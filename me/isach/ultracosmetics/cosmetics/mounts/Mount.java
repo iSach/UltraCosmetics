@@ -35,6 +35,8 @@ public abstract class Mount implements Listener {
 
     public Entity ent;
 
+    public int repeatDelay = 2;
+
     public Mount(EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final MountType type) {
         this.material = material;
         this.data = data;
@@ -48,6 +50,8 @@ public abstract class Mount implements Listener {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
+            if(type == MountType.NYANSHEEP || type == MountType.DRAGON)
+                repeatDelay = 1;
             if(Core.getCustomPlayer(getPlayer()).currentMount != null)
                 Core.getCustomPlayer(getPlayer()).removeMount();
             BukkitRunnable runnable = new BukkitRunnable() {
@@ -62,11 +66,17 @@ public abstract class Mount implements Listener {
                     }
                 }
             };
-            runnable.runTaskTimer(Core.getPlugin(), 0, 2);
+            runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
             new MountListener(this);
 
             this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
-            ((Ageable) ent).setAdult();
+            if(ent instanceof Ageable) {
+                ((Ageable) ent).setAdult();
+            } else {
+                if(ent instanceof Slime) {
+                    ((Slime)ent).setSize(4);
+                }
+            }
             ent.setCustomNameVisible(true);
             ent.setCustomName(getName());
             ent.setPassenger(getPlayer());
@@ -166,7 +176,9 @@ public abstract class Mount implements Listener {
         MOUNTOFFIRE("ultracosmetics.mounts.mountoffire", "MountOfFire"),
         MOUNTOFWATER("ultracosmetics.mounts.mountofwater", "MountOfWater"),
         ECOLOGISTHORSE("ultracosmetics.mounts.ecologisthorse", "EcologistHorse"),
-        SNAKE("ultracosmetics.mounts.snake", "Snake");
+        SNAKE("ultracosmetics.mounts.snake", "Snake"),
+        NYANSHEEP("ultracosmetics.mounts.nyansheep", "NyanSheep"),
+        DRAGON("ultracosmetics.mounts.dragon", "Dragon");
 
 
         String permission;

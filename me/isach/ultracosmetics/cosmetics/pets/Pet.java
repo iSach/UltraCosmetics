@@ -3,18 +3,16 @@ package me.isach.ultracosmetics.cosmetics.pets;
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
+import net.minecraft.server.v1_8_R3.PathEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -37,6 +35,8 @@ public abstract class Pet implements Listener {
 
     private String permission;
 
+    public ArmorStand armorStand;
+
     private UUID owner;
 
     public Entity ent;
@@ -52,9 +52,9 @@ public abstract class Pet implements Listener {
             this.owner = owner;
             if (!getPlayer().hasPermission(permission)) {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
-                return;
+                return; 
             }
-            if(Core.getCustomPlayer(getPlayer()).currentPet != null)
+            if (Core.getCustomPlayer(getPlayer()).currentPet != null)
                 Core.getCustomPlayer(getPlayer()).removePet();
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
@@ -74,14 +74,21 @@ public abstract class Pet implements Listener {
 
             this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
             ((Ageable) ent).setAdult();
-            ent.setCustomNameVisible(true);
-            ent.setCustomName(getName());
+            //ent.setCustomNameVisible(true);
+            //ent.setCustomName(getName());
             ((Ageable) ent).setBaby();
             ((Ageable) ent).setAgeLock(true);
 
+
+            armorStand = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
+            armorStand.setVisible(false);
+            armorStand.setSmall(true);
+            armorStand.setCustomName(getName());
+            armorStand.setCustomNameVisible(true);
+            ent.setPassenger(armorStand);
+
             getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replaceAll("%petname%", getMenuName()));
             Core.getCustomPlayer(getPlayer()).currentPet = this;
-            net.minecraft.server.v1_8_R3.Entity pet = ((CraftEntity) ent).getHandle();
         }
     }
 
@@ -93,7 +100,7 @@ public abstract class Pet implements Listener {
         PathEntity path;
         path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
         int distance = (int) Bukkit.getPlayer(getPlayer().getName()).getLocation().distance(ent.getLocation());
-        if (path != null && distance > 2) {
+        if (path != null && distance > 3.3) {
             ((EntityInsentient) petf).getNavigation().a(path, 1.5D);
             ((EntityInsentient) petf).getNavigation().a(1.5D);
         }
@@ -101,6 +108,7 @@ public abstract class Pet implements Listener {
             ent.teleport(getPlayer().getLocation());
         }
     }
+
 
     public EntityType getEntityType() {
         return entityType;
@@ -137,10 +145,12 @@ public abstract class Pet implements Listener {
         getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replaceAll("%petname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentPet = null;
         ent.remove();
-        for(Item i : items) {
+        for (Item i : items) {
             i.remove();
         }
         items.clear();
+        if (armorStand != null)
+            armorStand.remove();
     }
 
     protected UUID getOwner() {
@@ -163,12 +173,13 @@ public abstract class Pet implements Listener {
         public void onEntityDamage(EntityDamageEvent event) {
             if (event.getEntity() == ent)
                 event.setCancelled(true);
-            if(event.getEntity() == getPlayer()
+            if (event.getEntity() == getPlayer()
                     && Core.getCustomPlayer(getPlayer()).currentPet != null
                     && Core.getCustomPlayer(getPlayer()).currentPet.getType() == getType()) {
                 event.setCancelled(true);
             }
         }
+
 
     }
 

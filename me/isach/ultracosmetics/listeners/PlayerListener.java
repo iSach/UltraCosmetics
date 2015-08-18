@@ -11,9 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
+
+import java.util.List;
 
 /**
  * Created by sacha on 03/08/15.
@@ -23,12 +23,18 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
         Core.customPlayers.add(new CustomPlayer(event.getPlayer().getUniqueId()));
-        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join")) {
+        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && !((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
                     int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
                     if (event.getPlayer().getInventory().getItem(slot) != null) {
+                        if(event.getPlayer().getInventory().getItem(slot).hasItemMeta()
+                                && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
+                                && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String)SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
+                            event.getPlayer().getInventory().remove(slot);
+                            event.getPlayer().getInventory().setItem(slot, null);
+                        }
                         event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
                         event.getPlayer().getInventory().remove(slot);
                     }
@@ -54,6 +60,11 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onQuit(PlayerKickEvent event) {
+
+    }
+
+    @EventHandler
     public void onPickUp(InventoryClickEvent event) {
         if (event.getCurrentItem() != null
                 && event.getCurrentItem().hasItemMeta()
@@ -64,11 +75,23 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        if (!((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+            int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+            if (event.getPlayer().getInventory().getItem(slot) != null) {
+                event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
+                event.getPlayer().getInventory().remove(slot);
+            }
+            String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replaceAll("&", "§");
+            Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
+            byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
+            event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
+        }
+    }
+
+    @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        Core.getCustomPlayer(event.getPlayer()).removeGadget();
-        Core.getCustomPlayer(event.getPlayer()).removeMount();
-        Core.getCustomPlayer(event.getPlayer()).removeParticleEffect();
-        Core.getCustomPlayer(event.getPlayer()).removePet();
+        Core.getCustomPlayer(event.getPlayer()).clear();
         Core.customPlayers.remove(Core.getCustomPlayer(event.getPlayer()));
         int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
         if (event.getPlayer().getInventory().getItem(slot) != null
@@ -81,16 +104,15 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
-        Core.getCustomPlayer(event.getEntity()).removeGadget();
-        Core.getCustomPlayer(event.getEntity()).removeMount();
-        Core.getCustomPlayer(event.getEntity()).removeParticleEffect();
-        Core.getCustomPlayer(event.getEntity()).removePet();
-        Core.customPlayers.remove(Core.getCustomPlayer(event.getEntity()));
         int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
         if (event.getEntity().getInventory().getItem(slot) != null
                 && event.getEntity().getInventory().getItem(slot).hasItemMeta()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().hasDisplayName()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replaceAll("&", "§"))) {
+            if (Core.getCustomPlayer(event.getEntity()).currentGadget != null)
+                event.getDrops().remove(event.getEntity().getInventory().getItem((Integer) SettingsManager.getConfig().get("Gadget-Slot")));
+            Core.getCustomPlayer(event.getEntity()).clear();
+            event.getDrops().remove(event.getEntity().getInventory().getItem(slot));
             event.getEntity().getInventory().setItem(slot, null);
         }
     }

@@ -40,9 +40,12 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     void onInteractRightClick() {
+        if(getPlayer().getVehicle() instanceof EnderPearl) {
+        getPlayer().getVehicle().remove();
+    }
         if (runnableHashMap.containsKey(getPlayer())) {
             if (getPlayer().getVehicle() != null)
-                getPlayer().remove();
+                getPlayer().getVehicle().remove();
             getPlayer().eject();
             if (getPlayer().getGameMode() != GameMode.CREATIVE)
                 getPlayer().setAllowFlight(false);

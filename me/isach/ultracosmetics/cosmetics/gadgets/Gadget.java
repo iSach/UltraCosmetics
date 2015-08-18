@@ -6,6 +6,7 @@ import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,6 +36,8 @@ public abstract class Gadget implements Listener {
     private String configName;
     private Inventory inv;
     private double countdown;
+
+    private boolean requireAmmo;
 
     private GadgetType type;
 
@@ -83,7 +86,7 @@ public abstract class Gadget implements Listener {
                 getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")));
                 getPlayer().getInventory().remove((int) SettingsManager.getConfig().get("Gadget-Slot"));
             }
-            if (Core.ammoEnabled) {
+            if (Core.ammoEnabled && getType().requiresAmmo()) {
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
             } else {
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, getName(), "§9Gadget"));
@@ -91,6 +94,7 @@ public abstract class Gadget implements Listener {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replaceAll("%gadgetname%", getName()));
             Core.getCustomPlayer(getPlayer()).currentGadget = this;
         }
+        this.requireAmmo = Boolean.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled")));
     }
 
     public String getName() {
@@ -216,7 +220,7 @@ public abstract class Gadget implements Listener {
             if(event.getAction() == Action.PHYSICAL) return;
             event.setCancelled(true);
             player.updateInventory();
-            if (Core.ammoEnabled) {
+            if (Core.ammoEnabled && getType().requiresAmmo()) {
                 if (Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) < 1) {
                     buyAmmo();
                     return;
@@ -225,6 +229,35 @@ public abstract class Gadget implements Listener {
             if (type == GadgetType.PORTALGUN) {
                 if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
+                    return;
+                }
+            }
+            if(type == GadgetType.ROCKET) {
+                boolean pathClear = true;
+                for(int i = getPlayer().getLocation().getBlockY(); i < getPlayer().getLocation().getBlockY() + 75; i++) {
+                    Block b1 = getPlayer().getLocation().clone().add(0, i, 0).getBlock();
+                    Block b2 = getPlayer().getLocation().clone().add(1, i, 0).getBlock();
+                    Block b3 = getPlayer().getLocation().clone().add(-1, i, 0).getBlock();
+                    Block b4 = getPlayer().getLocation().clone().add(0, i, 1).getBlock();
+                    Block b5 = getPlayer().getLocation().clone().add(0, i, -1).getBlock();
+                    Block b6 = getPlayer().getLocation().clone().add(1, i, -1).getBlock();
+                    Block b7 = getPlayer().getLocation().clone().add(-1, i, 1).getBlock();
+                    if(b1.getType() != Material.AIR
+                            || b2.getType() != Material.AIR
+                            || b3.getType() != Material.AIR
+                            || b4.getType() != Material.AIR
+                            || b5.getType() != Material.AIR
+                            || b6.getType() != Material.AIR
+                            || b7.getType() != Material.AIR) {
+                        pathClear = false;
+                    }
+                    if(!pathClear) {
+                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
+                        return;
+                    }
+                }
+                if(!getPlayer().isOnGround()) {
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
                     return;
                 }
             }
@@ -248,7 +281,7 @@ public abstract class Gadget implements Listener {
                 if (Core.countdownMap.get(getPlayer()).containsKey(getType())) {
                     String timeLeft = new DecimalFormat("0.0").format(Core.countdownMap.get(getPlayer()).get(getType()));
                     if (displayCountdownMessage)
-                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replaceAll("%gadgetname%", configName).replaceAll("%time%", timeLeft));
+                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replaceAll("%gadgetname%", getName()).replaceAll("%time%", timeLeft));
                     return;
                 } else {
                     Core.countdownMap.get(getPlayer()).put(getType(), countdown);
@@ -259,7 +292,7 @@ public abstract class Gadget implements Listener {
                 countdownMap.put(getType(), countdown);
                 Core.countdownMap.put(getPlayer(), countdownMap);
             }
-            if (Core.ammoEnabled) {
+            if (Core.ammoEnabled && getType().requiresAmmo()) {
                 Core.getCustomPlayer(getPlayer()).removeAmmo(getType().toString().toLowerCase());
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
             }
@@ -322,8 +355,11 @@ public abstract class Gadget implements Listener {
         PAINTBALLGUN("ultracosmetics.gadgets.paintballgun", "PaintballGun"),
         THORHAMMER("ultracosmetics.gadgets.thorhammer", "ThorHammer"),
         ANTIGRAVITY("ultracosmetics.gadgets.antigravity", "AntiGravity"),
-        SMASHDOWN("ultracosmetics.gadgets.smashdown", "SmashDown");
-        //TSUNAMI("ultracosmetics.gadgets.tsunami", "Tsunami");
+        SMASHDOWN("ultracosmetics.gadgets.smashdown", "SmashDown"),
+        ROCKET("ultracosmetics.gadgets.rocket", "Rocket"),
+        BLACKHOLE("ultracosmetics.gadgets.blackhole", "BlackHole"),
+        TSUNAMI("ultracosmetics.gadgets.tsunami", "Tsunami"),
+        TNT("ultracosmetics.gadgets.tnt", "TNT");
 
         String permission;
         public String configName;
@@ -331,6 +367,10 @@ public abstract class Gadget implements Listener {
         GadgetType(String permission, String configName) {
             this.permission = permission;
             this.configName = configName;
+        }
+
+        public boolean requiresAmmo() {
+            return SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled");
         }
 
         public String getConfigName() {

@@ -27,7 +27,8 @@ public class CustomPlayer {
     public enum MenuCategory {
         GADGETS,
         PARTICLEEFFECTS,
-        MOUNTS, PETS;
+        MOUNTS,
+        PETS;
     }
 
     public CustomPlayer(UUID uuid) {
@@ -38,8 +39,8 @@ public class CustomPlayer {
                 Core.sqlUtils.initStats(getPlayer());
             } else {
                 SettingsManager.getData(getPlayer());
-                for(Gadget g : Core.gadgetList) {
-                    if(g.getType().isEnabled()) {
+                for (Gadget g : Core.gadgetList) {
+                    if (g.getType().isEnabled()) {
                         SettingsManager.getData(getPlayer()).addDefault("Ammo." + g.getType().toString().toLowerCase(), 0);
                     }
                 }
@@ -72,6 +73,8 @@ public class CustomPlayer {
 
     public void removePet() {
         if (currentPet != null) {
+            if (currentPet.armorStand != null)
+                currentPet.armorStand.remove();
             currentPet.ent.remove();
             currentPet.clear();
             currentPet = null;

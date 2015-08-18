@@ -156,6 +156,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
             completeBefore.add("mount");
             completeBefore.add("clear");
             completeBefore.add("reload");
+            completeBefore.add("chest");
 
 
             if (!args[0].equals("")) {

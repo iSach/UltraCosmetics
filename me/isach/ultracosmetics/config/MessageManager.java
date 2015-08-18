@@ -64,7 +64,13 @@ public class MessageManager {
         addMessage("Gadgets.ExplosiveSheep.name", "&4&lExplosive Sheep");
         addMessage("Gadgets.ExplosiveSheep.Already-Active", "&c&lThere is already a an explosive sheep active!");
         addMessage("Gadgets.AntiGravity.name", "&d&lAnti Gravity");
-      //  addMessage("Gadgets.Tsunami.name", "&9&lTsunami");
+        addMessage("Gadgets.Tsunami.name", "&9&lTsunami");
+        addMessage("Gadgets.Rocket.name", "&4&lRocket");
+        addMessage("Gadgets.Rocket.Not-Enough-Space", "%prefix% &c&lNot enough space around and above you!");
+        addMessage("Gadgets.Rocket.Not-On-Ground", "%prefix% &c&lYou must be on the ground!");
+        addMessage("Gadgets.Rocket.Takeoff", "&4&lTAKEOFF!!");
+        addMessage("Gadgets.BlackHole.name", "&1&lBlack Hole");
+        addMessage("Gadgets.TNT.name", "&4&lT&f&lN&4&lT");
 
         // MOUNTS
         addMessage("Mounts.DruggedHorse.menu-name", "&2&lDrugged Horse");
@@ -81,8 +87,12 @@ public class MessageManager {
         addMessage("Mounts.MountOfWater.entity-displayname", "&l%playername%'s mount of water");
         addMessage("Mounts.EcologistHorse.menu-name", "&a&lEcologist Horse");
         addMessage("Mounts.EcologistHorse.entity-displayname", "&l%playername%'s ecologist horse");
+        addMessage("Mounts.NyanSheep.menu-name", "&4&lNy&6&la&e&ln &a&lSh&b&lee&d&lp");
+        addMessage("Mounts.NyanSheep.entity-displayname", "&l%playername%'s nyan sheep");
         addMessage("Mounts.Snake.menu-name", "&6&lSnake");
         addMessage("Mounts.Snake.entity-displayname", "&l%playername%'s snake");
+        addMessage("Mounts.Dragon.menu-name", "&5&lDragon");
+        addMessage("Mounts.Dragon.entity-displayname", "&l%playername%'s dragon");
         addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
         addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
 

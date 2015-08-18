@@ -30,7 +30,7 @@ public class GadgetTsunami extends Gadget {
     List<ArmorStand> armorStands = new ArrayList<>();
 
     public GadgetTsunami(UUID owner) {
-        super(Material.WATER_BUCKET, (byte) 0x0, "Tsunami", "ultracosmetics.gadgets.tsunami", 10, owner, null);
+        super(Material.WATER_BUCKET, (byte) 0x0, "Tsunami", "ultracosmetics.gadgets.tsunami", 10, owner, GadgetType.TSUNAMI);
     }
 
     @Override

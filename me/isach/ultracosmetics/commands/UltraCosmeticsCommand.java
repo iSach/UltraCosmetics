@@ -9,7 +9,9 @@ import me.isach.ultracosmetics.cosmetics.mounts.Mount;
 import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
 import me.isach.ultracosmetics.listeners.MenuListener;
+import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,6 +28,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
         if (!(sender instanceof Player)) {
             return true;
         }
+        Player player = (Player)sender;
         if (args == null || args.length == 0) {
             sender.sendMessage(getHelp());
             return true;
@@ -134,6 +137,17 @@ public class UltraCosmeticsCommand implements CommandExecutor {
             } else if (argZero.equalsIgnoreCase("clear")) {
                 Core.getCustomPlayer((Player) sender).clear();
                 return true;
+            }  else if (argZero.equalsIgnoreCase("chest")) {
+                int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+                if (player.getInventory().getItem(slot) != null) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), player.getInventory().getItem(slot));
+                    player.getInventory().remove(slot);
+                }
+                String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replaceAll("&", "§");
+                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
+                byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
+                player.getInventory().setItem(slot, ItemFactory.create(material, data, name));
+                return true;
             }  else if (argZero.equalsIgnoreCase("reload")) {
                 if(((Player)sender).hasPermission("ultracosmetics.reload")) {
                     SettingsManager.getConfig().reload();
@@ -178,13 +192,14 @@ public class UltraCosmeticsCommand implements CommandExecutor {
 
     public String getHelp() {
         return "\n§r"
-                + "§b§lUltra Cosmetics  §8┃ §f§lUltra Cosmetics Help (/uc)" + "\n§r"
-                + "                         §8┃ §7/uc reload §f- Reloads the config" + "\n§r"
-                + "                         §8┃ §7/uc menu [menu] §f- Opens a menu" + "\n§r"
-                + "                         §8┃ §7/uc gadget <gadget> §f- Toggles a gadget" + "\n§r"
-                + "                         §8┃ §7/uc pet <pet> §f- Toggles a pet" + "\n§r"
-                + "                         §8┃ §7/uc effect <effect> §f- Toggles an effect" + "\n§r"
-                + "                         §8┃ §7/uc mount <mount> §f- Toggles a mount" + "\n§r"
-                + "                         §8┃ §7/uc clear §f- Clear your current cosmetics" + "\n§r";
+                + "§b§lCosmetics §8┃ §f§lUltra Cosmetics Help (/uc)" + "\n§r"
+                + "                  §8┃ §7/uc reload §f- Reloads the config" + "\n§r"
+                + "                  §8┃ §7/uc menu [menu] §f- Opens a menu" + "\n§r"
+                + "                  §8┃ §7/uc gadget <gadget/clear> §f- Toggles a gadget" + "\n§r"
+                + "                  §8┃ §7/uc pet <pet/clear> §f- Toggles a pet" + "\n§r"
+                + "                  §8┃ §7/uc effect <effect/clear> §f- Toggles an effect" + "\n§r"
+                + "                  §8┃ §7/uc mount <mount/clear> §f- Toggles a mount" + "\n§r"
+                + "                  §8┃ §7/uc clear §f- Clears your current cosmetics" + "\n§r"
+                + "                  §8┃ §7/uc chest §f- Gets the menu item." + "\n§r";
     }
 }

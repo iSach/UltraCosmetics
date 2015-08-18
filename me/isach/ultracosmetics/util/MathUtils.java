@@ -69,6 +69,9 @@ public class MathUtils {
                 return;
             }
         }
+        if(ent.hasMetadata("NPC")) {
+            return;
+        }
         ent.setVelocity(v);
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
             @Override

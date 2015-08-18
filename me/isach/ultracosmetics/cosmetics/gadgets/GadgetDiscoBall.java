@@ -50,7 +50,7 @@ public class GadgetDiscoBall extends Gadget {
             i = 0;
             i2 = 0;
             Core.discoBalls.remove(this);
-            if (Core.nbapiEnabled)
+            if (Core.nbsapiEnabled)
                 positionSongPlayer.setPlaying(false);
         } catch (Exception exc) {
         }
@@ -65,7 +65,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
         running = true;
         Core.discoBalls.add(this);
-        if (Core.nbapiEnabled) {
+        if (Core.nbsapiEnabled) {
             Song s = NBSDecoder.parse(new File(Core.getPlugin().getDataFolder().getPath() + "/songs/GetLucky.nbs"));
             positionSongPlayer = new PositionSongPlayer(s);
 

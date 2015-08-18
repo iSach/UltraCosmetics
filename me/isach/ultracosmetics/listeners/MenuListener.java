@@ -4,20 +4,22 @@ import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.CustomPlayer;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
-import me.isach.ultracosmetics.cosmetics.gadgets.*;
-import me.isach.ultracosmetics.cosmetics.mounts.*;
-import me.isach.ultracosmetics.cosmetics.particleeffects.*;
-import me.isach.ultracosmetics.cosmetics.pets.*;
+import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import me.isach.ultracosmetics.cosmetics.mounts.Mount;
+import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
+import me.isach.ultracosmetics.cosmetics.pets.Pet;
 import me.isach.ultracosmetics.util.ItemFactory;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -76,7 +78,7 @@ public class MenuListener implements Listener {
         ItemStack gadgets = ItemFactory.create(Material.SLIME_BALL, (byte) 0, MessageManager.getMessage("Menu.Gadgets"));
         ItemStack mounts = ItemFactory.create(Material.SADDLE, (byte) 0, MessageManager.getMessage("Menu.Mounts"));
 
-        pets.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
+        pets = addGlow(pets);
 
         inv.setItem(1, pets);
         inv.setItem(3, particleEffects);
@@ -135,7 +137,7 @@ public class MenuListener implements Listener {
                 toggle = MessageManager.getMessage("Menu.Despawn");
             ItemStack is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName(), (lore != null) ? lore : null);
             if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
-                is.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
+                is = addGlow(is);
             inv.setItem(i, is);
             if (i == 25 || i == 34 || i == 43) {
                 i += 3;
@@ -162,7 +164,7 @@ public class MenuListener implements Listener {
         ItemStack gadgets = ItemFactory.create(Material.SLIME_BALL, (byte) 0, MessageManager.getMessage("Menu.Gadgets"));
         ItemStack mounts = ItemFactory.create(Material.SADDLE, (byte) 0, MessageManager.getMessage("Menu.Mounts"));
 
-        particleEffects.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
+        particleEffects = addGlow(particleEffects);
 
         inv.setItem(1, pets);
         inv.setItem(3, particleEffects);
@@ -221,7 +223,7 @@ public class MenuListener implements Listener {
                 toggle = MessageManager.getMessage("Menu.Unsummon");
             ItemStack is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName(), (lore != null) ? lore : null);
             if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
-                is.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
+                is = addGlow(is);
             inv.setItem(i, is);
             if (i == 25 || i == 34 || i == 43) {
                 i += 3;
@@ -258,7 +260,7 @@ public class MenuListener implements Listener {
         ItemStack gadgets = ItemFactory.create(Material.SLIME_BALL, (byte) 0, MessageManager.getMessage("Menu.Gadgets"));
         ItemStack mounts = ItemFactory.create(Material.SADDLE, (byte) 0, MessageManager.getMessage("Menu.Mounts"));
 
-        mounts.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
+        mounts = addGlow(mounts);
 
         inv.setItem(1, pets);
         inv.setItem(3, particleEffects);
@@ -321,7 +323,7 @@ public class MenuListener implements Listener {
                 toggle = MessageManager.getMessage("Menu.Despawn");
             ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName(), (lore != null) ? lore : null);
             if (cp.currentMount != null && cp.currentMount.getType() == m.getType())
-                is.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
+                is = addGlow(is);
             inv.setItem(i, is);
             if (i == 25 || i == 34 || i == 43) {
                 i += 3;
@@ -348,7 +350,7 @@ public class MenuListener implements Listener {
         ItemStack gadgets = ItemFactory.create(Material.SLIME_BALL, (byte) 0, MessageManager.getMessage("Menu.Gadgets"));
         ItemStack mounts = ItemFactory.create(Material.SADDLE, (byte) 0, MessageManager.getMessage("Menu.Mounts"));
 
-        gadgets.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
+        gadgets = addGlow(gadgets);
 
         inv.setItem(1, pets);
         inv.setItem(3, particleEffects);
@@ -408,8 +410,8 @@ public class MenuListener implements Listener {
                 toggle = MessageManager.getMessage("Menu.Deactivate");
             ItemStack is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName(), (lore != null) ? lore : null);
             if (cp.currentGadget != null && cp.currentGadget.getType() == g.getType())
-                is.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 10);
-            if (Core.ammoEnabled) {
+                is = addGlow(is);
+            if (Core.ammoEnabled && g.getType().requiresAmmo()) {
                 ItemMeta itemMeta = is.getItemMeta();
                 List<String> loreList = itemMeta.getLore();
                 loreList.add("");
@@ -465,8 +467,8 @@ public class MenuListener implements Listener {
             return;
         }
 
-        for(Mount mount : Core.mountList) {
-            if(mount.getType().isEnabled() && mount.getType() == type) {
+        for (Mount mount : Core.mountList) {
+            if (mount.getType().isEnabled() && mount.getType() == type) {
                 Class mountClass = mount.getClass();
 
                 Class[] cArg = new Class[1];
@@ -513,8 +515,8 @@ public class MenuListener implements Listener {
             return;
         }
 
-        for(Pet pet : Core.petList) {
-            if(pet.getType().isEnabled() && pet.getType() == type) {
+        for (Pet pet : Core.petList) {
+            if (pet.getType().isEnabled() && pet.getType() == type) {
                 Class petClass = pet.getClass();
 
                 Class[] cArg = new Class[1];
@@ -561,8 +563,8 @@ public class MenuListener implements Listener {
             return;
         }
 
-        for(ParticleEffect particleEffect : Core.particleEffectList) {
-            if(particleEffect.getType().isEnabled() && particleEffect.getType() == type) {
+        for (ParticleEffect particleEffect : Core.particleEffectList) {
+            if (particleEffect.getType().isEnabled() && particleEffect.getType() == type) {
                 Class particleEffectClass = particleEffect.getClass();
 
                 Class[] cArg = new Class[1]; //Our constructor has 3 arguments
@@ -599,8 +601,8 @@ public class MenuListener implements Listener {
             }
             return;
         }
-        for(Gadget g : Core.gadgetList) {
-            if(g.getType().isEnabled() && g.getType() == type) {
+        for (Gadget g : Core.gadgetList) {
+            if (g.getType().isEnabled() && g.getType() == type) {
                 Class gadgetClass = g.getClass();
 
                 Class[] cArg = new Class[1];
@@ -627,7 +629,8 @@ public class MenuListener implements Listener {
     public void gadgetSelection(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Gadgets"))) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR || !event.getCurrentItem().hasItemMeta()) return;
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR || !event.getCurrentItem().hasItemMeta())
+                return;
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))
                         || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
@@ -659,7 +662,8 @@ public class MenuListener implements Listener {
                     }
                     if (cp.currentGadget == null)
                         activateGadgetByType(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
-                    cp.currentGadget.buyAmmo();
+                    if (cp.currentGadget.getType().requiresAmmo())
+                        cp.currentGadget.buyAmmo();
                     return;
                 }
 
@@ -680,7 +684,7 @@ public class MenuListener implements Listener {
 
                     }
                     activateGadgetByType(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
-                    if (cp.currentGadget != null && Core.ammoEnabled && cp.getAmmo(cp.currentGadget.getType().toString().toLowerCase()) < 1) {
+                    if (cp.currentGadget != null && Core.ammoEnabled && cp.getAmmo(cp.currentGadget.getType().toString().toLowerCase()) < 1 && cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.buyAmmo();
                     }
                 }
@@ -817,4 +821,30 @@ public class MenuListener implements Listener {
             }
         }
     }
+
+    public static ItemStack addGlow(ItemStack item){
+        net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = null;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        }
+        if (tag == null) tag = nmsStack.getTag();
+        NBTTagList ench = new NBTTagList();
+        tag.set("ench", ench);
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
+    }
+
+
+    @EventHandler
+    public void onInventoryMoveItem(InventoryPickupItemEvent event) {
+
+        if(event.getInventory().getType() == InventoryType.HOPPER) {
+            if(UUID.fromString(event.getItem().getItemStack().getItemMeta().getDisplayName()) != null) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
 }
