@@ -142,6 +142,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 if (player.getInventory().getItem(slot) != null) {
                     player.getWorld().dropItemNaturally(player.getLocation(), player.getInventory().getItem(slot));
                     player.getInventory().remove(slot);
+                    player.getInventory().setItem(slot, null);
                 }
                 String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replaceAll("&", "§");
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
@@ -149,7 +150,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 player.getInventory().setItem(slot, ItemFactory.create(material, data, name));
                 return true;
             }  else if (argZero.equalsIgnoreCase("reload")) {
-                if(((Player)sender).hasPermission("ultracosmetics.reload")) {
+                if(sender.hasPermission("ultracosmetics.reload")) {
                     SettingsManager.getConfig().reload();
                     SettingsManager.getMessages().reload();
                     sender.sendMessage("§l§oCosmetics > §c§lConfig and messages Reloaded!");

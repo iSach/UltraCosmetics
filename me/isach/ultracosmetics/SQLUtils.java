@@ -57,6 +57,24 @@ public class SQLUtils {
         }
     }
 
+    public int getKeys(Player p) {
+        try {
+            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            res.first();
+            return res.getInt("keys");
+        } catch (SQLException e) {
+            return 0;
+        }
+    }
+
+    public void removeKey(Player p) {
+        core.table.update().set("keys", getKeys(p) - 1).where("uuid", p.getUniqueId().toString()).execute();
+    }
+
+    public void addKey(Player p) {
+        core.table.update().set("keys", getKeys(p) + 1).where("uuid", p.getUniqueId().toString()).execute();
+    }
+
     public void removeAmmo(Player p, String name) {
         core.table.update().set(name, getAmmo(p, name) - 1).where("uuid", p.getUniqueId().toString()).execute();
     }

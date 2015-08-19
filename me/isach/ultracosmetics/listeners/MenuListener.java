@@ -8,6 +8,7 @@ import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import me.isach.ultracosmetics.cosmetics.mounts.Mount;
 import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
+import me.isach.ultracosmetics.util.Cuboid;
 import me.isach.ultracosmetics.util.ItemFactory;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
@@ -15,11 +16,13 @@ import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +31,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -38,6 +42,10 @@ public class MenuListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
+        if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null) {
+            event.setCancelled(true);
+            return;
+        }
         if (event.getItem() != null
                 && event.getItem().hasItemMeta()
                 && event.getItem().getItemMeta().hasDisplayName()
@@ -56,20 +64,24 @@ public class MenuListener implements Listener {
     }
 
     public static void openPetsMenu(Player p) {
+        int add = 0;
+        if (Core.treasureChests)
+            add = 9;
         int listSize = 0;
-        for (Pet pet : Core.petList) {
-            if (!pet.getType().isEnabled()) continue;
+        for (Pet m : Core.petList) {
+            if (!m.getType().isEnabled()) continue;
             listSize++;
         }
-        int slotAmount = 45;
+        int slotAmount = 45 + add;
         if (listSize < 29)
-            slotAmount = 54;
+            slotAmount = 54 + add;
         if (listSize < 22)
-            slotAmount = 45;
+            slotAmount = 45 + add;
         if (listSize < 15)
-            slotAmount = 36;
+            slotAmount = 45;
         if (listSize < 8)
-            slotAmount = 27;
+            slotAmount = 27 + add;
+
 
         Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Pets"));
 
@@ -80,31 +92,44 @@ public class MenuListener implements Listener {
 
         pets = addGlow(pets);
 
-        inv.setItem(1, pets);
-        inv.setItem(3, particleEffects);
-        inv.setItem(5, gadgets);
-        inv.setItem(7, mounts);
+        inv.setItem(1 + add, pets);
+        inv.setItem(3 + add, particleEffects);
+        inv.setItem(5 + add, gadgets);
+        inv.setItem(7 + add, mounts);
 
-        for (int i = 9; i < 19; i++)
+        if (Core.treasureChests) {
+            ItemStack chest;
+
+            if (Core.getCustomPlayer(p).getKeys() == 0)
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            else
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
+
+            ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "", MessageManager.getMessage("Your-Keys").replaceAll("%keys%", Core.getCustomPlayer(p).getKeys() + ""), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            inv.setItem(6, keys);
+            inv.setItem(2, chest);
+        }
+
+        for (int i = 9 + add; i < 19 + add; i++)
             inv.setItem(i, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        inv.setItem(26, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        if (slotAmount > 27) {
-            inv.setItem(27, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            inv.setItem(35, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            if (slotAmount > 36) {
-                inv.setItem(36, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-                inv.setItem(44, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+        inv.setItem(26 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+        if (slotAmount > 27 + add) {
+            inv.setItem(27 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            inv.setItem(35 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            if (slotAmount > 36 + add) {
+                inv.setItem(36 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+                inv.setItem(44 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
             }
         }
 
-        int i = 19;
+        int i = 19 + add;
         for (Pet pet : Core.petList) {
             if (!pet.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -120,7 +145,7 @@ public class MenuListener implements Listener {
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -151,11 +176,23 @@ public class MenuListener implements Listener {
     }
 
     public static void openParticlesMenu(Player p) {
-        int slotAmount = 45;
-        if (Core.particleEffectList.size() < 15)
-            slotAmount = 36;
-        if (Core.particleEffectList.size() < 8)
-            slotAmount = 27;
+        int add = 0;
+        if (Core.treasureChests)
+            add = 9;
+        int listSize = 0;
+        for (ParticleEffect m : Core.particleEffectList) {
+            if (!m.getType().isEnabled()) continue;
+            listSize++;
+        }
+        int slotAmount = 45 + add;
+        if (listSize < 29)
+            slotAmount = 54 + add;
+        if (listSize < 22)
+            slotAmount = 45 + add;
+        if (listSize < 15)
+            slotAmount = 45;
+        if (listSize < 8)
+            slotAmount = 27 + add;
 
         Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Particle-Effects"));
 
@@ -166,31 +203,43 @@ public class MenuListener implements Listener {
 
         particleEffects = addGlow(particleEffects);
 
-        inv.setItem(1, pets);
-        inv.setItem(3, particleEffects);
-        inv.setItem(5, gadgets);
-        inv.setItem(7, mounts);
+        inv.setItem(1 + add, pets);
+        inv.setItem(3 + add, particleEffects);
+        inv.setItem(5 + add, gadgets);
+        inv.setItem(7 + add, mounts);
 
-        for (int i = 9; i < 19; i++)
-            inv.setItem(i, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        inv.setItem(26, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        if (slotAmount > 27) {
-            inv.setItem(27, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            inv.setItem(35, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            if (slotAmount > 36) {
-                inv.setItem(36, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-                inv.setItem(44, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            }
+        if (Core.treasureChests) {
+            ItemStack chest;
+
+            if (Core.getCustomPlayer(p).getKeys() == 0)
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            else
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
+
+            ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "", MessageManager.getMessage("Your-Keys").replaceAll("%keys%", Core.getCustomPlayer(p).getKeys() + ""), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            inv.setItem(6, keys);
+            inv.setItem(2, chest);
         }
 
-        int i = 19;
+        for (int i = 9 + add; i < 19 + add; i++)
+            inv.setItem(i, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+        inv.setItem(26 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+        if (slotAmount > 27 + add) {
+            inv.setItem(27 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            inv.setItem(35 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            if (slotAmount > 36 + add) {
+                inv.setItem(36 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+                inv.setItem(44 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            }
+        }
+        int i = 19 + add;
         for (ParticleEffect particleEffect : Core.particleEffectList) {
             if (!particleEffect.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -206,7 +255,7 @@ public class MenuListener implements Listener {
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -238,20 +287,23 @@ public class MenuListener implements Listener {
 
     public static void openMountsMenu(Player p) {
 
+        int add = 0;
+        if (Core.treasureChests)
+            add = 9;
         int listSize = 0;
         for (Mount m : Core.mountList) {
             if (!m.getType().isEnabled()) continue;
             listSize++;
         }
-        int slotAmount = 45;
+        int slotAmount = 45 + add;
         if (listSize < 29)
-            slotAmount = 54;
+            slotAmount = 54 + add;
         if (listSize < 22)
-            slotAmount = 45;
+            slotAmount = 45 + add;
         if (listSize < 15)
-            slotAmount = 36;
+            slotAmount = 45;
         if (listSize < 8)
-            slotAmount = 27;
+            slotAmount = 27 + add;
 
         Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Mounts"));
 
@@ -262,35 +314,44 @@ public class MenuListener implements Listener {
 
         mounts = addGlow(mounts);
 
-        inv.setItem(1, pets);
-        inv.setItem(3, particleEffects);
-        inv.setItem(5, gadgets);
-        inv.setItem(7, mounts);
+        inv.setItem(1 + add, pets);
+        inv.setItem(3 + add, particleEffects);
+        inv.setItem(5 + add, gadgets);
+        inv.setItem(7 + add, mounts);
 
-        for (int i = 9; i < 19; i++)
+        if (Core.treasureChests) {
+            ItemStack chest;
+
+            if (Core.getCustomPlayer(p).getKeys() == 0)
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            else
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
+
+            ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "", MessageManager.getMessage("Your-Keys").replaceAll("%keys%", Core.getCustomPlayer(p).getKeys() + ""), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            inv.setItem(6, keys);
+            inv.setItem(2, chest);
+        }
+
+        for (int i = 9 + add; i < 19 + add; i++)
             inv.setItem(i, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        inv.setItem(26, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        if (slotAmount > 27) {
-            inv.setItem(27, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            inv.setItem(35, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            if (slotAmount > 36) {
-                inv.setItem(36, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-                inv.setItem(44, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-                if (slotAmount > 45) {
-                    inv.setItem(45, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-                    inv.setItem(53, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-                }
+        inv.setItem(26 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+        if (slotAmount > 27 + add) {
+            inv.setItem(27 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            inv.setItem(35 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            if (slotAmount > 36 + add) {
+                inv.setItem(36 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+                inv.setItem(44 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
             }
         }
 
-        int i = 19;
+        int i = 19 + add;
         for (Mount m : Core.mountList) {
             if (!m.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -306,7 +367,7 @@ public class MenuListener implements Listener {
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -337,11 +398,23 @@ public class MenuListener implements Listener {
     }
 
     public static void openGadgetsMenu(Player p) {
-        int slotAmount = 45;
-        if (Core.gadgetList.size() < 15)
-            slotAmount = 36;
-        if (Core.gadgetList.size() < 8)
-            slotAmount = 27;
+        int add = 0;
+        if (Core.treasureChests)
+            add = 9;
+        int listSize = 0;
+        for (Gadget g : Core.gadgetList) {
+            if (!g.getType().isEnabled()) continue;
+            listSize++;
+        }
+        int slotAmount = 45 + add;
+        if (listSize < 29)
+            slotAmount = 54 + add;
+        if (listSize < 22)
+            slotAmount = 45 + add;
+        if (listSize < 15)
+            slotAmount = 45;
+        if (listSize < 8)
+            slotAmount = 27 + add;
 
         Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Gadgets"));
 
@@ -352,31 +425,44 @@ public class MenuListener implements Listener {
 
         gadgets = addGlow(gadgets);
 
-        inv.setItem(1, pets);
-        inv.setItem(3, particleEffects);
-        inv.setItem(5, gadgets);
-        inv.setItem(7, mounts);
+        inv.setItem(1 + add, pets);
+        inv.setItem(3 + add, particleEffects);
+        inv.setItem(5 + add, gadgets);
+        inv.setItem(7 + add, mounts);
 
-        for (int i = 9; i < 19; i++)
+        if (Core.treasureChests) {
+            ItemStack chest;
+
+            if (Core.getCustomPlayer(p).getKeys() == 0)
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            else
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
+
+            ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "", MessageManager.getMessage("Your-Keys").replaceAll("%keys%", Core.getCustomPlayer(p).getKeys() + ""), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+            inv.setItem(6, keys);
+            inv.setItem(2, chest);
+        }
+
+        for (int i = 9 + add; i < 19 + add; i++)
             inv.setItem(i, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        inv.setItem(26, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-        if (slotAmount > 27) {
-            inv.setItem(27, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            inv.setItem(35, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-            if (slotAmount > 36) {
-                inv.setItem(36, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
-                inv.setItem(44, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+        inv.setItem(26 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+        if (slotAmount > 27 + add) {
+            inv.setItem(27 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            inv.setItem(35 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+            if (slotAmount > 36 + add) {
+                inv.setItem(36 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
+                inv.setItem(44 + add, ItemFactory.create(Material.STAINED_GLASS_PANE, (byte) 0xb, "§k"));
             }
         }
 
-        int i = 19;
+        int i = 19 + add;
         for (Gadget g : Core.gadgetList) {
             if (!g.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -392,7 +478,7 @@ public class MenuListener implements Listener {
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replaceAll("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34) {
+                if (i == 25 || i == 34 || i == 43) {
                     i += 3;
                 } else {
                     i++;
@@ -421,7 +507,7 @@ public class MenuListener implements Listener {
                 is.setItemMeta(itemMeta);
             }
             inv.setItem(i, is);
-            if (i == 25 || i == 34) {
+            if (i == 25 || i == 34 || i == 43) {
                 i += 3;
             } else {
                 i++;
@@ -822,7 +908,137 @@ public class MenuListener implements Listener {
         }
     }
 
-    public static ItemStack addGlow(ItemStack item){
+    public void openTreasureChest(Player player) {
+        Class treasureChestClass = Core.treasureChestList.get(new Random().nextInt(Core.treasureChestList.size() - 1)).getClass();
+
+        Class[] cArg = new Class[1];
+        cArg[0] = UUID.class;
+
+        UUID uuid = player.getUniqueId();
+
+        try {
+            treasureChestClass.getDeclaredConstructor(UUID.class).newInstance(uuid);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @EventHandler
+    public void openChest(InventoryClickEvent event) {
+        if (event.getCurrentItem() != null
+                && event.getCurrentItem().hasItemMeta()
+                && event.getCurrentItem().getItemMeta().hasDisplayName()
+                && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
+            if (Core.getCustomPlayer((Player) event.getWhoClicked()).getKeys() > 0) {
+                Cuboid c = new Cuboid(event.getWhoClicked().getLocation().add(-2, 0, -2), event.getWhoClicked().getLocation().add(2, 1, 2));
+                if(!c.isEmpty()) {
+                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
+                    return;
+                }
+                if(!((Player)event.getWhoClicked()).isOnGround()) {
+                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
+                    return;
+                }
+                Core.getCustomPlayer((Player) event.getWhoClicked()).removeKey();
+                openTreasureChest((Player) event.getWhoClicked());
+            } else {
+                Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
+
+                try {
+                    ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replaceAll("%price%", "" + (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"))));
+                    inventory.setItem(13, itemStack);
+                    event.getWhoClicked().getInventory().addItem(itemStack);
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+                for (int i = 27; i < 30; i++) {
+                    inventory.setItem(i, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
+                    inventory.setItem(i + 9, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
+                    inventory.setItem(i + 18, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
+                    inventory.setItem(i + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
+                    inventory.setItem(i + 9 + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
+                    inventory.setItem(i + 18 + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
+                }
+
+                event.getWhoClicked().openInventory(inventory);
+            }
+        }
+    }
+
+    @EventHandler
+    public void buyKeyOpenInv(InventoryClickEvent event) {
+        if (event.getCurrentItem() != null
+                && event.getCurrentItem().hasItemMeta()
+                && event.getCurrentItem().getItemMeta().hasDisplayName()
+                && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Keys"))) {
+
+            Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
+
+            ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replaceAll("%price%", "" + (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"))));
+            inventory.setItem(13, itemStack);
+
+            for (int i = 27; i < 30; i++) {
+                inventory.setItem(i, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 9, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 18, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
+                inventory.setItem(i + 9 + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
+                inventory.setItem(i + 18 + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
+            }
+
+            event.getWhoClicked().openInventory(inventory);
+        }
+    }
+
+    @EventHandler
+    public void buyKeyConfirm(InventoryClickEvent event) {
+        if (!event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("Buy-Treasure-Key"))) return;
+        event.setCancelled(true);
+        if (event.getCurrentItem() != null
+                && event.getCurrentItem().hasItemMeta()
+                && event.getCurrentItem().getItemMeta().hasDisplayName()) {
+            if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) {
+                if (Core.economy.getBalance((Player) event.getWhoClicked()) >= (int) SettingsManager.getConfig().get("TreasureChests.Key-Price")) {
+                    Core.economy.withdrawPlayer((Player) event.getWhoClicked(), (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"));
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).addKey();
+                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
+                    event.getWhoClicked().closeInventory();
+                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.GADGETS) {
+                        MenuListener.openGadgetsMenu((Player) event.getWhoClicked());
+                    } else if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.PARTICLEEFFECTS) {
+                        MenuListener.openParticlesMenu((Player) event.getWhoClicked());
+                    } else if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.MOUNTS) {
+                        MenuListener.openMountsMenu((Player) event.getWhoClicked());
+                    } else if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.PETS) {
+                        MenuListener.openPetsMenu((Player) event.getWhoClicked());
+                    }
+                } else {
+                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Not-Enough-Money"));
+                    event.getWhoClicked().closeInventory();
+                    return;
+                }
+            } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
+                event.getWhoClicked().closeInventory();
+                if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.GADGETS) {
+                    MenuListener.openGadgetsMenu((Player) event.getWhoClicked());
+                } else if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.PARTICLEEFFECTS) {
+                    MenuListener.openParticlesMenu((Player) event.getWhoClicked());
+                } else if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.MOUNTS) {
+                    MenuListener.openMountsMenu((Player) event.getWhoClicked());
+                } else if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMenu == CustomPlayer.MenuCategory.PETS) {
+                    MenuListener.openPetsMenu((Player) event.getWhoClicked());
+                }
+            }
+        }
+    }
+
+    public static ItemStack addGlow(ItemStack item) {
         net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tag = null;
         if (!nmsStack.hasTag()) {
@@ -840,8 +1056,11 @@ public class MenuListener implements Listener {
     @EventHandler
     public void onInventoryMoveItem(InventoryPickupItemEvent event) {
 
-        if(event.getInventory().getType() == InventoryType.HOPPER) {
-            if(UUID.fromString(event.getItem().getItemStack().getItemMeta().getDisplayName()) != null) {
+        if (event.getInventory() != null
+                && event.getInventory().getType() == InventoryType.HOPPER) {
+            if (event.getItem().getItemStack().hasItemMeta()
+                    && event.getItem().getItemStack().getItemMeta().hasDisplayName()
+                    && UUID.fromString(event.getItem().getItemStack().getItemMeta().getDisplayName()) != null) {
                 event.setCancelled(true);
             }
         }

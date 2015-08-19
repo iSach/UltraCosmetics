@@ -335,8 +335,6 @@ public abstract class Gadget implements Listener {
                     && event.getCurrentItem().getItemMeta().hasDisplayName()
                     && event.getCurrentItem().getItemMeta().getDisplayName().endsWith(getName())) {
                 event.setCancelled(true);
-                if (event.getWhoClicked().getItemOnCursor() != null && event.getWhoClicked().getItemOnCursor().getType() != Material.AIR)
-                    event.getWhoClicked().getWorld().dropItem(event.getWhoClicked().getLocation(), event.getWhoClicked().getItemOnCursor());
             }
         }
     }

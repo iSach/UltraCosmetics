@@ -8,6 +8,7 @@ import me.isach.ultracosmetics.cosmetics.gadgets.*;
 import me.isach.ultracosmetics.cosmetics.mounts.*;
 import me.isach.ultracosmetics.cosmetics.particleeffects.*;
 import me.isach.ultracosmetics.cosmetics.pets.*;
+import me.isach.ultracosmetics.cosmetics.treasurechests.*;
 import me.isach.ultracosmetics.listeners.MenuListener;
 import me.isach.ultracosmetics.listeners.PlayerListener;
 import me.isach.ultracosmetics.mysql.MySQLConnection;
@@ -27,7 +28,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
@@ -48,6 +51,7 @@ public class Core extends JavaPlugin {
     public static List<Mount> mountList = new ArrayList<>();
     public static List<Pet> petList = new ArrayList<>();
     public static List<CustomPlayer> customPlayers = new ArrayList<>();
+    public static List<TreasureChest> treasureChestList = new ArrayList<>();
     public static HashMap<Player, HashMap<Gadget.GadgetType, Double>> countdownMap = new HashMap<>();
 
     public static ArrayList<GadgetDiscoBall> discoBalls = new ArrayList<>();
@@ -56,6 +60,7 @@ public class Core extends JavaPlugin {
     public static boolean nbsapiEnabled = false;
     public static boolean ammoEnabled = false;
     public static boolean ammoFileStorage = true;
+    public static boolean treasureChests = false;
 
     public static Economy economy = null;
 
@@ -130,6 +135,12 @@ public class Core extends JavaPlugin {
         petList.add(new PetCow(null));
         petList.add(new PetEasterBunny(null));
 
+        // Register Treasure Chests
+        treasureChestList.add(new TreasureChestClassic(null));
+        treasureChestList.add(new TreasureChestIce(null));
+        treasureChestList.add(new TreasureChestNether(null));
+        treasureChestList.add(new TreasureChestSea(null));
+
         // Register the command
         getCommand("ultracosmetics").setExecutor(new UltraCosmeticsCommand());
         ArrayList<String> arrayList = new ArrayList<>();
@@ -144,6 +155,12 @@ public class Core extends JavaPlugin {
         disabledWorlds.add("worldDisabled3");
 
         SettingsManager.getConfig().addDefault("Disabled-Worlds", disabledWorlds);
+
+        SettingsManager.getConfig().addDefault("TreasureChests.Enabled", false);
+        SettingsManager.getConfig().addDefault("TreasureChests.Key-Price", 1000);
+        SettingsManager.getConfig().addDefault("TreasureChests.Money-Loot.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Money-Loot.Max", 200);
+        SettingsManager.getConfig().addDefault("TreasureChests.Permission-Add-Command", "pex user %name% add %permission%");
 
         // Set config things.
         SettingsManager.getConfig().addDefault("Ammo-System-For-Gadgets.Enabled", false);
@@ -177,6 +194,22 @@ public class Core extends JavaPlugin {
         ammoEnabled = SettingsManager.getConfig().get("Ammo-System-For-Gadgets.Enabled");
 
         ammoFileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
+
+        if(SettingsManager.getConfig().get("TreasureChests.Enabled")) {
+            treasureChests = true;
+            if(!ammoEnabled || !Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+                Bukkit.getConsoleSender().sendMessage("§c§l");
+                Bukkit.getConsoleSender().sendMessage("§c§l");
+                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests require Vault and Ammo System Enabled!");
+                Bukkit.getConsoleSender().sendMessage("§c§l");
+                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests are turning off...");
+                Bukkit.getConsoleSender().sendMessage("§c§l");
+                Bukkit.getConsoleSender().sendMessage("§c§l");
+                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+                treasureChests = false;
+            }
+        }
 
         for (Gadget gadget : gadgetList) {
             SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Enabled", true);
@@ -237,7 +270,12 @@ public class Core extends JavaPlugin {
                             PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD " + gadget.getType().toString().toLowerCase() + " INTEGER DEFAULT 0 not NULL");
                             statement.executeUpdate();
                         }
-
+                    }
+                    DatabaseMetaData md = co.getMetaData();
+                    ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "keys");
+                    if (!rs.next()) {
+                        PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD keys INTEGER DEFAULT 0 not NULL");
+                        statement.executeUpdate();
                     }
                     table = new Table(co, "UltraCosmeticsData");
                     sqlUtils = new SQLUtils(this);
@@ -285,71 +323,71 @@ public class Core extends JavaPlugin {
         }
 
 
-            final BukkitRunnable countdownRunnable = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    try {
-                        Iterator<Entity> iter = noFallDamageEntities.iterator();
-                        while (iter.hasNext()) {
-                            Entity ent = iter.next();
-                            if (ent.isOnGround())
-                                iter.remove();
-                        }
-                        Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
-                        while (iter.hasNext()) {
-                            CustomPlayer customPlayer = customPlayerIterator.next();
-                            if (customPlayer.getPlayer() == null)
-                                customPlayerIterator.remove();
-                        }
-                        for (Player p : countdownMap.keySet()) {
-                            if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName())) {
-                                Core.getCustomPlayer(p).clear();
-                            }
-                            if (countdownMap.get(p) != null) {
-                                for (Gadget.GadgetType gt : countdownMap.get(p).keySet()) {
-                                    double timeLeft = countdownMap.get(p).get(gt);
-                                    if (timeLeft > 0.05f) {
-                                        timeLeft -= 0.05f;
-                                        countdownMap.get(p).put(gt, timeLeft);
-                                    }
-                                }
-                                Iterator it = countdownMap.get(p).entrySet().iterator();
-                                while (it.hasNext()) {
-                                    Map.Entry pair = (Map.Entry) it.next();
-                                    if ((double) pair.getValue() < 0.1) {
-                                        it.remove();
-                                    }
-                                }
-                            }
-                        }
-                    } catch (Exception exc) {
+        final BukkitRunnable countdownRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    Iterator<Entity> iter = noFallDamageEntities.iterator();
+                    while (iter.hasNext()) {
+                        Entity ent = iter.next();
+                        if (ent.isOnGround())
+                            iter.remove();
                     }
+                    Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
+                    while (iter.hasNext()) {
+                        CustomPlayer customPlayer = customPlayerIterator.next();
+                        if (customPlayer.getPlayer() == null)
+                            customPlayerIterator.remove();
+                    }
+                    for (Player p : countdownMap.keySet()) {
+                        if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName())) {
+                            Core.getCustomPlayer(p).clear();
+                        }
+                        if (countdownMap.get(p) != null) {
+                            for (Gadget.GadgetType gt : countdownMap.get(p).keySet()) {
+                                double timeLeft = countdownMap.get(p).get(gt);
+                                if (timeLeft > 0.05f) {
+                                    timeLeft -= 0.05f;
+                                    countdownMap.get(p).put(gt, timeLeft);
+                                }
+                            }
+                            Iterator it = countdownMap.get(p).entrySet().iterator();
+                            while (it.hasNext()) {
+                                Map.Entry pair = (Map.Entry) it.next();
+                                if ((double) pair.getValue() < 0.1) {
+                                    it.remove();
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception exc) {
                 }
-            };
-            countdownRunnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, 1);
-
-            if (nbsapiEnabled) {
-                File folder = new File(getDataFolder().getPath() + "/songs/");
-                if ((!folder.exists()) || (folder.listFiles().length <= 0)) {
-                    saveResource("songs/GetLucky.nbs", true);
-                }
-                saveResource("songs/NyanCat.nbs", true);
             }
+        };
+        countdownRunnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, 1);
+
+        if (nbsapiEnabled) {
+            File folder = new File(getDataFolder().getPath() + "/songs/");
+            if ((!folder.exists()) || (folder.listFiles().length <= 0)) {
+                saveResource("songs/GetLucky.nbs", true);
+            }
+            saveResource("songs/NyanCat.nbs", true);
+        }
 
 
-            Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-                @Override
-                public void run() {
-                    if (outdated()) {
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (p.isOp())
-                                p.sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + getLastVersion());
-                        }
+        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+            @Override
+            public void run() {
+                if (outdated()) {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (p.isOp())
+                            p.sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + getLastVersion());
                     }
                 }
-            }, 20);
+            }
+        }, 20);
 
-        }
+    }
 
     private boolean setupEconomy() {
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
@@ -364,6 +402,8 @@ public class Core extends JavaPlugin {
     public void onDisable() {
         BlockUtils.forceRestore();
         for (CustomPlayer cp : customPlayers) {
+            if(cp.currentTreasureChest != null)
+                cp.currentTreasureChest.forceOpen(0);
             cp.clear();
             int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
             if (cp.getPlayer().getInventory().getItem(slot) != null

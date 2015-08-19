@@ -34,6 +34,24 @@ public class MessageManager {
         addMessage("Buy-Ammo-Description", "&e&lBuy %amount% %gadgetname% ammo &e&lfor %price%$");
         addMessage("Right-Click-Buy-Ammo", "&7Right Click to Buy Ammo");
         addMessage("Not-Enough-Money", "%prefix% &c&lYou don't have enough money!");
+        addMessage("Successful-Purchase", "%prefix% &a&lSuccessful purchase!");
+        addMessage("Buy-Treasure-Key", "&lBuy a Treasure Key");
+        addMessage("Treasure-Keys", "§7§lTreasure Keys");
+        addMessage("Treasure-Chests", "§6§lTreasure Chests");
+        addMessage("Dont-Have-Key", "§4§lYou need a key!");
+        addMessage("Click-Open-Chest", "§aClick to open a chest");
+        addMessage("Click-Buy-Key", "§aClick to buy a key");
+        addMessage("Your-Keys", "§7§oYour keys: §f§l%keys%");
+        addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor %price%$");
+        addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
+        addMessage("Chest-Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
+        addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
+
+        addMessage("Treasure-Chests-Loot.Gadget", "%ammo% %name% ammo");
+        addMessage("Treasure-Chests-Loot.Pet", "%pet% pet");
+        addMessage("Treasure-Chests-Loot.Mount", "%mount% mount");
+        addMessage("Treasure-Chests-Loot.Effect", "%effect% effect");
+        addMessage("Treasure-Chests-Loot.Money", "&e&l%money%$");
 
         //Menus
         addMessage("Menus.Pets", "&lPets");

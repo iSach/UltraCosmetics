@@ -6,6 +6,7 @@ import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import me.isach.ultracosmetics.cosmetics.mounts.Mount;
 import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
+import me.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -22,6 +23,7 @@ public class CustomPlayer {
     public Mount currentMount;
     public ParticleEffect currentParticleEffect;
     public Pet currentPet;
+    public TreasureChest currentTreasureChest;
     public MenuCategory currentMenu = MenuCategory.GADGETS;
 
     public enum MenuCategory {
@@ -34,11 +36,14 @@ public class CustomPlayer {
     public CustomPlayer(UUID uuid) {
         this.uuid = uuid;
         Core.countdownMap.put(getPlayer(), null);
+        SettingsManager.getData(getPlayer());
+        if (Core.ammoFileStorage) {
+            SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
+        }
         if (Core.ammoEnabled) {
             if (!Core.ammoFileStorage) {
                 Core.sqlUtils.initStats(getPlayer());
             } else {
-                SettingsManager.getData(getPlayer());
                 for (Gadget g : Core.gadgetList) {
                     if (g.getType().isEnabled()) {
                         SettingsManager.getData(getPlayer()).addDefault("Ammo." + g.getType().toString().toLowerCase(), 0);
@@ -81,11 +86,34 @@ public class CustomPlayer {
         }
     }
 
+    public void addKey() {
+        if (Core.ammoFileStorage)
+            SettingsManager.getData(getPlayer()).set("Keys", getKeys() + 1);
+        else
+            Core.sqlUtils.addKey(getPlayer());
+    }
+
+    public void removeKey() {
+        if (Core.ammoFileStorage)
+            SettingsManager.getData(getPlayer()).set("Keys", getKeys() - 1);
+        else
+            Core.sqlUtils.removeKey(getPlayer());
+    }
+
+    public int getKeys() {
+        if (Core.ammoFileStorage) {
+            return (int) SettingsManager.getData(getPlayer()).get("Keys");
+        } else {
+            return Core.sqlUtils.getKeys(getPlayer());
+        }
+    }
+
     public void clear() {
         removeGadget();
         removeParticleEffect();
         removePet();
         removeMount();
+        removeTreasureChest();
     }
 
     public void removeParticleEffect() {
@@ -122,6 +150,12 @@ public class CustomPlayer {
             }
         }
         return 0;
+    }
+
+    public void removeTreasureChest() {
+        if (currentTreasureChest == null) return;
+        this.currentTreasureChest.clear();
+        this.currentTreasureChest = null;
     }
 
     public void removeAmmo(String name) {
