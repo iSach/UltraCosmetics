@@ -34,7 +34,7 @@ public class MountNyanSheep extends Mount {
 
         if (owner == null) return;
         ((LivingEntity) ent).setNoDamageTicks(Integer.MAX_VALUE);
-        if (Core.nbsapiEnabled) {
+        if (Core.isNoteBlockAPIEnabled()) {
             Song s = NBSDecoder.parse(new File(Core.getPlugin().getDataFolder(), "/songs/NyanCat.nbs"));
             positionSongPlayer = new PositionSongPlayer(s);
             positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
@@ -47,10 +47,10 @@ public class MountNyanSheep extends Mount {
 
     @Override
     public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replaceAll("%mountname%", getMenuName()));
+        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentMount = null;
         ent.remove();
-        if (Core.nbsapiEnabled)
+        if (Core.isNoteBlockAPIEnabled())
             positionSongPlayer.setPlaying(false);
     }
 
@@ -60,7 +60,7 @@ public class MountNyanSheep extends Mount {
             clear();
         move();
 
-        if (Core.nbsapiEnabled)
+        if (Core.isNoteBlockAPIEnabled())
             positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
 
 

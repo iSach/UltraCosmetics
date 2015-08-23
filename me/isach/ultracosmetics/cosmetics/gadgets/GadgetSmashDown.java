@@ -1,12 +1,12 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.BlockUtils;
 import me.isach.ultracosmetics.util.MathUtils;
 import me.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
@@ -112,14 +112,15 @@ public class GadgetSmashDown extends Gadget {
                                 && b.getType() != Material.STATIONARY_LAVA
                                 && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()
                                 && b.getType().getId() != 43
-                                && b.getType().getId() != 44) {
+                                && b.getType().getId() != 44
+                                && b.getRelative(BlockFace.UP).getType() == Material.AIR) {
                             FallingBlock fb = loc.getWorld().spawnFallingBlock(b.getLocation().clone().add(0, 1.1f, 0), b.getType(), b.getData());
                             fb.setVelocity(new Vector(0, 0.3f, 0));
                             fb.setDropItem(false);
                             fallingBlocks.add(fb);
                             for (Entity ent : fb.getNearbyEntities(1, 1, 1)) {
                                 if (ent != getPlayer() && ent.getType() != EntityType.FALLING_BLOCK)
-                                    MathUtils.applyVector(ent, new Vector(0, 0.5, 0));
+                                    MathUtils.applyVelocity(ent, new Vector(0, 0.5, 0));
                             }
                         }
                     }

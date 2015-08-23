@@ -50,7 +50,7 @@ public class GadgetDiscoBall extends Gadget {
             i = 0;
             i2 = 0;
             Core.discoBalls.remove(this);
-            if (Core.nbsapiEnabled)
+            if (Core.isNoteBlockAPIEnabled())
                 positionSongPlayer.setPlaying(false);
         } catch (Exception exc) {
         }
@@ -65,7 +65,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
         running = true;
         Core.discoBalls.add(this);
-        if (Core.nbsapiEnabled) {
+        if (Core.isNoteBlockAPIEnabled()) {
             Song s = NBSDecoder.parse(new File(Core.getPlugin().getDataFolder().getPath() + "/songs/GetLucky.nbs"));
             positionSongPlayer = new PositionSongPlayer(s);
 
@@ -115,7 +115,7 @@ public class GadgetDiscoBall extends Gadget {
             i2 += 0.4;
             for (Entity ent : getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5))
                 if (ent.isOnGround())
-                    ent.setVelocity(new Vector(0, 0.3, 0));
+                    MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
 
 
             for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false))

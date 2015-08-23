@@ -85,7 +85,7 @@ public abstract class Mount implements Listener {
                 ((Horse) ent).getInventory().setSaddle(new ItemStack(Material.SADDLE));
             }
 
-            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replaceAll("%mountname%", getMenuName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", getMenuName()));
             Core.getCustomPlayer(getPlayer()).currentMount = this;
         }
     }
@@ -95,7 +95,7 @@ public abstract class Mount implements Listener {
     }
 
     public String getName() {
-        return MessageManager.getMessage("Mounts." + name + ".entity-displayname").replaceAll("%playername%", getPlayer().getName());
+        return MessageManager.getMessage("Mounts." + name + ".entity-displayname").replace("%playername%", getPlayer().getName());
     }
 
     public String getMenuName() {
@@ -120,7 +120,7 @@ public abstract class Mount implements Listener {
     abstract void onUpdate();
 
     public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replaceAll("%mountname%", getMenuName()));
+        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentMount = null;
         try {
             ent.getPassenger().eject();

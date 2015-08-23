@@ -1,7 +1,6 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -36,7 +35,7 @@ public class GadgetAntiGravity extends Gadget {
                 as.getWorld().spigot().playEffect(as.getEyeLocation(), Effect.PORTAL, 0, 0, 3, 3, 3, 0, 150, 64);
                 as.getWorld().spigot().playEffect(as.getEyeLocation(), Effect.WITCH_MAGIC, 0, 0, .3f, 0.3f, 0.3f, 0, 5, 64);
                 for(Entity ent : as.getNearbyEntities(3, 2, 3)) {
-                    MathUtils.applyVector(ent, new Vector(0, 0.1, 0));
+                    MathUtils.applyVelocity(ent, new Vector(0, 0.1, 0));
                 }
             }
         }, 0, 2).getTaskId();

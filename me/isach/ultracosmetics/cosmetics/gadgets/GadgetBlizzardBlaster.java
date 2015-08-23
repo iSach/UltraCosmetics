@@ -1,7 +1,6 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -67,7 +66,7 @@ public class GadgetBlizzardBlaster extends Gadget {
                     }, 20);
                     for (final Entity ent : as.getNearbyEntities(0.5, 0.5, 0.5)) {
                         if (!cooldownJump.contains(ent) && ent != getPlayer()) {
-                            MathUtils.applyVector(ent, new Vector(0, 1, 0).add(v));
+                            MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
                             cooldownJump.add(ent);
                             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                                 @Override

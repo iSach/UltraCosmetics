@@ -23,7 +23,7 @@ import java.util.UUID;
  */
 public abstract class Pet implements Listener {
 
-    ArrayList<Item> items = new ArrayList<>();
+    public ArrayList<Item> items = new ArrayList<>();
 
     private Material material;
     private Byte data;
@@ -52,7 +52,7 @@ public abstract class Pet implements Listener {
             this.owner = owner;
             if (!getPlayer().hasPermission(permission)) {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
-                return; 
+                return;
             }
             if (Core.getCustomPlayer(getPlayer()).currentPet != null)
                 Core.getCustomPlayer(getPlayer()).removePet();
@@ -85,26 +85,37 @@ public abstract class Pet implements Listener {
             armorStand.setSmall(true);
             armorStand.setCustomName(getName());
             armorStand.setCustomNameVisible(true);
+
+            if(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()) != null)
+                armorStand.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()));
+
             ent.setPassenger(armorStand);
 
-            getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replaceAll("%petname%", getMenuName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", getMenuName()));
             Core.getCustomPlayer(getPlayer()).currentPet = this;
         }
     }
 
     private void followPlayer() {
+        if(Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
+            return;
         net.minecraft.server.v1_8_R3.Entity pett = ((CraftEntity) ent).getHandle();
         ((EntityInsentient) pett).getNavigation().a(2);
         Object petf = ((CraftEntity) ent).getHandle();
         Location targetLocation = getPlayer().getLocation();
         PathEntity path;
         path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
-        int distance = (int) Bukkit.getPlayer(getPlayer().getName()).getLocation().distance(ent.getLocation());
-        if (path != null && distance > 3.3) {
-            ((EntityInsentient) petf).getNavigation().a(path, 1.5D);
-            ((EntityInsentient) petf).getNavigation().a(1.5D);
-        }
-        if (distance > 10 && ent.isValid() && getPlayer().isOnGround()) {
+        try {
+            int distance = (int) Bukkit.getPlayer(getPlayer().getName()).getLocation().distance(ent.getLocation());
+            if (distance > 10 && ent.isValid() && getPlayer().isOnGround()) {
+                ent.teleport(getPlayer().getLocation());
+            }
+            if (path != null && distance > 3.3) {
+                ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
+                ((EntityInsentient) petf).getNavigation().a(1.05D);
+            }
+        } catch (IllegalArgumentException exception) {
+            exception.printStackTrace();
             ent.teleport(getPlayer().getLocation());
         }
     }
@@ -115,7 +126,7 @@ public abstract class Pet implements Listener {
     }
 
     public String getName() {
-        return MessageManager.getMessage("Pets." + name + ".entity-displayname").replaceAll("%playername%", getPlayer().getName());
+        return MessageManager.getMessage("Pets." + name + ".entity-displayname").replace("%playername%", getPlayer().getName());
     }
 
     public String getConfigName() {
@@ -142,7 +153,7 @@ public abstract class Pet implements Listener {
     abstract void onUpdate();
 
     public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replaceAll("%petname%", getMenuName()));
+        getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replace("%petname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentPet = null;
         ent.remove();
         for (Item i : items) {
@@ -173,11 +184,6 @@ public abstract class Pet implements Listener {
         public void onEntityDamage(EntityDamageEvent event) {
             if (event.getEntity() == ent)
                 event.setCancelled(true);
-            if (event.getEntity() == getPlayer()
-                    && Core.getCustomPlayer(getPlayer()).currentPet != null
-                    && Core.getCustomPlayer(getPlayer()).currentPet.getType() == getType()) {
-                event.setCancelled(true);
-            }
         }
 
 

@@ -4,10 +4,14 @@ import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.Title;
 import me.isach.ultracosmetics.util.UtilParticles;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -21,7 +25,7 @@ import java.util.UUID;
 public class GadgetRocket extends Gadget {
 
     boolean launching;
-    ArmorStand armorStand;
+    Arrow arrow;
     List<FallingBlock> fallingBlocks = new ArrayList<>();
     List<Block> blocks = new ArrayList<>();
 
@@ -57,16 +61,16 @@ public class GadgetRocket extends Gadget {
                     blocks.add(b4);
                     blocks.add(b5);
                 }
-                armorStand = loc.getWorld().spawn(loc.add(0, 4, 0), ArmorStand.class);
-                armorStand.setSmall(true);
-                armorStand.setVisible(false);
+                arrow = loc.getWorld().spawn(loc.add(0, 4, 0), Arrow.class);
+                arrow.setKnockbackStrength(0);
+                
             }
         }, 10);
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
 
             @Override
             public void run() {
-                armorStand.setPassenger(getPlayer());
+                arrow.setPassenger(getPlayer());
                 BukkitRunnable runnable = new BukkitRunnable() {
                     int i = 5;
 
@@ -88,8 +92,8 @@ public class GadgetRocket extends Gadget {
                             new Title(MessageManager.getMessage("Gadgets.Rocket.Takeoff")).send(getPlayer());
 
                             getPlayer().playSound(getPlayer().getLocation(), Sound.EXPLODE, 1, 1);
-                            armorStand.remove();
-                            armorStand = null;
+                            arrow.remove();
+                            arrow = null;
 
                             for (Block block : blocks) {
                                 block.setType(Material.AIR);
@@ -115,7 +119,7 @@ public class GadgetRocket extends Gadget {
                             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(!isStillCurrentGadget()) {
+                                    if (!isStillCurrentGadget()) {
                                         cancel();
                                         return;
                                     }
@@ -143,17 +147,17 @@ public class GadgetRocket extends Gadget {
 
     @Override
     void onUpdate() {
-        if (armorStand != null) {
-            if (armorStand.getPassenger() == null)
-                armorStand.setPassenger(getPlayer());
-            UtilParticles.play(armorStand.getLocation().clone().add(0, -3, 0), Effect.LARGE_SMOKE, 0, 0, 0.3f, 0.2f, 0.3f, 0, 10);
-            armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.FIZZ, 0.025f, 1);
+        if (arrow != null) {
+            if (arrow.getPassenger() == null)
+                arrow.setPassenger(getPlayer());
+            UtilParticles.play(arrow.getLocation().clone().add(0, -3, 0), Effect.LARGE_SMOKE, 0, 0, 0.3f, 0.2f, 0.3f, 0, 10);
+            arrow.getWorld().playSound(arrow.getLocation().clone().add(0, -3, 0), Sound.FIZZ, 0.025f, 1);
         }
         for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.setVelocity(new Vector(0, 0.8, 0));
         }
         if (launching) {
-            if(fallingBlocks.get(8).getPassenger() == null)
+            if (fallingBlocks.get(8).getPassenger() == null)
                 fallingBlocks.get(8).setPassenger(getPlayer());
             UtilParticles.play(getPlayer().getLocation().clone().add(0, -3, 0), Effect.LAVA_POP, 0, 0, 0.3f, 0.2f, 0.3f, 0, 10);
             UtilParticles.play(getPlayer().getLocation().clone().add(0, -3, 0), Effect.FLAME, 0, 0, 0.3f, 0.2f, 0.3f, 0.1f, 10);
@@ -164,15 +168,15 @@ public class GadgetRocket extends Gadget {
 
     @Override
     public void clear() {
-        for(Block block : blocks)
+        for (Block block : blocks)
             block.setType(Material.AIR);
-        for(FallingBlock fallingBlock : fallingBlocks)
+        for (FallingBlock fallingBlock : fallingBlocks)
             fallingBlock.remove();
         blocks.clear();
         fallingBlocks.clear();
-        if(armorStand != null) {
-            armorStand.remove();
-        }
+        if (arrow != null)
+            arrow.remove();
+
         launching = false;
         new Title(" ").send(getPlayer());
     }

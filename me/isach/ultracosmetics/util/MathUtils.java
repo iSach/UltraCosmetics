@@ -4,7 +4,6 @@ import me.isach.ultracosmetics.Core;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -62,16 +61,10 @@ public class MathUtils {
         return new Vector(x, y, z).normalize();
     }
 
-    public static void applyVector(final Entity ent, Vector v) {
-        if (ent instanceof Player) {
-            final Player p = (Player) ent;
-            if (p.hasPermission("ultracosmetics.sneakfornoeffects") && p.isSneaking()) {
-                return;
-            }
-        }
-        if(ent.hasMetadata("NPC")) {
+    public static void applyVelocity(final Entity ent, Vector v) {
+        if (ent.hasMetadata("NPC"))
             return;
-        }
+
         ent.setVelocity(v);
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
             @Override
@@ -98,6 +91,7 @@ public class MathUtils {
     }
 
     public static int randomRangeInt(int min, int max) {
+        max++;
         return (int) (Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min));
     }
 

@@ -54,7 +54,7 @@ public class UtilParticles {
                 v.setX(Math.cos(angle) * radius);
                 v.setZ(Math.sin(angle) * radius);
                 if(effect == Effect.COLOURED_DUST) {
-                    play(location.add(v), Effect.COLOURED_DUST, 0, 0, -255f, -255f, 255f, 1, 0);
+                    play(location.add(v), Effect.COLOURED_DUST, 0, 0, -1, -1, 1f, 1, 0);
                 } else {
                     play(location.add(v), effect, 0f);
                 }

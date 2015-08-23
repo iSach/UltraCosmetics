@@ -1,6 +1,7 @@
 package me.isach.ultracosmetics.config;
 
-import net.md_5.bungee.api.ChatColor;
+
+import org.bukkit.ChatColor;
 
 /**
  * Created by sacha on 03/08/15.
@@ -46,6 +47,15 @@ public class MessageManager {
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("Chest-Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
+        addMessage("Clear-Cosmetics", "§c§lClear cosmetics");
+        addMessage("Clear-Gadget", "§c§lClear current gadget");
+        addMessage("Clear-Pet", "§c§lClear current pet");
+        addMessage("Clear-Mount", "§c§lClear current mount");
+        addMessage("Clear-Effect", "§c§lClear current effect");
+        addMessage("Rename-Pet-Purchase", "§c§lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
+
+        addMessage("Active-Pet-Needed", "§c§lYou need to spawn a pet to rename it");
+        addMessage("Rename-Pet", "§c§lClick to rename: %petname%");
 
         addMessage("Treasure-Chests-Loot.Gadget", "%ammo% %name% ammo");
         addMessage("Treasure-Chests-Loot.Pet", "%pet% pet");
@@ -54,11 +64,13 @@ public class MessageManager {
         addMessage("Treasure-Chests-Loot.Money", "&e&l%money%$");
 
         //Menus
+        addMessage("Menus.Main-Menu", "&lMain Menu");
         addMessage("Menus.Pets", "&lPets");
         addMessage("Menus.Gadgets", "&lGadgets");
         addMessage("Menus.Mounts", "&lMounts");
         addMessage("Menus.Particle-Effects", "&lParticle Effects");
         addMessage("Menus.Buy-Ammo", "&lBuy Ammo");
+        addMessage("Menus.Rename-Pet", "&lRename Pet");
 
         // Gadgets
         addMessage("Gadgets.Equip", "%prefix% &9You equipped %gadgetname%");
@@ -148,6 +160,7 @@ public class MessageManager {
         addMessage("Menu.Particle-Effects", "&b&lParticle Effects");
         addMessage("Menu.Mounts", "&6&lMounts");
         addMessage("Menu.Pets", "&a&lPets");
+        addMessage("Menu.Main-Menu", "&c&lMain Menu");
         addMessage("Menu.Activate", "&b&lActivate");
         addMessage("Menu.Deactivate", "&c&lDeactivate");
         addMessage("Menu.Spawn", "&b&lSpawn");
@@ -173,7 +186,7 @@ public class MessageManager {
      * @return a message from a config path.
      */
     public static String getMessage(String path) {
-        return ChatColor.translateAlternateColorCodes('&', (String) settingsManager.get(path)).replaceAll("%prefix%", ((String) settingsManager.get("Prefix")).replaceAll("&", "§"));
+        return ((String) settingsManager.get(path)).replace("%prefix%", ((String) settingsManager.get("Prefix"))).replace("&", "§");
     }
 
 }

@@ -73,7 +73,7 @@ public abstract class ParticleEffect implements Listener {
             runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
             new ParticleEffectListener(this);
 
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replaceAll("%effectname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", getName()));
             Core.getCustomPlayer(getPlayer()).currentParticleEffect = this;
         }
     }
@@ -106,7 +106,7 @@ public abstract class ParticleEffect implements Listener {
     abstract void onUpdate();
 
     public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replaceAll("%mountname%", getName()));
+        getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", getName()));
         Core.getCustomPlayer(getPlayer()).currentParticleEffect = null;
     }
 

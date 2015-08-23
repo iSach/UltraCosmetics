@@ -64,7 +64,7 @@ public class GadgetTNT extends Gadget {
                 double Z = Math.cos(pitch);
 
                 Vector vector = new Vector(X, Z, Y);
-                MathUtils.applyVector(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
+                MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
             }
             entities.remove(event.getEntity());
         }

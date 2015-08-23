@@ -35,7 +35,8 @@ public class BlockUtils {
                     if (distance < radius * radius
                             && !(hollow && distance < ((radius - 1) * (radius - 1)))) {
                         Location l = new Location(location.getWorld(), x, y, z);
-                        blocks.add(l.getBlock());
+                        if (l.getBlock().getType() != Material.BARRIER)
+                            blocks.add(l.getBlock());
                     }
                 }
 
@@ -122,6 +123,7 @@ public class BlockUtils {
                 && b.getType() != Material.PORTAL
                 && b.getType() != Material.ENDER_PORTAL
                 && b.getType() != Material.SOIL
+                && b.getType() != Material.BARRIER
                 && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()
                 && bUp.getType() != Material.CROPS
                 && bUp.getType() != Material.GRASS

@@ -4,7 +4,9 @@ import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.MathUtils;
 import net.minecraft.server.v1_8_R3.EntityCreature;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.Navigation;
+import net.minecraft.server.v1_8_R3.PathEntity;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -48,7 +50,7 @@ public class MountSnake extends Mount {
             }
         }
         tailMap.clear();
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replaceAll("%mountname%", getMenuName()));
+        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentMount = null;
         ent.remove();
     }
@@ -86,8 +88,11 @@ public class MountSnake extends Mount {
                     tail.teleport(tp);
                 }
                 EntityCreature ec = ((CraftCreature) tail).getHandle();
-                Navigation nav = (Navigation) ec.getNavigation();
-                nav.a(loc.getX(), loc.getY(), loc.getZ(), (1.0D + 2.0D * mult) * 1.0D);
+                PathEntity path;
+                path = ec.getNavigation().a(loc.getX() + 1, loc.getY(), loc.getZ() + 1);
+                ec.getNavigation().a(path, (1.0D + 2.0D * mult) * 1.0D);
+                ec.getNavigation().a((1.0D + 2.0D * mult) * 1.0D);
+
                 before = tail;
             }
 

@@ -37,30 +37,38 @@ public class RandomGenerator {
     public RandomGenerator(final Player player, Location location) {
         this.loc = location.add(0.5, 0, 0.5);
         this.player = player;
-        for (Gadget g : Core.gadgetList) {
+        for (Gadget g : Core.getGadgets()) {
             if (g.getType().isEnabled()
                     && player.hasPermission(g.getType().getPermission())
                     && g.getType().requiresAmmo())
                 this.gadgetList.add(g);
         }
         if (petList.isEmpty())
-            for (Pet pet : Core.petList) {
+            for (Pet pet : Core.getPets()) {
                 if (pet.getType().isEnabled()
                         && !player.hasPermission(pet.getType().getPermission()))
                     this.petList.add(pet);
             }
         if (particleEffectList.isEmpty())
-            for (ParticleEffect particleEffect : Core.particleEffectList) {
+            for (ParticleEffect particleEffect : Core.getParticleEffects()) {
                 if (particleEffect.getType().isEnabled()
                         && !player.hasPermission(particleEffect.getType().getPermission()))
                     this.particleEffectList.add(particleEffect);
             }
         if (mountList.isEmpty())
-            for (Mount m : Core.mountList) {
+            for (Mount m : Core.getMounts()) {
                 if (m.getType().isEnabled()
                         && !player.hasPermission(m.getType().getPermission()))
                     this.mountList.add(m);
             }
+        if(!Core.Category.MOUNTS.isEnabled())
+            mountList.clear();
+        if(!Core.Category.GADGETS.isEnabled())
+            gadgetList.clear();
+        if(!Core.Category.EFFECTS.isEnabled())
+            particleEffectList.clear();
+        if(!Core.Category.PETS.isEnabled())
+            petList.clear();
     }
 
     public byte getData() {
@@ -120,7 +128,7 @@ public class RandomGenerator {
 
     private void giveMoney() {
         int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Money-Loot.Max"));
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replaceAll("%money%", money + "");
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
         Core.economy.depositPlayer(player, money);
         material = Material.getMaterial(175);
         if (money > 3 * (int) SettingsManager.getConfig().get("TreasureChests.Money-Loot.Max") / 4) {
@@ -132,7 +140,7 @@ public class RandomGenerator {
         int i = MathUtils.randomRangeInt(0, gadgetList.size() - 1);
         Gadget g = gadgetList.get(i);
         int ammo = MathUtils.randomRangeInt(15, 100);
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Gadget").replaceAll("%name%", g.getName()).replaceAll("%ammo%", ammo + "");
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Gadget").replace("%name%", g.getName()).replace("%ammo%", ammo + "");
         gadgetList.remove(i);
         Core.getCustomPlayer(player).addAmmo(g.getType().toString().toLowerCase(), ammo);
         material = g.getMaterial();
@@ -145,7 +153,7 @@ public class RandomGenerator {
     private void giveRandomRarePet() {
         int i = MathUtils.randomRangeInt(0, petList.size() - 1);
         Pet pet = petList.get(i);
-        name = MessageManager.getMessage("Treasure-Chests-Loots.Pet").replaceAll("%name%", pet.getMenuName());
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Pet").replace("%pet%", pet.getMenuName());
         petList.remove(i);
         givePermission(pet.getType().getPermission());
         material = pet.getMaterial();
@@ -153,14 +161,14 @@ public class RandomGenerator {
     }
 
     public void givePermission(String permission) {
-        String command = ((String) SettingsManager.getConfig().get("TreasureChests.Permission-Add-Command")).replaceAll("%name%", player.getName()).replaceAll("%permission%", permission);
+        String command = ((String) SettingsManager.getConfig().get("TreasureChests.Permission-Add-Command")).replace("%name%", player.getName()).replace("%permission%", permission);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 
     private void giveRandomRareMount() {
         int i = MathUtils.randomRangeInt(0, mountList.size() - 1);
         Mount mount = mountList.get(i);
-        name = MessageManager.getMessage("Treasure-Chests-Loots.Mount").replaceAll("%name%", mount.getMenuName());
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Mount").replace("%mount%", mount.getMenuName());
         mountList.remove(i);
         material = mount.getMaterial();
         givePermission(mount.getType().getPermission());
@@ -170,12 +178,12 @@ public class RandomGenerator {
     private void giveRandomLegendary() {
         int i = MathUtils.randomRangeInt(0, particleEffectList.size() - 1);
         ParticleEffect particleEffect = particleEffectList.get(i);
-        name = MessageManager.getMessage("Treasure-Chests-Loots.Effect").replaceAll("%name%", particleEffect.getName());
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Effect").replace("%effect%", particleEffect.getName());
         particleEffectList.remove(i);
         material = particleEffect.getMaterial();
         givePermission(particleEffect.getType().getPermission());
         spawnRandomFirework(loc);
-        Bukkit.broadcastMessage(MessageManager.getMessage("Found-Legendary").replaceAll("%name%", player.getName()).replaceAll("%found%", name));
+        Bukkit.broadcastMessage(MessageManager.getMessage("Found-Legendary").replace("%name%", player.getName()).replace("%found%", name));
         loc.getWorld().playSound(loc, Sound.WITHER_DEATH, 3, 1);
     }
 

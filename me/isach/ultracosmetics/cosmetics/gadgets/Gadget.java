@@ -3,6 +3,7 @@ package me.isach.ultracosmetics.cosmetics.gadgets;
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
+import me.isach.ultracosmetics.util.Cuboid;
 import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -86,12 +87,12 @@ public abstract class Gadget implements Listener {
                 getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")));
                 getPlayer().getInventory().remove((int) SettingsManager.getConfig().get("Gadget-Slot"));
             }
-            if (Core.ammoEnabled && getType().requiresAmmo()) {
+            if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
             } else {
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, getName(), "§9Gadget"));
             }
-            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replaceAll("%gadgetname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", getName()));
             Core.getCustomPlayer(getPlayer()).currentGadget = this;
         }
         this.requireAmmo = Boolean.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled")));
@@ -146,15 +147,15 @@ public abstract class Gadget implements Listener {
 
         Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Buy-Ammo"));
 
-        inventory.setItem(13, ItemFactory.create(material, data, MessageManager.getMessage("Buy-Ammo-Description").replaceAll("%amount%", "" + getResultAmmoAmount()).replaceAll("%price%", "" + getPrice()).replaceAll("%gadgetname%", getName())));
+        inventory.setItem(13, ItemFactory.create(material, data, MessageManager.getMessage("Buy-Ammo-Description").replace("%amount%", "" + getResultAmmoAmount()).replace("%price%", "" + getPrice()).replaceAll("%gadgetname%", getName())));
 
         for (int i = 27; i < 30; i++) {
-            inventory.setItem(i, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 9, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 18, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xb, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
-            inventory.setItem(i + 9 + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
-            inventory.setItem(i + 18 + 6, ItemFactory.create(Material.STAINED_CLAY, (byte) 0xe, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 9, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 18, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i + 9 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
         }
 
 
@@ -220,7 +221,10 @@ public abstract class Gadget implements Listener {
             if(event.getAction() == Action.PHYSICAL) return;
             event.setCancelled(true);
             player.updateInventory();
-            if (Core.ammoEnabled && getType().requiresAmmo()) {
+            if(Core.getCustomPlayer(getPlayer()).currentTreasureChest != null) {
+                return;
+            }
+            if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
                 if (Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) < 1) {
                     buyAmmo();
                     return;
@@ -234,28 +238,11 @@ public abstract class Gadget implements Listener {
             }
             if(type == GadgetType.ROCKET) {
                 boolean pathClear = true;
-                for(int i = getPlayer().getLocation().getBlockY(); i < getPlayer().getLocation().getBlockY() + 75; i++) {
-                    Block b1 = getPlayer().getLocation().clone().add(0, i, 0).getBlock();
-                    Block b2 = getPlayer().getLocation().clone().add(1, i, 0).getBlock();
-                    Block b3 = getPlayer().getLocation().clone().add(-1, i, 0).getBlock();
-                    Block b4 = getPlayer().getLocation().clone().add(0, i, 1).getBlock();
-                    Block b5 = getPlayer().getLocation().clone().add(0, i, -1).getBlock();
-                    Block b6 = getPlayer().getLocation().clone().add(1, i, -1).getBlock();
-                    Block b7 = getPlayer().getLocation().clone().add(-1, i, 1).getBlock();
-                    if(b1.getType() != Material.AIR
-                            || b2.getType() != Material.AIR
-                            || b3.getType() != Material.AIR
-                            || b4.getType() != Material.AIR
-                            || b5.getType() != Material.AIR
-                            || b6.getType() != Material.AIR
-                            || b7.getType() != Material.AIR) {
-                        pathClear = false;
-                    }
-                    if(!pathClear) {
+                    Cuboid c = new Cuboid(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
+                    if(!c.isEmpty()) {
                         getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
                         return;
                     }
-                }
                 if(!getPlayer().isOnGround()) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
                     return;
@@ -281,7 +268,7 @@ public abstract class Gadget implements Listener {
                 if (Core.countdownMap.get(getPlayer()).containsKey(getType())) {
                     String timeLeft = new DecimalFormat("0.0").format(Core.countdownMap.get(getPlayer()).get(getType()));
                     if (displayCountdownMessage)
-                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replaceAll("%gadgetname%", getName()).replaceAll("%time%", timeLeft));
+                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", getName()).replace("%time%", timeLeft));
                     return;
                 } else {
                     Core.countdownMap.get(getPlayer()).put(getType(), countdown);
@@ -292,7 +279,7 @@ public abstract class Gadget implements Listener {
                 countdownMap.put(getType(), countdown);
                 Core.countdownMap.put(getPlayer(), countdownMap);
             }
-            if (Core.ammoEnabled && getType().requiresAmmo()) {
+            if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
                 Core.getCustomPlayer(getPlayer()).removeAmmo(getType().toString().toLowerCase());
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
             }

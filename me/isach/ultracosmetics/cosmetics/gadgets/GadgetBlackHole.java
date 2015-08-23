@@ -72,7 +72,7 @@ public class GadgetBlackHole extends Gadget {
             }
             for (Entity ent : i.getNearbyEntities(5, 3, 5)) {
                 Vector vector = i.getLocation().toVector().subtract(ent.getLocation().toVector());
-                MathUtils.applyVector(ent, vector);
+                MathUtils.applyVelocity(ent, vector);
                 if (ent instanceof Player)
                     ((Player) ent).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
             }

@@ -21,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,9 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
@@ -45,22 +44,24 @@ import java.util.*;
 public class Core extends JavaPlugin {
 
     public static ArrayList<Entity> noFallDamageEntities = new ArrayList<>();
-
-    public static List<Gadget> gadgetList = new ArrayList<>();
-    public static List<ParticleEffect> particleEffectList = new ArrayList<>();
-    public static List<Mount> mountList = new ArrayList<>();
-    public static List<Pet> petList = new ArrayList<>();
-    public static List<CustomPlayer> customPlayers = new ArrayList<>();
-    public static List<TreasureChest> treasureChestList = new ArrayList<>();
-    public static HashMap<Player, HashMap<Gadget.GadgetType, Double>> countdownMap = new HashMap<>();
-
     public static ArrayList<GadgetDiscoBall> discoBalls = new ArrayList<>();
     public static ArrayList<GadgetExplosiveSheep> explosiveSheep = new ArrayList<>();
+    public static HashMap<Player, HashMap<Gadget.GadgetType, Double>> countdownMap = new HashMap<>();
 
-    public static boolean nbsapiEnabled = false;
-    public static boolean ammoEnabled = false;
-    public static boolean ammoFileStorage = true;
-    public static boolean treasureChests = false;
+    private static List<CustomPlayer> customPlayers = new ArrayList<>();
+
+    private static List<Gadget> gadgetList = new ArrayList<>();
+    private static List<ParticleEffect> particleEffectList = new ArrayList<>();
+    private static List<Mount> mountList = new ArrayList<>();
+    private static List<Pet> petList = new ArrayList<>();
+    private static List<TreasureChest> treasureChestList = new ArrayList<>();
+
+    private static boolean nbsapiEnabled = false;
+    private static boolean ammoEnabled = false;
+    private static boolean fileStorage = true;
+    private static boolean treasureChests = false;
+
+    public static List<Category> enabledCategories = new ArrayList<>();
 
     public static Economy economy = null;
 
@@ -69,8 +70,12 @@ public class Core extends JavaPlugin {
     public Table table; // SQL Table.
     public static SQLUtils sqlUtils; // SQL Utils.
 
+    private static Core core;
+
     @Override
     public void onEnable() {
+
+        core = this;
 
         if (Bukkit.getPluginManager().getPlugin("NoteBlockAPI") != null) {
             getServer().getConsoleSender().sendMessage("§c§l----------------------------");
@@ -82,28 +87,9 @@ public class Core extends JavaPlugin {
         }
 
         new MessageManager();
-        registerListener(new MenuListener());
+        registerListener(new MenuListener(this));
         registerListener(new PlayerListener());
 
-        // Add gadgets.
-        gadgetList.add(new GadgetPaintballGun(null));
-        gadgetList.add(new GadgetBatBlaster(null));
-        gadgetList.add(new GadgetChickenator(null));
-        gadgetList.add(new GadgetMelonThrower(null));
-        gadgetList.add(new GadgetEtherealPearl(null));
-        gadgetList.add(new GadgetDiscoBall(null));
-        gadgetList.add(new GadgetColorBomb(null));
-        gadgetList.add(new GadgetFleshHook(null));
-        gadgetList.add(new GadgetPortalGun(null));
-        gadgetList.add(new GadgetBlizzardBlaster(null));
-        gadgetList.add(new GadgetThorHammer(null));
-        gadgetList.add(new GadgetSmashDown(null));
-        gadgetList.add(new GadgetExplosiveSheep(null));
-        gadgetList.add(new GadgetAntiGravity(null));
-        gadgetList.add(new GadgetTsunami(null));
-        gadgetList.add(new GadgetRocket(null));
-        gadgetList.add(new GadgetBlackHole(null));
-        gadgetList.add(new GadgetTNT(null));
 
         // Register Mounts
         mountList.add(new MountDruggedHorse(null));
@@ -140,6 +126,13 @@ public class Core extends JavaPlugin {
         treasureChestList.add(new TreasureChestIce(null));
         treasureChestList.add(new TreasureChestNether(null));
         treasureChestList.add(new TreasureChestSea(null));
+        treasureChestList.add(new TreasureChestClay(null));
+        treasureChestList.add(new TreasureChestDesert(null));
+        treasureChestList.add(new TreasureChestDirt(null));
+        treasureChestList.add(new TreasureChestEnd(null));
+        treasureChestList.add(new TreasureChestGlass(null));
+
+        fileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
 
         // Register the command
         getCommand("ultracosmetics").setExecutor(new UltraCosmeticsCommand());
@@ -156,11 +149,21 @@ public class Core extends JavaPlugin {
 
         SettingsManager.getConfig().addDefault("Disabled-Worlds", disabledWorlds);
 
+        SettingsManager.getConfig().addDefault("Categories-Enabled.Gadgets", true);
+        SettingsManager.getConfig().addDefault("Categories-Enabled.Particle-Effects", true);
+        SettingsManager.getConfig().addDefault("Categories-Enabled.Mounts", true);
+        SettingsManager.getConfig().addDefault("Categories-Enabled.Pets", true);
+
         SettingsManager.getConfig().addDefault("TreasureChests.Enabled", false);
         SettingsManager.getConfig().addDefault("TreasureChests.Key-Price", 1000);
         SettingsManager.getConfig().addDefault("TreasureChests.Money-Loot.Enabled", true);
         SettingsManager.getConfig().addDefault("TreasureChests.Money-Loot.Max", 200);
         SettingsManager.getConfig().addDefault("TreasureChests.Permission-Add-Command", "pex user %name% add %permission%");
+
+        SettingsManager.getConfig().addDefault("Pets-Rename.Enabled", false);
+        SettingsManager.getConfig().addDefault("Pets-Rename.Permission-Required", false);
+        SettingsManager.getConfig().addDefault("Pets-Rename.Requires-Money.Enabled", true);
+        SettingsManager.getConfig().addDefault("Pets-Rename.Requires-Money.Price", 100);
 
         // Set config things.
         SettingsManager.getConfig().addDefault("Ammo-System-For-Gadgets.Enabled", false);
@@ -191,13 +194,42 @@ public class Core extends JavaPlugin {
         SettingsManager.getConfig().addDefault("Gadget-Slot", 4);
         SettingsManager.getConfig().addDefault("Remove-Gadget-With-Drop", false);
 
+        // Add gadgets.
+        gadgetList.add(new GadgetPaintballGun(null));
+        gadgetList.add(new GadgetBatBlaster(null));
+        gadgetList.add(new GadgetChickenator(null));
+        gadgetList.add(new GadgetMelonThrower(null));
+        gadgetList.add(new GadgetEtherealPearl(null));
+        gadgetList.add(new GadgetDiscoBall(null));
+        gadgetList.add(new GadgetColorBomb(null));
+        gadgetList.add(new GadgetFleshHook(null));
+        gadgetList.add(new GadgetPortalGun(null));
+        gadgetList.add(new GadgetBlizzardBlaster(null));
+        gadgetList.add(new GadgetThorHammer(null));
+        gadgetList.add(new GadgetSmashDown(null));
+        gadgetList.add(new GadgetExplosiveSheep(null));
+        gadgetList.add(new GadgetAntiGravity(null));
+        gadgetList.add(new GadgetTsunami(null));
+        gadgetList.add(new GadgetRocket(null));
+        gadgetList.add(new GadgetBlackHole(null));
+        gadgetList.add(new GadgetTNT(null));
+
         ammoEnabled = SettingsManager.getConfig().get("Ammo-System-For-Gadgets.Enabled");
 
-        ammoFileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
+        for (Category c : Category.values()) {
+            if (c.isEnabled())
+                enabledCategories.add(c);
+        }
 
-        if(SettingsManager.getConfig().get("TreasureChests.Enabled")) {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (SettingsManager.getConfig().get("TreasureChests.Enabled")) {
             treasureChests = true;
-            if(!ammoEnabled || !Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            if (!ammoEnabled || !Bukkit.getPluginManager().isPluginEnabled("Vault")) {
                 Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
                 Bukkit.getConsoleSender().sendMessage("§c§l");
                 Bukkit.getConsoleSender().sendMessage("§c§l");
@@ -240,7 +272,7 @@ public class Core extends JavaPlugin {
                 return;
             }
             setupEconomy();
-            if (!ammoFileStorage) {
+            if (!fileStorage) {
                 try {
                     String hostname = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.hostname"));
                     String portNumber = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.port"));
@@ -271,14 +303,14 @@ public class Core extends JavaPlugin {
                             statement.executeUpdate();
                         }
                     }
-                    DatabaseMetaData md = co.getMetaData();
-                    ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "keys");
-                    if (!rs.next()) {
-                        PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD keys INTEGER DEFAULT 0 not NULL");
-                        statement.executeUpdate();
-                    }
                     table = new Table(co, "UltraCosmeticsData");
                     sqlUtils = new SQLUtils(this);
+                    DatabaseMetaData md = co.getMetaData();
+                    ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "treasureKeys");
+                    if (!rs.next()) {
+                        PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
+                        statement.executeUpdate();
+                    }
 
                 } catch (Exception e) {
 
@@ -315,52 +347,48 @@ public class Core extends JavaPlugin {
                     p.getWorld().dropItemNaturally(p.getLocation(), p.getInventory().getItem(slot));
                     p.getInventory().remove(slot);
                 }
-                String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replaceAll("&", "§");
+                String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
                 byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
                 p.getInventory().setItem(slot, ItemFactory.create(material, data, name));
             }
         }
 
+        ArrayList<Entity> ents = new ArrayList<Entity>();
+
 
         final BukkitRunnable countdownRunnable = new BukkitRunnable() {
             @Override
             public void run() {
-                try {
-                    Iterator<Entity> iter = noFallDamageEntities.iterator();
-                    while (iter.hasNext()) {
-                        Entity ent = iter.next();
-                        if (ent.isOnGround())
-                            iter.remove();
+                Iterator<Entity> iter = noFallDamageEntities.iterator();
+                while (iter.hasNext()) {
+                    Entity ent = iter.next();
+                    if (ent.isOnGround())
+                        iter.remove();
+                }
+                Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
+                while (customPlayerIterator.hasNext()) {
+                    CustomPlayer customPlayer = customPlayerIterator.next();
+                    if (customPlayer.getPlayer() == null)
+                        customPlayerIterator.remove();
+                }
+                for (Player p : countdownMap.keySet()) {
+                    if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName())) {
+                        Core.getCustomPlayer(p).clear();
                     }
-                    Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
-                    while (iter.hasNext()) {
-                        CustomPlayer customPlayer = customPlayerIterator.next();
-                        if (customPlayer.getPlayer() == null)
-                            customPlayerIterator.remove();
-                    }
-                    for (Player p : countdownMap.keySet()) {
-                        if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName())) {
-                            Core.getCustomPlayer(p).clear();
-                        }
-                        if (countdownMap.get(p) != null) {
-                            for (Gadget.GadgetType gt : countdownMap.get(p).keySet()) {
-                                double timeLeft = countdownMap.get(p).get(gt);
-                                if (timeLeft > 0.05f) {
-                                    timeLeft -= 0.05f;
-                                    countdownMap.get(p).put(gt, timeLeft);
-                                }
-                            }
-                            Iterator it = countdownMap.get(p).entrySet().iterator();
-                            while (it.hasNext()) {
-                                Map.Entry pair = (Map.Entry) it.next();
-                                if ((double) pair.getValue() < 0.1) {
-                                    it.remove();
-                                }
-                            }
+                    if (countdownMap.get(p) != null) {
+                        Iterator it = countdownMap.get(p).entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pair = (Map.Entry) it.next();
+                            double timeLeft = (double) pair.getValue();
+                            Gadget.GadgetType type = (Gadget.GadgetType) pair.getKey();
+                            if (timeLeft > 0.1)
+                                pair.setValue(timeLeft - 0.05);
+                            else
+                                it.remove();
+
                         }
                     }
-                } catch (Exception exc) {
                 }
             }
         };
@@ -402,18 +430,58 @@ public class Core extends JavaPlugin {
     public void onDisable() {
         BlockUtils.forceRestore();
         for (CustomPlayer cp : customPlayers) {
-            if(cp.currentTreasureChest != null)
+            if (cp.currentTreasureChest != null)
                 cp.currentTreasureChest.forceOpen(0);
             cp.clear();
             int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
             if (cp.getPlayer().getInventory().getItem(slot) != null
                     && cp.getPlayer().getInventory().getItem(slot).hasItemMeta()
                     && cp.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                    && cp.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replaceAll("&", "§"))) {
+                    && cp.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
                 cp.getPlayer().getInventory().setItem(slot, null);
             }
         }
         Core.customPlayers.clear();
+    }
+
+    public static List<Gadget> getGadgets() {
+        return gadgetList;
+    }
+
+    public static List<CustomPlayer> getCustomPlayers() {
+        return customPlayers;
+    }
+
+    public static List<Pet> getPets() {
+        return petList;
+    }
+
+    public static List<Mount> getMounts() {
+        return mountList;
+    }
+
+    public static List<TreasureChest> getTreasureChests() {
+        return treasureChestList;
+    }
+
+    public static List<ParticleEffect> getParticleEffects() {
+        return particleEffectList;
+    }
+
+    public static boolean isAmmoEnabled() {
+        return ammoEnabled;
+    }
+
+    public static boolean isNoteBlockAPIEnabled() {
+        return nbsapiEnabled;
+    }
+
+    public static boolean usingFileStorage() {
+        return fileStorage;
+    }
+
+    public static boolean treasureChestsEnabled() {
+        return treasureChests;
     }
 
     /**
@@ -422,7 +490,7 @@ public class Core extends JavaPlugin {
      * @return
      */
     public static Plugin getPlugin() {
-        return Bukkit.getPluginManager().getPlugin("UltraCosmetics");
+        return core;
     }
 
     public static void registerListener(Listener listenerClass) {
@@ -445,7 +513,7 @@ public class Core extends JavaPlugin {
             con.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
             String version = new BufferedReader(new InputStreamReader(
                     con.getInputStream())).readLine();
-            return version.replaceAll("Beta ", "").replaceAll("Release ", "");
+            return version.replace("Beta ", "").replace("Release ", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -453,9 +521,32 @@ public class Core extends JavaPlugin {
     }
 
     public static boolean outdated() {
-        String currentVersion = Core.getPlugin().getDescription().getVersion().replaceAll("Beta ", "");
+        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "");
         int i = new Version(currentVersion).compareTo(new Version(getLastVersion()));
         return i == -1;
+    }
+
+    public enum Category {
+        PETS("Pets", ItemFactory.create(Material.MONSTER_EGG, (byte) 0, MessageManager.getMessage("Menu.Pets"))),
+        EFFECTS("Particle-Effects", ItemFactory.create(Material.MELON_SEEDS, (byte) 0, MessageManager.getMessage("Menu.Particle-Effects"))),
+        GADGETS("Gadgets", ItemFactory.create(Material.SLIME_BALL, (byte) 0, MessageManager.getMessage("Menu.Gadgets"))),
+        MOUNTS("Mounts", ItemFactory.create(Material.SADDLE, (byte) 0, MessageManager.getMessage("Menu.Mounts")));
+
+        String configPath;
+        ItemStack is;
+
+        Category(String configPath, ItemStack is) {
+            this.configPath = configPath;
+            this.is = is;
+        }
+
+        public ItemStack getItemStack() {
+            return is;
+        }
+
+        public boolean isEnabled() {
+            return SettingsManager.getConfig().get("Categories-Enabled." + configPath);
+        }
     }
 
 }

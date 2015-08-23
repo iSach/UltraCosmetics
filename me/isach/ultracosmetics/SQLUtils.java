@@ -56,23 +56,39 @@ public class SQLUtils {
             return 0;
         }
     }
+    public String getPetName(Player p, String pet) {
+
+        try {
+            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            res.first();
+            return res.getString(pet);
+
+        } catch (SQLException e) {
+
+            return "Unknown";
+        }
+    }
+
+    public void setName(Player p, String pet, String name) {
+        core.table.update().set("name" + pet, name).where("uuid", p.getUniqueId().toString()).execute();
+    }
 
     public int getKeys(Player p) {
         try {
             ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
             res.first();
-            return res.getInt("keys");
+            return res.getInt("treasureKeys");
         } catch (SQLException e) {
             return 0;
         }
     }
 
     public void removeKey(Player p) {
-        core.table.update().set("keys", getKeys(p) - 1).where("uuid", p.getUniqueId().toString()).execute();
+        core.table.update().set("treasureKeys", getKeys(p) - 1).where("uuid", p.getUniqueId().toString()).execute();
     }
 
     public void addKey(Player p) {
-        core.table.update().set("keys", getKeys(p) + 1).where("uuid", p.getUniqueId().toString()).execute();
+        core.table.update().set("treasureKeys", getKeys(p) + 1).where("uuid", p.getUniqueId().toString()).execute();
     }
 
     public void removeAmmo(Player p, String name) {

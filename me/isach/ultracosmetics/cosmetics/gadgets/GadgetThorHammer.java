@@ -42,6 +42,19 @@ public class GadgetThorHammer extends Gadget implements Listener {
             public void run() {
                 i.setVelocity(getPlayer().getEyeLocation().toVector().subtract(i.getLocation().toVector()).multiply(0.2).add(new Vector(0, 0, 0)));
                 v = null;
+                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        if(i.isValid()) {
+                            if (Core.isAmmoEnabled()) {
+                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
+                            } else {
+                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), "§9Gadget"));
+                            }
+                            i.remove();
+                        }
+                    }
+                }, 40);
             }
         }, 20);
     }
@@ -52,7 +65,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
             event.setCancelled(true);
             if (event.getPlayer() == getPlayer()) {
                 if (event.getItem().getTicksLived() > 5) {
-                    if (Core.ammoEnabled) {
+                    if (Core.isAmmoEnabled()) {
                         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                     } else {
                         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), "§9Gadget"));
@@ -62,7 +75,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
                 }
             } else {
                 if (v != null)
-                    MathUtils.applyVector(event.getPlayer(), v);
+                    MathUtils.applyVelocity(event.getPlayer(), v);
             }
         }
     }

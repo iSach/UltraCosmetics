@@ -122,7 +122,7 @@ public class GadgetExplosiveSheep extends Gadget {
                     } catch (Exception exc) {
                     }
                     Random r = new Random();
-                    MathUtils.applyVector(sheep, new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
+                    MathUtils.applyVelocity(sheep, new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
                     sheep.setBaby();
                     sheep.setAgeLock(true);
                     sheep.setNoDamageTicks(120);
