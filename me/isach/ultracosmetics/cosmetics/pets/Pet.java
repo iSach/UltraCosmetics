@@ -86,7 +86,7 @@ public abstract class Pet implements Listener {
             armorStand.setCustomName(getName());
             armorStand.setCustomNameVisible(true);
 
-            if(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()) != null)
+            if (Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()) != null)
                 armorStand.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()));
 
             ent.setPassenger(armorStand);
@@ -97,7 +97,7 @@ public abstract class Pet implements Listener {
     }
 
     private void followPlayer() {
-        if(Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
+        if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
             return;
         net.minecraft.server.v1_8_R3.Entity pett = ((CraftEntity) ent).getHandle();
         ((EntityInsentient) pett).getNavigation().a(2);
@@ -115,7 +115,6 @@ public abstract class Pet implements Listener {
                 ((EntityInsentient) petf).getNavigation().a(1.05D);
             }
         } catch (IllegalArgumentException exception) {
-            exception.printStackTrace();
             ent.teleport(getPlayer().getLocation());
         }
     }

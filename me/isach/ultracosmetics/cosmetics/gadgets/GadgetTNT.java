@@ -8,10 +8,10 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
-import org.bukkit.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,19 +41,19 @@ public class GadgetTNT extends Gadget {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if(entities.contains(event.getDamager())) {
+        if (entities.contains(event.getDamager())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
-        if(entities.contains(event.getEntity())) {
+        if (entities.contains(event.getEntity())) {
             event.setCancelled(true);
             UtilParticles.play(event.getEntity().getLocation(), Effect.EXPLOSION_HUGE);
             event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1);
 
-            for(Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {
+            for (Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {
                 double dX = event.getEntity().getLocation().getX() - ent.getLocation().getX();
                 double dY = event.getEntity().getLocation().getY() - ent.getLocation().getY();
                 double dZ = event.getEntity().getLocation().getZ() - ent.getLocation().getZ();

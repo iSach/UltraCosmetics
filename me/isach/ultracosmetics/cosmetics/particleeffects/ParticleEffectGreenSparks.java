@@ -22,13 +22,13 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
 
     @Override
     void onUpdate() {
-        if(up) {
-            if(height < 2)
+        if (up) {
+            if (height < 2)
                 height += 0.05;
             else
                 up = false;
         } else {
-            if(height > 0)
+            if (height > 0)
                 height -= 0.05;
             else
                 up = true;

@@ -28,7 +28,7 @@ public class MountMountOfFire extends Mount {
         super(EntityType.HORSE, Material.BLAZE_POWDER, (byte) 0, "MountOfFire", "ultracosmetics.mounts.mountoffire", owner, MountType.MOUNTOFFIRE);
         Core.registerListener(this);
         if (owner != null) {
-            Horse horse = (Horse)ent;
+            Horse horse = (Horse) ent;
             horse.setColor(Horse.Color.CREAMY);
             horse.setVariant(Horse.Variant.HORSE);
             horse.setJumpStrength(0.7);

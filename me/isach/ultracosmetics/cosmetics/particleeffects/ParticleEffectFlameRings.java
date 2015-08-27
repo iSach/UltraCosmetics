@@ -28,13 +28,13 @@ public class ParticleEffectFlameRings extends ParticleEffect {
         for (int i = 0; i < 2; i++) {
             double inc = (2 * Math.PI) / 100;
             double toAdd = 0;
-            if(i == 1)
+            if (i == 1)
                 toAdd = 3.5;
             double angle = step * inc + toAdd;
             Vector v = new Vector();
             v.setX(Math.cos(angle));
             v.setZ(Math.sin(angle));
-            if(i == 0) {
+            if (i == 0) {
                 MathUtils.rotateAroundAxisZ(v, 180);
             } else {
                 MathUtils.rotateAroundAxisZ(v, 90);

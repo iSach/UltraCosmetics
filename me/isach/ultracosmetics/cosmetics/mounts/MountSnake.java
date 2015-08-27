@@ -4,8 +4,6 @@ import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.MathUtils;
 import net.minecraft.server.v1_8_R3.EntityCreature;
-import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.Navigation;
 import net.minecraft.server.v1_8_R3.PathEntity;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;

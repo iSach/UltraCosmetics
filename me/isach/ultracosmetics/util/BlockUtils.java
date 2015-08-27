@@ -1,6 +1,9 @@
 package me.isach.ultracosmetics.util;
 
 import me.isach.ultracosmetics.Core;
+import me.isach.ultracosmetics.CustomPlayer;
+import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import me.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,6 +47,18 @@ public class BlockUtils {
         }
 
         return blocks;
+    }
+
+    public static boolean isRocketBlock(Block b) {
+        for (CustomPlayer cp : Core.getCustomPlayers()) {
+            if (cp.currentGadget != null
+                    && cp.currentGadget.getType() == Gadget.GadgetType.ROCKET) {
+                GadgetRocket rocket = (GadgetRocket) cp.currentGadget;
+                if (rocket.blocks.contains(b))
+                    return true;
+            }
+        }
+        return false;
     }
 
 
@@ -124,21 +139,10 @@ public class BlockUtils {
                 && b.getType() != Material.ENDER_PORTAL
                 && b.getType() != Material.SOIL
                 && b.getType() != Material.BARRIER
+                && !isPortalBlock(b)
+                && !isRocketBlock(b)
                 && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()
-                && bUp.getType() != Material.CROPS
-                && bUp.getType() != Material.GRASS
-                && bUp.getType() != Material.LONG_GRASS
-                && bUp.getType() != Material.SAPLING
-                && bUp.getType() != Material.DEAD_BUSH
-                && bUp.getType() != Material.RED_ROSE
-                && bUp.getType() != Material.RED_MUSHROOM
-                && bUp.getType() != Material.BROWN_MUSHROOM
-                && bUp.getType() != Material.TORCH
-                && bUp.getType() != Material.LADDER
-                && bUp.getType() != Material.VINE
-                && bUp.getType() != Material.DOUBLE_PLANT
-                && bUp.getType() != Material.CACTUS
-                && bUp.getType() != Material.WATER_LILY
+                && a(bUp)
                 && b.getType().getId() != 43
                 && b.getType().getId() != 44) {
             if (!blocksToRestore.containsKey(b.getLocation())) {
@@ -156,6 +160,20 @@ public class BlockUtils {
             }
 
         }
+    }
+
+    private static boolean a(Block b) {
+        if(b.getType() == Material.AIR
+            || net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid())
+            return true;
+        return false;
+    }
+
+    public static boolean isPortalBlock(Block b) {
+        for(BlockFace face : BlockFace.values())
+            if(b.getRelative(face).getType() == Material.PORTAL)
+                return true;
+        return false;
     }
 
 

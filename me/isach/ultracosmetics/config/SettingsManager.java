@@ -7,7 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by sacha on 21/07/15.
@@ -34,7 +33,7 @@ public class SettingsManager {
         }
 
         File f = new File(Core.getPlugin().getDataFolder(), "/data");
-        if(!f.exists())
+        if (!f.exists())
             f.mkdirs();
 
         file = new File(Core.getPlugin().getDataFolder(), fileName + ".yml");

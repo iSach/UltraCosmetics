@@ -50,9 +50,9 @@ public abstract class Mount implements Listener {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
-            if(type == MountType.NYANSHEEP || type == MountType.DRAGON)
+            if (type == MountType.NYANSHEEP || type == MountType.DRAGON)
                 repeatDelay = 1;
-            if(Core.getCustomPlayer(getPlayer()).currentMount != null)
+            if (Core.getCustomPlayer(getPlayer()).currentMount != null)
                 Core.getCustomPlayer(getPlayer()).removeMount();
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
@@ -70,11 +70,11 @@ public abstract class Mount implements Listener {
             new MountListener(this);
 
             this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
-            if(ent instanceof Ageable) {
+            if (ent instanceof Ageable) {
                 ((Ageable) ent).setAdult();
             } else {
-                if(ent instanceof Slime) {
-                    ((Slime)ent).setSize(4);
+                if (ent instanceof Slime) {
+                    ((Slime) ent).setSize(4);
                 }
             }
             ent.setCustomNameVisible(true);
@@ -102,7 +102,9 @@ public abstract class Mount implements Listener {
         return MessageManager.getMessage("Mounts." + name + ".menu-name");
     }
 
-    public String getConfigName() { return name; }
+    public String getConfigName() {
+        return name;
+    }
 
     public Material getMaterial() {
         return this.material;

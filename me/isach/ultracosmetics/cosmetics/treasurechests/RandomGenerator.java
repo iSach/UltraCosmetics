@@ -4,6 +4,7 @@ import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import me.isach.ultracosmetics.cosmetics.morphs.Morph;
 import me.isach.ultracosmetics.cosmetics.mounts.Mount;
 import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
@@ -33,6 +34,7 @@ public class RandomGenerator {
     public static List<ParticleEffect> particleEffectList = new ArrayList<>();
     public static List<Mount> mountList = new ArrayList<>();
     public static List<Pet> petList = new ArrayList<>();
+    public static List<Morph> morphList = new ArrayList<>();
 
     public RandomGenerator(final Player player, Location location) {
         this.loc = location.add(0.5, 0, 0.5);
@@ -49,6 +51,12 @@ public class RandomGenerator {
                         && !player.hasPermission(pet.getType().getPermission()))
                     this.petList.add(pet);
             }
+        if (morphList.isEmpty())
+            for (Morph morph : Core.getMorphs()) {
+                if (morph.getType().isEnabled()
+                        && !player.hasPermission(morph.getType().getPermission()))
+                    this.morphList.add(morph);
+            }
         if (particleEffectList.isEmpty())
             for (ParticleEffect particleEffect : Core.getParticleEffects()) {
                 if (particleEffect.getType().isEnabled()
@@ -61,14 +69,16 @@ public class RandomGenerator {
                         && !player.hasPermission(m.getType().getPermission()))
                     this.mountList.add(m);
             }
-        if(!Core.Category.MOUNTS.isEnabled())
+        if (!Core.Category.MOUNTS.isEnabled())
             mountList.clear();
-        if(!Core.Category.GADGETS.isEnabled())
+        if (!Core.Category.GADGETS.isEnabled())
             gadgetList.clear();
-        if(!Core.Category.EFFECTS.isEnabled())
+        if (!Core.Category.EFFECTS.isEnabled())
             particleEffectList.clear();
-        if(!Core.Category.PETS.isEnabled())
+        if (!Core.Category.PETS.isEnabled())
             petList.clear();
+        if (!Core.Category.MORPHS.isEnabled())
+            morphList.clear();
     }
 
     public byte getData() {
@@ -176,15 +186,28 @@ public class RandomGenerator {
     }
 
     private void giveRandomLegendary() {
-        int i = MathUtils.randomRangeInt(0, particleEffectList.size() - 1);
-        ParticleEffect particleEffect = particleEffectList.get(i);
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Effect").replace("%effect%", particleEffect.getName());
-        particleEffectList.remove(i);
-        material = particleEffect.getMaterial();
-        givePermission(particleEffect.getType().getPermission());
-        spawnRandomFirework(loc);
-        Bukkit.broadcastMessage(MessageManager.getMessage("Found-Legendary").replace("%name%", player.getName()).replace("%found%", name));
-        loc.getWorld().playSound(loc, Sound.WITHER_DEATH, 3, 1);
+        int j = MathUtils.randomRangeInt(0, 2);
+        if(j == 0) {
+            int i = MathUtils.randomRangeInt(0, morphList.size() - 1);
+            ParticleEffect particleEffect = particleEffectList.get(i);
+            name = MessageManager.getMessage("Treasure-Chests-Loot.Effect").replace("%effect%", particleEffect.getName());
+            particleEffectList.remove(i);
+            material = particleEffect.getMaterial();
+            givePermission(particleEffect.getType().getPermission());
+            spawnRandomFirework(loc);
+            Bukkit.broadcastMessage(MessageManager.getMessage("Found-Legendary").replace("%name%", player.getName()).replace("%found%", name));
+            loc.getWorld().playSound(loc, Sound.WITHER_DEATH, 3, 1);
+        } else {
+            int i = MathUtils.randomRangeInt(0, morphList.size() - 1);
+            Morph morph = morphList.get(i);
+            name = MessageManager.getMessage("Treasure-Chests-Loot.Morph").replace("%morph%", morph.getName());
+            particleEffectList.remove(i);
+            material = morph.getMaterial();
+            givePermission(morph.getType().getPermission());
+            spawnRandomFirework(loc);
+            Bukkit.broadcastMessage(MessageManager.getMessage("Found-Legendary").replace("%name%", player.getName()).replace("%found%", name));
+            loc.getWorld().playSound(loc, Sound.WITHER_DEATH, 3, 1);
+        }
     }
 
 

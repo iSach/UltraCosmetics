@@ -654,8 +654,8 @@ public class Cuboid implements Iterable<Block>, Cloneable,
     }
 
     public boolean isEmpty() {
-        for(Block b : getBlocks()) {
-            if(b.getType() != Material.AIR)
+        for (Block b : getBlocks()) {
+            if (b.getType() != Material.AIR)
                 return false;
         }
         return true;
@@ -696,7 +696,6 @@ public class Cuboid implements Iterable<Block>, Cloneable,
             }
             return b;
         }
-
 
 
         public void remove() {

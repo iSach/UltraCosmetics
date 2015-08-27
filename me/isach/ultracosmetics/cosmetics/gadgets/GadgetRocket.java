@@ -4,14 +4,10 @@ import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.Title;
 import me.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArrow;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -27,7 +23,7 @@ public class GadgetRocket extends Gadget {
     boolean launching;
     Arrow arrow;
     List<FallingBlock> fallingBlocks = new ArrayList<>();
-    List<Block> blocks = new ArrayList<>();
+    public List<Block> blocks = new ArrayList<>();
 
     public GadgetRocket(UUID owner) {
         super(Material.getMaterial(401), (byte) 0x0, "Rocket", "ultracosmetics.gadgets.rocket", 60, owner, GadgetType.ROCKET);
@@ -63,7 +59,7 @@ public class GadgetRocket extends Gadget {
                 }
                 arrow = loc.getWorld().spawn(loc.add(0, 4, 0), Arrow.class);
                 arrow.setKnockbackStrength(0);
-                
+
             }
         }, 10);
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {

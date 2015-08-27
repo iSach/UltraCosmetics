@@ -1,7 +1,6 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -81,12 +80,15 @@ public class GadgetMelonThrower extends Gadget implements Listener {
                     item.remove();
                 }
             }
-        } catch (Exception exc) {}
+        } catch (Exception exc) {
+        }
     }
 
     @Override
-    public void clear() { }
+    public void clear() {
+    }
 
     @Override
-    void onInteractLeftClick() { }
+    void onInteractLeftClick() {
+    }
 }

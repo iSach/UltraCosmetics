@@ -45,7 +45,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
-                        if(i.isValid()) {
+                        if (i.isValid()) {
                             if (Core.isAmmoEnabled()) {
                                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                             } else {

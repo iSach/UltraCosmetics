@@ -3,11 +3,11 @@ package me.isach.ultracosmetics.cosmetics.gadgets;
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
+import me.isach.ultracosmetics.listeners.MenuListener;
 import me.isach.ultracosmetics.util.Cuboid;
 import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,6 +36,7 @@ public abstract class Gadget implements Listener {
     private Byte data;
     private String configName;
     private Inventory inv;
+    public boolean openGadgetsInvAfterAmmo;
     private double countdown;
 
     private boolean requireAmmo;
@@ -53,7 +54,7 @@ public abstract class Gadget implements Listener {
         this.data = data;
         this.configName = configName;
         this.permission = permission;
-        if(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
+        if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
             this.countdown = countdown;
             SettingsManager.getConfig().set("Gadgets." + configName + ".Cooldown", countdown);
         } else {
@@ -176,12 +177,13 @@ public abstract class Gadget implements Listener {
         public void onInventoryClose(InventoryCloseEvent event) {
             if (event.getPlayer() == getPlayer() && inv != null && isSameInventory(event.getInventory(), inv)) {
                 inv = null;
+                openGadgetsInvAfterAmmo = false;
                 return;
             }
         }
 
         @EventHandler
-        public void onInventoryClickAmmo(InventoryClickEvent event) {
+        public void onInventoryClickAmmo(final InventoryClickEvent event) {
             if (event.getWhoClicked() == getPlayer() && inv != null && isSameInventory(event.getWhoClicked().getOpenInventory().getTopInventory(), inv)) {
                 event.setCancelled(true);
                 if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasDisplayName()) {
@@ -192,7 +194,16 @@ public abstract class Gadget implements Listener {
                         if (Core.economy.getBalance((Player) event.getWhoClicked()) >= getPrice()) {
                             Core.economy.withdrawPlayer((Player) event.getWhoClicked(), getPrice());
                             Core.getCustomPlayer((Player) event.getWhoClicked()).addAmmo(type.toString().toLowerCase(), getResultAmmoAmount());
+                            event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
                             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
+                            if (openGadgetsInvAfterAmmo)
+                                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        MenuListener.openGadgetsMenu((Player) event.getWhoClicked());
+                                        openGadgetsInvAfterAmmo = false;
+                                    }
+                                }, 1);
                         } else {
                             getPlayer().sendMessage(MessageManager.getMessage("Not-Enough-Money"));
                         }
@@ -218,10 +229,14 @@ public abstract class Gadget implements Listener {
             if (itemStack.getData().getData() != gadget.data) return;
             if (player.getInventory().getHeldItemSlot() != (int) SettingsManager.getConfig().get("Gadget-Slot")) return;
             if (Core.getCustomPlayer(getPlayer()).currentGadget != gadget) return;
-            if(event.getAction() == Action.PHYSICAL) return;
+            if (event.getAction() == Action.PHYSICAL) return;
             event.setCancelled(true);
             player.updateInventory();
-            if(Core.getCustomPlayer(getPlayer()).currentTreasureChest != null) {
+            if (!Core.getCustomPlayer(getPlayer()).hasGadgetsEnabled()) {
+                getPlayer().sendMessage(MessageManager.getMessage("Gadgets-Enabled-Needed"));
+                return;
+            }
+            if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null) {
                 return;
             }
             if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
@@ -236,14 +251,14 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if(type == GadgetType.ROCKET) {
+            if (type == GadgetType.ROCKET) {
                 boolean pathClear = true;
-                    Cuboid c = new Cuboid(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
-                    if(!c.isEmpty()) {
-                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
-                        return;
-                    }
-                if(!getPlayer().isOnGround()) {
+                Cuboid c = new Cuboid(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
+                if (!c.isEmpty()) {
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
+                    return;
+                }
+                if (!getPlayer().isOnGround()) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
                     return;
                 }

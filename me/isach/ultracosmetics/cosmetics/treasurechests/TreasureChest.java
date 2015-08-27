@@ -28,6 +28,7 @@ import org.bukkit.material.EnderChest;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -147,6 +148,7 @@ public abstract class TreasureChest implements Listener {
                                 }, 30);
                             } catch (Exception exc) {
                                 clear();
+                                cancel();
                             }
                         }
                     };
@@ -224,6 +226,8 @@ public abstract class TreasureChest implements Listener {
                     cancel();
                     return;
                 }
+                if(getPlayer().getLocation().distance(center) > 1.5)
+                    getPlayer().teleport(center);
                 for (Entity ent : player.getNearbyEntities(2, 2, 2)) {
                     if (Core.getCustomPlayer(player).currentPet != null) {
                         if (ent == Core.getCustomPlayer(player).currentPet
@@ -256,7 +260,7 @@ public abstract class TreasureChest implements Listener {
             b.setType(oldMaterials.get(b.getLocation()));
             b.setData(oldDatas.get(b.getLocation()));
         }
-        if(!stopping) {
+        if (!stopping) {
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
@@ -277,6 +281,7 @@ public abstract class TreasureChest implements Listener {
                     holograms.clear();
                     chestsToRemove.clear();
                     blocksToRestore.clear();
+                    if(Core.getCustomPlayer(getPlayer()) != null)
                     Core.getCustomPlayer(getPlayer()).currentTreasureChest = null;
                     owner = null;
                     randomGenerator.clear();

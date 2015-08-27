@@ -5,6 +5,7 @@ import me.isach.ultracosmetics.CustomPlayer;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import me.isach.ultracosmetics.cosmetics.morphs.Morph;
 import me.isach.ultracosmetics.cosmetics.mounts.Mount;
 import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
@@ -15,8 +16,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.awt.*;
 
 /**
  * Created by sacha on 14/08/15.
@@ -36,7 +35,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
         } else {
             String argZero = args[0];
             if (argZero.equalsIgnoreCase("gadget")) {
-                if(!Core.Category.GADGETS.isEnabled()) {
+                if (!Core.Category.GADGETS.isEnabled()) {
                     sender.sendMessage("§c§lGadgets are disabled!");
                     return true;
                 }
@@ -65,7 +64,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 }
                 return true;
             } else if (argZero.equalsIgnoreCase("effect")) {
-                if(!Core.Category.EFFECTS.isEnabled()) {
+                if (!Core.Category.EFFECTS.isEnabled()) {
                     sender.sendMessage("§c§lParticle Effects are disabled!");
                     return true;
                 }
@@ -94,7 +93,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 }
                 return true;
             } else if (argZero.equalsIgnoreCase("mount")) {
-                if(!Core.Category.MOUNTS.isEnabled()) {
+                if (!Core.Category.MOUNTS.isEnabled()) {
                     sender.sendMessage("§c§lMounts are disabled!");
                     return true;
                 }
@@ -123,7 +122,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 }
                 return true;
             } else if (argZero.equalsIgnoreCase("pet")) {
-                if(!Core.Category.PETS.isEnabled()) {
+                if (!Core.Category.PETS.isEnabled()) {
                     sender.sendMessage("§c§lPets are disabled!");
                     return true;
                 }
@@ -149,6 +148,35 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 }
                 if (!petFound) {
                     sender.sendMessage(MessageManager.getMessage("Invalid-Pet"));
+                }
+                return true;
+            } else if (argZero.equalsIgnoreCase("morph")) {
+                if (!Core.Category.MORPHS.isEnabled()) {
+                    sender.sendMessage("§c§lMorphs are disabled!");
+                    return true;
+                }
+                if (args.length != 2) {
+                    sender.sendMessage("§l§oCosmetics > §7/uc morph <morph>");
+                    return true;
+                }
+                if (args[1].equalsIgnoreCase("clear")) {
+                    Core.getCustomPlayer((Player) sender).removeMorph();
+                    return true;
+                }
+                boolean morphFound = false;
+                for (Morph morph : Core.getMorphs()) {
+                    if (morph.getType().toString().toLowerCase().equalsIgnoreCase(args[1].toLowerCase())) {
+                        if (!morph.getType().isEnabled()) {
+                            sender.sendMessage(MessageManager.getMessage("Cosmetic-Disabled"));
+                            return true;
+                        } else {
+                            MenuListener.activateMorphByType(morph.getType(), (Player) sender);
+                        }
+                        morphFound = true;
+                    }
+                }
+                if (!morphFound) {
+                    sender.sendMessage(MessageManager.getMessage("Invalid-Morph"));
                 }
                 return true;
             } else if (argZero.equalsIgnoreCase("clear")) {
@@ -184,23 +212,25 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 return true;
             } else if (argZero.equalsIgnoreCase("menu")) {
                 if (args.length == 1) {
-                    MenuListener.openMainMenu((Player)sender);
+                    MenuListener.openMainMenu((Player) sender);
                     return true;
                 } else if (args.length > 1) {
                     if (args[1].equalsIgnoreCase("gadgets")) {
-                        if(Core.Category.GADGETS.isEnabled())
-                        MenuListener.openGadgetsMenu((Player) sender);
+                        if (Core.Category.GADGETS.isEnabled())
+                            MenuListener.openGadgetsMenu((Player) sender);
                     } else if (args[1].equalsIgnoreCase("effects")) {
-                        if(Core.Category.EFFECTS.isEnabled())
-                        MenuListener.openParticlesMenu((Player) sender);
+                        if (Core.Category.EFFECTS.isEnabled())
+                            MenuListener.openParticlesMenu((Player) sender);
                     } else if (args[1].equalsIgnoreCase("mounts")) {
-                        if(Core.Category.MOUNTS.isEnabled())
-                        MenuListener.openMountsMenu((Player) sender);
+                        if (Core.Category.MOUNTS.isEnabled())
+                            MenuListener.openMountsMenu((Player) sender);
                     } else if (args[1].equalsIgnoreCase("pets")) {
-                        if(Core.Category.PETS.isEnabled())
-                        MenuListener.openPetsMenu((Player) sender);
+                        if (Core.Category.PETS.isEnabled())
+                            MenuListener.openPetsMenu((Player) sender);
                     } else if (args[1].equalsIgnoreCase("main")) {
-                        MenuListener.openMainMenu((Player)sender);
+                        MenuListener.openMainMenu((Player) sender);
+                    } else if (args[1].equalsIgnoreCase("morph")) {
+                        MenuListener.openMorphsMenu((Player) sender);
                     } else {
                         sender.sendMessage(MessageManager.getMessage("Invalid-Menu"));
                     }

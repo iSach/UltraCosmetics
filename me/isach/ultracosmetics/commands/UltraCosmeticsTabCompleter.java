@@ -1,6 +1,7 @@
 package me.isach.ultracosmetics.commands;
 
 import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import me.isach.ultracosmetics.cosmetics.morphs.Morph;
 import me.isach.ultracosmetics.cosmetics.mounts.Mount;
 import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
@@ -28,7 +29,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                             gadgets.add(type.toString().toLowerCase());
                         }
                     }
-                    if("clear".startsWith(args[1].toLowerCase())) {
+                    if ("clear".startsWith(args[1].toLowerCase())) {
                         gadgets.add("clear");
                     }
                 } else {
@@ -53,7 +54,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                 mounts.add(type.toString().toLowerCase());
                             }
                     }
-                    if("clear".startsWith(args[1].toLowerCase())) {
+                    if ("clear".startsWith(args[1].toLowerCase())) {
                         mounts.add("clear");
                     }
                 } else {
@@ -79,7 +80,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                 effects.add(type.toString().toLowerCase());
                             }
                     }
-                    if("clear".startsWith(args[1].toLowerCase())) {
+                    if ("clear".startsWith(args[1].toLowerCase())) {
                         effects.add("clear");
                     }
                 } else {
@@ -105,7 +106,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                 pets.add(type.toString().toLowerCase());
                             }
                     }
-                    if("clear".startsWith(args[1].toLowerCase())) {
+                    if ("clear".startsWith(args[1].toLowerCase())) {
                         pets.add("clear");
                     }
                 } else {
@@ -121,6 +122,30 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                 Collections.sort(pets);
 
                 return pets;
+            } else if (args[0].equalsIgnoreCase("morph")) {
+                ArrayList<String> morphs = new ArrayList<>();
+
+                if (!args[1].equals("")) {
+                    for (Morph.MorphType type : Morph.MorphType.values()) {
+                        if (type.isEnabled() && type.toString().toLowerCase().toLowerCase().startsWith(args[1].toLowerCase())) {
+                            morphs.add(type.toString().toLowerCase());
+                        }
+                    }
+                    if ("clear".startsWith(args[1].toLowerCase())) {
+                        morphs.add("clear");
+                    }
+                } else {
+                    for (Morph.MorphType type : Morph.MorphType.values()) {
+                        if (type.isEnabled()) {
+                            morphs.add(type.toString().toLowerCase());
+                        }
+                    }
+                    morphs.add("clear");
+                }
+
+                Collections.sort(morphs);
+
+                return morphs;
             } else if (args[0].equalsIgnoreCase("menu")) {
                 ArrayList<String> completes = new ArrayList<>();
 
@@ -129,6 +154,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                 completeBefore.add("gadgets");
                 completeBefore.add("mounts");
                 completeBefore.add("effects");
+                completeBefore.add("morphs");
 
                 if (!args[1].equals("")) {
                     for (String complete : completeBefore) {
@@ -157,6 +183,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
             completeBefore.add("clear");
             completeBefore.add("reload");
             completeBefore.add("chest");
+            completeBefore.add("morph");
 
 
             if (!args[0].equals("")) {

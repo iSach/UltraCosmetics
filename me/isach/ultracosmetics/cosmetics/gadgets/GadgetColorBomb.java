@@ -1,7 +1,6 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.ItemFactory;
 import me.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
@@ -75,7 +74,8 @@ public class GadgetColorBomb extends Gadget {
                         items.remove(item);
                     }
                 }
-            } catch (Exception exc) {}
+            } catch (Exception exc) {
+            }
             Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), ItemFactory.create(Material.WOOL, (byte) random.nextInt(15), UUID.randomUUID().toString()));
             i.setPickupDelay(500000);
             i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
@@ -102,6 +102,8 @@ public class GadgetColorBomb extends Gadget {
         }
         running = false;
     }
+
     @Override
-    void onInteractLeftClick() { }
+    void onInteractLeftClick() {
+    }
 }

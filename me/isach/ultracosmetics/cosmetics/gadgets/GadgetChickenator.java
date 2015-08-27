@@ -1,10 +1,12 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
@@ -61,7 +63,7 @@ public class GadgetChickenator extends Gadget {
 
     @Override
     public void clear() {
-        for(Item i : items)
+        for (Item i : items)
             i.remove();
     }
 
@@ -89,6 +91,8 @@ public class GadgetChickenator extends Gadget {
             }
         }, 2);
     }
+
     @Override
-    void onInteractLeftClick() { }
+    void onInteractLeftClick() {
+    }
 }

@@ -3,11 +3,13 @@ package me.isach.ultracosmetics;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import me.isach.ultracosmetics.cosmetics.morphs.Morph;
 import me.isach.ultracosmetics.cosmetics.mounts.Mount;
 import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
 import me.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import me.isach.ultracosmetics.util.ItemFactory;
+import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,6 +31,7 @@ public class CustomPlayer {
     public ParticleEffect currentParticleEffect;
     public Pet currentPet;
     public TreasureChest currentTreasureChest;
+    public Morph currentMorph;
 
     public CustomPlayer(UUID uuid) {
         this.uuid = uuid;
@@ -48,6 +51,11 @@ public class CustomPlayer {
                 }
             }
         }
+        if (Core.usingFileStorage()) {
+            SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
+            SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
+        }
+
     }
 
     public Player getPlayer() {
@@ -106,6 +114,10 @@ public class CustomPlayer {
     }
 
     public void clear() {
+        if (Core.Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+            removeMorph();
+            DisguiseAPI.undisguiseToAll(getPlayer());
+        }
         removeGadget();
         removeParticleEffect();
         removePet();
@@ -148,6 +160,15 @@ public class CustomPlayer {
         }
     }
 
+    public void removeMorph() {
+        if (currentMorph != null) {
+            DisguiseAPI.undisguiseToAll(getPlayer());
+            currentMorph.clear();
+            //getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", currentMorph.getName()));
+            currentMorph = null;
+        }
+    }
+
     public int getMoney() {
         try {
             return (int) Core.economy.getBalance(getPlayer());
@@ -169,6 +190,9 @@ public class CustomPlayer {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Pet-Names." + petName);
             } else {
+                if (Core.sqlUtils.getPetName(getPlayer(), petName).equalsIgnoreCase("Unknown")) {
+                    return null;
+                }
                 return Core.sqlUtils.getPetName(getPlayer(), petName);
             }
         } catch (NullPointerException e) {
@@ -185,6 +209,51 @@ public class CustomPlayer {
             }
         }
     }
+
+    public void setGadgetsEnabled(Boolean enabled) {
+        try {
+            if (Core.usingFileStorage()) {
+                SettingsManager.getData(getPlayer()).set("Gadgets-Enabled", enabled);
+            } else {
+                Core.sqlUtils.setGadgetsEnabled(getPlayer(), enabled);
+            }
+
+        } catch (NullPointerException e) {
+        }
+    }
+
+    public boolean hasGadgetsEnabled() {
+        try {
+            if (Core.usingFileStorage()) {
+                return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
+            } else {
+                return Core.sqlUtils.hasGadgetsEnabled(getPlayer());
+            }
+        } catch (NullPointerException e) {
+            return true;
+        }
+    }
+
+    public void setSeeSelfMorph(Boolean enabled) {
+        if (Core.usingFileStorage()) {
+            SettingsManager.getData(getPlayer()).set("Third-Person-Morph-View", enabled);
+        } else {
+            Core.sqlUtils.setSeeSelfMorph(getPlayer(), enabled);
+        }
+    }
+
+    public boolean canSeeSelfMorph() {
+        try {
+            if (Core.usingFileStorage()) {
+                return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
+            } else {
+                return Core.sqlUtils.canSeeSelfMorph(getPlayer());
+            }
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
 
     public int getAmmo(String name) {
         if (Core.isAmmoEnabled()) {

@@ -3,9 +3,10 @@ package me.isach.ultracosmetics.cosmetics.pets;
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.util.Vector;
 
 import java.util.Random;

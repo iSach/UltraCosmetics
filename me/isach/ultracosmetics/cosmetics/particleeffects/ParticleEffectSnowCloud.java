@@ -11,8 +11,8 @@ import java.util.UUID;
  */
 public class ParticleEffectSnowCloud extends ParticleEffect {
 
-    public ParticleEffectSnowCloud(UUID owner){
-        super(Effect.SNOW_SHOVEL, Material.SNOW_BALL, (byte)0x0, "SnowCloud", "ultracosmetics.particleeffects.snowcloud", owner, ParticleEffectType.SNOWCLOUD, 1);
+    public ParticleEffectSnowCloud(UUID owner) {
+        super(Effect.SNOW_SHOVEL, Material.SNOW_BALL, (byte) 0x0, "SnowCloud", "ultracosmetics.particleeffects.snowcloud", owner, ParticleEffectType.SNOWCLOUD, 1);
     }
 
     @Override

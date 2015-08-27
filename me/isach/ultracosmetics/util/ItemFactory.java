@@ -17,7 +17,7 @@ public class ItemFactory {
         ItemStack itemStack = new MaterialData(material, data).toItemStack(1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(displayName);
-        if(lore != null) {
+        if (lore != null) {
             List<String> finalLore = new ArrayList<>();
             for (String s : lore)
                 finalLore.add(s);

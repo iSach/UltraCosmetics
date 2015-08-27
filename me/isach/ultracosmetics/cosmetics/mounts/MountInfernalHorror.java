@@ -22,7 +22,7 @@ public class MountInfernalHorror extends Mount {
             Horse horse = (Horse) ent;
             horse.setVariant(Horse.Variant.SKELETON_HORSE);
             horse.setJumpStrength(0.7);
-            EntityHorse entityHorse = ((CraftHorse)horse).getHandle();
+            EntityHorse entityHorse = ((CraftHorse) horse).getHandle();
             entityHorse.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4);
         }
     }

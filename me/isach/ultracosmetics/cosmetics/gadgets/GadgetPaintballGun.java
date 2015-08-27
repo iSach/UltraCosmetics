@@ -1,14 +1,11 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.util.BlockUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Projectile;
@@ -104,7 +101,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        if(event.getEntity().getType() == EntityType.ENDERMITE)
+        if (event.getEntity().getType() == EntityType.ENDERMITE)
             event.setCancelled(true);
     }
 

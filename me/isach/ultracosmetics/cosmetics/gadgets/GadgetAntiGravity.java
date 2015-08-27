@@ -6,7 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -34,8 +36,9 @@ public class GadgetAntiGravity extends Gadget {
                 as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
                 as.getWorld().spigot().playEffect(as.getEyeLocation(), Effect.PORTAL, 0, 0, 3, 3, 3, 0, 150, 64);
                 as.getWorld().spigot().playEffect(as.getEyeLocation(), Effect.WITCH_MAGIC, 0, 0, .3f, 0.3f, 0.3f, 0, 5, 64);
-                for(Entity ent : as.getNearbyEntities(3, 2, 3)) {
-                    MathUtils.applyVelocity(ent, new Vector(0, 0.1, 0));
+                for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
+                    if (ent instanceof LivingEntity && !(ent instanceof ArmorStand))
+                        MathUtils.applyVelocity(ent, new Vector(0, 0.1, 0));
                 }
             }
         }, 0, 2).getTaskId();

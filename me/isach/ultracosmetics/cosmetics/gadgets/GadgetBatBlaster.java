@@ -64,7 +64,7 @@ public class GadgetBatBlaster extends Gadget {
                     bat.setVelocity(loc.getDirection().clone().multiply(0.5D).add(rand));
 
                     for (Player other : getPlayer().getWorld().getPlayers()) {
-                        if (!other.equals(getPlayer())) {
+                        if (!other.equals(getPlayer()) && Core.getCustomPlayer(other).hasGadgetsEnabled()) {
 
                             if (hitPlayer(bat.getLocation(), other)) {
 

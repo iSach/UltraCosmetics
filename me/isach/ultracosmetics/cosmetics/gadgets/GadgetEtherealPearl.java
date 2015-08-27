@@ -1,7 +1,6 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
-import me.isach.ultracosmetics.config.MessageManager;
 import org.bukkit.*;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Firework;
@@ -40,9 +39,9 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     void onInteractRightClick() {
-        if(getPlayer().getVehicle() instanceof EnderPearl) {
-        getPlayer().getVehicle().remove();
-    }
+        if (getPlayer().getVehicle() instanceof EnderPearl) {
+            getPlayer().getVehicle().remove();
+        }
         if (runnableHashMap.containsKey(getPlayer())) {
             if (getPlayer().getVehicle() != null)
                 getPlayer().getVehicle().remove();
@@ -157,6 +156,8 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             }
         }
     }
+
     @Override
-    void onInteractLeftClick() { }
+    void onInteractLeftClick() {
+    }
 }

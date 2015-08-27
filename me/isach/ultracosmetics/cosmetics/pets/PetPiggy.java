@@ -20,18 +20,18 @@ public class PetPiggy extends Pet {
     Random r = new Random();
 
     public PetPiggy(UUID owner) {
-        super(EntityType.PIG, Material.MONSTER_EGG, (byte)0x5a, "Piggy", "ultracosmetics.pets.piggy", owner, PetType.PIGGY);
+        super(EntityType.PIG, Material.MONSTER_EGG, (byte) 0x5a, "Piggy", "ultracosmetics.pets.piggy", owner, PetType.PIGGY);
     }
 
     @Override
     void onUpdate() {
-        final Item ITEM = ent.getWorld().dropItem(((Pig)ent).getEyeLocation(), ItemFactory.create(Material.PORK, (byte) 0, UUID.randomUUID().toString()));
+        final Item ITEM = ent.getWorld().dropItem(((Pig) ent).getEyeLocation(), ItemFactory.create(Material.PORK, (byte) 0, UUID.randomUUID().toString()));
         ITEM.setPickupDelay(30000);
         ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-              ITEM.remove();
+                ITEM.remove();
             }
         }, 5);
     }

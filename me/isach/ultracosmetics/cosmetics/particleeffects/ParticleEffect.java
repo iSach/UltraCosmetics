@@ -50,7 +50,7 @@ public abstract class ParticleEffect implements Listener {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
-            if(Core.getCustomPlayer(getPlayer()).currentParticleEffect != null)
+            if (Core.getCustomPlayer(getPlayer()).currentParticleEffect != null)
                 Core.getCustomPlayer(getPlayer()).removeParticleEffect();
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override

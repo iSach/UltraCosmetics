@@ -5,7 +5,9 @@ import me.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Wolf;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -20,7 +22,7 @@ public class PetDog extends Pet {
 
     public PetDog(UUID owner) {
         super(EntityType.WOLF, Material.BONE, (byte) 0x0, "Dog", "ultracosmetics.pets.dog", owner, PetType.DOG);
-        if(owner != null) {
+        if (owner != null) {
             Wolf w = (Wolf) ent;
             w.setTamed(true);
             w.setSitting(false);
@@ -29,9 +31,9 @@ public class PetDog extends Pet {
 
     @Override
     void onUpdate() {
-        Wolf w = (Wolf)ent;
+        Wolf w = (Wolf) ent;
         w.setCollarColor(DyeColor.values()[r.nextInt(15)]);
-        final Item ITEM = ent.getWorld().dropItem(((Wolf)ent).getEyeLocation(), ItemFactory.create(Material.BONE, (byte) 0x0, UUID.randomUUID().toString()));
+        final Item ITEM = ent.getWorld().dropItem(((Wolf) ent).getEyeLocation(), ItemFactory.create(Material.BONE, (byte) 0x0, UUID.randomUUID().toString()));
         ITEM.setPickupDelay(30000);
         ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
         items.add(ITEM);

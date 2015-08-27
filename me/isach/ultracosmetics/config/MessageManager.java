@@ -1,8 +1,6 @@
 package me.isach.ultracosmetics.config;
 
 
-import org.bukkit.ChatColor;
-
 /**
  * Created by sacha on 03/08/15.
  */
@@ -28,6 +26,7 @@ public class MessageManager {
         addMessage("Invalid-Pet", "%prefix% &c&lInvalid Pet!");
         addMessage("Invalid-Mount", "%prefix% &c&lInvalid Mount!");
         addMessage("Invalid-Effect", "%prefix% &c&lInvalid Effect!");
+        addMessage("Invalid-Morph", "%prefix% &c&lInvalid Morph!");
         addMessage("Invalid-Menu", "%prefix% &c&lInvalid Menu!");
         addMessage("Ammo", "&7Your ammo: &e%ammo%");
         addMessage("Purchase", "&a&lPURCHASE");
@@ -52,6 +51,7 @@ public class MessageManager {
         addMessage("Clear-Pet", "§c§lClear current pet");
         addMessage("Clear-Mount", "§c§lClear current mount");
         addMessage("Clear-Effect", "§c§lClear current effect");
+        addMessage("Clear-Morph", "§c§lClear current morph");
         addMessage("Rename-Pet-Purchase", "§c§lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
 
         addMessage("Active-Pet-Needed", "§c§lYou need to spawn a pet to rename it");
@@ -61,6 +61,7 @@ public class MessageManager {
         addMessage("Treasure-Chests-Loot.Pet", "%pet% pet");
         addMessage("Treasure-Chests-Loot.Mount", "%mount% mount");
         addMessage("Treasure-Chests-Loot.Effect", "%effect% effect");
+        addMessage("Treasure-Chests-Loot.Morph", "%morph% morph");
         addMessage("Treasure-Chests-Loot.Money", "&e&l%money%$");
 
         //Menus
@@ -68,9 +69,15 @@ public class MessageManager {
         addMessage("Menus.Pets", "&lPets");
         addMessage("Menus.Gadgets", "&lGadgets");
         addMessage("Menus.Mounts", "&lMounts");
+        addMessage("Menus.Morphs", "&lMorphs");
         addMessage("Menus.Particle-Effects", "&lParticle Effects");
         addMessage("Menus.Buy-Ammo", "&lBuy Ammo");
         addMessage("Menus.Rename-Pet", "&lRename Pet");
+        addMessage("Disable-Gadgets", "&c&lDisable Gadgets");
+        addMessage("Enable-Gadgets", "&a&lEnable Gadgets");
+        addMessage("Disable-Third-Person-View", "&c&lDisable Morphs Third Person View");
+        addMessage("Enable-Third-Person-View", "&a&lEnable Morphs Third Person View");
+        addMessage("Gadgets-Enabled-Needed", "%prefix% &c&lYou need to enable gadgets!");
 
         // Gadgets
         addMessage("Gadgets.Equip", "%prefix% &9You equipped %gadgetname%");
@@ -156,10 +163,30 @@ public class MessageManager {
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
+        addMessage("Morphs.Blaze.name", "&6&lBlaze");
+        addMessage("Morphs.Blaze.skill", "&eCrouch§7 to: &aFly");
+        addMessage("Morphs.Chicken.name", "&f&lChicken");
+        addMessage("Morphs.Chicken.skill", "&eCrouch§7 to: &aLay eggs");
+        addMessage("Morphs.Slime.name", "&a&lSlime");
+        addMessage("Morphs.Slime.skill", "&eCrouch§7 to: &aBounce");
+        addMessage("Morphs.Pig.name", "&d&lPig");
+        addMessage("Morphs.Pig.skill", "&eCollide§7 to: &aBounce Players");
+        addMessage("Morphs.Enderman.name", "&5&lEnderman");
+        addMessage("Morphs.Enderman.skill", "&eCrouch§7 to: &aTeleport");
+        addMessage("Morphs.Bat.name", "&8&lBat");
+        addMessage("Morphs.Bat.skill", "&eDouble Jump§7 to: &aFlap");
+        addMessage("Morphs.Creeper.name", "&a&lCreeper");
+        addMessage("Morphs.Creeper.skill", "&eCrouch§7 to: &aDetonate");
+        addMessage("Morphs.Creeper.charging", "&a&lCharging: %chargelevel%/100");
+        addMessage("Morphs.Creeper.release-to-explode", "&f&lRelease to explode!");
+        addMessage("Morphs.Morph", "%prefix% &9You morphed into %morphname%");
+        addMessage("Morphs.Unmorph", "%prefix% &9You unmorphed from %morphname%");
+
         addMessage("Menu.Gadgets", "&9&lGadgets");
         addMessage("Menu.Particle-Effects", "&b&lParticle Effects");
         addMessage("Menu.Mounts", "&6&lMounts");
         addMessage("Menu.Pets", "&a&lPets");
+        addMessage("Menu.Morphs", "&2&lMorphs");
         addMessage("Menu.Main-Menu", "&c&lMain Menu");
         addMessage("Menu.Activate", "&b&lActivate");
         addMessage("Menu.Deactivate", "&c&lDeactivate");
@@ -167,6 +194,8 @@ public class MessageManager {
         addMessage("Menu.Despawn", "&c&lDespawn");
         addMessage("Menu.Summon", "&b&lSummon");
         addMessage("Menu.Unsummon", "&c&lUnsummon");
+        addMessage("Menu.Morph", "&b&lMorph into");
+        addMessage("Menu.Unmorph", "&c&lUnmorph from");
     }
 
     /**

@@ -1,7 +1,6 @@
 package me.isach.ultracosmetics.cosmetics.particleeffects;
 
 import me.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;

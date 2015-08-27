@@ -30,9 +30,9 @@ public class PlayerListener implements Listener {
                 public void run() {
                     int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
                     if (event.getPlayer().getInventory().getItem(slot) != null) {
-                        if(event.getPlayer().getInventory().getItem(slot).hasItemMeta()
+                        if (event.getPlayer().getInventory().getItem(slot).hasItemMeta()
                                 && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                                && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String)SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
+                                && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
                             event.getPlayer().getInventory().remove(slot);
                             event.getPlayer().getInventory().setItem(slot, null);
                         }
@@ -97,6 +97,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
+        if(Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
+            Core.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
         Core.getCustomPlayer(event.getPlayer()).clear();
         Core.getCustomPlayers().remove(Core.getCustomPlayer(event.getPlayer()));
         int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
@@ -129,6 +131,17 @@ public class PlayerListener implements Listener {
             if (Core.noFallDamageEntities.contains(event.getEntity())) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerPickUpItem(PlayerPickupItemEvent event) {
+        if (event.getItem().getItemStack() != null
+                && event.getItem().getItemStack().hasItemMeta()
+                && event.getItem().getItemStack().getItemMeta().hasDisplayName()
+                && event.getItem().getItemStack().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            event.setCancelled(true);
+            event.getItem().remove();
         }
     }
 

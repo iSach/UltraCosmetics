@@ -1,9 +1,11 @@
 package me.isach.ultracosmetics.util;
 
 import me.isach.ultracosmetics.Core;
+import me.isach.ultracosmetics.CustomPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -64,7 +66,11 @@ public class MathUtils {
     public static void applyVelocity(final Entity ent, Vector v) {
         if (ent.hasMetadata("NPC"))
             return;
-
+        if(ent instanceof Player) {
+            CustomPlayer customPlayer = Core.getCustomPlayer((Player)ent);
+            if(!customPlayer.hasGadgetsEnabled())
+                return;
+        }
         ent.setVelocity(v);
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
             @Override
@@ -90,8 +96,13 @@ public class MathUtils {
         return (float) (Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min));
     }
 
+    /**
+     * Returns a random integer between the value min and the value max.
+     * @param min the minimum integer value.
+     * @param max the maximum integer value.
+     * @return a random integer between two values.
+     */
     public static int randomRangeInt(int min, int max) {
-        max++;
         return (int) (Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min));
     }
 

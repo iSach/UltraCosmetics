@@ -5,6 +5,7 @@ import me.isach.ultracosmetics.commands.UltraCosmeticsTabCompleter;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.cosmetics.gadgets.*;
+import me.isach.ultracosmetics.cosmetics.morphs.*;
 import me.isach.ultracosmetics.cosmetics.mounts.*;
 import me.isach.ultracosmetics.cosmetics.particleeffects.*;
 import me.isach.ultracosmetics.cosmetics.pets.*;
@@ -15,6 +16,8 @@ import me.isach.ultracosmetics.mysql.MySQLConnection;
 import me.isach.ultracosmetics.mysql.Table;
 import me.isach.ultracosmetics.util.BlockUtils;
 import me.isach.ultracosmetics.util.ItemFactory;
+import me.isach.ultracosmetics.util.SQLUtils;
+import me.libraryaddict.disguise.DisguiseAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -55,6 +58,7 @@ public class Core extends JavaPlugin {
     private static List<Mount> mountList = new ArrayList<>();
     private static List<Pet> petList = new ArrayList<>();
     private static List<TreasureChest> treasureChestList = new ArrayList<>();
+    private static List<Morph> morphList = new ArrayList<>();
 
     private static boolean nbsapiEnabled = false;
     private static boolean ammoEnabled = false;
@@ -66,7 +70,7 @@ public class Core extends JavaPlugin {
     public static Economy economy = null;
 
     private MySQLConnection sql;
-    private Connection co; // SQL Connection.
+    public Connection co; // SQL Connection.
     public Table table; // SQL Table.
     public static SQLUtils sqlUtils; // SQL Utils.
 
@@ -77,6 +81,16 @@ public class Core extends JavaPlugin {
 
         core = this;
 
+        if (getDescription().getVersion().startsWith("Pre")) {
+            getServer().getConsoleSender().sendMessage("§c§l----------------------------");
+            getServer().getConsoleSender().sendMessage("");
+            getServer().getConsoleSender().sendMessage("  §4§lUNSTABLE VERSION!");
+            getServer().getConsoleSender().sendMessage("  §4§lNo support accepted for this version!");
+            getServer().getConsoleSender().sendMessage("");
+            getServer().getConsoleSender().sendMessage("§c§l----------------------------");
+            nbsapiEnabled = true;
+        }
+
         if (Bukkit.getPluginManager().getPlugin("NoteBlockAPI") != null) {
             getServer().getConsoleSender().sendMessage("§c§l----------------------------");
             getServer().getConsoleSender().sendMessage("");
@@ -85,9 +99,7 @@ public class Core extends JavaPlugin {
             getServer().getConsoleSender().sendMessage("§c§l----------------------------");
             nbsapiEnabled = true;
         }
-
         new MessageManager();
-        registerListener(new MenuListener(this));
         registerListener(new PlayerListener());
 
 
@@ -132,6 +144,7 @@ public class Core extends JavaPlugin {
         treasureChestList.add(new TreasureChestEnd(null));
         treasureChestList.add(new TreasureChestGlass(null));
 
+
         fileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
 
         // Register the command
@@ -153,6 +166,7 @@ public class Core extends JavaPlugin {
         SettingsManager.getConfig().addDefault("Categories-Enabled.Particle-Effects", true);
         SettingsManager.getConfig().addDefault("Categories-Enabled.Mounts", true);
         SettingsManager.getConfig().addDefault("Categories-Enabled.Pets", true);
+        SettingsManager.getConfig().addDefault("Categories-Enabled.Morphs", true);
 
         SettingsManager.getConfig().addDefault("TreasureChests.Enabled", false);
         SettingsManager.getConfig().addDefault("TreasureChests.Key-Price", 1000);
@@ -217,8 +231,22 @@ public class Core extends JavaPlugin {
         ammoEnabled = SettingsManager.getConfig().get("Ammo-System-For-Gadgets.Enabled");
 
         for (Category c : Category.values()) {
+            if (c == Category.MORPHS)
+                if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
+                    continue;
             if (c.isEnabled())
                 enabledCategories.add(c);
+        }
+
+        // Register Morphs
+        if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+            morphList.add(new MorphBat(null));
+            morphList.add(new MorphBlaze(null));
+            morphList.add(new MorphSlime(null));
+            morphList.add(new MorphEnderman(null));
+            morphList.add(new MorphChicken(null));
+            morphList.add(new MorphPig(null));
+            morphList.add(new MorphCreeper(null));
         }
 
         try {
@@ -260,6 +288,20 @@ public class Core extends JavaPlugin {
 
         for (Pet pet : petList)
             SettingsManager.getConfig().addDefault("Pets." + pet.getConfigName() + ".Enabled", true);
+
+        for (Morph morph : morphList)
+            SettingsManager.getConfig().addDefault("Morphs." + morph.getConfigName() + ".Enabled", true);
+
+
+        if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+            Bukkit.getLogger().info("");
+            Bukkit.getConsoleSender().sendMessage("§c§lUltraCosmetics requires Lib's Disguises!");
+            Bukkit.getLogger().info("");
+            Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please install Lib's Disguises!");
+            Bukkit.getLogger().info("");
+            Bukkit.shutdown();
+            return;
+        }
 
         if (ammoEnabled) {
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
@@ -330,6 +372,7 @@ public class Core extends JavaPlugin {
 
                 }
             }
+            registerListener(new MenuListener(this));
         }
 
 
@@ -360,11 +403,14 @@ public class Core extends JavaPlugin {
         final BukkitRunnable countdownRunnable = new BukkitRunnable() {
             @Override
             public void run() {
-                Iterator<Entity> iter = noFallDamageEntities.iterator();
-                while (iter.hasNext()) {
-                    Entity ent = iter.next();
-                    if (ent.isOnGround())
-                        iter.remove();
+                try {
+                    Iterator<Entity> iter = noFallDamageEntities.iterator();
+                    while (iter.hasNext()) {
+                        Entity ent = iter.next();
+                        if (ent.isOnGround())
+                            iter.remove();
+                    }
+                } catch (Exception exc) {
                 }
                 Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
                 while (customPlayerIterator.hasNext()) {
@@ -428,7 +474,6 @@ public class Core extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        BlockUtils.forceRestore();
         for (CustomPlayer cp : customPlayers) {
             if (cp.currentTreasureChest != null)
                 cp.currentTreasureChest.forceOpen(0);
@@ -442,6 +487,10 @@ public class Core extends JavaPlugin {
             }
         }
         Core.customPlayers.clear();
+        try {
+            BlockUtils.forceRestore();
+        } catch (Exception e) {
+        }
     }
 
     public static List<Gadget> getGadgets() {
@@ -458,6 +507,10 @@ public class Core extends JavaPlugin {
 
     public static List<Mount> getMounts() {
         return mountList;
+    }
+
+    public static List<Morph> getMorphs() {
+        return morphList;
     }
 
     public static List<TreasureChest> getTreasureChests() {
@@ -513,7 +566,7 @@ public class Core extends JavaPlugin {
             con.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
             String version = new BufferedReader(new InputStreamReader(
                     con.getInputStream())).readLine();
-            return version.replace("Beta ", "").replace("Release ", "");
+            return version.replace("Beta ", "").replace("Release ", "").replace("Pre-", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -521,7 +574,7 @@ public class Core extends JavaPlugin {
     }
 
     public static boolean outdated() {
-        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "");
+        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release", "");
         int i = new Version(currentVersion).compareTo(new Version(getLastVersion()));
         return i == -1;
     }
@@ -530,7 +583,8 @@ public class Core extends JavaPlugin {
         PETS("Pets", ItemFactory.create(Material.MONSTER_EGG, (byte) 0, MessageManager.getMessage("Menu.Pets"))),
         EFFECTS("Particle-Effects", ItemFactory.create(Material.MELON_SEEDS, (byte) 0, MessageManager.getMessage("Menu.Particle-Effects"))),
         GADGETS("Gadgets", ItemFactory.create(Material.SLIME_BALL, (byte) 0, MessageManager.getMessage("Menu.Gadgets"))),
-        MOUNTS("Mounts", ItemFactory.create(Material.SADDLE, (byte) 0, MessageManager.getMessage("Menu.Mounts")));
+        MOUNTS("Mounts", ItemFactory.create(Material.SADDLE, (byte) 0, MessageManager.getMessage("Menu.Mounts"))),
+        MORPHS("Morphs", ItemFactory.create(Material.SKULL_ITEM, (byte) 4, MessageManager.getMessage("Menu.Morphs")));
 
         String configPath;
         ItemStack is;
