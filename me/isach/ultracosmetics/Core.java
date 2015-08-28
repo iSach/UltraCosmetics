@@ -569,8 +569,9 @@ public class Core extends JavaPlugin {
             return version.replace("Beta ", "").replace("Release ", "").replace("Pre-", "");
         } catch (Exception ex) {
             ex.printStackTrace();
+            getLogger().warning("Can't confirm the latest version!");
         }
-        return "Version cannot be verified!";
+        return Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release", "");;
     }
 
     public static boolean outdated() {
