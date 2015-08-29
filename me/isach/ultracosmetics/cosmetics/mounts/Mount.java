@@ -150,7 +150,13 @@ public abstract class Mount implements Listener {
 
         @EventHandler
         public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
-            if (event.getVehicle().getCustomName().equals(getName()) && event.getExited() == getPlayer()) {
+            
+            String name = null;
+            try {
+                name = getName();
+            } catch ( Exception e ) {}
+            
+            if ( name != null && event.getVehicle().getCustomName().equals(name) && event.getExited() == getPlayer()) {
                 Core.getCustomPlayer(getPlayer()).removeMount();
             }
         }
