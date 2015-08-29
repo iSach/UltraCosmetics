@@ -139,6 +139,7 @@ public class BlockUtils {
                 && b.getType() != Material.ENDER_PORTAL
                 && b.getType() != Material.SOIL
                 && b.getType() != Material.BARRIER
+                && b.getType() != Material.COMMAND
                 && !isPortalBlock(b)
                 && !isRocketBlock(b)
                 && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()

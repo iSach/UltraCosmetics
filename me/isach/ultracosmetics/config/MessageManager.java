@@ -172,7 +172,7 @@ public class MessageManager {
         addMessage("Morphs.Pig.name", "&d&lPig");
         addMessage("Morphs.Pig.skill", "&eCollide§7 to: &aBounce Players");
         addMessage("Morphs.Enderman.name", "&5&lEnderman");
-        addMessage("Morphs.Enderman.skill", "&eCrouch§7 to: &aTeleport");
+        addMessage("Morphs.Enderman.skill", "&eDouble Jump§7 to: &aTeleport");
         addMessage("Morphs.Bat.name", "&8&lBat");
         addMessage("Morphs.Bat.skill", "&eDouble Jump§7 to: &aFlap");
         addMessage("Morphs.Creeper.name", "&a&lCreeper");

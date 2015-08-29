@@ -315,64 +315,69 @@ public class Core extends JavaPlugin {
             }
             setupEconomy();
             if (!fileStorage) {
-                try {
-                    String hostname = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.hostname"));
-                    String portNumber = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.port"));
-                    String database = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.database"));
-                    String username = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.username"));
-                    String password = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.password"));
-                    sql = new MySQLConnection(hostname, portNumber, database, username, password);
-                    co = sql.getConnection();
 
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics >>> Successfully connected to MySQL server! :)");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
-                            "id INTEGER not NULL AUTO_INCREMENT," +
-                            " uuid VARCHAR(255)," +
-                            " username VARCHAR(255),"
-                            + " PRIMARY KEY ( id ))");
-                    sql.executeUpdate();
-                    for (Gadget gadget : gadgetList) {
-                        DatabaseMetaData md = co.getMetaData();
-                        ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", gadget.getType().toString().toLowerCase());
-                        if (!rs.next()) {
-                            PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD " + gadget.getType().toString().toLowerCase() + " INTEGER DEFAULT 0 not NULL");
-                            statement.executeUpdate();
+                Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String hostname = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.hostname"));
+                            String portNumber = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.port"));
+                            String database = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.database"));
+                            String username = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.username"));
+                            String password = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.password"));
+                            sql = new MySQLConnection(hostname, portNumber, database, username, password);
+                            co = sql.getConnection();
+
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics >>> Successfully connected to MySQL server! :)");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
+                                    "id INTEGER not NULL AUTO_INCREMENT," +
+                                    " uuid VARCHAR(255)," +
+                                    " username VARCHAR(255),"
+                                    + " PRIMARY KEY ( id ))");
+                            sql.executeUpdate();
+                            for (Gadget gadget : gadgetList) {
+                                DatabaseMetaData md = co.getMetaData();
+                                ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", gadget.getType().toString().toLowerCase());
+                                if (!rs.next()) {
+                                    PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD " + gadget.getType().toString().toLowerCase() + " INTEGER DEFAULT 0 not NULL");
+                                    statement.executeUpdate();
+                                }
+                            }
+                            table = new Table(co, "UltraCosmeticsData");
+                            sqlUtils = new SQLUtils(core);
+                            DatabaseMetaData md = co.getMetaData();
+                            ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "treasureKeys");
+                            if (!rs.next()) {
+                                PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
+                                statement.executeUpdate();
+                            }
+
+                        } catch (Exception e) {
+
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getConsoleSender().sendMessage("§c§lUltra Cosmetics >>> Could not connect to MySQL server!");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getConsoleSender().sendMessage("§c§lError:");
+                            e.printStackTrace();
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please check the MySQL info!");
+                            Bukkit.getLogger().info("");
+                            Bukkit.getLogger().info("");
+                            Bukkit.shutdown();
+
                         }
                     }
-                    table = new Table(co, "UltraCosmeticsData");
-                    sqlUtils = new SQLUtils(this);
-                    DatabaseMetaData md = co.getMetaData();
-                    ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "treasureKeys");
-                    if (!rs.next()) {
-                        PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
-                        statement.executeUpdate();
-                    }
-
-                } catch (Exception e) {
-
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getConsoleSender().sendMessage("§c§lUltra Cosmetics >>> Could not connect to MySQL server!");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getConsoleSender().sendMessage("§c§lError:");
-                    e.printStackTrace();
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please check the MySQL info!");
-                    Bukkit.getLogger().info("");
-                    Bukkit.getLogger().info("");
-                    Bukkit.shutdown();
-
-                }
+                }, 0, 24000);
             }
-            registerListener(new MenuListener(this));
         }
 
 
@@ -460,6 +465,7 @@ public class Core extends JavaPlugin {
                 }
             }
         }, 20);
+        registerListener(new MenuListener(this));
 
     }
 
@@ -574,7 +580,7 @@ public class Core extends JavaPlugin {
     }
 
     public static boolean outdated() {
-        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release", "");
+        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release ", "");
         int i = new Version(currentVersion).compareTo(new Version(getLastVersion()));
         return i == -1;
     }

@@ -187,7 +187,7 @@ public class RandomGenerator {
 
     private void giveRandomLegendary() {
         int j = MathUtils.randomRangeInt(0, 2);
-        if(j == 0) {
+        if(j == 1) {
             int i = MathUtils.randomRangeInt(0, morphList.size() - 1);
             ParticleEffect particleEffect = particleEffectList.get(i);
             name = MessageManager.getMessage("Treasure-Chests-Loot.Effect").replace("%effect%", particleEffect.getName());

@@ -3,18 +3,21 @@ package me.isach.ultracosmetics.cosmetics.pets;
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
-import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.PathEntity;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -78,6 +81,20 @@ public abstract class Pet implements Listener {
             //ent.setCustomName(getName());
             ((Ageable) ent).setBaby();
             ((Ageable) ent).setAgeLock(true);
+
+            net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity)ent).getHandle();
+            try {
+                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
+                bField.setAccessible(true);
+                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
+                cField.setAccessible(true);
+                bField.set(((EntityInsentient)entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+                bField.set(((EntityInsentient)entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+                cField.set(((EntityInsentient)entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+                cField.set(((EntityInsentient)entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
 
 
             armorStand = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
