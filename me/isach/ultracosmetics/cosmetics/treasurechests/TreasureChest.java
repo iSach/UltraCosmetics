@@ -21,6 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Chest;
@@ -28,7 +29,6 @@ import org.bukkit.material.EnderChest;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -97,8 +97,8 @@ public abstract class TreasureChest implements Listener {
                         public void run() {
                             try {
                                 randomGenerator = new RandomGenerator(getPlayer(), getPlayer().getLocation());
-                                UtilParticles.playHelix(getChestLocation(i, getPlayer().getLocation()), 0, particleEffect);
-                                UtilParticles.playHelix(getChestLocation(i, getPlayer().getLocation()), 3.5f, particleEffect);
+                                UtilParticles.playHelix(getChestLocation(i, center.clone()), 0, particleEffect);
+                                UtilParticles.playHelix(getChestLocation(i, center.clone()), 3.5f, particleEffect);
                                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                                     @Override
                                     public void run() {
@@ -226,7 +226,7 @@ public abstract class TreasureChest implements Listener {
                     cancel();
                     return;
                 }
-                if(getPlayer().getLocation().distance(center) > 1.5)
+                if (getPlayer().getLocation().distance(center) > 1.5)
                     getPlayer().teleport(center);
                 for (Entity ent : player.getNearbyEntities(2, 2, 2)) {
                     if (Core.getCustomPlayer(player).currentPet != null) {
@@ -281,8 +281,8 @@ public abstract class TreasureChest implements Listener {
                     holograms.clear();
                     chestsToRemove.clear();
                     blocksToRestore.clear();
-                    if(Core.getCustomPlayer(getPlayer()) != null)
-                    Core.getCustomPlayer(getPlayer()).currentTreasureChest = null;
+                    if (Core.getCustomPlayer(getPlayer()) != null)
+                        Core.getCustomPlayer(getPlayer()).currentTreasureChest = null;
                     owner = null;
                     randomGenerator.clear();
                 }
@@ -499,6 +499,15 @@ public abstract class TreasureChest implements Listener {
                     }
                 }, 50);
             }
+        }
+    }
+
+    @EventHandler
+    public void onKick(PlayerKickEvent event) {
+        if (event.getPlayer() == getPlayer()
+                && event.getReason().contains("Fly")) {
+            event.setCancelled(true);
+            event.getPlayer().teleport(center);
         }
     }
 

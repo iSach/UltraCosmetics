@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -40,6 +41,8 @@ public abstract class Gadget implements Listener {
     private double countdown;
 
     private boolean requireAmmo;
+
+    private Listener listener;
 
     private GadgetType type;
 
@@ -79,11 +82,13 @@ public abstract class Gadget implements Listener {
                         onUpdate();
                     } else {
                         cancel();
+                        unregister();
                     }
                 }
             };
             runnable.runTaskTimer(Core.getPlugin(), 0, 1);
-            Bukkit.getPluginManager().registerEvents(new GadgetListener(this), Core.getPlugin());
+            listener = new GadgetListener(this);
+            Core.registerListener(listener);
             if (getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")) != null) {
                 getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")));
                 getPlayer().getInventory().remove((int) SettingsManager.getConfig().get("Gadget-Slot"));
@@ -123,6 +128,14 @@ public abstract class Gadget implements Listener {
 
 
     public abstract void clear();
+
+    public void unregister() {
+        try {
+            HandlerList.unregisterAll(this);
+            HandlerList.unregisterAll(listener);
+        } catch (Exception exc) {
+        }
+    }
 
     protected UUID getOwner() {
         return owner;

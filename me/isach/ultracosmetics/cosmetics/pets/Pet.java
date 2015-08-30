@@ -3,16 +3,17 @@ package me.isach.ultracosmetics.cosmetics.pets;
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
 import me.isach.ultracosmetics.config.SettingsManager;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
+import net.minecraft.server.v1_8_R3.PathEntity;
+import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,6 +42,8 @@ public abstract class Pet implements Listener {
     public ArmorStand armorStand;
 
     private UUID owner;
+
+    private Listener listener;
 
     public Entity ent;
 
@@ -73,7 +76,7 @@ public abstract class Pet implements Listener {
                 }
             };
             runnable.runTaskTimer(Core.getPlugin(), 0, 6);
-            new PetListener(this);
+            listener = new PetListener(this);
 
             this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
             ((Ageable) ent).setAdult();
@@ -82,16 +85,16 @@ public abstract class Pet implements Listener {
             ((Ageable) ent).setBaby();
             ((Ageable) ent).setAgeLock(true);
 
-            net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity)ent).getHandle();
+            net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity) ent).getHandle();
             try {
                 Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
                 bField.setAccessible(true);
                 Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
                 cField.setAccessible(true);
-                bField.set(((EntityInsentient)entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
-                bField.set(((EntityInsentient)entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
-                cField.set(((EntityInsentient)entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
-                cField.set(((EntityInsentient)entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+                bField.set(((EntityInsentient) entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+                bField.set(((EntityInsentient) entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+                cField.set(((EntityInsentient) entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+                cField.set(((EntityInsentient) entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
@@ -178,6 +181,11 @@ public abstract class Pet implements Listener {
         items.clear();
         if (armorStand != null)
             armorStand.remove();
+        try {
+            HandlerList.unregisterAll(this);
+            HandlerList.unregisterAll(listener);
+        } catch (Exception exc) {
+        }
     }
 
     protected UUID getOwner() {

@@ -33,13 +33,15 @@ public class MorphPig extends Morph {
                     }
                     for(Entity ent : getPlayer().getNearbyEntities(0.2, 0.2, 0.2)) {
                         if(ent instanceof Creature || ent instanceof Player) {
-                            ent.getWorld().playSound(ent.getLocation(), Sound.PIG_IDLE, 0.3f, 1);
-                            Vector vEnt = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).add(new Vector(0, 0.6, 0));
-                            Vector vPig = getPlayer().getLocation().toVector().subtract(ent.getLocation().toVector()).add(new Vector(0, 0.6, 0));
-                            vEnt.setY(0.5);
-                            vPig.setY(0.5);
-                            MathUtils.applyVelocity(ent, vEnt.multiply(0.75));
-                            MathUtils.applyVelocity(getPlayer(), vPig.multiply(0.75));
+                            if(!ent.hasMetadata("Mount")) {
+                                ent.getWorld().playSound(ent.getLocation(), Sound.PIG_IDLE, 0.3f, 1);
+                                Vector vEnt = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).add(new Vector(0, 0.6, 0));
+                                Vector vPig = getPlayer().getLocation().toVector().subtract(ent.getLocation().toVector()).add(new Vector(0, 0.6, 0));
+                                vEnt.setY(0.5);
+                                vPig.setY(0.5);
+                                MathUtils.applyVelocity(ent, vEnt.multiply(0.75));
+                                MathUtils.applyVelocity(getPlayer(), vPig.multiply(0.75));
+                            }
                         }
                     }
                 }

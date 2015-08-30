@@ -11,13 +11,14 @@ import me.isach.ultracosmetics.cosmetics.particleeffects.*;
 import me.isach.ultracosmetics.cosmetics.pets.*;
 import me.isach.ultracosmetics.cosmetics.treasurechests.*;
 import me.isach.ultracosmetics.listeners.MenuListener;
+import me.isach.ultracosmetics.listeners.MorphMenuListener;
 import me.isach.ultracosmetics.listeners.PlayerListener;
 import me.isach.ultracosmetics.mysql.MySQLConnection;
 import me.isach.ultracosmetics.mysql.Table;
 import me.isach.ultracosmetics.util.BlockUtils;
 import me.isach.ultracosmetics.util.ItemFactory;
+import me.isach.ultracosmetics.util.MetricsLite;
 import me.isach.ultracosmetics.util.SQLUtils;
-import me.libraryaddict.disguise.DisguiseAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -32,6 +33,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -80,6 +82,13 @@ public class Core extends JavaPlugin {
     public void onEnable() {
 
         core = this;
+
+        try {
+            MetricsLite metrics = new MetricsLite(this);
+            metrics.start();
+        } catch (IOException e) {
+            System.out.println("Couldn't send data to Metrics :(");
+        }
 
         if (getDescription().getVersion().startsWith("Pre")) {
             getServer().getConsoleSender().sendMessage("§c§l----------------------------");
@@ -188,6 +197,7 @@ public class Core extends JavaPlugin {
         SettingsManager.getConfig().addDefault("Ammo-System-For-Gadgets.MySQL.port", "3306");
         SettingsManager.getConfig().addDefault("Ammo-System-For-Gadgets.MySQL.database", "UltraCosmetics");
         SettingsManager.getConfig().addDefault("Menu-Item.Give-On-Join", true);
+        SettingsManager.getConfig().addDefault("Menu-Item.Give-On-Respawn", true);
         SettingsManager.getConfig().addDefault("Menu-Item.Slot", 3);
         SettingsManager.getConfig().addDefault("Menu-Item.Type", "ENDER_CHEST");
         SettingsManager.getConfig().addDefault("Menu-Item.Data", 0);
@@ -295,12 +305,11 @@ public class Core extends JavaPlugin {
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             Bukkit.getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("§c§lUltraCosmetics requires Lib's Disguises!");
+            Bukkit.getConsoleSender().sendMessage("§c§lMorphs require Lib's Disguises!");
             Bukkit.getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please install Lib's Disguises!");
+            Bukkit.getConsoleSender().sendMessage("§c§lMorphs are disabling..");
             Bukkit.getLogger().info("");
-            Bukkit.shutdown();
-            return;
+
         }
 
         if (ammoEnabled) {
@@ -423,9 +432,13 @@ public class Core extends JavaPlugin {
                     if (customPlayer.getPlayer() == null)
                         customPlayerIterator.remove();
                 }
-                for (Player p : countdownMap.keySet()) {
-                    if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName())) {
-                        Core.getCustomPlayer(p).clear();
+                Iterator<Player> playerIterator = countdownMap.keySet().iterator();
+                while (playerIterator.hasNext()) {
+                    Player p = playerIterator.next();
+                    try {
+                        if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName()))
+                            Core.getCustomPlayer(p).clear();
+                    } catch (Exception exc) {
                     }
                     if (countdownMap.get(p) != null) {
                         Iterator it = countdownMap.get(p).entrySet().iterator();
@@ -466,6 +479,8 @@ public class Core extends JavaPlugin {
             }
         }, 20);
         registerListener(new MenuListener(this));
+        if(Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
+            registerListener(new MorphMenuListener());
 
     }
 
@@ -557,10 +572,15 @@ public class Core extends JavaPlugin {
     }
 
     public static CustomPlayer getCustomPlayer(Player player) {
-        for (CustomPlayer cp : customPlayers)
-            if (cp.getPlayer().getName().equals(player.getName()))
-                return cp;
-        return new CustomPlayer(player.getUniqueId());
+        try {
+            for (CustomPlayer cp : customPlayers)
+                if (cp.getPlayer().getName().equals(player.getName()))
+                    return cp;
+            return new CustomPlayer(player.getUniqueId());
+        } catch (NullPointerException exception) {
+            customPlayers.add(new CustomPlayer(player.getUniqueId()));
+            return  getCustomPlayer(player);
+        }
     }
 
     public static String getLastVersion() {

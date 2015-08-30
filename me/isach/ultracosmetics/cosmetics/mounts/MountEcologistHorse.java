@@ -30,6 +30,8 @@ public class MountEcologistHorse extends Mount {
         if (owner != null) {
             Horse horse = (Horse) ent;
             horse.setColor(Horse.Color.CHESTNUT);
+            color = Horse.Color.CHESTNUT;
+            variant = Horse.Variant.HORSE;
             horse.setVariant(Horse.Variant.HORSE);
             horse.setJumpStrength(0.7);
             EntityHorse entityHorse = ((CraftHorse) horse).getHandle();

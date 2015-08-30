@@ -37,9 +37,9 @@ public class CustomPlayer {
         this.uuid = uuid;
         Core.countdownMap.put(getPlayer(), null);
         SettingsManager.getData(getPlayer());
-        if (Core.usingFileStorage()) {
+        if (Core.usingFileStorage())
             SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
-        }
+
         if (Core.isAmmoEnabled()) {
             if (!Core.usingFileStorage()) {
                 Core.sqlUtils.initStats(getPlayer());
@@ -68,6 +68,7 @@ public class CustomPlayer {
             currentGadget.removeItem();
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", currentGadget.getName()));
             currentGadget.clear();
+            currentGadget.unregister();
             currentGadget = null;
         }
     }

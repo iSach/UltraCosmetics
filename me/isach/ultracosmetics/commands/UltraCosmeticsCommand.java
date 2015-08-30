@@ -11,6 +11,7 @@ import me.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import me.isach.ultracosmetics.cosmetics.pets.Pet;
 import me.isach.ultracosmetics.listeners.MenuListener;
 import me.isach.ultracosmetics.util.ItemFactory;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -151,7 +152,8 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 }
                 return true;
             } else if (argZero.equalsIgnoreCase("morph")) {
-                if (!Core.Category.MORPHS.isEnabled()) {
+                if (!Core.Category.MORPHS.isEnabled()
+                        || !Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
                     sender.sendMessage("§c§lMorphs are disabled!");
                     return true;
                 }

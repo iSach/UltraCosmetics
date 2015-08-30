@@ -66,11 +66,6 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onQuit(PlayerKickEvent event) {
-
-    }
-
-    @EventHandler
     public void onPickUp(InventoryClickEvent event) {
         if (event.getCurrentItem() != null
                 && event.getCurrentItem().hasItemMeta()
@@ -82,7 +77,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        if (!((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && !((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
             int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
             if (event.getPlayer().getInventory().getItem(slot) != null) {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
@@ -97,7 +92,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        if(Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
+        if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
             Core.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
         Core.getCustomPlayer(event.getPlayer()).clear();
         Core.getCustomPlayers().remove(Core.getCustomPlayer(event.getPlayer()));

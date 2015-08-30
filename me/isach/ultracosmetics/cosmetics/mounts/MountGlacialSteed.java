@@ -28,6 +28,8 @@ public class MountGlacialSteed extends Mount {
 
             horse.setColor(Horse.Color.WHITE);
             horse.setVariant(Horse.Variant.HORSE);
+            color = Horse.Color.WHITE;
+            variant = Horse.Variant.HORSE;
             horse.setJumpStrength(0.7);
             EntityHorse entityHorse = ((CraftHorse) horse).getHandle();
             entityHorse.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4);

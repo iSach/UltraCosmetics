@@ -9,6 +9,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.util.UUID;
@@ -21,7 +22,7 @@ public abstract class Morph implements Listener {
     private Material material;
     private Byte data;
     private String name;
-    private String permission;
+    public String permission;
 
     private MorphType type;
 
@@ -52,9 +53,10 @@ public abstract class Morph implements Listener {
             // Disguise the player
             disguise = new MobDisguise(disguiseType);
             DisguiseAPI.disguiseToAll(getPlayer(), disguise);
-            disguise.setShowName(true);
             if (!Core.getCustomPlayer(getPlayer()).canSeeSelfMorph())
                 disguise.setViewSelfDisguise(false);
+            disguise.setModifyBoundingBox(true);
+            disguise.setShowName(true);
         }
     }
 
@@ -83,6 +85,10 @@ public abstract class Morph implements Listener {
         getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
         Core.getCustomPlayer(getPlayer()).currentMorph = null;
         owner = null;
+        try {
+            HandlerList.unregisterAll(this);
+        } catch (Exception exc) {
+        }
     }
 
     protected UUID getOwner() {

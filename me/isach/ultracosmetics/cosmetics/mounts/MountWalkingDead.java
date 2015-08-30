@@ -21,6 +21,7 @@ public class MountWalkingDead extends Mount {
         if (owner != null) {
             Horse horse = (Horse) ent;
             horse.setVariant(Horse.Variant.UNDEAD_HORSE);
+            variant = Horse.Variant.UNDEAD_HORSE;
             horse.setJumpStrength(0.7);
             EntityHorse entityHorse = ((CraftHorse) horse).getHandle();
             entityHorse.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4);

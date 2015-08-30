@@ -31,6 +31,8 @@ public class MountMountOfFire extends Mount {
             Horse horse = (Horse) ent;
             horse.setColor(Horse.Color.CREAMY);
             horse.setVariant(Horse.Variant.HORSE);
+            color = Horse.Color.CREAMY;
+            variant = Horse.Variant.HORSE;
             horse.setJumpStrength(0.7);
             EntityHorse entityHorse = ((CraftHorse) horse).getHandle();
             entityHorse.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4);

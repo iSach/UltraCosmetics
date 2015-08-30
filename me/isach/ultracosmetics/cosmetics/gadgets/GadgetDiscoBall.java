@@ -65,7 +65,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
         running = true;
         Core.discoBalls.add(this);
-        if (Core.isNoteBlockAPIEnabled()) {
+        if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
             Song s = NBSDecoder.parse(new File(Core.getPlugin().getDataFolder().getPath() + "/songs/GetLucky.nbs"));
             positionSongPlayer = new PositionSongPlayer(s);
 

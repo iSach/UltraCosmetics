@@ -43,7 +43,7 @@ public class MorphSlime extends Morph {
 
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        if (event.getPlayer() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown ) {
+        if (event.getPlayer() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown) {
             MathUtils.applyVelocity(getPlayer(), new Vector(0, 2.3, 0));
             cooldown = true;
             Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {

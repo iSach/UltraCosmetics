@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.io.File;
@@ -27,21 +28,31 @@ import java.util.UUID;
  */
 public class MountNyanSheep extends Mount {
 
-    PositionSongPlayer positionSongPlayer;
-
     public MountNyanSheep(UUID owner) {
         super(EntityType.SHEEP, Material.STAINED_GLASS, (byte) new Random().nextInt(15), "NyanSheep", "ultracosmetics.mounts.nyansheep", owner, MountType.NYANSHEEP);
 
         if (owner == null) return;
         ((LivingEntity) ent).setNoDamageTicks(Integer.MAX_VALUE);
-        if (Core.isNoteBlockAPIEnabled()) {
+        if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
             Song s = NBSDecoder.parse(new File(Core.getPlugin().getDataFolder(), "/songs/NyanCat.nbs"));
-            positionSongPlayer = new PositionSongPlayer(s);
+            final PositionSongPlayer positionSongPlayer = new PositionSongPlayer(s);
             positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
             positionSongPlayer.setPlaying(true);
             for (Player p : Bukkit.getOnlinePlayers())
                 positionSongPlayer.addPlayer(p);
             positionSongPlayer.setAutoDestroy(true);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(ent.isValid()) {
+                        if (Core.isNoteBlockAPIEnabled())
+                            positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
+                    } else {
+                        positionSongPlayer.setPlaying(false);
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(Core.getPlugin(), 0, 1);
         }
     }
 
@@ -50,8 +61,6 @@ public class MountNyanSheep extends Mount {
         getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentMount = null;
         ent.remove();
-        if (Core.isNoteBlockAPIEnabled())
-            positionSongPlayer.setPlaying(false);
     }
 
     @Override
@@ -60,8 +69,6 @@ public class MountNyanSheep extends Mount {
             clear();
         move();
 
-        if (Core.isNoteBlockAPIEnabled())
-            positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
 
 
         ((Sheep) ent).setColor(DyeColor.values()[new Random().nextInt(15)]);

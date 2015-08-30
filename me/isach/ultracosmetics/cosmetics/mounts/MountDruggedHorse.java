@@ -29,6 +29,8 @@ public class MountDruggedHorse extends Mount {
                 Horse horse = (Horse) ent;
 
                 horse.setColor(Horse.Color.CHESTNUT);
+                color = Horse.Color.CHESTNUT;
+                variant = Horse.Variant.HORSE;
                 horse.setVariant(Horse.Variant.HORSE);
 
                 EntityHorse entityHorse = ((CraftHorse) horse).getHandle();

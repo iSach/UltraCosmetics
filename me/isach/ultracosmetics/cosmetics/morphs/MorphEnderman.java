@@ -2,6 +2,7 @@ package me.isach.ultracosmetics.cosmetics.morphs;
 
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.config.MessageManager;
+import me.isach.ultracosmetics.util.MathUtils;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,11 +31,14 @@ import java.util.UUID;
  */
 public class MorphEnderman extends Morph {
 
+    private boolean cooldown;
+
     public MorphEnderman(UUID owner) {
         super(DisguiseType.ENDERMAN, Material.ENDER_PEARL, (byte) 0, "Enderman", "ultracosmetics.morphs.enderman", owner, MorphType.ENDERMAN);
-        Core.registerListener(this);
-        if (owner != null)
+        if (owner != null) {
+            Core.registerListener(this);
             getPlayer().setAllowFlight(true);
+        }
     }
 
     @EventHandler
@@ -41,7 +46,14 @@ public class MorphEnderman extends Morph {
         if (event.getPlayer() == getPlayer()
                 && event.getPlayer().getGameMode() != GameMode.CREATIVE
                 && !event.getPlayer().isFlying()
-                && event.getPlayer().isOnGround()) {
+                && !cooldown) {
+            cooldown = true;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    cooldown = false;
+                }
+            }, 70);
             Block b = event.getPlayer().getTargetBlock((Set<Material>) null, 17);
             Location loc = b.getLocation();
             loc.setPitch(event.getPlayer().getLocation().getPitch());

@@ -21,6 +21,7 @@ public class MountInfernalHorror extends Mount {
         if (ent instanceof Horse) {
             Horse horse = (Horse) ent;
             horse.setVariant(Horse.Variant.SKELETON_HORSE);
+            variant = Horse.Variant.SKELETON_HORSE;
             horse.setJumpStrength(0.7);
             EntityHorse entityHorse = ((CraftHorse) horse).getHandle();
             entityHorse.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4);

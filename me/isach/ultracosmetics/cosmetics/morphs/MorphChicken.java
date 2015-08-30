@@ -64,7 +64,7 @@ public class MorphChicken extends Morph {
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         if (event.getPlayer() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown) {
             final List<Item> items = new ArrayList<>();
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 10; j++) {
                 final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(Material.EGG, (byte) 0x0, UUID.randomUUID().toString()));
                 items.add(i);
                 Random r = new Random();
@@ -91,17 +91,20 @@ public class MorphChicken extends Morph {
                     followRunnable = new BukkitRunnable() {
                         @Override
                         public void run() {
-                            for (Chicken chicken : chickens) {
-                                net.minecraft.server.v1_8_R3.Entity pett = ((CraftEntity) chicken).getHandle();
-                                ((EntityInsentient) pett).getNavigation().a(2);
-                                Object petf = ((CraftEntity) chicken).getHandle();
-                                Location targetLocation = getPlayer().getLocation();
-                                PathEntity path;
-                                path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
-                                if (path != null) {
-                                    ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
-                                    ((EntityInsentient) petf).getNavigation().a(1.05D);
+                            try {
+                                for (Chicken chicken : chickens) {
+                                    net.minecraft.server.v1_8_R3.Entity pett = ((CraftEntity) chicken).getHandle();
+                                    ((EntityInsentient) pett).getNavigation().a(2);
+                                    Object petf = ((CraftEntity) chicken).getHandle();
+                                    Location targetLocation = getPlayer().getLocation();
+                                    PathEntity path;
+                                    path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
+                                    if (path != null) {
+                                        ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
+                                        ((EntityInsentient) petf).getNavigation().a(1.05D);
+                                    }
                                 }
+                            } catch (Exception exc) {
                             }
                         }
                     };

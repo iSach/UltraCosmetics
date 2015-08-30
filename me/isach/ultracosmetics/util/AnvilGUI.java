@@ -3,6 +3,7 @@ package me.isach.ultracosmetics.util;
 import me.isach.ultracosmetics.Core;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -110,11 +111,12 @@ public class AnvilGUI {
 
     private Listener listener;
 
-    public AnvilGUI(Player player, final AnvilClickEventHandler handler) {
+    public AnvilGUI(final Player player, final AnvilClickEventHandler handler) {
         this.player = player;
         this.handler = handler;
 
         this.listener = new Listener() {
+
             @EventHandler
             public void onInventoryClick(InventoryClickEvent event) {
                 if (event.getWhoClicked() instanceof Player) {
@@ -137,6 +139,17 @@ public class AnvilGUI {
                             }
                         }
 
+                        if (player.getGameMode() == GameMode.ADVENTURE
+                                || player.getGameMode() == GameMode.SURVIVAL
+                                && player.getLevel() > 0)
+                            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    player.setLevel(player.getLevel());
+                                }
+                            }, 5);
+
+
                         AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name);
 
                         handler.onAnvilClick(clickEvent);
@@ -144,6 +157,7 @@ public class AnvilGUI {
                         if (clickEvent.getWillClose()) {
                             event.getWhoClicked().closeInventory();
                         }
+
 
                         if (clickEvent.getWillDestroy()) {
                             destroy();
@@ -157,7 +171,6 @@ public class AnvilGUI {
                 if (event.getPlayer() instanceof Player) {
                     Player player = (Player) event.getPlayer();
                     Inventory inv = event.getInventory();
-
                     if (inv.equals(AnvilGUI.this.inv)) {
                         inv.clear();
                         destroy();

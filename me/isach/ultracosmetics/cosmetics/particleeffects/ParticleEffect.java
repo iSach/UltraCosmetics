@@ -9,6 +9,7 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,6 +34,8 @@ public abstract class ParticleEffect implements Listener {
     int repeatDelay = 1;
 
     private UUID owner;
+
+    private Listener listener;
 
     private Effect effect;
 
@@ -71,7 +74,7 @@ public abstract class ParticleEffect implements Listener {
                 }
             };
             runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
-            new ParticleEffectListener(this);
+            listener = new ParticleEffectListener(this);
 
             getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", getName()));
             Core.getCustomPlayer(getPlayer()).currentParticleEffect = this;
@@ -108,6 +111,11 @@ public abstract class ParticleEffect implements Listener {
     public void clear() {
         getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", getName()));
         Core.getCustomPlayer(getPlayer()).currentParticleEffect = null;
+        try {
+            HandlerList.unregisterAll(this);
+            HandlerList.unregisterAll(listener);
+        } catch (Exception exc) {
+        }
     }
 
     protected UUID getOwner() {

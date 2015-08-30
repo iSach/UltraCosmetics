@@ -7,10 +7,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -31,7 +35,12 @@ public abstract class Mount implements Listener {
 
     private String permission;
 
+    private Listener listener;
+
     private UUID owner;
+
+    Horse.Variant variant;
+    Horse.Color color;
 
     public Entity ent;
 
@@ -57,7 +66,8 @@ public abstract class Mount implements Listener {
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (Bukkit.getPlayer(owner) != null
+                    if (owner != null
+                            && Bukkit.getPlayer(owner) != null
                             && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount != null
                             && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount.getType() == type) {
                         onUpdate();
@@ -67,7 +77,7 @@ public abstract class Mount implements Listener {
                 }
             };
             runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
-            new MountListener(this);
+            listener = new MountListener(this);
 
             this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
             if (ent instanceof Ageable) {
@@ -87,6 +97,7 @@ public abstract class Mount implements Listener {
 
             getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", getMenuName()));
             Core.getCustomPlayer(getPlayer()).currentMount = this;
+            ent.setMetadata("Mount", new FixedMetadataValue(Core.getPlugin(), "UltraCosmetics"));
         }
     }
 
@@ -124,12 +135,16 @@ public abstract class Mount implements Listener {
     public void clear() {
         getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentMount = null;
+        getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
         try {
             ent.getPassenger().eject();
+            ent.remove();
+            owner = null;
+            HandlerList.unregisterAll(this);
+            HandlerList.unregisterAll(listener);
         } catch (Exception exc) {
         }
-        ent.remove();
-        getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
+
     }
 
     protected UUID getOwner() {
@@ -150,13 +165,13 @@ public abstract class Mount implements Listener {
 
         @EventHandler
         public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
-            
             String name = null;
             try {
                 name = getName();
-            } catch ( Exception e ) {}
-            
-            if ( name != null && event.getVehicle().getCustomName().equals(name) && event.getExited() == getPlayer()) {
+            } catch (Exception e) {
+            }
+
+            if (name != null && getPlayer() != null /*&& event.getVehicle().getCustomName() != null*/ && event.getVehicle().getCustomName().equals(name) && event.getExited() == getPlayer()) {
                 Core.getCustomPlayer(getPlayer()).removeMount();
             }
         }
@@ -169,6 +184,18 @@ public abstract class Mount implements Listener {
                     && Core.getCustomPlayer(getPlayer()).currentMount != null
                     && Core.getCustomPlayer(getPlayer()).currentMount.getType() == getType()) {
                 event.setCancelled(true);
+            }
+        }
+
+        @EventHandler
+        public void teleportEvent(PlayerTeleportEvent event) {
+            if (owner != null && getPlayer() != null && Core.getCustomPlayer(getPlayer()).currentMount == mount && event.getPlayer() == getPlayer()) {
+                if ((event.getFrom().getBlockX() != event.getTo().getBlockX()
+                        || event.getFrom().getBlockY() != event.getTo().getBlockY()
+                        || event.getFrom().getBlockZ() != event.getTo().getBlockZ()
+                        || !event.getFrom().getWorld().getName().equalsIgnoreCase(event.getTo().getWorld().getName()))) {
+                    clear();
+                }
             }
         }
 
