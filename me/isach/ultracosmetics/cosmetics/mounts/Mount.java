@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -63,21 +62,6 @@ public abstract class Mount implements Listener {
                 repeatDelay = 1;
             if (Core.getCustomPlayer(getPlayer()).currentMount != null)
                 Core.getCustomPlayer(getPlayer()).removeMount();
-            BukkitRunnable runnable = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (owner != null
-                            && Bukkit.getPlayer(owner) != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount.getType() == type) {
-                        onUpdate();
-                    } else {
-                        cancel();
-                    }
-                }
-            };
-            runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
-            listener = new MountListener(this);
 
             this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
             if (ent instanceof Ageable) {
@@ -94,6 +78,36 @@ public abstract class Mount implements Listener {
                 ((Horse) ent).setDomestication(1);
                 ((Horse) ent).getInventory().setSaddle(new ItemStack(Material.SADDLE));
             }
+            BukkitRunnable runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (ent.getPassenger() != getPlayer() && ent.getTicksLived() > 10) {
+                            clear();
+                            cancel();
+                            return;
+                        }
+                        if (!ent.isValid()) {
+                            cancel();
+                            return;
+                        }
+                        if (owner != null
+                                && Bukkit.getPlayer(owner) != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount.getType() == type) {
+                            onUpdate();
+                        } else {
+                            cancel();
+                        }
+
+                    } catch (NullPointerException exc) {
+                        clear();
+                        cancel();
+                    }
+                }
+            };
+            runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
+            listener = new MountListener(this);
 
             getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", getMenuName()));
             Core.getCustomPlayer(getPlayer()).currentMount = this;
@@ -133,18 +147,19 @@ public abstract class Mount implements Listener {
     abstract void onUpdate();
 
     public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
-        Core.getCustomPlayer(getPlayer()).currentMount = null;
-        getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
-        try {
-            ent.getPassenger().eject();
-            ent.remove();
-            owner = null;
-            HandlerList.unregisterAll(this);
-            HandlerList.unregisterAll(listener);
-        } catch (Exception exc) {
+        if (getPlayer() != null && Core.getCustomPlayer(getPlayer()) != null) {
+            Core.getCustomPlayer(getPlayer()).currentMount = null;
+            getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
         }
-
+        if (ent.getPassenger() != null)
+            ent.getPassenger().eject();
+        if (ent != null)
+            ent.remove();
+        if (getPlayer() != null)
+            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
+        owner = null;
+        HandlerList.unregisterAll(this);
+        HandlerList.unregisterAll(listener);
     }
 
     protected UUID getOwner() {

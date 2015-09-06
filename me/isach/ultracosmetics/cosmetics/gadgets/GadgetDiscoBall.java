@@ -16,6 +16,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -54,6 +55,7 @@ public class GadgetDiscoBall extends Gadget {
                 positionSongPlayer.setPlaying(false);
         } catch (Exception exc) {
         }
+        HandlerList.unregisterAll(this);
     }
 
     @Override

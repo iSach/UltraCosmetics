@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -49,8 +50,8 @@ public class GadgetBlizzardBlaster extends Gadget {
                 }
                 for (int i = 0; i < 5; i++) {
                     final ArmorStand as = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), EntityType.ARMOR_STAND);
-                    as.setSmall(true);
                     as.setVisible(false);
+                    as.setSmall(true);
                     as.setGravity(false);
                     as.setHelmet(new ItemStack(Material.PACKED_ICE));
                     as.setHeadPose(new EulerAngle(r.nextInt(50), r.nextInt(50), r.nextInt(50)));
@@ -105,5 +106,6 @@ public class GadgetBlizzardBlaster extends Gadget {
         for (ArmorStand as : armorStands) {
             as.remove();
         }
+        HandlerList.unregisterAll(this);
     }
 }

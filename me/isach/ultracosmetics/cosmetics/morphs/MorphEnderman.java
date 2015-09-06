@@ -14,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.NPC;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -103,9 +104,11 @@ public class MorphEnderman extends Morph {
         if (getPlayer().getGameMode() != GameMode.CREATIVE)
             getPlayer().setAllowFlight(false);
         DisguiseAPI.undisguiseToAll(getPlayer());
-        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
+        if (getPlayer() != null)
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
         Core.getCustomPlayer(getPlayer()).currentMorph = null;
         owner = null;
+        HandlerList.unregisterAll(this);
     }
 
 }

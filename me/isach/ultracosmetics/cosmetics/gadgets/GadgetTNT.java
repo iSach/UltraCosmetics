@@ -3,14 +3,19 @@ package me.isach.ultracosmetics.cosmetics.gadgets;
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.util.MathUtils;
 import me.isach.ultracosmetics.util.UtilParticles;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -47,6 +52,14 @@ public class GadgetTNT extends Gadget {
     }
 
     @EventHandler
+    public void onItemFrameBreak(HangingBreakEvent event) {
+        for (Entity ent : entities) {
+            if (ent.getLocation().distance(event.getEntity().getLocation()) < 15)
+                event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         if (entities.contains(event.getEntity())) {
             event.setCancelled(true);
@@ -54,17 +67,19 @@ public class GadgetTNT extends Gadget {
             event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1);
 
             for (Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {
-                double dX = event.getEntity().getLocation().getX() - ent.getLocation().getX();
-                double dY = event.getEntity().getLocation().getY() - ent.getLocation().getY();
-                double dZ = event.getEntity().getLocation().getZ() - ent.getLocation().getZ();
-                double yaw = Math.atan2(dZ, dX);
-                double pitch = Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI;
-                double X = Math.sin(pitch) * Math.cos(yaw);
-                double Y = Math.sin(pitch) * Math.sin(yaw);
-                double Z = Math.cos(pitch);
+                if (ent instanceof Creature || ent instanceof Player) {
+                    double dX = event.getEntity().getLocation().getX() - ent.getLocation().getX();
+                    double dY = event.getEntity().getLocation().getY() - ent.getLocation().getY();
+                    double dZ = event.getEntity().getLocation().getZ() - ent.getLocation().getZ();
+                    double yaw = Math.atan2(dZ, dX);
+                    double pitch = Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI;
+                    double X = Math.sin(pitch) * Math.cos(yaw);
+                    double Y = Math.sin(pitch) * Math.sin(yaw);
+                    double Z = Math.cos(pitch);
 
-                Vector vector = new Vector(X, Z, Y);
-                MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
+                    Vector vector = new Vector(X, Z, Y);
+                    MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
+                }
             }
             entities.remove(event.getEntity());
         }
@@ -82,6 +97,6 @@ public class GadgetTNT extends Gadget {
 
     @Override
     public void clear() {
-
+        HandlerList.unregisterAll(this);
     }
 }

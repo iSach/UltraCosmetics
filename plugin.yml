@@ -1,11 +1,11 @@
 name: UltraCosmetics
 author: iSach
-version: Beta 1.5.8
+version: Beta 1.6.2
 load: POSTWORLD
 main: me.isach.ultracosmetics.Core
 softdepend: [LibsDisguises, NoteBlockAPI, Vault]
 commands:
-  ultracosmetics:
+  canelacosmetics:
     aliases: [uc, cosmetics]
     description: Main Command of Ultra Cosmetics
     usage: /ultracosmetics

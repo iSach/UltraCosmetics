@@ -6,9 +6,11 @@ import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -30,15 +32,19 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     public GadgetEtherealPearl(UUID owner) {
         super(Material.ENDER_PEARL, (byte) 0x0, "EtherealPearl", "ultracosmetics.gadgets.etherealpearl", 3, owner, GadgetType.ETHEREALPEARL);
-        Core.registerListener(this);
+        if (owner != null)
+            Core.registerListener(this);
     }
 
     @Override
     public void clear() {
+        HandlerList.unregisterAll(this);
     }
 
     @Override
     void onInteractRightClick() {
+        if (Core.getCustomPlayer(getPlayer()).currentMount != null)
+            Core.getCustomPlayer(getPlayer()).removeMount();
         if (getPlayer().getVehicle() instanceof EnderPearl) {
             getPlayer().getVehicle().remove();
         }
@@ -124,6 +130,15 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
         }, 2);
     }
 
+
+    @EventHandler
+    public void onItemFrameBreak(HangingBreakByEntityEvent event) {
+        if (pearls.contains(event.getRemover())
+                || event.getRemover() == getPlayer()) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity() instanceof EnderPearl) {
@@ -131,19 +146,6 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
                 pearls.remove(event.getEntity());
                 event.getEntity().remove();
             }
-            /*if (event.getEntity().getPassenger() != null) {
-                Bukkit.broadcastMessage("b");
-                // && event.getEntity().getPassenger() == getPlayer()
-                if (runnableHashMap.containsKey(event.getEntity().getPassenger())) {
-                    Bukkit.broadcastMessage("c");
-                    if (((Player) event.getEntity().getPassenger()).getName().equals(getPlayer().getName())){
-                        Bukkit.broadcastMessage("d");
-                        getPlayer().eject();
-                        runnableHashMap.remove( event.getEntity().getPassenger());
-                        event.getEntity().remove();
-                    }
-                }
-            }*/
         }
     }
 

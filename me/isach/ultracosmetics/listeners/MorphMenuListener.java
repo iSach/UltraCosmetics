@@ -19,7 +19,8 @@ public class MorphMenuListener implements Listener {
     public void morphSelection(InventoryClickEvent event) {
         if (!event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Morphs"))) return;
         event.setCancelled(true);
-        if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
+        if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
         if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
             if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Morphs"))
                     || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {

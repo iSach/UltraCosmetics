@@ -76,13 +76,20 @@ public abstract class Gadget implements Listener {
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (Bukkit.getPlayer(owner) != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget.getType() == type) {
-                        onUpdate();
-                    } else {
+                    try {
+                        if (Bukkit.getPlayer(owner) != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget.getType() == type) {
+                            onUpdate();
+                        } else {
+                            cancel();
+                            unregister();
+                        }
+                    } catch (NullPointerException exc) {
+                        removeItem();
+                        clear();
+                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", getName()));
                         cancel();
-                        unregister();
                     }
                 }
             };
@@ -208,7 +215,6 @@ public abstract class Gadget implements Listener {
                             Core.economy.withdrawPlayer((Player) event.getWhoClicked(), getPrice());
                             Core.getCustomPlayer((Player) event.getWhoClicked()).addAmmo(type.toString().toLowerCase(), getResultAmmoAmount());
                             event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
-                            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                             if (openGadgetsInvAfterAmmo)
                                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                                     @Override

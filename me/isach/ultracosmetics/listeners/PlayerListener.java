@@ -46,9 +46,9 @@ public class PlayerListener implements Listener {
                 }
             }, 5);
         }
-        if (Core.outdated())
+        if (Core.outdated)
             if (event.getPlayer().isOp())
-                event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + Core.getLastVersion());
+                event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + Core.lastVersion);
     }
 
     @EventHandler

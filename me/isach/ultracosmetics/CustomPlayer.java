@@ -34,28 +34,40 @@ public class CustomPlayer {
     public Morph currentMorph;
 
     public CustomPlayer(UUID uuid) {
-        this.uuid = uuid;
-        Core.countdownMap.put(getPlayer(), null);
-        SettingsManager.getData(getPlayer());
-        if (Core.usingFileStorage())
-            SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
+        try {
+            this.uuid = uuid;
+            Core.countdownMap.put(getPlayer(), null);
+            SettingsManager.getData(getPlayer());
+            if (Core.usingFileStorage())
+                SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
 
-        if (Core.isAmmoEnabled()) {
-            if (!Core.usingFileStorage()) {
-                Core.sqlUtils.initStats(getPlayer());
-            } else {
-                for (Gadget g : Core.getGadgets()) {
-                    if (g.getType().isEnabled()) {
-                        SettingsManager.getData(getPlayer()).addDefault("Ammo." + g.getType().toString().toLowerCase(), 0);
+            if (Core.isAmmoEnabled()) {
+                if (!Core.usingFileStorage()) {
+                    Core.sqlUtils.initStats(getPlayer());
+                } else {
+                    for (Gadget g : Core.getGadgets()) {
+                        if (g.getType().isEnabled()) {
+                            SettingsManager.getData(getPlayer()).addDefault("Ammo." + g.getType().toString().toLowerCase(), 0);
+                        }
                     }
                 }
             }
+            if (Core.usingFileStorage()) {
+                SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
+                SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
+            }
+        } catch (Exception exc) {
+            System.out.println("-------------------");
+            System.out.println("An error happened with the custom players. (UltraCosmetics");
+            System.out.println("");
+            System.out.println("Please check first your MySQL settings or the data folder.");
+            System.out.println("Report this error by PMing 'iSach' on http://spigotmc.org");
+            System.out.println("");
+            System.out.println("ERROR:");
+            exc.getCause();
+            System.out.println("");
+            System.out.println("-------------------");
         }
-        if (Core.usingFileStorage()) {
-            SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
-            SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
-        }
-
     }
 
     public Player getPlayer() {
@@ -65,8 +77,9 @@ public class CustomPlayer {
 
     public void removeGadget() {
         if (currentGadget != null) {
+            if (getPlayer() != null)
+                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", currentGadget.getName()));
             currentGadget.removeItem();
-            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", currentGadget.getName()));
             currentGadget.clear();
             currentGadget.unregister();
             currentGadget = null;
@@ -209,6 +222,10 @@ public class CustomPlayer {
                 Core.sqlUtils.addAmmo(getPlayer(), name, i);
             }
         }
+        if (currentGadget != null)
+            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString().toLowerCase()) + " " + currentGadget.getName(), "§9Gadget"));
+
+
     }
 
     public void setGadgetsEnabled(Boolean enabled) {

@@ -2,6 +2,7 @@ package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.util.BlockUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -14,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.*;
@@ -27,7 +29,8 @@ public class GadgetPaintballGun extends Gadget implements Listener {
 
     public GadgetPaintballGun(UUID owner) {
         super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALLGUN);
-        Core.registerListener(this);
+        if (owner != null)
+            Core.registerListener(this);
         displayCountdownMessage = false;
     }
 
@@ -49,6 +52,17 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             if (plist.contains(projectile)) return true;
         }
         return false;
+    }
+
+
+    @EventHandler
+    public void onItemFrameBreak(HangingBreakByEntityEvent event) {
+        if (event.getRemover() instanceof Projectile) {
+            if (mapContainsProjectile((Projectile) event.getRemover())) {
+                event.setCancelled(true);
+            }
+        } else if(event.getRemover() == getPlayer())
+            event.setCancelled(true);
     }
 
     public void removeProjectile(Projectile projectile) {

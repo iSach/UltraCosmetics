@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -83,6 +84,7 @@ public class GadgetBlackHole extends Gadget {
     public void clear() {
         if (i != null)
             i.remove();
+        HandlerList.unregisterAll(this);
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
+import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -44,7 +45,7 @@ public class MountNyanSheep extends Mount {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if(ent.isValid()) {
+                    if (ent.isValid() && ent.getPassenger() == getPlayer()) {
                         if (Core.isNoteBlockAPIEnabled())
                             positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
                     } else {
@@ -57,18 +58,8 @@ public class MountNyanSheep extends Mount {
     }
 
     @Override
-    public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
-        Core.getCustomPlayer(getPlayer()).currentMount = null;
-        ent.remove();
-    }
-
-    @Override
     void onUpdate() {
-        if (ent.getPassenger() == null)
-            clear();
         move();
-
 
 
         ((Sheep) ent).setColor(DyeColor.values()[new Random().nextInt(15)]);

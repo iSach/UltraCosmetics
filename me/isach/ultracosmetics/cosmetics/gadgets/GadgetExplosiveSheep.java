@@ -10,6 +10,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftSheep;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -86,6 +87,7 @@ public class GadgetExplosiveSheep extends Gadget {
     @Override
     public void clear() {
         Core.explosiveSheep.remove(this);
+        HandlerList.unregisterAll(this);
     }
 
     class SheepColorRunnable extends BukkitRunnable {

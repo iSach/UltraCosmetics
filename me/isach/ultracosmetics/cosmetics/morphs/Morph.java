@@ -82,8 +82,9 @@ public abstract class Morph implements Listener {
 
     public void clear() {
         DisguiseAPI.undisguiseToAll(getPlayer());
-        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
         Core.getCustomPlayer(getPlayer()).currentMorph = null;
+        if (getPlayer() != null)
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
         owner = null;
         try {
             HandlerList.unregisterAll(this);

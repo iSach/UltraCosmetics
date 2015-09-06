@@ -41,7 +41,11 @@ public class MountDruggedHorse extends Mount {
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
-                    getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));
+                    try {
+                        getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));
+                    } catch (Exception exc) {
+
+                    }
                 }
             }, 1);
         }

@@ -62,16 +62,43 @@ public abstract class Pet implements Listener {
             }
             if (Core.getCustomPlayer(getPlayer()).currentPet != null)
                 Core.getCustomPlayer(getPlayer()).removePet();
+
+            final Pet pet = this;
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (Bukkit.getPlayer(owner) != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet.getType() == type) {
-                        onUpdate();
-                        followPlayer();
-                    } else {
+                    try {
+                        if (!ent.isValid()) {
+                            if (armorStand != null)
+                                armorStand.remove();
+                            ent.remove();
+                            Core.getCustomPlayer(getPlayer()).currentPet = null;
+                            for (Item i : items) {
+                                i.remove();
+                            }
+                            items.clear();
+                            try {
+                                HandlerList.unregisterAll(pet);
+                                HandlerList.unregisterAll(listener);
+                            } catch (Exception exc) {
+                            }
+                            cancel();
+                            return;
+                        }
+                        if (Bukkit.getPlayer(owner) != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet.getType() == type) {
+                            onUpdate();
+                            followPlayer();
+                        } else {
+                            cancel();
+                        }
+
+                    } catch (NullPointerException exc) {
                         cancel();
+                        if (armorStand != null)
+                            armorStand.remove();
+                        clear();
                     }
                 }
             };
@@ -172,9 +199,9 @@ public abstract class Pet implements Listener {
     abstract void onUpdate();
 
     public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replace("%petname%", getMenuName()));
-        Core.getCustomPlayer(getPlayer()).currentPet = null;
         ent.remove();
+        if (getPlayer() != null && Core.getCustomPlayer(getPlayer()) != null)
+            Core.getCustomPlayer(getPlayer()).currentPet = null;
         for (Item i : items) {
             i.remove();
         }
@@ -186,6 +213,9 @@ public abstract class Pet implements Listener {
             HandlerList.unregisterAll(listener);
         } catch (Exception exc) {
         }
+        if (getPlayer() != null)
+            getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replace("%petname%", getMenuName()));
+        owner = null;
     }
 
     protected UUID getOwner() {

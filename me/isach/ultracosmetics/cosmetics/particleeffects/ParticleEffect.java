@@ -58,17 +58,23 @@ public abstract class ParticleEffect implements Listener {
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (Bukkit.getPlayer(owner) != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect != null
-                            && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect.getType() == type) {
-                        if (moving) {
-                            UtilParticles.play(getPlayer().getLocation().add(0, 1, 0), effect, 0, 0, .4f, .3f, .4f, 0, 3);
-                            moving = false;
+                    try {
+                        if (Bukkit.getPlayer(owner) != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect != null
+                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect.getType() == type) {
+                            if (moving) {
+                                UtilParticles.play(getPlayer().getLocation().add(0, 1, 0), effect, 0, 0, .4f, .3f, .4f, 0, 3);
+                                moving = false;
+                            } else {
+                                if (!moving)
+                                    onUpdate();
+                            }
                         } else {
-                            if (!moving)
-                                onUpdate();
+                            cancel();
                         }
-                    } else {
+
+                    } catch (NullPointerException exc) {
+                        clear();
                         cancel();
                     }
                 }
@@ -109,13 +115,15 @@ public abstract class ParticleEffect implements Listener {
     abstract void onUpdate();
 
     public void clear() {
-        getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", getName()));
         Core.getCustomPlayer(getPlayer()).currentParticleEffect = null;
         try {
             HandlerList.unregisterAll(this);
             HandlerList.unregisterAll(listener);
         } catch (Exception exc) {
         }
+        if (getPlayer() != null)
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", getName()));
+        owner = null;
     }
 
     protected UUID getOwner() {

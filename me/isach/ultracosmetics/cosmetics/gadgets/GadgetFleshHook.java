@@ -7,6 +7,7 @@ import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.util.Vector;
@@ -85,7 +86,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
 
     @Override
     public void clear() {
-
+        HandlerList.unregisterAll(this);
     }
 
 }

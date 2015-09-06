@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.HandlerList;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
@@ -109,5 +110,6 @@ public class GadgetTsunami extends Gadget {
         for (ArmorStand as : armorStands) {
             as.remove();
         }
+        HandlerList.unregisterAll(this);
     }
 }

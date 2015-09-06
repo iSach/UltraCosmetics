@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.util.Vector;
@@ -96,5 +97,6 @@ public class GadgetThorHammer extends Gadget implements Listener {
             i.remove();
         hammer.clear();
         v = null;
+        HandlerList.unregisterAll(this);
     }
 }

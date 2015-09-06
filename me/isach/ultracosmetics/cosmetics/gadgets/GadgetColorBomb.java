@@ -10,6 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -101,6 +102,7 @@ public class GadgetColorBomb extends Gadget {
             items.clear();
         }
         running = false;
+        HandlerList.unregisterAll(this);
     }
 
     @Override

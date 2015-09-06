@@ -19,6 +19,7 @@ import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -756,7 +757,8 @@ public class MenuListener implements Listener {
     public void gadgetSelection(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Gadgets"))) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR || !event.getCurrentItem().hasItemMeta())
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName())
                 return;
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
@@ -829,7 +831,8 @@ public class MenuListener implements Listener {
     public void mountsSelection(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Mounts"))) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
                     return;
@@ -876,7 +879,8 @@ public class MenuListener implements Listener {
     public void mainMenuSelection(final InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Main-Menu"))) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
                     return;
@@ -916,7 +920,8 @@ public class MenuListener implements Listener {
     public void particleEffectSelection(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Particle-Effects"))) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))
                         || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
@@ -964,7 +969,8 @@ public class MenuListener implements Listener {
     public void petSelection(InventoryClickEvent event) {
         if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Pets"))) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Pets"))
                         || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
@@ -1017,6 +1023,9 @@ public class MenuListener implements Listener {
     }
 
     public void openTreasureChest(Player player) {
+
+
+
         Class treasureChestClass = Core.getTreasureChests().get(MathUtils.randomRangeInt(0, Core.getTreasureChests().size() - 1)).getClass();
 
         Class[] cArg = new Class[1];
@@ -1050,6 +1059,13 @@ public class MenuListener implements Listener {
                 if (!c.isEmpty()) {
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
                     return;
+                }
+                for(Entity ent : event.getWhoClicked().getNearbyEntities(5, 5, 5)) {
+                    if(ent instanceof Player && Core.getCustomPlayer((Player)ent).currentTreasureChest != null) {
+                        event.getWhoClicked().closeInventory();
+                        event.getWhoClicked().sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
+                        return;
+                    }
                 }
                 if (!((Player) event.getWhoClicked()).isOnGround()) {
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));

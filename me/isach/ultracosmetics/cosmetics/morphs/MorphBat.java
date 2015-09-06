@@ -9,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
@@ -45,8 +46,10 @@ public class MorphBat extends Morph {
         if (getPlayer().getGameMode() != GameMode.CREATIVE)
             getPlayer().setAllowFlight(false);
         DisguiseAPI.undisguiseToAll(getPlayer());
-        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
+        if (getPlayer() != null)
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
         Core.getCustomPlayer(getPlayer()).currentMorph = null;
         owner = null;
+        HandlerList.unregisterAll(this);
     }
 }

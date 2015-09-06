@@ -78,10 +78,18 @@ public class Core extends JavaPlugin {
 
     private static Core core;
 
+    public static boolean outdated;
+    public static String lastVersion;
+
     @Override
     public void onEnable() {
 
         core = this;
+
+        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release ", "");
+        lastVersion = getLastVersion();
+        int i = new Version(currentVersion).compareTo(new Version(lastVersion));
+        outdated = i == -1;
 
         try {
             MetricsLite metrics = new MetricsLite(this);
@@ -153,15 +161,14 @@ public class Core extends JavaPlugin {
         treasureChestList.add(new TreasureChestEnd(null));
         treasureChestList.add(new TreasureChestGlass(null));
 
-
-        fileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
-
         // Register the command
         getCommand("ultracosmetics").setExecutor(new UltraCosmeticsCommand());
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("uc");
         getCommand("ultracosmetics").setAliases(arrayList);
         getCommand("ultracosmetics").setTabCompleter(new UltraCosmeticsTabCompleter());
+
+        fileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
 
         List<String> disabledWorlds = new ArrayList<>();
 
@@ -424,35 +431,35 @@ public class Core extends JavaPlugin {
                         if (ent.isOnGround())
                             iter.remove();
                     }
-                } catch (Exception exc) {
-                }
-                Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
-                while (customPlayerIterator.hasNext()) {
-                    CustomPlayer customPlayer = customPlayerIterator.next();
-                    if (customPlayer.getPlayer() == null)
-                        customPlayerIterator.remove();
-                }
-                Iterator<Player> playerIterator = countdownMap.keySet().iterator();
-                while (playerIterator.hasNext()) {
-                    Player p = playerIterator.next();
-                    try {
-                        if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName()))
-                            Core.getCustomPlayer(p).clear();
-                    } catch (Exception exc) {
+                    Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
+                    while (customPlayerIterator.hasNext()) {
+                        CustomPlayer customPlayer = customPlayerIterator.next();
+                        if (customPlayer.getPlayer() == null)
+                            customPlayerIterator.remove();
                     }
-                    if (countdownMap.get(p) != null) {
-                        Iterator it = countdownMap.get(p).entrySet().iterator();
-                        while (it.hasNext()) {
-                            Map.Entry pair = (Map.Entry) it.next();
-                            double timeLeft = (double) pair.getValue();
-                            Gadget.GadgetType type = (Gadget.GadgetType) pair.getKey();
-                            if (timeLeft > 0.1)
-                                pair.setValue(timeLeft - 0.05);
-                            else
-                                it.remove();
+                    Iterator<Player> playerIterator = countdownMap.keySet().iterator();
+                    while (playerIterator.hasNext()) {
+                        Player p = playerIterator.next();
+                        try {
+                            if (((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName()))
+                                Core.getCustomPlayer(p).clear();
+                        } catch (Exception exc) {
+                        }
+                        if (countdownMap.get(p) != null) {
+                            Iterator it = countdownMap.get(p).entrySet().iterator();
+                            while (it.hasNext()) {
+                                Map.Entry pair = (Map.Entry) it.next();
+                                double timeLeft = (double) pair.getValue();
+                                Gadget.GadgetType type = (Gadget.GadgetType) pair.getKey();
+                                if (timeLeft > 0.1)
+                                    pair.setValue(timeLeft - 0.05);
+                                else
+                                    it.remove();
 
+                            }
                         }
                     }
+                } catch (Exception exc) {
                 }
             }
         };
@@ -470,16 +477,16 @@ public class Core extends JavaPlugin {
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
             @Override
             public void run() {
-                if (outdated()) {
+                if (outdated) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (p.isOp())
-                            p.sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + getLastVersion());
+                            p.sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + lastVersion);
                     }
                 }
             }
         }, 20);
         registerListener(new MenuListener(this));
-        if(Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
+        if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
             registerListener(new MorphMenuListener());
 
     }
@@ -579,7 +586,7 @@ public class Core extends JavaPlugin {
             return new CustomPlayer(player.getUniqueId());
         } catch (NullPointerException exception) {
             customPlayers.add(new CustomPlayer(player.getUniqueId()));
-            return  getCustomPlayer(player);
+            return getCustomPlayer(player);
         }
     }
 
@@ -598,12 +605,6 @@ public class Core extends JavaPlugin {
             System.err.println("Can't confirm the latest version!");
         }
         return Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release", "");
-    }
-
-    public static boolean outdated() {
-        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release ", "");
-        int i = new Version(currentVersion).compareTo(new Version(getLastVersion()));
-        return i == -1;
     }
 
     public enum Category {

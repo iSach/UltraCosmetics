@@ -5,6 +5,7 @@ import me.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -111,6 +112,7 @@ public class GadgetBatBlaster extends Gadget {
             }
             this.bats.remove(getPlayer());
         }
+        HandlerList.unregisterAll(this);
     }
 
     @Override

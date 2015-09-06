@@ -8,6 +8,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -175,6 +176,7 @@ public class GadgetRocket extends Gadget {
 
         launching = false;
         new Title(" ").send(getPlayer());
+        HandlerList.unregisterAll(this);
     }
 
     @Override

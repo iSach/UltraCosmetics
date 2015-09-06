@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftCreature;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
@@ -48,9 +49,11 @@ public class MountSnake extends Mount {
             }
         }
         tailMap.clear();
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
+        if (getPlayer() != null)
+            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
         Core.getCustomPlayer(getPlayer()).currentMount = null;
         ent.remove();
+        HandlerList.unregisterAll(this);
     }
 
     @Override

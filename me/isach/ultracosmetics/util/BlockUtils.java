@@ -140,6 +140,8 @@ public class BlockUtils {
                 && b.getType() != Material.SOIL
                 && b.getType() != Material.BARRIER
                 && b.getType() != Material.COMMAND
+                && b.getType() != Material.DROPPER
+                && b.getType() != Material.DISPENSER
                 && !isPortalBlock(b)
                 && !isRocketBlock(b)
                 && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()

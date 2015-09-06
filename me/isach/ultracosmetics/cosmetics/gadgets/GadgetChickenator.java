@@ -7,6 +7,7 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Item;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
@@ -65,6 +66,7 @@ public class GadgetChickenator extends Gadget {
     public void clear() {
         for (Item i : items)
             i.remove();
+        HandlerList.unregisterAll(this);
     }
 
     public static FireworkEffect getRandomFireworkEffect() {
