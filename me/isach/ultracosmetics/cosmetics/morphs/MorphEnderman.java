@@ -46,8 +46,12 @@ public class MorphEnderman extends Morph {
     public void onPlayerToggleFligh(PlayerToggleFlightEvent event) {
         if (event.getPlayer() == getPlayer()
                 && event.getPlayer().getGameMode() != GameMode.CREATIVE
-                && !event.getPlayer().isFlying()
-                && !cooldown) {
+                && !event.getPlayer().isFlying()) {
+            if(cooldown) {
+                event.getPlayer().setFlying(false);
+                event.setCancelled(true);
+                return;
+            }
             cooldown = true;
             Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
                 @Override
@@ -105,7 +109,7 @@ public class MorphEnderman extends Morph {
             getPlayer().setAllowFlight(false);
         DisguiseAPI.undisguiseToAll(getPlayer());
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
         Core.getCustomPlayer(getPlayer()).currentMorph = null;
         owner = null;
         HandlerList.unregisterAll(this);

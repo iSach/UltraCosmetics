@@ -18,11 +18,14 @@ import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -30,6 +33,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -61,11 +65,17 @@ public class MenuListener implements Listener {
     }
 
     public static void openMainMenu(Player p) {
+        if (!p.hasPermission("ultracosmetics.openmenu")) {
+            p.sendMessage(MessageManager.getMessage("No-Permission"));
+            p.closeInventory();
+            return;
+        }
+        boolean chests = Core.treasureChestsEnabled();
         int add = 0;
-        if (Core.treasureChestsEnabled())
+        if (chests)
             add = 18;
         int slotAmount = 36;
-        if (Core.treasureChestsEnabled())
+        if (chests)
             slotAmount = 54;
 
         Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Main-Menu"));
@@ -92,7 +102,7 @@ public class MenuListener implements Listener {
             b += 2;
         }
 
-        if (Core.treasureChestsEnabled()) {
+        if (chests) {
             ItemStack chest;
 
             if (Core.getCustomPlayer(p).getKeys() == 0)
@@ -174,8 +184,9 @@ public class MenuListener implements Listener {
             if (Core.getCustomPlayer(p).getPetName(pet.getConfigName()) != null) {
                 customName = " §f§l(§r" + Core.getCustomPlayer(p).getPetName(pet.getConfigName()) + "§f§l)";
             }
-            ItemStack is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName, (lore != null) ? lore : null);
-            customName = "";
+            ItemStack is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName);
+            if (lore != null)
+                is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName, lore);
             if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
                 is = addGlow(is);
             inv.setItem(i, is);
@@ -262,7 +273,9 @@ public class MenuListener implements Listener {
             CustomPlayer cp = Core.getCustomPlayer(p);
             if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
                 toggle = MessageManager.getMessage("Menu.Unsummon");
-            ItemStack is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName(), (lore != null) ? lore : null);
+            ItemStack is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName());
+            if (lore != null)
+                is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName(), lore);
             if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
                 is = addGlow(is);
             inv.setItem(i, is);
@@ -333,7 +346,9 @@ public class MenuListener implements Listener {
             CustomPlayer cp = Core.getCustomPlayer(p);
             if (cp.currentMount != null && cp.currentMount.getType() == m.getType())
                 toggle = MessageManager.getMessage("Menu.Despawn");
-            ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName(), (lore != null) ? lore : null);
+            ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName());
+            if (lore != null)
+                is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName(), lore);
             if (cp.currentMount != null && cp.currentMount.getType() == m.getType())
                 is = addGlow(is);
             inv.setItem(i, is);
@@ -404,11 +419,15 @@ public class MenuListener implements Listener {
             CustomPlayer cp = Core.getCustomPlayer(p);
             if (cp.currentMorph != null && cp.currentMorph.getType() == m.getType())
                 toggle = MessageManager.getMessage("Menu.Unmorph");
-            ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getName(), (lore != null) ? lore : null);
+            ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getName());
+            if (lore != null)
+                is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getName(), lore);
             if (cp.currentMorph != null && cp.currentMorph.getType() == m.getType())
                 is = addGlow(is);
             ItemMeta itemMeta = is.getItemMeta();
-            List<String> loreList = itemMeta.getLore();
+            List<String> loreList = new ArrayList<>();
+            if (itemMeta.hasLore())
+                loreList = itemMeta.getLore();
             loreList.add("");
             loreList.add(m.getType().getSkill());
             itemMeta.setLore(loreList);
@@ -487,12 +506,16 @@ public class MenuListener implements Listener {
             CustomPlayer cp = Core.getCustomPlayer(p);
             if (cp.currentGadget != null && cp.currentGadget.getType() == g.getType())
                 toggle = MessageManager.getMessage("Menu.Deactivate");
-            ItemStack is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName(), (lore != null) ? lore : null);
+            ItemStack is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName());
+            if (lore != null)
+                is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName(), lore);
             if (cp.currentGadget != null && cp.currentGadget.getType() == g.getType())
                 is = addGlow(is);
             if (Core.isAmmoEnabled() && g.getType().requiresAmmo()) {
                 ItemMeta itemMeta = is.getItemMeta();
-                List<String> loreList = itemMeta.getLore();
+                List<String> loreList = new ArrayList<>();
+                if (itemMeta.hasLore())
+                    loreList = itemMeta.getLore();
                 loreList.add("");
                 loreList.add(MessageManager.getMessage("Ammo").replace("%ammo%", "" + Core.getCustomPlayer(p).getAmmo(g.getType().toString().toLowerCase())));
                 loreList.add(MessageManager.getMessage("Right-Click-Buy-Ammo"));
@@ -790,7 +813,8 @@ public class MenuListener implements Listener {
 
                     }
                     if (cp.currentGadget == null)
-                        activateGadgetByType(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
+                        cp.removeGadget();
+                    activateGadgetByType(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
                     if (cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.buyAmmo();
                         cp.currentGadget.openGadgetsInvAfterAmmo = true;
@@ -1025,7 +1049,6 @@ public class MenuListener implements Listener {
     public void openTreasureChest(Player player) {
 
 
-
         Class treasureChestClass = Core.getTreasureChests().get(MathUtils.randomRangeInt(0, Core.getTreasureChests().size() - 1)).getClass();
 
         Class[] cArg = new Class[1];
@@ -1060,8 +1083,8 @@ public class MenuListener implements Listener {
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
                     return;
                 }
-                for(Entity ent : event.getWhoClicked().getNearbyEntities(5, 5, 5)) {
-                    if(ent instanceof Player && Core.getCustomPlayer((Player)ent).currentTreasureChest != null) {
+                for (Entity ent : event.getWhoClicked().getNearbyEntities(5, 5, 5)) {
+                    if (ent instanceof Player && Core.getCustomPlayer((Player) ent).currentTreasureChest != null) {
                         event.getWhoClicked().closeInventory();
                         event.getWhoClicked().sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
                         return;
@@ -1160,7 +1183,7 @@ public class MenuListener implements Listener {
 
     // ************ Pet renaming ************
 
-    private Map<Player, String> renamePetList = new HashMap<>();
+    private static Map<Player, String> renamePetList = new HashMap<>();
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
@@ -1172,7 +1195,7 @@ public class MenuListener implements Listener {
         renamePetList.remove(e.getPlayer());
     }
 
-    private void renamePet(final Player p) {
+    public static void renamePet(final Player p) {
         AnvilGUI gui = new AnvilGUI(p, new AnvilGUI.AnvilClickEventHandler() {
             @Override
             public void onAnvilClick(AnvilGUI.AnvilClickEvent event) {
@@ -1195,7 +1218,7 @@ public class MenuListener implements Listener {
         gui.open();
     }
 
-    private void buyRenamePet(final Player p, final String name) {
+    private static void buyRenamePet(final Player p, final String name) {
         p.closeInventory();
         final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Rename-Pet"));
 

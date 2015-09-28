@@ -83,123 +83,129 @@ public abstract class TreasureChest implements Listener {
 
         this.player = getPlayer();
 
+        randomGenerator = new RandomGenerator(getPlayer(), getPlayer().getLocation());
+
         BukkitRunnable runnable = new BukkitRunnable() {
             int i = 5;
 
             @Override
             public void run() {
-                if (i == 0) {
 
-                    BukkitRunnable runnable = new BukkitRunnable() {
-                        int i = 4;
+                try {
+                    if (i == 0) {
+                        BukkitRunnable runnable = new BukkitRunnable() {
+                            int i = 4;
 
-                        @Override
-                        public void run() {
-                            try {
-                                randomGenerator = new RandomGenerator(getPlayer(), getPlayer().getLocation());
-                                UtilParticles.playHelix(getChestLocation(i, center.clone()), 0, particleEffect);
-                                UtilParticles.playHelix(getChestLocation(i, center.clone()), 3.5f, particleEffect);
-                                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Block b = getChestLocation(i, center.clone()).getBlock();
-                                        b.setType(Material.CHEST);
-                                        if (enderChests)
-                                            b.setType(Material.ENDER_CHEST);
-                                        getPlayer().playSound(getPlayer().getLocation(), Sound.ANVIL_LAND, 2, 1);
-                                        for (int i = 0; i < 5; i++) {
-                                            UtilParticles.play(b.getLocation(), Effect.LARGE_SMOKE);
-                                            UtilParticles.play(b.getLocation(), Effect.LAVA_POP);
+                            @Override
+                            public void run() {
+                                try {
+                                    UtilParticles.playHelix(getChestLocation(i, center.clone()), 0, particleEffect);
+                                    UtilParticles.playHelix(getChestLocation(i, center.clone()), 3.5f, particleEffect);
+                                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Block b = getChestLocation(i, center.clone()).getBlock();
+                                            b.setType(Material.CHEST);
+                                            if (enderChests)
+                                                b.setType(Material.ENDER_CHEST);
+                                            getPlayer().playSound(getPlayer().getLocation(), Sound.ANVIL_LAND, 2, 1);
+                                            for (int i = 0; i < 5; i++) {
+                                                UtilParticles.play(b.getLocation(), Effect.LARGE_SMOKE);
+                                                UtilParticles.play(b.getLocation(), Effect.LAVA_POP);
+                                            }
+                                            BlockFace blockFace = BlockFace.SOUTH;
+                                            switch (i) {
+                                                case 4:
+                                                    blockFace = BlockFace.SOUTH;
+                                                    break;
+                                                case 3:
+                                                    blockFace = BlockFace.NORTH;
+                                                    break;
+                                                case 2:
+                                                    blockFace = BlockFace.EAST;
+                                                    break;
+                                                case 1:
+                                                    blockFace = BlockFace.WEST;
+                                                    break;
+                                            }
+
+                                            BlockState blockState = b.getState();
+                                            if (enderChests) {
+                                                EnderChest enderChest = (EnderChest) b.getState().getData();
+                                                enderChest.setFacingDirection(blockFace);
+                                                blockState.setData(enderChest);
+                                            } else {
+                                                Chest chest = (Chest) b.getState().getData();
+                                                chest.setFacingDirection(blockFace);
+                                                blockState.setData(chest);
+                                            }
+                                            blockState.update();
+
+                                            chests.add(b);
+                                            UtilParticles.play(getChestLocation(i, getPlayer().getLocation()), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
+                                            i--;
+                                            if (i == 0)
+                                                cancel();
                                         }
-                                        BlockFace blockFace = BlockFace.SOUTH;
-                                        switch (i) {
-                                            case 4:
-                                                blockFace = BlockFace.SOUTH;
-                                                break;
-                                            case 3:
-                                                blockFace = BlockFace.NORTH;
-                                                break;
-                                            case 2:
-                                                blockFace = BlockFace.EAST;
-                                                break;
-                                            case 1:
-                                                blockFace = BlockFace.WEST;
-                                                break;
-                                        }
-
-                                        BlockState blockState = b.getState();
-                                        if (enderChests) {
-                                            EnderChest enderChest = (EnderChest) b.getState().getData();
-                                            enderChest.setFacingDirection(blockFace);
-                                            blockState.setData(enderChest);
-                                        } else {
-                                            Chest chest = (Chest) b.getState().getData();
-                                            chest.setFacingDirection(blockFace);
-                                            blockState.setData(chest);
-                                        }
-                                        blockState.update();
-
-                                        chests.add(b);
-                                        UtilParticles.play(getChestLocation(i, getPlayer().getLocation()), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
-                                        i--;
-                                        if (i == 0)
-                                            cancel();
-                                    }
-                                }, 30);
-                            } catch (Exception exc) {
-                                clear();
-                                cancel();
+                                    }, 30);
+                                } catch (Exception exc) {
+                                    clear();
+                                    cancel();
+                                }
                             }
+                        };
+                        runnable.runTaskTimer(Core.getPlugin(), 0, 50);
+                    }
+                    if (i == 5) {
+                        Block lampBlock = getPlayer().getLocation().add(0, -1, 0).getBlock();
+                        center = lampBlock.getLocation().add(0.5, 1, 0.5);
+                        oldMaterials.put(lampBlock.getLocation(), lampBlock.getType());
+                        oldDatas.put(lampBlock.getLocation(), lampBlock.getData());
+                        blocksToRestore.add(lampBlock);
+                        lampBlock.setType(lampMaterial);
+                        UtilParticles.play(lampBlock.getLocation(), Effect.STEP_SOUND, lampBlock.getTypeId(), lampBlock.getData(), 0, 0, 0, 1, 50);
+                    } else if (i == 4) {
+                        for (Block b : getSurroundingBlocks(center.clone().add(0, -1, 0).getBlock())) {
+                            oldMaterials.put(b.getLocation(), b.getType());
+                            oldDatas.put(b.getLocation(), b.getData());
+                            blocksToRestore.add(b);
+                            b.setType(b1Mat);
+                            b.setData(b1data);
+                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
                         }
-                    };
-                    runnable.runTaskTimer(Core.getPlugin(), 0, 50);
+                    } else if (i == 3) {
+                        for (Block b : getSurroundingSurrounding(center.clone().add(0, -1, 0).getBlock())) {
+                            oldMaterials.put(b.getLocation(), b.getType());
+                            oldDatas.put(b.getLocation(), b.getData());
+                            blocksToRestore.add(b);
+                            b.setType(b2Mat);
+                            b.setData(b2data);
+                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
+                        }
+                    } else if (i == 2) {
+                        for (Block b : getBlock3(center.clone().add(0, -1, 0).getBlock())) {
+                            oldMaterials.put(b.getLocation(), b.getType());
+                            oldDatas.put(b.getLocation(), b.getData());
+                            blocksToRestore.add(b);
+                            b.setType(b3Mat);
+                            b.setData(b3data);
+                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
+                        }
+                    } else if (i == 1) {
+                        for (Block b : getSurroundingSurrounding(center.getBlock())) {
+                            oldMaterials.put(b.getLocation(), b.getType());
+                            oldDatas.put(b.getLocation(), b.getData());
+                            blocksToRestore.add(b);
+                            b.setType(barriersMaterial);
+                            b.setData(barrierData);
+                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
+                        }
+                    }
+                    i--;
+                } catch (Exception exc) {
+                    cancel();
+                    forceOpen(0);
                 }
-                if (i == 5) {
-                    Block lampBlock = getPlayer().getLocation().add(0, -1, 0).getBlock();
-                    center = lampBlock.getLocation().add(0.5, 1, 0.5);
-                    oldMaterials.put(lampBlock.getLocation(), lampBlock.getType());
-                    oldDatas.put(lampBlock.getLocation(), lampBlock.getData());
-                    blocksToRestore.add(lampBlock);
-                    lampBlock.setType(lampMaterial);
-                    UtilParticles.play(lampBlock.getLocation(), Effect.STEP_SOUND, lampBlock.getTypeId(), lampBlock.getData(), 0, 0, 0, 1, 50);
-                } else if (i == 4) {
-                    for (Block b : getSurroundingBlocks(center.clone().add(0, -1, 0).getBlock())) {
-                        oldMaterials.put(b.getLocation(), b.getType());
-                        oldDatas.put(b.getLocation(), b.getData());
-                        blocksToRestore.add(b);
-                        b.setType(b1Mat);
-                        b.setData(b1data);
-                        UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
-                    }
-                } else if (i == 3) {
-                    for (Block b : getSurroundingSurrounding(center.clone().add(0, -1, 0).getBlock())) {
-                        oldMaterials.put(b.getLocation(), b.getType());
-                        oldDatas.put(b.getLocation(), b.getData());
-                        blocksToRestore.add(b);
-                        b.setType(b2Mat);
-                        b.setData(b2data);
-                        UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
-                    }
-                } else if (i == 2) {
-                    for (Block b : getBlock3(center.clone().add(0, -1, 0).getBlock())) {
-                        oldMaterials.put(b.getLocation(), b.getType());
-                        oldDatas.put(b.getLocation(), b.getData());
-                        blocksToRestore.add(b);
-                        b.setType(b3Mat);
-                        b.setData(b3data);
-                        UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
-                    }
-                } else if (i == 1) {
-                    for (Block b : getSurroundingSurrounding(center.getBlock())) {
-                        oldMaterials.put(b.getLocation(), b.getType());
-                        oldDatas.put(b.getLocation(), b.getData());
-                        blocksToRestore.add(b);
-                        b.setType(barriersMaterial);
-                        b.setData(barrierData);
-                        UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
-                    }
-                }
-                i--;
             }
         };
         runnable.runTaskTimer(Core.getPlugin(), 0, 12);
@@ -223,9 +229,13 @@ public abstract class TreasureChest implements Listener {
                 if (getPlayer() == null
                         || Core.getCustomPlayer(getPlayer()) == null
                         || Core.getCustomPlayer(getPlayer()).currentTreasureChest != treasureChest) {
+                    for (Entity entity : holograms)
+                        entity.remove();
                     cancel();
                     return;
                 }
+                if (!getPlayer().getWorld().getName().equals(center.getWorld().getName()))
+                    getPlayer().teleport(center);
                 if (getPlayer().getLocation().distance(center) > 1.5)
                     getPlayer().teleport(center);
                 for (Entity ent : player.getNearbyEntities(2, 2, 2)) {
@@ -264,6 +274,8 @@ public abstract class TreasureChest implements Listener {
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
+                    for (Entity hologram : holograms)
+                        hologram.remove();
                     for (Block b : chestsToRemove) {
                         UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
                         b.setType(Material.AIR);
@@ -274,8 +286,6 @@ public abstract class TreasureChest implements Listener {
                     }
                     for (Entity ent : items)
                         ent.remove();
-                    for (Entity hologram : holograms)
-                        hologram.remove();
                     items.clear();
                     chests.clear();
                     holograms.clear();
@@ -288,6 +298,8 @@ public abstract class TreasureChest implements Listener {
                 }
             }, 30);
         } else {
+            for (Entity hologram : holograms)
+                hologram.remove();
             for (Block b : chestsToRemove) {
                 UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
                 b.setType(Material.AIR);
@@ -298,8 +310,6 @@ public abstract class TreasureChest implements Listener {
             }
             for (Entity ent : items)
                 ent.remove();
-            for (Entity hologram : holograms)
-                hologram.remove();
             items.clear();
             chests.clear();
             holograms.clear();
@@ -308,6 +318,7 @@ public abstract class TreasureChest implements Listener {
             Core.getCustomPlayer(getPlayer()).currentTreasureChest = null;
             owner = null;
             randomGenerator.clear();
+            randomGenerator = null;
         }
     }
 
@@ -449,16 +460,27 @@ public abstract class TreasureChest implements Listener {
         holograms.add(armorStand);
     }
 
+    boolean cooldown = false;
+
     @EventHandler
     public void onInter(final PlayerInteractEvent event) {
         if (event.getClickedBlock() != null
                 && (event.getClickedBlock().getType() == Material.CHEST ||
                 event.getClickedBlock().getType() == Material.ENDER_CHEST)
                 && chests.contains(event.getClickedBlock())
+                && !cooldown
                 && event.getPlayer() == getPlayer()) {
             playChestAction(event.getClickedBlock(), true);
             randomGenerator.loc = event.getClickedBlock().getLocation().add(0, 1, 0);
             randomGenerator.giveRandomThing();
+
+            cooldown = true;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    cooldown = false;
+                }
+            }, 3);
 
             ItemStack is = ItemFactory.create(randomGenerator.getMaterial(), randomGenerator.getData(), UUID.randomUUID().toString());
 

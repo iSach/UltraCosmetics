@@ -294,6 +294,18 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                     player.sendMessage(MessageManager.getMessage("Invalid-Mount"));
                     return true;
                 }
+            } else if (argZero.equalsIgnoreCase("renamepet")) {
+                if (Core.getCustomPlayer(player).currentPet == null) {
+                    player.sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
+                    return true;
+                } else if (!(boolean) SettingsManager.getConfig().get("Pets-Rename.Enabled"))
+                    return true;
+                else
+                    MenuListener.renamePet(player);
+            } else if (argZero.equalsIgnoreCase("selfmorphview")) {
+                Core.getCustomPlayer(player).setSeeSelfMorph(Core.getCustomPlayer(player).canSeeSelfMorph() ? false : true);
+            } else if (argZero.equalsIgnoreCase("gadgets")) {
+                Core.getCustomPlayer(player).setGadgetsEnabled(Core.getCustomPlayer(player).hasGadgetsEnabled() ? false : true);
             } else if (argZero.equalsIgnoreCase("give")) {
 
                 if (!sender.hasPermission("ultracosmetics.commands.give")) {
@@ -339,7 +351,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
 
                     for (int i = 0; i < amount; i++)
                         Core.getCustomPlayer(giveTo).addKey();
-                    sender.sendMessage("§l§oCoscmetics > §c§lSuccesfully given " + amount + " treasure keys to " + giveTo.getName());
+                    sender.sendMessage("§l§oCosmetics > §c§lSuccesfully given " + amount + " treasure keys to " + giveTo.getName());
 
                 } else if (argOne.equals("ammo")) {
                     //uc give ammo <gadget> <amount> [player]
@@ -396,7 +408,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                         player.sendMessage("§l§oCosmetics > §c§lPlayer could not be found.");
                         return true;
                     }
-                    giveTo = Bukkit.getPlayer(args[3]);
+                    giveTo = Bukkit.getPlayer(args[1]);
                 }
 
                 Core.getCustomPlayer(giveTo).clear();
@@ -405,7 +417,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
                 Player giveTo = player;
 
-                if (!player.hasPermission("ultracosmetics.command.chest")) {
+                if (!player.hasPermission("ultracosmetics.commands.chest")) {
                     noPerm(player);
                     return true;
                 }
@@ -415,10 +427,10 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                         player.sendMessage("§l§oCosmetics > §c§lPlayer could not be found.");
                         return true;
                     }
-                    giveTo = Bukkit.getPlayer(args[3]);
+                    giveTo = Bukkit.getPlayer(args[1]);
                 }
                 if (giveTo.getInventory().getItem(slot) != null) {
-                    if(giveTo.getInventory().getItem(slot).hasItemMeta()
+                    if (giveTo.getInventory().getItem(slot).hasItemMeta()
                             && giveTo.getInventory().getItem(slot).getItemMeta().hasDisplayName()
                             && giveTo.getInventory().getItem(slot).getItemMeta().getDisplayName().equals(((String) SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
                         return true;
@@ -429,7 +441,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 }
                 String name = ((String) SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-                byte data = ((Integer)SettingsManager.getConfig().get("Menu-Item.Data")).byteValue();
+                byte data = ((Integer) SettingsManager.getConfig().get("Menu-Item.Data")).byteValue();
                 player.getInventory().setItem(slot, ItemFactory.create(material, data, name));
                 return true;
             } else if (argZero.equalsIgnoreCase("reload")) {
@@ -494,6 +506,8 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 + "      §8┃ §7/uc give key <amount> [player] §fGive key" + "\n§r"
                 + "      §8┃ §7/uc give ammo <gadget> <amount> [player] §fGive ammo" + "\n§r"
                 + "      §8┃ §7/uc clear [player]§f Clears current cosmetics" + "\n§r"
-                + "      §8┃ §7/uc chest [player]§f Gets the menu item." + "\n§r";
+                + "      §8┃ §7/uc chest [player]§f Gets the menu item." + "\n§r"
+                + "      §8┃ §7/uc gadgets§f Toggle gadgets" + "\n§r"
+                + "      §8┃ §7/uc selfmorphview§f Toggle Self Morph View" + "\n§r";
     }
 }

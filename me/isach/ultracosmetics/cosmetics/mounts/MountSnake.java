@@ -43,17 +43,22 @@ public class MountSnake extends Mount {
 
     @Override
     public void clear() {
-        for (Player p : tailMap.keySet()) {
-            for (Entity ent : tailMap.get(p)) {
+        for (Player p : tailMap.keySet())
+            for (Entity ent : tailMap.get(p))
                 ent.remove();
-            }
-        }
         tailMap.clear();
+        if (getPlayer() != null && Core.getCustomPlayer(getPlayer()) != null) {
+            Core.getCustomPlayer(getPlayer()).currentMount = null;
+        }
+        if (ent.getPassenger() != null)
+            ent.getPassenger().eject();
+        if (ent != null)
+            ent.remove();
         if (getPlayer() != null)
             getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
-        Core.getCustomPlayer(getPlayer()).currentMount = null;
-        ent.remove();
+        owner = null;
         HandlerList.unregisterAll(this);
+        HandlerList.unregisterAll(listener);
     }
 
     @Override

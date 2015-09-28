@@ -1,6 +1,7 @@
 package me.isach.ultracosmetics.cosmetics.mounts;
 
 import me.isach.ultracosmetics.Core;
+import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.util.BlockUtils;
 import me.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
@@ -26,8 +27,8 @@ public class MountEcologistHorse extends Mount {
 
     public MountEcologistHorse(UUID owner) {
         super(EntityType.HORSE, Material.RED_ROSE, (byte) 0, "EcologistHorse", "ultracosmetics.mounts.ecologisthorse", owner, MountType.ECOLOGISTHORSE);
-        Core.registerListener(this);
         if (owner != null) {
+            Core.registerListener(this);
             Horse horse = (Horse) ent;
             horse.setColor(Horse.Color.CHESTNUT);
             color = Horse.Color.CHESTNUT;
@@ -42,7 +43,8 @@ public class MountEcologistHorse extends Mount {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer() == getPlayer()
-                && Core.getCustomPlayer(getPlayer()).currentMount == this) {
+                && Core.getCustomPlayer(getPlayer()).currentMount == this
+                && (boolean) SettingsManager.getConfig().get("Mounts-Block-Trails")) {
             List<Byte> datas = new ArrayList<>();
             datas.add((byte) 0x5);
             datas.add((byte) 0xd);

@@ -20,7 +20,9 @@ import me.isach.ultracosmetics.util.ItemFactory;
 import me.isach.ultracosmetics.util.MetricsLite;
 import me.isach.ultracosmetics.util.SQLUtils;
 import net.milkbowl.vault.economy.Economy;
+import net.minecraft.server.v1_8_R3.Block;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -61,6 +63,8 @@ public class Core extends JavaPlugin {
     private static List<Pet> petList = new ArrayList<>();
     private static List<TreasureChest> treasureChestList = new ArrayList<>();
     private static List<Morph> morphList = new ArrayList<>();
+
+    public static Boolean placeHolderColor;
 
     private static boolean nbsapiEnabled = false;
     private static boolean ammoEnabled = false;
@@ -168,8 +172,6 @@ public class Core extends JavaPlugin {
         getCommand("ultracosmetics").setAliases(arrayList);
         getCommand("ultracosmetics").setTabCompleter(new UltraCosmeticsTabCompleter());
 
-        fileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
-
         List<String> disabledWorlds = new ArrayList<>();
 
         disabledWorlds.add("worldDisabled1");
@@ -186,14 +188,44 @@ public class Core extends JavaPlugin {
 
         SettingsManager.getConfig().addDefault("TreasureChests.Enabled", false);
         SettingsManager.getConfig().addDefault("TreasureChests.Key-Price", 1000);
-        SettingsManager.getConfig().addDefault("TreasureChests.Money-Loot.Enabled", true);
-        SettingsManager.getConfig().addDefault("TreasureChests.Money-Loot.Max", 200);
+
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Money.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Money.Max", 100);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Money.Chance", 20);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Money.Message.enabled", false);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Money.Message.message", "%prefix% §6§l%name% found %money%$");
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Max", 100);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Chance", 60);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Message.enabled", false);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Message.message", "%prefix% §6§l%name% found %ammo% %gadget% ammo");
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Mounts.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Mounts.Chance", 10);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Mounts.Message.enabled", false);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Mounts.Message.message", "%prefix% §6§l%name% found rare %mount%");
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Pets.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Pets.Chance", 10);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Pets.Message.enabled", false);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Pets.Message.message", "%prefix% §6§l%name% found rare %pet%");
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Morphs.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Morphs.Chance", 4);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Morphs.Message.enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Morphs.Message.message", "%prefix% §6§l%name% found legendary %morph%");
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Effects.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Effects.Chance", 4);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Effects.Message.enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Effects.Message.message", "%prefix% §6§l%name% found legendary %effect%");
+
         SettingsManager.getConfig().addDefault("TreasureChests.Permission-Add-Command", "pex user %name% add %permission%");
 
         SettingsManager.getConfig().addDefault("Pets-Rename.Enabled", false);
         SettingsManager.getConfig().addDefault("Pets-Rename.Permission-Required", false);
         SettingsManager.getConfig().addDefault("Pets-Rename.Requires-Money.Enabled", true);
         SettingsManager.getConfig().addDefault("Pets-Rename.Requires-Money.Price", 100);
+
+        SettingsManager.getConfig().addDefault("Pets-Drop-Items", true);
+        SettingsManager.getConfig().addDefault("Pets-Are-Babies", true);
+        SettingsManager.getConfig().addDefault("Mounts-Block-Trails", true);
 
         // Set config things.
         SettingsManager.getConfig().addDefault("Ammo-System-For-Gadgets.Enabled", false);
@@ -222,8 +254,14 @@ public class Core extends JavaPlugin {
         SettingsManager.getConfig().addDefault("Disabled-Items.Custom-Disabled-Item.Data", 8);
         SettingsManager.getConfig().addDefault("Disabled-Items.Custom-Disabled-Item.Name", "&c&lDisabled");
 
+        SettingsManager.getConfig().addDefault("Chat-Cosmetic-PlaceHolder-Color", true);
+
         SettingsManager.getConfig().addDefault("Gadget-Slot", 4);
         SettingsManager.getConfig().addDefault("Remove-Gadget-With-Drop", false);
+
+        fileStorage = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System")).equalsIgnoreCase("file");
+
+        placeHolderColor = SettingsManager.getConfig().get("Chat-Cosmetic-PlaceHolder-Color");
 
         // Add gadgets.
         gadgetList.add(new GadgetPaintballGun(null));
@@ -290,6 +328,15 @@ public class Core extends JavaPlugin {
 
         for (Gadget gadget : gadgetList) {
             SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Enabled", true);
+            if (gadget.getType() == Gadget.GadgetType.PAINTBALLGUN) {
+                SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Block-Type", "STAINED_CLAY");
+                SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Particle.Enabled", false);
+                SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Particle.Effect", "fireworksSpark");
+                SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Radius", 2);
+                List<String> blackListedBlocks = new ArrayList<>();
+                blackListedBlocks.add("REDSTONE_BLOCK");
+                SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".BlackList", blackListedBlocks);
+            }
             if (ammoEnabled) {
                 SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Enabled", true);
                 SettingsManager.getConfig().addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Price", 500);
@@ -329,71 +376,71 @@ public class Core extends JavaPlugin {
                 Bukkit.shutdown();
                 return;
             }
-            setupEconomy();
-            if (!fileStorage) {
+        }
+        setupEconomy();
+        if (!fileStorage) {
 
-                Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            String hostname = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.hostname"));
-                            String portNumber = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.port"));
-                            String database = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.database"));
-                            String username = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.username"));
-                            String password = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.password"));
-                            sql = new MySQLConnection(hostname, portNumber, database, username, password);
-                            co = sql.getConnection();
+            Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String hostname = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.hostname"));
+                        String portNumber = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.port"));
+                        String database = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.database"));
+                        String username = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.username"));
+                        String password = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.password"));
+                        sql = new MySQLConnection(hostname, portNumber, database, username, password);
+                        co = sql.getConnection();
 
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics >>> Successfully connected to MySQL server! :)");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
-                                    "id INTEGER not NULL AUTO_INCREMENT," +
-                                    " uuid VARCHAR(255)," +
-                                    " username VARCHAR(255),"
-                                    + " PRIMARY KEY ( id ))");
-                            sql.executeUpdate();
-                            for (Gadget gadget : gadgetList) {
-                                DatabaseMetaData md = co.getMetaData();
-                                ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", gadget.getType().toString().toLowerCase());
-                                if (!rs.next()) {
-                                    PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD " + gadget.getType().toString().toLowerCase() + " INTEGER DEFAULT 0 not NULL");
-                                    statement.executeUpdate();
-                                }
-                            }
-                            table = new Table(co, "UltraCosmeticsData");
-                            sqlUtils = new SQLUtils(core);
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics >>> Successfully connected to MySQL server! :)");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
+                                "id INTEGER not NULL AUTO_INCREMENT," +
+                                " uuid VARCHAR(255)," +
+                                " username VARCHAR(255),"
+                                + " PRIMARY KEY ( id ))");
+                        sql.executeUpdate();
+                        for (Gadget gadget : gadgetList) {
                             DatabaseMetaData md = co.getMetaData();
-                            ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "treasureKeys");
+                            ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", gadget.getType().toString().toLowerCase());
                             if (!rs.next()) {
-                                PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
+                                PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD " + gadget.getType().toString().toLowerCase() + " INTEGER DEFAULT 0 not NULL");
                                 statement.executeUpdate();
                             }
-
-                        } catch (Exception e) {
-
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getConsoleSender().sendMessage("§c§lUltra Cosmetics >>> Could not connect to MySQL server!");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getConsoleSender().sendMessage("§c§lError:");
-                            e.printStackTrace();
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please check the MySQL info!");
-                            Bukkit.getLogger().info("");
-                            Bukkit.getLogger().info("");
-                            Bukkit.shutdown();
-
                         }
+                        table = new Table(co, "UltraCosmeticsData");
+                        sqlUtils = new SQLUtils(core);
+                        DatabaseMetaData md = co.getMetaData();
+                        ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "treasureKeys");
+                        if (!rs.next()) {
+                            PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
+                            statement.executeUpdate();
+                        }
+
+                    } catch (Exception e) {
+
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getConsoleSender().sendMessage("§c§lUltra Cosmetics >>> Could not connect to MySQL server!");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getConsoleSender().sendMessage("§c§lError:");
+                        e.printStackTrace();
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please check the MySQL info!");
+                        Bukkit.getLogger().info("");
+                        Bukkit.getLogger().info("");
+                        Bukkit.shutdown();
+
                     }
-                }, 0, 24000);
-            }
+                }
+            }, 0, 24000);
         }
 
 
@@ -605,6 +652,14 @@ public class Core extends JavaPlugin {
             System.err.println("Can't confirm the latest version!");
         }
         return Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release", "");
+    }
+
+    public static CharSequence filterColor(String menuName) {
+        String filtered = menuName;
+        Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
+        for (Character character : chars)
+            menuName = menuName.replace("§" + character, "");
+        return menuName;
     }
 
     public enum Category {

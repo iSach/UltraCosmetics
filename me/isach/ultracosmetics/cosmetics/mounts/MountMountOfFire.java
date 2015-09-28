@@ -1,10 +1,12 @@
 package me.isach.ultracosmetics.cosmetics.mounts;
 
 import me.isach.ultracosmetics.Core;
+import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.util.BlockUtils;
 import me.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,8 +28,8 @@ public class MountMountOfFire extends Mount {
 
     public MountMountOfFire(UUID owner) {
         super(EntityType.HORSE, Material.BLAZE_POWDER, (byte) 0, "MountOfFire", "ultracosmetics.mounts.mountoffire", owner, MountType.MOUNTOFFIRE);
-        Core.registerListener(this);
         if (owner != null) {
+            Core.registerListener(this);
             Horse horse = (Horse) ent;
             horse.setColor(Horse.Color.CREAMY);
             horse.setVariant(Horse.Variant.HORSE);
@@ -42,7 +44,8 @@ public class MountMountOfFire extends Mount {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer() == getPlayer()
-                && Core.getCustomPlayer(getPlayer()).currentMount == this) {
+                && Core.getCustomPlayer(getPlayer()).currentMount == this
+                && (boolean)SettingsManager.getConfig().get("Mounts-Block-Trails")) {
             List<Byte> datas = new ArrayList<>();
             datas.add((byte) 0x1);
             datas.add((byte) 0x4);
@@ -55,7 +58,6 @@ public class MountMountOfFire extends Mount {
 
     @Override
     void onUpdate() {
-
         UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.FLAME, 0, 0, 0.4f, 0.2f, 0.4f, 0, 5);
     }
 }

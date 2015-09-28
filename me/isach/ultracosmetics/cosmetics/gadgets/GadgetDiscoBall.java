@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -68,7 +69,12 @@ public class GadgetDiscoBall extends Gadget {
         running = true;
         Core.discoBalls.add(this);
         if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
-            Song s = NBSDecoder.parse(new File(Core.getPlugin().getDataFolder().getPath() + "/songs/GetLucky.nbs"));
+            File[] files = new File(Core.getPlugin().getDataFolder().getPath() + "/songs/").listFiles();
+            List<File> songs = new ArrayList<>();
+            for (File f : files)
+                if (f.getName().contains(".nbs")) songs.add(f);
+            File song = songs.get(new Random().nextInt(songs.size()));
+            Song s = NBSDecoder.parse(song);
             positionSongPlayer = new PositionSongPlayer(s);
 
             positionSongPlayer.setTargetLocation(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d));

@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
@@ -88,7 +89,8 @@ public abstract class Pet implements Listener {
                         if (Bukkit.getPlayer(owner) != null
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet != null
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet.getType() == type) {
-                            onUpdate();
+                            if (SettingsManager.getConfig().get("Pets-Drop-Items"))
+                                onUpdate();
                             followPlayer();
                         } else {
                             cancel();
@@ -106,10 +108,12 @@ public abstract class Pet implements Listener {
             listener = new PetListener(this);
 
             this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
-            ((Ageable) ent).setAdult();
             //ent.setCustomNameVisible(true);
             //ent.setCustomName(getName());
-            ((Ageable) ent).setBaby();
+            if (SettingsManager.getConfig().get("Pets-Are-Babies"))
+                ((Ageable) ent).setBaby();
+            else
+                ((Ageable) ent).setAdult();
             ((Ageable) ent).setAgeLock(true);
 
             net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity) ent).getHandle();
@@ -137,8 +141,9 @@ public abstract class Pet implements Listener {
                 armorStand.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()));
 
             ent.setPassenger(armorStand);
+            ent.setMetadata("Pet", new FixedMetadataValue(Core.getPlugin(), "UltraCosmetics"));
 
-            getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", getMenuName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", (Core.placeHolderColor)?getMenuName():Core.filterColor(getMenuName())));
             Core.getCustomPlayer(getPlayer()).currentPet = this;
         }
     }
@@ -202,9 +207,8 @@ public abstract class Pet implements Listener {
         ent.remove();
         if (getPlayer() != null && Core.getCustomPlayer(getPlayer()) != null)
             Core.getCustomPlayer(getPlayer()).currentPet = null;
-        for (Item i : items) {
+        for (Item i : items)
             i.remove();
-        }
         items.clear();
         if (armorStand != null)
             armorStand.remove();
@@ -214,7 +218,7 @@ public abstract class Pet implements Listener {
         } catch (Exception exc) {
         }
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replace("%petname%", getMenuName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replace("%petname%", (Core.placeHolderColor)?getMenuName():Core.filterColor(getMenuName())));
         owner = null;
     }
 

@@ -88,7 +88,7 @@ public abstract class Gadget implements Listener {
                     } catch (NullPointerException exc) {
                         removeItem();
                         clear();
-                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", getName()));
+                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
                         cancel();
                     }
                 }
@@ -105,7 +105,7 @@ public abstract class Gadget implements Listener {
             } else {
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, getName(), "§9Gadget"));
             }
-            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
             Core.getCustomPlayer(getPlayer()).currentGadget = this;
         }
         this.requireAmmo = Boolean.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled")));

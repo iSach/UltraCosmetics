@@ -43,7 +43,7 @@ public abstract class Morph implements Listener {
             if (Core.getCustomPlayer(getPlayer()).currentMorph != null)
                 Core.getCustomPlayer(getPlayer()).removeMorph();
 
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
             Core.getCustomPlayer(getPlayer()).currentMorph = this;
             if (!getPlayer().hasPermission(permission)) {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
@@ -84,7 +84,7 @@ public abstract class Morph implements Listener {
         DisguiseAPI.undisguiseToAll(getPlayer());
         Core.getCustomPlayer(getPlayer()).currentMorph = null;
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
         owner = null;
         try {
             HandlerList.unregisterAll(this);

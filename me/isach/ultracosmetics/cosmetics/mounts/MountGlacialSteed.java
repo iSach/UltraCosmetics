@@ -1,6 +1,7 @@
 package me.isach.ultracosmetics.cosmetics.mounts;
 
 import me.isach.ultracosmetics.Core;
+import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.util.BlockUtils;
 import me.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
@@ -22,8 +23,8 @@ import java.util.UUID;
 public class MountGlacialSteed extends Mount {
     public MountGlacialSteed(UUID owner) {
         super(EntityType.HORSE, Material.PACKED_ICE, (byte) 0, "GlacialSteed", "ultracosmetics.mounts.glacialsteed", owner, MountType.GLACIALSTEED);
-        Core.registerListener(this);
         if (ent instanceof Horse) {
+            Core.registerListener(this);
             Horse horse = (Horse) ent;
 
             horse.setColor(Horse.Color.WHITE);
@@ -39,7 +40,8 @@ public class MountGlacialSteed extends Mount {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer() == getPlayer()
-                && Core.getCustomPlayer(getPlayer()).currentMount == this) {
+                && Core.getCustomPlayer(getPlayer()).currentMount == this
+                && (boolean) SettingsManager.getConfig().get("Mounts-Block-Trails")) {
             for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false))
                 if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1)
                     BlockUtils.setToRestore(b, Material.SNOW_BLOCK, (byte) 0x0, 20);

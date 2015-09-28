@@ -82,7 +82,7 @@ public abstract class ParticleEffect implements Listener {
             runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
             listener = new ParticleEffectListener(this);
 
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
             Core.getCustomPlayer(getPlayer()).currentParticleEffect = this;
         }
     }
@@ -122,7 +122,7 @@ public abstract class ParticleEffect implements Listener {
         } catch (Exception exc) {
         }
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
         owner = null;
     }
 

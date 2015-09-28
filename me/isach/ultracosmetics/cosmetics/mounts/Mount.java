@@ -34,9 +34,9 @@ public abstract class Mount implements Listener {
 
     private String permission;
 
-    private Listener listener;
+    Listener listener;
 
-    private UUID owner;
+    UUID owner;
 
     Horse.Variant variant;
     Horse.Color color;
@@ -109,7 +109,7 @@ public abstract class Mount implements Listener {
             runnable.runTaskTimer(Core.getPlugin(), 0, repeatDelay);
             listener = new MountListener(this);
 
-            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", getMenuName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (Core.placeHolderColor)?getMenuName():Core.filterColor(getMenuName())));
             Core.getCustomPlayer(getPlayer()).currentMount = this;
             ent.setMetadata("Mount", new FixedMetadataValue(Core.getPlugin(), "UltraCosmetics"));
         }
@@ -156,7 +156,7 @@ public abstract class Mount implements Listener {
         if (ent != null)
             ent.remove();
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", (Core.placeHolderColor)?getMenuName():Core.filterColor(getMenuName())));
         owner = null;
         HandlerList.unregisterAll(this);
         HandlerList.unregisterAll(listener);
@@ -180,6 +180,9 @@ public abstract class Mount implements Listener {
 
         @EventHandler
         public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
+            if(event.getVehicle().getType() == EntityType.BOAT
+                    || event.getVehicle().getType().toString().contains("MINECART"))
+                return;
             String name = null;
             try {
                 name = getName();

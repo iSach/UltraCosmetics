@@ -57,16 +57,8 @@ public class CustomPlayer {
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
         } catch (Exception exc) {
-            System.out.println("-------------------");
-            System.out.println("An error happened with the custom players. (UltraCosmetics");
-            System.out.println("");
-            System.out.println("Please check first your MySQL settings or the data folder.");
-            System.out.println("Report this error by PMing 'iSach' on http://spigotmc.org");
-            System.out.println("");
-            System.out.println("ERROR:");
-            exc.getCause();
-            System.out.println("");
-            System.out.println("-------------------");
+            // Player could not be found.
+            return;
         }
     }
 
@@ -74,11 +66,10 @@ public class CustomPlayer {
         return Bukkit.getPlayer(uuid);
     }
 
-
     public void removeGadget() {
         if (currentGadget != null) {
             if (getPlayer() != null)
-                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", currentGadget.getName()));
+                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (Core.placeHolderColor)?currentGadget.getName():Core.filterColor(currentGadget.getName())));
             currentGadget.removeItem();
             currentGadget.clear();
             currentGadget.unregister();
@@ -88,7 +79,6 @@ public class CustomPlayer {
 
     public void removeMount() {
         if (currentMount != null) {
-            currentMount.ent.remove();
             currentMount.clear();
             currentMount = null;
             getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
@@ -169,7 +159,7 @@ public class CustomPlayer {
 
     public void removeParticleEffect() {
         if (currentParticleEffect != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", currentParticleEffect.getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", (Core.placeHolderColor)?currentParticleEffect.getName():Core.filterColor(currentParticleEffect.getName())));
             currentParticleEffect = null;
         }
     }
@@ -187,6 +177,7 @@ public class CustomPlayer {
         try {
             return (int) Core.economy.getBalance(getPlayer());
         } catch (Exception exc) {
+            exc.printStackTrace();
             return 0;
         }
     }
@@ -235,7 +226,10 @@ public class CustomPlayer {
             } else {
                 Core.sqlUtils.setGadgetsEnabled(getPlayer(), enabled);
             }
-
+            if (enabled)
+                getPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
+            else
+                getPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
         } catch (NullPointerException e) {
         }
     }
@@ -258,6 +252,10 @@ public class CustomPlayer {
         } else {
             Core.sqlUtils.setSeeSelfMorph(getPlayer(), enabled);
         }
+        if (enabled)
+            getPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
+        else
+            getPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
     }
 
     public boolean canSeeSelfMorph() {

@@ -197,6 +197,11 @@ public class MessageManager {
         addMessage("Menu.Unsummon", "&c&lUnsummon");
         addMessage("Menu.Morph", "&b&lMorph into");
         addMessage("Menu.Unmorph", "&c&lUnmorph from");
+
+        addMessage("Enabled-SelfMorphView", "%prefix% &9you enabled self view for morphs!");
+        addMessage("Disabled-SelfMorphView", "%prefix% &9you disabled self view for morphs!");
+        addMessage("Enabled-Gadgets", "%prefix% &9you enabled gadgets!");
+        addMessage("Disabled-Gadgets", "%prefix% &9you disabled gadgets!");
     }
 
     /**

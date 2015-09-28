@@ -22,7 +22,8 @@ public class MountDragon extends Mount {
 
     public MountDragon(UUID owner) {
         super(EntityType.ENDER_DRAGON, Material.DRAGON_EGG, (byte) 0, "Dragon", "ultracosmetics.mounts.dragon", owner, MountType.DRAGON);
-        Core.registerListener(this);
+        if (owner != null)
+            Core.registerListener(this);
     }
 
     @Override

@@ -2,6 +2,7 @@ package me.isach.ultracosmetics.util;
 
 import me.isach.ultracosmetics.Core;
 import me.isach.ultracosmetics.CustomPlayer;
+import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import me.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
 import org.bukkit.Bukkit;
@@ -142,6 +143,10 @@ public class BlockUtils {
                 && b.getType() != Material.COMMAND
                 && b.getType() != Material.DROPPER
                 && b.getType() != Material.DISPENSER
+                && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(b.getType().toString().toUpperCase())
+                && !b.getType().toString().toLowerCase().contains("door")
+                && b.getType() != Material.BED
+                && b.getType() != Material.BED_BLOCK
                 && !isPortalBlock(b)
                 && !isRocketBlock(b)
                 && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()

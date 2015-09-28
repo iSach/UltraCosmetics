@@ -47,7 +47,7 @@ public class MorphBat extends Morph {
             getPlayer().setAllowFlight(false);
         DisguiseAPI.undisguiseToAll(getPlayer());
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", getName()));
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
         Core.getCustomPlayer(getPlayer()).currentMorph = null;
         owner = null;
         HandlerList.unregisterAll(this);

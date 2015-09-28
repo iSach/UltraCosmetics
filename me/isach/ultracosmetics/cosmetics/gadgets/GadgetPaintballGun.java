@@ -1,11 +1,10 @@
 package me.isach.ultracosmetics.cosmetics.gadgets;
 
 import me.isach.ultracosmetics.Core;
+import me.isach.ultracosmetics.config.SettingsManager;
 import me.isach.ultracosmetics.util.BlockUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import me.isach.ultracosmetics.util.UtilParticles;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EntityType;
@@ -27,10 +26,14 @@ public class GadgetPaintballGun extends Gadget implements Listener {
 
     Map<UUID, ArrayList<Projectile>> projectiles = new HashMap();
 
+    int radius = 2;
+
     public GadgetPaintballGun(UUID owner) {
         super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALLGUN);
-        if (owner != null)
+        if (owner != null) {
             Core.registerListener(this);
+            radius = SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Radius");
+        }
         displayCountdownMessage = false;
     }
 
@@ -61,7 +64,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             if (mapContainsProjectile((Projectile) event.getRemover())) {
                 event.setCancelled(true);
             }
-        } else if(event.getRemover() == getPlayer())
+        } else if (event.getRemover() == getPlayer())
             event.setCancelled(true);
     }
 
@@ -85,10 +88,13 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             Random r = new Random();
             byte b = (byte) r.nextInt(15);
             Location center = event.getEntity().getLocation().add(event.getEntity().getVelocity());
-            for (Block block : BlockUtils.getBlocksInRadius(center.getBlock().getLocation(), 2, false)) {
-                BlockUtils.setToRestore(block, Material.STAINED_CLAY, b, 20 * 3);
+            for (Block block : BlockUtils.getBlocksInRadius(center.getBlock().getLocation(), radius, false)) {
+                BlockUtils.setToRestore(block, Material.getMaterial((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Block-Type")), b, 20 * 3);
             }
-            event.getEntity().getLocation().getWorld().playEffect(event.getEntity().getLocation(), org.bukkit.Effect.STEP_SOUND, 49);
+            if (SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Particle.Enabled")) {
+                Effect effect = Effect.getByName(((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
+                UtilParticles.play(center.clone().add(0.5f, 1.2f, 0.5F), effect, 0, 0, 2.5f, 0.2f, 2.5f, 1f, 50);
+            }
             event.getEntity().remove();
         }
     }

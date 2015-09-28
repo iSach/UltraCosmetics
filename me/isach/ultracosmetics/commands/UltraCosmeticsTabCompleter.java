@@ -31,16 +31,12 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                 gadgets.add(type.toString().toLowerCase());
                             }
                         }
-                        if ("clear".startsWith(args[2].toLowerCase())) {
-                            gadgets.add("clear");
-                        }
                     } else {
                         for (Gadget.GadgetType type : Gadget.GadgetType.values()) {
                             if (type.isEnabled()) {
                                 gadgets.add(type.toString().toLowerCase());
                             }
                         }
-                        gadgets.add("clear");
                     }
 
                     Collections.sort(gadgets);
@@ -56,9 +52,6 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                     mounts.add(type.toString().toLowerCase());
                                 }
                         }
-                        if ("clear".startsWith(args[2].toLowerCase())) {
-                            mounts.add("clear");
-                        }
                     } else {
                         for (Mount.MountType type : Mount.MountType.values()) {
                             if (type != Mount.MountType.DEFAULT)
@@ -66,7 +59,6 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                     mounts.add(type.toString().toLowerCase());
                                 }
                         }
-                        mounts.add("clear");
                     }
 
                     Collections.sort(mounts);
@@ -82,9 +74,6 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                     effects.add(type.toString().toLowerCase());
                                 }
                         }
-                        if ("clear".startsWith(args[2].toLowerCase())) {
-                            effects.add("clear");
-                        }
                     } else {
                         for (ParticleEffect.ParticleEffectType type : ParticleEffect.ParticleEffectType.values()) {
                             if (type != ParticleEffect.ParticleEffectType.DEFAULT)
@@ -92,7 +81,6 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                     effects.add(type.toString().toLowerCase());
                                 }
                         }
-                        effects.add("clear");
                     }
 
                     Collections.sort(effects);
@@ -108,9 +96,6 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                     pets.add(type.toString().toLowerCase());
                                 }
                         }
-                        if ("clear".startsWith(args[2].toLowerCase())) {
-                            pets.add("clear");
-                        }
                     } else {
                         for (Pet.PetType type : Pet.PetType.values()) {
                             if (type != Pet.PetType.DEFAULT)
@@ -118,7 +103,6 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                     pets.add(type.toString().toLowerCase());
                                 }
                         }
-                        pets.add("clear");
                     }
 
                     Collections.sort(pets);
@@ -133,16 +117,12 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                                 morphs.add(type.toString().toLowerCase());
                             }
                         }
-                        if ("clear".startsWith(args[2].toLowerCase())) {
-                            morphs.add("clear");
-                        }
                     } else {
                         for (Morph.MorphType type : Morph.MorphType.values()) {
                             if (type.isEnabled()) {
                                 morphs.add(type.toString().toLowerCase());
                             }
                         }
-                        morphs.add("clear");
                     }
 
                     Collections.sort(morphs);
