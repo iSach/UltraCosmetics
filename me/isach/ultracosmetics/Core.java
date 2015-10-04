@@ -632,8 +632,9 @@ public class Core extends JavaPlugin {
                     return cp;
             return new CustomPlayer(player.getUniqueId());
         } catch (NullPointerException exception) {
-            customPlayers.add(new CustomPlayer(player.getUniqueId()));
-            return getCustomPlayer(player);
+        	CustomPlayer p = new CustomPlayer(player.getUniqueId());
+            customPlayers.add(p);
+            return p;
         }
     }
 
