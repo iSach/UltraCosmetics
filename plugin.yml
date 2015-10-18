@@ -1,11 +1,211 @@
 name: UltraCosmetics
 author: iSach
-version: Beta 1.6.2
+version: Release 1.0
 load: POSTWORLD
-main: me.isach.ultracosmetics.Core
+main: be.isach.ultracosmetics.Core
 softdepend: [LibsDisguises, NoteBlockAPI, Vault]
 commands:
-  canelacosmetics:
+  ultracosmetics:
     aliases: [uc, cosmetics]
     description: Main Command of Ultra Cosmetics
     usage: /ultracosmetics
+permissions:
+  ultracosmetics.*:
+    children:
+      - ultracosmetics.gadgets.*
+      - ultracosmetics.pets.*
+      - ultracosmetics.particleeffecs.*
+      - ultracosmetics.mounts.*
+      - ultracosmetics.morphs.*
+      - ultracosmetics.commands.*
+      - ultracosmetics.openmenu
+  ultracosmetics.openmenu:
+   default: true
+  ultracosmetics.receivechest:
+   default: true
+  ultracosmetics.commands.*:
+    children:
+      - ultracosmetics.commands.reload
+      - ultracosmetics.commands.clear
+      - ultracosmetics.commands.clear.others
+      - ultracosmetics.commands.toggle
+      - ultracosmetics.commands.toggle.others
+      - ultracosmetics.commands.give
+      - ultracosmetics.commands.chest
+      - ultracosmetics.commands.others
+  ultracosmetics.commands.reload:
+    default: op
+  ultracosmetics.commands.clear:
+    default: op
+  ultracosmetics.commands.clear.others:
+    default: op
+  ultracosmetics.commands.toggle:
+    default: op
+  ultracosmetics.commands.toggle.others:
+    default: op
+  ultracosmetics.commands.give:
+    default: op
+  ultracosmetics.commands.chest:
+    default: op
+  ultracosmetics.commands.others:
+    default: op
+  ultracosmetics.gadgets.*:
+    children: 
+      - ultracosmetics.gadgets.paintballgun
+      - ultracosmetics.gadgets.batblaster
+      - ultracosmetics.gadgets.chickenator
+      - ultracosmetics.gadgets.melonthrower
+      - ultracosmetics.gadgets.etherealpearl
+      - ultracosmetics.gadgets.discoball
+      - ultracosmetics.gadgets.colorbomb
+      - ultracosmetics.gadgets.fleshhook
+      - ultracosmetics.gadgets.portalgun
+      - ultracosmetics.gadgets.blizzardblaster
+      - ultracosmetics.gadgets.thorhammer
+      - ultracosmetics.gadgets.smashdown
+      - ultracosmetics.gadgets.explosivesheep
+      - ultracosmetics.gadgets.antigravity
+      - ultracosmetics.gadgets.tsunami
+      - ultracosmetics.gadgets.rocket
+      - ultracosmetics.gadgets.tnt
+      - ultracosmetics.gadgets.blackhole
+  ultracosmetics.gadgets.paintballgun:
+    default: op
+  ultracosmetics.gadgets.batblaster:
+    default: op
+  ultracosmetics.gadgets.chickenator:
+    default: op
+  ultracosmetics.gadgets.melonthrower:
+    default: op
+  ultracosmetics.gadgets.etherealpearl:
+    default: op
+  ultracosmetics.gadgets.discoball:
+    default: op
+  ultracosmetics.gadgets.colorbomb:
+    default: op
+  ultracosmetics.gadgets.fleshhook:
+    default: op
+  ultracosmetics.gadgets.portalgun:
+    default: op
+  ultracosmetics.gadgets.blizzardblaster:
+    default: op
+  ultracosmetics.gadgets.thorhammer:
+    default: op
+  ultracosmetics.gadgets.smashdown:
+    default: op
+  ultracosmetics.gadgets.explosivesheep:
+    default: op
+  ultracosmetics.gadgets.antigravity:
+    default: op
+  ultracosmetics.gadgets.tsunami:
+    default: op
+  ultracosmetics.gadgets.rocket:
+    default: op
+  ultracosmetics.gadgets.tnt:
+    default: op
+  ultracosmetics.gadgets.blackhole:
+    default: op
+  ultracosmetics.particleeffecs.*:
+    children:
+      - ultracosmetics.particleeffects.raincloud
+      - ultracosmetics.particleeffects.snowcloud
+      - ultracosmetics.particleeffects.bloodhelix
+      - ultracosmetics.particleeffects.frostlord
+      - ultracosmetics.particleeffects.flamerings
+      - ultracosmetics.particleeffects.inlove
+      - ultracosmetics.particleeffects.greensparks
+  ultracosmetics.particleeffects.raincloud:
+    default: op
+  ultracosmetics.particleeffects.snowcloud:
+    default: op
+  ultracosmetics.particleeffects.bloodhelix:
+    default: op
+  ultracosmetics.particleeffects.frostlord:
+    default: op
+  ultracosmetics.particleeffects.flamerings:
+    default: op
+  ultracosmetics.particleeffects.inlove:
+    default: op
+  ultracosmetics.particleeffects.greensparks:
+    default: op
+  ultracosmetics.mounts.*:
+    children:
+      - ultracosmetics.mounts.druggedhorse
+      - ultracosmetics.mounts.ecologisthorse
+      - ultracosmetics.mounts.glacialsteed
+      - ultracosmetics.mounts.infernalhorror
+      - ultracosmetics.mounts.mountoffire
+      - ultracosmetics.mounts.mountofwater
+      - ultracosmetics.mounts.walkingdead
+      - ultracosmetics.mounts.snake
+      - ultracosmetics.mounts.nyansheep
+      - ultracosmetics.mounts.dragon
+  ultracosmetics.mounts.druggedhorse:
+    default: op
+  ultracosmetics.mounts.ecologisthorse:
+    default: op
+  ultracosmetics.mounts.glacialsteed:
+    default: op
+  ultracosmetics.mounts.infernalhorror:
+    default: op
+  ultracosmetics.mounts.mountoffire:
+    default: op
+  ultracosmetics.mounts.mountofwater:
+    default: op
+  ultracosmetics.mounts.walkingdead:
+    default: op
+  ultracosmetics.mounts.snake:
+    default: op
+  ultracosmetics.mounts.nyansheep:
+    default: op
+  ultracosmetics.mounts.dragon:
+    default: op
+  ultracosmetics.pets.*:
+    children:
+      - ultracosmetics.pets.piggy
+      - ultracosmetics.pets.sheep
+      - ultracosmetics.pets.kitty
+      - ultracosmetics.pets.dog
+      - ultracosmetics.pets.chick
+      - ultracosmetics.pets.cow
+      - ultracosmetics.pets.easterbunny
+      - ultracosmetics.pets.rename
+  ultracosmetics.pets.piggy:
+    default: op
+  ultracosmetics.pets.sheep:
+    default: op
+  ultracosmetics.pets.kitty:
+    default: op
+  ultracosmetics.pets.dog:
+    default: op
+  ultracosmetics.pets.chick:
+    default: op
+  ultracosmetics.pets.cow:
+    default: op
+  ultracosmetics.pets.easterbunny:
+    default: op
+  ultracosmetics.pets.rename:
+    default: op
+  ultracosmetics.morphs.*:
+    children:
+      - ultracosmetics.morphs.bat
+      - ultracosmetics.morphs.blaze
+      - ultracosmetics.morphs.pig
+      - ultracosmetics.morphs.chicken
+      - ultracosmetics.morphs.slime
+      - ultracosmetics.morphs.enderman
+      - ultracosmetics.morphs.creeper
+  ultracosmetics.morphs.bat:
+    default: op
+  ultracosmetics.morphs.blaze:
+    default: op
+  ultracosmetics.morphs.pig:
+    default: op
+  ultracosmetics.morphs.chicken:
+    default: op
+  ultracosmetics.morphs.slime:
+    default: op
+  ultracosmetics.morphs.enderman:
+    default: op
+  ultracosmetics.morphs.creeper:
+    default: op

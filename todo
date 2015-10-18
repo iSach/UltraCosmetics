@@ -1,0 +1,24 @@
+
+TODO List
+
+Improve gadget onInteract functions to make gadgets checks from sub-classes with a boolean return.
+Make all the cosmetics classes work the same way (clear, etc)
+Halloween Update:
+ - 4 Halloween Hats
+ - Pumpling Pet
+ - Spider Mount
+ - Ghost Gadget
+ - Zombie Morph
+ add the possibility to make custom treasure chests lmyouts:
+ Example in config:
+ Treasure-Chests-Layouts:
+   - '1':
+     centerBlock: DIRT
+     block1: DIRT
+     block2: DIRT
+     block3: DIRT
+     barriers: FENCE
+Manager better commands (objet SubCommand etc)
+Bugs to fix:
+  None atm
+  
