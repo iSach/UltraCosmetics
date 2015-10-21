@@ -116,6 +116,7 @@ public class MessageManager {
         addMessage("Gadgets.FunGun.name", "&6&lFun Gun");
         addMessage("Gadgets.Parachute.name", "&f&lParachute");
         addMessage("Gadgets.QuakeGun.name", "&5§lQuake &d&lGun");
+        addMessage("Gadgets.GhostParty.name", "&f&lGhost Party");
 
         // MOUNTS
         addMessage("Mounts.DruggedHorse.menu-name", "&2&lDrugged Horse");
@@ -144,6 +145,8 @@ public class MessageManager {
         addMessage("Mounts.HypeCart.entity-displayname", "&l%playername%'s hypecart");
         addMessage("Mounts.Slime.menu-name", "&a&lSlime");
         addMessage("Mounts.Slime.entity-displayname", "&l%playername%'s slime");
+        addMessage("Mounts.Spider.menu-name", "&8&lSpider");
+        addMessage("Mounts.Spider.entity-displayname", "&l%playername%'s spider");
         addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
         addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
 
@@ -161,6 +164,7 @@ public class MessageManager {
         addMessage("Particle-Effects.FrozenWalk.name", "&b&lFrozen Walk");
         addMessage("Particle-Effects.Enchanted.name", "&7&lEnchanted");
         addMessage("Particle-Effects.Music.name", "&9&lMusic");
+        addMessage("Particle-Effects.Inferno.name", "&4&lInferno");
 
         // PETS
         addMessage("Pets.Piggy.menu-name", "&d&lPiggy");
@@ -179,6 +183,8 @@ public class MessageManager {
         addMessage("Pets.Chick.entity-displayname", "&l%playername%'s chick");
         addMessage("Pets.Wither.menu-name", "&8&lWither");
         addMessage("Pets.Wither.entity-displayname", "&l%playername%'s wither");
+        addMessage("Pets.Pumpling.menu-name", "&6&lPumpling");
+        addMessage("Pets.Pumpling.entity-displayname", "&l%playername%'s pumpling");
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
@@ -200,6 +206,8 @@ public class MessageManager {
         addMessage("Morphs.Creeper.release-to-explode", "&f&lRelease to explode!");
         addMessage("Morphs.Morph", "%prefix% &9You morphed into %morphname%");
         addMessage("Morphs.Unmorph", "%prefix% &9You unmorphed from %morphname%");
+        addMessage("Morphs.WitherSkeleton.name", "&8&lWither Skeleton");
+        addMessage("Morphs.WitherSkeleton.skill", "&eSneak§7 to: &aBone Bomb");
 
         addMessage("Hats.Equip", "%prefix% &9You equipped %hatname% &9hat!");
         addMessage("Hats.Unequip", "%prefix% &9You unequipped %hatname% &9hat!");
@@ -234,6 +242,10 @@ public class MessageManager {
         addMessage("Hats.Luigi.Name", "&2&lLuigi");
         addMessage("Hats.Batman.Name", "&8&lBatman");
         addMessage("Hats.Chest.Name", "&6&lChest");
+        addMessage("Hats.Skull.Name", "&f&lSkull");
+        addMessage("Hats.JackOLantern.Name", "&6&lJack-O'-Lantern");
+        addMessage("Hats.Ghost.Name", "&f&lGhost");
+        addMessage("Hats.ScaryClown.Name", "&4&lScary Clown");
         addMessage("Hats.Must-Remove-Hat", "%prefix% &c&lYou must remove your helmet to equip a hat!");
 
 

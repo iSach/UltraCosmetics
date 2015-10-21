@@ -80,12 +80,12 @@ public class MountNyanSheep extends Mount {
 
     private void move() {
         Player player = getPlayer();
-        double mult = 0.4D;
         Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
         Location loc = player.getLocation().add(vel);
         EntityCreature ec = ((CraftCreature) ent).getHandle();
+        ec.S = 1;
         Navigation nav = (Navigation) ec.getNavigation();
-        nav.a(loc.getX(), loc.getY(), loc.getZ(), (1.0D + 2.0D * mult) * 1.0D);
+        nav.a(loc.getX(), loc.getY(), loc.getZ(), 1.8d * 1.0D);
     }
 
     class RGBColor {

@@ -69,18 +69,19 @@ public class GadgetTsunami extends Gadget {
                         as.remove();
                     }
                 }, 20);
-                for (final Entity ent : as.getNearbyEntities(0.5, 0.5, 0.5)) {
-                    if (!cooldownJump.contains(ent) && ent != getPlayer() && !(ent instanceof ArmorStand)) {
-                        MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v.clone().multiply(2)));
-                        cooldownJump.add(ent);
-                        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                            @Override
-                            public void run() {
-                                cooldownJump.remove(ent);
-                            }
-                        }, 20);
+                if (affectPlayers)
+                    for (final Entity ent : as.getNearbyEntities(0.5, 0.5, 0.5)) {
+                        if (!cooldownJump.contains(ent) && ent != getPlayer() && !(ent instanceof ArmorStand)) {
+                            MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v.clone().multiply(2)));
+                            cooldownJump.add(ent);
+                            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    cooldownJump.remove(ent);
+                                }
+                            }, 20);
+                        }
                     }
-                }
 
                 loc.add(v);
             }

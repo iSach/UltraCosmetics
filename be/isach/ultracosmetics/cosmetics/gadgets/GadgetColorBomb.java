@@ -75,22 +75,23 @@ public class GadgetColorBomb extends Gadget {
                         items.remove(item);
                     }
                 }
+                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), ItemFactory.create(Material.WOOL, (byte) random.nextInt(15), UUID.randomUUID().toString()));
+                        i.setPickupDelay(500000);
+                        i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
+                        items.add(i);
+                        i.getWorld().playSound(i.getLocation(), Sound.CHICKEN_EGG_POP, 0.2f, 1);
+                        for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
+                            if (entity instanceof Player)
+                                if (affectPlayers)
+                                    entity.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
+                        }
+                    }
+                });
             } catch (Exception exc) {
             }
-            Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
-                @Override
-                public void run() {
-                    Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), ItemFactory.create(Material.WOOL, (byte) random.nextInt(15), UUID.randomUUID().toString()));
-                    i.setPickupDelay(500000);
-                    i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                    items.add(i);
-                    i.getWorld().playSound(i.getLocation(), Sound.CHICKEN_EGG_POP, 0.2f, 1);
-                    for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
-                        if (entity instanceof Player)
-                            entity.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                    }
-                }
-            });
         }
     }
 

@@ -86,7 +86,7 @@ public class GadgetSmashDown extends Gadget {
                 if (i == 5) {
                     cancel();
                 }
-                if(Core.getCustomPlayer(getPlayer()).currentGadget != instance) {
+                if (Core.getCustomPlayer(getPlayer()).currentGadget != instance) {
                     cancel();
                     return;
                 }
@@ -128,7 +128,8 @@ public class GadgetSmashDown extends Gadget {
                             fallingBlocks.add(fb);
                             for (Entity ent : fb.getNearbyEntities(1, 1, 1)) {
                                 if (ent != getPlayer() && ent.getType() != EntityType.FALLING_BLOCK)
-                                    MathUtils.applyVelocity(ent, new Vector(0, 0.5, 0));
+                                    if (affectPlayers)
+                                        MathUtils.applyVelocity(ent, new Vector(0, 0.5, 0));
                             }
                         }
                     }

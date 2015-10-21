@@ -43,7 +43,7 @@ public class GadgetBlizzardBlaster extends Gadget {
         final int i = Bukkit.getScheduler().runTaskTimer(Core.getPlugin(), new BukkitRunnable() {
             @Override
             public void run() {
-                if(Core.getCustomPlayer(getPlayer()).currentGadget != instance) {
+                if (Core.getCustomPlayer(getPlayer()).currentGadget != instance) {
                     cancel();
                     return;
                 }
@@ -55,7 +55,7 @@ public class GadgetBlizzardBlaster extends Gadget {
                     if (loc.clone().getBlock().getTypeId() != 43 && loc.clone().getBlock().getTypeId() != 44)
                         loc.add(0, -1, 0);
                 }
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 3; i++) {
                     final ArmorStand as = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), EntityType.ARMOR_STAND);
                     as.setVisible(false);
                     as.setSmall(true);
@@ -72,18 +72,19 @@ public class GadgetBlizzardBlaster extends Gadget {
                             as.remove();
                         }
                     }, 20);
-                    for (final Entity ent : as.getNearbyEntities(0.5, 0.5, 0.5)) {
-                        if (!cooldownJump.contains(ent) && ent != getPlayer()) {
-                            MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
-                            cooldownJump.add(ent);
-                            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                                @Override
-                                public void run() {
-                                    cooldownJump.remove(ent);
-                                }
-                            }, 20);
+                    if (affectPlayers)
+                        for (final Entity ent : as.getNearbyEntities(0.5, 0.5, 0.5)) {
+                            if (!cooldownJump.contains(ent) && ent != getPlayer()) {
+                                MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
+                                cooldownJump.add(ent);
+                                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cooldownJump.remove(ent);
+                                    }
+                                }, 20);
+                            }
                         }
-                    }
                 }
                 loc.add(v);
             }

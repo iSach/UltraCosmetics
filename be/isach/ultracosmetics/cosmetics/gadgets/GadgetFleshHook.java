@@ -50,7 +50,8 @@ public class GadgetFleshHook extends Gadget implements Listener {
             double Z = Math.cos(pitch);
 
             Vector vector = new Vector(X, Z, Y);
-            HIT.setVelocity(vector.multiply(2.5D).add(new Vector(0D, 1.45D, 0D)));
+            if (affectPlayers)
+                HIT.setVelocity(vector.multiply(2.5D).add(new Vector(0D, 1.45D, 0D)));
             Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {

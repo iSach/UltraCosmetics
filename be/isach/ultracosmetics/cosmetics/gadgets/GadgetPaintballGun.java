@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import java.util.*;
 
@@ -57,6 +58,16 @@ public class GadgetPaintballGun extends Gadget implements Listener {
         return false;
     }
 
+    @EventHandler
+    public void onVehicleDestroy(VehicleDestroyEvent event) {
+        for(ArrayList<Projectile> projectile : projectiles.values()) {
+            for(Projectile proj : projectile) {
+                if(proj.getLocation().distance(event.getVehicle().getLocation()) < 10) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void onItemFrameBreak(HangingBreakByEntityEvent event) {

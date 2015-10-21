@@ -5,10 +5,12 @@ import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.apache.commons.codec.binary.Base64;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
 
@@ -58,5 +60,13 @@ public class ItemFactory {
         }
         head.setItemMeta(headMeta);
         return head;
+    }
+
+    public static ItemStack createColouredLeather(Material armourPart, int red, int green, int blue) {
+        ItemStack itemStack = new ItemStack(armourPart);
+        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta)itemStack.getItemMeta();
+        leatherArmorMeta.setColor(Color.fromRGB(red, green, blue));
+        itemStack.setItemMeta(leatherArmorMeta);
+        return itemStack;
     }
 }

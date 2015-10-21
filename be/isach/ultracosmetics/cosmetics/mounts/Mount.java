@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.CustomSlime;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.FlyingSquid;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.RideableSpider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -79,7 +80,8 @@ public abstract class Mount implements Listener {
                 Core.getCustomPlayer(getPlayer()).removeMount();
 
             if (entityType != EntityType.SQUID
-                    && entityType != EntityType.SLIME) {
+                    && entityType != EntityType.SLIME
+                    && entityType != EntityType.SPIDER) {
                 this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
                 if (ent instanceof Ageable) {
                     ((Ageable) ent).setAdult();
@@ -130,6 +132,8 @@ public abstract class Mount implements Listener {
                     customEnt = new FlyingSquid(((CraftPlayer) getPlayer()).getHandle().getWorld());
                 else if (getType() == MountType.SLIME)
                     customEnt = new CustomSlime(((CraftPlayer) getPlayer()).getHandle().getWorld());
+                else if (getType() == MountType.SPIDER)
+                    customEnt = new RideableSpider(((CraftPlayer) getPlayer()).getHandle().getWorld());
                 double x = getPlayer().getLocation().getX();
                 double y = getPlayer().getLocation().getY();
                 double z = getPlayer().getLocation().getZ();
@@ -212,7 +216,8 @@ public abstract class Mount implements Listener {
             getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
         }
         if (entityType != EntityType.SQUID
-                && entityType != EntityType.SLIME) {
+                && entityType != EntityType.SLIME
+                && entityType != EntityType.SPIDER) {
             if (ent.getPassenger() != null)
                 ent.getPassenger().eject();
             if (ent != null)
@@ -308,7 +313,8 @@ public abstract class Mount implements Listener {
         DRAGON("ultracosmetics.mounts.dragon", "Dragon"),
         SKYSQUID("ultracosmetics.mounts.skysquid", "SkySquid"),
         SLIME("ultracosmetics.mounts.slime", "Slime"),
-        HYPECART("ultracosmetics.mounts.hypecart", "HypeCart");
+        HYPECART("ultracosmetics.mounts.hypecart", "HypeCart"),
+        SPIDER("ultracosmetics.mounts.spider", "Spider");
 
 
         String permission;

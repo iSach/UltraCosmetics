@@ -170,7 +170,8 @@ public abstract class ParticleEffect implements Listener {
         GREENSPARKS("ultracosmetics.particleeffects.greensparks", "GreenSparks"),
         FROZENWALK("ultracosmetics.particleeffects.frozenwalk", "FrozenWalk"),
         MUSIC("ultracosmetics.particleeffects.music", "Music"),
-        ENCHANTED("ultracosmetics.particleeffects.enchanted", "Enchanted"),;
+        ENCHANTED("ultracosmetics.particleeffects.enchanted", "Enchanted"),
+        INFERNO("ultracosmetics.particleeffects.inferno", "Inferno");
 
 
         String permission;

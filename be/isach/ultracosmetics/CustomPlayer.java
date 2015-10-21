@@ -91,7 +91,6 @@ public class CustomPlayer {
         if (currentPet != null) {
             if (currentPet.armorStand != null)
                 currentPet.armorStand.remove();
-            currentPet.ent.remove();
             currentPet.clear();
             currentPet = null;
         }
@@ -231,7 +230,7 @@ public class CustomPlayer {
                 return Core.sqlUtils.getPetName(getPlayer(), petName);
             }
         } catch (NullPointerException e) {
-            return "Error";
+            return null;
         }
     }
 

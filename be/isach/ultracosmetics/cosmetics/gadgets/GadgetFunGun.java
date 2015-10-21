@@ -49,8 +49,6 @@ public class GadgetFunGun extends Gadget {
         location.getWorld().playSound(location, Sound.CAT_MEOW, 2, 1);
     }
 
-    @EventHandler
-
     @Override
     void onInteractLeftClick() {}
 

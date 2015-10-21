@@ -3,15 +3,18 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
-import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.PathEntity;
-import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
+import be.isach.ultracosmetics.cosmetics.pets.customentities.Pumpling;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -21,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -29,6 +33,7 @@ import java.util.UUID;
 public abstract class Pet implements Listener {
 
     public ArrayList<Item> items = new ArrayList<>();
+    public static List<net.minecraft.server.v1_8_R3.Entity> customEntities = new ArrayList();
 
     private Material material;
     private Byte data;
@@ -47,8 +52,9 @@ public abstract class Pet implements Listener {
     private Listener listener;
 
     public Entity ent;
+    public net.minecraft.server.v1_8_R3.Entity customEnt;
 
-    public Pet(EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final PetType type) {
+    public Pet(final EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final PetType type) {
         this.material = material;
         this.data = data;
         this.name = configName;
@@ -69,22 +75,44 @@ public abstract class Pet implements Listener {
                 @Override
                 public void run() {
                     try {
-                        if (!ent.isValid()) {
-                            if (armorStand != null)
-                                armorStand.remove();
-                            ent.remove();
-                            Core.getCustomPlayer(getPlayer()).currentPet = null;
-                            for (Item i : items) {
-                                i.remove();
+                        if (entityType == EntityType.ZOMBIE) {
+                            if (!customEnt.valid) {
+                                if (armorStand != null)
+                                    armorStand.remove();
+                                customEnt.dead = true;
+                                if (getPlayer() != null)
+                                    Core.getCustomPlayer(getPlayer()).currentPet = null;
+                                for (Item i : items) {
+                                    i.remove();
+                                }
+                                items.clear();
+                                try {
+                                    HandlerList.unregisterAll(pet);
+                                    HandlerList.unregisterAll(listener);
+                                } catch (Exception exc) {
+                                }
+                                cancel();
+                                return;
                             }
-                            items.clear();
-                            try {
-                                HandlerList.unregisterAll(pet);
-                                HandlerList.unregisterAll(listener);
-                            } catch (Exception exc) {
+                        } else {
+                            if (!ent.isValid()) {
+                                if (armorStand != null)
+                                    armorStand.remove();
+                                ent.remove();
+                                if (getPlayer() != null)
+                                    Core.getCustomPlayer(getPlayer()).currentPet = null;
+                                for (Item i : items) {
+                                    i.remove();
+                                }
+                                items.clear();
+                                try {
+                                    HandlerList.unregisterAll(pet);
+                                    HandlerList.unregisterAll(listener);
+                                } catch (Exception exc) {
+                                }
+                                cancel();
+                                return;
                             }
-                            cancel();
-                            return;
                         }
                         if (Bukkit.getPlayer(owner) != null
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet != null
@@ -97,6 +125,7 @@ public abstract class Pet implements Listener {
                         }
 
                     } catch (NullPointerException exc) {
+                        exc.printStackTrace();
                         cancel();
                         if (armorStand != null)
                             armorStand.remove();
@@ -107,33 +136,61 @@ public abstract class Pet implements Listener {
             runnable.runTaskTimer(Core.getPlugin(), 0, 6);
             listener = new PetListener(this);
 
-            this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
-            //ent.setCustomNameVisible(true);
-            //ent.setCustomName(getName());
-            if (ent instanceof Ageable) {
-                if (SettingsManager.getConfig().get("Pets-Are-Babies"))
-                    ((Ageable) ent).setBaby();
-                else
-                    ((Ageable) ent).setAdult();
-                ((Ageable) ent).setAgeLock(true);
-            }
-            net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity) ent).getHandle();
-            try {
-                Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-                bField.setAccessible(true);
-                Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-                cField.setAccessible(true);
-                bField.set(((EntityInsentient) entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
-                bField.set(((EntityInsentient) entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
-                cField.set(((EntityInsentient) entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
-                cField.set(((EntityInsentient) entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
-            } catch (Exception exc) {
-                exc.printStackTrace();
-            }
+            if (entityType != EntityType.ZOMBIE) {
 
-            if(getEntityType() != EntityType.WITHER) {
+                this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
+                //ent.setCustomNameVisible(true);
+                //ent.setCustomName(getName());
+                if (ent instanceof Ageable) {
+                    if (SettingsManager.getConfig().get("Pets-Are-Babies"))
+                        ((Ageable) ent).setBaby();
+                    else
+                        ((Ageable) ent).setAdult();
+                    ((Ageable) ent).setAgeLock(true);
+                }
+                net.minecraft.server.v1_8_R3.Entity entity = ((CraftEntity) ent).getHandle();
+                try {
+                    Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
+                    bField.setAccessible(true);
+                    Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
+                    cField.setAccessible(true);
+                    bField.set(((EntityInsentient) entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+                    bField.set(((EntityInsentient) entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+                    cField.set(((EntityInsentient) entity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+                    cField.set(((EntityInsentient) entity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
 
-                armorStand = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
+                if (getEntityType() != EntityType.WITHER) {
+
+                    armorStand = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
+                    armorStand.setVisible(false);
+                    armorStand.setSmall(true);
+                    armorStand.setCustomName(getName());
+                    armorStand.setCustomNameVisible(true);
+
+                    if (Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()) != null)
+                        armorStand.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()));
+
+                    ent.setPassenger(armorStand);
+                } else {
+                    ent.setCustomName(getName());
+                    ent.setCustomNameVisible(true);
+
+                    if (Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()) != null)
+                        ent.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()));
+                }
+                ent.setMetadata("Pet", new FixedMetadataValue(Core.getPlugin(), "UltraCosmetics"));
+
+            } else {
+                customEnt = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
+                customEntities.add(customEnt);
+                double x = getPlayer().getLocation().getX();
+                double y = getPlayer().getLocation().getY();
+                double z = getPlayer().getLocation().getZ();
+                customEnt.setLocation(x, y, z, 0, 0);
+                armorStand = (ArmorStand) customEnt.getBukkitEntity().getWorld().spawnEntity(customEnt.getBukkitEntity().getLocation(), EntityType.ARMOR_STAND);
                 armorStand.setVisible(false);
                 armorStand.setSmall(true);
                 armorStand.setCustomName(getName());
@@ -142,40 +199,37 @@ public abstract class Pet implements Listener {
                 if (Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()) != null)
                     armorStand.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()));
 
-                ent.setPassenger(armorStand);
-            } else {
-                ent.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getConfigName()));
-                ent.setCustomNameVisible(true);
+                customEnt.getBukkitEntity().setPassenger(armorStand);
+                ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(customEnt);
             }
-            ent.setMetadata("Pet", new FixedMetadataValue(Core.getPlugin(), "UltraCosmetics"));
-
             getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", (Core.placeHolderColor) ? getMenuName() : Core.filterColor(getMenuName())));
             Core.getCustomPlayer(getPlayer()).currentPet = this;
         }
     }
 
-
-
     private void followPlayer() {
         if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
             return;
-        net.minecraft.server.v1_8_R3.Entity pett = ((CraftEntity) ent).getHandle();
+
+        net.minecraft.server.v1_8_R3.Entity pett = getEntityType() == EntityType.ZOMBIE ? customEnt : ((CraftEntity) ent).getHandle();
         ((EntityInsentient) pett).getNavigation().a(2);
-        Object petf = ((CraftEntity) ent).getHandle();
         Location targetLocation = getPlayer().getLocation();
         PathEntity path;
-        path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
+        path = ((EntityInsentient) pett).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
         try {
-            int distance = (int) Bukkit.getPlayer(getPlayer().getName()).getLocation().distance(ent.getLocation());
-            if (distance > 10 && ent.isValid() && getPlayer().isOnGround()) {
-                ent.teleport(getPlayer().getLocation());
+            int distance = (int) Bukkit.getPlayer(getPlayer().getName()).getLocation().distance(pett.getBukkitEntity().getLocation());
+            if (distance > 10 && pett.valid && getPlayer().isOnGround()) {
+                pett.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
             }
             if (path != null && distance > 3.3) {
-                ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
-                ((EntityInsentient) petf).getNavigation().a(1.05D);
+                double speed = 1.05d;
+                if (entityType == EntityType.ZOMBIE)
+                    speed *= 1.5;
+                ((EntityInsentient) pett).getNavigation().a(path, speed);
+                ((EntityInsentient) pett).getNavigation().a(speed);
             }
         } catch (IllegalArgumentException exception) {
-            ent.teleport(getPlayer().getLocation());
+            pett.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
         }
     }
 
@@ -212,7 +266,12 @@ public abstract class Pet implements Listener {
     abstract void onUpdate();
 
     public void clear() {
-        ent.remove();
+        if (getEntityType() != EntityType.ZOMBIE)
+            ent.remove();
+        else {
+            customEnt.dead = true;
+            customEntities.remove(customEnt);
+        }
         if (getPlayer() != null && Core.getCustomPlayer(getPlayer()) != null)
             Core.getCustomPlayer(getPlayer()).currentPet = null;
         for (Item i : items)
@@ -248,8 +307,13 @@ public abstract class Pet implements Listener {
 
         @EventHandler
         public void onEntityDamage(EntityDamageEvent event) {
-            if (event.getEntity() == ent)
-                event.setCancelled(true);
+            if (pet.entityType == EntityType.ZOMBIE) {
+                if (event.getEntity() == pet.customEnt.getBukkitEntity())
+                    event.setCancelled(true);
+            } else {
+                if (event.getEntity() == pet.ent)
+                    event.setCancelled(true);
+            }
         }
 
 
@@ -265,7 +329,8 @@ public abstract class Pet implements Listener {
         KITTY("ultracosmetics.pets.kitty", "Kitty"),
         DOG("ultracosmetics.pets.dog", "Dog"),
         CHICK("ultracosmetics.pets.chick", "Chick"),
-        WITHER("ultracosmetics.pets.wither", "Wither");
+        WITHER("ultracosmetics.pets.wither", "Wither"),
+        PUMPLING("ultracosmetics.pets.pumpling", "Pumpling");
 
 
         String permission;

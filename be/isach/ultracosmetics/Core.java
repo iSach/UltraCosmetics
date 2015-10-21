@@ -91,16 +91,22 @@ public class Core extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        if(!getServer().getVersion().contains("1.8.8")) {
+            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 to work!\n\n----------------------------");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         core = this;
 
         CustomEntities.registerEntities();
 
-        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release ", "");
+        String currentVersion = Core.getPlugin().getDescription().getVersion().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
         lastVersion = getLastVersion();
         if (lastVersion != null) {
             int i = new Version(currentVersion).compareTo(new Version(lastVersion));
             outdated = i == -1;
-            if (lastVersion.equalsIgnoreCase("1.7.1") && currentVersion.equalsIgnoreCase("1.0"))
+            if (lastVersion.equalsIgnoreCase("1.7.1") && currentVersion.startsWith("1.1"))
                 outdated = false;
         } else
             outdated = false;
@@ -146,6 +152,7 @@ public class Core extends JavaPlugin {
         mountList.add(new MountSkySquid(null));
         mountList.add(new MountSlime(null));
         mountList.add(new MountHypeCart(null));
+        mountList.add(new MountSpider(null));
 
         // Register Particle Effects
         particleEffectList.add(new ParticleEffectRainCloud(null));
@@ -158,6 +165,7 @@ public class Core extends JavaPlugin {
         particleEffectList.add(new ParticleEffectFrozenWalk(null));
         particleEffectList.add(new ParticleEffectMusic(null));
         particleEffectList.add(new ParticleEffectEnchanted(null));
+        particleEffectList.add(new ParticleEffectInferno(null));
 
         // Register Particle Effects
         petList.add(new PetPiggy(null));
@@ -168,17 +176,19 @@ public class Core extends JavaPlugin {
         petList.add(new PetCow(null));
         petList.add(new PetEasterBunny(null));
         petList.add(new PetWither(null));
+        petList.add(new PetPumpling(null));
 
         // Register Treasure Chests
-        treasureChestList.add(new TreasureChestClassic(null));
-        treasureChestList.add(new TreasureChestIce(null));
-        treasureChestList.add(new TreasureChestNether(null));
-        treasureChestList.add(new TreasureChestSea(null));
-        treasureChestList.add(new TreasureChestClay(null));
-        treasureChestList.add(new TreasureChestDesert(null));
-        treasureChestList.add(new TreasureChestDirt(null));
-        treasureChestList.add(new TreasureChestEnd(null));
-        treasureChestList.add(new TreasureChestGlass(null));
+        treasureChestList.add(new HalloweenTreasureChest(null));
+//        treasureChestList.add(new TreasureChestClassic(null));
+//        treasureChestList.add(new TreasureChestIce(null));
+//        treasureChestList.add(new TreasureChestNether(null));
+//        treasureChestList.add(new TreasureChestSea(null));
+//        treasureChestList.add(new TreasureChestClay(null));
+//        treasureChestList.add(new TreasureChestDesert(null));
+//        treasureChestList.add(new TreasureChestDirt(null));
+//        treasureChestList.add(new TreasureChestEnd(null));
+//        treasureChestList.add(new TreasureChestGlass(null));
 
         hatList.addAll(Arrays.asList(Hat.values()));
 
@@ -213,6 +223,7 @@ public class Core extends JavaPlugin {
         SettingsManager.getConfig().addDefault("TreasureChests.Loots.Money.Message.enabled", false);
         SettingsManager.getConfig().addDefault("TreasureChests.Loots.Money.Message.message", "%prefix% §6§l%name% found %money%$");
         SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Enabled", true);
+        SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Min", 20);
         SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Max", 100);
         SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Chance", 60);
         SettingsManager.getConfig().addDefault("TreasureChests.Loots.Gadgets-Ammo.Message.enabled", false);
@@ -285,6 +296,9 @@ public class Core extends JavaPlugin {
 
         placeHolderColor = SettingsManager.getConfig().get("Chat-Cosmetic-PlaceHolder-Color");
 
+        for (Gadget.GadgetType gadgetType : Gadget.GadgetType.values())
+            SettingsManager.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true);
+
         // Add gadgets.
         gadgetList.add(new GadgetPaintballGun(null));
         gadgetList.add(new GadgetBatBlaster(null));
@@ -307,6 +321,7 @@ public class Core extends JavaPlugin {
         gadgetList.add(new GadgetFunGun(null));
         gadgetList.add(new GadgetQuakeGun(null));
         gadgetList.add(new GadgetParachute(null));
+        gadgetList.add(new GadgetGhostParty(null));
 
         ammoEnabled = SettingsManager.getConfig().get("Ammo-System-For-Gadgets.Enabled");
 
@@ -327,6 +342,7 @@ public class Core extends JavaPlugin {
             morphList.add(new MorphChicken(null));
             morphList.add(new MorphPig(null));
             morphList.add(new MorphCreeper(null));
+            morphList.add(new MorphWitherSkeleton(null));
         }
 
         try {
@@ -684,12 +700,12 @@ public class Core extends JavaPlugin {
             con.setRequestMethod("POST");
             con.getOutputStream().write(
                     ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
-            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "");
+            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replaceAll(")", "");
             if (version.length() <= 7) {
                 return version;
             }
         } catch (Exception ex) {
-            System.out.print("[UltraCosmetics] Failed to check for a update on spigot. ");
+            System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
         }
         return null;
     }

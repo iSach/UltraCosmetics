@@ -77,7 +77,8 @@ public class GadgetThorHammer extends Gadget implements Listener {
                 }
             } else {
                 if (v != null)
-                    MathUtils.applyVelocity(event.getPlayer(), v);
+                    if (affectPlayers)
+                        MathUtils.applyVelocity(event.getPlayer(), v);
             }
         }
     }

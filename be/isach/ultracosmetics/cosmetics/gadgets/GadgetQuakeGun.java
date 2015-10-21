@@ -41,19 +41,20 @@ public class GadgetQuakeGun extends Gadget {
 
             List<Entity> nearbyEntities = firework.getNearbyEntities(0.5d, 0.5d, 0.5d);
 
-            if (!nearbyEntities.isEmpty()) {
-                Entity entity = nearbyEntities.get(0);
-                if ((entity instanceof Player || entity instanceof Creature)
-                        && entity != getPlayer()) {
-                    MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
-                    UtilParticles.play(entity.getLocation(), Effect.FLAME, 0, 0, 0, 0, 0, 0.4f, 60);
-                    FireworkEffect.Builder builder = FireworkEffect.builder();
-                    FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
-                            .withColor(Color.RED).withFade(Color.ORANGE).build();
-                    CustomEntityFirework.spawn(location, effect);
-                    break;
+            if (affectPlayers)
+                if (!nearbyEntities.isEmpty()) {
+                    Entity entity = nearbyEntities.get(0);
+                    if ((entity instanceof Player || entity instanceof Creature)
+                            && entity != getPlayer()) {
+                        MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
+                        UtilParticles.play(entity.getLocation(), Effect.FLAME, 0, 0, 0, 0, 0, 0.4f, 60);
+                        FireworkEffect.Builder builder = FireworkEffect.builder();
+                        FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
+                                .withColor(Color.RED).withFade(Color.ORANGE).build();
+                        CustomEntityFirework.spawn(location, effect);
+                        break;
+                    }
                 }
-            }
         }
         Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
             @Override

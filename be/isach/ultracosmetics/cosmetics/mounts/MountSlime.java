@@ -13,8 +13,6 @@ public class MountSlime extends Mount {
 
     public MountSlime(UUID owner) {
         super(EntityType.SLIME, Material.SLIME_BALL, (byte) 0, "Slime", "ultracosmetics.mounts.slime", owner, MountType.SLIME);
-
-
     }
 
     @Override

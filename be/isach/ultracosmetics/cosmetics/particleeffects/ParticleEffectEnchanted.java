@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -19,6 +20,7 @@ public class ParticleEffectEnchanted extends ParticleEffect {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(getPlayer().getLocation().add(0, 2, 0), Effect.FLYING_GLYPH, 0, 0, 0, 0, 0, 8f, 60);
+        for (int i = 0; i < 60; i++)
+            UtilParticles.play(getPlayer().getLocation().add(0, MathUtils.randomDouble(0.1, 2), 0), Effect.FLYING_GLYPH, 0, 0, 0, 0, 0, 8f, 1);
     }
 }

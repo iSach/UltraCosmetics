@@ -108,7 +108,8 @@ public abstract class Morph implements Listener {
         PIG("ultracosmetics.morphs.pig", "Pig"),
         ENDERMAN("ultracosmetics.morphs.enderman", "Enderman"),
         SLIME("ultracosmetics.morphs.slime", "Slime"),
-        CREEPER("ultracosmetics.morphs.creeper", "Creeper");
+        CREEPER("ultracosmetics.morphs.creeper", "Creeper"),
+        WITHERSKELETON("ultracosmetics.morphs.witherskeleton", "WitherSkeleton");
 
         String permission;
         String configName;

@@ -23,32 +23,37 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
-        Core.getCustomPlayers().add(new CustomPlayer(event.getPlayer().getUniqueId()));
-        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && !((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
-            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                @Override
-                public void run() {
-                    int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
-                    if (event.getPlayer().getInventory().getItem(slot) != null) {
-                        if (event.getPlayer().getInventory().getItem(slot).hasItemMeta()
-                                && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                                && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
-                            event.getPlayer().getInventory().remove(slot);
-                            event.getPlayer().getInventory().setItem(slot, null);
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                Core.getCustomPlayers().add(new CustomPlayer(event.getPlayer().getUniqueId()));
+                if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && !((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                        @Override
+                        public void run() {
+                            int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+                            if (event.getPlayer().getInventory().getItem(slot) != null) {
+                                if (event.getPlayer().getInventory().getItem(slot).hasItemMeta()
+                                        && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
+                                        && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
+                                    event.getPlayer().getInventory().remove(slot);
+                                    event.getPlayer().getInventory().setItem(slot, null);
+                                }
+                                event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
+                                event.getPlayer().getInventory().remove(slot);
+                            }
+                            String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
+                            Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
+                            byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
+                            event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
                         }
-                        event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
-                        event.getPlayer().getInventory().remove(slot);
-                    }
-                    String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
-                    Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-                    byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
-                    event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
+                    }, 5);
                 }
-            }, 5);
-        }
-        if (Core.outdated)
-            if (event.getPlayer().isOp())
-                event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + Core.lastVersion);
+                if (Core.outdated)
+                    if (event.getPlayer().isOp())
+                        event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + Core.lastVersion);
+            }
+        });
     }
 
     @EventHandler

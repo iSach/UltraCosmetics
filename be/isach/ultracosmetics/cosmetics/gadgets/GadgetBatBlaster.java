@@ -80,7 +80,8 @@ public class GadgetBatBlaster extends Gadget {
 
                             other.setFallDistance(0);
 
-                            MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
+                            if (affectPlayers)
+                                MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
 
 
                             bat.getWorld().playSound(bat.getLocation(), Sound.BAT_HURT, 1.0F, 1.0F);

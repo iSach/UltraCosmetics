@@ -53,11 +53,14 @@ public abstract class Gadget implements Listener {
 
     private UUID owner;
 
+    boolean affectPlayers;
+
     public Gadget(Material material, Byte data, String configName, String permission, double countdown, final UUID owner, final GadgetType type) {
         this.material = material;
         this.data = data;
         this.configName = configName;
         this.permission = permission;
+        affectPlayers = SettingsManager.getConfig().get("Gadgets." + configName + ".Affect-Players");
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
             this.countdown = countdown;
             SettingsManager.getConfig().set("Gadgets." + configName + ".Cooldown", countdown);
@@ -394,7 +397,8 @@ public abstract class Gadget implements Listener {
         TNT("ultracosmetics.gadgets.tnt", "TNT"),
         FUNGUN("ultracosmetics.gadgets.fungun", "FunGun"),
         PARACHUTE("ultracosmetics.gadgets.parachute", "Parachute"),
-        QUAKEGUN("ultracosmetics.gadgets.quakegun", "QuakeGun");
+        QUAKEGUN("ultracosmetics.gadgets.quakegun", "QuakeGun"),
+        GHOSTPARTY("ultracosmetics.gadgets.ghostparty", "GhostParty");
 
         String permission;
         public String configName;

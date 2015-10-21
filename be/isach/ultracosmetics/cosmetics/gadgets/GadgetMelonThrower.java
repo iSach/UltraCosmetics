@@ -38,7 +38,8 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 
     @EventHandler
     public void onTakeUpMelon(PlayerPickupItemEvent event) {
-        if (melons.contains(event.getItem()) && event.getItem().getTicksLived() > 5) {
+        if (melons.contains(event.getItem()) && event.getItem().getTicksLived() > 5
+                && affectPlayers) {
             event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 2));
             event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.BURP, 1, 1f);
             event.setCancelled(true);

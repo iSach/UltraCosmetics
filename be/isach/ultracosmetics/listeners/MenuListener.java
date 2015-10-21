@@ -62,50 +62,61 @@ public class MenuListener implements Listener {
         }
     }
 
-    public static void openMainMenu(Player p) {
-        if (!p.hasPermission("ultracosmetics.openmenu")) {
-            p.sendMessage(MessageManager.getMessage("No-Permission"));
-            p.closeInventory();
-            return;
-        }
-        boolean chests = Core.treasureChestsEnabled();
-        int add = 0;
-        if (chests)
-            add = 9;
-        int slotAmount = 27;
-        if (Core.enabledCategories.size() > 5)
-            slotAmount = 36;
-        if (chests)
-            slotAmount = 45;
+    public static void openMainMenu(final Player PLAYER) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                if (!PLAYER.hasPermission("ultracosmetics.openmenu")) {
+                    PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                    PLAYER.closeInventory();
+                    return;
+                }
+                boolean chests = Core.treasureChestsEnabled();
+                int add = 0;
+                if (chests)
+                    add = 9;
+                int slotAmount = 27;
+                if (Core.enabledCategories.size() > 5)
+                    slotAmount = 36;
+                if (chests)
+                    slotAmount = 45;
 
-        Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Main-Menu"));
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Main-Menu"));
 
-        for (int i = 0; i < Core.enabledCategories.size(); i++) {
-            ItemStack is = Core.enabledCategories.get(i).getItemStack().clone();
-            inv.setItem(getMainMenuLayout()[i] + add, is);
-        }
+                for (int i = 0; i < Core.enabledCategories.size(); i++) {
+                    ItemStack is = Core.enabledCategories.get(i).getItemStack().clone();
+                    inv.setItem(getMainMenuLayout()[i] + add, is);
+                }
 
-        if (chests) {
-            ItemStack chest;
+                if (chests) {
+                    ItemStack chest;
 
-            if (Core.getCustomPlayer(p).getKeys() == 0)
-                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
-            else
-                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
+                    if (Core.getCustomPlayer(PLAYER).getKeys() == 0)
+                        chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+                    else
+                        chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
 
-            ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "", MessageManager.getMessage("Your-Keys").replace("%keys%", Core.getCustomPlayer(p).getKeys() + ""), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
-            inv.setItem(5, keys);
-            inv.setItem(3, chest);
-        }
+                    ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "", MessageManager.getMessage("Your-Keys").replace("%keys%", Core.getCustomPlayer(PLAYER).getKeys() + ""), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+                    inv.setItem(5, keys);
+                    inv.setItem(3, chest);
+                }
 
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Cosmetics")));
-        if (Core.getCustomPlayer(p).hasGadgetsEnabled())
-            inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
-        else
-            inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Cosmetics")));
+                if (Core.getCustomPlayer(PLAYER).hasGadgetsEnabled())
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
+                else
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
 
 
-        p.openInventory(inv);
+                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        PLAYER.openInventory(inv);
+                    }
+                });
+
+            }
+        });
     }
 
     private static int[] getMainMenuLayout() {
@@ -133,437 +144,500 @@ public class MenuListener implements Listener {
         return layout;
     }
 
-    public static void openHatsMenu(Player p) {
-        int listSize = 0;
-        for (Hat hat : Core.getHats()) {
-            if (!hat.isEnabled()) continue;
-            listSize++;
-        }
-        int slotAmount = 54;
-        if (listSize < 22)
-            slotAmount = 54;
-        if (listSize < 15)
-            slotAmount = 45;
-        if (listSize < 8)
-            slotAmount = 36;
-
-        Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Hats"));
-
-        int i = 1;
-        for (Hat hat : Core.getHats()) {
-            if (!hat.isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 43 || i == 16 || i == 5) {
-                    i += 3;
-                } else {
-                    i++;
+    public static void openHatsMenu(final Player p) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                int listSize = 0;
+                for (Hat hat : Core.getHats()) {
+                    if (!hat.isEnabled()) continue;
+                    listSize++;
                 }
-                continue;
-            }
-            if (!hat.isEnabled()) continue;
-            if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
-                if (!p.hasPermission(hat.getPermission()))
-                    continue;
-            if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(hat.getPermission())) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 43 || i == 16 || i == 5) {
-                    i += 3;
-                } else {
-                    i++;
+                int slotAmount = 54;
+                if (listSize < 22)
+                    slotAmount = 54;
+                if (listSize < 15)
+                    slotAmount = 45;
+                if (listSize < 8)
+                    slotAmount = 36;
+
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Hats"));
+
+                int i = 1;
+                for (Hat hat : Core.getHats()) {
+                    if (!hat.isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 43 || i == 16 || i == 5) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    if (!hat.isEnabled()) continue;
+                    if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
+                        if (!p.hasPermission(hat.getPermission()))
+                            continue;
+                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(hat.getPermission())) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 43 || i == 16 || i == 5) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    String lore = null;
+                    if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore"))
+                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(hat.getPermission()) ? "Yes" : "No")))));
+                    String toggle = MessageManager.getMessage("Menu.Equip");
+                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    if (cp.currentHat != null && cp.currentHat == hat)
+                        toggle = MessageManager.getMessage("Menu.Unequip");
+                    ItemStack is = hat.getItemStack().clone();
+                    ItemMeta im = is.getItemMeta();
+                    im.setDisplayName(toggle + " " + hat.getName());
+                    if (lore != null) {
+                        String[] loreBoard = {lore};
+                        im.setLore(Arrays.asList(loreBoard));
+                    }
+                    is.setItemMeta(im);
+                    if (cp.currentHat != null && cp.currentHat == hat)
+                        is = addGlow(is);
+                    inv.setItem(i, is);
+                    if (i == 25 || i == 34 || i == 43 || i == 16 || i == 7) {
+
+                        i += 3;
+                    } else {
+                        i++;
+                    }
                 }
-                continue;
-            }
-            String lore = null;
-            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore"))
-                lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(hat.getPermission()) ? "Yes" : "No")))));
-            String toggle = MessageManager.getMessage("Menu.Equip");
-            CustomPlayer cp = Core.getCustomPlayer(p);
-            if (cp.currentHat != null && cp.currentHat == hat)
-                toggle = MessageManager.getMessage("Menu.Unequip");
-            ItemStack is = hat.getItemStack().clone();
-            ItemMeta im = is.getItemMeta();
-            im.setDisplayName(toggle + " " + hat.getName());
-            if (lore != null) {
-                String[] loreBoard = {lore};
-                im.setLore(Arrays.asList(loreBoard));
-            }
-            is.setItemMeta(im);
-            if (cp.currentHat != null && cp.currentHat == hat)
-                is = addGlow(is);
-            inv.setItem(i, is);
-            if (i == 25 || i == 34 || i == 43 || i == 16 || i == 7) {
 
-                i += 3;
-            } else {
-                i++;
+                inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Hat")));
+
+                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        p.openInventory(inv);
+                    }
+                });
             }
-        }
-
-        inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Hat")));
-
-        p.openInventory(inv);
+        });
     }
 
     @EventHandler
     public void cancelHatClick(PlayerDropItemEvent event) {
         ItemStack item = event.getItemDrop().getItemStack().clone();
-        if(item != null
+        if (item != null
                 && item.hasItemMeta()
                 && item.getItemMeta().hasDisplayName()
                 && item.getItemMeta().getDisplayName().equals("§8§oHat")) {
-            event.setCancelled(true);
+//            event.setCancelled(true);
+            event.getItemDrop().remove();
             event.getPlayer().closeInventory();
             event.getPlayer().updateInventory();
         }
     }
 
     @EventHandler
-    public void cancelHatClick(InventoryClickEvent event) {
-        if(event.getCurrentItem() != null
-                && event.getCurrentItem().hasItemMeta()
-                && event.getCurrentItem().getItemMeta().hasDisplayName()
-                && event.getCurrentItem().getItemMeta().getDisplayName().equals("§8§oHat")) {
-            event.setCancelled(true);
-            event.setResult(Event.Result.DENY);
-            event.setCurrentItem(event.getCurrentItem());
-            event.getWhoClicked().closeInventory();
+    public void cancelHatClick(final InventoryClickEvent EVENT) {
+        if (EVENT.getCurrentItem() != null
+                && EVENT.getCurrentItem().hasItemMeta()
+                && EVENT.getCurrentItem().getItemMeta().hasDisplayName()
+                && EVENT.getCurrentItem().getItemMeta().getDisplayName().equals("§8§oHat")) {
+            EVENT.setCancelled(true);
+            EVENT.setResult(Event.Result.DENY);
+            EVENT.getWhoClicked().closeInventory();
+            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    for (ItemStack itemStack : EVENT.getWhoClicked().getInventory().getContents()) {
+                        if (itemStack != null
+                                && itemStack.hasItemMeta()
+                                && itemStack.getItemMeta().hasDisplayName()
+                                && itemStack.getItemMeta().getDisplayName().equals("§8§oHat")
+                                && itemStack != EVENT.getWhoClicked().getInventory().getHelmet())
+                            EVENT.getWhoClicked().getInventory().remove(itemStack);
+                    }
+                }
+            }, 1);
         }
     }
 
-    public static void openPetsMenu(Player p) {
-        int listSize = 0;
-        for (Pet m : Core.getPets()) {
-            if (!m.getType().isEnabled()) continue;
-            listSize++;
-        }
-        int slotAmount = 54;
-        if (listSize < 22)
-            slotAmount = 54;
-        if (listSize < 15)
-            slotAmount = 45;
-        if (listSize < 8)
-            slotAmount = 36;
-
-
-        Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Pets"));
-
-        int i = 10;
-        for (Pet pet : Core.getPets()) {
-            if (!pet.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
+    public static void openPetsMenu(final Player p) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                int listSize = 0;
+                for (Pet m : Core.getPets()) {
+                    if (!m.getType().isEnabled()) continue;
+                    listSize++;
                 }
-                continue;
-            }
-            if (!pet.getType().isEnabled()) continue;
-            if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
-                if (!p.hasPermission(pet.getType().getPermission()))
-                    continue;
-            if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(pet.getType().getPermission())) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-            String lore = null;
-            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
-                lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(pet.getType().getPermission()) ? "Yes" : "No")))));
-            }
-            String toggle = MessageManager.getMessage("Menu.Spawn");
-            CustomPlayer cp = Core.getCustomPlayer(p);
-            if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
-                toggle = MessageManager.getMessage("Menu.Despawn");
-            String customName = "";
-            if (Core.getCustomPlayer(p).getPetName(pet.getConfigName()) != null) {
-                customName = " §f§l(§r" + Core.getCustomPlayer(p).getPetName(pet.getConfigName()) + "§f§l)";
-            }
-            ItemStack is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName);
-            if (lore != null)
-                is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName, lore);
-            if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
-                is = addGlow(is);
-            inv.setItem(i, is);
-            if (i == 25 || i == 34 || i == 16) {
-                i += 3;
-            } else {
-                i++;
-            }
-        }
+                int slotAmount = 54;
+                if (listSize < 22)
+                    slotAmount = 54;
+                if (listSize < 15)
+                    slotAmount = 45;
+                if (listSize < 8)
+                    slotAmount = 36;
 
-        inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Pet")));
 
-        if (SettingsManager.getConfig().get("Pets-Rename.Enabled")) {
-            if (SettingsManager.getConfig().get("Pets-Rename.Permission-Required")) {
-                if (p.hasPermission("ultracosmetics.pets.rename")) {
-                    if (Core.getCustomPlayer(p).currentPet != null)
-                        inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet").replace("%petname%", Core.getCustomPlayer(p).currentPet.getMenuName())));
-                    else
-                        inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Pets"));
+
+                int i = 10;
+                for (Pet pet : Core.getPets()) {
+                    if (!pet.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    if (!pet.getType().isEnabled()) continue;
+                    if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
+                        if (!p.hasPermission(pet.getType().getPermission()))
+                            continue;
+                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(pet.getType().getPermission())) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    String lore = null;
+                    if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
+                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(pet.getType().getPermission()) ? "Yes" : "No")))));
+                    }
+                    String toggle = MessageManager.getMessage("Menu.Spawn");
+                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
+                        toggle = MessageManager.getMessage("Menu.Despawn");
+                    String customName = "";
+                    if (Core.getCustomPlayer(p).getPetName(pet.getConfigName()) != null) {
+                        customName = " §f§l(§r" + Core.getCustomPlayer(p).getPetName(pet.getConfigName()) + "§f§l)";
+                    }
+                    ItemStack is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName);
+                    if (lore != null)
+                        is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName, lore);
+                    if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
+                        is = addGlow(is);
+                    inv.setItem(i, is);
+                    if (i == 25 || i == 34 || i == 16) {
+                        i += 3;
+                    } else {
+                        i++;
+                    }
                 }
-            } else {
-                if (Core.getCustomPlayer(p).currentPet != null)
-                    inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet").replace("%petname%", Core.getCustomPlayer(p).currentPet.getMenuName())));
+
+                inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Pet")));
+
+                if (SettingsManager.getConfig().get("Pets-Rename.Enabled")) {
+                    if (SettingsManager.getConfig().get("Pets-Rename.Permission-Required")) {
+                        if (p.hasPermission("ultracosmetics.pets.rename")) {
+                            if (Core.getCustomPlayer(p).currentPet != null)
+                                inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet").replace("%petname%", Core.getCustomPlayer(p).currentPet.getMenuName())));
+                            else
+                                inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
+                        }
+                    } else {
+                        if (Core.getCustomPlayer(p).currentPet != null)
+                            inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet").replace("%petname%", Core.getCustomPlayer(p).currentPet.getMenuName())));
+                        else
+                            inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
+                    }
+                }
+
+                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        p.openInventory(inv);
+                    }
+                });
+            }
+        });
+    }
+
+    public static void openParticlesMenu(final Player p) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                int listSize = 0;
+                for (ParticleEffect m : Core.getParticleEffects()) {
+                    if (!m.getType().isEnabled()) continue;
+                    listSize++;
+                }
+                int slotAmount = 54;
+                if (listSize < 22)
+                    slotAmount = 54;
+                if (listSize < 15)
+                    slotAmount = 45;
+                if (listSize < 8)
+                    slotAmount = 36;
+
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Particle-Effects"));
+
+                int i = 10;
+                for (ParticleEffect particleEffect : Core.getParticleEffects()) {
+                    if (!particleEffect.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    if (!particleEffect.getType().isEnabled()) continue;
+                    if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
+                        if (!p.hasPermission(particleEffect.getType().getPermission()))
+                            continue;
+                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(particleEffect.getType().getPermission())) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    String lore = null;
+                    if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
+                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(particleEffect.getType().getPermission()) ? "Yes" : "No")))));
+                    }
+                    String toggle = MessageManager.getMessage("Menu.Summon");
+                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
+                        toggle = MessageManager.getMessage("Menu.Unsummon");
+                    ItemStack is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName());
+                    if (lore != null)
+                        is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName(), lore);
+                    if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
+                        is = addGlow(is);
+                    inv.setItem(i, is);
+                    if (i == 25 || i == 34 || i == 16) {
+                        i += 3;
+                    } else {
+                        i++;
+                    }
+                }
+
+                inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Effect")));
+
+                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        p.openInventory(inv);
+                    }
+                });
+            }
+        });
+    }
+
+    public static void openMountsMenu(final Player p) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                int listSize = 0;
+                for (Mount m : Core.getMounts()) {
+                    if (!m.getType().isEnabled()) continue;
+                    listSize++;
+                }
+                int slotAmount = 54;
+                if (listSize < 22)
+                    slotAmount = 54;
+                if (listSize < 15)
+                    slotAmount = 45;
+                if (listSize < 8)
+                    slotAmount = 36;
+
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Mounts"));
+
+                int i = 10;
+                for (Mount m : Core.getMounts()) {
+                    if (!m.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    if (!m.getType().isEnabled()) continue;
+                    if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
+                        if (!p.hasPermission(m.getType().getPermission()))
+                            continue;
+                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(m.getType().getPermission())) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    String lore = null;
+                    if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
+                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(m.getType().getPermission()) ? "Yes" : "No")))));
+                    }
+                    String toggle = MessageManager.getMessage("Menu.Spawn");
+                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    if (cp.currentMount != null && cp.currentMount.getType() == m.getType())
+                        toggle = MessageManager.getMessage("Menu.Despawn");
+                    ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName());
+                    if (lore != null)
+                        is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName(), lore);
+                    if (cp.currentMount != null && cp.currentMount.getType() == m.getType())
+                        is = addGlow(is);
+                    inv.setItem(i, is);
+                    if (i == 25 || i == 34 || i == 16) {
+                        i += 3;
+                    } else {
+                        i++;
+                    }
+                }
+
+                inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Mount")));
+
+                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        p.openInventory(inv);
+                    }
+                });
+            }
+        });
+    }
+
+    public static void openMorphsMenu(final Player p) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                int listSize = 0;
+                for (Morph m : Core.getMorphs()) {
+                    if (!m.getType().isEnabled()) continue;
+                    listSize++;
+                }
+                int slotAmount = 54;
+                if (listSize < 22)
+                    slotAmount = 54;
+                if (listSize < 15)
+                    slotAmount = 45;
+                if (listSize < 8)
+                    slotAmount = 36;
+
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Morphs"));
+
+                int i = 10;
+                for (Morph m : Core.getMorphs()) {
+                    if (!m.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    if (!m.getType().isEnabled()) continue;
+                    if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
+                        if (!p.hasPermission(m.getType().getPermission()))
+                            continue;
+                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(m.getType().getPermission())) {
+                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
+                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
+                        inv.setItem(i, ItemFactory.create(material, data, name));
+                        if (i == 25 || i == 34 || i == 16) {
+                            i += 3;
+                        } else {
+                            i++;
+                        }
+                        continue;
+                    }
+                    String lore = null;
+                    if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
+                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(m.getType().getPermission()) ? "Yes" : "No")))));
+                    }
+                    String toggle = MessageManager.getMessage("Menu.Morph");
+                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    if (cp.currentMorph != null && cp.currentMorph.getType() == m.getType())
+                        toggle = MessageManager.getMessage("Menu.Unmorph");
+                    ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getName());
+                    if (lore != null)
+                        is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getName(), lore);
+                    if (cp.currentMorph != null && cp.currentMorph.getType() == m.getType())
+                        is = addGlow(is);
+                    ItemMeta itemMeta = is.getItemMeta();
+                    List<String> loreList = new ArrayList<>();
+                    if (itemMeta.hasLore())
+                        loreList = itemMeta.getLore();
+                    loreList.add("");
+                    loreList.add(m.getType().getSkill());
+                    itemMeta.setLore(loreList);
+                    is.setItemMeta(itemMeta);
+                    inv.setItem(i, is);
+                    if (i == 25 || i == 34 || i == 16) {
+                        i += 3;
+                    } else {
+                        i++;
+                    }
+                }
+
+                inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
+                if (Core.getCustomPlayer(p).canSeeSelfMorph())
+                    inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0x0, MessageManager.getMessage("Disable-Third-Person-View")));
                 else
-                    inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
-            }
-        }
+                    inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.ENDER_PEARL, (byte) 0x0, MessageManager.getMessage("Enable-Third-Person-View")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Morph")));
 
-        p.openInventory(inv);
+
+                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        p.openInventory(inv);
+                    }
+                });
+            }
+        });
     }
 
-    public static void openParticlesMenu(Player p) {
-        int listSize = 0;
-        for (ParticleEffect m : Core.getParticleEffects()) {
-            if (!m.getType().isEnabled()) continue;
-            listSize++;
-        }
-        int slotAmount = 54;
-        if (listSize < 22)
-            slotAmount = 54;
-        if (listSize < 15)
-            slotAmount = 45;
-        if (listSize < 8)
-            slotAmount = 36;
-
-        Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Particle-Effects"));
-
-        int i = 10;
-        for (ParticleEffect particleEffect : Core.getParticleEffects()) {
-            if (!particleEffect.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-            if (!particleEffect.getType().isEnabled()) continue;
-            if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
-                if (!p.hasPermission(particleEffect.getType().getPermission()))
-                    continue;
-            if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(particleEffect.getType().getPermission())) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-            String lore = null;
-            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
-                lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(particleEffect.getType().getPermission()) ? "Yes" : "No")))));
-            }
-            String toggle = MessageManager.getMessage("Menu.Summon");
-            CustomPlayer cp = Core.getCustomPlayer(p);
-            if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
-                toggle = MessageManager.getMessage("Menu.Unsummon");
-            ItemStack is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName());
-            if (lore != null)
-                is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName(), lore);
-            if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
-                is = addGlow(is);
-            inv.setItem(i, is);
-            if (i == 25 || i == 34 || i == 16) {
-                i += 3;
-            } else {
-                i++;
-            }
-        }
-
-        inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Effect")));
-
-        p.openInventory(inv);
-    }
-
-    public static void openMountsMenu(Player p) {
-        int listSize = 0;
-        for (Mount m : Core.getMounts()) {
-            if (!m.getType().isEnabled()) continue;
-            listSize++;
-        }
-        int slotAmount = 54;
-        if (listSize < 22)
-            slotAmount = 54;
-        if (listSize < 15)
-            slotAmount = 45;
-        if (listSize < 8)
-            slotAmount = 36;
-
-        Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Mounts"));
-
-        int i = 10;
-        for (Mount m : Core.getMounts()) {
-            if (!m.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-            if (!m.getType().isEnabled()) continue;
-            if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
-                if (!p.hasPermission(m.getType().getPermission()))
-                    continue;
-            if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(m.getType().getPermission())) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-            String lore = null;
-            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
-                lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(m.getType().getPermission()) ? "Yes" : "No")))));
-            }
-            String toggle = MessageManager.getMessage("Menu.Spawn");
-            CustomPlayer cp = Core.getCustomPlayer(p);
-            if (cp.currentMount != null && cp.currentMount.getType() == m.getType())
-                toggle = MessageManager.getMessage("Menu.Despawn");
-            ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName());
-            if (lore != null)
-                is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getMenuName(), lore);
-            if (cp.currentMount != null && cp.currentMount.getType() == m.getType())
-                is = addGlow(is);
-            inv.setItem(i, is);
-            if (i == 25 || i == 34 || i == 16) {
-                i += 3;
-            } else {
-                i++;
-            }
-        }
-
-        inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Mount")));
-
-        p.openInventory(inv);
-    }
-
-    public static void openMorphsMenu(Player p) {
-        int listSize = 0;
-        for (Morph m : Core.getMorphs()) {
-            if (!m.getType().isEnabled()) continue;
-            listSize++;
-        }
-        int slotAmount = 54;
-        if (listSize < 22)
-            slotAmount = 54;
-        if (listSize < 15)
-            slotAmount = 45;
-        if (listSize < 8)
-            slotAmount = 36;
-
-        Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Morphs"));
-
-        int i = 10;
-        for (Morph m : Core.getMorphs()) {
-            if (!m.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-            if (!m.getType().isEnabled()) continue;
-            if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
-                if (!p.hasPermission(m.getType().getPermission()))
-                    continue;
-            if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(m.getType().getPermission())) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                inv.setItem(i, ItemFactory.create(material, data, name));
-                if (i == 25 || i == 34 || i == 16) {
-                    i += 3;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-            String lore = null;
-            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
-                lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(m.getType().getPermission()) ? "Yes" : "No")))));
-            }
-            String toggle = MessageManager.getMessage("Menu.Morph");
-            CustomPlayer cp = Core.getCustomPlayer(p);
-            if (cp.currentMorph != null && cp.currentMorph.getType() == m.getType())
-                toggle = MessageManager.getMessage("Menu.Unmorph");
-            ItemStack is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getName());
-            if (lore != null)
-                is = ItemFactory.create(m.getMaterial(), m.getData(), toggle + " " + m.getName(), lore);
-            if (cp.currentMorph != null && cp.currentMorph.getType() == m.getType())
-                is = addGlow(is);
-            ItemMeta itemMeta = is.getItemMeta();
-            List<String> loreList = new ArrayList<>();
-            if (itemMeta.hasLore())
-                loreList = itemMeta.getLore();
-            loreList.add("");
-            loreList.add(m.getType().getSkill());
-            itemMeta.setLore(loreList);
-            is.setItemMeta(itemMeta);
-            inv.setItem(i, is);
-            if (i == 25 || i == 34 || i == 16) {
-                i += 3;
-            } else {
-                i++;
-            }
-        }
-
-        inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        if (Core.getCustomPlayer(p).canSeeSelfMorph())
-            inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0x0, MessageManager.getMessage("Disable-Third-Person-View")));
-        else
-            inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.ENDER_PEARL, (byte) 0x0, MessageManager.getMessage("Enable-Third-Person-View")));
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Morph")));
-
-
-        p.openInventory(inv);
-    }
-
-    public static void openGadgetsMenu(Player p) {
+    public static void openGadgetsMenu(final Player p) {
         int listSize = 0;
         for (Gadget g : Core.getGadgets()) {
             if (!g.getType().isEnabled()) continue;
@@ -577,7 +651,7 @@ public class MenuListener implements Listener {
         if (listSize < 8)
             slotAmount = 36;
 
-        Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Gadgets"));
+        final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Gadgets"));
 
         int i = 10;
         for (Gadget g : Core.getGadgets()) {
@@ -645,7 +719,12 @@ public class MenuListener implements Listener {
         inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
         inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
 
-        p.openInventory(inv);
+        Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                p.openInventory(inv);
+            }
+        });
     }
 
     public static Mount.MountType getMountByName(String name) {
@@ -1392,14 +1471,16 @@ public class MenuListener implements Listener {
         AnvilGUI gui = new AnvilGUI(p, new AnvilGUI.AnvilClickEventHandler() {
             @Override
             public void onAnvilClick(AnvilGUI.AnvilClickEvent event) {
-                Bukkit.broadcastMessage("a");
                 if (event.getSlot() == AnvilGUI.AnvilSlot.OUTPUT) {
                     event.setWillClose(true);
                     event.setWillDestroy(true);
                     if (SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Enabled")) {
                         buyRenamePet(p, event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
                     } else {
-                        Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                        if (Core.getCustomPlayer(p).currentPet.getType() == Pet.PetType.WITHER)
+                            Core.getCustomPlayer(p).currentPet.ent.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                        else
+                            Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
                         Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getConfigName(), event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
                     }
                 } else {
@@ -1449,7 +1530,10 @@ public class MenuListener implements Listener {
                     if (Core.getCustomPlayer(p).getMoney() >= (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")) {
                         Core.economy.withdrawPlayer(p, (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price"));
                         p.sendMessage(MessageManager.getMessage("Successful-Purchase"));
-                        Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(name);
+                        if (Core.getCustomPlayer(p).currentPet.getType() == Pet.PetType.WITHER)
+                            Core.getCustomPlayer(p).currentPet.ent.setCustomName(name);
+                        else
+                            Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(name);
                         Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getConfigName(), name);
                     } else {
                         p.sendMessage(MessageManager.getMessage("Not-Enough-Money"));

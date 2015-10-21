@@ -136,10 +136,11 @@ public class TreasureRandomizer {
         if (Core.Category.MOUNTS.isEnabled()
                 && !mountList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Mounts.Enabled"))
-            if (Core.Category.HATS.isEnabled()
-                    && !hatList.isEmpty()
-                    && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Hats.Enabled"))
             setupChance(RESULT_REF, MOUNTS_CHANCE, ResultType.MOUNT);
+        if (Core.Category.HATS.isEnabled()
+                && !hatList.isEmpty()
+                && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Hats.Enabled"))
+            setupChance(RESULT_REF, HATS_CHANCE, ResultType.HAT);
         if (SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled"))
             setupChance(RESULT_REF, MONEY_CHANCE, ResultType.MONEY);
     }
@@ -168,8 +169,6 @@ public class TreasureRandomizer {
             ResultType type = types.get(0);
 
             types = new ArrayList();
-
-            giveRandomHat();
 
             switch (type) {
                 case MONEY:
@@ -232,7 +231,7 @@ public class TreasureRandomizer {
     public void giveAmmo() {
         int i = MathUtils.randomRangeInt(0, gadgetList.size() - 1);
         Gadget g = gadgetList.get(i);
-        int ammo = MathUtils.randomRangeInt(15, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Max"));
+        int ammo = MathUtils.randomRangeInt((int)SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Min"), (int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Max"));
         name = MessageManager.getMessage("Treasure-Chests-Loot.Gadget").replace("%name%", g.getName()).replace("%ammo%", ammo + "");
         gadgetList.remove(i);
         Core.getCustomPlayer(player).addAmmo(g.getType().toString().toLowerCase(), ammo);
@@ -246,9 +245,9 @@ public class TreasureRandomizer {
     }
 
     public void giveRandomHat() {
-        int i = new Random().nextInt(hatList.size());
+        int i = MathUtils.randomRangeInt(0, hatList.size() - 1);
         Hat hat = hatList.get(i);
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Hat").replace("%pet%", hat.getName());
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Hat").replace("%hat%", hat.getName());
         hatList.remove(i);
         givePermission(hat.getPermission());
         itemStack = hat.getItemStack().clone();
