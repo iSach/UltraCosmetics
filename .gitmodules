@@ -1,0 +1,2 @@
+[submodule "src/main/java"]
+	ignore = dirty
