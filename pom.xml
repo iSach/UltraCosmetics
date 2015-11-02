@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>be.isach</groupId>
+    <artifactId>UltraCosmetics</artifactId>
+    <version>RELEASE-1.1.4</version>
+
+    <repositories>
+        <!-- NoteBlockAPI repositery -->
+        <repository>
+            <id>sinndev-repo</id>
+            <url>http://repo.sinndev.com/content/repositories/releases/</url>
+        </repository>
+        <!-- Spigot repositery -->
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>http://repo.dmulloy2.net/content/groups/public/</url>
+        </repository>
+        <!-- Vault repositery -->
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+        </repository>
+        <!-- Lib's Disguises repositery -->
+        <repository>
+            <id>libs-repo</id>
+            <url>http://server.psmc.ca/repo/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Spigot dependency -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- NoteBlockAPI dependency -->
+        <dependency>
+            <groupId>com.xxmicloxx</groupId>
+            <artifactId>NoteBlockAPI</artifactId>
+            <version>1.8.7</version>
+        </dependency>
+        <!-- Vault dependency -->
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <!-- Lib's Disguises dependency -->
+        <dependency>
+            <groupId>LibsDisguises</groupId>
+            <artifactId>LibsDisguises</artifactId>
+            <version>8.6.5-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
