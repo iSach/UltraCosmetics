@@ -2,12 +2,8 @@ package be.isach.ultracosmetics.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagList;
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -42,7 +38,9 @@ public class ItemFactory {
         return create(material, data, displayName, null);
     }
 
-    public static ItemStack createSkull(String url) {
+    public static ItemStack createSkull(String urlToFormat) {
+
+        String url = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" + urlToFormat;
         ItemStack head = create(Material.SKULL_ITEM, (byte) 3, "§8§oHat");
 
         if (url.isEmpty()) return head;
