@@ -283,7 +283,7 @@ public class Core extends JavaPlugin {
     private void initPlayers() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             customPlayers.add(new CustomPlayer(p.getUniqueId()));
-            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && !((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(p.getWorld().getName())) {
+            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
                 int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
                 if (p.getInventory().getItem(slot) != null) {
                     if (p.getInventory().getItem(slot).hasItemMeta()
