@@ -120,6 +120,8 @@ public class GadgetManager implements Listener {
             inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
         inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
 
+        ItemFactory.fillInventory(inv);
+
         Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {

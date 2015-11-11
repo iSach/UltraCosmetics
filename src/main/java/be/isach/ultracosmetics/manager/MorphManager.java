@@ -114,13 +114,14 @@ public class MorphManager implements Listener {
 
                 if (Category.MORPHS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Pet")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Morph")));
                 int d = (Category.MORPHS.hasGoBackArrow() ? 5 : 6);
                 if (Core.getCustomPlayer(p).canSeeSelfMorph())
                     inv.setItem(inv.getSize() - d, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0x0, MessageManager.getMessage("Disable-Third-Person-View")));
                 else
                     inv.setItem(inv.getSize() - d, ItemFactory.create(Material.ENDER_PEARL, (byte) 0x0, MessageManager.getMessage("Enable-Third-Person-View")));
 
+                ItemFactory.fillInventory(inv);
 
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                     @Override

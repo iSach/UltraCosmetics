@@ -129,6 +129,8 @@ public class MountManager implements Listener {
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
                 inv.setItem(inv.getSize() - (Category.MOUNTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Mount")));
 
+                ItemFactory.fillInventory(inv);
+
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {

@@ -594,6 +594,9 @@ public class Core extends JavaPlugin {
 
         addDefault("TreasureChests.Permission-Add-Command", "pex user %name% add %permission%");
 
+        addDefault("Fill-Blank-Slots-With-Item.Enabled", false);
+        addDefault("Fill-Blank-Slots-With-Item.Item", "160:15");
+
         addDefault("Pets-Rename.Enabled", false);
         addDefault("Pets-Rename.Permission-Required", false);
         addDefault("Pets-Rename.Requires-Money.Enabled", true);

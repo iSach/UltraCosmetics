@@ -185,6 +185,7 @@ public class CustomPlayer {
             ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"))));
             inventory.setItem(13, itemStack);
 
+            ItemFactory.fillInventory(inventory);
 
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                 @Override

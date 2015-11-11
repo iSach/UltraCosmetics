@@ -65,6 +65,9 @@ public class TreasureChest
 
         this.player = getPlayer();
 
+        if (Core.getCustomPlayer(getPlayer()).currentMorph != null)
+            Core.getCustomPlayer(getPlayer()).setSeeSelfMorph(false);
+
         this.randomGenerator = new TreasureRandomizer(getPlayer(), getPlayer().getLocation());
 
         BukkitRunnable runnable = new BukkitRunnable() {

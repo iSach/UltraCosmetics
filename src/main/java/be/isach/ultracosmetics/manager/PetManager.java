@@ -137,6 +137,7 @@ public class PetManager implements Listener {
                             inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
                     }
                 }
+                ItemFactory.fillInventory(inv);
 
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                     @Override
@@ -183,7 +184,6 @@ public class PetManager implements Listener {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removePet();
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Spawn"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removePet();
                     StringBuilder sb = new StringBuilder();
                     String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Spawn"), "");
                     int j = name.split(" ").length;
@@ -209,16 +209,18 @@ public class PetManager implements Listener {
         if (!PLAYER.hasPermission(type.getPermission())) {
             if (!playerList.contains(PLAYER)) {
                 PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        playerList.remove(PLAYER);
-                    }
-                }, 1);
+                return;
             }
-            return;
         }
+        if (playerList.contains(PLAYER))
+            return;
+        playerList.add(PLAYER);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                playerList.remove(PLAYER);
+            }
+        }, 4);
 
         for (Pet pet : Core.getPets()) {
             if (pet.getType().isEnabled() && pet.getType() == type) {
@@ -308,6 +310,8 @@ public class PetManager implements Listener {
         }
 
         inventory.setItem(13, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet-Purchase").replace("%price%", "" + SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")).replace("%name%", name)));
+
+        ItemFactory.fillInventory(inventory);
 
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
             @Override

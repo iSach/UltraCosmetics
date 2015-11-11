@@ -77,6 +77,7 @@ public abstract class Pet implements Listener {
             }
             if (Core.getCustomPlayer(getPlayer()).currentPet != null)
                 Core.getCustomPlayer(getPlayer()).removePet();
+            Core.getCustomPlayer(getPlayer()).currentPet = this;
 
             final Pet pet = this;
             BukkitRunnable runnable = new BukkitRunnable() {
@@ -145,7 +146,6 @@ public abstract class Pet implements Listener {
             listener = new PetListener(this);
 
             if (entityType != EntityType.ZOMBIE) {
-
                 this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
                 //ent.setCustomNameVisible(true);
                 //ent.setCustomName(getName());
@@ -211,11 +211,12 @@ public abstract class Pet implements Listener {
                 ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(customEnt);
             }
             getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", (Core.placeHolderColor) ? getMenuName() : Core.filterColor(getMenuName())));
-            Core.getCustomPlayer(getPlayer()).currentPet = this;
         }
     }
 
     private void followPlayer() {
+        if (getPlayer() == null)
+            return;
         if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
             return;
 
@@ -292,8 +293,10 @@ public abstract class Pet implements Listener {
             HandlerList.unregisterAll(listener);
         } catch (Exception exc) {
         }
-        if (getPlayer() != null)
+        if (getPlayer() != null) {
             getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replace("%petname%", (Core.placeHolderColor) ? getMenuName() : Core.filterColor(getMenuName())));
+            Core.getCustomPlayer(getPlayer()).currentPet = null;
+        }
         owner = null;
     }
 

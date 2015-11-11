@@ -90,6 +90,7 @@ public class MainMenuManager implements Listener {
                 else
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
 
+                ItemFactory.fillInventory(inv);
 
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                     @Override

@@ -188,10 +188,10 @@ public abstract class Gadget implements Listener {
             inventory.setItem(i + 9 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
             inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
         }
+        ItemFactory.fillInventory(inventory);
 
 
         getPlayer().openInventory(inventory);
-        getPlayer().getOpenInventory().setCursor(getPlayer().getOpenInventory().getItem(49));
 
         this.inv = inventory;
     }
