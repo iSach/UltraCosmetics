@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.treasurechests;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
@@ -40,7 +41,6 @@ public class TreasureRandomizer {
     public static List<Hat> hatList = new ArrayList<>();
 
     private enum ResultType {
-
         GADGET,
         MONEY,
         MORPH,
@@ -72,72 +72,78 @@ public class TreasureRandomizer {
         for (Gadget g : Core.getGadgets()) {
             if (g.getType().isEnabled()
                     && player.hasPermission(g.getType().getPermission())
-                    && g.getType().requiresAmmo())
+                    && g.getType().requiresAmmo()
+                    && g.canBeFound())
                 this.gadgetList.add(g);
         }
         if (petList.isEmpty())
             for (Pet pet : Core.getPets()) {
                 if (pet.getType().isEnabled()
-                        && !player.hasPermission(pet.getType().getPermission()))
+                        && !player.hasPermission(pet.getType().getPermission())
+                        && pet.canBeFound())
                     this.petList.add(pet);
             }
         if (morphList.isEmpty())
             for (Morph morph : Core.getMorphs()) {
                 if (morph.getType().isEnabled()
-                        && !player.hasPermission(morph.getType().getPermission()))
+                        && !player.hasPermission(morph.getType().getPermission())
+                        && morph.canBeFound())
                     this.morphList.add(morph);
             }
         if (particleEffectList.isEmpty())
             for (ParticleEffect particleEffect : Core.getParticleEffects()) {
                 if (particleEffect.getType().isEnabled()
+                        && particleEffect.canBeFound()
                         && !player.hasPermission(particleEffect.getType().getPermission()))
                     this.particleEffectList.add(particleEffect);
             }
         if (mountList.isEmpty())
             for (Mount m : Core.getMounts()) {
                 if (m.getType().isEnabled()
+                        && m.canBeFound()
                         && !player.hasPermission(m.getType().getPermission()))
                     this.mountList.add(m);
             }
         if (hatList.isEmpty())
             for (Hat hat : Core.getHats()) {
                 if (hat.isEnabled()
+                        && hat.canBeFound()
                         && !player.hasPermission(hat.getPermission()))
                     this.hatList.add(hat);
             }
-        if (!Core.Category.MOUNTS.isEnabled())
+        if (!Category.MOUNTS.isEnabled())
             mountList.clear();
-        if (!Core.Category.GADGETS.isEnabled())
+        if (!Category.GADGETS.isEnabled())
             gadgetList.clear();
-        if (!Core.Category.EFFECTS.isEnabled())
+        if (!Category.EFFECTS.isEnabled())
             particleEffectList.clear();
-        if (!Core.Category.PETS.isEnabled())
+        if (!Category.PETS.isEnabled())
             petList.clear();
-        if (!Core.Category.MORPHS.isEnabled())
+        if (!Category.MORPHS.isEnabled())
             morphList.clear();
-        if (!Core.Category.HATS.isEnabled())
+        if (!Category.HATS.isEnabled())
             hatList.clear();
-        if (Core.Category.MORPHS.isEnabled()
+        if (Category.MORPHS.isEnabled()
                 && !morphList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Morphs.Enabled"))
             setupChance(RESULT_REF, MORPHS_CHANCE, ResultType.MORPH);
-        if (Core.Category.EFFECTS.isEnabled()
+        if (Category.EFFECTS.isEnabled()
                 && !particleEffectList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Effects.Enabled"))
             setupChance(RESULT_REF, EFFECTS_CHANCE, ResultType.EFFECT);
-        if (Core.Category.GADGETS.isEnabled()
+        if (Category.GADGETS.isEnabled()
                 && !gadgetList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Enabled"))
             setupChance(RESULT_REF, GADGETS_CHANCE, ResultType.GADGET);
-        if (Core.Category.PETS.isEnabled()
+        if (Category.PETS.isEnabled()
                 && !petList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Pets.Enabled"))
             setupChance(RESULT_REF, PETS_CHANCE, ResultType.PET);
-        if (Core.Category.MOUNTS.isEnabled()
+        if (Category.MOUNTS.isEnabled()
                 && !mountList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Mounts.Enabled"))
             setupChance(RESULT_REF, MOUNTS_CHANCE, ResultType.MOUNT);
-        if (Core.Category.HATS.isEnabled()
+        if (Category.HATS.isEnabled()
                 && !hatList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Hats.Enabled"))
             setupChance(RESULT_REF, HATS_CHANCE, ResultType.HAT);

@@ -3,11 +3,13 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -28,7 +30,7 @@ public class GadgetTNT extends Gadget {
     List<Entity> entities = new ArrayList<>();
 
     public GadgetTNT(UUID owner) {
-        super(Material.TNT, (byte) 0x0, "TNT", "ultracosmetics.gadgets.tnt", 1, owner, GadgetType.TNT);
+        super(Material.TNT, (byte) 0x0, "TNT", "ultracosmetics.gadgets.tnt", 1, owner, GadgetType.TNT, "&7&oBlow some people up!\n&7&oKABOOM!");
         Core.registerListener(this);
     }
 
@@ -104,7 +106,7 @@ public class GadgetTNT extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (Entity ent : entities)
             ent.remove();
         HandlerList.unregisterAll(this);

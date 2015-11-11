@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.pets.customentities.Pumpling;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
+import net.minecraft.server.v1_8_R3.PathEntity;
+import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,8 +15,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -51,16 +51,24 @@ public abstract class Pet implements Listener {
 
     private Listener listener;
 
+    private String description;
+
     public Entity ent;
     public net.minecraft.server.v1_8_R3.Entity customEnt;
 
-    public Pet(final EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final PetType type) {
+    public Pet(final EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final PetType type, String defaultDesc) {
         this.material = material;
         this.data = data;
         this.name = configName;
         this.permission = permission;
         this.type = type;
         this.entityType = entityType;
+        if (SettingsManager.getConfig().get("Pets." + configName + ".Description") == null) {
+            this.description = defaultDesc;
+            SettingsManager.getConfig().set("Pets." + configName + ".Description", getDescription());
+        } else {
+            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Pets." + configName + ".Description")));
+        }
         if (owner != null) {
             this.owner = owner;
             if (!getPlayer().hasPermission(permission)) {
@@ -317,6 +325,30 @@ public abstract class Pet implements Listener {
         }
 
 
+    }
+
+    public List<String> getDescription() {
+        List<String> desc = new ArrayList<>();
+        for (String string : description.split("\n")) {
+            desc.add(string.replace('&', '§'));
+        }
+        return desc;
+    }
+
+    public boolean showsDescription() {
+        return SettingsManager.getConfig().getBoolean("Pets." + getConfigName() + ".Show-Description");
+    }
+
+    public boolean canBeFound() {
+        return SettingsManager.getConfig().getBoolean("Pets." + getConfigName() + ".Can-Be-Found-In-Treasure-Chests");
+    }
+
+    private String fromList(List<String> description) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < description.size(); i++) {
+            stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
+        }
+        return stringBuilder.toString();
     }
 
     public enum PetType {

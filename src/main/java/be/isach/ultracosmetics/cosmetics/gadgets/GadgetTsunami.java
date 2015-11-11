@@ -29,7 +29,7 @@ public class GadgetTsunami extends Gadget {
     List<ArmorStand> armorStands = new ArrayList<>();
 
     public GadgetTsunami(UUID owner) {
-        super(Material.WATER_BUCKET, (byte) 0x0, "Tsunami", "ultracosmetics.gadgets.tsunami", 10, owner, GadgetType.TSUNAMI);
+        super(Material.WATER_BUCKET, (byte) 0x0, "Tsunami", "ultracosmetics.gadgets.tsunami", 10, owner, GadgetType.TSUNAMI, "&9&oTSUNAMI\n&7&oJump!\n&7&oLet's go!");
     }
 
     @Override
@@ -107,7 +107,7 @@ public class GadgetTsunami extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (ArmorStand as : armorStands) {
             as.remove();
         }

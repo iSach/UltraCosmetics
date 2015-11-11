@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
@@ -26,7 +26,7 @@ import java.util.UUID;
 public class MountMountOfWater extends Mount {
 
     public MountMountOfWater(UUID owner) {
-        super(EntityType.HORSE, Material.INK_SACK, (byte) 4, "MountOfWater", "ultracosmetics.mounts.mountofwater", owner, MountType.MOUNTOFWATER);
+        super(EntityType.HORSE, Material.INK_SACK, (byte) 4, "MountOfWater", "ultracosmetics.mounts.mountofwater", owner, MountType.MOUNTOFWATER, "&7&oThe mount of Poseidon!");
         if (owner != null) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

@@ -1,11 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.listeners.MenuListener;
-import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.manager.GadgetManager;
 import be.isach.ultracosmetics.util.Cuboid;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,9 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by sacha on 03/08/15.
@@ -40,22 +38,16 @@ public abstract class Gadget implements Listener {
     private Inventory inv;
     public boolean openGadgetsInvAfterAmmo;
     private double countdown;
-
     private boolean requireAmmo;
-
     private Listener listener;
-
     private GadgetType type;
-
     public boolean displayCountdownMessage = true;
-
     private String permission;
-
     private UUID owner;
-
     boolean affectPlayers;
+    private String description;
 
-    public Gadget(Material material, Byte data, String configName, String permission, double countdown, final UUID owner, final GadgetType type) {
+    public Gadget(Material material, Byte data, String configName, String permission, double countdown, final UUID owner, final GadgetType type, String defaultDesc) {
         this.material = material;
         this.data = data;
         this.configName = configName;
@@ -66,6 +58,12 @@ public abstract class Gadget implements Listener {
             SettingsManager.getConfig().set("Gadgets." + configName + ".Cooldown", countdown);
         } else {
             this.countdown = Double.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown")));
+        }
+        if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
+            this.description = defaultDesc;
+            SettingsManager.getConfig().set("Gadgets." + configName + ".Description", getDescription());
+        } else {
+            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
         }
         this.type = type;
         this.useTwoInteractMethods = false;
@@ -91,7 +89,7 @@ public abstract class Gadget implements Listener {
                         }
                     } catch (NullPointerException exc) {
                         removeItem();
-                        clear();
+                        onClear();
                         getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())));
                         cancel();
                     }
@@ -113,6 +111,14 @@ public abstract class Gadget implements Listener {
             Core.getCustomPlayer(getPlayer()).currentGadget = this;
         }
         this.requireAmmo = Boolean.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled")));
+    }
+
+    public boolean showsDescription() {
+        return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Show-Description");
+    }
+
+    public boolean canBeFound() {
+        return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Can-Be-Found-In-Treasure-Chests");
     }
 
     public String getName() {
@@ -138,7 +144,7 @@ public abstract class Gadget implements Listener {
     abstract void onUpdate();
 
 
-    public abstract void clear();
+    public abstract void onClear();
 
     public void unregister() {
         try {
@@ -223,7 +229,7 @@ public abstract class Gadget implements Listener {
                                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                                     @Override
                                     public void run() {
-                                        MenuListener.openGadgetsMenu((Player) event.getWhoClicked());
+                                        GadgetManager.openGadgetsMenu((Player) event.getWhoClicked());
                                         openGadgetsInvAfterAmmo = false;
                                     }
                                 }, 1);
@@ -317,7 +323,7 @@ public abstract class Gadget implements Listener {
             if (Core.countdownMap.get(getPlayer()) != null) {
                 if (Core.countdownMap.get(getPlayer()).containsKey(getType())) {
                     String timeLeft = new DecimalFormat("0.0").format(Core.countdownMap.get(getPlayer()).get(getType()));
-                    if (displayCountdownMessage)
+                    if (countdown > 1)
                         getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", getName()).replace("%time%", timeLeft));
                     return;
                 } else {
@@ -376,6 +382,22 @@ public abstract class Gadget implements Listener {
         }
     }
 
+    public List<String> getDescription() {
+        List<String> desc = new ArrayList<>();
+        for (String string : description.split("\n")) {
+            desc.add(string.replace('&', '§'));
+        }
+        return desc;
+    }
+
+    private String fromList(List<String> description) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < description.size(); i++) {
+            stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
+        }
+        return stringBuilder.toString();
+    }
+
     public enum GadgetType {
         BATBLASTER("ultracosmetics.gadgets.batblaster", "BatBlaster"),
         CHICKENATOR("ultracosmetics.gadgets.chickenator", "Chickenator"),
@@ -398,7 +420,8 @@ public abstract class Gadget implements Listener {
         FUNGUN("ultracosmetics.gadgets.fungun", "FunGun"),
         PARACHUTE("ultracosmetics.gadgets.parachute", "Parachute"),
         QUAKEGUN("ultracosmetics.gadgets.quakegun", "QuakeGun"),
-        GHOSTPARTY("ultracosmetics.gadgets.ghostparty", "GhostParty");
+        GHOSTPARTY("ultracosmetics.gadgets.ghostparty", "GhostParty"),
+        FIREWORK("ultracosmetics.gadgets.firework", "Firework");
 
         String permission;
         public String configName;

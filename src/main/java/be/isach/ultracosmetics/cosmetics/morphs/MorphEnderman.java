@@ -26,7 +26,7 @@ public class MorphEnderman extends Morph {
     private boolean cooldown;
 
     public MorphEnderman(UUID owner) {
-        super(DisguiseType.ENDERMAN, Material.ENDER_PEARL, (byte) 0, "Enderman", "ultracosmetics.morphs.enderman", owner, MorphType.ENDERMAN);
+        super(DisguiseType.ENDERMAN, Material.ENDER_PEARL, (byte) 0, "Enderman", "ultracosmetics.morphs.enderman", owner, MorphType.ENDERMAN, "&7&oI go from there to\n&7&o there, then you lost me.");
         if (owner != null) {
             Core.registerListener(this);
             getPlayer().setAllowFlight(true);

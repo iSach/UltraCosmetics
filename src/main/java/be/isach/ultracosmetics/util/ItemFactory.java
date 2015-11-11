@@ -2,8 +2,11 @@ package be.isach.ultracosmetics.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -66,5 +69,19 @@ public class ItemFactory {
         leatherArmorMeta.setColor(Color.fromRGB(red, green, blue));
         itemStack.setItemMeta(leatherArmorMeta);
         return itemStack;
+    }
+
+    public static ItemStack addGlow(ItemStack item) {
+        net.minecraft.server.v1_8_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = null;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        }
+        if (tag == null) tag = nmsStack.getTag();
+        NBTTagList ench = new NBTTagList();
+        tag.set("ench", ench);
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
     }
 }

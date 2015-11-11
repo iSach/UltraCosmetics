@@ -16,7 +16,9 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
     double i = 0;
 
     public ParticleEffectBloodHelix(UUID owner) {
-        super(Effect.COLOURED_DUST, Material.REDSTONE, (byte) 0x0, "BloodHelix", "ultracosmetics.particleeffects.bloodhelix", owner, ParticleEffectType.BLOODHELIX, 1);
+        super(Effect.COLOURED_DUST, Material.REDSTONE, (byte) 0x0, "BloodHelix", "ultracosmetics.particleeffects.bloodhelix", owner,
+                ParticleEffectType.BLOODHELIX, 1,
+                "&7&oAncient legend says this magic\n&7&o enpowers the blood of its user,\n&7&ogiving them godly powers");
         repeatDelay = 20;
     }
 

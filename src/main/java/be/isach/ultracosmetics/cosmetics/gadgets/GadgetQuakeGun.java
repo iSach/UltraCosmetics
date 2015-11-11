@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.CustomEntityFirework;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.*;
@@ -23,7 +23,7 @@ public class GadgetQuakeGun extends Gadget {
     List<Firework> fireworkList = new ArrayList<>();
 
     public GadgetQuakeGun(UUID owner) {
-        super(Material.DIAMOND_HOE, (byte) 0x0, "QuakeGun", "ultracosmetics.gadgets.quakegun", 5, owner, GadgetType.QUAKEGUN);
+        super(Material.DIAMOND_HOE, (byte) 0x0, "QuakeGun", "ultracosmetics.gadgets.quakegun", 5, owner, GadgetType.QUAKEGUN, "&7&oGet a real Rail Gun and\n&7&oStrike players and mobs!");
         Core.registerListener(this);
     }
 
@@ -76,6 +76,6 @@ public class GadgetQuakeGun extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
     }
 }

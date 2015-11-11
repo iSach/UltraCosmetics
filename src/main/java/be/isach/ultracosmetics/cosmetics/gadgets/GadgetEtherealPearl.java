@@ -31,13 +31,13 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     ArrayList<EnderPearl> pearls = new ArrayList<>();
 
     public GadgetEtherealPearl(UUID owner) {
-        super(Material.ENDER_PEARL, (byte) 0x0, "EtherealPearl", "ultracosmetics.gadgets.etherealpearl", 3, owner, GadgetType.ETHEREALPEARL);
+        super(Material.ENDER_PEARL, (byte) 0x0, "EtherealPearl", "ultracosmetics.gadgets.etherealpearl", 3, owner, GadgetType.ETHEREALPEARL, "&7&oTake a ride through the skies\n&7&oon your very own Ethereal Pearl!");
         if (owner != null)
             Core.registerListener(this);
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (EnderPearl pearl : pearls)
             pearl.remove();
         HandlerList.unregisterAll(this);

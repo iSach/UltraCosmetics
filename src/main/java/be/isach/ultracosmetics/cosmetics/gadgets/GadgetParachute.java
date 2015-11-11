@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,7 +27,7 @@ public class GadgetParachute extends Gadget {
     boolean active;
 
     public GadgetParachute(UUID owner) {
-        super(Material.LEASH, (byte) 0x0, "Parachute", "ultracosmetics.gadgets.parachute", 45, owner, GadgetType.PARACHUTE);
+        super(Material.LEASH, (byte) 0x0, "Parachute", "ultracosmetics.gadgets.parachute", 45, owner, GadgetType.PARACHUTE, "&7&oGeronimo!");
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
@@ -88,7 +87,7 @@ public class GadgetParachute extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         killParachute();
         HandlerList.unregisterAll(this);
     }

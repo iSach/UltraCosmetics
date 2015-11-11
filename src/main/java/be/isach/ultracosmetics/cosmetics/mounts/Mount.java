@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.cosmetics.mounts.customentities.CustomSlime;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.FlyingSquid;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.RideableSpider;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -54,17 +53,25 @@ public abstract class Mount implements Listener {
     public Entity ent;
     public net.minecraft.server.v1_8_R3.Entity customEnt;
 
+    private String description;
+
     public static List<net.minecraft.server.v1_8_R3.Entity> customEntities = new ArrayList();
 
     public int repeatDelay = 2;
 
-    public Mount(EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final MountType type) {
+    public Mount(EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final MountType type, String defaultDescription) {
         this.material = material;
         this.data = data;
         this.name = configName;
         this.permission = permission;
         this.type = type;
         this.entityType = entityType;
+        if (SettingsManager.getConfig().get("Mounts." + configName + ".Description") == null) {
+            this.description = defaultDescription;
+            SettingsManager.getConfig().set("Mounts." + configName + ".Description", getDescription());
+        } else {
+            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Mounts." + configName + ".Description")));
+        }
         if (owner != null) {
             this.owner = owner;
             if (!getPlayer().hasPermission(permission)) {
@@ -295,7 +302,30 @@ public abstract class Mount implements Listener {
                 }
             }
         }
+    }
 
+    public List<String> getDescription() {
+        List<String> desc = new ArrayList<>();
+        for (String string : description.split("\n")) {
+            desc.add(string.replace('&', '§'));
+        }
+        return desc;
+    }
+
+    private String fromList(List<String> description) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < description.size(); i++) {
+            stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
+        }
+        return stringBuilder.toString();
+    }
+
+    public boolean showsDescription() {
+        return SettingsManager.getConfig().getBoolean("Mounts." + getConfigName() + ".Show-Description");
+    }
+
+    public boolean canBeFound() {
+        return SettingsManager.getConfig().getBoolean("Mounts." + getConfigName() + ".Can-Be-Found-In-Treasure-Chests");
     }
 
     public enum MountType {

@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.MathUtils;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,7 +22,7 @@ public class MorphPig extends Morph {
     private boolean cooldown = false;
 
     public MorphPig(UUID owner) {
-        super(DisguiseType.PIG, Material.PORK, (byte) 0x0, "Pig", "ultracosmetics.morphs.pig", owner, MorphType.PIG);
+        super(DisguiseType.PIG, Material.PORK, (byte) 0x0, "Pig", "ultracosmetics.morphs.pig", owner, MorphType.PIG, "&7&oMust hold your carrot!");
         if (owner != null) {
 
             final MorphPig pig = this;

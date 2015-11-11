@@ -4,7 +4,10 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.*;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EntityType;
@@ -30,7 +33,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     int radius = 2;
 
     public GadgetPaintballGun(UUID owner) {
-        super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALLGUN);
+        super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALLGUN, "&7&oPEW PEW PEW PEW!!");
         if (owner != null) {
             Core.registerListener(this);
             radius = SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Radius");
@@ -137,7 +140,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for(ArrayList<Projectile> list : projectiles.values()) {
             for(Projectile projectile : list) {
                 projectile.remove();

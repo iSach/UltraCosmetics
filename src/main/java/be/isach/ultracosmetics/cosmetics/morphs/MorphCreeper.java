@@ -30,7 +30,7 @@ public class MorphCreeper extends Morph {
     private double charge = 0;
 
     public MorphCreeper(UUID owner) {
-        super(DisguiseType.CREEPER, Material.SULPHUR, (byte) 0, "Creeper", "ultracosmetics.morphs.creeper", owner, MorphType.CREEPER);
+        super(DisguiseType.CREEPER, Material.SULPHUR, (byte) 0, "Creeper", "ultracosmetics.morphs.creeper", owner, MorphType.CREEPER, "&7&oNice housssssssse you got! Sssssssh");
 
         if (owner != null) {
             CreeperWatcher creeperWatcher = (CreeperWatcher) disguise.getWatcher();

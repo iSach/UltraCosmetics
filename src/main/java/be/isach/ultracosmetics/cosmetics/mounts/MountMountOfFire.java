@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
@@ -26,7 +26,7 @@ import java.util.UUID;
 public class MountMountOfFire extends Mount {
 
     public MountMountOfFire(UUID owner) {
-        super(EntityType.HORSE, Material.BLAZE_POWDER, (byte) 0, "MountOfFire", "ultracosmetics.mounts.mountoffire", owner, MountType.MOUNTOFFIRE);
+        super(EntityType.HORSE, Material.BLAZE_POWDER, (byte) 0, "MountOfFire", "ultracosmetics.mounts.mountoffire", owner, MountType.MOUNTOFFIRE, "&7&oThe mount of Hadès!");
         if (owner != null) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

@@ -1,13 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.util.Title;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.util.Title;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,7 +27,7 @@ public class GadgetRocket extends Gadget {
     public List<Block> blocks = new ArrayList<>();
 
     public GadgetRocket(UUID owner) {
-        super(Material.getMaterial(401), (byte) 0x0, "Rocket", "ultracosmetics.gadgets.rocket", 60, owner, GadgetType.ROCKET);
+        super(Material.getMaterial(401), (byte) 0x0, "Rocket", "ultracosmetics.gadgets.rocket", 60, owner, GadgetType.ROCKET, "&7&oHouston, we have got a problem.");
     }
 
     @Override
@@ -166,7 +165,7 @@ public class GadgetRocket extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (Block block : blocks)
             block.setType(Material.AIR);
         for (FallingBlock fallingBlock : fallingBlocks)

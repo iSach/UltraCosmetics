@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -21,7 +21,7 @@ public class PetDog extends Pet {
     Random r = new Random();
 
     public PetDog(UUID owner) {
-        super(EntityType.WOLF, Material.BONE, (byte) 0x0, "Dog", "ultracosmetics.pets.dog", owner, PetType.DOG);
+        super(EntityType.WOLF, Material.BONE, (byte) 0x0, "Dog", "ultracosmetics.pets.dog", owner, PetType.DOG, "&7&oWoof!");
         if (owner != null) {
             Wolf w = (Wolf) ent;
             w.setTamed(true);

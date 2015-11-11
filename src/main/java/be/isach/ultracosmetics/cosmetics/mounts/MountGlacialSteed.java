@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
@@ -22,7 +22,9 @@ import java.util.UUID;
  */
 public class MountGlacialSteed extends Mount {
     public MountGlacialSteed(UUID owner) {
-        super(EntityType.HORSE, Material.PACKED_ICE, (byte) 0, "GlacialSteed", "ultracosmetics.mounts.glacialsteed", owner, MountType.GLACIALSTEED);
+        super(EntityType.HORSE, Material.PACKED_ICE, (byte) 0, "GlacialSteed", "ultracosmetics.mounts.glacialsteed",
+                owner, MountType.GLACIALSTEED,
+                "&7&oThis mount comes from North Pole!");
         if (ent instanceof Horse) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

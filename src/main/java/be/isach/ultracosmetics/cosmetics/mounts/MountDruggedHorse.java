@@ -21,7 +21,8 @@ import java.util.UUID;
 public class MountDruggedHorse extends Mount {
 
     public MountDruggedHorse(UUID owner) {
-        super(EntityType.HORSE, Material.SUGAR, (byte) 0, "DruggedHorse", "ultracosmetics.mounts.druggedhorse", owner, MountType.DRUGGEDHORSE);
+        super(EntityType.HORSE, Material.SUGAR, (byte) 0, "DruggedHorse", "ultracosmetics.mounts.druggedhorse", owner, MountType.DRUGGEDHORSE,
+                "&7&oThat is just too much!");
 
         if (owner != null) {
 

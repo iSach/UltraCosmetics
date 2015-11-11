@@ -12,7 +12,8 @@ import java.util.UUID;
 public class ParticleEffectInLove extends ParticleEffect {
 
     public ParticleEffectInLove(UUID owner) {
-        super(Effect.HEART, Material.RED_ROSE, (byte) 0x0, "InLove", "ultracosmetics.particleeffects.inlove", owner, ParticleEffectType.INLOVE, 6);
+        super(Effect.HEART, Material.RED_ROSE, (byte) 0x0, "InLove", "ultracosmetics.particleeffects.inlove", owner, ParticleEffectType.INLOVE, 6,
+                "&7&oOMG, I am in love!");
     }
 
     @Override

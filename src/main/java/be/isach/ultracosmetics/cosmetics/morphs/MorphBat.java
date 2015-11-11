@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 public class MorphBat extends Morph {
     public MorphBat(UUID owner) {
-        super(DisguiseType.BAT, Material.COAL, (byte) 0, "Bat", "ultracosmetics.morphs.bat", owner, MorphType.BAT);
+        super(DisguiseType.BAT, Material.COAL, (byte) 0, "Bat", "ultracosmetics.morphs.bat", owner, MorphType.BAT, "&7&oBecome a bat!");
         Core.registerListener(this);
         if (owner != null)
             getPlayer().setAllowFlight(true);

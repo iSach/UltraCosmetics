@@ -19,7 +19,7 @@ public class SettingsManager {
     private static SettingsManager messages = new SettingsManager("messages");
 
     private File file;
-    private FileConfiguration fileConfiguration;
+    public FileConfiguration fileConfiguration;
 
     /**
      * Creates a new file and defines fileConfiguration and file.
@@ -98,6 +98,36 @@ public class SettingsManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Get a boolean in config from a path.
+     *
+     * @param path The path in config to the boolean.
+     * @return The boolean found in config from the given path.
+     */
+    public boolean getBoolean(String path) {
+        return (boolean) get(path);
+    }
+
+    /**
+     * Get a int in config from a path.
+     *
+     * @param path The path in config to the int.
+     * @return The int found in config from the given path.
+     */
+    public int getInt(String path) {
+        return (int) get(path);
+    }
+
+    /**
+     * Get a double in config from a path.
+     *
+     * @param path The path in config to the double.
+     * @return The double found in config from the given path.
+     */
+    public double getDouble(String path) {
+        return (double) get(path);
     }
 
     /**

@@ -28,7 +28,7 @@ public class GadgetColorBomb extends Gadget {
     private boolean running = false;
 
     public GadgetColorBomb(UUID owner) {
-        super(Material.WOOL, (byte) 0x3, "ColorBomb", "ultracosmetics.gadgets.colorbomb", 30, owner, GadgetType.COLORBOMB);
+        super(Material.WOOL, (byte) 0x3, "ColorBomb", "ultracosmetics.gadgets.colorbomb", 30, owner, GadgetType.COLORBOMB, "&7&oA colorful bomb!");
 
     }
 
@@ -49,7 +49,7 @@ public class GadgetColorBomb extends Gadget {
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
-                    clear();
+                    onClear();
                 }
             }, 100);
         }
@@ -96,7 +96,7 @@ public class GadgetColorBomb extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         if (bomb != null) {
             bomb.remove();
             bomb = null;

@@ -18,12 +18,10 @@ public class ParticleEffectFrostLord extends ParticleEffect {
     float stepY = 0;
     float radius = 1.5f;
 
-
     public ParticleEffectFrostLord(UUID owner) {
-        super(Effect.SNOW_SHOVEL, Material.PACKED_ICE, (byte) 0x0, "FrostLord", "ultracosmetics.particleeffects.frostlord", owner, ParticleEffectType.FROSTLORD, 2);
-        if (owner != null) {
-
-        }
+        super(Effect.SNOW_SHOVEL, Material.PACKED_ICE, (byte) 0x0, "FrostLord", "ultracosmetics.particleeffects.frostlord",
+                owner, ParticleEffectType.FROSTLORD, 2,
+                "&7&oI am the almighty frostlord!");
     }
 
     @Override

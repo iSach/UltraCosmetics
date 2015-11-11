@@ -3,11 +3,9 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.util.Vector;
 
@@ -22,7 +20,7 @@ public class PetPumpling extends Pet {
     Random r = new Random();
 
     public PetPumpling(UUID owner) {
-        super(EntityType.ZOMBIE, Material.PUMPKIN, (byte) 0x0, "Pumpling", "ultracosmetics.pets.pumpling", owner, PetType.PUMPLING);
+        super(EntityType.ZOMBIE, Material.PUMPKIN, (byte) 0x0, "Pumpling", "ultracosmetics.pets.pumpling", owner, PetType.PUMPLING, "&7&oI am just a little pumpkin");
         if (owner != null) {
 
         }

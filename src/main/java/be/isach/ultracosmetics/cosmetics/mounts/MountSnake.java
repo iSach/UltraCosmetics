@@ -4,8 +4,6 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import net.minecraft.server.v1_8_R3.EntityCreature;
-import net.minecraft.server.v1_8_R3.Navigation;
-import net.minecraft.server.v1_8_R3.PathEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -31,7 +29,7 @@ public class MountSnake extends Mount {
 
 
     public MountSnake(UUID owner) {
-        super(EntityType.SHEEP, Material.SEEDS, (byte) 0, "Snake", "ultracosmetics.mounts.snake", owner, MountType.SNAKE);
+        super(EntityType.SHEEP, Material.SEEDS, (byte) 0, "Snake", "ultracosmetics.mounts.snake", owner, MountType.SNAKE, "&7&oWatch out it may bite.");
 
         if (owner == null) return;
         color = MathUtils.randomRangeInt(0, 14);

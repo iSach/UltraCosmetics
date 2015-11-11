@@ -17,7 +17,7 @@ import java.util.UUID;
 public class MountWalkingDead extends Mount {
 
     public MountWalkingDead(UUID owner) {
-        super(EntityType.HORSE, Material.ROTTEN_FLESH, (byte) 0, "WalkingDead", "ultracosmetics.mounts.walkingdead", owner, MountType.WALKINGDEAD);
+        super(EntityType.HORSE, Material.ROTTEN_FLESH, (byte) 0, "WalkingDead", "ultracosmetics.mounts.walkingdead", owner, MountType.WALKINGDEAD, "&7&oGraaaw..");
         if (owner != null) {
             Horse horse = (Horse) ent;
             horse.setVariant(Horse.Variant.UNDEAD_HORSE);

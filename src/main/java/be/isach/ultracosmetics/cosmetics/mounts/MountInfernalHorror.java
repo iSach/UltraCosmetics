@@ -17,7 +17,7 @@ import java.util.UUID;
 public class MountInfernalHorror extends Mount {
 
     public MountInfernalHorror(UUID owner) {
-        super(EntityType.HORSE, Material.BONE, (byte) 0, "InfernalHorror", "ultracosmetics.mounts.infernalhorror", owner, MountType.INFERNALHORROR);
+        super(EntityType.HORSE, Material.BONE, (byte) 0, "InfernalHorror", "ultracosmetics.mounts.infernalhorror", owner, MountType.INFERNALHORROR, "&7&oThis mount directly comes from hell!");
         if (ent instanceof Horse) {
             Horse horse = (Horse) ent;
             horse.setVariant(Horse.Variant.SKELETON_HORSE);

@@ -20,7 +20,7 @@ public class PetKitty extends Pet {
     Random r = new Random();
 
     public PetKitty(UUID owner) {
-        super(EntityType.OCELOT, Material.RAW_FISH, (byte) 0x0, "Kitty", "ultracosmetics.pets.kitty", owner, PetType.KITTY);
+        super(EntityType.OCELOT, Material.RAW_FISH, (byte) 0x0, "Kitty", "ultracosmetics.pets.kitty", owner, PetType.KITTY, "&7&oMeoooow!");
         if (owner != null) {
             Ocelot ocelot = (Ocelot) ent;
             ocelot.setTamed(true);

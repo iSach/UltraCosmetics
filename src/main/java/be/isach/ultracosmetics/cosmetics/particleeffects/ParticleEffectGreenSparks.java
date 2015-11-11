@@ -17,7 +17,8 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
     int step;
 
     public ParticleEffectGreenSparks(UUID owner) {
-        super(Effect.HAPPY_VILLAGER, Material.EMERALD, (byte) 0x0, "GreenSparks", "ultracosmetics.particleeffects.greensparks", owner, ParticleEffectType.GREENSPARKS, 1);
+        super(Effect.HAPPY_VILLAGER, Material.EMERALD, (byte) 0x0, "GreenSparks", "ultracosmetics.particleeffects.greensparks", owner, ParticleEffectType.GREENSPARKS, 1,
+                "&7&oLittle green sparkly sparks!");
     }
 
     @Override

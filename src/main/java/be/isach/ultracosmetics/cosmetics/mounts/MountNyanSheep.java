@@ -1,10 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.UtilParticles;
 import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
 import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.Song;
-import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityCreature;
 import net.minecraft.server.v1_8_R3.Navigation;
 import org.bukkit.*;
@@ -28,7 +28,7 @@ import java.util.UUID;
 public class MountNyanSheep extends Mount {
 
     public MountNyanSheep(UUID owner) {
-        super(EntityType.SHEEP, Material.STAINED_GLASS, (byte) new Random().nextInt(15), "NyanSheep", "ultracosmetics.mounts.nyansheep", owner, MountType.NYANSHEEP);
+        super(EntityType.SHEEP, Material.STAINED_GLASS, (byte) new Random().nextInt(15), "NyanSheep", "ultracosmetics.mounts.nyansheep", owner, MountType.NYANSHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan");
 
         if (owner == null) return;
         ((LivingEntity) ent).setNoDamageTicks(Integer.MAX_VALUE);

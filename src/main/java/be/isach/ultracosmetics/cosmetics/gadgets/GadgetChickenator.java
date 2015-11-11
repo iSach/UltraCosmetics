@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.*;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
@@ -24,7 +24,7 @@ public class GadgetChickenator extends Gadget {
     ArrayList<Item> items = new ArrayList<>();
 
     public GadgetChickenator(UUID owner) {
-        super(Material.COOKED_CHICKEN, (byte) 0x0, "Chickenator", "ultracosmetics.gadgets.chickenator", 2, owner, GadgetType.CHICKENATOR);
+        super(Material.COOKED_CHICKEN, (byte) 0x0, "Chickenator", "ultracosmetics.gadgets.chickenator", 2, owner, GadgetType.CHICKENATOR, "&7&oShoot, boom, KFC");
     }
 
     @Override
@@ -63,7 +63,7 @@ public class GadgetChickenator extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (Item i : items)
             i.remove();
         HandlerList.unregisterAll(this);

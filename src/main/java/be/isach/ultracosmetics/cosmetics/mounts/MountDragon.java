@@ -21,7 +21,8 @@ import java.util.UUID;
 public class MountDragon extends Mount {
 
     public MountDragon(UUID owner) {
-        super(EntityType.ENDER_DRAGON, Material.DRAGON_EGG, (byte) 0, "Dragon", "ultracosmetics.mounts.dragon", owner, MountType.DRAGON);
+        super(EntityType.ENDER_DRAGON, Material.DRAGON_EGG, (byte) 0, "Dragon", "ultracosmetics.mounts.dragon", owner, MountType.DRAGON,
+                "&7&oBecome a dragon rider!");
         if (owner != null)
             Core.registerListener(this);
     }

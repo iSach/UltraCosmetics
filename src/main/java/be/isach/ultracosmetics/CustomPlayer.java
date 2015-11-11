@@ -2,6 +2,7 @@ package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
@@ -64,6 +65,16 @@ public class CustomPlayer {
         }
     }
 
+    public void removeChest() {
+        int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+        if (getPlayer().getInventory().getItem(slot) != null
+                && getPlayer().getInventory().getItem(slot).hasItemMeta()
+                && getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
+                && getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            getPlayer().getInventory().setItem(slot, null);
+        }
+    }
+
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
     }
@@ -73,7 +84,7 @@ public class CustomPlayer {
             if (getPlayer() != null)
                 getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (Core.placeHolderColor) ? currentGadget.getName() : Core.filterColor(currentGadget.getName())));
             currentGadget.removeItem();
-            currentGadget.clear();
+            currentGadget.onClear();
             currentGadget.unregister();
             currentGadget = null;
         }
@@ -146,7 +157,7 @@ public class CustomPlayer {
     }
 
     public void clear() {
-        if (Core.Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+        if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             removeMorph();
             DisguiseAPI.undisguiseToAll(getPlayer());
         }

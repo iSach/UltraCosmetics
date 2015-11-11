@@ -3,9 +3,7 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Effect;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
@@ -15,7 +13,9 @@ import java.util.UUID;
 public class ParticleEffectEnchanted extends ParticleEffect {
 
     public ParticleEffectEnchanted(UUID owner) {
-        super(Effect.FLYING_GLYPH, Material.BOOK, (byte) 0, "Enchanted", "ultracosmetics.particleeffects.enchanted", owner, ParticleEffectType.ENCHANTED, 4);
+        super(Effect.FLYING_GLYPH, Material.BOOK, (byte) 0, "Enchanted", "ultracosmetics.particleeffects.enchanted", owner,
+                ParticleEffectType.ENCHANTED, 4,
+                "&7&oBecome an almighty enchanter!");
     }
 
     @Override

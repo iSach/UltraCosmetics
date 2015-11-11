@@ -13,7 +13,9 @@ import java.util.UUID;
 public class ParticleEffectRainCloud extends ParticleEffect {
 
     public ParticleEffectRainCloud(UUID owner) {
-        super(Effect.WATERDRIP, Material.INK_SACK, (byte) 0x4, "RainCloud", "ultracosmetics.particleeffects.raincloud", owner, ParticleEffectType.RAINCLOUD, 1);
+        super(Effect.WATERDRIP, Material.INK_SACK, (byte) 0x4, "RainCloud", "ultracosmetics.particleeffects.raincloud",
+                owner, ParticleEffectType.RAINCLOUD, 1,
+                "&7&oThe weather forecast is\n&7&otelling me it is raining.");
     }
 
     @Override

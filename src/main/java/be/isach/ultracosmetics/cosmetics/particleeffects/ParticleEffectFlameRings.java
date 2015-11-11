@@ -16,7 +16,9 @@ public class ParticleEffectFlameRings extends ParticleEffect {
     float step = 0;
 
     public ParticleEffectFlameRings(UUID owner) {
-        super(Effect.FLAME, Material.BLAZE_POWDER, (byte) 0x0, "FlameRings", "ultracosmetics.particleeffects.flamerings", owner, ParticleEffectType.FLAMERINGS, 1);
+        super(Effect.FLAME, Material.BLAZE_POWDER, (byte) 0x0, "FlameRings", "ultracosmetics.particleeffects.flamerings", owner,
+                ParticleEffectType.FLAMERINGS, 1,
+                "&7&oWatch out, they are hot!");
         if (owner != null) {
 
         }

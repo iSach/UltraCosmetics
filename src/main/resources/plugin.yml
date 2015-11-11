@@ -1,6 +1,6 @@
 name: UltraCosmetics
 author: iSach
-version: Pre-Release 1.1.4
+version: Release 1.2
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core
 softdepend: [LibsDisguises, NoteBlockAPI, Vault]
@@ -73,6 +73,7 @@ permissions:
       - ultracosmetics.gadgets.quakegun
       - ultracosmetics.gadgets.parachute
       - ultracosmetics.gadgets.ghostparty
+      - ultracosmetics.gadgets.firework
   ultracosmetics.gadgets.paintballgun:
     default: op
   ultracosmetics.gadgets.batblaster:
@@ -117,6 +118,8 @@ permissions:
     default: op
   ultracosmetics.gadgets.ghostparty:
     default: op
+  ultracosmetics.gadgets.firework:
+    default: op
   ultracosmetics.particleeffecs.*:
     children:
       - ultracosmetics.particleeffects.raincloud
@@ -130,6 +133,8 @@ permissions:
       - ultracosmetics.particleeffects.inferno
       - ultracosmetics.particleeffects.frozenwalk
       - ultracosmetics.particleeffects.music
+      - ultracosmetics.particleeffects.angelwings
+      - ultracosmetics.particleeffects.superhero
   ultracosmetics.particleeffects.raincloud:
     default: op
   ultracosmetics.particleeffects.snowcloud:
@@ -151,6 +156,10 @@ permissions:
   ultracosmetics.particleeffects.inferno:
     default: op
   ultracosmetics.particleeffects.enchanted:
+    default: op
+  ultracosmetics.particleeffects.angelwings:
+    default: op
+  ultracosmetics.particleeffects.superhero:
     default: op
   ultracosmetics.mounts.*:
     children:

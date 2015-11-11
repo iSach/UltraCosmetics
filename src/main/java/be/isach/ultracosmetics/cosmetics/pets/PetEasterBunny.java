@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -22,7 +22,7 @@ public class PetEasterBunny extends Pet {
     Random r = new Random();
 
     public PetEasterBunny(UUID owner) {
-        super(EntityType.RABBIT, Material.CARROT_ITEM, (byte) 0x0, "EasterBunny", "ultracosmetics.pets.easterbunny", owner, PetType.EASTERBUNNY);
+        super(EntityType.RABBIT, Material.CARROT_ITEM, (byte) 0x0, "EasterBunny", "ultracosmetics.pets.easterbunny", owner, PetType.EASTERBUNNY, "&7&oIs it easter yet?");
         if (owner != null) {
             eggDatas.add((byte) 0x32);
             eggDatas.add((byte) 0x3d);

@@ -20,7 +20,7 @@ public class PetSheep extends Pet {
     Random r = new Random();
 
     public PetSheep(UUID owner) {
-        super(EntityType.SHEEP, Material.WOOL, (byte) 0x0, "Sheep", "ultracosmetics.pets.sheep", owner, PetType.SHEEP);
+        super(EntityType.SHEEP, Material.WOOL, (byte) 0x0, "Sheep", "ultracosmetics.pets.sheep", owner, PetType.SHEEP, "&7&oBaaaa, baa");
     }
 
     @Override

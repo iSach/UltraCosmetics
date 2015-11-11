@@ -3,7 +3,9 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.UtilParticles;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import org.bukkit.*;
+import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -17,7 +19,7 @@ import java.util.UUID;
 public class MorphBlaze extends Morph {
 
     public MorphBlaze(UUID owner) {
-        super(DisguiseType.BLAZE, Material.BLAZE_POWDER, (byte) 0, "Blaze", "ultracosmetics.morphs.blaze", owner, MorphType.BLAZE);
+        super(DisguiseType.BLAZE, Material.BLAZE_POWDER, (byte) 0, "Blaze", "ultracosmetics.morphs.blaze", owner, MorphType.BLAZE, "&7&oIt might be hot on there..");
 
         if (owner != null) {
 

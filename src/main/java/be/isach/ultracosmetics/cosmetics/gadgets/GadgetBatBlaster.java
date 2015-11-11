@@ -22,7 +22,7 @@ public class GadgetBatBlaster extends Gadget {
     private HashMap<Player, ArrayList<Bat>> bats = new HashMap();
 
     public GadgetBatBlaster(UUID owner) {
-        super(Material.IRON_BARDING, (byte) 0x0, "BatBlaster", "ultracosmetics.gadgets.batblaster", 7, owner, GadgetType.BATBLASTER);
+        super(Material.IRON_BARDING, (byte) 0x0, "BatBlaster", "ultracosmetics.gadgets.batblaster", 7, owner, GadgetType.BATBLASTER, "&7&oLaunch waves of annoying bats\n&7&oto people you do not like!");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class GadgetBatBlaster extends Gadget {
         Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                clear();
+                onClear();
             }
         }, 60);
     }
@@ -96,7 +96,7 @@ public class GadgetBatBlaster extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         this.isActive.remove(getPlayer());
         this.playerVelocity.remove(getPlayer());
         if (this.bats.containsKey(getPlayer())) {

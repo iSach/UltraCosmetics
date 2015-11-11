@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ public class GadgetBlackHole extends Gadget {
     Item i;
 
     public GadgetBlackHole(UUID owner) {
-        super(Material.STAINED_CLAY, (byte) 0xf, "BlackHole", "ultracosmetics.gadgets.blackhole", 45, owner, GadgetType.BLACKHOLE);
+        super(Material.STAINED_CLAY, (byte) 0xf, "BlackHole", "ultracosmetics.gadgets.blackhole", 45, owner, GadgetType.BLACKHOLE, "&7&oDo not get caught in it...");
     }
 
     @Override
@@ -87,7 +87,7 @@ public class GadgetBlackHole extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         if (i != null)
             i.remove();
         HandlerList.unregisterAll(this);

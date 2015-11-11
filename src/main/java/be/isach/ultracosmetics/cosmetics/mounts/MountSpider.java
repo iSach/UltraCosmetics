@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class MountSpider extends Mount {
     public MountSpider(UUID owner) {
-        super(EntityType.SPIDER, Material.WEB, (byte) 0, "Spider", "ultracosmetics.mounts.spider", owner, MountType.SPIDER);
+        super(EntityType.SPIDER, Material.WEB, (byte) 0, "Spider", "ultracosmetics.mounts.spider", owner, MountType.SPIDER, "&7&oYou are the spider jockey!");
     }
 
     @Override

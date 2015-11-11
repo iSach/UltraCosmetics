@@ -1,12 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
 import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
 import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.Song;
-import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -39,11 +39,11 @@ public class GadgetDiscoBall extends Gadget {
     PositionSongPlayer positionSongPlayer;
 
     public GadgetDiscoBall(UUID owner) {
-        super(Material.BEACON, (byte) 0x0, "DiscoBall", "ultracosmetics.gadgets.discoball", 60, owner, GadgetType.DISCOBALL);
+        super(Material.BEACON, (byte) 0x0, "DiscoBall", "ultracosmetics.gadgets.discoball", 60, owner, GadgetType.DISCOBALL, "&7&oJust, dance!");
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         try {
             running = false;
             armorStand.getWorld().spigot().playEffect(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), Effect.STEP_SOUND, Material.STAINED_CLAY.getId(), 4, 0, 0, 0, 1, 200, 32);
@@ -97,7 +97,7 @@ public class GadgetDiscoBall extends Gadget {
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new BukkitRunnable() {
             @Override
             public void run() {
-                clear();
+                onClear();
             }
         }, 20 * 20);
     }

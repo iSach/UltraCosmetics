@@ -3,13 +3,9 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftBat;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Bat;
 import org.bukkit.event.EventHandler;
@@ -31,7 +27,7 @@ public class GadgetGhostParty extends Gadget {
     Map<Bat, ArmorStand> bats = new HashMap<>();
 
     public GadgetGhostParty(UUID owner) {
-        super(Material.SKULL_ITEM, (byte) 0x0, "GhostParty", "ultracosmetics.gadgets.ghostparty", 45, owner, GadgetType.GHOSTPARTY);
+        super(Material.SKULL_ITEM, (byte) 0x0, "GhostParty", "ultracosmetics.gadgets.ghostparty", 45, owner, GadgetType.GHOSTPARTY, "&7&oWho Ya Gonna Call?\n&f&lGHOST &4&lBUSTERS");
 
         if (owner != null)
             Core.registerListener(this);
@@ -92,7 +88,7 @@ public class GadgetGhostParty extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         killBats();
         HandlerList.unregisterAll(this);
     }

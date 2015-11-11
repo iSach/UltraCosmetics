@@ -117,6 +117,7 @@ public class MessageManager {
         addMessage("Gadgets.Parachute.name", "&f&lParachute");
         addMessage("Gadgets.QuakeGun.name", "&5§lQuake &d&lGun");
         addMessage("Gadgets.GhostParty.name", "&f&lGhost Party");
+        addMessage("Gadgets.Firework.name", "&c&lFirework");
 
         // MOUNTS
         addMessage("Mounts.DruggedHorse.menu-name", "&2&lDrugged Horse");
@@ -165,6 +166,8 @@ public class MessageManager {
         addMessage("Particle-Effects.Enchanted.name", "&7&lEnchanted");
         addMessage("Particle-Effects.Music.name", "&9&lMusic");
         addMessage("Particle-Effects.Inferno.name", "&4&lInferno");
+        addMessage("Particle-Effects.AngelWings.name", "&f&lAngel Wings");
+        addMessage("Particle-Effects.SuperHero.name", "&4&lSuper Hero");
 
         // PETS
         addMessage("Pets.Piggy.menu-name", "&d&lPiggy");

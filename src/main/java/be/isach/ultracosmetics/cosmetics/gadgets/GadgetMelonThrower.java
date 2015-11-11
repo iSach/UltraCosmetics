@@ -1,8 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.CustomPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -32,7 +31,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     ArrayList<Item> melonBlocks = new ArrayList<>();
 
     public GadgetMelonThrower(UUID owner) {
-        super(Material.MELON, (byte) 0x0, "MelonThrower", "ultracosmetics.gadgets.melonthrower", 1.5f, owner, GadgetType.MELONTHROWER);
+        super(Material.MELON, (byte) 0x0, "MelonThrower", "ultracosmetics.gadgets.melonthrower", 1.5f, owner, GadgetType.MELONTHROWER, "&7&oDeliciously fun!\n&7&oEat the melon slices for a\n&7&otemporary speed boost!");
         Core.registerListener(this);
     }
 
@@ -95,7 +94,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (Item melon : melons)
             melon.remove();
 

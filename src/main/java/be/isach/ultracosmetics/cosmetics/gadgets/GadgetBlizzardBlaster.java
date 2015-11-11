@@ -31,7 +31,7 @@ public class GadgetBlizzardBlaster extends Gadget {
     List<ArmorStand> armorStands = new ArrayList<>();
 
     public GadgetBlizzardBlaster(UUID owner) {
-        super(Material.PACKED_ICE, (byte) 0x0, "BlizzardBlaster", "ultracosmetics.gadgets.blizzardblaster", 5, owner, GadgetType.BLIZZARDBLASTER);
+        super(Material.PACKED_ICE, (byte) 0x0, "BlizzardBlaster", "ultracosmetics.gadgets.blizzardblaster", 5, owner, GadgetType.BLIZZARDBLASTER, "&7&oLet it go!");
         instance = this;
     }
 
@@ -110,7 +110,7 @@ public class GadgetBlizzardBlaster extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (ArmorStand as : armorStands)
             as.remove();
         HandlerList.unregisterAll(this);

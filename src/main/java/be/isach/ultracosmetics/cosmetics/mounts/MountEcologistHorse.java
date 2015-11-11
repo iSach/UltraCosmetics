@@ -26,7 +26,8 @@ import java.util.UUID;
 public class MountEcologistHorse extends Mount {
 
     public MountEcologistHorse(UUID owner) {
-        super(EntityType.HORSE, Material.RED_ROSE, (byte) 0, "EcologistHorse", "ultracosmetics.mounts.ecologisthorse", owner, MountType.ECOLOGISTHORSE);
+        super(EntityType.HORSE, Material.RED_ROSE, (byte) 0, "EcologistHorse", "ultracosmetics.mounts.ecologisthorse", owner, MountType.ECOLOGISTHORSE,
+                "&7&oBecome ecologist!");
         if (owner != null) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

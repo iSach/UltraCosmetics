@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -16,10 +15,10 @@ public class ParticleEffectInferno extends ParticleEffect {
     float[] height = {0, 0, 2, 2};
     boolean[] up = {true, false, true, false};
     int[] steps = {0, 0, 0, 0};
-    int[] angleToAdd = {0, 90, 45, 135};
 
     public ParticleEffectInferno(UUID owner) {
-        super(Effect.FLAME, Material.getMaterial(372), (byte) 0x0, "Inferno", "ultracosmetics.particleeffects.inferno", owner, ParticleEffectType.INFERNO, 1);
+        super(Effect.FLAME, Material.getMaterial(372), (byte) 0x0, "Inferno", "ultracosmetics.particleeffects.inferno", owner, ParticleEffectType.INFERNO, 1,
+                "&7&oEffect created by Satan himself!");
     }
 
     @Override

@@ -1,11 +1,12 @@
 package be.isach.ultracosmetics.commands;
 
+import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
-import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -205,7 +206,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                 ArrayList<String> completes = new ArrayList<>();
 
                 ArrayList<String> completeBefore = new ArrayList<>();
-                for (Core.Category category : Core.enabledCategories) {
+                for (Category category : Core.enabledCategories) {
                     completeBefore.add(category.toString().toLowerCase().replace("s", ""));
                 }
 
@@ -255,7 +256,7 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
             ArrayList<String> completeBefore = new ArrayList<>();
             completeBefore.add("toggle");
             completeBefore.add("chest");
-            completeBefore.add("clear");
+            completeBefore.add("onClear");
             completeBefore.add("reload");
             completeBefore.add("give");
             completeBefore.add("menu");

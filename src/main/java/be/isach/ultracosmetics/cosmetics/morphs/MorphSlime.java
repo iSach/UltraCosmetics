@@ -22,7 +22,7 @@ public class MorphSlime extends Morph {
     private boolean cooldown;
 
     public MorphSlime(UUID owner) {
-        super(DisguiseType.SLIME, Material.SLIME_BLOCK, (byte) 0x0, "Slime", "ultracosmetics.morphs.slime", owner, MorphType.SLIME);
+        super(DisguiseType.SLIME, Material.SLIME_BLOCK, (byte) 0x0, "Slime", "ultracosmetics.morphs.slime", owner, MorphType.SLIME, "&7&oSplat splat!");
         Core.registerListener(this);
         if(owner != null) {
             Core.registerListener(this);

@@ -32,7 +32,7 @@ public class GadgetSmashDown extends Gadget {
     GadgetSmashDown instance;
 
     public GadgetSmashDown(UUID owner) {
-        super(Material.FIREWORK_CHARGE, (byte) 0x0, "SmashDown", "ultracosmetics.gadgets.smashdown", 15, owner, GadgetType.SMASHDOWN);
+        super(Material.FIREWORK_CHARGE, (byte) 0x0, "SmashDown", "ultracosmetics.gadgets.smashdown", 15, owner, GadgetType.SMASHDOWN, "&7&oSmash the ground like Hulk!");
         Core.registerListener(this);
         instance = this;
     }
@@ -151,7 +151,7 @@ public class GadgetSmashDown extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (FallingBlock block : fallingBlocks) {
             block.remove();
         }

@@ -26,7 +26,7 @@ public class GadgetAntiGravity extends Gadget {
 
 
     public GadgetAntiGravity(UUID owner) {
-        super(Material.EYE_OF_ENDER, (byte) 0x0, "AntiGravity", "ultracosmetics.gadgets.antigravity", 30, owner, GadgetType.ANTIGRAVITY);
+        super(Material.EYE_OF_ENDER, (byte) 0x0, "AntiGravity", "ultracosmetics.gadgets.antigravity", 30, owner, GadgetType.ANTIGRAVITY, "&7&oIf you do not like gravity\n&7&oThis gadget is made for you!");
         Core.registerListener(this);
     }
 
@@ -91,7 +91,7 @@ public class GadgetAntiGravity extends Gadget {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         if (as != null)
             as.remove();
         HandlerList.unregisterAll(this);

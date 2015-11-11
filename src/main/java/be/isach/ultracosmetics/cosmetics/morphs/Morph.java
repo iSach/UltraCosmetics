@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -31,13 +33,21 @@ public abstract class Morph implements Listener {
 
     public UUID owner;
 
-    public Morph(DisguiseType disguiseType, Material material, Byte data, String configName, String permission, final UUID owner, final MorphType type) {
+    private String description;
+
+    public Morph(DisguiseType disguiseType, Material material, Byte data, String configName, String permission, final UUID owner, final MorphType type, String defaultDesc) {
         this.material = material;
         this.data = data;
         this.name = configName;
         this.permission = permission;
         this.type = type;
         this.disguiseType = disguiseType;
+        if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
+            this.description = defaultDesc;
+            SettingsManager.getConfig().set("Gadgets." + configName + ".Description", getDescription());
+        } else {
+            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
+        }
         if (owner != null) {
             this.owner = owner;
             if (Core.getCustomPlayer(getPlayer()).currentMorph != null)
@@ -98,6 +108,30 @@ public abstract class Morph implements Listener {
 
     protected Player getPlayer() {
         return Bukkit.getPlayer(owner);
+    }
+
+    public List<String> getDescription() {
+        List<String> desc = new ArrayList<>();
+        for (String string : description.split("\n")) {
+            desc.add(string.replace('&', '§'));
+        }
+        return desc;
+    }
+
+    private String fromList(List<String> description) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < description.size(); i++) {
+            stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
+        }
+        return stringBuilder.toString();
+    }
+
+    public boolean showsDescription() {
+        return SettingsManager.getConfig().getBoolean("Morphs." + getConfigName() + ".Show-Description");
+    }
+
+    public boolean canBeFound() {
+        return SettingsManager.getConfig().getBoolean("Morphs." + getConfigName() + ".Can-Be-Found-In-Treasure-Chests");
     }
 
     public enum MorphType {
