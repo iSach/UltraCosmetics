@@ -3,10 +3,10 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
@@ -52,6 +52,6 @@ public class MountGlacialSteed extends Mount {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.SNOW_SHOVEL, 0, 0, 0.4f, 0.2f, 0.4f, 0, 5);
+        UtilParticles.play(Particles.SNOW_SHOVEL, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
     }
 }

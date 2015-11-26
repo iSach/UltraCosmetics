@@ -2,8 +2,12 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
@@ -35,7 +39,7 @@ public class GadgetPortalGun extends Gadget {
     @Override
     void onInteractRightClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 1.5f);
-        UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Effect.COLOURED_DUST, 100, -255, -255, 255);
+        UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Particles.REDSTONE, 100, 0, 0, 255);
         locBlue = getPlayer().getTargetBlock((Set<Material>) null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks((Set<Material>) null, 20);
         blueBlockFace = getBlockFace(b.get(0), b.get(1));
@@ -57,7 +61,7 @@ public class GadgetPortalGun extends Gadget {
     @Override
     void onInteractLeftClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 1.5f);
-        UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Effect.COLOURED_DUST, 100, 255, -255, -255);
+        UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Particles.REDSTONE, 100, 255, 0, 0);
         locRed = getPlayer().getTargetBlock((Set<Material>) null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks((Set<Material>) null, 20);
         redBlockFace = getBlockFace(b.get(0), b.get(1));
@@ -186,10 +190,7 @@ public class GadgetPortalGun extends Gadget {
                     }
                 }
                 MathUtils.rotateVector(v, x, 0, z);
-                float finalR = -255 / 255;
-                float finalG = -255 / 255;
-                float finalB = 255 / 255;
-                UtilParticles.play(loc.add(v), Effect.COLOURED_DUST, 0, 0, finalR, finalG, finalB, 1f, 0);
+                UtilParticles.play(0, 0, 255, loc.add(v));
             }
         }
         if (locRed != null) {
@@ -245,10 +246,7 @@ public class GadgetPortalGun extends Gadget {
                     }
                 }
                 MathUtils.rotateVector(v, x, 0, z);
-                float finalR = 255 / 255;
-                float finalG = -255 / 255;
-                float finalB = -255 / 255;
-                UtilParticles.play(loc.add(v), Effect.COLOURED_DUST, 0, 0, finalR, finalG, finalB, 1f, 0);
+                UtilParticles.play(255, 0, 0, loc.add(v));
             }
         }
 

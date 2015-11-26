@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
 import org.bukkit.entity.EntityType;
@@ -30,7 +30,7 @@ public class MountWalkingDead extends Mount {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.POTION_SWIRL_TRANSPARENT, 0, 0, 0.4f, 0.2f, 0.4f, 0, 5);
-        UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.MAGIC_CRIT, 0, 0, 0.4f, 0.2f, 0.4f, 0, 5);
+        UtilParticles.play(Particles.CRIT_MAGIC, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
+        UtilParticles.play(Particles.SPELL_MOB_AMBIENT, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
     }
 }

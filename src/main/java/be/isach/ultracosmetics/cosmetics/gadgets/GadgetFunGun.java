@@ -1,8 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -44,8 +48,8 @@ public class GadgetFunGun extends Gadget {
         for (Projectile snowball : projectiles)
             snowball.remove();
 
-        UtilParticles.play(location, Effect.LAVA_POP, 0, 0, 1.3f, 1f, 1.3f, 0, 16);
-        UtilParticles.play(location, Effect.HEART, 0, 0, 0.8f, 0.8f, 0.8f, 0, 20);
+        UtilParticles.play(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
+        UtilParticles.play(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
         location.getWorld().playSound(location, Sound.CAT_MEOW, 2, 1);
     }
 

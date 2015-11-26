@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -10,7 +11,6 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -59,7 +59,7 @@ public class MorphCreeper extends Morph {
                                 disguise.setViewSelfDisguise(false);
                         }
                         if (charge == 100) {
-                            UtilParticles.play(getPlayer().getLocation(), Effect.EXPLOSION_HUGE);
+                            UtilParticles.play(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.EXPLODE, 1, 1);
 
                             for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {

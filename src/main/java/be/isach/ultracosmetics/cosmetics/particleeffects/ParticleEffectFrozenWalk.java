@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
-import org.bukkit.Effect;
+import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -13,7 +13,7 @@ import java.util.UUID;
 public class ParticleEffectFrozenWalk extends ParticleEffect {
 
     public ParticleEffectFrozenWalk(UUID owner) {
-        super(Effect.ITEM_BREAK, Material.SNOW_BALL, (byte) 0, "FrozenWalk", "ultracosmetics.particleeffects.frozenwalk", owner, ParticleEffectType.FROZENWALK, 1,
+        super(Particles.ITEM_CRACK, Material.SNOW_BALL, (byte) 0, "FrozenWalk", "ultracosmetics.particleeffects.frozenwalk", owner, ParticleEffectType.FROZENWALK, 1,
                 "&7&oMy feet are so cold!");
     }
 
@@ -26,8 +26,8 @@ public class ParticleEffectFrozenWalk extends ParticleEffect {
         locationLeft.setY(getPlayer().getLocation().getY());
         locationRight.setY(getPlayer().getLocation().getY());
 
-        be.isach.ultracosmetics.util.ParticleEffect.ITEM_CRACK.display(new be.isach.ultracosmetics.util.ParticleEffect.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationLeft, 32);
-        be.isach.ultracosmetics.util.ParticleEffect.ITEM_CRACK.display(new be.isach.ultracosmetics.util.ParticleEffect.ItemData(Material.SNOW, (byte)0), 0, 0, 0, 0f, 0, locationRight, 32);
+        Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationLeft, 32);
+        Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationRight, 32);
     }
 
     public static Vector getLeftVector(Location loc) {

@@ -577,7 +577,9 @@ public class UltraCosmeticsCommand implements CommandExecutor {
     public String getHelp() {
         return "\n§r"
                 + "  §f§lUltra Cosmetics Help (/uc)" + "\n§r"
-                + "      §7§lA plugin by §b§liSach §7§l| §ohttp://bit.ly/UltraCosmetics\n§r"
+                + "      §7§lA plugin by §b§liSach §7§l" +
+                "" +
+                "| §ohttp://bit.ly/UltraCosmetics\n§r"
                 + "      §8┃ §7/uc reload §fReloads the config" + "\n§r"
                 + "      §8┃ §7/uc menu [menu] §fOpens a menu" + "\n§r"
                 + "      §8┃ §7/uc toggle <type> <cosmetic> [player] §fToggles a gadget" + "\n§r"

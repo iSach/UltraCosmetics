@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
 import org.bukkit.entity.EntityType;
@@ -30,6 +30,6 @@ public class MountInfernalHorror extends Mount {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.FLAME, 0, 0, 0.4f, 0.2f, 0.4f, 0, 5);
+        UtilParticles.play(Particles.FLAME, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
     }
 }

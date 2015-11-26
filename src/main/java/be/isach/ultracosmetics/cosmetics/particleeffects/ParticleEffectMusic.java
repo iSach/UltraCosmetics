@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.util.MathUtils;
-import org.bukkit.Effect;
+import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Material;
 
 import java.util.Random;
@@ -13,7 +13,7 @@ import java.util.UUID;
 public class ParticleEffectMusic extends ParticleEffect {
 
     public ParticleEffectMusic(UUID owner) {
-        super(Effect.NOTE, Material.JUKEBOX, (byte) 0, "Music", "ultracosmetics.particleeffects.music", owner, ParticleEffectType.MUSIC, 4,
+        super(Particles.NOTE, Material.JUKEBOX, (byte) 0, "Music", "ultracosmetics.particleeffects.music", owner, ParticleEffectType.MUSIC, 4,
                 "&7&oMuch music");
     }
 
@@ -22,8 +22,8 @@ public class ParticleEffectMusic extends ParticleEffect {
         for (int i = 0; i < 12; i++) {
             Random random = new Random();
             int j = random.nextInt(25);
-            be.isach.ultracosmetics.util.ParticleEffect.ParticleColor particleColor = new be.isach.ultracosmetics.util.ParticleEffect.NoteColor(j);
-            be.isach.ultracosmetics.util.ParticleEffect.NOTE.display(particleColor, getPlayer().getLocation().add(MathUtils.randomDouble(-1.5, 1.5),
+            Particles.ParticleColor particleColor = new Particles.NoteColor(j);
+            Particles.NOTE.display(particleColor, getPlayer().getLocation().add(MathUtils.randomDouble(-1.5, 1.5),
                     MathUtils.randomDouble(0, 2.5), MathUtils.randomDouble(-1.5, 1.5)), 32);
         }
     }

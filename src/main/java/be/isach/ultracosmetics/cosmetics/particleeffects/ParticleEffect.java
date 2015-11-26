@@ -4,9 +4,9 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,13 +40,13 @@ public abstract class ParticleEffect implements Listener {
 
     private Listener listener;
 
-    private Effect effect;
+    private Particles effect;
 
     private String description;
 
     protected boolean ignoreMove = false;
 
-    public ParticleEffect(final Effect effect, Material material, Byte data, String configName, String permission, final UUID owner, final ParticleEffectType type, int repeatDelay, String defaultDesc) {
+    public ParticleEffect(final Particles effect, Material material, Byte data, String configName, String permission, final UUID owner, final ParticleEffectType type, int repeatDelay, String defaultDesc) {
         this.material = material;
         this.data = data;
         this.name = configName;
@@ -81,12 +81,12 @@ public abstract class ParticleEffect implements Listener {
                                 if (!moving || ignoreMove)
                                     onUpdate();
                                 if (moving) {
-                                    if (effect == Effect.COLOURED_DUST) {
+                                    if (effect == Particles.REDSTONE)
                                         if (!ignoreMove)
                                             for (int i = 0; i < 15; i++)
-                                                UtilParticles.play(getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), effect, 0, 0, 1, 1, 1, 1, 0);
-                                    } else
-                                        UtilParticles.play(getPlayer().getLocation().add(0, 1, 0), effect, 0, 0, .4f, .3f, .4f, 0, 3);
+                                                effect.display(new Particles.OrdinaryColor(255, 255, 255), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
+                                        else
+                                            UtilParticles.play(effect, .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
                                     moving = false;
                                 }
                             } else
@@ -109,7 +109,7 @@ public abstract class ParticleEffect implements Listener {
         }
     }
 
-    public Effect getEffect() {
+    public Particles getEffect() {
         return effect;
     }
 

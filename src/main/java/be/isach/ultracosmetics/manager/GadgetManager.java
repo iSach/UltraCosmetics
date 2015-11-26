@@ -78,10 +78,6 @@ public class GadgetManager implements Listener {
                 continue;
             }
 
-            String lore = null;
-            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
-                lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(g.getType().getPermission()) ? "Yes" : "No")))));
-            }
             String toggle = MessageManager.getMessage("Menu.Activate");
             CustomPlayer cp = Core.getCustomPlayer(p);
             if (cp.currentGadget != null && cp.currentGadget.getType() == g.getType())
@@ -89,25 +85,27 @@ public class GadgetManager implements Listener {
             ItemStack is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName());
             if (cp.currentGadget != null && cp.currentGadget.getType() == g.getType())
                 is = ItemFactory.addGlow(is);
+            ItemMeta itemMeta = is.getItemMeta();
+            List<String> loreList = new ArrayList<>();
             if (Core.isAmmoEnabled() && g.getType().requiresAmmo()) {
-                ItemMeta itemMeta = is.getItemMeta();
-                List<String> loreList = new ArrayList<>();
                 if (itemMeta.hasLore())
                     loreList = itemMeta.getLore();
-                if (g.showsDescription()) {
-                    loreList.add("");
-                    for (String s : g.getDescription())
-                        loreList.add(s);
-                    loreList.add("");
-                }
-                if (lore != null)
-                    loreList.add(lore);
                 loreList.add("");
                 loreList.add(MessageManager.getMessage("Ammo").replace("%ammo%", "" + Core.getCustomPlayer(p).getAmmo(g.getType().toString().toLowerCase())));
                 loreList.add(MessageManager.getMessage("Right-Click-Buy-Ammo"));
-                itemMeta.setLore(loreList);
-                is.setItemMeta(itemMeta);
             }
+            if (g.showsDescription()) {
+                loreList.add("");
+                for (String s : g.getDescription())
+                    loreList.add(s);
+                loreList.add("");
+            }
+            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore"))
+                loreList.add(ChatColor.translateAlternateColorCodes('&',
+                        String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" +
+                                ((p.hasPermission(g.getType().getPermission()) ? "Yes" : "No"))))));
+            itemMeta.setLore(loreList);
+            is.setItemMeta(itemMeta);
             inv.setItem(i, is);
             if (i == 25 || i == 34 || i == 16) {
                 i += 3;

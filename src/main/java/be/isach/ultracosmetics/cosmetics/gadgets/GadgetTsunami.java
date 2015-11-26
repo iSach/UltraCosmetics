@@ -57,11 +57,8 @@ public class GadgetTsunami extends Gadget {
                     loc.getWorld().spigot().playEffect(loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1.3, 1.8) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), Effect.CLOUD, 0, 0, 0.2f, 0.2f, 0.2f, 0f, 1, 64);
                     loc.getWorld().spigot().playEffect(loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), Effect.WATERDRIP, 0, 0, 0.5f, 0.5f, 0.5f, 0.4f, 2, 64);
                 }
-                float finalR = -255 / 255;
-                float finalG = -255 / 255;
-                float finalB = 255 / 255;
                 for (int a = 0; a < 100; a++)
-                    UtilParticles.play(loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), Effect.COLOURED_DUST, 0, 0, finalR, finalG, finalB, 1f, 0);
+                    UtilParticles.play(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {

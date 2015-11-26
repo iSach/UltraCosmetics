@@ -59,6 +59,11 @@
         </dependency>
     </dependencies>
 
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://ci.isach.be/job/UltraCosmetics/</url>
+    </ciManagement>
+
     <build>
         <plugins>
             <plugin>

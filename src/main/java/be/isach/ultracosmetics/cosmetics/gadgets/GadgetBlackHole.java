@@ -3,9 +3,9 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -67,7 +67,7 @@ public class GadgetBlackHole extends Gadget {
                     double x = Math.cos(angle) * ratio * radius;
                     double z = Math.sin(angle) * ratio * radius;
                     location.add(x, 0, z);
-                    UtilParticles.play(location, Effect.LARGE_SMOKE);
+                    UtilParticles.play(Particles.SMOKE_LARGE, location);
                     location.subtract(x, 0, z);
                 }
             }

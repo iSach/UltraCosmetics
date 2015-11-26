@@ -7,7 +7,10 @@ import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.Song;
 import net.minecraft.server.v1_8_R3.EntityCreature;
 import net.minecraft.server.v1_8_R3.Navigation;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftCreature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -73,7 +76,9 @@ public class MountNyanSheep extends Mount {
         float y = 1.2f;
         for (RGBColor rgbColor : colors) {
             for (int i = 0; i < 10; i++)
-                UtilParticles.play(ent.getLocation().add(ent.getLocation().getDirection().normalize().multiply(-1).multiply(1.4)).add(0, y, 0), Effect.COLOURED_DUST, 0, 0, rgbColor.getRed() / 255, rgbColor.getGreen() / 255, rgbColor.getBlue() / 255, 1, 0);
+                UtilParticles.play(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getGreen(),
+                        ent.getLocation().add(ent.getLocation().getDirection()
+                                .normalize().multiply(-1).multiply(1.4)).add(0, y, 0));
             y -= 0.2;
         }
     }

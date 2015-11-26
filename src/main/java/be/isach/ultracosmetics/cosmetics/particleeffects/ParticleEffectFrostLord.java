@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,7 +19,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
     float radius = 1.5f;
 
     public ParticleEffectFrostLord(UUID owner) {
-        super(Effect.SNOW_SHOVEL, Material.PACKED_ICE, (byte) 0x0, "FrostLord", "ultracosmetics.particleeffects.frostlord",
+        super(Particles.SNOW_SHOVEL, Material.PACKED_ICE, (byte) 0x0, "FrostLord", "ultracosmetics.particleeffects.frostlord",
                 owner, ParticleEffectType.FROSTLORD, 2,
                 "&7&oI am the almighty frostlord!");
     }
@@ -33,7 +33,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
-            UtilParticles.play(location.add(v).add(0, stepY, 0), Effect.SNOW_SHOVEL);
+            UtilParticles.play(getEffect(), location.add(v).add(0, stepY, 0));
             location.subtract(v).subtract(0, stepY, 0);
             if (stepY < 3) {
                 radius -= 0.022;
@@ -43,7 +43,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                 step = 0;
                 radius = 1.5f;
                 location.getWorld().playSound(location, Sound.DIG_SNOW, .5f, 1.5f);
-                UtilParticles.play(location.clone().add(0, 3, 0), Effect.SNOW_SHOVEL, 0, 0, 0, 0, 0, 0.3f, 40);
+                UtilParticles.play(getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
             }
         }
     }

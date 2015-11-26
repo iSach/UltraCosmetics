@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -14,10 +14,9 @@ import java.util.UUID;
 public class ParticleEffectSuperHero extends ParticleEffect {
 
     boolean x = true;
-    boolean o = false;
 
     public ParticleEffectSuperHero(UUID owner) {
-        super(Effect.COLOURED_DUST, Material.MAGMA_CREAM, (byte) 0, "SuperHero", "ultracosmetics.particleeffects.superhero",
+        super(Particles.REDSTONE, Material.MAGMA_CREAM, (byte) 0, "SuperHero", "ultracosmetics.particleeffects.superhero",
                 owner, ParticleEffectType.SUPERHERO, 2,
                 "&7&oBecome SuperMan!");
         this.ignoreMove = true;
@@ -37,7 +36,7 @@ public class ParticleEffectSuperHero extends ParticleEffect {
     @Override
     void onUpdate() {
         drawParticles(getPlayer().getLocation());
-        UtilParticles.play(getPlayer().getLocation(), Effect.CLOUD, 0, 0, 0.15F, 0.1f, 0.15f, 0, 4);
+        UtilParticles.play(Particles.CLOUD, 0.15F, 0.1f, 0.15f, getPlayer().getLocation(), 4);
     }
 
 
@@ -70,7 +69,7 @@ public class ParticleEffectSuperHero extends ParticleEffect {
                         loc.setY(defY);
 
                     for (int k = 0; k < 3; k++)
-                        location.getWorld().spigot().playEffect(loc, getEffect(), 0, 0, 1, 0, 0, 1, 0, 64);
+                        UtilParticles.play(255, 0, 0, loc);
                     loc.subtract(v2);
                     loc.subtract(v);
                 }

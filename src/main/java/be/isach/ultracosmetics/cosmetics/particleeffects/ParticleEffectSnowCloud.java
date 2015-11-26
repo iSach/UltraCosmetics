@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 
 import java.util.UUID;
@@ -12,15 +12,15 @@ import java.util.UUID;
 public class ParticleEffectSnowCloud extends ParticleEffect {
 
     public ParticleEffectSnowCloud(UUID owner) {
-        super(Effect.SNOW_SHOVEL, Material.SNOW_BALL, (byte) 0x0, "SnowCloud", "ultracosmetics.particleeffects.snowcloud",
+        super(Particles.SNOW_SHOVEL, Material.SNOW_BALL, (byte) 0x0, "SnowCloud", "ultracosmetics.particleeffects.snowcloud",
                 owner, ParticleEffectType.SNOWCLOUD, 1,
                 "&7&oThe weather forecast is\n" + "&7&otelling me it is raining.");
     }
 
     @Override
     void onUpdate() {
-        UtilParticles.play(getPlayer().getLocation().add(0, 3, 0), Effect.CLOUD, 0, 0, 0.5F, 0.1f, 0.5f, 0, 10);
-        UtilParticles.play(getPlayer().getLocation().add(0, 3, 0), Effect.SNOW_SHOVEL, 0, 0, 0.25F, 0.05f, 0.25f, 0, 1);
+        UtilParticles.play(Particles.CLOUD, 0.5F, 0.1f, 0.5f, getPlayer().getLocation().add(0, 3, 0), 10);
+        UtilParticles.play(getEffect(), 0.25F, 0.05f, 0.25f, getPlayer().getLocation().add(0, 3, 0), 1);
     }
 
 }

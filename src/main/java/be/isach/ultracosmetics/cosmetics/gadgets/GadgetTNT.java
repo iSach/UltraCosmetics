@@ -2,8 +2,8 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
@@ -72,7 +72,7 @@ public class GadgetTNT extends Gadget {
     public void onEntityExplode(EntityExplodeEvent event) {
         if (entities.contains(event.getEntity())) {
             event.setCancelled(true);
-            UtilParticles.play(event.getEntity().getLocation(), Effect.EXPLOSION_HUGE);
+            UtilParticles.play(Particles.EXPLOSION_HUGE, event.getEntity().getLocation());
             event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1);
 
             for (Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {

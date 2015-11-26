@@ -1,11 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
 import org.bukkit.entity.EntityType;
@@ -54,10 +55,10 @@ public class MountDruggedHorse extends Mount {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.FIREWORKS_SPARK, 0, 0, 0.4f, 0.2f, 0.4f, 0, 1);
-        UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.SPELL, 0, 0, 0.4f, 0.2f, 0.4f, 0, 5);
-        for (int i = 0; i < 5; i++)
-            UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.POTION_SWIRL_TRANSPARENT, 2, 2, 5 / 255f, 255 / 255f, 0, 1, 0);
-        UtilParticles.play(ent.getLocation().clone().add(0, 1, 0), Effect.WITCH_MAGIC, 0, 0, 0.4f, 0.2f, 0.4f, 0, 5);
+        Location loc = ent.getLocation().add(0, 1, 0);
+        UtilParticles.play(Particles.FIREWORKS_SPARK, 0.4f, 0.2f, 0.4f, loc, 5);
+        UtilParticles.play(Particles.SPELL, 0.4f, 0.2f, 0.4f, loc, 5);
+        UtilParticles.play(Particles.SPELL_MOB_AMBIENT, 0.4f, 0.2f, 0.4f, loc, 5);
+        UtilParticles.play(Particles.SPELL_MOB, 5, 255, 0, loc);
     }
 }

@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
@@ -36,8 +36,8 @@ public class MorphBlaze extends Morph {
                     }
 
                     if (getPlayer().isSneaking()) {
-                        UtilParticles.play(getPlayer().getLocation(), Effect.LAVA_POP);
-                        UtilParticles.play(getPlayer().getLocation(), Effect.FLAME);
+                        UtilParticles.play(Particles.FLAME, getPlayer().getLocation());
+                        UtilParticles.play(Particles.LAVA, getPlayer().getLocation());
                         getPlayer().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.05f, 1);
                         getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
                     }

@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -16,7 +16,7 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
     double i = 0;
 
     public ParticleEffectBloodHelix(UUID owner) {
-        super(Effect.COLOURED_DUST, Material.REDSTONE, (byte) 0x0, "BloodHelix", "ultracosmetics.particleeffects.bloodhelix", owner,
+        super(Particles.REDSTONE, Material.REDSTONE, (byte) 0x0, "BloodHelix", "ultracosmetics.particleeffects.bloodhelix", owner,
                 ParticleEffectType.BLOODHELIX, 1,
                 "&7&oAncient legend says this magic\n&7&o enpowers the blood of its user,\n&7&ogiving them godly powers");
         repeatDelay = 20;
@@ -36,7 +36,7 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
-            UtilParticles.play(location.add(v), Effect.COLOURED_DUST, 0f);
+            UtilParticles.play(Particles.REDSTONE, location.add(v));
             location.subtract(v);
             location.add(0, 0.12d, 0);
             radius -= 0.044f;
@@ -47,7 +47,7 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius2);
             v.setZ(Math.sin(angle) * radius2);
-            UtilParticles.play(location2.add(v), Effect.COLOURED_DUST, 0f);
+            UtilParticles.play(Particles.REDSTONE, location2.add(v));
             location2.subtract(v);
             location2.add(0, 0.12d, 0);
             radius2 -= 0.044f;

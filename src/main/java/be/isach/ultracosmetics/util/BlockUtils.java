@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.util;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
 import org.bukkit.Bukkit;
@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +54,7 @@ public class BlockUtils {
 
     public static boolean isOnGround(Entity entity) {
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        if(block.getType().isSolid())
+        if (block.getType().isSolid())
             return true;
         return false;
     }
@@ -95,109 +96,125 @@ public class BlockUtils {
     /**
      * Restores the block at the location "loc".
      *
-     * @param loc The location of the block to restore.
+     * @param LOCATION The location of the block to restore.
      */
-    public static void restoreBlockAt(Location loc) {
-        if (!blocksToRestore.containsKey(loc)) return;
-        Block b = loc.getBlock();
-        String s = blocksToRestore.get(loc);
-        Material m = Material.valueOf(s.split(",")[0]);
-        byte d = Byte.valueOf(s.split(",")[1]);
-        b.setType(m);
-        b.setData(d);
-        blocksToRestore.remove(loc);
-    }
-
-    /**
-     * Replaces a block with a new material and data, and after delay, restore it.
-     *
-     * @param b         The block.
-     * @param newType   The new material.
-     * @param newData   The new data.
-     * @param tickDelay The delay after which the block is restored.
-     */
-    public static void setToRestoreIgnoring(final Block b, Material newType, byte newData, int tickDelay) {
-        if (blocksToRestore.containsKey(b.getLocation())) return;
-        if (!blocksToRestore.containsKey(b.getLocation())) {
-            blocksToRestore.put(b.getLocation(), b.getType().toString() + "," + b.getData());
-            b.setType(newType);
-            b.setData(newData);
-            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                @Override
-                public void run() {
-                    restoreBlockAt(b.getLocation());
-
-                }
-            }, tickDelay);
-        }
-    }
-
-    /**
-     * Replaces a block with a new material and data, and after delay, restore it.
-     *
-     * @param b         The block.
-     * @param newType   The new material.
-     * @param newData   The new data.
-     * @param tickDelay The delay after which the block is restored.
-     */
-    public static void setToRestore(final Block b, Material newType, byte newData, int tickDelay) {
-        if (blocksToRestore.containsKey(b.getLocation())) return;
-        Block bUp = b.getRelative(BlockFace.UP);
-        if (b.getType() != Material.AIR
-                && b.getType() != Material.SIGN_POST
-                && b.getType() != Material.CHEST
-                && b.getType() != Material.STONE_PLATE
-                && b.getType() != Material.WOOD_PLATE
-                && b.getType() != Material.WALL_SIGN
-                && b.getType() != Material.WALL_BANNER
-                && b.getType() != Material.STANDING_BANNER
-                && b.getType() != Material.CROPS
-                && b.getType() != Material.LONG_GRASS
-                && b.getType() != Material.SAPLING
-                && b.getType() != Material.DEAD_BUSH
-                && b.getType() != Material.RED_ROSE
-                && b.getType() != Material.RED_MUSHROOM
-                && b.getType() != Material.BROWN_MUSHROOM
-                && b.getType() != Material.TORCH
-                && b.getType() != Material.LADDER
-                && b.getType() != Material.VINE
-                && b.getType() != Material.DOUBLE_PLANT
-                && b.getType() != Material.PORTAL
-                && b.getType() != Material.CACTUS
-                && b.getType() != Material.WATER
-                && b.getType() != Material.STATIONARY_WATER
-                && b.getType() != Material.LAVA
-                && b.getType() != Material.STATIONARY_LAVA
-                && b.getType() != Material.PORTAL
-                && b.getType() != Material.ENDER_PORTAL
-                && b.getType() != Material.SOIL
-                && b.getType() != Material.BARRIER
-                && b.getType() != Material.COMMAND
-                && b.getType() != Material.DROPPER
-                && b.getType() != Material.DISPENSER
-                && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(b.getType().toString().toUpperCase())
-                && !b.getType().toString().toLowerCase().contains("door")
-                && b.getType() != Material.BED
-                && b.getType() != Material.BED_BLOCK
-                && !isPortalBlock(b)
-                && !isRocketBlock(b)
-                && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()
-                && a(bUp)
-                && b.getType().getId() != 43
-                && b.getType().getId() != 44) {
-            if (!blocksToRestore.containsKey(b.getLocation())) {
-                blocksToRestore.put(b.getLocation(), b.getType().toString() + "," + b.getData());
-                b.setType(newType);
-                b.setData(newData);
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        restoreBlockAt(b.getLocation());
-
-                    }
-                }, tickDelay);
+    public static void restoreBlockAt(final Location LOCATION) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                if (!blocksToRestore.containsKey(LOCATION)) return;
+                Block b = LOCATION.getBlock();
+                String s = blocksToRestore.get(LOCATION);
+                Material m = Material.valueOf(s.split(",")[0]);
+                byte d = Byte.valueOf(s.split(",")[1]);
+                for (Player player : b.getLocation().getWorld().getPlayers())
+                    player.sendBlockChange(LOCATION, m, d);
+                blocksToRestore.remove(LOCATION);
             }
-        }
+        });
+    }
+
+    /**
+     * Replaces a block with a new material and data, and after delay, restore it.
+     *
+     * @param BLOCK      The block.
+     * @param NEW_TYPE   The new material.
+     * @param NEW_DATA   The new data.
+     * @param TICK_DELAY The delay after which the block is restored.
+     */
+    public static void setToRestoreIgnoring(final Block BLOCK, final Material NEW_TYPE, final byte NEW_DATA, final int TICK_DELAY) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                if (blocksToRestore.containsKey(BLOCK.getLocation())) return;
+                if (!blocksToRestore.containsKey(BLOCK.getLocation())) {
+                    blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
+                    for (Player player : BLOCK.getLocation().getWorld().getPlayers())
+                        player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
+                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                        @Override
+                        public void run() {
+                            restoreBlockAt(BLOCK.getLocation());
+
+                        }
+                    }, TICK_DELAY);
+                }
+            }
+        });
+    }
+
+    /**
+     * Replaces a block with a new material and data, and after delay, restore it.
+     *
+     * @param BLOCK      The block.
+     * @param NEW_TYPE   The new material.
+     * @param NEW_DATA   The new data.
+     * @param TICK_DELAY The delay after which the block is restored.
+     */
+    public static void setToRestore(final Block BLOCK, final Material NEW_TYPE, final byte NEW_DATA, final int TICK_DELAY) {
+        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                if (blocksToRestore.containsKey(BLOCK.getLocation())) return;
+                Block bUp = BLOCK.getRelative(BlockFace.UP);
+                if (BLOCK.getType() != Material.AIR
+                        && BLOCK.getType() != Material.SIGN_POST
+                        && BLOCK.getType() != Material.CHEST
+                        && BLOCK.getType() != Material.STONE_PLATE
+                        && BLOCK.getType() != Material.WOOD_PLATE
+                        && BLOCK.getType() != Material.WALL_SIGN
+                        && BLOCK.getType() != Material.WALL_BANNER
+                        && BLOCK.getType() != Material.STANDING_BANNER
+                        && BLOCK.getType() != Material.CROPS
+                        && BLOCK.getType() != Material.LONG_GRASS
+                        && BLOCK.getType() != Material.SAPLING
+                        && BLOCK.getType() != Material.DEAD_BUSH
+                        && BLOCK.getType() != Material.RED_ROSE
+                        && BLOCK.getType() != Material.RED_MUSHROOM
+                        && BLOCK.getType() != Material.BROWN_MUSHROOM
+                        && BLOCK.getType() != Material.TORCH
+                        && BLOCK.getType() != Material.LADDER
+                        && BLOCK.getType() != Material.VINE
+                        && BLOCK.getType() != Material.DOUBLE_PLANT
+                        && BLOCK.getType() != Material.PORTAL
+                        && BLOCK.getType() != Material.CACTUS
+                        && BLOCK.getType() != Material.WATER
+                        && BLOCK.getType() != Material.STATIONARY_WATER
+                        && BLOCK.getType() != Material.LAVA
+                        && BLOCK.getType() != Material.STATIONARY_LAVA
+                        && BLOCK.getType() != Material.PORTAL
+                        && BLOCK.getType() != Material.ENDER_PORTAL
+                        && BLOCK.getType() != Material.SOIL
+                        && BLOCK.getType() != Material.BARRIER
+                        && BLOCK.getType() != Material.COMMAND
+                        && BLOCK.getType() != Material.DROPPER
+                        && BLOCK.getType() != Material.DISPENSER
+                        && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(BLOCK.getType().toString().toUpperCase())
+                        && !BLOCK.getType().toString().toLowerCase().contains("door")
+                        && BLOCK.getType() != Material.BED
+                        && BLOCK.getType() != Material.BED_BLOCK
+                        && !isPortalBlock(BLOCK)
+                        && !isRocketBlock(BLOCK)
+                        && net.minecraft.server.v1_8_R3.Block.getById(BLOCK.getTypeId()).getMaterial().isSolid()
+                        && a(bUp)
+                        && BLOCK.getType().getId() != 43
+                        && BLOCK.getType().getId() != 44) {
+                    if (!blocksToRestore.containsKey(BLOCK.getLocation())) {
+                        blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
+                        for (Player player : BLOCK.getLocation().getWorld().getPlayers())
+                            player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
+                        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                            @Override
+                            public void run() {
+                                restoreBlockAt(BLOCK.getLocation());
+
+                            }
+                        }, TICK_DELAY);
+                    }
+                }
+
+            }
+        });
     }
 
     private static boolean a(Block b) {

@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -44,7 +45,7 @@ public class GadgetSmashDown extends Gadget {
         final int taskId = Bukkit.getScheduler().runTaskTimer(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                UtilParticles.play(getPlayer().getLocation(), Effect.CLOUD);
+                UtilParticles.play(Particles.CLOUD, getPlayer().getLocation());
             }
         }, 0, 1).getTaskId();
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {

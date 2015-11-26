@@ -3,12 +3,16 @@ package be.isach.ultracosmetics.cosmetics.treasurechests;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EntityItem;
 import net.minecraft.server.v1_8_R3.TileEntityChest;
 import net.minecraft.server.v1_8_R3.TileEntityEnderChest;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -44,7 +48,7 @@ public class TreasureChest
     TreasureChest instance;
     TreasureRandomizer randomGenerator;
     Location center;
-    Effect particleEffect;
+    Particles particleEffect;
     int chestsLeft = 4;
     private Player player;
     private List<Entity> items = new ArrayList();
@@ -101,10 +105,8 @@ public class TreasureChest
                                             Block b = getChestLocation(i, center.clone()).getBlock();
                                             b.setType(design.getChestType().getType());
                                             getPlayer().playSound(getPlayer().getLocation(), Sound.ANVIL_LAND, 2, 1);
-                                            for (int i = 0; i < 5; i++) {
-                                                UtilParticles.play(b.getLocation(), Effect.LARGE_SMOKE);
-                                                UtilParticles.play(b.getLocation(), Effect.LAVA_POP);
-                                            }
+                                            UtilParticles.play(Particles.SMOKE_LARGE, b.getLocation(), 5);
+                                            UtilParticles.play(Particles.LAVA, b.getLocation(), 5);
                                             BlockFace blockFace = BlockFace.SOUTH;
                                             switch (i) {
                                                 case 4:
@@ -134,7 +136,8 @@ public class TreasureChest
                                             blockState.update();
 
                                             chests.add(b);
-                                            UtilParticles.play(getChestLocation(i, getPlayer().getLocation()), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0, 0, 0, 1, 50);
+                                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()),
+                                                    0f, 0f, 0f, 0f, 1, getChestLocation(i, getPlayer().getLocation()), 128);
                                             i--;
                                         } catch (Exception exc) {
                                             clear();
@@ -157,7 +160,7 @@ public class TreasureChest
                         blocksToRestore.add(lampBlock);
                         lampBlock.setType(design.getCenter().getItemType());
                         lampBlock.setData(design.getCenter().getData());
-                        UtilParticles.play(lampBlock.getLocation(), Effect.STEP_SOUND, lampBlock.getTypeId(), lampBlock.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                        Particles.FOOTSTEP.display(new Particles.BlockData(lampBlock.getType(), lampBlock.getData()), 0f, 0f, 0f, 1f, 50, lampBlock.getLocation());
                     } else if (this.i == 4) {
                         for (Block b : getSurroundingBlocks(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
@@ -165,7 +168,7 @@ public class TreasureChest
                             blocksToRestore.add(b);
                             b.setType(design.getBlocks2().getItemType());
                             b.setData(design.getBlocks2().getData());
-                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 3) {
                         for (Block b : getSurroundingSurrounding(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
@@ -174,7 +177,7 @@ public class TreasureChest
                             blocksToRestore.add(b);
                             b.setType(design.getBlocks3().getItemType());
                             b.setData(design.getBlocks3().getData());
-                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 2) {
                         for (Block b : getBlock3(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
@@ -183,7 +186,7 @@ public class TreasureChest
                             blocksToRestore.add(b);
                             b.setType(design.getBelowChests().getItemType());
                             b.setData(design.getBelowChests().getData());
-                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 1) {
                         for (Block b : getSurroundingSurrounding(center.getBlock())) {
@@ -192,7 +195,7 @@ public class TreasureChest
                             blocksToRestore.add(b);
                             b.setType(design.getBarriers().getItemType());
                             b.setData(design.getBarriers().getData());
-                            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     }
                     this.i -= 1;
@@ -262,7 +265,7 @@ public class TreasureChest
 
     public void clear() {
         for (Block b : this.blocksToRestore) {
-            UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
             b.setType((Material) this.oldMaterials.get(b.getLocation()));
             b.setData(((Byte) this.oldDatas.get(b.getLocation())).byteValue());
         }
@@ -272,11 +275,11 @@ public class TreasureChest
                     for (Entity hologram : holograms)
                         hologram.remove();
                     for (Block b : chestsToRemove) {
-                        UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                        Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         b.setType(Material.AIR);
                     }
                     for (Block b : chests) {
-                        UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                        Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         b.setType(Material.AIR);
                     }
                     if (items != null)
@@ -308,11 +311,11 @@ public class TreasureChest
             for (Entity hologram : this.holograms)
                 hologram.remove();
             for (Block b : this.chestsToRemove) {
-                UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                 b.setType(Material.AIR);
             }
             for (Block b : this.chests) {
-                UtilParticles.play(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), b.getData(), 0.0F, 0.0F, 0.0F, 1.0F, 50);
+                Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                 b.setType(Material.AIR);
             }
             for (Entity ent : this.items)

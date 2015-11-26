@@ -24,6 +24,7 @@ import be.isach.ultracosmetics.util.SQLUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -128,6 +129,8 @@ public class Core extends JavaPlugin {
         new MessageManager();
         registerListener(new PlayerListener());
 
+        setupDefaultConfig();
+
         registerPets();
         registerMounts();
         registerParticleEffects();
@@ -141,7 +144,6 @@ public class Core extends JavaPlugin {
         getCommand("ultracosmetics").setAliases(arrayList);
         getCommand("ultracosmetics").setTabCompleter(new UltraCosmeticsTabCompleter());
 
-        setupDefaultConfig();
         String s = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System"));
         fileStorage = s.equalsIgnoreCase("file");
         placeHolderColor = SettingsManager.getConfig().get("Chat-Cosmetic-PlaceHolder-Color");
@@ -166,8 +168,14 @@ public class Core extends JavaPlugin {
 
         checkTreasureChests();
 
-        if (SettingsManager.getConfig().getBoolean("Check-For-Updates"))
-            checkForUpdate();
+        new Thread() {
+
+            @Override
+            public void run() {
+                if (SettingsManager.getConfig().getBoolean("Check-For-Updates"))
+                    checkForUpdate();
+            }
+        }.run();
 
         setupGadgetsConfig();
 
@@ -191,7 +199,11 @@ public class Core extends JavaPlugin {
                 return;
             }
         }
-        setupEconomy();
+
+        if (ammoEnabled
+                || SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled"))
+            setupEconomy();
+
         startMySQL();
         initPlayers();
 
@@ -205,7 +217,7 @@ public class Core extends JavaPlugin {
             saveResource("songs/NyanCat.nbs", true);
         }
 
-        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
             @Override
             public void run() {
                 if (outdated) {
@@ -217,7 +229,7 @@ public class Core extends JavaPlugin {
             }
         }, 20);
 
-        registerListener(new MainMenuManager(this));
+        registerListener(new MainMenuManager());
         registerListener(new GadgetManager());
         registerListener(new PetManager());
         registerListener(new MountManager());
@@ -505,9 +517,8 @@ public class Core extends JavaPlugin {
     private void setupDefaultConfig() {
         List<String> enabledWorlds = new ArrayList<>();
 
-        enabledWorlds.add("worldEnabled1");
-        enabledWorlds.add("worldEnabled2");
-        enabledWorlds.add("worldEnabled3");
+        for (World world : Bukkit.getWorlds())
+            enabledWorlds.add(world.getName());
 
         addDefault("Enabled-Worlds", enabledWorlds);
 
@@ -519,9 +530,6 @@ public class Core extends JavaPlugin {
         addDefault("Categories-Enabled.Pets", true);
         addDefault("Categories-Enabled.Morphs", true);
         addDefault("Categories-Enabled.Hats", true);
-
-        addDefault("TreasureChests.Enabled", false);
-        addDefault("TreasureChests.Key-Price", 1000);
 
         addDefault("Categories.Gadgets.Main-Menu-Item", "341:0");
         addDefault("Categories.Gadgets.Go-Back-Arrow", true);
@@ -535,6 +543,9 @@ public class Core extends JavaPlugin {
         addDefault("Categories.Morphs.Go-Back-Arrow", true);
         addDefault("Categories.Hats.Main-Menu-Item", "310:0");
         addDefault("Categories.Hats.Go-Back-Arrow", true);
+
+        addDefault("TreasureChests.Enabled", false);
+        addDefault("TreasureChests.Key-Price", 1000);
 
         addDefault("TreasureChests.Loots.Money.Enabled", true);
         addDefault("TreasureChests.Loots.Money.Max", 100);

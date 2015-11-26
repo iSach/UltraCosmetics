@@ -1,12 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.pets.customentities;
 
 import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.Zombie;
 
@@ -80,7 +79,7 @@ public class Pumpling extends EntityZombie {
         super.m();
         if (isCustomEntity) {
             fireTicks = 0;
-            UtilParticles.play(((Zombie) getBukkitEntity()).getEyeLocation(), Effect.FLAME, 0, 0, 0.2f, 0.2f, 0.2f, 0.1f, 3);
+            UtilParticles.play(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
         }
     }
 

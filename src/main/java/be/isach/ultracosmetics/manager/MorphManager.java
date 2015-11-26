@@ -134,6 +134,9 @@ public class MorphManager implements Listener {
     }
 
     public static void activateMorphByType(Morph.MorphType type, final Player PLAYER) {
+        Bukkit.broadcastMessage(type.toString());
+        Bukkit.broadcastMessage(type.getPermission());
+        Bukkit.broadcastMessage(PLAYER.getName());
         if (!PLAYER.hasPermission(type.getPermission())) {
             if (!playerList.contains(PLAYER)) {
                 PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));

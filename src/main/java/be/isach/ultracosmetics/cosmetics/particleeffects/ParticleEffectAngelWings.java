@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
-import org.bukkit.Effect;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
@@ -16,7 +17,7 @@ public class ParticleEffectAngelWings extends ParticleEffect {
     boolean o = false;
 
     public ParticleEffectAngelWings(UUID owner) {
-        super(Effect.COLOURED_DUST, Material.FEATHER, (byte) 0, "AngelWings", "ultracosmetics.particleeffects.angelwings", owner, ParticleEffectType.ANGELWINGS, 4, "&7&oBecome an angel!");
+        super(Particles.REDSTONE, Material.FEATHER, (byte) 0, "AngelWings", "ultracosmetics.particleeffects.angelwings", owner, ParticleEffectType.ANGELWINGS, 4, "&7&oBecome an angel!");
     }
 
     private boolean[][] shape = {
@@ -60,7 +61,7 @@ public class ParticleEffectAngelWings extends ParticleEffect {
                     location.add(v);
                     location.add(v2);
                     for (int k = 0; k < 3; k++)
-                        location.getWorld().spigot().playEffect(location, getEffect(), 0, 0, 1, 1, 1, 1, 0, 64);
+                        UtilParticles.play(255, 255, 255, location);
                     location.subtract(v2);
                     location.subtract(v);
                 }

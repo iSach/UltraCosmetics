@@ -3,8 +3,8 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -106,8 +106,8 @@ public class GadgetPaintballGun extends Gadget implements Listener {
                 BlockUtils.setToRestore(block, Material.getMaterial((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Block-Type")), b, 20 * 3);
             }
             if (SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Particle.Enabled")) {
-                Effect effect = Effect.getByName(((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
-                UtilParticles.play(center.clone().add(0.5f, 1.2f, 0.5F), effect, 0, 0, 2.5f, 0.2f, 2.5f, 1f, 50);
+                Particles effect = Particles.valueOf(((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
+                UtilParticles.play(effect, 2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
             }
             event.getEntity().remove();
         }

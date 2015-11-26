@@ -2,9 +2,9 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Bat;
@@ -81,7 +81,7 @@ public class GadgetGhostParty extends Gadget {
         try {
             if (!bats.isEmpty()) {
                 for (Bat bat : bats.keySet())
-                    UtilParticles.play(bat.getLocation().add(0, 1.5, 0), Effect.CLOUD, 0, 0, 0.05f, 0.05f, 0.05f, 0.02f, 1);
+                    UtilParticles.play(Particles.CLOUD, 0.05f, 0.05f, 0.05f, bat.getLocation().add(0, 1.5, 0), 1);
             }
         } catch (Exception exc) {
         }

@@ -2,12 +2,16 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PathEntity;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Chicken;
@@ -78,7 +82,7 @@ public class MorphChicken extends Morph {
                 public void run() {
                     final List<Chicken> chickens = new ArrayList<>();
                     for (Item i : items) {
-                        UtilParticles.play(i.getLocation(), Effect.STEP_SOUND, Material.STAINED_CLAY.getId(), 0, 0, 0, 0, 0.3f, 50);
+                        Particles.FOOTSTEP.display(new Particles.BlockData(Material.STAINED_CLAY, (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation());
                         i.getWorld().playSound(i.getLocation(), Sound.ZOMBIE_WOODBREAK, 0.05f, 1);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
                         chicken.setAgeLock(true);
@@ -113,7 +117,7 @@ public class MorphChicken extends Morph {
                         @Override
                         public void run() {
                             for (Chicken chicken : chickens) {
-                                UtilParticles.play(chicken.getLocation(), Effect.LAVA_POP, 0, 0, 0, 0, 0, 1, 10);
+                                UtilParticles.play(Particles.LAVA, chicken.getLocation(), 10);
                                 chicken.remove();
                             }
                             chickens.clear();

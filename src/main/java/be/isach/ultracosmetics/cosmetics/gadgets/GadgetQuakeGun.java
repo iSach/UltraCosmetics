@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.CustomEntityFirework;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.*;
@@ -47,7 +48,7 @@ public class GadgetQuakeGun extends Gadget {
                     if ((entity instanceof Player || entity instanceof Creature)
                             && entity != getPlayer()) {
                         MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
-                        UtilParticles.play(entity.getLocation(), Effect.FLAME, 0, 0, 0, 0, 0, 0.4f, 60);
+                        UtilParticles.play(Particles.FLAME, entity.getLocation(), 60, 0.4f);
                         FireworkEffect.Builder builder = FireworkEffect.builder();
                         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                                 .withColor(Color.RED).withFade(Color.ORANGE).build();

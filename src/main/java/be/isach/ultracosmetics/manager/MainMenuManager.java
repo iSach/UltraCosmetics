@@ -24,24 +24,23 @@ import java.util.UUID;
  */
 public class MainMenuManager implements Listener {
 
-    private Core core;
-
-    public MainMenuManager(Core core) {
-        this.core = core;
-    }
-
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null) {
-            event.setCancelled(true);
+    public void onInteract(final PlayerInteractEvent EVENT) {
+        if (Core.getCustomPlayer(EVENT.getPlayer()).currentTreasureChest != null) {
+            EVENT.setCancelled(true);
             return;
         }
-        if (event.getItem() != null
-                && event.getItem().hasItemMeta()
-                && event.getItem().getItemMeta().hasDisplayName()
-                && event.getItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            event.setCancelled(true);
-            openMainMenu(event.getPlayer());
+        if (EVENT.getItem() != null
+                && EVENT.getItem().hasItemMeta()
+                && EVENT.getItem().getItemMeta().hasDisplayName()
+                && EVENT.getItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            EVENT.setCancelled(true);
+            Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    openMainMenu(EVENT.getPlayer());
+                }
+            });
         }
     }
 
