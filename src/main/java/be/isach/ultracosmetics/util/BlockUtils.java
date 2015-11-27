@@ -25,6 +25,8 @@ public class BlockUtils {
 
     public static Map<Location, String> blocksToRestore = new HashMap<>();
 
+    public static List<Block> treasureBlocks = new ArrayList<>();
+
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
         List<Block> blocks = new ArrayList<>();
 
@@ -195,6 +197,7 @@ public class BlockUtils {
                         && BLOCK.getType() != Material.BED_BLOCK
                         && !isPortalBlock(BLOCK)
                         && !isRocketBlock(BLOCK)
+                        && !isTreasureChestBlock(BLOCK)
                         && net.minecraft.server.v1_8_R3.Block.getById(BLOCK.getTypeId()).getMaterial().isSolid()
                         && a(bUp)
                         && BLOCK.getType().getId() != 43
@@ -215,6 +218,10 @@ public class BlockUtils {
 
             }
         });
+    }
+
+    public static boolean isTreasureChestBlock(Block block) {
+        return treasureBlocks.contains(block);
     }
 
     private static boolean a(Block b) {

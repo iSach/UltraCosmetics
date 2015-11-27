@@ -82,7 +82,7 @@ public class MorphChicken extends Morph {
                 public void run() {
                     final List<Chicken> chickens = new ArrayList<>();
                     for (Item i : items) {
-                        Particles.FOOTSTEP.display(new Particles.BlockData(Material.STAINED_CLAY, (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation());
+                        Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.STAINED_CLAY, (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation());
                         i.getWorld().playSound(i.getLocation(), Sound.ZOMBIE_WOODBREAK, 0.05f, 1);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
                         chicken.setAgeLock(true);

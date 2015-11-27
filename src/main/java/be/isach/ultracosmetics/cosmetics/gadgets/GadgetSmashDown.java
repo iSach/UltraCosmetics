@@ -119,6 +119,7 @@ public class GadgetSmashDown extends Gadget {
                                 && b.getType() != Material.LAVA
                                 && b.getType() != Material.STATIONARY_LAVA
                                 && !BlockUtils.isRocketBlock(b)
+                                && !BlockUtils.isTreasureChestBlock(b)
                                 && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()
                                 && b.getType().getId() != 43
                                 && b.getType().getId() != 44

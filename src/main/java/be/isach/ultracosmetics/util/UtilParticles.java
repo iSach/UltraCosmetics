@@ -51,9 +51,9 @@ public class UtilParticles {
                 v.setX(Math.cos(angle) * radius);
                 v.setZ(Math.sin(angle) * radius);
                 if (effect == Particles.REDSTONE)
-                    play(0, 0, 255, loc);
+                    play(0, 0, 255, location);
                 else
-                    play(effect, loc);
+                    play(effect, location);
                 location.subtract(v);
                 location.subtract(0, 0.1d, 0);
                 if (location.getY() <= y) {

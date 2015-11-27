@@ -2,6 +2,8 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntitySheep;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
@@ -152,7 +154,7 @@ public class GadgetExplosiveSheep extends Gadget {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            sheep.getWorld().spigot().playEffect(sheep.getLocation(), Effect.LAVA_POP, 0, 0, 0, 0, 0, 0, 5, 32);
+                            UtilParticles.play(Particles.LAVA, sheep.getLocation(), 5);
                             sheep.remove();
                             Core.explosiveSheep.remove(gadgetExplosiveSheep);
                         }

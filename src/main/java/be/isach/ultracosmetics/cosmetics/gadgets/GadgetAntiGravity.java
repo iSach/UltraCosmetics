@@ -2,8 +2,9 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -62,8 +63,8 @@ public class GadgetAntiGravity extends Gadget {
     void onUpdate() {
         if (as != null && as.isValid()) {
             as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
-            as.getWorld().spigot().playEffect(as.getEyeLocation(), Effect.PORTAL, 0, 0, 3, 3, 3, 0, 150, 64);
-            as.getWorld().spigot().playEffect(as.getEyeLocation(), Effect.WITCH_MAGIC, 0, 0, .3f, 0.3f, 0.3f, 0, 5, 64);
+            UtilParticles.play(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
+            UtilParticles.play(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
             for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
                 if (ent instanceof LivingEntity && !(ent instanceof ArmorStand))
                     MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));

@@ -3,8 +3,9 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -54,20 +55,22 @@ public class GadgetColorBomb extends Gadget {
             }, 100);
         }
         if (running) {
+            Particles effect;
             switch (random.nextInt(5)) {
                 default:
-                    bomb.getWorld().spigot().playEffect(bomb.getLocation(), Effect.FIREWORKS_SPARK, 0, 0, 0, 0, 0, 0.2f, 1, 32);
+                    effect = Particles.FIREWORKS_SPARK;
                     break;
                 case 1:
-                    bomb.getWorld().spigot().playEffect(bomb.getLocation(), Effect.FIREWORKS_SPARK, 0, 0, 0, 0, 0, 0.2f, 1, 32);
+                    effect = Particles.FIREWORKS_SPARK;
                     break;
                 case 4:
-                    bomb.getWorld().spigot().playEffect(bomb.getLocation(), Effect.FLAME, 0, 0, 0, 0, 0, 0.2f, 1, 32);
+                    effect = Particles.FLAME;
                     break;
                 case 5:
-                    bomb.getWorld().spigot().playEffect(bomb.getLocation(), Effect.WITCH_MAGIC, 0, 0, 0, 0, 0, 0.2f, 1, 32);
+                    effect = Particles.SPELL_WITCH;
                     break;
             }
+            UtilParticles.play(effect, bomb.getLocation(), 1, 0.2f);
             try {
                 for (Item item : items) {
                     if (item.getTicksLived() > 15) {

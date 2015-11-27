@@ -1,6 +1,6 @@
 name: UltraCosmetics
 author: iSach
-version: Release 1.2.2
+version: Pre-Release 1.3
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core
 softdepend: [LibsDisguises, NoteBlockAPI, Vault]

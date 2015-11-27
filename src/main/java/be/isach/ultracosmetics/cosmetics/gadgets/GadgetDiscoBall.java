@@ -1,9 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.*;
 import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
 import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.Song;
@@ -107,9 +105,10 @@ public class GadgetDiscoBall extends Gadget {
         if (running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
             armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
-            armorStand.getWorld().spigot().playEffect(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), Effect.SPELL, 0, 0, 0, 0, 0, 1f, 1, 64);
-            armorStand.getWorld().spigot().playEffect(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), Effect.INSTANT_SPELL, 0, 0, 0, 0, 0, 1f, 1, 64);
-            armorStand.getWorld().spigot().playEffect(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), Effect.NOTE, r.nextInt(15), r.nextInt(15), 4, 3, 4, 1f, 1, 64);
+            UtilParticles.play(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
+            UtilParticles.play(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
+            Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
+            Particles.NOTE.display(new Particles.NoteColor(r.nextInt(25)), loc, 128);
             double angle, angle2, x, x2, z, z2;
             angle = 2 * Math.PI * i / 100;
             x = Math.cos(angle) * 4;

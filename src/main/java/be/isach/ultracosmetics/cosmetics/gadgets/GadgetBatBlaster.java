@@ -2,6 +2,8 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.*;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
@@ -85,7 +87,7 @@ public class GadgetBatBlaster extends Gadget {
 
 
                             bat.getWorld().playSound(bat.getLocation(), Sound.BAT_HURT, 1.0F, 1.0F);
-                            bat.getWorld().spigot().playEffect(bat.getLocation(), Effect.SMOKE);
+                            UtilParticles.play(Particles.SMOKE_NORMAL, bat.getLocation());
 
                             bat.remove();
                         }

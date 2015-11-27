@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.treasurechests;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -136,8 +137,8 @@ public class TreasureChest
                                             blockState.update();
 
                                             chests.add(b);
-                                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()),
-                                                    0f, 0f, 0f, 0f, 1, getChestLocation(i, getPlayer().getLocation()), 128);
+//                                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()),
+//                                                    0f, 0f, 0f, 0f, 1, getChestLocation(i, getPlayer().getLocation()), 128);
                                             i--;
                                         } catch (Exception exc) {
                                             clear();
@@ -160,42 +161,47 @@ public class TreasureChest
                         blocksToRestore.add(lampBlock);
                         lampBlock.setType(design.getCenter().getItemType());
                         lampBlock.setData(design.getCenter().getData());
-                        Particles.FOOTSTEP.display(new Particles.BlockData(lampBlock.getType(), lampBlock.getData()), 0f, 0f, 0f, 1f, 50, lampBlock.getLocation());
+//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(lampBlock.getType(), lampBlock.getData()), 0f, 0f, 0f, 1f, 50, lampBlock.getLocation());
                     } else if (this.i == 4) {
                         for (Block b : getSurroundingBlocks(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
                             oldDatas.put(b.getLocation(), Byte.valueOf(b.getData()));
                             blocksToRestore.add(b);
+                            BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBlocks2().getItemType());
                             b.setData(design.getBlocks2().getData());
-                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 3) {
                         for (Block b : getSurroundingSurrounding(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
                             oldDatas.put(b.getLocation(), Byte.valueOf(b.getData()));
                             blocksToRestore.add(b);
+                            BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBlocks3().getItemType());
                             b.setData(design.getBlocks3().getData());
-                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 2) {
                         for (Block b : getBlock3(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
                             oldDatas.put(b.getLocation(), Byte.valueOf(b.getData()));
                             blocksToRestore.add(b);
+                            BlockUtils.treasureBlocks.add(b);
+                            BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBelowChests().getItemType());
                             b.setData(design.getBelowChests().getData());
-                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 1) {
                         for (Block b : getSurroundingSurrounding(center.getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
                             oldDatas.put(b.getLocation(), Byte.valueOf(b.getData()));
                             blocksToRestore.add(b);
+                            BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBarriers().getItemType());
                             b.setData(design.getBarriers().getData());
-                            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     }
                     this.i -= 1;
@@ -265,9 +271,10 @@ public class TreasureChest
 
     public void clear() {
         for (Block b : this.blocksToRestore) {
-            Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
             b.setType((Material) this.oldMaterials.get(b.getLocation()));
             b.setData(((Byte) this.oldDatas.get(b.getLocation())).byteValue());
+            BlockUtils.treasureBlocks.remove(b);
         }
         if (!this.stopping) {
             Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
@@ -275,11 +282,11 @@ public class TreasureChest
                     for (Entity hologram : holograms)
                         hologram.remove();
                     for (Block b : chestsToRemove) {
-                        Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         b.setType(Material.AIR);
                     }
                     for (Block b : chests) {
-                        Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         b.setType(Material.AIR);
                     }
                     if (items != null)
@@ -311,11 +318,11 @@ public class TreasureChest
             for (Entity hologram : this.holograms)
                 hologram.remove();
             for (Block b : this.chestsToRemove) {
-                Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                 b.setType(Material.AIR);
             }
             for (Block b : this.chests) {
-                Particles.FOOTSTEP.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                 b.setType(Material.AIR);
             }
             for (Entity ent : this.items)
