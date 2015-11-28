@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.config;
 
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.CustomConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -74,7 +75,7 @@ public class SettingsManager {
      *
      * @return the messages SettingsManager.
      */
-    public static FileConfiguration getConfig() {
+    public static CustomConfiguration getConfig() {
         return Core.config;
     }
 

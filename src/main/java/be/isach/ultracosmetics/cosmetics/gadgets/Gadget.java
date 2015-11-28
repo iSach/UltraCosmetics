@@ -61,7 +61,7 @@ public abstract class Gadget implements Listener {
         }
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            SettingsManager.getConfig().set("Gadgets." + configName + ".Description", getDescription());
+            Core.config.addDefault("Gadgets." + configName + ".Description", getDescriptionWithColor(), "Description of this gadget.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
         }
@@ -143,6 +143,9 @@ public abstract class Gadget implements Listener {
 
     abstract void onUpdate();
 
+    public List<String> getDescriptionWithColor() {
+        return Arrays.asList(description.split("\n"));
+    }
 
     public abstract void onClear();
 

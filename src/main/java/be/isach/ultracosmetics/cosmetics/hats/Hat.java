@@ -1,11 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.hats;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,10 +67,14 @@ public enum Hat {
         this.permission = configName.toLowerCase();
         if (SettingsManager.getConfig().get("Hats." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            SettingsManager.getConfig().set("Hats." + configName + ".Description", getDescription());
+            Core.config.addDefault("Hats." + configName + ".Description", getDescriptionWithColor(), "description of this hat.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Hats." + configName + ".Description")));
         }
+    }
+
+    public List<String> getDescriptionWithColor() {
+        return Arrays.asList(description.split("\n"));
     }
 
     public List<String> getDescription() {

@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,7 +57,7 @@ public abstract class ParticleEffect implements Listener {
         this.repeatDelay = repeatDelay;
         if (SettingsManager.getConfig().get("Particle-Effects." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            SettingsManager.getConfig().set("Particle-Effects." + configName + ".Description", getDescription());
+            SettingsManager.getConfig().set("Particle-Effects." + configName + ".Description", getDescriptionWithColor(), "Description of this particle effect.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Particle-Effects." + configName + ".Description")));
         }
@@ -125,6 +126,9 @@ public abstract class ParticleEffect implements Listener {
         return this.material;
     }
 
+    public List<String> getDescriptionWithColor() {
+        return Arrays.asList(description.split("\n"));
+    }
 
     public ParticleEffectType getType() {
         return this.type;
@@ -214,7 +218,8 @@ public abstract class ParticleEffect implements Listener {
         ENCHANTED("ultracosmetics.particleeffects.enchanted", "Enchanted"),
         INFERNO("ultracosmetics.particleeffects.inferno", "Inferno"),
         ANGELWINGS("ultracosmetics.particleeffects.angelwings", "AngelWings"),
-        SUPERHERO("ultracosmetics.particleeffects.superhero", "SuperHero");
+        SUPERHERO("ultracosmetics.particleeffects.superhero", "SuperHero"),
+        SANTAHAT("ultracosmetics.particleeffects.santahat", "SantaHat");
 
 
         String permission;

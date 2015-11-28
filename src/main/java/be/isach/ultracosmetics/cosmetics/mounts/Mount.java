@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,7 +69,7 @@ public abstract class Mount implements Listener {
         this.entityType = entityType;
         if (SettingsManager.getConfig().get("Mounts." + configName + ".Description") == null) {
             this.description = defaultDescription;
-            SettingsManager.getConfig().set("Mounts." + configName + ".Description", getDescription());
+            SettingsManager.getConfig().set("Mounts." + configName + ".Description", getDescriptionWithColor(), "Description of this mount.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Mounts." + configName + ".Description")));
         }
@@ -184,6 +185,10 @@ public abstract class Mount implements Listener {
             getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (Core.placeHolderColor) ? getMenuName() : Core.filterColor(getMenuName())));
             Core.getCustomPlayer(getPlayer()).currentMount = this;
         }
+    }
+
+    public List<String> getDescriptionWithColor() {
+        return Arrays.asList(description.split("\n"));
     }
 
     public EntityType getEntityType() {

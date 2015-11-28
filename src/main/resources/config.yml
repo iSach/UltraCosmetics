@@ -1,5 +1,4 @@
-# If set to true, it will check at each reload/restart
-# if an update is available.
+# If set to true, will check for updates
 Check-For-Updates: true
 
 # List of the enabled categories.
@@ -36,29 +35,43 @@ Categories:
 
 # Treasure Chests Settings.
 # /uc reload will not be enough to toggle them!
+#
+# NOTE: Money will be given
+#       to player even if disabled in case
+#       there is nothing to give!
+#
+#
+# About Treasure Chests designs:
+# For a list of effect: http://pastebin.com/CVKkufck
+# For the chest-types: NORMAL or ENDER
+# Material syntax: 'id:data'
+# You CAN make more designs just copy one, paste it and modify.
+# Not twice same name!
+#
+# Some infos:
+# center-block: The block on the center.
+# around-center: Blocks around the center
+# third-blocks: blocks "around around" the center.
+# below-chests: Block below the chests.
+# barriers: the barrier.
+# chest-type: The chest type (NORMAL or ENDER)
+# effect: The effect (complete list: http://pastebin.com/CVKkufck)
+#
+# For permission command:
+# Change it to correspond to your Permissions plugin!
+# Default one is Pex's.
+#
 TreasureChests:
-
-  # Turn to true to toggle on Treasure Chests.
   Enabled: false
-
-  # What is the price of a key?
   Key-Price: 1000
-
-  # Loots settings.
   Loots:
-    # Money Loot, even if toggled off, will be given if nothing
-    # can be given!
     Money:
-      # 'true' for toggled on, 'false' for toggled off.
       Enabled: true
-      # The max money a player can get.
       Max: 100
-      # chance of getting money.
       Chance: 20
-      # Broadcast a message when obtained?
       Message:
         enabled: false
-        message: '%prefix% §6§l%name% found %money%$'
+        message: '%prefix% &6&l%name% found %money%$'
     Gadgets-Ammo:
       Enabled: true
       Min: 20
@@ -66,59 +79,45 @@ TreasureChests:
       Chance: 60
       Message:
         enabled: false
-        message: '%prefix% §6§l%name% found %ammo% %gadget% ammo'
+        message: '%prefix% &6&l%name% found %ammo% %gadget% ammo'
     Mounts:
       Enabled: true
       Chance: 10
       Message:
         enabled: false
-        message: '%prefix% §6§l%name% found rare %mount%'
+        message: '%prefix% &6&l%name% found rare %mount%'
     Pets:
       Enabled: true
       Chance: 10
       Message:
         enabled: false
-        message: '%prefix% §6§l%name% found rare %pet%'
+        message: '%prefix% &6&l%name% found rare %pet%'
     Morphs:
       Enabled: true
       Chance: 4
       Message:
         enabled: true
-        message: '%prefix% §6§l%name% found legendary %morph%'
+        message: '%prefix% &6&l%name% found legendary %morph%'
     Effects:
       Enabled: true
       Chance: 4
       Message:
         enabled: true
-        message: '%prefix% §6§l%name% found legendary %effect%'
+        message: '%prefix% &6&l%name% found legendary %effect%'
     Hats:
       Enabled: true
       Chance: 30
       Message:
         enabled: false
-        message: '%prefix% §6§l%name% found rare %hat%'
-
-  # Treasure Chests designs.
-  # For a list of effect: http://pastebin.com/CVKkufck
-  # For the chest-types: NORMAL or ENDER
-  # Material syntax: 'id:data'
-  # You CAN make more designs just copy one, paste it and modify.
-  # Not twice same name!
+        message: '%prefix% &6&l%name% found rare %hat%'
   Designs:
     Classic:
-      # The block on the center.
       center-block: '169:0'
-      # Blocks around the center
       around-center: '5:0'
-      # blocks "around around" the center.
       third-blocks: '5:1'
-      # Blocks below the chests.
       below-chests: '17:0'
-      # The barriers.
       barriers: '85:0'
-      # The chest type (NORMAL or ENDER)
       chest-type: NORMAL
-      # The effect (complete list: http://pastebin.com/CVKkufck)
       effect: FLAME
     Modern:
       center-block: '169:0'
@@ -136,8 +135,6 @@ TreasureChests:
       barriers: '113:0'
       chest-type: NORMAL
       effect: SMOKE_NORMAL
-  # Default one is Pex's one.
-  # Change it to correspond to your Permissions plugin!
   Permission-Add-Command: pex user %name% add %permission%
 
 # This option will fill the blank slots of inventories
@@ -147,14 +144,18 @@ Fill-Blank-Slots-With-Item:
   Item: '160:15'
 
 # Toggle this to allow players to rename pets.
+#
+# Permission-Required:
+# If true, the permission:
+# ultracosmetics.pets.rename
+# will be required to rename a pet.
+#
+# Requires Money:
+# If true, money will be required
+# to rename a pet.
 Pets-Rename:
   Enabled: false
-  # If true, the permission:
-  # ultracosmetics.pets.rename
-  # will be required to rename a pet.
   Permission-Required: false
-  # If true, money will be required
-  # to rename a pet.
   Requires-Money:
     Enabled: true
     Price: 100
@@ -174,10 +175,13 @@ Mounts-Block-Trails: true
 # for gadgets, for limited uses.
 # Ammo can be given with /uc give ammo
 # or bought from menu when activating gadget.
+#
+# For the system: 'file' or 'mysql'
+#
+# If you set mysql, please fill the MySQL infos.
 Ammo-System-For-Gadgets:
   Enabled: false
-  System: file # file or mysql
-  # If system is set to mysql, you must set the infos here.
+  System: file
   MySQL:
     hostname: localhost
     username: root
@@ -185,72 +189,43 @@ Ammo-System-For-Gadgets:
     port: '3306'
     database: UltraCosmetics
 # The menu item settings.
+#
+# List for type: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 Menu-Item:
-
-  # Should it be given on join?
   Give-On-Join: true
-
-  # Should it be given on respawn?
   Give-On-Respawn: true
-
-  # In what slot do you want to give the item?
   Slot: 3
-
-  # What type?
-  # Complete list here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   Type: ENDER_CHEST
 
-  # What data?
   Data: 0
 
-  # What display name?
   Displayname: '&6&lCosmetics'
 
 # Settings related to permissions.
+#
+# List for "Type" https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 No-Permission:
 
-  # Show in lore if player has permission for a cosmetic?
   Show-In-Lore: true
 
-  # Message when a player has permission.
   Lore-Message-Yes: '&o&7Permission: &a&lYes!'
 
-  # Message when player doesn't have a permission.
   Lore-Message-No: '&o&7Permission: &4&lNo!'
 
-  # You want to hide the items the player don't have
-  # permission to?
   Dont-Show-Item: false
 
-  # Or show a custom item?
   Custom-Item:
     enabled: false
-
-    # What type?
-    # Complete list here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
     Type: INK_SACK
-
-    # What data?
     Data: 8
-
-    # What displayname?
     Name: '&c&lNo Permission'
+
+# When a cosmetic is disabled, want to show an item instead of it?
 Disabled-Items:
-
-  # When a cosmetic is disabled, want to show it?
   Show-Custom-Disabled-Item: false
-
-  # If you show it, customize the item here.
   Custom-Disabled-Item:
-
-    # What type?
-    # Complete list here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
     Type: INK_SACK
-
-    # What data?
     Data: 8
-
-    # What displayname?
     Name: '&c&lDisabled'
 
 # If set to true, in messages the cosmetics' names
@@ -268,5 +243,3 @@ Gadget-Slot: 4
 # their current gadget by pressing
 # their drop key.
 Remove-Gadget-With-Drop: false
-
-# List of the enabled Worlds

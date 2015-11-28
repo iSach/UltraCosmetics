@@ -71,6 +71,7 @@ public class Core extends JavaPlugin {
     public static List<Category> enabledCategories = new ArrayList<>();
 
     public static CustomConfiguration config;
+    public static File file;
 
     public static Economy economy = null;
 
@@ -92,28 +93,22 @@ public class Core extends JavaPlugin {
             return;
         }
 
-        File conf = new File(getDataFolder(), "config.yml");
+        file = new File(getDataFolder(), "config.yml");
 
-        if (!conf.exists()) {
-            conf.getParentFile().mkdirs();
-            copy(getResource("config.yml"), conf);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            copy(getResource("config.yml"), file);
+            System.out.println("UltraCosmetics -> Loading and Generating config...");
         }
 
-        config = CustomConfiguration.loadConfiguration(conf);
-
-        config.addDefault("a", "b", "1", "2", "4");
+        config = CustomConfiguration.loadConfiguration(file);
 
         List<String> enabledWorlds = new ArrayList<>();
         for (World world : Bukkit.getWorlds())
             enabledWorlds.add(world.getName());
-        config.set("Enabled-Worlds", enabledWorlds);
+        config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");
 
-        try {
-            config.save(conf);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        saveConfig();
 
         core = this;
 
@@ -196,6 +191,11 @@ public class Core extends JavaPlugin {
         }.run();
 
         setupGadgetsConfig();
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             Bukkit.getLogger().info("");
@@ -257,7 +257,20 @@ public class Core extends JavaPlugin {
         registerListener(new TreasureChestManager());
         if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
             registerListener(new MorphManager());
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void saveConfig() {
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initCooldownManager() {
@@ -418,53 +431,58 @@ public class Core extends JavaPlugin {
 
     private void setupGadgetsConfig() {
         for (Gadget gadget : gadgetList) {
-            addDefault("Gadgets." + gadget.getType().configName + ".Enabled", true);
-            addDefault("Gadgets." + gadget.getType().configName + ".Show-Description", true);
-            addDefault("Gadgets." + gadget.getType().configName + ".Can-Be-Found-In-Treasure-Chests", true);
+            config.addDefault("Gadgets." + gadget.getType().configName + ".Enabled", true, "if true, the gadget will be enabled.");
+            config.addDefault("Gadgets." + gadget.getType().configName + ".Show-Description", true, "if true, the description of gadget will be showed.");
+            config.addDefault("Gadgets." + gadget.getType().configName + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
             if (gadget.getType() == Gadget.GadgetType.PAINTBALLGUN) {
-                addDefault("Gadgets." + gadget.getType().configName + ".Block-Type", "STAINED_CLAY");
-                addDefault("Gadgets." + gadget.getType().configName + ".Particle.Enabled", false);
-                addDefault("Gadgets." + gadget.getType().configName + ".Particle.Effect", "fireworksSpark");
-                addDefault("Gadgets." + gadget.getType().configName + ".Radius", 2);
+                config.addDefault("Gadgets." + gadget.getType().configName + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
+                config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Enabled", false, "Should it display particles?");
+                config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
+                config.addDefault("Gadgets." + gadget.getType().configName + ".Radius", 2, "The radius of painting.");
                 List<String> blackListedBlocks = new ArrayList<>();
                 blackListedBlocks.add("REDSTONE_BLOCK");
-                addDefault("Gadgets." + gadget.getType().configName + ".BlackList", blackListedBlocks);
+                config.addDefault("Gadgets." + gadget.getType().configName + ".BlackList", blackListedBlocks, "A list of the blocks that", "can't be painted.");
             }
             if (ammoEnabled) {
-                addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Enabled", true);
-                addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Price", 500);
-                addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Result-Amount", 20);
+                config.addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Enabled", true, "You want this gadget to need ammo?");
+                config.addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Price", 500, "What price for the ammo?");
+                config.addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Result-Amount", 20, "And how much ammo is given", "when bought?");
             }
         }
 
         for (Mount mount : mountList) {
-            addDefault("Mounts." + mount.getConfigName() + ".Enabled", true);
-            addDefault("Mounts." + mount.getConfigName() + ".Show-Description", true);
-            addDefault("Mounts." + mount.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true);
+            config.addDefault("Mounts." + mount.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
+            config.addDefault("Mounts." + mount.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Mounts." + mount.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
         for (ParticleEffect particleEffect : particleEffectList) {
-            addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Enabled", true);
-            addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Show-Description", true);
-            addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true);
+            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Enabled", true, "if true, the effect will be enabled.");
+            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
         for (Pet pet : petList) {
-            addDefault("Pets." + pet.getConfigName() + ".Enabled", true);
-            addDefault("Pets." + pet.getConfigName() + ".Show-Description", true);
-            addDefault("Pets." + pet.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true);
+            config.addDefault("Pets." + pet.getConfigName() + ".Enabled", true, "if true, the pet will be enabled.");
+            config.addDefault("Pets." + pet.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Pets." + pet.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
         for (Morph morph : morphList) {
-            addDefault("Morphs." + morph.getConfigName() + ".Enabled", true);
-            addDefault("Morphs." + morph.getConfigName() + ".Show-Description", true);
-            addDefault("Morphs." + morph.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true);
+            config.addDefault("Morphs." + morph.getConfigName() + ".Enabled", true, "if true, the morph will be enabled.");
+            config.addDefault("Morphs." + morph.getConfigName() + ".Show-Description", true, "if true, the description of this morph will be showed.");
+            config.addDefault("Morphs." + morph.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
         for (Hat hat : hatList) {
-            addDefault("Hats." + hat.getConfigName() + ".Enabled", true);
-            addDefault("Hats." + hat.getConfigName() + ".Show-Description", true);
-            addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true);
+            config.addDefault("Hats." + hat.getConfigName() + ".Enabled", true, "if true, the hat will be enabled.");
+            config.addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
+            config.addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+        }
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -482,6 +500,7 @@ public class Core extends JavaPlugin {
         particleEffectList.add(new ParticleEffectInferno(null));
         particleEffectList.add(new ParticleEffectAngelWings(null));
         particleEffectList.add(new ParticleEffectSuperHero(null));
+        particleEffectList.add(new ParticleEffectSantaHat(null));
     }
 
     private void tryRegisterMorphs() {
@@ -546,8 +565,7 @@ public class Core extends JavaPlugin {
     }
 
     private void addDefault(String path, Object value) {
-        if (!config.contains(path))
-            config.set(path, value);
+        config.addDefault(path, value);
     }
 
     private boolean setupEconomy() {
@@ -569,6 +587,7 @@ public class Core extends JavaPlugin {
         petList.add(new PetEasterBunny(null));
         petList.add(new PetWither(null));
         petList.add(new PetPumpling(null));
+        petList.add(new PetChristmasElf(null));
     }
 
     private void registerMounts() {
@@ -590,6 +609,7 @@ public class Core extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
         for (CustomPlayer cp : customPlayers) {
             if (cp.currentTreasureChest != null)
                 cp.currentTreasureChest.forceOpen(0);
@@ -609,6 +629,7 @@ public class Core extends JavaPlugin {
         }
 
         CustomEntities.unregisterEntities();
+
     }
 
     private void checkForUpdate() {

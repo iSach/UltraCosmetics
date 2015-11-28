@@ -24,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,7 +66,7 @@ public abstract class Pet implements Listener {
         this.entityType = entityType;
         if (SettingsManager.getConfig().get("Pets." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            SettingsManager.getConfig().set("Pets." + configName + ".Description", getDescription());
+            Core.config.addDefault("Pets." + configName + ".Description", getDescriptionWithColor(), "description of this pet.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Pets." + configName + ".Description")));
         }
@@ -332,10 +333,13 @@ public abstract class Pet implements Listener {
 
     public List<String> getDescription() {
         List<String> desc = new ArrayList<>();
-        for (String string : description.split("\n")) {
+        for (String string : description.split("\n"))
             desc.add(string.replace('&', '§'));
-        }
         return desc;
+    }
+
+    public List<String> getDescriptionWithColor() {
+        return Arrays.asList(description.split("\n"));
     }
 
     public boolean showsDescription() {
@@ -365,7 +369,8 @@ public abstract class Pet implements Listener {
         DOG("ultracosmetics.pets.dog", "Dog"),
         CHICK("ultracosmetics.pets.chick", "Chick"),
         WITHER("ultracosmetics.pets.wither", "Wither"),
-        PUMPLING("ultracosmetics.pets.pumpling", "Pumpling");
+        PUMPLING("ultracosmetics.pets.pumpling", "Pumpling"),
+        CHRISTMASELF("ultracosmetics.pets.pumpling.christmaself", "ChristmasElf");
 
 
         String permission;

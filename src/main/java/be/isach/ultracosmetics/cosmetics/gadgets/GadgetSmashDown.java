@@ -5,7 +5,10 @@ import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -147,7 +150,8 @@ public class GadgetSmashDown extends Gadget {
             event.setCancelled(true);
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
-            fb.getWorld().spigot().playEffect(fb.getLocation(), Effect.STEP_SOUND, fb.getBlockId(), (int) fb.getBlockData(), 0, 0, 0, 0, 1, 32);
+            Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.getMaterial(fb.getBlockId()), fb.getBlockData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
+            fb.getWorld().playSound(fb.getLocation(), Sound.STEP_STONE, 1, 1);
             event.getEntity().remove();
         }
     }

@@ -137,6 +137,11 @@ public class HatManager implements Listener {
         });
     }
 
+    /**
+     * Gets the max amount of pages.
+     *
+     * @return the maximum amount of pages.
+     */
     private static int getMaxPagesAmount() {
         int max = 21;
         int i = Core.getHats().size();

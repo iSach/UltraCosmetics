@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public class CustomConfiguration extends YamlConfiguration {
 
     private Map<String, List<String>> comments = null;
-    private boolean newLineAfterHeader = true;
+    private boolean newLineAfterHeader = false;
     private boolean newLinePerKey = false;
 
     private CustomConfiguration() {
@@ -23,7 +23,7 @@ public class CustomConfiguration extends YamlConfiguration {
         this.comments = new LinkedHashMap<>();
     }
 
-    public void addDefault(String path, Object defaultValue, String... comments) {
+    /*public void addDefault(String path, Object defaultValue, String... comments) {
         if (defaultValue != null && comments != null && comments.length > 0 && !this.comments.containsKey(path)) {
             List<String> commentsList = new ArrayList<>();
             for (String comment : comments) {
@@ -33,6 +33,11 @@ public class CustomConfiguration extends YamlConfiguration {
             this.comments.put(path, commentsList);
         }
         super.addDefault(path, defaultValue);
+    }*/
+
+    public void addDefault(String path, Object defaultValue, String... comments) {
+        if (!contains(path))
+            set(path, defaultValue, comments);
     }
 
     public ConfigurationSection createSection(String path, String... comments) {
@@ -85,6 +90,7 @@ public class CustomConfiguration extends YamlConfiguration {
                 }
             }
         }
+        comments = configComments;
     }
 
     public void load(File file, boolean loadComments) throws IOException, InvalidConfigurationException {

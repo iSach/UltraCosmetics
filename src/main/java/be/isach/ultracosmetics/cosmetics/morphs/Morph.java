@@ -13,6 +13,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +45,7 @@ public abstract class Morph implements Listener {
         this.disguiseType = disguiseType;
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            SettingsManager.getConfig().set("Gadgets." + configName + ".Description", getDescription());
+            SettingsManager.getConfig().addDefault("Gadgets." + configName + ".Description", getDescriptionWithColor(), "Description of this Morph.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
         }
@@ -68,6 +69,10 @@ public abstract class Morph implements Listener {
             disguise.setModifyBoundingBox(true);
             disguise.setShowName(true);
         }
+    }
+
+    public List<String> getDescriptionWithColor() {
+        return Arrays.asList(description.split("\n"));
     }
 
     public String getConfigName() {

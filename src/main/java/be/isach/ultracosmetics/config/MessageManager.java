@@ -168,6 +168,7 @@ public class MessageManager {
         addMessage("Particle-Effects.Inferno.name", "&4&lInferno");
         addMessage("Particle-Effects.AngelWings.name", "&f&lAngel Wings");
         addMessage("Particle-Effects.SuperHero.name", "&4&lSuper Hero");
+        addMessage("Particle-Effects.SantaHat.name", "&4&lSanta &f&lHat");
 
         // PETS
         addMessage("Pets.Piggy.menu-name", "&d&lPiggy");
@@ -188,6 +189,8 @@ public class MessageManager {
         addMessage("Pets.Wither.entity-displayname", "&l%playername%'s wither");
         addMessage("Pets.Pumpling.menu-name", "&6&lPumpling");
         addMessage("Pets.Pumpling.entity-displayname", "&l%playername%'s pumpling");
+        addMessage("Pets.ChristmasElf.menu-name", "&a&lChristmas Elf");
+        addMessage("Pets.ChristmasElf.entity-displayname", "&l%playername%'s Christmas elf");
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
