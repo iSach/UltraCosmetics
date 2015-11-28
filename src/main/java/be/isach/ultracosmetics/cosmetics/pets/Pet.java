@@ -126,7 +126,7 @@ public abstract class Pet implements Listener {
                         if (Bukkit.getPlayer(owner) != null
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet != null
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet.getType() == type) {
-                            if (SettingsManager.getConfig().get("Pets-Drop-Items"))
+                            if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
                                 onUpdate();
                             followPlayer();
                         } else {
@@ -150,7 +150,7 @@ public abstract class Pet implements Listener {
                 //ent.setCustomNameVisible(true);
                 //ent.setCustomName(getName());
                 if (ent instanceof Ageable) {
-                    if (SettingsManager.getConfig().get("Pets-Are-Babies"))
+                    if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies"))
                         ((Ageable) ent).setBaby();
                     else
                         ((Ageable) ent).setAdult();
@@ -381,7 +381,7 @@ public abstract class Pet implements Listener {
         }
 
         public boolean isEnabled() {
-            return SettingsManager.getConfig().get("Pets." + configName + ".Enabled");
+            return SettingsManager.getConfig().getBoolean("Pets." + configName + ".Enabled");
         }
 
     }

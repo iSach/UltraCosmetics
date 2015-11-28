@@ -79,7 +79,7 @@ public class MountManager implements Listener {
                         continue;
                     }
                     if (!m.getType().isEnabled()) continue;
-                    if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
+                    if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item"))
                         if (!p.hasPermission(m.getType().getPermission()))
                             continue;
                     if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(m.getType().getPermission())) {
@@ -95,7 +95,7 @@ public class MountManager implements Listener {
                         continue;
                     }
                     String lore = null;
-                    if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore")) {
+                    if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore")) {
                         lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(m.getType().getPermission()) ? "Yes" : "No")))));
                     }
                     String toggle = MessageManager.getMessage("Menu.Spawn");

@@ -31,7 +31,7 @@ public class TreasureChestManager implements Listener {
     }
 
     private String getRandomDesign() {
-        Set<String> set = SettingsManager.getConfig().fileConfiguration.getConfigurationSection("TreasureChests.Designs").getKeys(false);
+        Set<String> set = Core.config.getConfigurationSection("TreasureChests.Designs").getKeys(false);
         List<String> list = new ArrayList<>();
         list.addAll(set);
         return list.get(random.nextInt(set.size()));

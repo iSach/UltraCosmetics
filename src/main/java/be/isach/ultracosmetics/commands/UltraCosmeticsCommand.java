@@ -482,7 +482,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 Core.getCustomPlayer(giveTo).clear();
                 return true;
             } else if (argZero.equalsIgnoreCase("chest")) {
-                int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+                int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
                 Player giveTo = PLAYER;
 
                 if (!PLAYER.hasPermission("ultracosmetics.commands.chest")) {
@@ -514,7 +514,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 return true;
             } else if (argZero.equalsIgnoreCase("reload")) {
                 if (SENDER.hasPermission("ultracosmetics.commands.reload")) {
-                    SettingsManager.getConfig().reload();
+                    Core.getPlugin().reloadConfig();
                     SettingsManager.getMessages().reload();
                     Core.enabledCategories.clear();
                     for (CustomPlayer cp : Core.getCustomPlayers())
@@ -557,7 +557,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                                     MorphManager.openMorphsMenu((Player) SENDER);
                             } else if (ARGS[1].startsWith("hat")) {
                                 if (Category.HATS.isEnabled())
-                                    HatManager.openHatsMenu((Player) SENDER);
+                                    HatManager.openHatsMenu((Player) SENDER, 1);
                             } else {
                                 SENDER.sendMessage(MessageManager.getMessage("Invalid-Menu"));
                             }

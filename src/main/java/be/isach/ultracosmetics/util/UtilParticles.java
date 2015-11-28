@@ -60,7 +60,7 @@ public class UtilParticles {
                     cancel();
                 }
                 step += 4;
-                radius += 1 / 30f;
+                radius += 1 / 50f;
             }
         };
         runnable.runTaskTimer(Core.getPlugin(), 0, 1);
@@ -79,12 +79,7 @@ public class UtilParticles {
     }
 
     public static void play(Particles effect, double x, double y, double z, Location location, int amount) {
-        for (int i = 0; i < amount; i++) {
-            double newX = MathUtils.randomDouble(-x, x);
-            double newY = MathUtils.randomDouble(-y, y);
-            double newZ = MathUtils.randomDouble(-z, z);
-            play(effect, location.clone().add(newX, newY, newZ));
-        }
+        effect.display((float) x, (float) y, (float) z, 0f, amount, location, 128);
     }
 
     public static void play(Particles effect, int red, int green, int blue, Location location, int amount) {

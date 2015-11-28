@@ -230,7 +230,7 @@ public abstract class ParticleEffect implements Listener {
         }
 
         public boolean isEnabled() {
-            return SettingsManager.getConfig().get("Particle-Effects." + configName + ".Enabled");
+            return SettingsManager.getConfig().getBoolean("Particle-Effects." + configName + ".Enabled");
         }
 
     }

@@ -52,13 +52,13 @@ public class TreasureRandomizer {
 
     private static final List<ResultType> RESULT_REF = new ArrayList<>();
 
-    private static final int MONEY_CHANCE = SettingsManager.getConfig().get("TreasureChests.Loots.Money.Chance");
-    private static final int GADGETS_CHANCE = SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Chance");
-    private static final int MORPHS_CHANCE = SettingsManager.getConfig().get("TreasureChests.Loots.Morphs.Chance");
-    private static final int PETS_CHANCE = SettingsManager.getConfig().get("TreasureChests.Loots.Pets.Chance");
-    private static final int EFFECTS_CHANCE = SettingsManager.getConfig().get("TreasureChests.Loots.Effects.Chance");
-    private static final int MOUNTS_CHANCE = SettingsManager.getConfig().get("TreasureChests.Loots.Mounts.Chance");
-    private static final int HATS_CHANCE = SettingsManager.getConfig().get("TreasureChests.Loots.Hats.Chance");
+    private static final int MONEY_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Chance");
+    private static final int GADGETS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Chance");
+    private static final int MORPHS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Morphs.Chance");
+    private static final int PETS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Pets.Chance");
+    private static final int EFFECTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Effects.Chance");
+    private static final int MOUNTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Mounts.Chance");
+    private static final int HATS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Hats.Chance");
 
     private static void setupChance(List<ResultType> resultRef, int percent, ResultType resultType) {
         for (int i = 0; i < percent; i++) {
@@ -147,7 +147,7 @@ public class TreasureRandomizer {
                 && !hatList.isEmpty()
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Hats.Enabled"))
             setupChance(RESULT_REF, HATS_CHANCE, ResultType.HAT);
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled"))
             setupChance(RESULT_REF, MONEY_CHANCE, ResultType.MONEY);
     }
 
@@ -230,7 +230,7 @@ public class TreasureRandomizer {
         if (money > 3 * (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max") / 4) {
             spawnRandomFirework(loc);
         }
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Money.Message.enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Money.Message.message")).replace("%name%", player.getName()).replace("%money%", money + ""));
     }
 
@@ -245,7 +245,7 @@ public class TreasureRandomizer {
         if (ammo > 50) {
             spawnRandomFirework(loc);
         }
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Message.enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%name%", player.getName()).replace("%ammo%", ammo + "").replace("%gadget%", (Core.placeHolderColor) ? g.getName() : Core.filterColor(g.getName())));
 
     }
@@ -258,7 +258,7 @@ public class TreasureRandomizer {
         givePermission(hat.getPermission());
         itemStack = hat.getItemStack().clone();
         spawnRandomFirework(loc);
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Hats.Message.enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Hats.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Hats.Message.message")).replace("%name%", player.getName()).replace("%hat%", (Core.placeHolderColor) ? hat.getName() : Core.filterColor(hat.getName())));
     }
 
@@ -270,7 +270,7 @@ public class TreasureRandomizer {
         givePermission(pet.getType().getPermission());
         itemStack = new ItemStack(pet.getMaterial());
         spawnRandomFirework(loc);
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Pets.Message.enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Pets.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Pets.Message.message")).replace("%name%", player.getName()).replace("%pet%", (Core.placeHolderColor) ? pet.getMenuName() : Core.filterColor(pet.getMenuName())));
     }
 
@@ -282,7 +282,7 @@ public class TreasureRandomizer {
         itemStack = new ItemStack(mount.getMaterial());
         givePermission(mount.getType().getPermission());
         spawnRandomFirework(loc);
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Mounts.Message.enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Mounts.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Mounts.Message.message")).replace("%name%", player.getName()).replace("%mount%", (Core.placeHolderColor) ? mount.getMenuName() : Core.filterColor(mount.getMenuName())));
     }
 
@@ -294,7 +294,7 @@ public class TreasureRandomizer {
         itemStack = new ItemStack(particleEffect.getMaterial());
         givePermission(particleEffect.getType().getPermission());
         spawnRandomFirework(loc);
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Effects.Message.enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Effects.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Effects.Message.message")).replace("%name%", player.getName()).replace("%effect%", (Core.placeHolderColor) ? particleEffect.getName() : Core.filterColor(particleEffect.getName())));
     }
 
@@ -306,7 +306,7 @@ public class TreasureRandomizer {
         itemStack = new ItemStack(morph.getMaterial());
         givePermission(morph.getType().getPermission());
         spawnRandomFirework(loc);
-        if (SettingsManager.getConfig().get("TreasureChests.Loots.Morphs.Message.enabled"))
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Morphs.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Morphs.Message.message")).replace("%name%", player.getName()).replace("%morph%", (Core.placeHolderColor) ? morph.getName() : Core.filterColor(morph.getName())));
     }
 

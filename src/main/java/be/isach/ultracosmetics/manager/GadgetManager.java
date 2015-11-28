@@ -49,8 +49,8 @@ public class GadgetManager implements Listener {
 
         int i = 10;
         for (Gadget g : Core.getGadgets()) {
-            if (!g.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
+            if (!g.getType().isEnabled() && SettingsManager.getConfig().getBoolean("Disabled-Items.Show-Custom-Disabled-Item")) {
+                Material material = Material.valueOf(SettingsManager.getConfig().getString("Disabled-Items.Custom-Disabled-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
                 inv.setItem(i, ItemFactory.create(material, data, name));
@@ -62,10 +62,10 @@ public class GadgetManager implements Listener {
                 continue;
             }
             if (!g.getType().isEnabled()) continue;
-            if (SettingsManager.getConfig().get("No-Permission.Dont-Show-Item"))
+            if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item"))
                 if (!p.hasPermission(g.getType().getPermission()))
                     continue;
-            if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(g.getType().getPermission())) {
+            if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled") && !p.hasPermission(g.getType().getPermission())) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
@@ -100,7 +100,7 @@ public class GadgetManager implements Listener {
                     loreList.add(s);
                 loreList.add("");
             }
-            if (SettingsManager.getConfig().get("No-Permission.Show-In-Lore"))
+            if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore"))
                 loreList.add(ChatColor.translateAlternateColorCodes('&',
                         String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" +
                                 ((p.hasPermission(g.getType().getPermission()) ? "Yes" : "No"))))));

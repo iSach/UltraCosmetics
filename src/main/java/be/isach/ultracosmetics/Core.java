@@ -17,10 +17,7 @@ import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.manager.*;
 import be.isach.ultracosmetics.mysql.MySQLConnection;
 import be.isach.ultracosmetics.mysql.Table;
-import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.MetricsLite;
-import be.isach.ultracosmetics.util.SQLUtils;
+import be.isach.ultracosmetics.util.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -33,10 +30,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
@@ -76,6 +70,8 @@ public class Core extends JavaPlugin {
 
     public static List<Category> enabledCategories = new ArrayList<>();
 
+    public static CustomConfiguration config;
+
     public static Economy economy = null;
 
     private MySQLConnection sql;
@@ -95,6 +91,29 @@ public class Core extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        File conf = new File(getDataFolder(), "config.yml");
+
+        if (!conf.exists()) {
+            conf.getParentFile().mkdirs();
+            copy(getResource("config.yml"), conf);
+        }
+
+        config = CustomConfiguration.loadConfiguration(conf);
+
+        config.addDefault("a", "b", "1", "2", "4");
+
+        List<String> enabledWorlds = new ArrayList<>();
+        for (World world : Bukkit.getWorlds())
+            enabledWorlds.add(world.getName());
+        config.set("Enabled-Worlds", enabledWorlds);
+
+        try {
+            config.save(conf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         core = this;
 
@@ -129,7 +148,6 @@ public class Core extends JavaPlugin {
         new MessageManager();
         registerListener(new PlayerListener());
 
-        setupDefaultConfig();
 
         registerPets();
         registerMounts();
@@ -144,11 +162,11 @@ public class Core extends JavaPlugin {
         getCommand("ultracosmetics").setAliases(arrayList);
         getCommand("ultracosmetics").setTabCompleter(new UltraCosmeticsTabCompleter());
 
-        String s = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.System"));
+        String s = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System");
         fileStorage = s.equalsIgnoreCase("file");
-        placeHolderColor = SettingsManager.getConfig().get("Chat-Cosmetic-PlaceHolder-Color");
+        placeHolderColor = SettingsManager.getConfig().getBoolean("Chat-Cosmetic-PlaceHolder-Color");
         registerGadgets();
-        ammoEnabled = SettingsManager.getConfig().get("Ammo-System-For-Gadgets.Enabled");
+        ammoEnabled = SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Enabled");
 
         for (Category c : Category.values()) {
             if (c == Category.MORPHS)
@@ -290,13 +308,14 @@ public class Core extends JavaPlugin {
             }
         };
         countdownRunnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, 1);
+
     }
 
     private void initPlayers() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             customPlayers.add(new CustomPlayer(p.getUniqueId()));
             if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
-                int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+                int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
                 if (p.getInventory().getItem(slot) != null) {
                     if (p.getInventory().getItem(slot).hasItemMeta()
                             && p.getInventory().getItem(slot).getItemMeta().hasDisplayName()
@@ -312,6 +331,22 @@ public class Core extends JavaPlugin {
                 byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
                 p.getInventory().setItem(slot, ItemFactory.create(material, data, name));
             }
+        }
+    }
+
+    private void copy(InputStream in, File file) {
+        try {
+            OutputStream out = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+
+            int len;
+            while ((len = in.read(buf)) > 0)
+                out.write(buf, 0, len);
+
+            out.close();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -463,7 +498,7 @@ public class Core extends JavaPlugin {
     }
 
     private void checkTreasureChests() {
-        if (SettingsManager.getConfig().get("TreasureChests.Enabled")) {
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Enabled")) {
             treasureChests = true;
             if (!ammoEnabled || !Bukkit.getPluginManager().isPluginEnabled("Vault")) {
                 Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
@@ -511,143 +546,8 @@ public class Core extends JavaPlugin {
     }
 
     private void addDefault(String path, Object value) {
-        SettingsManager.getConfig().addDefault(path, value);
-    }
-
-    private void setupDefaultConfig() {
-        List<String> enabledWorlds = new ArrayList<>();
-
-        for (World world : Bukkit.getWorlds())
-            enabledWorlds.add(world.getName());
-
-        addDefault("Enabled-Worlds", enabledWorlds);
-
-        addDefault("Check-For-Updates", true);
-
-        addDefault("Categories-Enabled.Gadgets", true);
-        addDefault("Categories-Enabled.Particle-Effects", true);
-        addDefault("Categories-Enabled.Mounts", true);
-        addDefault("Categories-Enabled.Pets", true);
-        addDefault("Categories-Enabled.Morphs", true);
-        addDefault("Categories-Enabled.Hats", true);
-
-        addDefault("Categories.Gadgets.Main-Menu-Item", "341:0");
-        addDefault("Categories.Gadgets.Go-Back-Arrow", true);
-        addDefault("Categories.Particle-Effects.Main-Menu-Item", "362:0");
-        addDefault("Categories.Particle-Effects.Go-Back-Arrow", true);
-        addDefault("Categories.Mounts.Main-Menu-Item", "329:0");
-        addDefault("Categories.Mounts.Go-Back-Arrow", true);
-        addDefault("Categories.Pets.Main-Menu-Item", "383:0");
-        addDefault("Categories.Pets.Go-Back-Arrow", true);
-        addDefault("Categories.Morphs.Main-Menu-Item", "397:4");
-        addDefault("Categories.Morphs.Go-Back-Arrow", true);
-        addDefault("Categories.Hats.Main-Menu-Item", "310:0");
-        addDefault("Categories.Hats.Go-Back-Arrow", true);
-
-        addDefault("TreasureChests.Enabled", false);
-        addDefault("TreasureChests.Key-Price", 1000);
-
-        addDefault("TreasureChests.Loots.Money.Enabled", true);
-        addDefault("TreasureChests.Loots.Money.Max", 100);
-        addDefault("TreasureChests.Loots.Money.Chance", 20);
-        addDefault("TreasureChests.Loots.Money.Message.enabled", false);
-        addDefault("TreasureChests.Loots.Money.Message.message", "%prefix% §6§l%name% found %money%$");
-        addDefault("TreasureChests.Loots.Gadgets-Ammo.Enabled", true);
-        addDefault("TreasureChests.Loots.Gadgets-Ammo.Min", 20);
-        addDefault("TreasureChests.Loots.Gadgets-Ammo.Max", 100);
-        addDefault("TreasureChests.Loots.Gadgets-Ammo.Chance", 60);
-        addDefault("TreasureChests.Loots.Gadgets-Ammo.Message.enabled", false);
-        addDefault("TreasureChests.Loots.Gadgets-Ammo.Message.message", "%prefix% §6§l%name% found %ammo% %gadget% ammo");
-        addDefault("TreasureChests.Loots.Mounts.Enabled", true);
-        addDefault("TreasureChests.Loots.Mounts.Chance", 10);
-        addDefault("TreasureChests.Loots.Mounts.Message.enabled", false);
-        addDefault("TreasureChests.Loots.Mounts.Message.message", "%prefix% §6§l%name% found rare %mount%");
-        addDefault("TreasureChests.Loots.Pets.Enabled", true);
-        addDefault("TreasureChests.Loots.Pets.Chance", 10);
-        addDefault("TreasureChests.Loots.Pets.Message.enabled", false);
-        addDefault("TreasureChests.Loots.Pets.Message.message", "%prefix% §6§l%name% found rare %pet%");
-        addDefault("TreasureChests.Loots.Morphs.Enabled", true);
-        addDefault("TreasureChests.Loots.Morphs.Chance", 4);
-        addDefault("TreasureChests.Loots.Morphs.Message.enabled", true);
-        addDefault("TreasureChests.Loots.Morphs.Message.message", "%prefix% §6§l%name% found legendary %morph%");
-        addDefault("TreasureChests.Loots.Effects.Enabled", true);
-        addDefault("TreasureChests.Loots.Effects.Chance", 4);
-        addDefault("TreasureChests.Loots.Effects.Message.enabled", true);
-        addDefault("TreasureChests.Loots.Effects.Message.message", "%prefix% §6§l%name% found legendary %effect%");
-        addDefault("TreasureChests.Loots.Hats.Enabled", true);
-        addDefault("TreasureChests.Loots.Hats.Chance", 30);
-        addDefault("TreasureChests.Loots.Hats.Message.enabled", false);
-        addDefault("TreasureChests.Loots.Hats.Message.message", "%prefix% §6§l%name% found rare %hat%");
-
-        if (!SettingsManager.getConfig().fileConfiguration.contains("TreasureChests.Designs.Classic")) {
-            addDefault("TreasureChests.Designs.Classic.center-block", "169:0");
-            addDefault("TreasureChests.Designs.Classic.around-center", "5:0");
-            addDefault("TreasureChests.Designs.Classic.third-blocks", "5:1");
-            addDefault("TreasureChests.Designs.Classic.below-chests", "17:0");
-            addDefault("TreasureChests.Designs.Classic.barriers", "85:0");
-            addDefault("TreasureChests.Designs.Classic.chest-type", "NORMAL");
-            addDefault("TreasureChests.Designs.Classic.effect", "FLAME");
-            addDefault("TreasureChests.Designs.Modern.center-block", "169:0");
-            addDefault("TreasureChests.Designs.Modern.around-center", "159:11");
-            addDefault("TreasureChests.Designs.Modern.third-blocks", "155:0");
-            addDefault("TreasureChests.Designs.Modern.below-chests", "159:11");
-            addDefault("TreasureChests.Designs.Modern.barriers", "160:3");
-            addDefault("TreasureChests.Designs.Modern.chest-type", "ENDER");
-            addDefault("TreasureChests.Designs.Modern.effect", "COLOURED_DUST");
-            addDefault("TreasureChests.Designs.Nether.center-block", "89:0");
-            addDefault("TreasureChests.Designs.Nether.around-center", "88:0");
-            addDefault("TreasureChests.Designs.Nether.third-blocks", "87:0");
-            addDefault("TreasureChests.Designs.Nether.below-chests", "112:0");
-            addDefault("TreasureChests.Designs.Nether.barriers", "113:0");
-            addDefault("TreasureChests.Designs.Nether.chest-type", "TRAPPED");
-            addDefault("TreasureChests.Designs.Nether.effect", "SMOKE");
-        }
-
-        addDefault("TreasureChests.Permission-Add-Command", "pex user %name% add %permission%");
-
-        addDefault("Fill-Blank-Slots-With-Item.Enabled", false);
-        addDefault("Fill-Blank-Slots-With-Item.Item", "160:15");
-
-        addDefault("Pets-Rename.Enabled", false);
-        addDefault("Pets-Rename.Permission-Required", false);
-        addDefault("Pets-Rename.Requires-Money.Enabled", true);
-        addDefault("Pets-Rename.Requires-Money.Price", 100);
-
-        addDefault("Pets-Drop-Items", true);
-        addDefault("Pets-Are-Babies", true);
-        addDefault("Mounts-Block-Trails", true);
-
-        // Set config things.
-        addDefault("Ammo-System-For-Gadgets.Enabled", false);
-        addDefault("Ammo-System-For-Gadgets.System", "file");
-        addDefault("Ammo-System-For-Gadgets.MySQL.hostname", "localhost");
-        addDefault("Ammo-System-For-Gadgets.MySQL.username", "root");
-        addDefault("Ammo-System-For-Gadgets.MySQL.password", "password");
-        addDefault("Ammo-System-For-Gadgets.MySQL.port", "3306");
-        addDefault("Ammo-System-For-Gadgets.MySQL.database", "UltraCosmetics");
-        addDefault("Menu-Item.Give-On-Join", true);
-        addDefault("Menu-Item.Give-On-Respawn", true);
-        addDefault("Menu-Item.Slot", 3);
-        addDefault("Menu-Item.Type", "ENDER_CHEST");
-        addDefault("Menu-Item.Data", 0);
-        addDefault("Menu-Item.Displayname", "&6&lCosmetics");
-        addDefault("No-Permission.Show-In-Lore", true);
-        addDefault("No-Permission.Lore-Message-Yes", "&o&7Permission: &a&lYes!");
-        addDefault("No-Permission.Lore-Message-No", "&o&7Permission: &4&lNo!");
-        addDefault("No-Permission.Dont-Show-Item", false);
-        addDefault("No-Permission.Custom-Item.enabled", false);
-        addDefault("No-Permission.Custom-Item.Type", "INK_SACK");
-        addDefault("No-Permission.Custom-Item.Data", 8);
-        addDefault("No-Permission.Custom-Item.Name", "&c&lNo Permission");
-        addDefault("Disabled-Items.Show-Custom-Disabled-Item", false);
-        addDefault("Disabled-Items.Custom-Disabled-Item.Type", "INK_SACK");
-        addDefault("Disabled-Items.Custom-Disabled-Item.Data", 8);
-        addDefault("Disabled-Items.Custom-Disabled-Item.Name", "&c&lDisabled");
-
-        addDefault("Chat-Cosmetic-PlaceHolder-Color", true);
-
-        addDefault("Gadget-Slot", 4);
-        addDefault("Remove-Gadget-With-Drop", false);
+        if (!config.contains(path))
+            config.set(path, value);
     }
 
     private boolean setupEconomy() {
@@ -694,7 +594,7 @@ public class Core extends JavaPlugin {
             if (cp.currentTreasureChest != null)
                 cp.currentTreasureChest.forceOpen(0);
             cp.clear();
-            int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+            int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
             if (cp.getPlayer().getInventory().getItem(slot) != null
                     && cp.getPlayer().getInventory().getItem(slot).hasItemMeta()
                     && cp.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()

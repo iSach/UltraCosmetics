@@ -156,7 +156,7 @@ public class MainMenuManager implements Listener {
                     event.getWhoClicked().closeInventory();
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {
-                    HatManager.openHatsMenu((Player) event.getWhoClicked());
+                    HatManager.openHatsMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Enable-Gadgets"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).setGadgetsEnabled(true);

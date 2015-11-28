@@ -162,7 +162,7 @@ public abstract class Morph implements Listener {
         }
 
         public boolean isEnabled() {
-            return SettingsManager.getConfig().get("Morphs." + configName + ".Enabled");
+            return SettingsManager.getConfig().getBoolean("Morphs." + configName + ".Enabled");
         }
 
     }

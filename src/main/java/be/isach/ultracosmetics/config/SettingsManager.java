@@ -14,9 +14,10 @@ import java.io.File;
 public class SettingsManager {
 
     // Config file.
-    private static SettingsManager config = new SettingsManager("config");
     // Translation config file.
     private static SettingsManager messages = new SettingsManager("messages");
+
+    private static SettingsManager conf;
 
     private File file;
     public FileConfiguration fileConfiguration;
@@ -50,6 +51,16 @@ public class SettingsManager {
     }
 
     /**
+     * Creates a new file and defines fileConfiguration and file.
+     *
+     * @param fileName
+     */
+    private SettingsManager() {
+        file = new File(Core.getPlugin().getDataFolder(), "config.yml");
+        fileConfiguration = Core.config;
+    }
+
+    /**
      * Gets the messages SettingsManager.
      *
      * @return the messages SettingsManager.
@@ -63,8 +74,8 @@ public class SettingsManager {
      *
      * @return the messages SettingsManager.
      */
-    public static SettingsManager getConfig() {
-        return config;
+    public static FileConfiguration getConfig() {
+        return Core.config;
     }
 
     /**

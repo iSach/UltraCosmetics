@@ -249,6 +249,10 @@ public class MessageManager {
         addMessage("Hats.JackOLantern.Name", "&6&lJack-O'-Lantern");
         addMessage("Hats.Ghost.Name", "&f&lGhost");
         addMessage("Hats.ScaryClown.Name", "&4&lScary Clown");
+        addMessage("Hats.Santa.Name", "&4&lSanta");
+        addMessage("Hats.Snowman.Name", "&f&lSnowman");
+        addMessage("Hats.Present.Name", "&c&lPresent");
+        addMessage("Hats.Elf.Name", "&a&lElf");
         addMessage("Hats.Must-Remove-Hat", "%prefix% &c&lYou must remove your helmet to equip a hat!");
 
 
@@ -269,6 +273,8 @@ public class MessageManager {
         addMessage("Menu.Unequip", "&c&lUnequip");
         addMessage("Menu.Morph", "&b&lMorph into");
         addMessage("Menu.Unmorph", "&c&lUnmorph from");
+        addMessage("Menu.Previous-Page", "&c&lPrevious Page");
+        addMessage("Menu.Next-Page", "&a&lNext Page");
 
         addMessage("Enabled-SelfMorphView", "%prefix% &9you enabled self view for morphs!");
         addMessage("Disabled-SelfMorphView", "%prefix% &9you disabled self view for morphs!");

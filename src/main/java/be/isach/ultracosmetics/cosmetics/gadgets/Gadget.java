@@ -52,7 +52,7 @@ public abstract class Gadget implements Listener {
         this.data = data;
         this.configName = configName;
         this.permission = permission;
-        affectPlayers = SettingsManager.getConfig().get("Gadgets." + configName + ".Affect-Players");
+        affectPlayers = SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Affect-Players");
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
             this.countdown = countdown;
             SettingsManager.getConfig().set("Gadgets." + configName + ".Cooldown", countdown);
@@ -358,7 +358,7 @@ public abstract class Gadget implements Listener {
                 if (event.getItemDrop().getItemStack().getData().getData() == data) {
                     if (event.getItemDrop().getItemStack().getItemMeta().hasDisplayName()) {
                         if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().endsWith(getName())) {
-                            if (SettingsManager.getConfig().get("Remove-Gadget-With-Drop")) {
+                            if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
                                 Core.getCustomPlayer(getPlayer()).removeGadget();
                                 event.getItemDrop().remove();
                                 return;
@@ -432,7 +432,7 @@ public abstract class Gadget implements Listener {
         }
 
         public boolean requiresAmmo() {
-            return SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled");
+            return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Ammo.Enabled");
         }
 
         public String getConfigName() {
@@ -444,7 +444,7 @@ public abstract class Gadget implements Listener {
         }
 
         public boolean isEnabled() {
-            return SettingsManager.getConfig().get("Gadgets." + configName + ".Enabled");
+            return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Enabled");
         }
     }
 

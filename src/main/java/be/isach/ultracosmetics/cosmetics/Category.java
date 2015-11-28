@@ -34,7 +34,7 @@ public enum Category {
     }
 
     public boolean isEnabled() {
-        return SettingsManager.getConfig().get("Categories-Enabled." + configPath);
+        return SettingsManager.getConfig().getBoolean("Categories-Enabled." + configPath);
     }
 
     public boolean hasGoBackArrow() {

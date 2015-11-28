@@ -48,7 +48,11 @@ public enum Hat {
     SKULL(ItemFactory.createSkull("MTFmNTRmZjliYjQyODUxOTEyYWE4N2ExYmRhNWI3Y2Q5ODE0Y2NjY2ZiZTIyNWZkZGE4ODdhZDYxODBkOSJ9fX0="), "Skull", "&7&oWho iss headless now?"),
     GHOST(ItemFactory.createSkull("NjhkMjE4MzY0MDIxOGFiMzMwYWM1NmQyYWFiN2UyOWE5NzkwYTU0NWY2OTE2MTllMzg1NzhlYTRhNjlhZTBiNiJ9fX0="), "Ghost", "&7&o2spooky4u"),
     JACKOLANTERN(ItemFactory.createSkull("MDI4OWQ0YjRjOTYyOTU5MTVmMDY4Yjk5YzI3ZDM5NDI3M2Y5ZjI2NGZjOTY4YzVkNWM0N2RmMmY1YmUyIn19fQ=="), "JackOLantern", "&7&oA little pumkin"),
-    SCARYCLOWN(ItemFactory.createSkull("ODZkYmMxZGViYzU3NDM4YTVkZTRiYTkxNTE1MTM4MmFiYzNkOGYxMzE4ZTJhMzVlNzhkZmIzMGYwNGJjNDY3In19fQ=="), "ScaryClown", "&7&oHope you are not scared of clowns.");
+    SCARYCLOW(ItemFactory.createSkull("ODZkYmMxZGViYzU3NDM4YTVkZTRiYTkxNTE1MTM4MmFiYzNkOGYxMzE4ZTJhMzVlNzhkZmIzMGYwNGJjNDY3In19fQ=="), "ScaryClown", "&7&oHope you are not scared of clowns."),
+    SANTA(ItemFactory.createSkull("MmQ2MWNjYmZkY2RmODk0MWFkYWY3NmM2YzBlMDE4MmQyYzhiYmI1ZGMxOGYzNzQ4OTU2NTJiYzY2MWI2ZWQifX19"), "Santa", "&7&oOh oh oh! Merry Christmas!"),
+    SNOWMAN(ItemFactory.createSkull("OThlMzM0ZTRiZWUwNDI2NDc1OWE3NjZiYzE5NTVjZmFmM2Y1NjIwMTQyOGZhZmVjOGQ0YmYxYmIzNmFlNiJ9fX0="), "Snowman", "&7&oI don't have a skull.. or bones"),
+    PRESENT(ItemFactory.createSkull("ZjBhZmE0ZmZmZDEwODYzZTc2YzY5OGRhMmM5YzllNzk5YmNmOWFiOWFhMzdkODMxMjg4MTczNDIyNWQzY2EifX19"), "Present", "&7&oFrom Santa, to you!"),
+    ELF(ItemFactory.createSkull("ODJhYjZjNzljNjNiODMzNGIyYzAzYjZmNzM2YWNmNjFhY2VkNWMyNGYyYmE3MmI3NzdkNzdmMjhlOGMifX19"), "Elf", "&7&oI work for Santa!");
 
     private String configName;
     private ItemStack itemStack;
@@ -100,7 +104,7 @@ public enum Hat {
     }
 
     public boolean isEnabled() {
-        return SettingsManager.getConfig().get("Hats." + configName + ".Enabled");
+        return SettingsManager.getConfig().getBoolean("Hats." + configName + ".Enabled");
     }
 
     public ItemStack getItemStack() {

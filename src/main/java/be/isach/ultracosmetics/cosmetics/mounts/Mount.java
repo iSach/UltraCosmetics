@@ -360,7 +360,7 @@ public abstract class Mount implements Listener {
         }
 
         public boolean isEnabled() {
-            return SettingsManager.getConfig().get("Mounts." + configName + ".Enabled");
+            return SettingsManager.getConfig().getBoolean("Mounts." + configName + ".Enabled");
         }
 
     }

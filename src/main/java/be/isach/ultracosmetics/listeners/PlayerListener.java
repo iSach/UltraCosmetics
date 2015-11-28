@@ -31,7 +31,7 @@ public class PlayerListener implements Listener {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+                            int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
                             if (event.getPlayer().getInventory().getItem(slot) != null) {
                                 if (event.getPlayer().getInventory().getItem(slot).hasItemMeta()
                                         && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
@@ -83,7 +83,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && !((List<String>) SettingsManager.getConfig().get("Disabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
-            int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+            int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
             if (event.getPlayer().getInventory().getItem(slot) != null) {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
                 event.getPlayer().getInventory().remove(slot);
@@ -101,7 +101,7 @@ public class PlayerListener implements Listener {
             Core.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
         Core.getCustomPlayer(event.getPlayer()).clear();
         Core.getCustomPlayers().remove(Core.getCustomPlayer(event.getPlayer()));
-        int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (event.getPlayer().getInventory().getItem(slot) != null
                 && event.getPlayer().getInventory().getItem(slot).hasItemMeta()
                 && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
@@ -112,7 +112,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
-        int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (event.getEntity().getInventory().getItem(slot) != null
                 && event.getEntity().getInventory().getItem(slot).hasItemMeta()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().hasDisplayName()

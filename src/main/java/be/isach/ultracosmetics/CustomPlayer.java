@@ -66,7 +66,7 @@ public class CustomPlayer {
     }
 
     public void removeChest() {
-        int slot = SettingsManager.getConfig().get("Menu-Item.Slot");
+        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (getPlayer().getInventory().getItem(slot) != null
                 && getPlayer().getInventory().getItem(slot).hasItemMeta()
                 && getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()

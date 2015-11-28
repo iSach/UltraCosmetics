@@ -36,7 +36,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
         super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALLGUN, "&7&oPEW PEW PEW PEW!!");
         if (owner != null) {
             Core.registerListener(this);
-            radius = SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Radius");
+            radius = SettingsManager.getConfig().getInt("Gadgets." + getType().configName + ".Radius");
         }
         displayCountdownMessage = false;
     }
@@ -63,9 +63,9 @@ public class GadgetPaintballGun extends Gadget implements Listener {
 
     @EventHandler
     public void onVehicleDestroy(VehicleDestroyEvent event) {
-        for(ArrayList<Projectile> projectile : projectiles.values()) {
-            for(Projectile proj : projectile) {
-                if(proj.getLocation().distance(event.getVehicle().getLocation()) < 10) {
+        for (ArrayList<Projectile> projectile : projectiles.values()) {
+            for (Projectile proj : projectile) {
+                if (proj.getLocation().distance(event.getVehicle().getLocation()) < 10) {
                     event.setCancelled(true);
                 }
             }
@@ -105,8 +105,8 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             for (Block block : BlockUtils.getBlocksInRadius(center.getBlock().getLocation(), radius, false)) {
                 BlockUtils.setToRestore(block, Material.getMaterial((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Block-Type")), b, 20 * 3);
             }
-            if (SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Particle.Enabled")) {
-                Particles effect = Particles.valueOf(((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
+            if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().configName + ".Particle.Enabled")) {
+                Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
                 UtilParticles.play(effect, 2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
             }
             event.getEntity().remove();
@@ -141,8 +141,8 @@ public class GadgetPaintballGun extends Gadget implements Listener {
 
     @Override
     public void onClear() {
-        for(ArrayList<Projectile> list : projectiles.values()) {
-            for(Projectile projectile : list) {
+        for (ArrayList<Projectile> list : projectiles.values()) {
+            for (Projectile projectile : list) {
                 projectile.remove();
             }
         }
