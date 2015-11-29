@@ -106,8 +106,8 @@ public class TreasureChest
                                             Block b = getChestLocation(i, center.clone()).getBlock();
                                             b.setType(design.getChestType().getType());
                                             getPlayer().playSound(getPlayer().getLocation(), Sound.ANVIL_LAND, 2, 1);
-                                            UtilParticles.play(Particles.SMOKE_LARGE, b.getLocation(), 5);
-                                            UtilParticles.play(Particles.LAVA, b.getLocation(), 5);
+                                            UtilParticles.display(Particles.SMOKE_LARGE, b.getLocation(), 5);
+                                            UtilParticles.display(Particles.LAVA, b.getLocation(), 5);
                                             BlockFace blockFace = BlockFace.SOUTH;
                                             switch (i) {
                                                 case 4:

@@ -36,7 +36,7 @@ public class GadgetSmashDown extends Gadget {
     GadgetSmashDown instance;
 
     public GadgetSmashDown(UUID owner) {
-        super(Material.FIREWORK_CHARGE, (byte) 0x0, "SmashDown", "ultracosmetics.gadgets.smashdown", 15, owner, GadgetType.SMASHDOWN, "&7&oSmash the ground like Hulk!");
+        super(Material.FIREWORK_CHARGE, (byte) 0x0, "SmashDown", "ultracosmetics.gadgets.smashdown", 15, owner, GadgetType.SMASH_DOWN, "&7&oSmash the ground like Hulk!");
         Core.registerListener(this);
         instance = this;
     }
@@ -48,7 +48,7 @@ public class GadgetSmashDown extends Gadget {
         final int taskId = Bukkit.getScheduler().runTaskTimer(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                UtilParticles.play(Particles.CLOUD, getPlayer().getLocation());
+                UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
             }
         }, 0, 1).getTaskId();
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {

@@ -32,7 +32,7 @@ public class GadgetBlizzardBlaster extends Gadget {
     List<ArmorStand> armorStands = new ArrayList<>();
 
     public GadgetBlizzardBlaster(UUID owner) {
-        super(Material.PACKED_ICE, (byte) 0x0, "BlizzardBlaster", "ultracosmetics.gadgets.blizzardblaster", 5, owner, GadgetType.BLIZZARDBLASTER, "&7&oLet it go!");
+        super(Material.PACKED_ICE, (byte) 0x0, "BlizzardBlaster", "ultracosmetics.gadgets.blizzardblaster", 5, owner, GadgetType.BLIZZARD_BLASTER, "&7&oLet it go!");
         instance = this;
     }
 
@@ -64,7 +64,7 @@ public class GadgetBlizzardBlaster extends Gadget {
                     as.setHelmet(new ItemStack(Material.PACKED_ICE));
                     as.setHeadPose(new EulerAngle(r.nextInt(50), r.nextInt(50), r.nextInt(50)));
                     armorStands.add(as);
-                    UtilParticles.play(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
+                    UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {

@@ -118,6 +118,8 @@ public class MessageManager {
         addMessage("Gadgets.QuakeGun.name", "&5§lQuake &d&lGun");
         addMessage("Gadgets.GhostParty.name", "&f&lGhost Party");
         addMessage("Gadgets.Firework.name", "&c&lFirework");
+        addMessage("Gadgets.ChristmasTree.name", "&2&lChristmas Tree");
+        addMessage("Gadgets.ChristmasTree.Click-On-Block", "%prefix% &c&lPlease click on a block!");
 
         // MOUNTS
         addMessage("Mounts.DruggedHorse.menu-name", "&2&lDrugged Horse");
@@ -148,6 +150,8 @@ public class MessageManager {
         addMessage("Mounts.Slime.entity-displayname", "&l%playername%'s slime");
         addMessage("Mounts.Spider.menu-name", "&8&lSpider");
         addMessage("Mounts.Spider.entity-displayname", "&l%playername%'s spider");
+        addMessage("Mounts.Rudolph.menu-name", "&f&lRudolp&4&lh");
+        addMessage("Mounts.Rudolph.entity-displayname", "&l%playername%'s spider");
         addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
         addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
 
@@ -210,6 +214,8 @@ public class MessageManager {
         addMessage("Morphs.Creeper.skill", "&eCrouch§7 to: &aDetonate");
         addMessage("Morphs.Creeper.charging", "&a&lCharging: %chargelevel%/100");
         addMessage("Morphs.Creeper.release-to-explode", "&f&lRelease to explode!");
+        addMessage("Morphs.Snowman.name", "&f&lSnowman");
+        addMessage("Morphs.Snowman.skill", "&eLeft Click§7 to: &aThrow Snowball");
         addMessage("Morphs.Morph", "%prefix% &9You morphed into %morphname%");
         addMessage("Morphs.Unmorph", "%prefix% &9You unmorphed from %morphname%");
         addMessage("Morphs.WitherSkeleton.name", "&8&lWither Skeleton");

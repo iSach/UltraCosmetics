@@ -33,7 +33,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     int radius = 2;
 
     public GadgetPaintballGun(UUID owner) {
-        super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALLGUN, "&7&oPEW PEW PEW PEW!!");
+        super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALL_GUN, "&7&oPEW PEW PEW PEW!!");
         if (owner != null) {
             Core.registerListener(this);
             radius = SettingsManager.getConfig().getInt("Gadgets." + getType().configName + ".Radius");
@@ -107,7 +107,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             }
             if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().configName + ".Particle.Enabled")) {
                 Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
-                UtilParticles.play(effect, 2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
+                UtilParticles.display(effect, 2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
             }
             event.getEntity().remove();
         }

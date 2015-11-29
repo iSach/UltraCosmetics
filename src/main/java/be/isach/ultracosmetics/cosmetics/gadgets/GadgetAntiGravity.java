@@ -27,7 +27,7 @@ public class GadgetAntiGravity extends Gadget {
 
 
     public GadgetAntiGravity(UUID owner) {
-        super(Material.EYE_OF_ENDER, (byte) 0x0, "AntiGravity", "ultracosmetics.gadgets.antigravity", 30, owner, GadgetType.ANTIGRAVITY, "&7&oIf you do not like gravity\n&7&oThis gadget is made for you!");
+        super(Material.EYE_OF_ENDER, (byte) 0x0, "AntiGravity", "ultracosmetics.gadgets.antigravity", 30, owner, GadgetType.ANTI_GRAVITY, "&7&oIf you do not like gravity\n&7&oThis gadget is made for you!");
         Core.registerListener(this);
     }
 
@@ -63,8 +63,8 @@ public class GadgetAntiGravity extends Gadget {
     void onUpdate() {
         if (as != null && as.isValid()) {
             as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
-            UtilParticles.play(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
-            UtilParticles.play(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
+            UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
+            UtilParticles.display(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
             for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
                 if (ent instanceof LivingEntity && !(ent instanceof ArmorStand))
                     MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));

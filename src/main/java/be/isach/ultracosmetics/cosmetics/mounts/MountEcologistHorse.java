@@ -57,6 +57,6 @@ public class MountEcologistHorse extends Mount {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(Particles.VILLAGER_HAPPY, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
+        UtilParticles.display(Particles.VILLAGER_HAPPY, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
     }
 }

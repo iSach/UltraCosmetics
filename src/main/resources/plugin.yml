@@ -1,6 +1,6 @@
 name: UltraCosmetics
 author: iSach
-version: Pre-Release 1.3
+version: Release 1.3
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core
 softdepend: [LibsDisguises, NoteBlockAPI, Vault]
@@ -74,6 +74,7 @@ permissions:
       - ultracosmetics.gadgets.parachute
       - ultracosmetics.gadgets.ghostparty
       - ultracosmetics.gadgets.firework
+      - ultracosmetics.gadgets.christmastree
   ultracosmetics.gadgets.paintballgun:
     default: op
   ultracosmetics.gadgets.batblaster:
@@ -120,6 +121,8 @@ permissions:
     default: op
   ultracosmetics.gadgets.firework:
     default: op
+  ultracosmetics.gadgets.christmastree:
+    default: op
   ultracosmetics.particleeffecs.*:
     children:
       - ultracosmetics.particleeffects.raincloud
@@ -135,6 +138,7 @@ permissions:
       - ultracosmetics.particleeffects.music
       - ultracosmetics.particleeffects.angelwings
       - ultracosmetics.particleeffects.superhero
+      - ultracosmetics.particleeffects.santahat
   ultracosmetics.particleeffects.raincloud:
     default: op
   ultracosmetics.particleeffects.snowcloud:
@@ -161,6 +165,8 @@ permissions:
     default: op
   ultracosmetics.particleeffects.superhero:
     default: op
+  ultracosmetics.particleeffects.santahat:
+    default: op
   ultracosmetics.mounts.*:
     children:
       - ultracosmetics.mounts.druggedhorse
@@ -177,6 +183,7 @@ permissions:
       - ultracosmetics.mounts.slime
       - ultracosmetics.mounts.hypecart
       - ultracosmetics.mounts.spider
+      - ultracosmetics.mounts.rudolph
   ultracosmetics.mounts.druggedhorse:
     default: op
   ultracosmetics.mounts.ecologisthorse:
@@ -205,6 +212,8 @@ permissions:
     default: op
   ultracosmetics.mounts.spider:
     default: op
+  ultracosmetics.mounts.rudolph:
+    default: op
   ultracosmetics.pets.*:
     children:
       - ultracosmetics.pets.piggy
@@ -216,6 +225,7 @@ permissions:
       - ultracosmetics.pets.easterbunny
       - ultracosmetics.pets.wither
       - ultracosmetics.pets.pumpling
+      - ultracosmetics.pets.christmaself
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -237,6 +247,8 @@ permissions:
     default: op
   ultracosmetics.pets.rename:
     default: op
+  ultracosmetics.pets.christmaself:
+    default: op
   ultracosmetics.morphs.*:
     children:
       - ultracosmetics.morphs.bat
@@ -247,6 +259,7 @@ permissions:
       - ultracosmetics.morphs.enderman
       - ultracosmetics.morphs.creeper
       - ultracosmetics.morphs.witherskeleton
+      - ultracosmetics.morphs.snowman
   ultracosmetics.morphs.bat:
     default: op
   ultracosmetics.morphs.blaze:
@@ -262,6 +275,8 @@ permissions:
   ultracosmetics.morphs.creeper:
     default: op
   ultracosmetics.morphs.witherskeleton:
+    default: op
+  ultracosmetics.morphs.snowman:
     default: op
   ultracosmetics.hats.*:
     children:
@@ -300,6 +315,10 @@ permissions:
       - ultracosmetics.hats.ghost
       - ultracosmetics.hats.jackolantern
       - ultracosmetics.hats.scaryclown
+      - ultracosmetics.hats.santa
+      - ultracosmetics.hats.snowman
+      - ultracosmetics.hats.present
+      - ultracosmetics.hats.elf
   ultracosmetics.hats.astronaut:
     default: op
   ultracosmetics.hats.scared:
@@ -369,4 +388,12 @@ permissions:
   ultracosmetics.hats.jackolantern:
     default: op
   ultracosmetics.hats.scaryclown:
+    default: op
+  ultracosmetics.hats.santa:
+    default: op
+  ultracosmetics.hats.snowman:
+    default: op
+  ultracosmetics.hats.present:
+    default: op
+  ultracosmetics.hats.elf:
     default: op

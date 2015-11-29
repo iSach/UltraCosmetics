@@ -117,7 +117,7 @@ public class MorphChicken extends Morph {
                         @Override
                         public void run() {
                             for (Chicken chicken : chickens) {
-                                UtilParticles.play(Particles.LAVA, chicken.getLocation(), 10);
+                                UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
                                 chicken.remove();
                             }
                             chickens.clear();

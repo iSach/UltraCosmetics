@@ -434,7 +434,7 @@ public class Core extends JavaPlugin {
             config.addDefault("Gadgets." + gadget.getType().configName + ".Enabled", true, "if true, the gadget will be enabled.");
             config.addDefault("Gadgets." + gadget.getType().configName + ".Show-Description", true, "if true, the description of gadget will be showed.");
             config.addDefault("Gadgets." + gadget.getType().configName + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-            if (gadget.getType() == Gadget.GadgetType.PAINTBALLGUN) {
+            if (gadget.getType() == Gadget.GadgetType.PAINTBALL_GUN) {
                 config.addDefault("Gadgets." + gadget.getType().configName + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
                 config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Enabled", false, "Should it display particles?");
                 config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
@@ -513,6 +513,7 @@ public class Core extends JavaPlugin {
             morphList.add(new MorphPig(null));
             morphList.add(new MorphCreeper(null));
             morphList.add(new MorphWitherSkeleton(null));
+            morphList.add(new MorphSnowman(null));
         }
     }
 
@@ -562,6 +563,7 @@ public class Core extends JavaPlugin {
         gadgetList.add(new GadgetParachute(null));
         gadgetList.add(new GadgetGhostParty(null));
         gadgetList.add(new GadgetFirework(null));
+        gadgetList.add(new GadgetChristmasTree(null));
     }
 
     private void addDefault(String path, Object value) {
@@ -605,6 +607,7 @@ public class Core extends JavaPlugin {
         mountList.add(new MountSlime(null));
         mountList.add(new MountHypeCart(null));
         mountList.add(new MountSpider(null));
+        mountList.add(new MountRudolph(null));
     }
 
     @Override

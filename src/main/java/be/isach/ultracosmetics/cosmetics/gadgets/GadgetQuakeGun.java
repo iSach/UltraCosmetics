@@ -24,7 +24,7 @@ public class GadgetQuakeGun extends Gadget {
     List<Firework> fireworkList = new ArrayList<>();
 
     public GadgetQuakeGun(UUID owner) {
-        super(Material.DIAMOND_HOE, (byte) 0x0, "QuakeGun", "ultracosmetics.gadgets.quakegun", 5, owner, GadgetType.QUAKEGUN, "&7&oGet a real Rail Gun and\n&7&oStrike players and mobs!");
+        super(Material.DIAMOND_HOE, (byte) 0x0, "QuakeGun", "ultracosmetics.gadgets.quakegun", 5, owner, GadgetType.QUAKE_GUN, "&7&oGet a real Rail Gun and\n&7&oStrike players and mobs!");
         Core.registerListener(this);
     }
 
@@ -48,7 +48,7 @@ public class GadgetQuakeGun extends Gadget {
                     if ((entity instanceof Player || entity instanceof Creature)
                             && entity != getPlayer()) {
                         MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
-                        UtilParticles.play(Particles.FLAME, entity.getLocation(), 60, 0.4f);
+                        UtilParticles.display(Particles.FLAME, entity.getLocation(), 60, 0.4f);
                         FireworkEffect.Builder builder = FireworkEffect.builder();
                         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                                 .withColor(Color.RED).withFade(Color.ORANGE).build();

@@ -56,11 +56,11 @@ public class GadgetTsunami extends Gadget {
                 Location loc1 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
                 Location loc2 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1.3, 1.8) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
                 for (int i = 0; i < 5; i++) {
-                    UtilParticles.play(Particles.CLOUD, 0.2d, 0.2d, 0.2d, loc1, 1);
-                    UtilParticles.play(Particles.DRIP_WATER, 0.4d, 0.4d, 0.4d, loc2, 2);
+                    UtilParticles.display(Particles.CLOUD, 0.2d, 0.2d, 0.2d, loc1, 1);
+                    UtilParticles.display(Particles.DRIP_WATER, 0.4d, 0.4d, 0.4d, loc2, 2);
                 }
                 for (int a = 0; a < 100; a++)
-                    UtilParticles.play(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
+                    UtilParticles.display(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {

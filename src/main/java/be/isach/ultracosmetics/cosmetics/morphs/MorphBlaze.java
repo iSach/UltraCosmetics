@@ -36,8 +36,8 @@ public class MorphBlaze extends Morph {
                     }
 
                     if (getPlayer().isSneaking()) {
-                        UtilParticles.play(Particles.FLAME, getPlayer().getLocation());
-                        UtilParticles.play(Particles.LAVA, getPlayer().getLocation());
+                        UtilParticles.display(Particles.FLAME, getPlayer().getLocation());
+                        UtilParticles.display(Particles.LAVA, getPlayer().getLocation());
                         getPlayer().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.05f, 1);
                         getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
                     }

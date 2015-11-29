@@ -41,7 +41,7 @@ public class ParticleEffectFlameRings extends ParticleEffect {
             } else {
                 MathUtils.rotateAroundAxisZ(v, 90);
             }
-            UtilParticles.play(getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
+            UtilParticles.display(getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
         }
         step += 3;
     }

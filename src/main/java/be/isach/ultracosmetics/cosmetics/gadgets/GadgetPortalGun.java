@@ -31,7 +31,7 @@ public class GadgetPortalGun extends Gadget {
     BlockFace redBlockFace;
 
     public GadgetPortalGun(UUID owner) {
-        super(Material.REDSTONE_COMPARATOR, (byte) 0x0, "PortalGun", "ultracosmetics.gadgets.portalgun", 1, owner, GadgetType.PORTALGUN, "&7&oMomentum, a function of mass and velocity,\n&7&ois converved between portals. In layman's terms,\n&7&ospeedy thing goes in, speedy thing goes out.");
+        super(Material.REDSTONE_COMPARATOR, (byte) 0x0, "PortalGun", "ultracosmetics.gadgets.portalgun", 1, owner, GadgetType.PORTAL_GUN, "&7&oMomentum, a function of mass and velocity,\n&7&ois converved between portals. In layman's terms,\n&7&ospeedy thing goes in, speedy thing goes out.");
         displayCountdownMessage = false;
         useTwoInteractMethods = true;
     }
@@ -190,7 +190,7 @@ public class GadgetPortalGun extends Gadget {
                     }
                 }
                 MathUtils.rotateVector(v, x, 0, z);
-                UtilParticles.play(0, 0, 255, loc.add(v));
+                UtilParticles.display(0, 0, 255, loc.add(v));
             }
         }
         if (locRed != null) {
@@ -246,7 +246,7 @@ public class GadgetPortalGun extends Gadget {
                     }
                 }
                 MathUtils.rotateVector(v, x, 0, z);
-                UtilParticles.play(255, 0, 0, loc.add(v));
+                UtilParticles.display(255, 0, 0, loc.add(v));
             }
         }
 

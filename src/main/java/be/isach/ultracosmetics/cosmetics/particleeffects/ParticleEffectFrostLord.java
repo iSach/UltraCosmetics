@@ -33,7 +33,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
-            UtilParticles.play(getEffect(), location.add(v).add(0, stepY, 0));
+            UtilParticles.display(getEffect(), location.add(v).add(0, stepY, 0));
             location.subtract(v).subtract(0, stepY, 0);
             if (stepY < 3) {
                 radius -= 0.022;
@@ -43,7 +43,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                 step = 0;
                 radius = 1.5f;
                 location.getWorld().playSound(location, Sound.DIG_SNOW, .5f, 1.5f);
-                UtilParticles.play(getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
+                UtilParticles.display(getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
             }
         }
     }

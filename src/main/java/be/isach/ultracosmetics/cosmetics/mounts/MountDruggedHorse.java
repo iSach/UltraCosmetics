@@ -56,9 +56,9 @@ public class MountDruggedHorse extends Mount {
     @Override
     void onUpdate() {
         Location loc = ent.getLocation().add(0, 1, 0);
-        UtilParticles.play(Particles.FIREWORKS_SPARK, 0.4f, 0.2f, 0.4f, loc, 5);
-        UtilParticles.play(Particles.SPELL, 0.4f, 0.2f, 0.4f, loc, 5);
-        UtilParticles.play(Particles.SPELL_MOB_AMBIENT, 0.4f, 0.2f, 0.4f, loc, 5);
-        UtilParticles.play(Particles.SPELL_MOB, 5, 255, 0, loc);
+        UtilParticles.display(Particles.FIREWORKS_SPARK, 0.4f, 0.2f, 0.4f, loc, 5);
+        UtilParticles.display(Particles.SPELL, 0.4f, 0.2f, 0.4f, loc, 5);
+        UtilParticles.display(Particles.SPELL_MOB_AMBIENT, 0.4f, 0.2f, 0.4f, loc, 5);
+        UtilParticles.display(Particles.SPELL_MOB, 5, 255, 0, loc);
     }
 }

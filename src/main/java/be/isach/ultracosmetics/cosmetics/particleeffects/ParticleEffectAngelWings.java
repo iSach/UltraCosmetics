@@ -61,7 +61,7 @@ public class ParticleEffectAngelWings extends ParticleEffect {
                     location.add(v);
                     location.add(v2);
                     for (int k = 0; k < 3; k++)
-                        UtilParticles.play(255, 255, 255, location);
+                        UtilParticles.display(255, 255, 255, location);
                     location.subtract(v2);
                     location.subtract(v);
                 }

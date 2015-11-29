@@ -26,7 +26,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
     Vector v;
 
     public GadgetThorHammer(UUID owner) {
-        super(Material.IRON_AXE, (byte) 0x0, "ThorHammer", "ultracosmetics.gadgets.thorhammer", 4, owner, GadgetType.THORHAMMER, "&7&oGet the real Mjölnir!");
+        super(Material.IRON_AXE, (byte) 0x0, "ThorHammer", "ultracosmetics.gadgets.thorhammer", 4, owner, GadgetType.THOR_HAMMER, "&7&oGet the real Mjölnir!");
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
     }

@@ -30,6 +30,6 @@ public class MountInfernalHorror extends Mount {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(Particles.FLAME, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
+        UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
     }
 }

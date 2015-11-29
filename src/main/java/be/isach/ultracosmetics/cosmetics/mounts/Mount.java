@@ -349,7 +349,8 @@ public abstract class Mount implements Listener {
         SKYSQUID("ultracosmetics.mounts.skysquid", "SkySquid"),
         SLIME("ultracosmetics.mounts.slime", "Slime"),
         HYPECART("ultracosmetics.mounts.hypecart", "HypeCart"),
-        SPIDER("ultracosmetics.mounts.spider", "Spider");
+        SPIDER("ultracosmetics.mounts.spider", "Spider"),
+        RUDOLPH("ultracosmetics.mounts.rudolph", "Rudolph");
 
 
         String permission;

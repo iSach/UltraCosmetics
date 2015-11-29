@@ -31,7 +31,7 @@ public class GadgetExplosiveSheep extends Gadget {
     ArrayList<Sheep> sheepArrayList = new ArrayList<>();
 
     public GadgetExplosiveSheep(UUID owner) {
-        super(Material.SHEARS, (byte) 0x0, "ExplosiveSheep", "ultracosmetics.gadgets.explosivesheep", 40, owner, GadgetType.EXPLOSIVESHEEP, "&7&oAre you sure it is supposed\n&7&oto flicker like that?");
+        super(Material.SHEARS, (byte) 0x0, "ExplosiveSheep", "ultracosmetics.gadgets.explosivesheep", 40, owner, GadgetType.EXPLOSIVE_SHEEP, "&7&oAre you sure it is supposed\n&7&oto flicker like that?");
         Core.registerListener(this);
     }
 
@@ -154,7 +154,7 @@ public class GadgetExplosiveSheep extends Gadget {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            UtilParticles.play(Particles.LAVA, sheep.getLocation(), 5);
+                            UtilParticles.display(Particles.LAVA, sheep.getLocation(), 5);
                             sheep.remove();
                             Core.explosiveSheep.remove(gadgetExplosiveSheep);
                         }

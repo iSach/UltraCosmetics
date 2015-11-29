@@ -35,6 +35,8 @@ Categories:
 
 # Treasure Chests Settings.
 # /uc reload will not be enough to toggle them!
+# Also currently requires "Ammo-System-For-Gadgets" toggled on
+# to work.
 #
 # NOTE: Money will be given
 #       to player even if disabled in case
@@ -135,6 +137,14 @@ TreasureChests:
       barriers: '113:0'
       chest-type: NORMAL
       effect: SMOKE_NORMAL
+    Christmas:
+      center-block: '169:0'
+      around-center: '80:0'
+      third-blocks: '174:0'
+      below-chests: '174:0'
+      barriers: '85:0'
+      chest-type: NORMAL
+      effect: SNOWBALL
   Permission-Add-Command: pex user %name% add %permission%
 
 # This option will fill the blank slots of inventories

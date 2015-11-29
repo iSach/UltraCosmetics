@@ -82,12 +82,16 @@ public abstract class ParticleEffect implements Listener {
                                 if (!moving || ignoreMove)
                                     onUpdate();
                                 if (moving) {
-                                    if (effect == Particles.REDSTONE)
+                                    boolean c = type == ParticleEffectType.ANGELWINGS;
+                                    if (getEffect() == Particles.REDSTONE) {
                                         if (!ignoreMove)
                                             for (int i = 0; i < 15; i++)
-                                                effect.display(new Particles.OrdinaryColor(255, 255, 255), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
-                                        else
-                                            UtilParticles.play(effect, .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
+                                                if (!c)
+                                                    effect.display(new Particles.OrdinaryColor(255, 0, 0), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
+                                                else
+                                                    effect.display(new Particles.OrdinaryColor(255, 255, 255), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
+                                    } else
+                                        UtilParticles.display(effect, .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
                                     moving = false;
                                 }
                             } else

@@ -16,9 +16,10 @@ public class ParticleEffectSantaHat extends ParticleEffect {
     public int particles = 12;
 
     public ParticleEffectSantaHat(UUID owner) {
-        super(Particles.FLAME, Material.INK_SACK, (byte) 0x1, "SantaHat", "ultracosmetics.particleeffects.santahat",
+        super(Particles.REDSTONE, Material.INK_SACK, (byte) 0x1, "SantaHat", "ultracosmetics.particleeffects.santahat",
                 owner, ParticleEffectType.SANTAHAT, 2,
                 "&7&oBecome Santa!");
+        ignoreMove = true;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class ParticleEffectSantaHat extends ParticleEffect {
             double x = MathUtils.randomDouble(-0.05, 0.05);
             double z = MathUtils.randomDouble(-0.05, 0.05);
             location.add(x, 0.46f, z);
-            UtilParticles.play(255, 255, 255, location);
+            UtilParticles.display(255, 255, 255, location);
             location.subtract(x, 0.46f, z);
         }
         for (float f = 0; f <= 0.4f; f += 0.1f) {
@@ -48,7 +49,7 @@ public class ParticleEffectSantaHat extends ParticleEffect {
             float x = MathUtils.cos(angle) * radius;
             float z = MathUtils.sin(angle) * radius;
             location.add(x, height, z);
-            UtilParticles.play(255, red ? 0 : 255, red ? 0 : 255, location);
+            UtilParticles.display(255, red ? 0 : 255, red ? 0 : 255, location);
             location.subtract(x, height, z);
         }
     }

@@ -137,7 +137,7 @@ public class MainMenuManager implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
                     return;
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
-                    GadgetManager.openGadgetsMenu((Player) event.getWhoClicked());
+                    GadgetManager.openGadgetsMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
                     MountManager.openMountsMenu((Player) event.getWhoClicked());

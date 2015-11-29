@@ -41,7 +41,7 @@ public class ParticleEffectInferno extends ParticleEffect {
             v.setX(Math.cos(angle) * 1.1);
             v.setZ(Math.sin(angle) * 1.1);
             try {
-                UtilParticles.play(getEffect(), 0.15f, 0.15f, 0.15f, getPlayer().getLocation().clone().add(v).add(0, height[i], 0), 4);
+                UtilParticles.display(getEffect(), 0.15f, 0.15f, 0.15f, getPlayer().getLocation().clone().add(v).add(0, height[i], 0), 4);
             } catch (Exception exc) {
 
             }

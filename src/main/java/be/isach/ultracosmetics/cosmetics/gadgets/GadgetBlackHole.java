@@ -26,7 +26,7 @@ public class GadgetBlackHole extends Gadget {
     Item i;
 
     public GadgetBlackHole(UUID owner) {
-        super(Material.STAINED_CLAY, (byte) 0xf, "BlackHole", "ultracosmetics.gadgets.blackhole", 45, owner, GadgetType.BLACKHOLE, "&7&oDo not get caught in it...");
+        super(Material.STAINED_CLAY, (byte) 0xf, "BlackHole", "ultracosmetics.gadgets.blackhole", 45, owner, GadgetType.BLACK_HOLE, "&7&oDo not get caught in it...");
     }
 
     @Override
@@ -67,7 +67,7 @@ public class GadgetBlackHole extends Gadget {
                     double x = Math.cos(angle) * ratio * radius;
                     double z = Math.sin(angle) * ratio * radius;
                     location.add(x, 0, z);
-                    UtilParticles.play(Particles.SMOKE_LARGE, location);
+                    UtilParticles.display(Particles.SMOKE_LARGE, location);
                     location.subtract(x, 0, z);
                 }
             }

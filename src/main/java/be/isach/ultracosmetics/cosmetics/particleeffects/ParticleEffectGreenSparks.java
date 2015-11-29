@@ -39,7 +39,7 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
         Vector v = new Vector();
         v.setX(Math.cos(angle) * 1.1);
         v.setZ(Math.sin(angle) * 1.1);
-        UtilParticles.play(getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
+        UtilParticles.display(getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
         step += 4;
     }
 }

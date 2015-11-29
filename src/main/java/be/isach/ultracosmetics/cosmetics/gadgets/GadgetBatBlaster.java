@@ -24,7 +24,7 @@ public class GadgetBatBlaster extends Gadget {
     private HashMap<Player, ArrayList<Bat>> bats = new HashMap();
 
     public GadgetBatBlaster(UUID owner) {
-        super(Material.IRON_BARDING, (byte) 0x0, "BatBlaster", "ultracosmetics.gadgets.batblaster", 7, owner, GadgetType.BATBLASTER, "&7&oLaunch waves of annoying bats\n&7&oto people you do not like!");
+        super(Material.IRON_BARDING, (byte) 0x0, "BatBlaster", "ultracosmetics.gadgets.batblaster", 7, owner, GadgetType.BAT_BLASTER, "&7&oLaunch waves of annoying bats\n&7&oto people you do not like!");
     }
 
     @Override
@@ -87,7 +87,7 @@ public class GadgetBatBlaster extends Gadget {
 
 
                             bat.getWorld().playSound(bat.getLocation(), Sound.BAT_HURT, 1.0F, 1.0F);
-                            UtilParticles.play(Particles.SMOKE_NORMAL, bat.getLocation());
+                            UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
 
                             bat.remove();
                         }

@@ -36,7 +36,7 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
-            UtilParticles.play(Particles.REDSTONE, location.add(v));
+            UtilParticles.display(Particles.REDSTONE, location.add(v));
             location.subtract(v);
             location.add(0, 0.12d, 0);
             radius -= 0.044f;
@@ -47,7 +47,7 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius2);
             v.setZ(Math.sin(angle) * radius2);
-            UtilParticles.play(Particles.REDSTONE, location2.add(v));
+            UtilParticles.display(Particles.REDSTONE, location2.add(v));
             location2.subtract(v);
             location2.add(0, 0.12d, 0);
             radius2 -= 0.044f;

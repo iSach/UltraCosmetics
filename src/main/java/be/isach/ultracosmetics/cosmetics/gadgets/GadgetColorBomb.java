@@ -29,7 +29,7 @@ public class GadgetColorBomb extends Gadget {
     private boolean running = false;
 
     public GadgetColorBomb(UUID owner) {
-        super(Material.WOOL, (byte) 0x3, "ColorBomb", "ultracosmetics.gadgets.colorbomb", 30, owner, GadgetType.COLORBOMB, "&7&oA colorful bomb!");
+        super(Material.WOOL, (byte) 0x3, "ColorBomb", "ultracosmetics.gadgets.colorbomb", 30, owner, GadgetType.COLOR_BOMB, "&7&oA colorful bomb!");
 
     }
 
@@ -70,7 +70,7 @@ public class GadgetColorBomb extends Gadget {
                     effect = Particles.SPELL_WITCH;
                     break;
             }
-            UtilParticles.play(effect, bomb.getLocation(), 1, 0.2f);
+            UtilParticles.display(effect, bomb.getLocation(), 1, 0.2f);
             try {
                 for (Item item : items) {
                     if (item.getTicksLived() > 15) {

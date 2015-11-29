@@ -53,13 +53,13 @@ public abstract class Morph implements Listener {
             this.owner = owner;
             if (Core.getCustomPlayer(getPlayer()).currentMorph != null)
                 Core.getCustomPlayer(getPlayer()).removeMorph();
-
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
-            Core.getCustomPlayer(getPlayer()).currentMorph = this;
             if (!getPlayer().hasPermission(permission)) {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
+            Core.getCustomPlayer(getPlayer()).currentMorph = this;
+
 
             // Disguise the player
             disguise = new MobDisguise(disguiseType);
@@ -148,7 +148,8 @@ public abstract class Morph implements Listener {
         ENDERMAN("ultracosmetics.morphs.enderman", "Enderman"),
         SLIME("ultracosmetics.morphs.slime", "Slime"),
         CREEPER("ultracosmetics.morphs.creeper", "Creeper"),
-        WITHERSKELETON("ultracosmetics.morphs.witherskeleton", "WitherSkeleton");
+        WITHERSKELETON("ultracosmetics.morphs.witherskeleton", "WitherSkeleton"),
+        SNOWNMAN("ultracosmetics.morphs.snowman", "Snowman");
 
         String permission;
         String configName;

@@ -130,7 +130,7 @@ public class GadgetRocket extends Gadget {
                                     fallingBlocks.clear();
                                     Core.noFallDamageEntities.add(getPlayer());
                                     getPlayer().playSound(getPlayer().getLocation(), Sound.EXPLODE, 3, 1);
-                                    UtilParticles.play(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
+                                    UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
                                     launching = false;
                                 }
                             }, 80);
@@ -152,7 +152,7 @@ public class GadgetRocket extends Gadget {
         if (armorStand != null) {
             if (armorStand.getPassenger() == null)
                 armorStand.setPassenger(getPlayer());
-            UtilParticles.play(Particles.SMOKE_LARGE, 0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
+            UtilParticles.display(Particles.SMOKE_LARGE, 0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
             armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.FIZZ, 0.025f, 1);
         }
         for (FallingBlock fallingBlock : fallingBlocks) {
@@ -161,8 +161,8 @@ public class GadgetRocket extends Gadget {
         if (launching) {
             if (fallingBlocks.get(8).getPassenger() == null)
                 fallingBlocks.get(8).setPassenger(getPlayer());
-            UtilParticles.play(Particles.FLAME, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
-            UtilParticles.play(Particles.LAVA, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
+            UtilParticles.display(Particles.FLAME, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
+            UtilParticles.display(Particles.LAVA, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
             getPlayer().getWorld().playSound(getPlayer().getLocation().clone().add(0, -3, 0), Sound.BAT_LOOP, 1.5f, 1);
             getPlayer().getWorld().playSound(getPlayer().getLocation().clone().add(0, -3, 0), Sound.FIZZ, 0.025f, 1);
         }

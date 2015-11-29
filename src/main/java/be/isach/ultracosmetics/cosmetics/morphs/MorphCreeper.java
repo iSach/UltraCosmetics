@@ -59,7 +59,7 @@ public class MorphCreeper extends Morph {
                                 disguise.setViewSelfDisguise(false);
                         }
                         if (charge == 100) {
-                            UtilParticles.play(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
+                            UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.EXPLODE, 1, 1);
 
                             for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {

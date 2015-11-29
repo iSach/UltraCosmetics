@@ -19,8 +19,8 @@ public class ParticleEffectSnowCloud extends ParticleEffect {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(Particles.CLOUD, 0.5F, 0.1f, 0.5f, getPlayer().getLocation().add(0, 3, 0), 10);
-        UtilParticles.play(getEffect(), 0.25F, 0.05f, 0.25f, getPlayer().getLocation().add(0, 3, 0), 1);
+        UtilParticles.display(Particles.CLOUD, 0.5F, 0.1f, 0.5f, getPlayer().getLocation().add(0, 3, 0), 10);
+        UtilParticles.display(getEffect(), 0.25F, 0.05f, 0.25f, getPlayer().getLocation().add(0, 3, 0), 1);
     }
 
 }

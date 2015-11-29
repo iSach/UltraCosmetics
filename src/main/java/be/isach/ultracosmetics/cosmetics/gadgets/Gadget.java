@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,6 +47,7 @@ public abstract class Gadget implements Listener {
     private UUID owner;
     boolean affectPlayers;
     private String description;
+    protected Block lastClickedBlock;
 
     public Gadget(Material material, Byte data, String configName, String permission, double countdown, final UUID owner, final GadgetType type, String defaultDesc) {
         this.material = material;
@@ -199,6 +201,8 @@ public abstract class Gadget implements Listener {
         this.inv = inventory;
     }
 
+    public int lastPage = 1;
+
     public class GadgetListener implements Listener {
         private Gadget gadget;
 
@@ -232,8 +236,9 @@ public abstract class Gadget implements Listener {
                                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                                     @Override
                                     public void run() {
-                                        GadgetManager.openGadgetsMenu((Player) event.getWhoClicked());
+                                        GadgetManager.openGadgetsMenu((Player) event.getWhoClicked(), lastPage);
                                         openGadgetsInvAfterAmmo = false;
+                                        lastPage = 1;
                                     }
                                 }, 1);
                         } else {
@@ -277,7 +282,7 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.PORTALGUN) {
+            if (type == GadgetType.PORTAL_GUN) {
                 if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
                     return;
@@ -295,13 +300,20 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.DISCOBALL) {
+            if (type == GadgetType.DISCO_BALL) {
                 if (Core.discoBalls.size() > 0) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.DiscoBall.Already-Active"));
                     return;
                 }
                 if (getPlayer().getLocation().add(0, 4, 0).getBlock() != null && getPlayer().getLocation().add(0, 4, 0).getBlock().getType() != Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.DiscoBall.Not-Space-Above"));
+                    return;
+                }
+            }
+            if(type == GadgetType.CHRISTMAS_TREE) {
+                if(event.getClickedBlock() == null
+                        || event.getClickedBlock().getType() == Material.AIR) {
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
                     return;
                 }
             }
@@ -317,7 +329,7 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.EXPLOSIVESHEEP) {
+            if (type == GadgetType.EXPLOSIVE_SHEEP) {
                 if (Core.explosiveSheep.size() > 0) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ExplosiveSheep.Already-Active"));
                     return;
@@ -342,6 +354,9 @@ public abstract class Gadget implements Listener {
                 Core.getCustomPlayer(getPlayer()).removeAmmo(getType().toString().toLowerCase());
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
             }
+            if(event.getClickedBlock() != null
+                    && event.getClickedBlock().getType() != Material.AIR)
+                lastClickedBlock = event.getClickedBlock();
             if (useTwoInteractMethods) {
                 if (event.getAction() == Action.RIGHT_CLICK_AIR
                         || event.getAction() == Action.RIGHT_CLICK_BLOCK)
@@ -402,29 +417,30 @@ public abstract class Gadget implements Listener {
     }
 
     public enum GadgetType {
-        BATBLASTER("ultracosmetics.gadgets.batblaster", "BatBlaster"),
+        BAT_BLASTER("ultracosmetics.gadgets.batblaster", "BatBlaster"),
         CHICKENATOR("ultracosmetics.gadgets.chickenator", "Chickenator"),
-        COLORBOMB("ultracosmetics.gadgets.colorbomb", "ColorBomb"),
-        DISCOBALL("ultracosmetics.gadgets.discoball", "DiscoBall"),
-        ETHEREALPEARL("ultracosmetics.gadgets.etherealpearl", "EtherealPearl"),
-        FLESHHOOK("ultracosmetics.gadgets.fleshhook", "FleshHook"),
-        MELONTHROWER("ultracosmetics.gadgets.melonthrower", "MelonThrower"),
-        BLIZZARDBLASTER("ultracosmetics.gadgets.blizzardblaster", "BlizzardBlaster"),
-        PORTALGUN("ultracosmetics.gadgets.portalgun", "PortalGun"),
-        EXPLOSIVESHEEP("ultracosmetics.gadgets.explosivesheep", "ExplosiveSheep"),
-        PAINTBALLGUN("ultracosmetics.gadgets.paintballgun", "PaintballGun"),
-        THORHAMMER("ultracosmetics.gadgets.thorhammer", "ThorHammer"),
-        ANTIGRAVITY("ultracosmetics.gadgets.antigravity", "AntiGravity"),
-        SMASHDOWN("ultracosmetics.gadgets.smashdown", "SmashDown"),
+        COLOR_BOMB("ultracosmetics.gadgets.colorbomb", "ColorBomb"),
+        DISCO_BALL("ultracosmetics.gadgets.discoball", "DiscoBall"),
+        ETHEREAL_PEARL("ultracosmetics.gadgets.etherealpearl", "EtherealPearl"),
+        FLESH_HOOK("ultracosmetics.gadgets.fleshhook", "FleshHook"),
+        MELON_THROWER("ultracosmetics.gadgets.melonthrower", "MelonThrower"),
+        BLIZZARD_BLASTER("ultracosmetics.gadgets.blizzardblaster", "BlizzardBlaster"),
+        PORTAL_GUN("ultracosmetics.gadgets.portalgun", "PortalGun"),
+        EXPLOSIVE_SHEEP("ultracosmetics.gadgets.explosivesheep", "ExplosiveSheep"),
+        PAINTBALL_GUN("ultracosmetics.gadgets.paintballgun", "PaintballGun"),
+        THOR_HAMMER("ultracosmetics.gadgets.thorhammer", "ThorHammer"),
+        ANTI_GRAVITY("ultracosmetics.gadgets.antigravity", "AntiGravity"),
+        SMASH_DOWN("ultracosmetics.gadgets.smashdown", "SmashDown"),
         ROCKET("ultracosmetics.gadgets.rocket", "Rocket"),
-        BLACKHOLE("ultracosmetics.gadgets.blackhole", "BlackHole"),
+        BLACK_HOLE("ultracosmetics.gadgets.blackhole", "BlackHole"),
         TSUNAMI("ultracosmetics.gadgets.tsunami", "Tsunami"),
         TNT("ultracosmetics.gadgets.tnt", "TNT"),
-        FUNGUN("ultracosmetics.gadgets.fungun", "FunGun"),
+        FUN_GUN("ultracosmetics.gadgets.fungun", "FunGun"),
         PARACHUTE("ultracosmetics.gadgets.parachute", "Parachute"),
-        QUAKEGUN("ultracosmetics.gadgets.quakegun", "QuakeGun"),
-        GHOSTPARTY("ultracosmetics.gadgets.ghostparty", "GhostParty"),
-        FIREWORK("ultracosmetics.gadgets.firework", "Firework");
+        QUAKE_GUN("ultracosmetics.gadgets.quakegun", "QuakeGun"),
+        GHOST_PARTY("ultracosmetics.gadgets.ghostparty", "GhostParty"),
+        FIREWORK("ultracosmetics.gadgets.firework", "Firework"),
+        CHRISTMAS_TREE("ultracosmetics.gadgets.christmastree", "ChristmasTree");
 
         String permission;
         public String configName;

@@ -57,6 +57,6 @@ public class MountMountOfWater extends Mount {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(Particles.DRIP_WATER, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
+        UtilParticles.display(Particles.DRIP_WATER, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
     }
 }

@@ -119,7 +119,7 @@ public class PlayerListener implements Listener {
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
             if (Core.getCustomPlayer(event.getEntity()).currentGadget != null)
                 event.getDrops().remove(event.getEntity().getInventory().getItem((Integer) SettingsManager.getConfig().get("Gadget-Slot")));
-            if(Core.getCustomPlayer(event.getEntity()).currentHat != null) {
+            if (Core.getCustomPlayer(event.getEntity()).currentHat != null) {
                 event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentHat.getItemStack());
             }
             Core.getCustomPlayer(event.getEntity()).clear();
@@ -146,6 +146,13 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             event.getItem().remove();
         }
+    }
+
+    @EventHandler
+    public void onPlayerInteractGhost(PlayerInteractAtEntityEvent event) {
+        if (event.getRightClicked() != null
+                && event.getRightClicked().hasMetadata("C_AD_ArmorStand"))
+            event.setCancelled(true);
     }
 
 }

@@ -25,7 +25,7 @@ public class GadgetFunGun extends Gadget {
     private List<Projectile> projectiles = new ArrayList<>();
 
     public GadgetFunGun(UUID owner) {
-        super(Material.BLAZE_ROD, (byte) 0x0, "FunGun", "ultracosmetics.gadgets.fungun", 2, owner, GadgetType.FUNGUN, "&7&oWow! So much fun in a gun!");
+        super(Material.BLAZE_ROD, (byte) 0x0, "FunGun", "ultracosmetics.gadgets.fungun", 2, owner, GadgetType.FUN_GUN, "&7&oWow! So much fun in a gun!");
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
@@ -48,8 +48,8 @@ public class GadgetFunGun extends Gadget {
         for (Projectile snowball : projectiles)
             snowball.remove();
 
-        UtilParticles.play(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
-        UtilParticles.play(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
+        UtilParticles.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
+        UtilParticles.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
         location.getWorld().playSound(location, Sound.CAT_MEOW, 2, 1);
     }
 

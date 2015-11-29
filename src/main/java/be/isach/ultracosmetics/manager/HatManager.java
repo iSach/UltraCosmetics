@@ -30,7 +30,7 @@ public class HatManager implements Listener {
 
     static List<Player> playerList = new ArrayList<>();
 
-    private final static int[] cosmeticsSlots =
+    private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
@@ -69,7 +69,7 @@ public class HatManager implements Listener {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
                         String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                        inv.setItem(cosmeticsSlots[i], ItemFactory.create(material, data, name));
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
                         i++;
                         continue;
                     }
@@ -81,7 +81,7 @@ public class HatManager implements Listener {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                         String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(cosmeticsSlots[i], ItemFactory.create(material, data, name));
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
                         i++;
                         continue;
                     }
@@ -110,17 +110,14 @@ public class HatManager implements Listener {
                         loreList.add(lore);
                     itemMeta.setLore(loreList);
                     is.setItemMeta(itemMeta);
-                    inv.setItem(cosmeticsSlots[i], is);
+                    inv.setItem(COSMETICS_SLOTS[i], is);
                     i++;
                 }
 
-                if (page > 1) {
+                if (page > 1)
                     inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
-                }
-
-                if (page < getMaxPagesAmount()) {
+                if (page < getMaxPagesAmount())
                     inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
-                }
 
                 if (Category.HATS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));

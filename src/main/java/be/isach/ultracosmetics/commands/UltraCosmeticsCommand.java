@@ -540,7 +540,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                         } else if (ARGS.length > 1) {
                             if (ARGS[1].startsWith("gadget")) {
                                 if (Category.GADGETS.isEnabled())
-                                    GadgetManager.openGadgetsMenu((Player) SENDER);
+                                    GadgetManager.openGadgetsMenu((Player) SENDER, 1);
                             } else if (ARGS[1].startsWith("effect")) {
                                 if (Category.EFFECTS.isEnabled())
                                     ParticleEffectManager.openParticlesMenu((Player) SENDER);

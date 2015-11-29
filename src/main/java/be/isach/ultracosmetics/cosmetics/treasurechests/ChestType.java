@@ -8,8 +8,7 @@ import org.bukkit.Material;
 public enum ChestType {
 
     NORMAL(Material.CHEST),
-    ENDER(Material.ENDER_CHEST),
-    TRAPPED(Material.TRAPPED_CHEST);
+    ENDER(Material.ENDER_CHEST);
 
     private Material type;
 

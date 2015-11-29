@@ -76,7 +76,7 @@ public class MountNyanSheep extends Mount {
         float y = 1.2f;
         for (RGBColor rgbColor : colors) {
             for (int i = 0; i < 10; i++)
-                UtilParticles.play(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getGreen(),
+                UtilParticles.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getGreen(),
                         ent.getLocation().add(ent.getLocation().getDirection()
                                 .normalize().multiply(-1).multiply(1.4)).add(0, y, 0));
             y -= 0.2;

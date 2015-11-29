@@ -79,7 +79,7 @@ public class Pumpling extends EntityZombie {
         super.m();
         if (isCustomEntity) {
             fireTicks = 0;
-            UtilParticles.play(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
+            UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
         }
     }
 

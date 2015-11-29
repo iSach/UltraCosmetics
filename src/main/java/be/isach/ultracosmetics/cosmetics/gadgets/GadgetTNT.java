@@ -72,7 +72,7 @@ public class GadgetTNT extends Gadget {
     public void onEntityExplode(EntityExplodeEvent event) {
         if (entities.contains(event.getEntity())) {
             event.setCancelled(true);
-            UtilParticles.play(Particles.EXPLOSION_HUGE, event.getEntity().getLocation());
+            UtilParticles.display(Particles.EXPLOSION_HUGE, event.getEntity().getLocation());
             event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1);
 
             for (Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {

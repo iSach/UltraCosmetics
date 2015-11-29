@@ -23,7 +23,7 @@ public class MountSkySquid extends Mount {
     void onUpdate() {
         Random random = new Random();
         for (int i = 0; i < 5; i++)
-            UtilParticles.play(Particles.SPELL_MOB_AMBIENT,
+            UtilParticles.display(Particles.SPELL_MOB_AMBIENT,
                     random.nextInt(256), random.nextInt(256),
                     random.nextInt(256),
                     customEnt.getBukkitEntity().getLocation()

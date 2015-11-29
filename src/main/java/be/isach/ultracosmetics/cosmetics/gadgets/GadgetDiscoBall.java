@@ -37,7 +37,7 @@ public class GadgetDiscoBall extends Gadget {
     PositionSongPlayer positionSongPlayer;
 
     public GadgetDiscoBall(UUID owner) {
-        super(Material.BEACON, (byte) 0x0, "DiscoBall", "ultracosmetics.gadgets.discoball", 60, owner, GadgetType.DISCOBALL, "&7&oJust, dance!");
+        super(Material.BEACON, (byte) 0x0, "DiscoBall", "ultracosmetics.gadgets.discoball", 60, owner, GadgetType.DISCO_BALL, "&7&oJust, dance!");
     }
 
     @Override
@@ -105,8 +105,8 @@ public class GadgetDiscoBall extends Gadget {
         if (running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
             armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
-            UtilParticles.play(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
-            UtilParticles.play(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
+            UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
+            UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
             Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
             Particles.NOTE.display(new Particles.NoteColor(r.nextInt(25)), loc, 128);
             double angle, angle2, x, x2, z, z2;

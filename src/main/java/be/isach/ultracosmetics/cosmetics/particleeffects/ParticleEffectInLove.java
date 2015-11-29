@@ -18,6 +18,6 @@ public class ParticleEffectInLove extends ParticleEffect {
 
     @Override
     void onUpdate() {
-        UtilParticles.play(getEffect(), 0.5f, 0.5f, 0.5f, getPlayer().getLocation().add(0, 1, 0), 2);
+        UtilParticles.display(getEffect(), 0.5f, 0.5f, 0.5f, getPlayer().getLocation().add(0, 1, 0), 2);
     }
 }
