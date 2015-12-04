@@ -1,8 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
@@ -23,12 +22,8 @@ public class MountSkySquid extends Mount {
     void onUpdate() {
         Random random = new Random();
         for (int i = 0; i < 5; i++)
-            UtilParticles.display(Particles.SPELL_MOB_AMBIENT,
-                    random.nextInt(256), random.nextInt(256),
-                    random.nextInt(256),
-                    customEnt.getBukkitEntity().getLocation()
-                            .add(MathUtils.randomDouble(-2, 2),
-                                    MathUtils.randomDouble(-1, 1.3),
-                                    MathUtils.randomDouble(-2, 2)), 20);
+            getPlayer().getWorld().spigot().playEffect(customEnt.getBukkitEntity().getLocation().add(MathUtils.randomDouble(-2, 2),
+                            MathUtils.randomDouble(-1, 1.3), MathUtils.randomDouble(-2, 2)), Effect.POTION_SWIRL, 0, 0, random.nextFloat(),
+                    random.nextFloat(), random.nextFloat(), 1, 20, 64);
     }
 }

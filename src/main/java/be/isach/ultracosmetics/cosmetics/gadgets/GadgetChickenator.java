@@ -24,7 +24,7 @@ public class GadgetChickenator extends Gadget {
     ArrayList<Item> items = new ArrayList<>();
 
     public GadgetChickenator(UUID owner) {
-        super(Material.COOKED_CHICKEN, (byte) 0x0, "Chickenator", "ultracosmetics.gadgets.chickenator", 2, owner, GadgetType.CHICKENATOR, "&7&oShoot, boom, KFC");
+        super(Material.COOKED_CHICKEN, (byte) 0x0, 2, owner, GadgetType.CHICKENATOR, "&7&oShoot, boom, KFC");
     }
 
     @Override

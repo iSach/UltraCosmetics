@@ -22,9 +22,10 @@ public class MathUtils {
 
     static public final float nanoToSec = 1 / 1000000000f;
 
-    // ---
     static public final float FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits
+
     static public final float PI = 3.141592653589793238462643383279f;
+
     static public final float PI2 = PI * 2;
 
     static public final float SQRT_3 = 1.73205080757f;
@@ -32,23 +33,30 @@ public class MathUtils {
     static public final float E = 2.7182818284590452354f;
 
     static private final int SIN_BITS = 14; // 16KB. Adjust for accuracy.
+
     static private final int SIN_MASK = ~(-1 << SIN_BITS);
+
     static private final int SIN_COUNT = SIN_MASK + 1;
 
     static private final float radFull = PI * 2;
+
     static private final float degFull = 360;
+
     static private final float radToIndex = SIN_COUNT / radFull;
+
     static private final float degToIndex = SIN_COUNT / degFull;
 
     /**
      * multiply by this to convert from radians to degrees
      */
     static public final float radiansToDegrees = 180f / PI;
+
     static public final float radDeg = radiansToDegrees;
     /**
      * multiply by this to convert from degrees to radians
      */
     static public final float degreesToRadians = PI / 180;
+
     static public final float degRad = degreesToRadians;
 
     static private class Sin {
@@ -93,12 +101,16 @@ public class MathUtils {
         return Sin.table[(int) ((degrees + 90) * degToIndex) & SIN_MASK];
     }
 
-    // ---
     static private final int ATAN2_BITS = 7; // Adjust for accuracy.
+
     static private final int ATAN2_BITS2 = ATAN2_BITS << 1;
+
     static private final int ATAN2_MASK = ~(-1 << ATAN2_BITS2);
+
     static private final int ATAN2_COUNT = ATAN2_MASK + 1;
+
     static final int ATAN2_DIM = (int) Math.sqrt(ATAN2_COUNT);
+
     static private final float INV_ATAN2_DIM_MINUS_1 = 1.0f / (ATAN2_DIM - 1);
 
     static private class Atan2 {
@@ -150,7 +162,6 @@ public class MathUtils {
         return (Atan2.table[yi * ATAN2_DIM + xi] + add) * mul;
     }
 
-    // ---
     static public Random random = new Random();
 
     /**

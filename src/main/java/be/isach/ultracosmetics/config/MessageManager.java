@@ -151,7 +151,9 @@ public class MessageManager {
         addMessage("Mounts.Spider.menu-name", "&8&lSpider");
         addMessage("Mounts.Spider.entity-displayname", "&l%playername%'s spider");
         addMessage("Mounts.Rudolph.menu-name", "&f&lRudolp&4&lh");
-        addMessage("Mounts.Rudolph.entity-displayname", "&l%playername%'s spider");
+        addMessage("Mounts.Rudolph.entity-displayname", "&l%playername%'s rudolph");
+        addMessage("Mounts.MoltenSnake.menu-name", "&c&lMolten Snake");
+        addMessage("Mounts.MoltenSnake.entity-displayname", "&l%playername%'s Molten Snake");
         addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
         addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
 

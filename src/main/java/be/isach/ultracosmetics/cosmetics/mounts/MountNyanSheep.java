@@ -66,17 +66,17 @@ public class MountNyanSheep extends Mount {
 
         List<RGBColor> colors = new ArrayList<>();
 
-        colors.add(new RGBColor(255, -255, -255));
-        colors.add(new RGBColor(255, 165, -255));
-        colors.add(new RGBColor(255, 255, -255));
+        colors.add(new RGBColor(255, 0, 0));
+        colors.add(new RGBColor(255, 165, 0));
+        colors.add(new RGBColor(255, 255, 0));
         colors.add(new RGBColor(154, 205, 50));
         colors.add(new RGBColor(30, 144, 255));
-        colors.add(new RGBColor(148, -255, 211));
+        colors.add(new RGBColor(148, 0, 211));
 
         float y = 1.2f;
         for (RGBColor rgbColor : colors) {
             for (int i = 0; i < 10; i++)
-                UtilParticles.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getGreen(),
+                UtilParticles.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue(),
                         ent.getLocation().add(ent.getLocation().getDirection()
                                 .normalize().multiply(-1).multiply(1.4)).add(0, y, 0));
             y -= 0.2;

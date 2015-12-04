@@ -2,7 +2,7 @@ package be.isach.ultracosmetics.commands;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
@@ -28,13 +28,13 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                     ArrayList<String> gadgets = new ArrayList<>();
 
                     if (!args[2].equals("")) {
-                        for (Gadget.GadgetType type : Gadget.GadgetType.values()) {
+                        for (GadgetType type : GadgetType.values()) {
                             if (type.isEnabled() && type.toString().toLowerCase().startsWith(args[2].toLowerCase())) {
                                 gadgets.add(type.toString().toLowerCase());
                             }
                         }
                     } else {
-                        for (Gadget.GadgetType type : Gadget.GadgetType.values()) {
+                        for (GadgetType type : GadgetType.values()) {
                             if (type.isEnabled()) {
                                 gadgets.add(type.toString().toLowerCase());
                             }
@@ -153,13 +153,13 @@ public class UltraCosmeticsTabCompleter implements TabCompleter {
                     ArrayList<String> gadgets = new ArrayList<>();
 
                     if (!args[2].equals("")) {
-                        for (Gadget.GadgetType type : Gadget.GadgetType.values()) {
+                        for (GadgetType type : GadgetType.values()) {
                             if (type.isEnabled() && type.toString().toLowerCase().startsWith(args[2].toLowerCase())) {
                                 gadgets.add(type.toString().toLowerCase());
                             }
                         }
                     } else {
-                        for (Gadget.GadgetType type : Gadget.GadgetType.values()) {
+                        for (GadgetType type : GadgetType.values()) {
                             if (type.isEnabled()) {
                                 gadgets.add(type.toString().toLowerCase());
                             }

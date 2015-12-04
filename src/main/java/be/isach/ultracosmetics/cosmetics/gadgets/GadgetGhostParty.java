@@ -27,7 +27,7 @@ public class GadgetGhostParty extends Gadget {
     Map<Bat, ArmorStand> bats = new HashMap<>();
 
     public GadgetGhostParty(UUID owner) {
-        super(Material.SKULL_ITEM, (byte) 0x0, "GhostParty", "ultracosmetics.gadgets.ghostparty", 45, owner, GadgetType.GHOST_PARTY, "&7&oWho Ya Gonna Call?\n&f&lGHOST &4&lBUSTERS");
+        super(Material.SKULL_ITEM, (byte) 0x0, 45, owner, GadgetType.GHOST_PARTY, "&7&oWho Ya Gonna Call?\n&f&lGHOST &4&lBUSTERS");
 
         if (owner != null)
             Core.registerListener(this);

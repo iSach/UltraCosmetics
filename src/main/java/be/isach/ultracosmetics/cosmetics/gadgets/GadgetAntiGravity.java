@@ -27,7 +27,7 @@ public class GadgetAntiGravity extends Gadget {
 
 
     public GadgetAntiGravity(UUID owner) {
-        super(Material.EYE_OF_ENDER, (byte) 0x0, "AntiGravity", "ultracosmetics.gadgets.antigravity", 30, owner, GadgetType.ANTI_GRAVITY, "&7&oIf you do not like gravity\n&7&oThis gadget is made for you!");
+        super(Material.EYE_OF_ENDER, (byte) 0x0, 30, owner, GadgetType.ANTI_GRAVITY, "&7&oIf you do not like gravity\n&7&oThis gadget is made for you!");
         Core.registerListener(this);
     }
 

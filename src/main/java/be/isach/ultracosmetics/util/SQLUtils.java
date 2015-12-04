@@ -52,7 +52,7 @@ public class SQLUtils {
         try {
             ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
             res.first();
-            return res.getInt(name);
+            return res.getInt(name.replace("_", ""));
 
         } catch (SQLException e) {
 
@@ -107,11 +107,11 @@ public class SQLUtils {
     }
 
     public void removeAmmo(Player p, String name) {
-        core.table.update().set(name, getAmmo(p, name) - 1).where("uuid", p.getUniqueId().toString()).execute();
+        core.table.update().set(name.replace("_", ""), getAmmo(p, name) - 1).where("uuid", p.getUniqueId().toString()).execute();
     }
 
     public void addAmmo(Player p, String name, int i) {
-        core.table.update().set(name, getAmmo(p, name) + i).where("uuid", p.getUniqueId().toString()).execute();
+        core.table.update().set(name.replace("_", ""), getAmmo(p, name) + i).where("uuid", p.getUniqueId().toString()).execute();
     }
 
     public void setGadgetsEnabled(Player p, boolean enabled) {

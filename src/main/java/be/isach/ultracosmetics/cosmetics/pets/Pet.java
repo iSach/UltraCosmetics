@@ -370,7 +370,7 @@ public abstract class Pet implements Listener {
         CHICK("ultracosmetics.pets.chick", "Chick"),
         WITHER("ultracosmetics.pets.wither", "Wither"),
         PUMPLING("ultracosmetics.pets.pumpling", "Pumpling"),
-        CHRISTMASELF("ultracosmetics.pets.pumpling.christmaself", "ChristmasElf");
+        CHRISTMASELF("ultracosmetics.pets.christmaself", "ChristmasElf");
 
 
         String permission;

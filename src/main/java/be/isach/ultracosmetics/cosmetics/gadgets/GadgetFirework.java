@@ -19,7 +19,7 @@ public class GadgetFirework extends Gadget {
     private static Random random = new Random();
 
     public GadgetFirework(UUID owner) {
-        super(Material.FIREWORK, (byte) 0x0, "Firework", "ultracosmetics.gadgets.firework", 0.1, owner, GadgetType.FIREWORK, "&7&oNeed to celebrate?\n&7&oUse fireworks");
+        super(Material.FIREWORK, (byte) 0x0, 0.1, owner, GadgetType.FIREWORK, "&7&oNeed to celebrate?\n&7&oUse fireworks");
         Core.registerListener(this);
     }
 

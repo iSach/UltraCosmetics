@@ -47,7 +47,7 @@ public class Core extends JavaPlugin {
     public static ArrayList<Entity> noFallDamageEntities = new ArrayList<>();
     public static ArrayList<GadgetDiscoBall> discoBalls = new ArrayList<>();
     public static ArrayList<GadgetExplosiveSheep> explosiveSheep = new ArrayList<>();
-    public static HashMap<Player, HashMap<Gadget.GadgetType, Double>> countdownMap = new HashMap<>();
+    public static HashMap<Player, HashMap<GadgetType, Double>> countdownMap = new HashMap<>();
 
     private static List<CustomPlayer> customPlayers = new ArrayList<>();
 
@@ -93,12 +93,25 @@ public class Core extends JavaPlugin {
             return;
         }
 
+        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+        log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded...");
+
+        log("");
+        log("Thanks for having downloaded it!");
+        log("");
+        log("Plugin by iSach.");
+        log("Link: http://bit.ly/UltraCosmetics");
+
+        log("");
+        log("Loading configuration...");
+
         file = new File(getDataFolder(), "config.yml");
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             copy(getResource("config.yml"), file);
-            System.out.println("UltraCosmetics -> Loading and Generating config...");
+            log("Config file doesn't exist yet.");
+            log("Creating Config File and loading it.");
         }
 
         config = CustomConfiguration.loadConfiguration(file);
@@ -110,52 +123,79 @@ public class Core extends JavaPlugin {
 
         saveConfig();
 
+        log("Configuration loaded.");
+        log("");
+
         core = this;
 
+        log("Registering Custom Entities...");
         CustomEntities.registerEntities();
+        log("Custom Entities registered.");
+        log("");
 
+        log("");
+        log("Preparing Metrics data.");
         try {
             MetricsLite metrics = new MetricsLite(this);
             metrics.start();
+            log("Data sent to Metrics successfully.");
         } catch (IOException e) {
             System.out.println("Couldn't send data to Metrics :(");
         }
+        log("");
 
         if (getDescription().getVersion().startsWith("Pre")) {
-            getServer().getConsoleSender().sendMessage("§c§l----------------------------");
-            getServer().getConsoleSender().sendMessage("");
-            getServer().getConsoleSender().sendMessage("  §4§lUNSTABLE VERSION!");
-            getServer().getConsoleSender().sendMessage("  §4§lNo support accepted for this version!");
-            getServer().getConsoleSender().sendMessage("");
-            getServer().getConsoleSender().sendMessage("§c§l----------------------------");
+            log("");
+            log("THIS IS AN UNSTABLE VERSION, NO SUPPORT FOR IT!");
+            log("");
             debug = true;
         }
 
         if (Bukkit.getPluginManager().getPlugin("NoteBlockAPI") != null) {
-            getServer().getConsoleSender().sendMessage("§c§l----------------------------");
-            getServer().getConsoleSender().sendMessage("");
-            getServer().getConsoleSender().sendMessage("  §4§lNoteBlockAPI found! Using it!");
-            getServer().getConsoleSender().sendMessage("");
-            getServer().getConsoleSender().sendMessage("§c§l----------------------------");
+            log("");
+            log("NoteBlockAPI loaded and hooked.");
+            log("");
             nbsapiEnabled = true;
         }
 
+
+        log("");
+        log("Registering Messages...");
         new MessageManager();
+        log("Messages registered.");
+        log("");
+
         registerListener(new PlayerListener());
 
-
+        log("Registering pets...");
         registerPets();
+        log("Pets registered.");
+        log("");
+        log("Registering Mounts...");
         registerMounts();
+        log("Mounts registered.");
+        log("");
+        log("Registering Particle Effects...");
         registerParticleEffects();
+        log("Particle Effects registered.");
+        log("");
 
+        log("Loading hats...");
         hatList.addAll(Arrays.asList(Hat.values()));
+        log("Hats loaded.");
 
+        log("");
+        log("Registering commands...");
         // Register the command
         getCommand("ultracosmetics").setExecutor(new UltraCosmeticsCommand());
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("uc");
         getCommand("ultracosmetics").setAliases(arrayList);
         getCommand("ultracosmetics").setTabCompleter(new UltraCosmeticsTabCompleter());
+        log("Registered command: '/ultracosmetics'.");
+        log("Registered command: '/uc'.");
+        log("Registered commands.");
+        log("");
 
         String s = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System");
         fileStorage = s.equalsIgnoreCase("file");
@@ -171,7 +211,8 @@ public class Core extends JavaPlugin {
                 enabledCategories.add(c);
         }
 
-        tryRegisterMorphs();
+        log("Trying to register Morphs...");
+        tryToRegisterMorphs();
 
         try {
             Thread.sleep(500);
@@ -190,29 +231,30 @@ public class Core extends JavaPlugin {
             }
         }.run();
 
+        log("Registering Gadgets...");
         setupGadgetsConfig();
         try {
             config.save(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        log("Gadgets Registered.");
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            Bukkit.getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("§c§lMorphs require Lib's Disguises!");
-            Bukkit.getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("§c§lMorphs are disabling..");
-            Bukkit.getLogger().info("");
-
+            log("");
+            log("§c§lMorphs require Lib's Disguises!");
+            log("");
+            log("§c§lMorphs are disabling..");
+            log("");
         }
-
-        if (ammoEnabled) {
+        if (ammoEnabled
+                || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))) {
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                Bukkit.getLogger().info("");
-                Bukkit.getConsoleSender().sendMessage("§c§lVault not found!");
-                Bukkit.getLogger().info("");
-                Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please install Vault to use Ammo System!");
-                Bukkit.getLogger().info("");
+                log("");
+                log("§c§lVault not found!");
+                log("");
+                log("§c§lServer shutting down, please install Vault to use Ammo System!");
+                log("");
                 Bukkit.shutdown();
                 return;
             }
@@ -222,16 +264,21 @@ public class Core extends JavaPlugin {
                 || SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled"))
             setupEconomy();
 
-        startMySQL();
+        if (!fileStorage) {
+            log("");
+            log("Connecting to MySQL database...");
+            startMySQL();
+            log("Connected to MySQL database.");
+            log("");
+        }
         initPlayers();
 
         initCooldownManager();
 
         if (nbsapiEnabled) {
             File folder = new File(getDataFolder().getPath() + "/songs/");
-            if ((!folder.exists()) || (folder.listFiles().length <= 0)) {
+            if ((!folder.exists()) || (folder.listFiles().length <= 0))
                 saveResource("songs/GetLucky.nbs", true);
-            }
             saveResource("songs/NyanCat.nbs", true);
         }
 
@@ -247,6 +294,8 @@ public class Core extends JavaPlugin {
             }
         }, 20);
 
+        log("");
+        log("Registering listeners...");
         registerListener(new MainMenuManager());
         registerListener(new GadgetManager());
         registerListener(new PetManager());
@@ -262,6 +311,15 @@ public class Core extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        log("Listeners registered.");
+        log("");
+        log("");
+        log("UltraCosmetics finished loading and is now enabled!");
+        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+    }
+
+    private void log(Object object) {
+        System.out.println("UltraCosmetics -> " + object.toString());
     }
 
     @Override
@@ -307,7 +365,7 @@ public class Core extends JavaPlugin {
                             while (it.hasNext()) {
                                 Map.Entry pair = (Map.Entry) it.next();
                                 double timeLeft = (double) pair.getValue();
-                                Gadget.GadgetType type = (Gadget.GadgetType) pair.getKey();
+                                GadgetType type = (GadgetType) pair.getKey();
                                 if (timeLeft > 0.1)
                                     pair.setValue(timeLeft - 0.05);
                                 else
@@ -434,7 +492,7 @@ public class Core extends JavaPlugin {
             config.addDefault("Gadgets." + gadget.getType().configName + ".Enabled", true, "if true, the gadget will be enabled.");
             config.addDefault("Gadgets." + gadget.getType().configName + ".Show-Description", true, "if true, the description of gadget will be showed.");
             config.addDefault("Gadgets." + gadget.getType().configName + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-            if (gadget.getType() == Gadget.GadgetType.PAINTBALL_GUN) {
+            if (gadget.getType() == GadgetType.PAINTBALL_GUN) {
                 config.addDefault("Gadgets." + gadget.getType().configName + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
                 config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Enabled", false, "Should it display particles?");
                 config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
@@ -503,7 +561,7 @@ public class Core extends JavaPlugin {
         particleEffectList.add(new ParticleEffectSantaHat(null));
     }
 
-    private void tryRegisterMorphs() {
+    private void tryToRegisterMorphs() {
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             morphList.add(new MorphBat(null));
             morphList.add(new MorphBlaze(null));
@@ -514,6 +572,12 @@ public class Core extends JavaPlugin {
             morphList.add(new MorphCreeper(null));
             morphList.add(new MorphWitherSkeleton(null));
             morphList.add(new MorphSnowman(null));
+            log("Morphs successfully registered.");
+            log("");
+        } else {
+            log("Morphs couldn't be registered.");
+            log("Lib's Disguises must not be installed.");
+            log("");
         }
     }
 
@@ -536,7 +600,7 @@ public class Core extends JavaPlugin {
     }
 
     private void registerGadgets() {
-        for (Gadget.GadgetType gadgetType : Gadget.GadgetType.values())
+        for (GadgetType gadgetType : GadgetType.values())
             addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true);
 
         // Add gadgets.

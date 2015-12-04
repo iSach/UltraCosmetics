@@ -78,33 +78,35 @@ public class MountSnake extends Mount {
             Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
+                    if (getPlayer() != null) {
 
-                    double multiplier = 0.5D;
+                        double multiplier = 0.5D;
 
-                    Vector vel = getPlayer().getLocation().getDirection().setY(0).normalize().multiply(4);
+                        Vector vel = getPlayer().getLocation().getDirection().setY(0).normalize().multiply(4);
 
-                    Creature before = null;
-                    for (int i = 0; i < ((ArrayList) tailMap.get(getPlayer())).size(); i++) {
-                        Creature tail = (Creature) ((ArrayList) tailMap.get(getPlayer())).get(i);
-                        Location loc = getPlayer().getLocation().add(vel);
-                        if (i == 0)
-                            loc = tail.getLocation().add(vel);
-                        if (before != null)
-                            loc = before.getLocation();
-                        if (loc.toVector().subtract(tail.getLocation().toVector()).length() > 12.0D)
-                            loc = tail.getLocation().add(traj(tail.getLocation(), loc).multiply(12));
-                        if (before != null) {
-                            Location tp = before.getLocation().add(traj2D(before, tail).multiply(1.4D));
-                            tp.setPitch(tail.getLocation().getPitch());
-                            tp.setYaw(tail.getLocation().getYaw());
-                            tail.teleport(tp);
+                        Creature before = null;
+                        for (int i = 0; i < ((ArrayList) tailMap.get(getPlayer())).size(); i++) {
+                            Creature tail = (Creature) ((ArrayList) tailMap.get(getPlayer())).get(i);
+                            Location loc = getPlayer().getLocation().add(vel);
+                            if (i == 0)
+                                loc = tail.getLocation().add(vel);
+                            if (before != null)
+                                loc = before.getLocation();
+                            if (loc.toVector().subtract(tail.getLocation().toVector()).length() > 12.0D)
+                                loc = tail.getLocation().add(traj(tail.getLocation(), loc).multiply(12));
+                            if (before != null) {
+                                Location tp = before.getLocation().add(traj2D(before, tail).multiply(1.4D));
+                                tp.setPitch(tail.getLocation().getPitch());
+                                tp.setYaw(tail.getLocation().getYaw());
+                                tail.teleport(tp);
+                            }
+                            EntityCreature ec = ((CraftCreature) tail).getHandle();
+                            ec.S = 1;
+                            ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), (1.0D + 2.0D * multiplier) * 1.0D);
+
+                            before = tail;
+
                         }
-                        EntityCreature ec = ((CraftCreature) tail).getHandle();
-                        ec.S = 1;
-                        ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), (1.0D + 2.0D * multiplier) * 1.0D);
-
-                        before = tail;
-
                     }
                 }
             });

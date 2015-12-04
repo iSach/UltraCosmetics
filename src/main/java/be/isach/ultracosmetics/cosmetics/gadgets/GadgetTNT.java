@@ -30,7 +30,7 @@ public class GadgetTNT extends Gadget {
     List<Entity> entities = new ArrayList<>();
 
     public GadgetTNT(UUID owner) {
-        super(Material.TNT, (byte) 0x0, "TNT", "ultracosmetics.gadgets.tnt", 1, owner, GadgetType.TNT, "&7&oBlow some people up!\n&7&oKABOOM!");
+        super(Material.TNT, (byte) 0x0, 1, owner, GadgetType.TNT, "&7&oBlow some people up!\n&7&oKABOOM!");
         Core.registerListener(this);
     }
 

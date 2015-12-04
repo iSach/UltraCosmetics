@@ -39,7 +39,7 @@ public abstract class Gadget implements Listener {
     private Inventory inv;
     public boolean openGadgetsInvAfterAmmo;
     private double countdown;
-    private boolean requireAmmo;
+    private boolean requiresAmmo;
     private Listener listener;
     private GadgetType type;
     public boolean displayCountdownMessage = true;
@@ -49,24 +49,22 @@ public abstract class Gadget implements Listener {
     private String description;
     protected Block lastClickedBlock;
 
-    public Gadget(Material material, Byte data, String configName, String permission, double countdown, final UUID owner, final GadgetType type, String defaultDesc) {
+    public Gadget(Material material, Byte data, double countdown, final UUID owner, final GadgetType type, String defaultDesc) {
         this.material = material;
         this.data = data;
-        this.configName = configName;
-        this.permission = permission;
+        this.configName = type.configName;
+        this.permission = type.permission;
         affectPlayers = SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Affect-Players");
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
             this.countdown = countdown;
             SettingsManager.getConfig().set("Gadgets." + configName + ".Cooldown", countdown);
-        } else {
+        } else
             this.countdown = Double.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown")));
-        }
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
             this.description = defaultDesc;
             Core.config.addDefault("Gadgets." + configName + ".Description", getDescriptionWithColor(), "Description of this gadget.");
-        } else {
+        } else
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
-        }
         this.type = type;
         this.useTwoInteractMethods = false;
         if (owner != null) {
@@ -104,15 +102,14 @@ public abstract class Gadget implements Listener {
                 getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")));
                 getPlayer().getInventory().remove((int) SettingsManager.getConfig().get("Gadget-Slot"));
             }
-            if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
-                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
-            } else {
-                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, getName(), "§9Gadget"));
-            }
+            String d = Core.isAmmoEnabled() && getType().requiresAmmo() ?
+                    "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " "
+                    : "";
+            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, d + getName(), "§9Gadget"));
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())));
             Core.getCustomPlayer(getPlayer()).currentGadget = this;
         }
-        this.requireAmmo = Boolean.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled")));
+        this.requiresAmmo = Boolean.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled")));
     }
 
     public boolean showsDescription() {
@@ -310,8 +307,8 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if(type == GadgetType.CHRISTMAS_TREE) {
-                if(event.getClickedBlock() == null
+            if (type == GadgetType.CHRISTMAS_TREE) {
+                if (event.getClickedBlock() == null
                         || event.getClickedBlock().getType() == Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
                     return;
@@ -354,7 +351,7 @@ public abstract class Gadget implements Listener {
                 Core.getCustomPlayer(getPlayer()).removeAmmo(getType().toString().toLowerCase());
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
             }
-            if(event.getClickedBlock() != null
+            if (event.getClickedBlock() != null
                     && event.getClickedBlock().getType() != Material.AIR)
                 lastClickedBlock = event.getClickedBlock();
             if (useTwoInteractMethods) {
@@ -414,57 +411,6 @@ public abstract class Gadget implements Listener {
             stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
         }
         return stringBuilder.toString();
-    }
-
-    public enum GadgetType {
-        BAT_BLASTER("ultracosmetics.gadgets.batblaster", "BatBlaster"),
-        CHICKENATOR("ultracosmetics.gadgets.chickenator", "Chickenator"),
-        COLOR_BOMB("ultracosmetics.gadgets.colorbomb", "ColorBomb"),
-        DISCO_BALL("ultracosmetics.gadgets.discoball", "DiscoBall"),
-        ETHEREAL_PEARL("ultracosmetics.gadgets.etherealpearl", "EtherealPearl"),
-        FLESH_HOOK("ultracosmetics.gadgets.fleshhook", "FleshHook"),
-        MELON_THROWER("ultracosmetics.gadgets.melonthrower", "MelonThrower"),
-        BLIZZARD_BLASTER("ultracosmetics.gadgets.blizzardblaster", "BlizzardBlaster"),
-        PORTAL_GUN("ultracosmetics.gadgets.portalgun", "PortalGun"),
-        EXPLOSIVE_SHEEP("ultracosmetics.gadgets.explosivesheep", "ExplosiveSheep"),
-        PAINTBALL_GUN("ultracosmetics.gadgets.paintballgun", "PaintballGun"),
-        THOR_HAMMER("ultracosmetics.gadgets.thorhammer", "ThorHammer"),
-        ANTI_GRAVITY("ultracosmetics.gadgets.antigravity", "AntiGravity"),
-        SMASH_DOWN("ultracosmetics.gadgets.smashdown", "SmashDown"),
-        ROCKET("ultracosmetics.gadgets.rocket", "Rocket"),
-        BLACK_HOLE("ultracosmetics.gadgets.blackhole", "BlackHole"),
-        TSUNAMI("ultracosmetics.gadgets.tsunami", "Tsunami"),
-        TNT("ultracosmetics.gadgets.tnt", "TNT"),
-        FUN_GUN("ultracosmetics.gadgets.fungun", "FunGun"),
-        PARACHUTE("ultracosmetics.gadgets.parachute", "Parachute"),
-        QUAKE_GUN("ultracosmetics.gadgets.quakegun", "QuakeGun"),
-        GHOST_PARTY("ultracosmetics.gadgets.ghostparty", "GhostParty"),
-        FIREWORK("ultracosmetics.gadgets.firework", "Firework"),
-        CHRISTMAS_TREE("ultracosmetics.gadgets.christmastree", "ChristmasTree");
-
-        String permission;
-        public String configName;
-
-        GadgetType(String permission, String configName) {
-            this.permission = permission;
-            this.configName = configName;
-        }
-
-        public boolean requiresAmmo() {
-            return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Ammo.Enabled");
-        }
-
-        public String getConfigName() {
-            return configName;
-        }
-
-        public String getPermission() {
-            return permission;
-        }
-
-        public boolean isEnabled() {
-            return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Enabled");
-        }
     }
 
 }

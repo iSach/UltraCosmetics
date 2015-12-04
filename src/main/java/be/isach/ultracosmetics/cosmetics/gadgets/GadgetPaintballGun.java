@@ -33,7 +33,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     int radius = 2;
 
     public GadgetPaintballGun(UUID owner) {
-        super(Material.DIAMOND_BARDING, (byte) 0x0, "PaintballGun", "ultracosmetics.gadgets.paintballgun", 0.2f, owner, GadgetType.PAINTBALL_GUN, "&7&oPEW PEW PEW PEW!!");
+        super(Material.DIAMOND_BARDING, (byte) 0x0, 0.2f, owner, GadgetType.PAINTBALL_GUN, "&7&oPEW PEW PEW PEW!!");
         if (owner != null) {
             Core.registerListener(this);
             radius = SettingsManager.getConfig().getInt("Gadgets." + getType().configName + ".Radius");

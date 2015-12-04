@@ -18,7 +18,7 @@ public class MountHypeCart extends Mount {
     @Override
     void onUpdate() {
         if (ent.isOnGround())
-            ent.setVelocity(PlayerUtils.getHorizontalDirection(getPlayer()).multiply(1.2));
+            ent.setVelocity(PlayerUtils.getHorizontalDirection(getPlayer()).multiply(1.6));
         ((CraftMinecartRideable)ent).getHandle().S = 1;
     }
 

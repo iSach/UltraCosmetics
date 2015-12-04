@@ -3,8 +3,8 @@ package be.isach.ultracosmetics.util;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -64,7 +64,7 @@ public class BlockUtils {
     public static boolean isRocketBlock(Block b) {
         for (CustomPlayer cp : Core.getCustomPlayers()) {
             if (cp.currentGadget != null
-                    && cp.currentGadget.getType() == Gadget.GadgetType.ROCKET) {
+                    && cp.currentGadget.getType() == GadgetType.ROCKET) {
                 GadgetRocket rocket = (GadgetRocket) cp.currentGadget;
                 if (rocket.blocks.contains(b))
                     return true;

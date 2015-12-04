@@ -22,7 +22,7 @@ public class GadgetChristmasTree extends Gadget {
     int[] logColor = {101, 67, 33};
 
     public GadgetChristmasTree(UUID owner) {
-        super(Material.LONG_GRASS, (byte) 0x2, "ChristmasTree", "ultracosmetics.gadgets.christmastree", 15, owner, GadgetType.CHRISTMAS_TREE, "&7&oHere is a Christmas Tree for you!");
+        super(Material.LONG_GRASS, (byte) 0x2, 15, owner, GadgetType.CHRISTMAS_TREE, "&7&oHere is a Christmas Tree for you!");
     }
 
     @Override

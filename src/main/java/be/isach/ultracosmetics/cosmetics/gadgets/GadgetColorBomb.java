@@ -29,7 +29,7 @@ public class GadgetColorBomb extends Gadget {
     private boolean running = false;
 
     public GadgetColorBomb(UUID owner) {
-        super(Material.WOOL, (byte) 0x3, "ColorBomb", "ultracosmetics.gadgets.colorbomb", 30, owner, GadgetType.COLOR_BOMB, "&7&oA colorful bomb!");
+        super(Material.WOOL, (byte) 0x3, 30, owner, GadgetType.COLOR_BOMB, "&7&oA colorful bomb!");
 
     }
 

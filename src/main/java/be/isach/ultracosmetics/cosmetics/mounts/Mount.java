@@ -80,7 +80,8 @@ public abstract class Mount implements Listener {
                 return;
             }
             if (type == MountType.NYANSHEEP || type == MountType.DRAGON
-                    || type == MountType.HYPECART)
+                    || type == MountType.HYPECART
+                    || type == MountType.MOLTENSNAKE)
                 repeatDelay = 1;
             if (type == MountType.SKYSQUID)
                 repeatDelay = 4;
@@ -350,7 +351,8 @@ public abstract class Mount implements Listener {
         SLIME("ultracosmetics.mounts.slime", "Slime"),
         HYPECART("ultracosmetics.mounts.hypecart", "HypeCart"),
         SPIDER("ultracosmetics.mounts.spider", "Spider"),
-        RUDOLPH("ultracosmetics.mounts.rudolph", "Rudolph");
+        RUDOLPH("ultracosmetics.mounts.rudolph", "Rudolph"),
+        MOLTENSNAKE("ultracosmetics.mounts.moltensnake", "MoltenSnake");
 
 
         String permission;

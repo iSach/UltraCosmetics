@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -19,10 +20,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Sacha on 11/11/15.
@@ -189,7 +188,7 @@ public class GadgetManager implements Listener {
                     openGadgetsMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
                     return;
                 }
-                int currentPage = getCurrentPage((Player)event.getWhoClicked());
+                int currentPage = getCurrentPage((Player) event.getWhoClicked());
                 event.getWhoClicked().closeInventory();
                 CustomPlayer cp = Core.getCustomPlayer((Player) event.getWhoClicked());
                 if (Core.isAmmoEnabled() && event.getAction() == InventoryAction.PICKUP_HALF) {
@@ -206,7 +205,7 @@ public class GadgetManager implements Listener {
                     }
                     if (cp.currentGadget == null)
                         cp.removeGadget();
-                    activateGadgetByType(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
+                    equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
                     if (cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
                         cp.currentGadget.buyAmmo();
@@ -234,7 +233,7 @@ public class GadgetManager implements Listener {
 
                         }
                     }
-                    activateGadgetByType(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
+                    equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
                     if (cp.currentGadget != null && Core.isAmmoEnabled() && cp.getAmmo(cp.currentGadget.getType().toString().toLowerCase()) < 1 && cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
                         cp.currentGadget.buyAmmo();
@@ -245,7 +244,7 @@ public class GadgetManager implements Listener {
         }
     }
 
-    public static Gadget.GadgetType getGadgetByName(String name) {
+    public static GadgetType getGadgetByName(String name) {
         for (Gadget g : Core.getGadgets()) {
             if (g.getName().replace(" ", "").equals(name.replace(" ", ""))) {
                 return g.getType();
@@ -254,42 +253,26 @@ public class GadgetManager implements Listener {
         return null;
     }
 
-    public static void activateGadgetByType(Gadget.GadgetType type, final Player player) {
-        if (!player.hasPermission(type.getPermission())) {
-            if (!playerList.contains(player)) {
-                player.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(player);
+    public static void equipGadget(final GadgetType type, final Player PLAYER) {
+        if (!PLAYER.hasPermission(type.getPermission())) {
+            if (!playerList.contains(PLAYER)) {
+                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                playerList.add(PLAYER);
                 Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
-                        playerList.remove(player);
+                        playerList.remove(PLAYER);
                     }
                 }, 1);
             }
             return;
         }
-        for (Gadget g : Core.getGadgets()) {
-            if (g.getType().isEnabled() && g.getType() == type) {
-                Class gadgetClass = g.getClass();
-
-                Class[] cArg = new Class[1];
-                cArg[0] = UUID.class;
-
-                UUID uuid = player.getUniqueId();
-
-                try {
-                    gadgetClass.getDeclaredConstructor(UUID.class).newInstance(uuid);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
+        new Thread() {
+            @Override
+            public void run() {
+                type.equip(PLAYER);
             }
-        }
+        }.run();
     }
 
 }

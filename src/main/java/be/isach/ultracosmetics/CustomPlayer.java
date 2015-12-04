@@ -143,7 +143,7 @@ public class CustomPlayer {
 
         removeHat();
 
-        if(getPlayer().getInventory().getHelmet() != null) {
+        if (getPlayer().getInventory().getHelmet() != null) {
             getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-Hat"));
             return;
         }
@@ -248,16 +248,13 @@ public class CustomPlayer {
 
     public void addAmmo(String name, int i) {
         if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage()) {
-                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + i);
-            } else {
+            if (Core.usingFileStorage())
+                SettingsManager.getData(getPlayer()).set("Ammo." + name.replace("_", ""), getAmmo(name) + i);
+            else
                 Core.sqlUtils.addAmmo(getPlayer(), name, i);
-            }
         }
         if (currentGadget != null)
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString().toLowerCase()) + " " + currentGadget.getName(), "§9Gadget"));
-
-
     }
 
     public void setGadgetsEnabled(Boolean enabled) {
@@ -314,11 +311,10 @@ public class CustomPlayer {
 
     public int getAmmo(String name) {
         if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage()) {
-                return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name);
-            } else {
+            if (Core.usingFileStorage())
+                return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name.replace("_", ""));
+            else
                 return Core.sqlUtils.getAmmo(getPlayer(), name);
-            }
         }
         return 0;
     }
@@ -331,11 +327,10 @@ public class CustomPlayer {
 
     public void removeAmmo(String name) {
         if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage()) {
-                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) - 1);
-            } else {
+            if (Core.usingFileStorage())
+                SettingsManager.getData(getPlayer()).set("Ammo." + name.replace("_", ""), getAmmo(name) - 1);
+            else
                 Core.sqlUtils.removeAmmo(getPlayer(), name);
-            }
         }
     }
 

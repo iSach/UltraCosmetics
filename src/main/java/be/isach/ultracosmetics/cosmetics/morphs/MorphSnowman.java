@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.Core;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import me.libraryaddict.disguise.disguisetypes.watchers.SlimeWatcher;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -23,8 +22,8 @@ public class MorphSnowman extends Morph {
 
     @EventHandler
     public void onLeftClick(PlayerInteractEvent event) {
-        if(event.getAction() == Action.LEFT_CLICK_AIR
-                || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+        if ((event.getAction() == Action.LEFT_CLICK_AIR
+                || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
             event.setCancelled(true);
             event.getPlayer().throwSnowball();
         }

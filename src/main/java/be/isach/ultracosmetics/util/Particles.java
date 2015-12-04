@@ -1095,27 +1095,9 @@ public enum Particles {
          * @throws IllegalArgumentException If one of the values is lower than 0 or higher than 255
          */
         public OrdinaryColor(int red, int green, int blue) throws IllegalArgumentException {
-            if (red < 0) {
-                throw new IllegalArgumentException("The red value is lower than 0");
-            }
-            if (red > 255) {
-                throw new IllegalArgumentException("The red value is higher than 255");
-            }
-            this.red = red;
-            if (green < 0) {
-                throw new IllegalArgumentException("The green value is lower than 0");
-            }
-            if (green > 255) {
-                throw new IllegalArgumentException("The green value is higher than 255");
-            }
-            this.green = green;
-            if (blue < 0) {
-                throw new IllegalArgumentException("The blue value is lower than 0");
-            }
-            if (blue > 255) {
-                throw new IllegalArgumentException("The blue value is higher than 255");
-            }
-            this.blue = blue;
+            this.red = Math.min(255, red);
+            this.green = Math.min(255, green);
+            this.blue = Math.min(255, blue);
         }
 
         /**

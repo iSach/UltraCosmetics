@@ -29,7 +29,7 @@ public class GadgetTsunami extends Gadget {
     List<ArmorStand> armorStands = new ArrayList<>();
 
     public GadgetTsunami(UUID owner) {
-        super(Material.WATER_BUCKET, (byte) 0x0, "Tsunami", "ultracosmetics.gadgets.tsunami", 10, owner, GadgetType.TSUNAMI, "&9&oTSUNAMI\n&7&oJump!\n&7&oLet's go!");
+        super(Material.WATER_BUCKET, (byte) 0x0, 10, owner, GadgetType.TSUNAMI, "&9&oTSUNAMI\n&7&oJump!\n&7&oLet's go!");
     }
 
     @Override
@@ -56,7 +56,7 @@ public class GadgetTsunami extends Gadget {
                 Location loc1 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
                 Location loc2 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1.3, 1.8) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
                 for (int i = 0; i < 5; i++) {
-                    UtilParticles.display(Particles.CLOUD, 0.2d, 0.2d, 0.2d, loc1, 1);
+                    UtilParticles.display(Particles.EXPLOSION_NORMAL, 0.2d, 0.2d, 0.2d, loc1, 1);
                     UtilParticles.display(Particles.DRIP_WATER, 0.4d, 0.4d, 0.4d, loc2, 2);
                 }
                 for (int a = 0; a < 100; a++)

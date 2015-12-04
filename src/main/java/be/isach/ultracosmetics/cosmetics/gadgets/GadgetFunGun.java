@@ -25,7 +25,7 @@ public class GadgetFunGun extends Gadget {
     private List<Projectile> projectiles = new ArrayList<>();
 
     public GadgetFunGun(UUID owner) {
-        super(Material.BLAZE_ROD, (byte) 0x0, "FunGun", "ultracosmetics.gadgets.fungun", 2, owner, GadgetType.FUN_GUN, "&7&oWow! So much fun in a gun!");
+        super(Material.BLAZE_ROD, (byte) 0x0, 2, owner, GadgetType.FUN_GUN, "&7&oWow! So much fun in a gun!");
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());

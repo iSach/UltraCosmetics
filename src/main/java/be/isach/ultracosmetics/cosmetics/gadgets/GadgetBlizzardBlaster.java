@@ -32,7 +32,7 @@ public class GadgetBlizzardBlaster extends Gadget {
     List<ArmorStand> armorStands = new ArrayList<>();
 
     public GadgetBlizzardBlaster(UUID owner) {
-        super(Material.PACKED_ICE, (byte) 0x0, "BlizzardBlaster", "ultracosmetics.gadgets.blizzardblaster", 5, owner, GadgetType.BLIZZARD_BLASTER, "&7&oLet it go!");
+        super(Material.PACKED_ICE, (byte) 0x0, 5, owner, GadgetType.BLIZZARD_BLASTER, "&7&oLet it go!");
         instance = this;
     }
 

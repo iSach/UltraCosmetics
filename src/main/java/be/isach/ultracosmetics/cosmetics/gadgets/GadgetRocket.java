@@ -31,7 +31,7 @@ public class GadgetRocket extends Gadget {
     public List<Block> blocks = new ArrayList<>();
 
     public GadgetRocket(UUID owner) {
-        super(Material.getMaterial(401), (byte) 0x0, "Rocket", "ultracosmetics.gadgets.rocket", 60, owner, GadgetType.ROCKET, "&7&oHouston, we have got a problem.");
+        super(Material.getMaterial(401), (byte) 0x0, 60, owner, GadgetType.ROCKET, "&7&oHouston, we have got a problem.");
     }
 
     @Override

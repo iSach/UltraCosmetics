@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
@@ -130,7 +131,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                         }
                         giveTo = Bukkit.getPlayer(ARGS[3]);
                     }
-                    Gadget.GadgetType gadgetType = null;
+                    GadgetType gadgetType = null;
 
                     for (Gadget gadget : Core.getGadgets())
                         if (gadget.getType().toString().toLowerCase().equalsIgnoreCase(ARGS[2].toLowerCase()))
@@ -144,7 +145,7 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                             }
                             Core.getCustomPlayer(giveTo).removeGadget();
                         }
-                        GadgetManager.activateGadgetByType(gadgetType, giveTo);
+                        GadgetManager.equipGadget(gadgetType, giveTo);
                     } catch (Exception exc) {
                         exc.printStackTrace();
                         PLAYER.sendMessage(MessageManager.getMessage("Invalid-Gadget"));
@@ -221,10 +222,10 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                                 petToGive = pet.getType();
                     try {
                         if (Core.getCustomPlayer(giveTo).currentPet != null) {
+                            Pet pet = Core.getCustomPlayer(giveTo).currentPet;
                             Core.getCustomPlayer(giveTo).removePet();
-                            if (Core.getCustomPlayer(giveTo).currentPet.getType() == petToGive) {
+                            if (pet.getType() == petToGive)
                                 return true;
-                            }
                         }
                         PetManager.activatePetByType(petToGive, giveTo);
                     } catch (Exception exc) {

@@ -31,7 +31,7 @@ public class GadgetExplosiveSheep extends Gadget {
     ArrayList<Sheep> sheepArrayList = new ArrayList<>();
 
     public GadgetExplosiveSheep(UUID owner) {
-        super(Material.SHEARS, (byte) 0x0, "ExplosiveSheep", "ultracosmetics.gadgets.explosivesheep", 40, owner, GadgetType.EXPLOSIVE_SHEEP, "&7&oAre you sure it is supposed\n&7&oto flicker like that?");
+        super(Material.SHEARS, (byte) 0x0, 40, owner, GadgetType.EXPLOSIVE_SHEEP, "&7&oAre you sure it is supposed\n&7&oto flicker like that?");
         Core.registerListener(this);
     }
 
