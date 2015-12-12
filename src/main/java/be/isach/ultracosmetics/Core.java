@@ -44,20 +44,20 @@ import java.util.*;
  */
 public class Core extends JavaPlugin {
 
-    public static ArrayList<Entity> noFallDamageEntities = new ArrayList<>();
-    public static ArrayList<GadgetDiscoBall> discoBalls = new ArrayList<>();
-    public static ArrayList<GadgetExplosiveSheep> explosiveSheep = new ArrayList<>();
-    public static HashMap<Player, HashMap<Gadget.GadgetType, Double>> countdownMap = new HashMap<>();
+    public static List<Entity> noFallDamageEntities = Collections.synchronizedList(new ArrayList<Entity>());
+    public static List<GadgetDiscoBall> discoBalls =  Collections.synchronizedList(new ArrayList<GadgetDiscoBall>());
+    public static List<GadgetExplosiveSheep> explosiveSheep =  Collections.synchronizedList(new ArrayList<GadgetExplosiveSheep>());
+    public static ConcurrentHashMap<Player, HashMap<Gadget.GadgetType, Double>> countdownMap = new ConcurrentHashMap<Player, HashMap<Gadget.GadgetType, Double>>();
 
-    private static List<CustomPlayer> customPlayers = new ArrayList<>();
+    private static List<CustomPlayer> customPlayers =  Collections.synchronizedList(new ArrayList<CustomPlayer>());
 
-    private static List<Gadget> gadgetList = new ArrayList<>();
-    private static List<ParticleEffect> particleEffectList = new ArrayList<>();
-    private static List<Mount> mountList = new ArrayList<>();
-    private static List<Pet> petList = new ArrayList<>();
-    private static List<TreasureChest> treasureChestList = new ArrayList<>();
-    private static List<Morph> morphList = new ArrayList<>();
-    private static List<Hat> hatList = new ArrayList<>();
+    private static List<Gadget> gadgetList = Collections.synchronizedList(new ArrayList<Gadget>());
+    private static List<ParticleEffect> particleEffectList = Collections.synchronizedList(new ArrayList<ParticleEffect>());
+    private static List<Mount> mountList = Collections.synchronizedList(new ArrayList<Mount>());
+    private static List<Pet> petList =  Collections.synchronizedList(new ArrayList<Pet>());
+    private static List<TreasureChest> treasureChestList =  Collections.synchronizedList(new ArrayList<TreasureChest>());
+    private static List<Morph> morphList =  Collections.synchronizedList(new ArrayList<Morph>());
+    private static List<Hat> hatList =  Collections.synchronizedList(new ArrayList<Hat>());
 
     public static Boolean placeHolderColor;
 
