@@ -29,7 +29,7 @@ public class GadgetColorBomb extends Gadget {
     private boolean running = false;
 
     public GadgetColorBomb(UUID owner) {
-        super(Material.WOOL, (byte) 0x3, 30, owner, GadgetType.COLOR_BOMB, "&7&oA colorful bomb!");
+        super(owner, GadgetType.COLOR_BOMB);
 
     }
 
@@ -81,6 +81,8 @@ public class GadgetColorBomb extends Gadget {
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
+                        if (bomb == null)
+                            return;
                         Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), ItemFactory.create(Material.WOOL, (byte) random.nextInt(15), UUID.randomUUID().toString()));
                         i.setPickupDelay(500000);
                         i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
@@ -89,7 +91,7 @@ public class GadgetColorBomb extends Gadget {
                         for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
                             if (entity instanceof Player)
                                 if (affectPlayers)
-                                    entity.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
+                                    MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                         }
                     }
                 });

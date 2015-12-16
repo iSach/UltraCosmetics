@@ -36,7 +36,7 @@ public class GadgetSmashDown extends Gadget {
     GadgetSmashDown instance;
 
     public GadgetSmashDown(UUID owner) {
-        super(Material.FIREWORK_CHARGE, (byte) 0x0, 15, owner, GadgetType.SMASH_DOWN, "&7&oSmash the ground like Hulk!");
+        super(owner, GadgetType.SMASH_DOWN);
         Core.registerListener(this);
         instance = this;
     }

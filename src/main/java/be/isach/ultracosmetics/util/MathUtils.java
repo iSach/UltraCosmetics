@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.run.FallDamageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -417,9 +418,9 @@ public class MathUtils {
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                Core.noFallDamageEntities.add(ent);
+                FallDamageManager.addNoFall(ent);
             }
-        }, 4);
+        }, 5);
     }
 
     public static void applyVelocity(final Entity ent, Vector v, boolean ignoreGadgetsEnabled) {
@@ -436,7 +437,7 @@ public class MathUtils {
         Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                Core.noFallDamageEntities.add(ent);
+                FallDamageManager.addNoFall(ent);
             }
         }, 4);
     }
@@ -460,6 +461,7 @@ public class MathUtils {
     public static double randomDouble(double min, double max) {
         return Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min);
     }
+
 
     public static float randomRangeFloat(float min, float max) {
         return (float) (Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min));

@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -25,7 +24,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
     private ArrayList<Item> items = new ArrayList<>();
 
     public GadgetFleshHook(UUID owner) {
-        super(Material.TRIPWIRE_HOOK, (byte) 0x0, 2, owner, GadgetType.FLESH_HOOK, "&7&oMake new friends by throwing a hook\n&7&ointo their face and pulling them\n&7&otowards you!");
+        super(owner, GadgetType.FLESH_HOOK);
         Core.registerListener(this);
     }
 
@@ -53,12 +52,6 @@ public class GadgetFleshHook extends Gadget implements Listener {
             Vector vector = new Vector(X, Z, Y);
             if (affectPlayers)
                 MathUtils.applyVelocity(HIT, vector.multiply(2.5D).add(new Vector(0D, 1.45D, 0D)));
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
-                @Override
-                public void run() {
-                    Core.noFallDamageEntities.add(HIT);
-                }
-            }, 2);
         }
     }
 

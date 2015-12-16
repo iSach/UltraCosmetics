@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
@@ -30,7 +29,7 @@ public class GadgetTNT extends Gadget {
     List<Entity> entities = new ArrayList<>();
 
     public GadgetTNT(UUID owner) {
-        super(Material.TNT, (byte) 0x0, 1, owner, GadgetType.TNT, "&7&oBlow some people up!\n&7&oKABOOM!");
+        super(owner, GadgetType.TNT);
         Core.registerListener(this);
     }
 

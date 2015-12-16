@@ -2,18 +2,20 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -29,10 +31,10 @@ public class GadgetBlizzardBlaster extends Gadget {
     GadgetBlizzardBlaster instance;
     Random r = new Random();
     List<Entity> cooldownJump = new ArrayList<>();
-    List<ArmorStand> armorStands = new ArrayList<>();
+    List<EntityArmorStand> fakeArmorStands = new ArrayList<>();
 
     public GadgetBlizzardBlaster(UUID owner) {
-        super(Material.PACKED_ICE, (byte) 0x0, 5, owner, GadgetType.BLIZZARD_BLASTER, "&7&oLet it go!");
+        super(owner, GadgetType.BLIZZARD_BLASTER);
         instance = this;
     }
 
@@ -41,7 +43,7 @@ public class GadgetBlizzardBlaster extends Gadget {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
-        final int i = Bukkit.getScheduler().runTaskTimer(Core.getPlugin(), new BukkitRunnable() {
+        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(Core.getPlugin(), new BukkitRunnable() {
             @Override
             public void run() {
                 if (Core.getCustomPlayer(getPlayer()).currentGadget != instance) {
@@ -57,23 +59,31 @@ public class GadgetBlizzardBlaster extends Gadget {
                         loc.add(0, -1, 0);
                 }
                 for (int i = 0; i < 3; i++) {
-                    final ArmorStand as = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), EntityType.ARMOR_STAND);
-                    as.setVisible(false);
+                    final EntityArmorStand as = new EntityArmorStand(((CraftWorld) getPlayer().getWorld()).getHandle());
+                    as.setInvisible(true);
                     as.setSmall(true);
                     as.setGravity(false);
-                    as.setHelmet(new ItemStack(Material.PACKED_ICE));
-                    as.setHeadPose(new EulerAngle(r.nextInt(50), r.nextInt(50), r.nextInt(50)));
-                    armorStands.add(as);
+                    as.setArms(true);
+                    as.setHeadPose(new Vector3f((float) (r.nextInt(360)),
+                            (float) (r.nextInt(360)),
+                            (float) (r.nextInt(360))));
+                    as.setLocation(loc.getX() + MathUtils.randomDouble(-1.5, 1.5), loc.getY() + MathUtils.randomDouble(0, .5) - 0.75, loc.getZ() + MathUtils.randomDouble(-1.5, 1.5), 0, 0);
+                    fakeArmorStands.add(as);
+                    for (Player player : getPlayer().getWorld().getPlayers()) {
+                        PacketSender.send(player, new PacketPlayOutSpawnEntityLiving(as));
+                        PacketSender.send(player, new PacketPlayOutEntityEquipment(as.getId(), 4, CraftItemStack.asNMSCopy(new ItemStack(Material.PACKED_ICE))));
+                    }
                     UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            armorStands.remove(as);
-                            as.remove();
+                            for (Player player : getPlayer().getWorld().getPlayers())
+                                PacketSender.send(player, new PacketPlayOutEntityDestroy(as.getId()));
+                            fakeArmorStands.remove(as);
                         }
                     }, 20);
                     if (affectPlayers)
-                        for (final Entity ent : as.getNearbyEntities(0.5, 0.5, 0.5)) {
+                        for (final Entity ent : as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
                             if (!cooldownJump.contains(ent) && ent != getPlayer()) {
                                 MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
                                 cooldownJump.add(ent);
@@ -111,8 +121,11 @@ public class GadgetBlizzardBlaster extends Gadget {
 
     @Override
     public void onClear() {
-        for (ArmorStand as : armorStands)
-            as.remove();
+        for (EntityArmorStand as : fakeArmorStands)
+            for (Player player : getPlayer().getWorld().getPlayers())
+                PacketSender.send(player, new PacketPlayOutEntityDestroy(as.getId()));
+        fakeArmorStands.clear();
+        fakeArmorStands = null;
         HandlerList.unregisterAll(this);
     }
 }

@@ -83,7 +83,7 @@ public class MainMenuManager implements Listener {
                     inv.setItem(3, chest);
                 }
 
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Cosmetics")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Cosmetics")));
                 if (Core.getCustomPlayer(PLAYER).hasGadgetsEnabled())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
                 else

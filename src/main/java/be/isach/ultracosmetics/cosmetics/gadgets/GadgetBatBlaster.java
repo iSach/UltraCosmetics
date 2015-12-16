@@ -4,7 +4,10 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -24,7 +27,7 @@ public class GadgetBatBlaster extends Gadget {
     private HashMap<Player, ArrayList<Bat>> bats = new HashMap();
 
     public GadgetBatBlaster(UUID owner) {
-        super(Material.IRON_BARDING, (byte) 0x0, 7, owner, GadgetType.BAT_BLASTER, "&7&oLaunch waves of annoying bats\n&7&oto people you do not like!");
+        super(owner, GadgetType.BAT_BLASTER);
     }
 
     @Override

@@ -120,7 +120,7 @@ public class PetManager implements Listener {
 
                 if (Category.PETS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Pet")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Pet")));
                 int d = (Category.PETS.hasGoBackArrow() ? 5 : 6);
                 if (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
                     if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {

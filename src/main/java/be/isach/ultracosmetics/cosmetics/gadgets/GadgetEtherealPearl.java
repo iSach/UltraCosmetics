@@ -31,7 +31,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     ArrayList<EnderPearl> pearls = new ArrayList<>();
 
     public GadgetEtherealPearl(UUID owner) {
-        super(Material.ENDER_PEARL, (byte) 0x0, 3, owner, GadgetType.ETHEREAL_PEARL, "&7&oTake a ride through the skies\n&7&oon your very own Ethereal Pearl!");
+        super(owner, GadgetType.ETHEREAL_PEARL);
         if (owner != null)
             Core.registerListener(this);
     }

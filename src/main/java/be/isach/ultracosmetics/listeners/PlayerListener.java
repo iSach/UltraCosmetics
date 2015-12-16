@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.listeners;
 
 import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -26,7 +26,7 @@ public class PlayerListener implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                Core.getCustomPlayers().add(new CustomPlayer(event.getPlayer().getUniqueId()));
+                Core.getPlayerManager().create(event.getPlayer());
                 if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
@@ -61,7 +61,6 @@ public class PlayerListener implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                Core.getCustomPlayers().add(new CustomPlayer(event.getPlayer().getUniqueId()));
                 if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
@@ -114,7 +113,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && !((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
             int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
             if (event.getPlayer().getInventory().getItem(slot) != null) {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
@@ -132,7 +131,7 @@ public class PlayerListener implements Listener {
         if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
             Core.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
         Core.getCustomPlayer(event.getPlayer()).clear();
-        Core.getCustomPlayers().remove(Core.getCustomPlayer(event.getPlayer()));
+        Core.getPlayerManager().remove(event.getPlayer());
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (event.getPlayer().getInventory().getItem(slot) != null
                 && event.getPlayer().getInventory().getItem(slot).hasItemMeta()
@@ -163,7 +162,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            if (Core.noFallDamageEntities.contains(event.getEntity())) {
+            if (FallDamageManager.shouldBeProtected(event.getEntity())) {
                 event.setCancelled(true);
             }
         }

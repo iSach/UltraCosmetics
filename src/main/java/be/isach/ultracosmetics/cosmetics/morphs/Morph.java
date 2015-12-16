@@ -43,11 +43,11 @@ public abstract class Morph implements Listener {
         this.permission = permission;
         this.type = type;
         this.disguiseType = disguiseType;
-        if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
+        if (SettingsManager.getConfig().get("Morphs." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            SettingsManager.getConfig().addDefault("Gadgets." + configName + ".Description", getDescriptionWithColor(), "Description of this Morph.");
+            SettingsManager.getConfig().addDefault("Morphs." + configName + ".Description", getDescriptionWithColor(), "Description of this Morph.");
         } else {
-            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
+            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Morphs." + configName + ".Description")));
         }
         if (owner != null) {
             this.owner = owner;

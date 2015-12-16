@@ -31,7 +31,7 @@ public class GadgetPortalGun extends Gadget {
     BlockFace redBlockFace;
 
     public GadgetPortalGun(UUID owner) {
-        super(Material.REDSTONE_COMPARATOR, (byte) 0x0, 1, owner, GadgetType.PORTAL_GUN, "&7&oMomentum, a function of mass and velocity,\n&7&ois converved between portals. In layman's terms,\n&7&ospeedy thing goes in, speedy thing goes out.");
+        super(owner, GadgetType.PORTAL_GUN);
         displayCountdownMessage = false;
         useTwoInteractMethods = true;
     }

@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.Title;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -31,7 +32,7 @@ public class GadgetRocket extends Gadget {
     public List<Block> blocks = new ArrayList<>();
 
     public GadgetRocket(UUID owner) {
-        super(Material.getMaterial(401), (byte) 0x0, 60, owner, GadgetType.ROCKET, "&7&oHouston, we have got a problem.");
+        super(owner, GadgetType.ROCKET);
     }
 
     @Override
@@ -128,7 +129,7 @@ public class GadgetRocket extends Gadget {
                                     for (FallingBlock fb : fallingBlocks)
                                         fb.remove();
                                     fallingBlocks.clear();
-                                    Core.noFallDamageEntities.add(getPlayer());
+                                    FallDamageManager.addNoFall(getPlayer());
                                     getPlayer().playSound(getPlayer().getLocation(), Sound.EXPLODE, 3, 1);
                                     UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
                                     launching = false;

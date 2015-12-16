@@ -26,7 +26,7 @@ public class GadgetBlackHole extends Gadget {
     Item i;
 
     public GadgetBlackHole(UUID owner) {
-        super(Material.STAINED_CLAY, (byte) 0xf, 45, owner, GadgetType.BLACK_HOLE, "&7&oDo not get caught in it...");
+        super(owner, GadgetType.BLACK_HOLE);
     }
 
     @Override

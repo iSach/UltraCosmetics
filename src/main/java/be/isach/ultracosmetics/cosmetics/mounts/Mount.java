@@ -14,6 +14,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
@@ -295,6 +296,13 @@ public abstract class Mount implements Listener {
                     && Core.getCustomPlayer(getPlayer()).currentMount.getType() == getType()) {
                 event.setCancelled(true);
             }
+        }
+
+        @EventHandler
+        public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+            if ((ent != null && event.getDamager() == ent)
+                    || (customEnt != null && event.getDamager() == customEnt.getBukkitEntity()))
+                event.setCancelled(true);
         }
 
         @EventHandler

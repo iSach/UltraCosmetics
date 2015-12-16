@@ -112,7 +112,7 @@ public class ParticleEffectManager implements Listener {
 
                 if (Category.EFFECTS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - (Category.EFFECTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Effect")));
+                inv.setItem(inv.getSize() - (Category.EFFECTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Effect")));
 
                 ItemFactory.fillInventory(inv);
 

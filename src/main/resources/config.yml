@@ -15,22 +15,24 @@ Categories-Enabled:
 # - Do you want a BackToMainMenu Arrow in it?
 Categories:
   Gadgets:
-    Main-Menu-Item: '341:0'
+    Main-Menu-Item: '409:0'
     Go-Back-Arrow: true
+    # You wanna show the cooldown of current gadget in actionbar?
+    Cooldown-In-ActionBar: true
   Particle-Effects:
-    Main-Menu-Item: '362:0'
+    Main-Menu-Item: '399:0'
     Go-Back-Arrow: true
   Mounts:
     Main-Menu-Item: '329:0'
     Go-Back-Arrow: true
   Pets:
-    Main-Menu-Item: '383:0'
+    Main-Menu-Item: '352:0'
     Go-Back-Arrow: true
   Morphs:
-    Main-Menu-Item: '397:4'
+    Main-Menu-Item: '334:0'
     Go-Back-Arrow: true
   Hats:
-    Main-Menu-Item: '310:0'
+    Main-Menu-Item: '314:0'
     Go-Back-Arrow: true
 
 # Treasure Chests Settings.

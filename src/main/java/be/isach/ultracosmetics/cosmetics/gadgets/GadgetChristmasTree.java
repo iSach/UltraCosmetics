@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -22,7 +21,7 @@ public class GadgetChristmasTree extends Gadget {
     int[] logColor = {101, 67, 33};
 
     public GadgetChristmasTree(UUID owner) {
-        super(Material.LONG_GRASS, (byte) 0x2, 15, owner, GadgetType.CHRISTMAS_TREE, "&7&oHere is a Christmas Tree for you!");
+        super(owner, GadgetType.CHRISTMAS_TREE);
     }
 
     @Override

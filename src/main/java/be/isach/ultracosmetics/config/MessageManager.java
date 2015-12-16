@@ -120,6 +120,10 @@ public class MessageManager {
         addMessage("Gadgets.Firework.name", "&c&lFirework");
         addMessage("Gadgets.ChristmasTree.name", "&2&lChristmas Tree");
         addMessage("Gadgets.ChristmasTree.Click-On-Block", "%prefix% &c&lPlease click on a block!");
+        addMessage("Gadgets.FreezeCannon.name", "&b&lFreeze Cannon");
+        addMessage("Gadgets.Snowball.name", "&f&lSnowball");
+        addMessage("Gadgets.PartyPopper.name", "&e&lParty Popper");
+        addMessage("Gadgets.Gadget-Ready-ActionBar", "%gadgetname% §f§lis ready!");
 
         // MOUNTS
         addMessage("Mounts.DruggedHorse.menu-name", "&2&lDrugged Horse");

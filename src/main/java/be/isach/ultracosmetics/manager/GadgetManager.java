@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import net.md_5.bungee.api.ChatColor;
@@ -39,10 +38,9 @@ public class GadgetManager implements Listener {
 
     public static void openGadgetsMenu(final Player p, int page) {
         int listSize = 0;
-        for (Gadget g : Core.getGadgets()) {
-            if (!g.getType().isEnabled()) continue;
-            listSize++;
-        }
+        for (GadgetType gadgetType : GadgetType.values())
+            if (gadgetType.isEnabled())
+                listSize++;
         int slotAmount = 54;
         if (listSize < 22)
             slotAmount = 54;
@@ -59,10 +57,10 @@ public class GadgetManager implements Listener {
             from = 21 * (page - 1) + 1;
         int to = 21 * page;
         for (int h = from; h <= to; h++) {
-            if (h > Core.getGadgets().size())
+            if (h > GadgetType.values().length)
                 break;
-            Gadget g = Core.getGadgets().get(h - 1);
-            if (!g.getType().isEnabled() && SettingsManager.getConfig().getBoolean("Disabled-Items.Show-Custom-Disabled-Item")) {
+            GadgetType g = GadgetType.values()[h - 1];
+            if (!g.isEnabled() && SettingsManager.getConfig().getBoolean("Disabled-Items.Show-Custom-Disabled-Item")) {
                 Material material = Material.valueOf(SettingsManager.getConfig().getString("Disabled-Items.Custom-Disabled-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
@@ -70,11 +68,11 @@ public class GadgetManager implements Listener {
                 i++;
                 continue;
             }
-            if (!g.getType().isEnabled()) continue;
+            if (!g.isEnabled()) continue;
             if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item"))
-                if (!p.hasPermission(g.getType().getPermission()))
+                if (!p.hasPermission(g.getPermission()))
                     continue;
-            if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled") && !p.hasPermission(g.getType().getPermission())) {
+            if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled") && !p.hasPermission(g.getPermission())) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                 String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
@@ -85,18 +83,18 @@ public class GadgetManager implements Listener {
 
             String toggle = MessageManager.getMessage("Menu.Activate");
             CustomPlayer cp = Core.getCustomPlayer(p);
-            if (cp.currentGadget != null && cp.currentGadget.getType() == g.getType())
+            if (cp.currentGadget != null && cp.currentGadget.getType() == g)
                 toggle = MessageManager.getMessage("Menu.Deactivate");
             ItemStack is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName());
-            if (cp.currentGadget != null && cp.currentGadget.getType() == g.getType())
+            if (cp.currentGadget != null && cp.currentGadget.getType() == g)
                 is = ItemFactory.addGlow(is);
             ItemMeta itemMeta = is.getItemMeta();
             List<String> loreList = new ArrayList<>();
-            if (Core.isAmmoEnabled() && g.getType().requiresAmmo()) {
+            if (Core.isAmmoEnabled() && g.requiresAmmo()) {
                 if (itemMeta.hasLore())
                     loreList = itemMeta.getLore();
                 loreList.add("");
-                loreList.add(MessageManager.getMessage("Ammo").replace("%ammo%", "" + Core.getCustomPlayer(p).getAmmo(g.getType().toString().toLowerCase())));
+                loreList.add(MessageManager.getMessage("Ammo").replace("%ammo%", "" + Core.getCustomPlayer(p).getAmmo(g.toString().toLowerCase())));
                 loreList.add(MessageManager.getMessage("Right-Click-Buy-Ammo"));
             }
             if (g.showsDescription()) {
@@ -108,7 +106,7 @@ public class GadgetManager implements Listener {
             if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore"))
                 loreList.add(ChatColor.translateAlternateColorCodes('&',
                         String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" +
-                                ((p.hasPermission(g.getType().getPermission()) ? "Yes" : "No"))))));
+                                ((p.hasPermission(g.getPermission()) ? "Yes" : "No"))))));
             itemMeta.setLore(loreList);
             is.setItemMeta(itemMeta);
             inv.setItem(COSMETICS_SLOTS[i], is);
@@ -122,7 +120,7 @@ public class GadgetManager implements Listener {
 
         if (Category.GADGETS.hasGoBackArrow())
             inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
+        inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
 
         ItemFactory.fillInventory(inv);
 
@@ -141,7 +139,10 @@ public class GadgetManager implements Listener {
      */
     private static int getMaxPagesAmount() {
         int max = 21;
-        int i = Core.getGadgets().size();
+        int i = 0;
+        for (GadgetType gadgetType : GadgetType.values())
+            if (gadgetType.isEnabled())
+                i++;
         if (i % max == 0) return i / max;
         double j = i / 21;
         int h = (int) Math.floor(j * 100) / 100;
@@ -245,9 +246,9 @@ public class GadgetManager implements Listener {
     }
 
     public static GadgetType getGadgetByName(String name) {
-        for (Gadget g : Core.getGadgets()) {
-            if (g.getName().replace(" ", "").equals(name.replace(" ", ""))) {
-                return g.getType();
+        for (GadgetType type : GadgetType.values()) {
+            if (type.getName().replace(" ", "").equals(name.replace(" ", ""))) {
+                return type;
             }
         }
         return null;

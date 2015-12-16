@@ -127,7 +127,7 @@ public class MountManager implements Listener {
 
                 if (Category.MOUNTS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - (Category.MOUNTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.TNT, (byte) 0x0, MessageManager.getMessage("Clear-Mount")));
+                inv.setItem(inv.getSize() - (Category.MOUNTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Mount")));
 
                 ItemFactory.fillInventory(inv);
 

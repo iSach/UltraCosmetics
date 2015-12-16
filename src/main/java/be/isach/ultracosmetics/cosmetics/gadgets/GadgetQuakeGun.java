@@ -24,7 +24,7 @@ public class GadgetQuakeGun extends Gadget {
     List<Firework> fireworkList = new ArrayList<>();
 
     public GadgetQuakeGun(UUID owner) {
-        super(Material.DIAMOND_HOE, (byte) 0x0, 5, owner, GadgetType.QUAKE_GUN, "&7&oGet a real Rail Gun and\n&7&oStrike players and mobs!");
+        super(owner, GadgetType.QUAKE_GUN);
         Core.registerListener(this);
     }
 

@@ -5,7 +5,9 @@ import be.isach.ultracosmetics.commands.UltraCosmeticsTabCompleter;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.gadgets.*;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetDiscoBall;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetExplosiveSheep;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.*;
 import be.isach.ultracosmetics.cosmetics.mounts.*;
@@ -17,18 +19,18 @@ import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.manager.*;
 import be.isach.ultracosmetics.mysql.MySQLConnection;
 import be.isach.ultracosmetics.mysql.Table;
+import be.isach.ultracosmetics.run.FallDamageManager;
+import be.isach.ultracosmetics.run.InvalidWorldManager;
 import be.isach.ultracosmetics.util.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -44,27 +46,23 @@ import java.util.*;
  */
 public class Core extends JavaPlugin {
 
-    public static ArrayList<Entity> noFallDamageEntities = new ArrayList<>();
-    public static ArrayList<GadgetDiscoBall> discoBalls = new ArrayList<>();
-    public static ArrayList<GadgetExplosiveSheep> explosiveSheep = new ArrayList<>();
-    public static HashMap<Player, HashMap<GadgetType, Double>> countdownMap = new HashMap<>();
+    public static List<GadgetDiscoBall> discoBalls = Collections.synchronizedList(new ArrayList<GadgetDiscoBall>());
+    public static List<GadgetExplosiveSheep> explosiveSheep = Collections.synchronizedList(new ArrayList<GadgetExplosiveSheep>());
 
-    private static List<CustomPlayer> customPlayers = new ArrayList<>();
-
-    private static List<Gadget> gadgetList = new ArrayList<>();
-    private static List<ParticleEffect> particleEffectList = new ArrayList<>();
-    private static List<Mount> mountList = new ArrayList<>();
-    private static List<Pet> petList = new ArrayList<>();
-    private static List<TreasureChest> treasureChestList = new ArrayList<>();
-    private static List<Morph> morphList = new ArrayList<>();
-    private static List<Hat> hatList = new ArrayList<>();
+    private static List<ParticleEffect> particleEffectList = Collections.synchronizedList(new ArrayList<ParticleEffect>());
+    private static List<Mount> mountList = Collections.synchronizedList(new ArrayList<Mount>());
+    private static List<Pet> petList = Collections.synchronizedList(new ArrayList<Pet>());
+    private static List<TreasureChest> treasureChestList = Collections.synchronizedList(new ArrayList<TreasureChest>());
+    private static List<Morph> morphList = Collections.synchronizedList(new ArrayList<Morph>());
+    private static List<Hat> hatList = Collections.synchronizedList(new ArrayList<Hat>());
 
     public static Boolean placeHolderColor;
 
-    private static boolean nbsapiEnabled = false;
-    private static boolean ammoEnabled = false;
+    private static boolean nbsapiEnabled;
+    private static boolean ammoEnabled;
     private static boolean fileStorage = true;
-    private static boolean treasureChests = false;
+    private static boolean treasureChests;
+    public static boolean cooldownInBar;
 
     static boolean debug = false;
 
@@ -85,6 +83,8 @@ public class Core extends JavaPlugin {
     public static boolean outdated;
     public static String lastVersion;
 
+    private static PlayerManager playerManager;
+
     @Override
     public void onEnable() {
         if (!getServer().getVersion().contains("1.8.8")) {
@@ -92,6 +92,8 @@ public class Core extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        playerManager = new PlayerManager();
 
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
         log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded...");
@@ -120,6 +122,8 @@ public class Core extends JavaPlugin {
         for (World world : Bukkit.getWorlds())
             enabledWorlds.add(world.getName());
         config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");
+
+        config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
 
         saveConfig();
 
@@ -200,8 +204,8 @@ public class Core extends JavaPlugin {
         String s = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System");
         fileStorage = s.equalsIgnoreCase("file");
         placeHolderColor = SettingsManager.getConfig().getBoolean("Chat-Cosmetic-PlaceHolder-Color");
-        registerGadgets();
         ammoEnabled = SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Enabled");
+        cooldownInBar = SettingsManager.getConfig().getBoolean("Categories.Gadgets.Cooldown-In-ActionBar");
 
         for (Category c : Category.values()) {
             if (c == Category.MORPHS)
@@ -232,7 +236,7 @@ public class Core extends JavaPlugin {
         }.run();
 
         log("Registering Gadgets...");
-        setupGadgetsConfig();
+        setupCosmeticsConfigs();
         try {
             config.save(file);
         } catch (IOException e) {
@@ -273,7 +277,8 @@ public class Core extends JavaPlugin {
         }
         initPlayers();
 
-        initCooldownManager();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new FallDamageManager(), 0, 1);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new InvalidWorldManager(), 0, 5);
 
         if (nbsapiEnabled) {
             File folder = new File(getDataFolder().getPath() + "/songs/");
@@ -331,60 +336,9 @@ public class Core extends JavaPlugin {
         }
     }
 
-    private void initCooldownManager() {
-        final BukkitRunnable countdownRunnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    Iterator<Entity> iter = noFallDamageEntities.iterator();
-                    while (iter.hasNext()) {
-                        Entity ent = iter.next();
-                        if (ent.isOnGround())
-                            iter.remove();
-                    }
-                    Iterator<CustomPlayer> customPlayerIterator = customPlayers.iterator();
-                    while (customPlayerIterator.hasNext()) {
-                        CustomPlayer customPlayer = customPlayerIterator.next();
-                        if (customPlayer.getPlayer() == null)
-                            customPlayerIterator.remove();
-                    }
-                    Iterator<Player> playerIterator = countdownMap.keySet().iterator();
-                    while (playerIterator.hasNext()) {
-                        Player p = playerIterator.next();
-                        try {
-                            if (!((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
-                                CustomPlayer customPlayer = Core.getCustomPlayer(p);
-                                customPlayer.clear();
-                                customPlayer.removeChest();
-                                customPlayer = null;
-                            }
-                        } catch (Exception exc) {
-                        }
-                        if (countdownMap.get(p) != null) {
-                            Iterator it = countdownMap.get(p).entrySet().iterator();
-                            while (it.hasNext()) {
-                                Map.Entry pair = (Map.Entry) it.next();
-                                double timeLeft = (double) pair.getValue();
-                                GadgetType type = (GadgetType) pair.getKey();
-                                if (timeLeft > 0.1)
-                                    pair.setValue(timeLeft - 0.05);
-                                else
-                                    it.remove();
-
-                            }
-                        }
-                    }
-                } catch (Exception exc) {
-                }
-            }
-        };
-        countdownRunnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, 1);
-
-    }
-
     private void initPlayers() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            customPlayers.add(new CustomPlayer(p.getUniqueId()));
+            playerManager.create(p);
             if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
                 int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
                 if (p.getInventory().getItem(slot) != null) {
@@ -448,11 +402,11 @@ public class Core extends JavaPlugin {
                                 " username VARCHAR(255),"
                                 + " PRIMARY KEY ( id ))");
                         sql.executeUpdate();
-                        for (Gadget gadget : gadgetList) {
+                        for (GadgetType gadgetType : GadgetType.values()) {
                             DatabaseMetaData md = co.getMetaData();
-                            ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", gadget.getType().toString().toLowerCase());
+                            ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", gadgetType.toString().replace("_", "").toLowerCase());
                             if (!rs.next()) {
-                                PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD " + gadget.getType().toString().toLowerCase() + " INTEGER DEFAULT 0 not NULL");
+                                PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD " + gadgetType.toString().replace("_", "").toLowerCase() + " INTEGER DEFAULT 0 not NULL");
                                 statement.executeUpdate();
                             }
                         }
@@ -487,24 +441,25 @@ public class Core extends JavaPlugin {
         }
     }
 
-    private void setupGadgetsConfig() {
-        for (Gadget gadget : gadgetList) {
-            config.addDefault("Gadgets." + gadget.getType().configName + ".Enabled", true, "if true, the gadget will be enabled.");
-            config.addDefault("Gadgets." + gadget.getType().configName + ".Show-Description", true, "if true, the description of gadget will be showed.");
-            config.addDefault("Gadgets." + gadget.getType().configName + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-            if (gadget.getType() == GadgetType.PAINTBALL_GUN) {
-                config.addDefault("Gadgets." + gadget.getType().configName + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
-                config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Enabled", false, "Should it display particles?");
-                config.addDefault("Gadgets." + gadget.getType().configName + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
-                config.addDefault("Gadgets." + gadget.getType().configName + ".Radius", 2, "The radius of painting.");
+    private void setupCosmeticsConfigs() {
+        for (GadgetType gadgetType : GadgetType.values()) {
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Enabled", true, "if true, the gadget will be enabled.");
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Show-Description", true, "if true, the description of gadget will be showed.");
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            if (gadgetType == GadgetType.PAINTBALL_GUN) {
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Enabled", false, "Should it display particles?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Radius", 2, "The radius of painting.");
                 List<String> blackListedBlocks = new ArrayList<>();
                 blackListedBlocks.add("REDSTONE_BLOCK");
-                config.addDefault("Gadgets." + gadget.getType().configName + ".BlackList", blackListedBlocks, "A list of the blocks that", "can't be painted.");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".BlackList", blackListedBlocks, "A list of the blocks that", "can't be painted.");
             }
             if (ammoEnabled) {
-                config.addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Enabled", true, "You want this gadget to need ammo?");
-                config.addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Price", 500, "What price for the ammo?");
-                config.addDefault("Gadgets." + gadget.getType().configName + ".Ammo.Result-Amount", 20, "And how much ammo is given", "when bought?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Enabled", true, "You want this gadget to need ammo?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Price", 500, "What price for the ammo?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Result-Amount", 20, "And how much ammo is given", "when bought?");
             }
         }
 
@@ -599,41 +554,6 @@ public class Core extends JavaPlugin {
         }
     }
 
-    private void registerGadgets() {
-        for (GadgetType gadgetType : GadgetType.values())
-            addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true);
-
-        // Add gadgets.
-        gadgetList.add(new GadgetPaintballGun(null));
-        gadgetList.add(new GadgetBatBlaster(null));
-        gadgetList.add(new GadgetChickenator(null));
-        gadgetList.add(new GadgetMelonThrower(null));
-        gadgetList.add(new GadgetEtherealPearl(null));
-        gadgetList.add(new GadgetDiscoBall(null));
-        gadgetList.add(new GadgetColorBomb(null));
-        gadgetList.add(new GadgetFleshHook(null));
-        gadgetList.add(new GadgetPortalGun(null));
-        gadgetList.add(new GadgetBlizzardBlaster(null));
-        gadgetList.add(new GadgetThorHammer(null));
-        gadgetList.add(new GadgetSmashDown(null));
-        gadgetList.add(new GadgetExplosiveSheep(null));
-        gadgetList.add(new GadgetAntiGravity(null));
-        gadgetList.add(new GadgetTsunami(null));
-        gadgetList.add(new GadgetRocket(null));
-        gadgetList.add(new GadgetBlackHole(null));
-        gadgetList.add(new GadgetTNT(null));
-        gadgetList.add(new GadgetFunGun(null));
-        gadgetList.add(new GadgetQuakeGun(null));
-        gadgetList.add(new GadgetParachute(null));
-        gadgetList.add(new GadgetGhostParty(null));
-        gadgetList.add(new GadgetFirework(null));
-        gadgetList.add(new GadgetChristmasTree(null));
-    }
-
-    private void addDefault(String path, Object value) {
-        config.addDefault(path, value);
-    }
-
     private boolean setupEconomy() {
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null) {
@@ -676,27 +596,12 @@ public class Core extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
-        for (CustomPlayer cp : customPlayers) {
-            if (cp.currentTreasureChest != null)
-                cp.currentTreasureChest.forceOpen(0);
-            cp.clear();
-            int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-            if (cp.getPlayer().getInventory().getItem(slot) != null
-                    && cp.getPlayer().getInventory().getItem(slot).hasItemMeta()
-                    && cp.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                    && cp.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-                cp.getPlayer().getInventory().setItem(slot, null);
-            }
-        }
-        Core.customPlayers.clear();
+        playerManager.dispose();
         try {
             BlockUtils.forceRestore();
         } catch (Exception e) {
         }
-
         CustomEntities.unregisterEntities();
-
     }
 
     private void checkForUpdate() {
@@ -716,12 +621,8 @@ public class Core extends JavaPlugin {
             outdated = false;
     }
 
-    public static List<Gadget> getGadgets() {
-        return gadgetList;
-    }
-
-    public static List<CustomPlayer> getCustomPlayers() {
-        return customPlayers;
+    public static Collection<CustomPlayer> getCustomPlayers() {
+        return playerManager.getPlayers();
     }
 
     public static List<Pet> getPets() {
@@ -783,16 +684,11 @@ public class Core extends JavaPlugin {
     }
 
     public static CustomPlayer getCustomPlayer(Player player) {
-        try {
-            for (CustomPlayer cp : customPlayers)
-                if (cp.getPlayer().getName().equals(player.getName()))
-                    return cp;
-            return new CustomPlayer(player.getUniqueId());
-        } catch (NullPointerException exception) {
-            CustomPlayer p = new CustomPlayer(player.getUniqueId());
-            customPlayers.add(p);
-            return p;
-        }
+        return playerManager.getCustomPlayer(player);
+    }
+
+    public static PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
     public static String getLastVersion() {
@@ -813,7 +709,6 @@ public class Core extends JavaPlugin {
     }
 
     public static CharSequence filterColor(String menuName) {
-        String filtered = menuName;
         Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
         for (Character character : chars)
             menuName = menuName.replace("§" + character, "");

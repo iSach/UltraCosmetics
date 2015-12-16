@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
@@ -25,7 +24,7 @@ public class GadgetFunGun extends Gadget {
     private List<Projectile> projectiles = new ArrayList<>();
 
     public GadgetFunGun(UUID owner) {
-        super(Material.BLAZE_ROD, (byte) 0x0, 2, owner, GadgetType.FUN_GUN, "&7&oWow! So much fun in a gun!");
+        super(owner, GadgetType.FUN_GUN);
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());

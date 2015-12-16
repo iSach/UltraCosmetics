@@ -1,14 +1,14 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.GadgetManager;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.ItemFactory;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import be.isach.ultracosmetics.util.PlayerUtils;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.Player;
@@ -25,46 +25,34 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by sacha on 03/08/15.
  */
 public abstract class Gadget implements Listener {
 
+    /**
+     * If true, it will
+     */
     public boolean useTwoInteractMethods;
-    private Material material;
-    private Byte data;
     private String configName;
     private Inventory inv;
     public boolean openGadgetsInvAfterAmmo;
-    private double countdown;
-    private boolean requiresAmmo;
     private Listener listener;
     private GadgetType type;
     public boolean displayCountdownMessage = true;
     private String permission;
     private UUID owner;
     boolean affectPlayers;
-    private String description;
     protected Block lastClickedBlock;
+    protected ItemStack itemStack;
 
-    public Gadget(Material material, Byte data, double countdown, final UUID owner, final GadgetType type, String defaultDesc) {
-        this.material = material;
-        this.data = data;
+    public Gadget(final UUID owner, final GadgetType type) {
         this.configName = type.configName;
         this.permission = type.permission;
         affectPlayers = SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Affect-Players");
-        if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
-            this.countdown = countdown;
-            SettingsManager.getConfig().set("Gadgets." + configName + ".Cooldown", countdown);
-        } else
-            this.countdown = Double.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown")));
-        if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
-            this.description = defaultDesc;
-            Core.config.addDefault("Gadgets." + configName + ".Description", getDescriptionWithColor(), "Description of this gadget.");
-        } else
-            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
         this.type = type;
         this.useTwoInteractMethods = false;
         if (owner != null) {
@@ -75,6 +63,7 @@ public abstract class Gadget implements Listener {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
+            final DecimalFormat decimalFormat = new DecimalFormat("0.0");
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -83,6 +72,25 @@ public abstract class Gadget implements Listener {
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget != null
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget.getType() == type) {
                             onUpdate();
+                            if (Core.cooldownInBar) {
+                                if (getPlayer().getItemInHand() != null
+                                        && itemStack != null
+                                        && getPlayer().getItemInHand().isSimilar(itemStack)
+                                        && Core.getCustomPlayer(getPlayer()).canUse(type) != -1)
+                                    sendCooldownBar();
+                                double left = Core.getCustomPlayer(getPlayer()).canUse(type);
+                                if (left > -0.1) {
+                                    String leftRounded = decimalFormat.format(left);
+                                    double decimalRoundedValue = Double.parseDouble(leftRounded);
+                                    if (decimalRoundedValue == 0) {
+                                        PlayerUtils.sendInActionBar(getPlayer(),
+                                                MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar").
+                                                        replace("%gadgetname%", (Core.placeHolderColor) ?
+                                                                getName() : Core.filterColor(getName())));
+                                        getPlayer().playSound(getPlayer().getLocation(), Sound.NOTE_STICKS, 1f, 1f);
+                                    }
+                                }
+                            }
                         } else {
                             cancel();
                             unregister();
@@ -105,35 +113,59 @@ public abstract class Gadget implements Listener {
             String d = Core.isAmmoEnabled() && getType().requiresAmmo() ?
                     "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " "
                     : "";
-            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, d + getName(), "§9Gadget"));
+            itemStack = ItemFactory.create(type.getMaterial(), type.getData(), d + getName(), "§9Gadget");
+            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())));
             Core.getCustomPlayer(getPlayer()).currentGadget = this;
         }
-        this.requiresAmmo = Boolean.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Enabled")));
     }
 
-    public boolean showsDescription() {
-        return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Show-Description");
-    }
+    /*
+    Gadget-Name ■■■■■■■■■■ <time>(0.0)s
+     */
 
-    public boolean canBeFound() {
-        return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Can-Be-Found-In-Treasure-Chests");
+    /**
+     * Sends the current cooldown in action bar.
+     */
+    private void sendCooldownBar() {
+        if (getPlayer() == null) return;
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        double currentCooldown = Core.getCustomPlayer(getPlayer()).canUse(type);
+        double maxCooldown = type.getCountdown();
+
+        int res = (int) (currentCooldown / maxCooldown * 10);
+        ChatColor color;
+        for (int i = 0; i < 10; i++) {
+            color = ChatColor.RED;
+            if (i < 10 - res)
+                color = ChatColor.GREEN;
+            stringBuilder.append(color + "█");
+        }
+
+        DecimalFormat decimalFormat = new DecimalFormat("0.0");
+        String timeLeft = decimalFormat.format(currentCooldown) + "s";
+
+        PlayerUtils.sendInActionBar(getPlayer(),
+                getName() + " §f" + stringBuilder.toString() + " §f" + timeLeft);
+
     }
 
     public String getName() {
-        return MessageManager.getMessage("Gadgets." + configName + ".name");
+        return type.getName();
     }
 
     public Material getMaterial() {
-        return this.material;
+        return type.getMaterial();
     }
 
     public GadgetType getType() {
-        return this.type;
+        return type;
     }
 
     public Byte getData() {
-        return this.data;
+        return type.getData();
     }
 
     abstract void onInteractRightClick();
@@ -141,10 +173,6 @@ public abstract class Gadget implements Listener {
     abstract void onInteractLeftClick();
 
     abstract void onUpdate();
-
-    public List<String> getDescriptionWithColor() {
-        return Arrays.asList(description.split("\n"));
-    }
 
     public abstract void onClear();
 
@@ -165,6 +193,7 @@ public abstract class Gadget implements Listener {
     }
 
     public void removeItem() {
+        itemStack = null;
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
     }
 
@@ -180,7 +209,7 @@ public abstract class Gadget implements Listener {
 
         Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Buy-Ammo"));
 
-        inventory.setItem(13, ItemFactory.create(material, data, MessageManager.getMessage("Buy-Ammo-Description").replace("%amount%", "" + getResultAmmoAmount()).replace("%price%", "" + getPrice()).replaceAll("%gadgetname%", getName())));
+        inventory.setItem(13, ItemFactory.create(type.getMaterial(), type.getData(), MessageManager.getMessage("Buy-Ammo-Description").replace("%amount%", "" + getResultAmmoAmount()).replace("%price%", "" + getPrice()).replaceAll("%gadgetname%", getName())));
 
         for (int i = 27; i < 30; i++) {
             inventory.setItem(i, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
@@ -257,10 +286,11 @@ public abstract class Gadget implements Listener {
         protected void onPlayerInteract(PlayerInteractEvent event) {
             Player player = event.getPlayer();
             UUID uuid = player.getUniqueId();
+            CustomPlayer cp = Core.getCustomPlayer(getPlayer());
             if (!uuid.equals(gadget.owner)) return;
             ItemStack itemStack = player.getItemInHand();
-            if (itemStack.getType() != gadget.material) return;
-            if (itemStack.getData().getData() != gadget.data) return;
+            if (itemStack.getType() != gadget.getMaterial()) return;
+            if (itemStack.getData().getData() != gadget.getData()) return;
             if (player.getInventory().getHeldItemSlot() != (int) SettingsManager.getConfig().get("Gadget-Slot")) return;
             if (Core.getCustomPlayer(getPlayer()).currentGadget != gadget) return;
             if (event.getAction() == Action.PHYSICAL) return;
@@ -270,9 +300,9 @@ public abstract class Gadget implements Listener {
                 getPlayer().sendMessage(MessageManager.getMessage("Gadgets-Enabled-Needed"));
                 return;
             }
-            if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null) {
+            if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
                 return;
-            }
+
             if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
                 if (Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) < 1) {
                     buyAmmo();
@@ -332,24 +362,18 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (Core.countdownMap.get(getPlayer()) != null) {
-                if (Core.countdownMap.get(getPlayer()).containsKey(getType())) {
-                    String timeLeft = new DecimalFormat("0.0").format(Core.countdownMap.get(getPlayer()).get(getType()));
-                    if (countdown > 1)
-                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", getName()).replace("%time%", timeLeft));
-                    return;
-                } else {
-                    Core.countdownMap.get(getPlayer()).put(getType(), countdown);
-                }
-            } else {
-                Core.countdownMap.remove(getPlayer());
-                HashMap<GadgetType, Double> countdownMap = new HashMap<>();
-                countdownMap.put(getType(), countdown);
-                Core.countdownMap.put(getPlayer(), countdownMap);
-            }
+            double coolDown = cp.canUse(getType());
+            if (coolDown != -1) {
+                String timeLeft = new DecimalFormat("#.#").format(coolDown);
+                if (type.getCountdown() > 1)
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", getName()).replace("%time%", timeLeft));
+                return;
+            } else
+                cp.setCoolDown(getType(), type.getCountdown());
             if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
                 Core.getCustomPlayer(getPlayer()).removeAmmo(getType().toString().toLowerCase());
-                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(material, data, "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget"));
+                itemStack = ItemFactory.create(type.getMaterial(), type.getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget");
+                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
             }
             if (event.getClickedBlock() != null
                     && event.getClickedBlock().getType() != Material.AIR)
@@ -369,8 +393,8 @@ public abstract class Gadget implements Listener {
 
         @EventHandler
         protected void onItemDrop(PlayerDropItemEvent event) {
-            if (event.getItemDrop().getItemStack().getType() == material) {
-                if (event.getItemDrop().getItemStack().getData().getData() == data) {
+            if (event.getItemDrop().getItemStack().getType() == type.getMaterial()) {
+                if (event.getItemDrop().getItemStack().getData().getData() == type.getData()) {
                     if (event.getItemDrop().getItemStack().getItemMeta().hasDisplayName()) {
                         if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().endsWith(getName())) {
                             if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
@@ -388,29 +412,13 @@ public abstract class Gadget implements Listener {
         @EventHandler
         protected void onInventoryClick(InventoryClickEvent event) {
             if (event.getCurrentItem() != null
-                    && event.getCurrentItem().getType() == material
-                    && event.getCurrentItem().getData().getData() == data
+                    && event.getCurrentItem().getType() == type.getMaterial()
+                    && event.getCurrentItem().getData().getData() == type.getData()
                     && event.getCurrentItem().getItemMeta().hasDisplayName()
                     && event.getCurrentItem().getItemMeta().getDisplayName().endsWith(getName())) {
                 event.setCancelled(true);
             }
         }
-    }
-
-    public List<String> getDescription() {
-        List<String> desc = new ArrayList<>();
-        for (String string : description.split("\n")) {
-            desc.add(string.replace('&', '§'));
-        }
-        return desc;
-    }
-
-    private String fromList(List<String> description) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < description.size(); i++) {
-            stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
-        }
-        return stringBuilder.toString();
     }
 
 }

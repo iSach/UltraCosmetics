@@ -37,7 +37,7 @@ public class GadgetDiscoBall extends Gadget {
     PositionSongPlayer positionSongPlayer;
 
     public GadgetDiscoBall(UUID owner) {
-        super(Material.BEACON, (byte) 0x0, 60, owner, GadgetType.DISCO_BALL, "&7&oJust, dance!");
+        super(owner, GadgetType.DISCO_BALL);
     }
 
     @Override

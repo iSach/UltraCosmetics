@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
@@ -33,7 +33,7 @@ public class TreasureRandomizer {
     private ItemStack itemStack;
     private String name;
 
-    public static List<Gadget> gadgetList = new ArrayList<>();
+    public static List<GadgetType> gadgetList = new ArrayList<>();
     public static List<ParticleEffect> particleEffectList = new ArrayList<>();
     public static List<Mount> mountList = new ArrayList<>();
     public static List<Pet> petList = new ArrayList<>();
@@ -69,12 +69,12 @@ public class TreasureRandomizer {
     public TreasureRandomizer(final Player player, Location location) {
         this.loc = location.add(0.5, 0, 0.5);
         this.player = player;
-        for (Gadget g : Core.getGadgets()) {
-            if (g.getType().isEnabled()
-                    && player.hasPermission(g.getType().getPermission())
-                    && g.getType().requiresAmmo()
-                    && g.canBeFound())
-                this.gadgetList.add(g);
+        for (GadgetType type : GadgetType.values()) {
+            if (type.isEnabled()
+                    && player.hasPermission(type.getPermission())
+                    && type.requiresAmmo()
+                    && type.canBeFound())
+                this.gadgetList.add(type);
         }
         if (petList.isEmpty())
             for (Pet pet : Core.getPets()) {
@@ -236,11 +236,11 @@ public class TreasureRandomizer {
 
     public void giveAmmo() {
         int i = MathUtils.randomRangeInt(0, gadgetList.size() - 1);
-        Gadget g = gadgetList.get(i);
+        GadgetType g = gadgetList.get(i);
         int ammo = MathUtils.randomRangeInt((int)SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Min"), (int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Max"));
         name = MessageManager.getMessage("Treasure-Chests-Loot.Gadget").replace("%name%", g.getName()).replace("%ammo%", ammo + "");
         gadgetList.remove(i);
-        Core.getCustomPlayer(player).addAmmo(g.getType().toString().toLowerCase(), ammo);
+        Core.getCustomPlayer(player).addAmmo(g.toString().toLowerCase(), ammo);
         itemStack = new MaterialData(g.getMaterial(), g.getData()).toItemStack(1);
         if (ammo > 50) {
             spawnRandomFirework(loc);

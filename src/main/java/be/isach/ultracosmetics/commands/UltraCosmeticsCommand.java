@@ -1,11 +1,9 @@
 package be.isach.ultracosmetics.commands;
 
 import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
@@ -48,15 +46,15 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                                 SENDER.sendMessage("§l§oCosmetics > §c§l" + ARGS[2] + " isn't a valid number.");
                                 return true;
                             }
-                            for (Gadget g : Core.getGadgets()) {
-                                if (g.getType().toString().toLowerCase().equalsIgnoreCase(ARGS[2].toLowerCase())) {
-                                    if (!g.getType().isEnabled()) {
+                            for (GadgetType gadgetType : GadgetType.values()) {
+                                if (gadgetType.toString().toLowerCase().equalsIgnoreCase(ARGS[2].toLowerCase())) {
+                                    if (!gadgetType.isEnabled()) {
                                         SENDER.sendMessage(MessageManager.getMessage("Cosmetic-Disabled"));
-                                    } else if (!g.getType().requiresAmmo()) {
+                                    } else if (!gadgetType.requiresAmmo()) {
                                         SENDER.sendMessage("§l§oCosmetics > §c§lThis gadget doesn't require ammo.");
                                     } else {
-                                        Core.getCustomPlayer(giveTo).addAmmo(g.getType().toString().toLowerCase(), amount);
-                                        SENDER.sendMessage("§l§oCoscmetics > §c§lSuccesfully given " + amount + " " + g.getType().toString().toLowerCase() + " ammo to " + giveTo.getName());
+                                        Core.getCustomPlayer(giveTo).addAmmo(gadgetType.toString().toLowerCase(), amount);
+                                        SENDER.sendMessage("§l§oCoscmetics > §c§lSuccesfully given " + amount + " " + gadgetType.toString().toLowerCase() + " ammo to " + giveTo.getName());
                                     }
                                     return true;
                                 }
@@ -131,12 +129,12 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                         }
                         giveTo = Bukkit.getPlayer(ARGS[3]);
                     }
-                    GadgetType gadgetType = null;
+                    GadgetType gadgetType = GadgetType.valueOf(ARGS[2].toLowerCase());
 
-                    for (Gadget gadget : Core.getGadgets())
-                        if (gadget.getType().toString().toLowerCase().equalsIgnoreCase(ARGS[2].toLowerCase()))
-                            if (gadget.getType().isEnabled())
-                                gadgetType = gadget.getType();
+                    if (!gadgetType.isEnabled()) {
+                        PLAYER.sendMessage(MessageManager.getMessage("Invalid-Gadget"));
+                        return true;
+                    }
                     try {
                         if (Core.getCustomPlayer(giveTo).currentGadget != null) {
                             if (Core.getCustomPlayer(giveTo).currentGadget.getType() == gadgetType) {
@@ -447,15 +445,15 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    for (Gadget g : Core.getGadgets()) {
-                        if (g.getType().toString().toLowerCase().equalsIgnoreCase(ARGS[2].toLowerCase())) {
-                            if (!g.getType().isEnabled()) {
+                    for (GadgetType gadgetType : GadgetType.values()) {
+                        if (gadgetType.toString().toLowerCase().equalsIgnoreCase(ARGS[2].toLowerCase())) {
+                            if (!gadgetType.isEnabled()) {
                                 SENDER.sendMessage(MessageManager.getMessage("Cosmetic-Disabled"));
-                            } else if (!g.getType().requiresAmmo()) {
+                            } else if (!gadgetType.requiresAmmo()) {
                                 SENDER.sendMessage("§l§oCosmetics > §c§lThis gadget doesn't require ammo.");
                             } else {
-                                Core.getCustomPlayer(giveTo).addAmmo(g.getType().toString().toLowerCase(), amount);
-                                SENDER.sendMessage("§l§oCoscmetics > §c§lSuccesfully given " + amount + " " + g.getType().toString().toLowerCase() + " ammo to " + giveTo.getName());
+                                Core.getCustomPlayer(giveTo).addAmmo(gadgetType.toString().toLowerCase(), amount);
+                                SENDER.sendMessage("§l§oCoscmetics > §c§lSuccesfully given " + amount + " " + gadgetType.toString().toLowerCase() + " ammo to " + giveTo.getName());
                             }
                             return true;
                         }
@@ -513,24 +511,6 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 byte data = ((Integer) SettingsManager.getConfig().get("Menu-Item.Data")).byteValue();
                 PLAYER.getInventory().setItem(slot, ItemFactory.create(material, data, name));
                 return true;
-            } else if (argZero.equalsIgnoreCase("reload")) {
-                if (SENDER.hasPermission("ultracosmetics.commands.reload")) {
-                    Core.getPlugin().reloadConfig();
-                    SettingsManager.getMessages().reload();
-                    Core.enabledCategories.clear();
-                    for (CustomPlayer cp : Core.getCustomPlayers())
-                        cp.clear();
-                    for (Category c : Category.values()) {
-                        if (c == Category.MORPHS && !Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
-                            continue;
-                        if (c.isEnabled())
-                            Core.enabledCategories.add(c);
-                    }
-                    SENDER.sendMessage("§l§oCosmetics > §c§lConfig and messages Reloaded!");
-                } else {
-                    SENDER.sendMessage(MessageManager.getMessage("No-Permission"));
-                }
-                return true;
             } else if (argZero.equalsIgnoreCase("menu")) {
                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                     @Override
@@ -581,12 +561,11 @@ public class UltraCosmeticsCommand implements CommandExecutor {
                 + "      §7§lA plugin by §b§liSach §7§l" +
                 "" +
                 "| §ohttp://bit.ly/UltraCosmetics\n§r"
-                + "      §8┃ §7/uc reload §fReloads the config" + "\n§r"
                 + "      §8┃ §7/uc menu [menu] §fOpens a menu" + "\n§r"
                 + "      §8┃ §7/uc toggle <type> <cosmetic> [player] §fToggles a gadget" + "\n§r"
                 + "      §8┃ §7/uc give key <amount> [player] §fGive key" + "\n§r"
                 + "      §8┃ §7/uc give ammo <gadget> <amount> [player] §fGive ammo" + "\n§r"
-                + "      §8┃ §7/uc onClear [player]§f Clears current cosmetics" + "\n§r"
+                + "      §8┃ §7/uc clear [player]§f Clears current cosmetics" + "\n§r"
                 + "      §8┃ §7/uc chest [player]§f Gets the menu item." + "\n§r"
                 + "      §8┃ §7/uc gadgets§f Toggle gadgets" + "\n§r"
                 + "      §8┃ §7/uc selfmorphview§f Toggle Self Morph View" + "\n§r";

@@ -27,7 +27,7 @@ public class GadgetParachute extends Gadget {
     boolean active;
 
     public GadgetParachute(UUID owner) {
-        super(Material.LEASH, (byte) 0x0, 45, owner, GadgetType.PARACHUTE, "&7&oGeronimo!");
+        super(owner, GadgetType.PARACHUTE);
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());

@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -36,33 +38,57 @@ public class CustomPlayer {
     public Morph currentMorph;
     public Hat currentHat;
 
+    private HashMap<GadgetType, Long> gadgetCooldowns = null;
+
     public CustomPlayer(UUID uuid) {
         try {
             this.uuid = uuid;
-            Core.countdownMap.put(getPlayer(), null);
+
+            gadgetCooldowns = new HashMap<>();
+
             SettingsManager.getData(getPlayer());
             if (Core.usingFileStorage())
                 SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
 
             if (Core.isAmmoEnabled()) {
-                if (!Core.usingFileStorage()) {
+                if (!Core.usingFileStorage())
                     Core.sqlUtils.initStats(getPlayer());
-                } else {
-                    for (Gadget g : Core.getGadgets()) {
-                        if (g.getType().isEnabled()) {
-                            SettingsManager.getData(getPlayer()).addDefault("Ammo." + g.getType().toString().toLowerCase(), 0);
-                        }
-                    }
-                }
+                else
+                    for (GadgetType type : GadgetType.values())
+                        if (type.isEnabled())
+                            SettingsManager.getData(getPlayer()).addDefault("Ammo." + type.toString().toLowerCase(), 0);
             }
             if (Core.usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
         } catch (Exception exc) {
-            // Player could not be found.
+            // Player couldn't be found.
+            System.out.println("UltraCosmetics ERR -> " + "Couldn't find player with UUID: " + uuid);
             return;
         }
+
+
+    }
+
+    /**
+     * Checks if a player can use a given gadget type.
+     *
+     * @param gadget The gadget type.
+     * @return -1 if player can use, otherwise the time left (in seconds).
+     */
+    public double canUse(GadgetType gadget) {
+        Object count = gadgetCooldowns.get(gadget);
+        if (count == null)
+            return -1;
+        if (System.currentTimeMillis() > (long) count)
+            return -1;
+        double valueMillis = (long) count - System.currentTimeMillis();
+        return valueMillis / 1000d;
+    }
+
+    public void setCoolDown(GadgetType gadget, double countdown) {
+        gadgetCooldowns.put(gadget, (long) (countdown * 1000 + System.currentTimeMillis()));
     }
 
     public void removeChest() {
@@ -122,11 +148,11 @@ public class CustomPlayer {
     }
 
     public int getKeys() {
-        if (Core.usingFileStorage()) {
-            return (int) SettingsManager.getData(getPlayer()).get("Keys");
-        } else {
-            return Core.sqlUtils.getKeys(getPlayer());
-        }
+        if (Core.usingFileStorage())
+            return Core.usingFileStorage() ?
+                    (int) SettingsManager.getData(getPlayer()).get("Keys") :
+                    Core.sqlUtils.getKeys(getPlayer());
+        return 0;
     }
 
     public void removeHat() {
@@ -248,13 +274,19 @@ public class CustomPlayer {
 
     public void addAmmo(String name, int i) {
         if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage())
-                SettingsManager.getData(getPlayer()).set("Ammo." + name.replace("_", ""), getAmmo(name) + i);
-            else
+            if (Core.usingFileStorage()) {
+                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + i);
+            } else {
                 Core.sqlUtils.addAmmo(getPlayer(), name, i);
+            }
         }
         if (currentGadget != null)
-            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString().toLowerCase()) + " " + currentGadget.getName(), "§9Gadget"));
+            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
+                    ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(),
+                            "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString()
+                                    .toLowerCase()) + " " + currentGadget.getName(), "§9Gadget"));
+
+
     }
 
     public void setGadgetsEnabled(Boolean enabled) {
@@ -311,10 +343,11 @@ public class CustomPlayer {
 
     public int getAmmo(String name) {
         if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage())
-                return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name.replace("_", ""));
-            else
+            if (Core.usingFileStorage()) {
+                return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name);
+            } else {
                 return Core.sqlUtils.getAmmo(getPlayer(), name);
+            }
         }
         return 0;
     }
@@ -327,15 +360,15 @@ public class CustomPlayer {
 
     public void removeAmmo(String name) {
         if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage())
-                SettingsManager.getData(getPlayer()).set("Ammo." + name.replace("_", ""), getAmmo(name) - 1);
-            else
+            if (Core.usingFileStorage()) {
+                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) - 1);
+            } else {
                 Core.sqlUtils.removeAmmo(getPlayer(), name);
+            }
         }
     }
 
     public UUID getUuid() {
         return uuid;
     }
-
 }
