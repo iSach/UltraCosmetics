@@ -3,6 +3,7 @@ author: iSach
 version: Release 1.4
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core
+depend: [Hub]
 softdepend: [LibsDisguises, NoteBlockAPI, Vault]
 commands:
   ultracosmetics:
