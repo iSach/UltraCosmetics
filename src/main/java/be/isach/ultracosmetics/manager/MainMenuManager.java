@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ItemFactory;
+import net.resortcraft.hub.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,6 +24,8 @@ import java.util.UUID;
  * Created by sacha on 03/08/15.
  */
 public class MainMenuManager implements Listener {
+
+    private static Main main = new Main();
 
     @EventHandler
     public void onInteract(final PlayerInteractEvent EVENT) {
@@ -50,6 +53,12 @@ public class MainMenuManager implements Listener {
             public void run() {
                 if (!PLAYER.hasPermission("ultracosmetics.openmenu")) {
                     PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                    PLAYER.closeInventory();
+                    return;
+                }
+                if(main.inParkourMode(PLAYER)) {
+                    PLAYER.sendMessage("§9Parkour§7> §eTrying to cheat?");
+                    PLAYER.sendMessage("§9Parkour§7> §cYou may not use cosmetics while you are in parkour mode!");
                     PLAYER.closeInventory();
                     return;
                 }
