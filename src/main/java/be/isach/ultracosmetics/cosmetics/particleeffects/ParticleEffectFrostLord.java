@@ -1,9 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
@@ -19,9 +17,9 @@ public class ParticleEffectFrostLord extends ParticleEffect {
     float radius = 1.5f;
 
     public ParticleEffectFrostLord(UUID owner) {
-        super(Particles.SNOW_SHOVEL, Material.PACKED_ICE, (byte) 0x0, "FrostLord", "ultracosmetics.particleeffects.frostlord",
-                owner, ParticleEffectType.FROSTLORD, 2,
-                "&7&oI am the almighty frostlord!");
+        super(
+                owner, ParticleEffectType.FROSTLORD
+        );
     }
 
     @Override
@@ -33,7 +31,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
-            UtilParticles.display(getEffect(), location.add(v).add(0, stepY, 0));
+            UtilParticles.display(getType().getEffect(), location.add(v).add(0, stepY, 0));
             location.subtract(v).subtract(0, stepY, 0);
             if (stepY < 3) {
                 radius -= 0.022;
@@ -43,7 +41,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                 step = 0;
                 radius = 1.5f;
                 location.getWorld().playSound(location, Sound.DIG_SNOW, .5f, 1.5f);
-                UtilParticles.display(getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
+                UtilParticles.display(getType().getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
             }
         }
     }

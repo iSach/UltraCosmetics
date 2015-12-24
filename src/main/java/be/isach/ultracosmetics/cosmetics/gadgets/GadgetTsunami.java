@@ -28,7 +28,7 @@ public class GadgetTsunami extends Gadget {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
@@ -78,7 +78,7 @@ public class GadgetTsunami extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
 
     }
 

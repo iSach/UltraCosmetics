@@ -556,8 +556,7 @@ public class TreasureChest
     @EventHandler
     public void onKick(PlayerKickEvent event) {
         if ((event.getPlayer() == getPlayer()) &&
-                (event
-                        .getReason().contains("Fly"))) {
+                (event.getReason().contains("Fly"))) {
             event.setCancelled(true);
             event.getPlayer().teleport(this.center);
         }

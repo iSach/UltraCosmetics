@@ -34,7 +34,7 @@ public class GadgetTNT extends Gadget {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
 
         TNTPrimed tnt = getPlayer().getWorld().spawn(getPlayer().getLocation().add(0, 2, 0), TNTPrimed.class);
         // vector stuff
@@ -95,7 +95,7 @@ public class GadgetTNT extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
 
     }
 

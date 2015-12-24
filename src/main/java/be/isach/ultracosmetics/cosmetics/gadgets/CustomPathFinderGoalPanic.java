@@ -7,7 +7,7 @@ import net.minecraft.server.v1_8_R3.*;
  */
 public class CustomPathFinderGoalPanic extends PathfinderGoal {
 
-    // ton mob
+    // NMS Entity
     private EntityCreature b;
 
     // speed

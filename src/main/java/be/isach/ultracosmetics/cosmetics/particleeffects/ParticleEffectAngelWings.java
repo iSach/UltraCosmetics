@@ -1,9 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -17,7 +15,7 @@ public class ParticleEffectAngelWings extends ParticleEffect {
     boolean o = false;
 
     public ParticleEffectAngelWings(UUID owner) {
-        super(Particles.REDSTONE, Material.FEATHER, (byte) 0, "AngelWings", "ultracosmetics.particleeffects.angelwings", owner, ParticleEffectType.ANGELWINGS, 4, "&7&oBecome an angel!");
+        super(owner, ParticleEffectType.ANGELWINGS);
     }
 
     private boolean[][] shape = {

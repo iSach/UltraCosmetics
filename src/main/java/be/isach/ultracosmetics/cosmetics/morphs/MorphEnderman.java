@@ -1,14 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.config.MessageManager;
-import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -26,7 +22,7 @@ public class MorphEnderman extends Morph {
     private boolean cooldown;
 
     public MorphEnderman(UUID owner) {
-        super(DisguiseType.ENDERMAN, Material.ENDER_PEARL, (byte) 0, "Enderman", "ultracosmetics.morphs.enderman", owner, MorphType.ENDERMAN, "&7&oI go from there to\n&7&o there, then you lost me.");
+        super(owner, MorphType.ENDERMAN);
         if (owner != null) {
             Core.registerListener(this);
             getPlayer().setAllowFlight(true);
@@ -98,12 +94,7 @@ public class MorphEnderman extends Morph {
     public void clear() {
         if (getPlayer().getGameMode() != GameMode.CREATIVE)
             getPlayer().setAllowFlight(false);
-        DisguiseAPI.undisguiseToAll(getPlayer());
-        if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", (Core.placeHolderColor)?getName():Core.filterColor(getName())));
-        Core.getCustomPlayer(getPlayer()).currentMorph = null;
-        owner = null;
-        HandlerList.unregisterAll(this);
+        super.clear();
     }
 
 }

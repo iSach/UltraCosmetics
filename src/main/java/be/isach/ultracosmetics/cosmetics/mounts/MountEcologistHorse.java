@@ -10,7 +10,6 @@ import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -26,8 +25,8 @@ import java.util.UUID;
 public class MountEcologistHorse extends Mount {
 
     public MountEcologistHorse(UUID owner) {
-        super(EntityType.HORSE, Material.RED_ROSE, (byte) 0, "EcologistHorse", "ultracosmetics.mounts.ecologisthorse", owner, MountType.ECOLOGISTHORSE,
-                "&7&oBecome ecologist!");
+        super(owner, MountType.ECOLOGISTHORSE
+        );
         if (owner != null) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

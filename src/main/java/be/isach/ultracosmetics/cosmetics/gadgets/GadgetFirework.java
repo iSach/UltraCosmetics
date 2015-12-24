@@ -23,7 +23,7 @@ public class GadgetFirework extends Gadget {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
         FireworkMeta fwm = fw.getFireworkMeta();
 
@@ -53,6 +53,6 @@ public class GadgetFirework extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

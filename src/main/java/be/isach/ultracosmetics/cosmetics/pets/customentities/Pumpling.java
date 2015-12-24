@@ -57,21 +57,21 @@ public class Pumpling extends EntityZombie {
     }
 
     @Override
-    protected void a(BlockPosition blockposition, Block block) {
-        if (isCustomEntity) {
-            return;
-        } else {
-            super.a(blockposition, block);
-        }
-    }
-
-    @Override
     protected String bp() { // Death
         if (isCustomEntity)
             return null;
         else
             super.z();
         return "mob.zombie.death";
+    }
+
+    @Override
+    protected void a(BlockPosition blockposition, Block block) {
+        if (isCustomEntity) {
+            return;
+        } else {
+            super.a(blockposition, block);
+        }
     }
 
     @Override

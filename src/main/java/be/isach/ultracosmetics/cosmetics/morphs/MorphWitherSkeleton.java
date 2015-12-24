@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,7 +25,7 @@ public class MorphWitherSkeleton extends Morph {
     boolean inCooldown;
 
     public MorphWitherSkeleton(UUID owner) {
-        super(DisguiseType.WITHER_SKELETON, Material.SKULL_ITEM, (byte) 1, "WitherSkeleton", "ultracosmetics.morphs.witherskeleton", owner, MorphType.WITHERSKELETON, "&7&oJust a regular skeleton\n&7&obut from the Nether!");
+        super(owner, MorphType.WITHERSKELETON);
         Core.registerListener(this);
     }
 

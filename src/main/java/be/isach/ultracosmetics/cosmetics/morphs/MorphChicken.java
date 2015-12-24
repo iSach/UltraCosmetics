@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PathEntity;
@@ -35,7 +34,7 @@ public class MorphChicken extends Morph {
     private boolean cooldown;
 
     public MorphChicken(UUID owner) {
-        super(DisguiseType.CHICKEN, Material.EGG, (byte) 0x0, "Chicken", "ultracosmetics.morphs.chicken", owner, MorphType.CHICKEN, "&7&oPoor chicken!");
+        super(owner, MorphType.CHICKEN);
 
         if (owner != null) {
 

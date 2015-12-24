@@ -1,17 +1,14 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import net.minecraft.server.v1_8_R3.EntityCreature;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftCreature;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
@@ -29,7 +26,7 @@ public class MountSnake extends Mount {
 
 
     public MountSnake(UUID owner) {
-        super(EntityType.SHEEP, Material.SEEDS, (byte) 0, "Snake", "ultracosmetics.mounts.snake", owner, MountType.SNAKE, "&7&oWatch out it may bite.");
+        super(owner, MountType.SNAKE);
 
         if (owner == null) return;
         color = MathUtils.randomRangeInt(0, 14);
@@ -47,29 +44,7 @@ public class MountSnake extends Mount {
             for (Entity ent : tailMap.get(p))
                 ent.remove();
         tailMap.clear();
-        if (getPlayer() != null && Core.getCustomPlayer(getPlayer()) != null) {
-            Core.getCustomPlayer(getPlayer()).currentMount = null;
-        }
-        if (entityType != EntityType.SQUID
-                && entityType != EntityType.SLIME
-                && entityType != EntityType.SPIDER) {
-            if (ent.getPassenger() != null)
-                ent.getPassenger().eject();
-            if (ent != null)
-                ent.remove();
-        } else {
-            if (customEnt.passenger != null)
-                customEnt.passenger = null;
-            if (customEnt != null) {
-                customEntities.remove(customEnt);
-                customEnt.dead = true;
-            }
-        }
-        if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", getMenuName()));
-        owner = null;
-        HandlerList.unregisterAll(this);
-        HandlerList.unregisterAll(listener);
+        super.clear();
     }
 
     @Override

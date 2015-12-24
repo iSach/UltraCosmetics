@@ -28,7 +28,7 @@ public class GadgetChickenator extends Gadget {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         final Chicken CHICKEN = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getEyeLocation(), EntityType.CHICKEN);
         CHICKEN.setNoDamageTicks(500);
         CHICKEN.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
@@ -95,6 +95,6 @@ public class GadgetChickenator extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

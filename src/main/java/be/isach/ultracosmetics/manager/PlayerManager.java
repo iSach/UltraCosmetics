@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.manager;
 
 import be.isach.ultracosmetics.CustomPlayer;
-import be.isach.ultracosmetics.config.SettingsManager;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -50,13 +49,7 @@ public class PlayerManager {
             if (cp.currentTreasureChest != null)
                 cp.currentTreasureChest.forceOpen(0);
             cp.clear();
-            int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-            if (cp.getPlayer().getInventory().getItem(slot) != null
-                    && cp.getPlayer().getInventory().getItem(slot).hasItemMeta()
-                    && cp.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                    && cp.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
-                    .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§")))
-                cp.getPlayer().getInventory().setItem(slot, null);
+            cp.removeMenuItem();
         }
 
         playerCache.clear();

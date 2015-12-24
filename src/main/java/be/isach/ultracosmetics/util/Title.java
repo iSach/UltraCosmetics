@@ -16,20 +16,40 @@ import java.util.Map;
  * @version 1.0.4
  */
 public class Title {
-    /* Title packet */
+    /**
+     * Title packet
+     */
     private Class<?> packetTitle;
-    /* Title packet actions ENUM */
+
+    /**
+     * Title packet actions ENUM
+     */
     private Class<?> packetActions;
-    /* Chat serializer */
+
+    /**
+     * Chat serializer
+     */
     private Class<?> nmsChatSerializer;
+
     private Class<?> chatBaseComponent;
-    /* Title text and color */
+
+    /**
+     * Title text and color
+     */
     private String title = "";
+
     private ChatColor titleColor = ChatColor.WHITE;
-    /* Subtitle text and color */
+
+    /**
+     * Subtitle text and color
+     */
     private String subtitle = "";
+
     private ChatColor subtitleColor = ChatColor.WHITE;
-    /* Title timings */
+
+    /**
+     * Title timings
+     */
     private int fadeInTime = -1;
     private int stayTime = -1;
     private int fadeOutTime = -1;

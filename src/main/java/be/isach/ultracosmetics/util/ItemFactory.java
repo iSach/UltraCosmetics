@@ -33,7 +33,8 @@ public class ItemFactory {
         if (lore != null) {
             List<String> finalLore = new ArrayList<>();
             for (String s : lore)
-                finalLore.add(s);
+                if (s != null)
+                    finalLore.add(s);
             itemMeta.setLore(finalLore);
         }
         itemStack.setItemMeta(itemMeta);

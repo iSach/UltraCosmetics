@@ -10,7 +10,6 @@ import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -22,9 +21,9 @@ import java.util.UUID;
  */
 public class MountGlacialSteed extends Mount {
     public MountGlacialSteed(UUID owner) {
-        super(EntityType.HORSE, Material.PACKED_ICE, (byte) 0, "GlacialSteed", "ultracosmetics.mounts.glacialsteed",
-                owner, MountType.GLACIALSTEED,
-                "&7&oThis mount comes from North Pole!");
+        super(
+                owner, MountType.GLACIALSTEED
+        );
         if (ent instanceof Horse) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

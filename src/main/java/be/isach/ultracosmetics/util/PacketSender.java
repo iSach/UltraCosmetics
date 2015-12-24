@@ -9,6 +9,12 @@ import org.bukkit.entity.Player;
  */
 public class PacketSender {
 
+    /**
+     * Sends easily a packet to a player.
+     *
+     * @param player Packet destinator.
+     * @param packet The packet to send.
+     */
     public static void send(Player player, Packet packet) {
         if (player == null || packet == null)
             return;

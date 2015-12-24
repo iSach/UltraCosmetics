@@ -24,7 +24,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
     private ArrayList<Item> items = new ArrayList<>();
 
     public GadgetFleshHook(UUID owner) {
-        super(owner, GadgetType.FLESH_HOOK);
+        super(owner, GadgetType.FLESHHOOK);
         Core.registerListener(this);
     }
 
@@ -56,7 +56,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         Item hook = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, UUID.randomUUID().toString()));
         hook.setPickupDelay(0);
         hook.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.5));
@@ -64,7 +64,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 
     @Override

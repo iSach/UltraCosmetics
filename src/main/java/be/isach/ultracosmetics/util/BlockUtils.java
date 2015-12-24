@@ -23,10 +23,24 @@ import java.util.Map;
  */
 public class BlockUtils {
 
+    /**
+     * List of all the blocks to restore.
+     */
     public static Map<Location, String> blocksToRestore = new HashMap<>();
 
+    /**
+     * List of all the current Treasure Blocks.
+     */
     public static List<Block> treasureBlocks = new ArrayList<>();
 
+    /**
+     * Gets blocks in radius.
+     *
+     * @param location The center.
+     * @param radius   The radius.
+     * @param hollow   if the sphere of blocks should be hollow.
+     * @return The list of all the blocks in the given radius.
+     */
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
         List<Block> blocks = new ArrayList<>();
 
@@ -54,6 +68,12 @@ public class BlockUtils {
         return blocks;
     }
 
+    /**
+     * Checks if an entity is on ground.
+     *
+     * @param entity The entity to check.
+     * @return {@code true} if entity is on ground, otherwise {@code false}.
+     */
     public static boolean isOnGround(Entity entity) {
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
         if (block.getType().isSolid())
@@ -61,6 +81,12 @@ public class BlockUtils {
         return false;
     }
 
+    /**
+     * Checks if a block is part of a rocket.
+     *
+     * @param b The block to check.
+     * @return {@code true} if the block is part of a rocket, otherwise {@code false}.
+     */
     public static boolean isRocketBlock(Block b) {
         for (CustomPlayer cp : Core.getCustomPlayers()) {
             if (cp.currentGadget != null
@@ -73,17 +99,9 @@ public class BlockUtils {
         return false;
     }
 
-
-    public static double getDistance(int x1, int z1, int x2, int z2) {
-        int dx = x1 - x2;
-        int dz = z1 - z2;
-        return Math.sqrt((dx * dx + dz * dz));
-    }
-
     /**
-     * Forces restoring the blocks.
+     * Force-restores the blocks.
      */
-
     public static void forceRestore() {
         for (Location loc : blocksToRestore.keySet()) {
             Block b = loc.getBlock();
@@ -220,9 +238,16 @@ public class BlockUtils {
         });
     }
 
+    /**
+     * Checks if a block is part of a Treasure Chest.
+     *
+     * @param block The block to check.
+     * @return {@code true} if yes, otherwise {@code false}.
+     */
     public static boolean isTreasureChestBlock(Block block) {
         return treasureBlocks.contains(block);
     }
+
 
     private static boolean a(Block b) {
         if (b.getType() == Material.AIR
@@ -231,6 +256,12 @@ public class BlockUtils {
         return false;
     }
 
+    /**
+     * Checks if a block is part of a Nether Portal.
+     *
+     * @param b The block to check
+     * @return {@code true} if a block is part of a Nether Portal, otherwise {@code false}.
+     */
     public static boolean isPortalBlock(Block b) {
         for (BlockFace face : BlockFace.values())
             if (b.getRelative(face).getType() == Material.PORTAL)

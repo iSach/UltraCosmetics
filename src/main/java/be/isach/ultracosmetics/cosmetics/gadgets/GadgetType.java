@@ -17,44 +17,46 @@ import java.util.UUID;
  */
 public enum GadgetType {
 
-    BAT_BLASTER(Material.IRON_BARDING, (byte) 0, 8, "ultracosmetics.gadgets.batblaster", "BatBlaster", "&7&oLaunch waves of annoying bats\n&7&oto people you don't like!", GadgetBatBlaster.class),
+    BATBLASTER(Material.IRON_BARDING, (byte) 0, 8, "ultracosmetics.gadgets.batblaster", "BatBlaster", "&7&oLaunch waves of annoying bats\n&7&oto people you don't like!", GadgetBatBlaster.class),
     CHICKENATOR(Material.COOKED_CHICKEN, (byte) 0, 6, "ultracosmetics.gadgets.chickenator", "Chickenator", "&7&oShoot, boom, KFC.", GadgetChickenator.class),
-    COLOR_BOMB(Material.WOOL, (byte) 3, 25, "ultracosmetics.gadgets.colorbomb", "ColorBomb", "&7&oA colorful bomb!", GadgetColorBomb.class),
-    DISCO_BALL(Material.BEACON, (byte) 0, 45, "ultracosmetics.gadgets.discoball", "DiscoBall", "&7&oJust, dance!", GadgetDiscoBall.class),
-    ETHEREAL_PEARL(Material.ENDER_PEARL, (byte) 0, 2, "ultracosmetics.gadgets.etherealpearl", "EtherealPearl", "&7&oTake a ride through the skies" +
+    COLORBOMB(Material.WOOL, (byte) 3, 25, "ultracosmetics.gadgets.colorbomb", "ColorBomb", "&7&oA colorful bomb!", GadgetColorBomb.class),
+    DISCOBALL(Material.BEACON, (byte) 0, 45, "ultracosmetics.gadgets.discoball", "DiscoBall", "&7&oJust, dance!", GadgetDiscoBall.class),
+    ETHEREALPEARL(Material.ENDER_PEARL, (byte) 0, 2, "ultracosmetics.gadgets.etherealpearl", "EtherealPearl", "&7&oTake a ride through the skies" +
             "\n&7&oon your very own Ethereal Pearl!", GadgetEtherealPearl.class),
-    FLESH_HOOK(Material.TRIPWIRE_HOOK, (byte) 0, 5, "ultracosmetics.gadgets.fleshhook", "FleshHook", "&7&oMake new friends by throwing a hook" +
+    FLESHHOOK(Material.TRIPWIRE_HOOK, (byte) 0, 5, "ultracosmetics.gadgets.fleshhook", "FleshHook", "&7&oMake new friends by throwing a hook" +
             "\n&7&ointo their face and pulling them\n&7&otowards you!", GadgetFleshHook.class),
-    MELON_THROWER(Material.MELON_BLOCK, (byte) 0, 2, "ultracosmetics.gadgets.melonthrower", "MelonThrower", "&7&oDeliciously fun!", GadgetMelonThrower.class),
-    BLIZZARD_BLASTER(Material.PACKED_ICE, (byte) 0, 12, "ultracosmetics.gadgets.blizzardblaster", "BlizzardBlaster", "&7&oLet it go!", GadgetBlizzardBlaster.class),
-    PORTAL_GUN(Material.REDSTONE_COMPARATOR, (byte) 0, 2, "ultracosmetics.gadgets.portalgun", "PortalGun", "&7&oMomentum, a function of " +
+    MELONTHROWER(Material.MELON_BLOCK, (byte) 0, 2, "ultracosmetics.gadgets.melonthrower", "MelonThrower", "&7&oDeliciously fun!", GadgetMelonThrower.class),
+    BLIZZARDBLASTER(Material.PACKED_ICE, (byte) 0, 12, "ultracosmetics.gadgets.blizzardblaster", "BlizzardBlaster", "&7&oLet it go!", GadgetBlizzardBlaster.class),
+    PORTALGUN(Material.REDSTONE_COMPARATOR, (byte) 0, 2, "ultracosmetics.gadgets.portalgun", "PortalGun", "&7&oMomentum, a function of " +
             "mass and velocity,\n&7&ois converved between portals. In Layman''s terms,\n&7&ospeedy thing goes in, speedy thing goes out.", GadgetPortalGun.class),
-    EXPLOSIVE_SHEEP(Material.SHEARS, (byte) 0, 25, "ultracosmetics.gadgets.explosivesheep", "ExplosiveSheep", "&7&oAre you sure it's supposed\n&7&oto flicker like that?", GadgetExplosiveSheep.class),
-    PAINTBALL_GUN(Material.DIAMOND_BARDING, (byte) 0, 0.5, "ultracosmetics.gadgets.paintballgun", "PaintballGun", "&7&oPEW PEW PEW PEW!!!", GadgetPaintballGun.class),
-    THOR_HAMMER(Material.IRON_AXE, (byte) 0, 8, "ultracosmetics.gadgets.thorhammer", "ThorHammer", "&7&oGet the real Mjölnir", GadgetThorHammer.class),
-    ANTI_GRAVITY(Material.EYE_OF_ENDER, (byte) 0, 30, "ultracosmetics.gadgets.antigravity", "AntiGravity", "&7&oYou don't like gravity?" +
+    EXPLOSIVESHEEP(Material.SHEARS, (byte) 0, 25, "ultracosmetics.gadgets.explosivesheep", "ExplosiveSheep", "&7&oAre you sure it's supposed\n&7&oto flicker like that?", GadgetExplosiveSheep.class),
+    PAINTBALLGUN(Material.DIAMOND_BARDING, (byte) 0, 0.5, "ultracosmetics.gadgets.paintballgun", "PaintballGun", "&7&oPEW PEW PEW PEW!!!", GadgetPaintballGun.class),
+    THORHAMMER(Material.IRON_AXE, (byte) 0, 8, "ultracosmetics.gadgets.thorhammer", "ThorHammer", "&7&oGet the real Mjölnir", GadgetThorHammer.class),
+    ANTIGRAVITY(Material.EYE_OF_ENDER, (byte) 0, 30, "ultracosmetics.gadgets.antigravity", "AntiGravity", "&7&oYou don't like gravity?" +
             "\n&7&oThen, this gadget is made for you!", GadgetAntiGravity.class),
-    SMASH_DOWN(Material.FIREWORK_CHARGE, (byte) 0, 15, "ultracosmetics.gadgets.smashdown", "SmashDown", "&7&oAND HIS NAME IS... JOHN CENA!!", GadgetSmashDown.class),
+    SMASHDOWN(Material.FIREWORK_CHARGE, (byte) 0, 15, "ultracosmetics.gadgets.smashdown", "SmashDown", "&7&oAND HIS NAME IS... JOHN CENA!!", GadgetSmashDown.class),
     ROCKET(Material.FIREWORK, (byte) 0, 60, "ultracosmetics.gadgets.rocket", "Rocket", "&7&oHouston, we have got a problem..", GadgetRocket.class),
-    BLACK_HOLE(Material.STAINED_CLAY, (byte) 15, 35, "ultracosmetics.gadgets.blackhole", "BlackHole", "&7&oYou should not get caught by it..", GadgetBlackHole.class),
+    BLACKHOLE(Material.STAINED_CLAY, (byte) 15, 35, "ultracosmetics.gadgets.blackhole", "BlackHole", "&7&oYou should not get caught by it..", GadgetBlackHole.class),
     TSUNAMI(Material.WATER_BUCKET, (byte) 0, 12, "ultracosmetics.gadgets.tsunami", "Tsunami", "&9&oTSUNAMI!!\n&7&oJUMP!\n&7&oLet's go!", GadgetTsunami.class),
     TNT(Material.TNT, (byte) 0, 10, "ultracosmetics.gadgets.tnt", "TNT", "&7&oBlow some people up!\n&7&oKABOOM!", GadgetTNT.class),
-    FUN_GUN(Material.BLAZE_ROD, (byte) 0, 4, "ultracosmetics.gadgets.fungun", "FunGun", "&7&oWoow! So much fun in a gun!", GadgetFunGun.class),
+    FUNGUN(Material.BLAZE_ROD, (byte) 0, 4, "ultracosmetics.gadgets.fungun", "FunGun", "&7&oWoow! So much fun in a gun!", GadgetFunGun.class),
     PARACHUTE(Material.LEASH, (byte) 0, 60, "ultracosmetics.gadgets.parachute", "Parachute", "&7&oGERONIMOooo!", GadgetParachute.class),
-    QUAKE_GUN(Material.DIAMOND_HOE, (byte) 0, 3, "ultracosmetics.gadgets.quakegun", "QuakeGun", "&7&oGet a real Rail Gun" +
+    QUAKEGUN(Material.DIAMOND_HOE, (byte) 0, 3, "ultracosmetics.gadgets.quakegun", "QuakeGun", "&7&oGet a real Rail Gun" +
             "\n&7&oand strike players and mobs!", GadgetQuakeGun.class),
-    GHOST_PARTY(Material.SKULL_ITEM, (byte) 0, 45, "ultracosmetics.gadgets.ghostparty", "GhostParty", "&7&oWho Ya Gonna Call?\n&f&lGHOST &4&lBUSTERS!",
+    GHOSTPARTY(Material.SKULL_ITEM, (byte) 0, 45, "ultracosmetics.gadgets.ghostparty", "GhostParty", "&7&oWho Ya Gonna Call?\n&f&lGHOST &4&lBUSTERS!",
             GadgetGhostParty.class),
     FIREWORK(Material.FIREWORK, (byte) 0, 0.2, "ultracosmetics.gadgets.firework", "Firework", "&7&oNeed to celebrate?\n&7&oUse fireworks!",
             GadgetFirework.class),
-    CHRISTMAS_TREE(Material.LONG_GRASS, (byte) 2, 20, "ultracosmetics.gadgets.christmastree", "ChristmasTree", "&7&oHere is a Christmas" +
+    CHRISTMASTREE(Material.LONG_GRASS, (byte) 2, 20, "ultracosmetics.gadgets.christmastree", "ChristmasTree", "&7&oHere is a Christmas" +
             "\n&7&oTree for you!", GadgetChristmasTree.class),
-    FREEZE_CANNON(Material.ICE, (byte) 0, 8, "ultracosmetics.gadgets.freezecannon", "FreezeCannon", "&7&oTransform the floor into a rink!",
+    FREEZECANNON(Material.ICE, (byte) 0, 8, "ultracosmetics.gadgets.freezecannon", "FreezeCannon", "&7&oTransform the floor into a rink!",
             GadgetFreezeCannon.class),
     SNOWBALL(Material.SNOW_BALL, (byte) 0, 0.5, "ultracosmetics.gadgets.snowball", "Snowball", "&7&oJoin in on the festive fun by\n" +
             "&7&othrowing snow at people!", GadgetSnowball.class),
-    PARTY_POPPER(Material.GOLDEN_CARROT, (byte) 0, 2, "ultracosmetics.gadgets.partypopper", "PartyPopper",
-            "&7&oCelebrate by blasting confetti into\n&7&opeoples' eyes!", GadgetPartyPopper.class);
+    PARTYPOPPER(Material.GOLDEN_CARROT, (byte) 0, 2, "ultracosmetics.gadgets.partypopper", "PartyPopper",
+            "&7&oCelebrate by blasting confetti into\n&7&opeoples' eyes!", GadgetPartyPopper.class),
+    TRAMPOLINE(Material.WOOL, (byte) 11, 75, "ultracosmetics.gadgets.trampoline", "Trampoline", "&7&oConstructs a trampoline!" +
+            "\n&7&othat sends you and your\n&7&ofriends into air!", GadgetTrampoline.class);
 
     String permission;
     public String configName;
@@ -63,6 +65,9 @@ public enum GadgetType {
     private byte data;
     private double countdown;
     private String description;
+    private boolean affectPlayers;
+
+    public static List<GadgetType> gadgetTypes = new ArrayList<>();
 
     GadgetType(Material material, byte data, double defaultCountdown, String permission, String configName, String defaultDesc, Class<? extends Gadget> clazz) {
         this.permission = permission;
@@ -70,6 +75,7 @@ public enum GadgetType {
         this.clazz = clazz;
         this.material = material;
         this.data = data;
+        this.affectPlayers = SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Affect-Players");
 
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
             this.countdown = defaultCountdown;
@@ -101,6 +107,14 @@ public enum GadgetType {
 
     public boolean requiresAmmo() {
         return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Ammo.Enabled");
+    }
+
+    public boolean affectPlayers() {
+        return affectPlayers;
+    }
+
+    public static List<GadgetType> enabled() {
+        return gadgetTypes;
     }
 
     public String getName() {

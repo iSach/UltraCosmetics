@@ -13,8 +13,8 @@ import java.util.UUID;
 public class ParticleEffectFrozenWalk extends ParticleEffect {
 
     public ParticleEffectFrozenWalk(UUID owner) {
-        super(Particles.ITEM_CRACK, Material.SNOW_BALL, (byte) 0, "FrozenWalk", "ultracosmetics.particleeffects.frozenwalk", owner, ParticleEffectType.FROZENWALK, 1,
-                "&7&oMy feet are so cold!");
+        super(owner, ParticleEffectType.FROZENWALK
+        );
     }
 
     @Override

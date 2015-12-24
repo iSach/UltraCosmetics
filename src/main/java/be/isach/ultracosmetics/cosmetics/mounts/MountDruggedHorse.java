@@ -7,9 +7,7 @@ import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -22,8 +20,8 @@ import java.util.UUID;
 public class MountDruggedHorse extends Mount {
 
     public MountDruggedHorse(UUID owner) {
-        super(EntityType.HORSE, Material.SUGAR, (byte) 0, "DruggedHorse", "ultracosmetics.mounts.druggedhorse", owner, MountType.DRUGGEDHORSE,
-                "&7&oThat is just too much!");
+        super(owner, MountType.DRUGGEDHORSE
+        );
 
         if (owner != null) {
 

@@ -1,8 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -17,8 +15,8 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
     int step;
 
     public ParticleEffectGreenSparks(UUID owner) {
-        super(Particles.VILLAGER_HAPPY, Material.EMERALD, (byte) 0x0, "GreenSparks", "ultracosmetics.particleeffects.greensparks", owner, ParticleEffectType.GREENSPARKS, 1,
-                "&7&oLittle green sparkly sparks!");
+        super(owner, ParticleEffectType.GREENSPARKS
+        );
     }
 
     @Override
@@ -39,7 +37,7 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
         Vector v = new Vector();
         v.setX(Math.cos(angle) * 1.1);
         v.setZ(Math.sin(angle) * 1.1);
-        UtilParticles.display(getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
+        UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
         step += 4;
     }
 }

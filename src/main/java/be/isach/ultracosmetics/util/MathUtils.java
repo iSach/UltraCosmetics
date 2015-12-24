@@ -129,6 +129,24 @@ public class MathUtils {
         }
     }
 
+    public static boolean isInteger(Object object) {
+        try {
+            Integer.parseInt(object.toString());
+            return true;
+        } catch (Exception exc) {
+            return false;
+        }
+    }
+
+    public static boolean isDouble(Object object) {
+        try {
+            Double.parseDouble(object.toString());
+            return true;
+        } catch (Exception exc) {
+            return false;
+        }
+    }
+
     /**
      * Returns atan2 in radians from a lookup table.
      */
@@ -415,7 +433,7 @@ public class MathUtils {
                 return;
         }
         ent.setVelocity(v);
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 FallDamageManager.addNoFall(ent);
@@ -434,7 +452,7 @@ public class MathUtils {
             }
         }
         ent.setVelocity(v);
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
                 FallDamageManager.addNoFall(ent);
@@ -465,6 +483,15 @@ public class MathUtils {
 
     public static float randomRangeFloat(float min, float max) {
         return (float) (Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min));
+    }
+
+    /**
+     * get random byte between 0 and max (included).
+     *
+     * @param max random byte between 0 and max (included).
+     */
+    public static byte randomByte(int max) {
+        return (byte) random.nextInt(max + 1);
     }
 
     /**

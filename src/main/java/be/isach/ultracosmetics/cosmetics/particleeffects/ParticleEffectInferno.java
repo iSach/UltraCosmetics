@@ -1,8 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -17,8 +15,8 @@ public class ParticleEffectInferno extends ParticleEffect {
     int[] steps = {0, 0, 0, 0};
 
     public ParticleEffectInferno(UUID owner) {
-        super(Particles.FLAME, Material.getMaterial(372), (byte) 0x0, "Inferno", "ultracosmetics.particleeffects.inferno", owner, ParticleEffectType.INFERNO, 1,
-                "&7&oEffect created by Satan himself!");
+        super(owner, ParticleEffectType.INFERNO
+        );
     }
 
     @Override
@@ -41,7 +39,7 @@ public class ParticleEffectInferno extends ParticleEffect {
             v.setX(Math.cos(angle) * 1.1);
             v.setZ(Math.sin(angle) * 1.1);
             try {
-                UtilParticles.display(getEffect(), 0.15f, 0.15f, 0.15f, getPlayer().getLocation().clone().add(v).add(0, height[i], 0), 4);
+                UtilParticles.display(getType().getEffect(), 0.15f, 0.15f, 0.15f, getPlayer().getLocation().clone().add(v).add(0, height[i], 0), 4);
             } catch (Exception exc) {
 
             }

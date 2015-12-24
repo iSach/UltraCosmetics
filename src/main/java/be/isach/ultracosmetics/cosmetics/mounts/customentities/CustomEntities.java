@@ -1,14 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.mounts.customentities;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-
+import be.isach.ultracosmetics.cosmetics.morphs.customentities.CustomGuardian;
 import be.isach.ultracosmetics.cosmetics.pets.customentities.Pumpling;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.EntityOcelot;
 import net.minecraft.server.v1_8_R3.EntityTypes;
-
 import org.bukkit.entity.EntityType;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public enum CustomEntities {
@@ -16,7 +15,8 @@ public enum CustomEntities {
     FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid.class, FlyingSquid.class),
     PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling.class, Pumpling.class),
     SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime.class, CustomSlime.class),
-    RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class);
+    RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
+    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
 
     private String name;
     private int id;

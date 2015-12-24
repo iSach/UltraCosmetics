@@ -1,13 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.util.PacketSender;
-import net.minecraft.server.v1_8_R3.EntitySnowball;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityVelocity;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntity;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.util.Vector;
+import be.isach.ultracosmetics.Core;
+import org.bukkit.entity.Snowball;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,24 +15,24 @@ import java.util.UUID;
  */
 public class GadgetSnowball extends Gadget {
 
+    private List<Snowball> snowballs;
+
     public GadgetSnowball(UUID owner) {
         super(owner, GadgetType.SNOWBALL);
+
+        if (owner != null)
+            snowballs = new ArrayList<>();
     }
 
     @Override
-    void onInteractRightClick() {
-        EntitySnowball snowball = new EntitySnowball(((CraftWorld) getPlayer().getWorld()).getHandle());
-        Location location = getPlayer().getEyeLocation().subtract(0, 0.2, 0);
-        snowball.setLocation(location.getX(), location.getY(), location.getZ(), 0, 0);
-        PacketPlayOutSpawnEntity spawnPacket = new PacketPlayOutSpawnEntity(snowball, 11);
-        Vector vector = getPlayer().getEyeLocation().getDirection().multiply(1.6);
-        PacketPlayOutEntityVelocity velocityPacket = new PacketPlayOutEntityVelocity(snowball.getId(), vector.getX(), vector.getY(), vector.getZ());
-        PacketSender.send(getPlayer(), spawnPacket);
-        PacketSender.send(getPlayer(), velocityPacket);
+    void onRightClick() {
+        Snowball snowball = getPlayer().launchProjectile(Snowball.class);
+        snowball.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.85d));
+        snowball.setMetadata("NO_DAMAGE", new FixedMetadataValue(Core.getPlugin(), ""));
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 
     @Override
@@ -42,7 +42,16 @@ public class GadgetSnowball extends Gadget {
 
     @Override
     public void onClear() {
+        for (Snowball snowball : snowballs)
+            snowball.remove();
+        snowballs.clear();
+        snowballs = null;
+    }
 
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager().hasMetadata("NO_DAMAGE"))
+            event.setCancelled(true);
     }
 
 }

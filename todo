@@ -1,15 +1,9 @@
-TODO
-
-Clean Code
-Witch Morph - Throws potions.
-Clean Code
-Firework Gadget
-Clean Code
-Snowman Morph - Paints floor as ice.
-Clean Code
-Iron Golem Morph - Holds flower if possible.
-Clean Code
-Trampoline Gadget
-Clean Code
-Add comments in config!!
-make wiki
+TODO:
+  - Finish Morphs recode DONE
+  - Add Elder Guardian Morph DONE
+  - Fix Treasure Chests DONE
+  - Fix Pets' names. DONE
+  - Trampoline Gadget DONE
+  - Add Suits DONE
+  - Make new command system. DONE
+  - and more..

@@ -56,9 +56,29 @@ public enum Hat {
     PRESENT(ItemFactory.createSkull("ZjBhZmE0ZmZmZDEwODYzZTc2YzY5OGRhMmM5YzllNzk5YmNmOWFiOWFhMzdkODMxMjg4MTczNDIyNWQzY2EifX19"), "Present", "&7&oFrom Santa, to you!"),
     ELF(ItemFactory.createSkull("ODJhYjZjNzljNjNiODMzNGIyYzAzYjZmNzM2YWNmNjFhY2VkNWMyNGYyYmE3MmI3NzdkNzdmMjhlOGMifX19"), "Elf", "&7&oI work for Santa!");
 
+    /**
+     * STATIC list of all the enabled hats.
+     */
+    public static List<Hat> enabled = new ArrayList<>();
+
+    /**
+     * Config path name.
+     */
     private String configName;
+
+    /**
+     * The Hat ItemStack
+     */
     private ItemStack itemStack;
+
+    /**
+     * The required permission of the Hat.
+     */
     private String permission;
+
+    /**
+     * The Hat Description (in menu).
+     */
     private String description;
 
     Hat(ItemStack itemStack, String configName, String defaultDesc) {
@@ -67,16 +87,26 @@ public enum Hat {
         this.permission = configName.toLowerCase();
         if (SettingsManager.getConfig().get("Hats." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            Core.config.addDefault("Hats." + configName + ".Description", getDescriptionWithColor(), "description of this hat.");
+            Core.config.addDefault("Hats." + configName + ".Description", getColoredDescription(), "description of this hat.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Hats." + configName + ".Description")));
         }
     }
 
-    public List<String> getDescriptionWithColor() {
+    /**
+     * Gets the Hat Description, with colors.
+     *
+     * @return the Hat Description, with colors.
+     */
+    public List<String> getColoredDescription() {
         return Arrays.asList(description.split("\n"));
     }
 
+    /**
+     * The Hat Description without colors.
+     *
+     * @return The Hat Description without colors.
+     */
     public List<String> getDescription() {
         List<String> desc = new ArrayList<>();
         for (String string : description.split("\n")) {
@@ -85,14 +115,30 @@ public enum Hat {
         return desc;
     }
 
+    /**
+     * Checks if hat should show its description in Hats Menu.
+     *
+     * @return {@code true} if hat should show its description in Hats Menu, {@code false} otherwise.
+     */
     public boolean showsDescription() {
         return SettingsManager.getConfig().getBoolean("Hats." + configName + ".Show-Description");
     }
 
+    /**
+     * Checks if hat can be found in Treasure Chests.
+     *
+     * @return {@code true} if hat can be found in treasure chests, {@code false} otherwise.
+     */
     public boolean canBeFound() {
         return SettingsManager.getConfig().getBoolean("Hats." + configName + ".Can-Be-Found-In-Treasure-Chests");
     }
 
+    /**
+     * Converts The description from a String List to a String.
+     *
+     * @param description The Description as a List.
+     * @return The Description as a String.
+     */
     private String fromList(List<String> description) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < description.size(); i++) {
@@ -101,24 +147,58 @@ public enum Hat {
         return stringBuilder.toString();
     }
 
+    /**
+     * Gets the hat permission.
+     *
+     * @return the required hat permission.
+     */
     public String getPermission() {
         return "ultracosmetics.hats." + permission;
     }
 
+    /**
+     * Gets the config path name.
+     *
+     * @return the config path name.
+     */
     public String getConfigName() {
         return configName;
     }
 
+    /**
+     * Checks if the Hat is enabled.
+     *
+     * @return {@code true} if it is enabled, otherwise {@code false}.
+     */
     public boolean isEnabled() {
         return SettingsManager.getConfig().getBoolean("Hats." + configName + ".Enabled");
     }
 
+    /**
+     * Gets the Hat ItemStack.
+     *
+     * @return the Hat ItemStack.
+     */
     public ItemStack getItemStack() {
         return itemStack;
     }
 
+    /**
+     * Gets the Hat Name (in Menu).
+     *
+     * @return the Hat Name (in Menu).
+     */
     public String getName() {
         return MessageManager.getMessage("Hats." + configName + ".Name");
+    }
+
+    /**
+     * Gets the list of all the enabled hats.
+     *
+     * @return the list of all the enabled hats.
+     */
+    public static List<Hat> enabled() {
+        return enabled;
     }
 
 }

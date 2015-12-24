@@ -31,13 +31,13 @@ public class GadgetPortalGun extends Gadget {
     BlockFace redBlockFace;
 
     public GadgetPortalGun(UUID owner) {
-        super(owner, GadgetType.PORTAL_GUN);
-        displayCountdownMessage = false;
+        super(owner, GadgetType.PORTALGUN);
+        displayCooldownMessage = false;
         useTwoInteractMethods = true;
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 1.5f);
         UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Particles.REDSTONE, 100, 0, 0, 255);
         locBlue = getPlayer().getTargetBlock((Set<Material>) null, 20).getLocation();
@@ -59,7 +59,7 @@ public class GadgetPortalGun extends Gadget {
 
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 1.5f);
         UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Particles.REDSTONE, 100, 255, 0, 0);
         locRed = getPlayer().getTargetBlock((Set<Material>) null, 20).getLocation();

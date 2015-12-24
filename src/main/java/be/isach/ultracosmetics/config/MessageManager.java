@@ -24,10 +24,12 @@ public class MessageManager {
         addMessage("Cosmetic-Disabled", "%prefix% &c&lThis cosmetic is disabled!");
         addMessage("Invalid-Gadget", "%prefix% &c&lInvalid Gadget!");
         addMessage("Invalid-Pet", "%prefix% &c&lInvalid Pet!");
+        addMessage("Invalid-Pet", "%prefix% &c&lInvalid Suit!");
         addMessage("Invalid-Mount", "%prefix% &c&lInvalid Mount!");
         addMessage("Invalid-Effect", "%prefix% &c&lInvalid Effect!");
         addMessage("Invalid-Morph", "%prefix% &c&lInvalid Morph!");
         addMessage("Invalid-Hat", "%prefix% &c&lInvalid Hat!");
+        addMessage("Invalid-Suit", "%prefix% &c&lInvalid Suit!");
         addMessage("Invalid-Menu", "%prefix% &c&lInvalid Menu!");
         addMessage("Ammo", "&7Your ammo: &e%ammo%");
         addMessage("Purchase", "&a&lPURCHASE");
@@ -55,18 +57,22 @@ public class MessageManager {
         addMessage("Clear-Effect", "§c§lClear current effect");
         addMessage("Clear-Morph", "§c§lClear current morph");
         addMessage("Clear-Hat", "§c§lClear current hat");
+        addMessage("Clear-Suit", "§c§lClear current suit");
         addMessage("Rename-Pet-Purchase", "§c§lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
 
         addMessage("Active-Pet-Needed", "§c§lYou need to spawn a pet to rename it");
         addMessage("Rename-Pet", "§c§lClick to rename: %petname%");
 
-        addMessage("Treasure-Chests-Loot.Gadget", "%ammo% %name% ammo");
+        addMessage("Treasure-Chests-Loot.Ammo", "%ammo% %name% ammo");
         addMessage("Treasure-Chests-Loot.Pet", "%pet% pet");
         addMessage("Treasure-Chests-Loot.Mount", "%mount% mount");
         addMessage("Treasure-Chests-Loot.Effect", "%effect% effect");
         addMessage("Treasure-Chests-Loot.Morph", "%morph% morph");
         addMessage("Treasure-Chests-Loot.Hat", "%hat% hat");
         addMessage("Treasure-Chests-Loot.Money", "&e&l%money%$");
+        addMessage("Treasure-Chests-Loot.gadget", "%gadget% gadget");
+        addMessage("Treasure-Chests-Loot.Suit", "%suit%");
+        addMessage("Treasure-Chests-Loot.Nothing", "&c&lNothing");
 
         //Menus
         addMessage("Menus.Main-Menu", "&lMain Menu");
@@ -76,6 +82,7 @@ public class MessageManager {
         addMessage("Menus.Morphs", "&lMorphs");
         addMessage("Menus.Hats", "&lHats");
         addMessage("Menus.Particle-Effects", "&lParticle Effects");
+        addMessage("Menus.Suits", "&lSuits");
         addMessage("Menus.Buy-Ammo", "&lBuy Ammo");
         addMessage("Menus.Rename-Pet", "&lRename Pet");
         addMessage("Disable-Gadgets", "&c&lDisable Gadgets");
@@ -123,6 +130,7 @@ public class MessageManager {
         addMessage("Gadgets.FreezeCannon.name", "&b&lFreeze Cannon");
         addMessage("Gadgets.Snowball.name", "&f&lSnowball");
         addMessage("Gadgets.PartyPopper.name", "&e&lParty Popper");
+        addMessage("Gadgets.Trampoline.name", "&9&lTrampoline");
         addMessage("Gadgets.Gadget-Ready-ActionBar", "%gadgetname% §f§lis ready!");
 
         // MOUNTS
@@ -179,6 +187,9 @@ public class MessageManager {
         addMessage("Particle-Effects.AngelWings.name", "&f&lAngel Wings");
         addMessage("Particle-Effects.SuperHero.name", "&4&lSuper Hero");
         addMessage("Particle-Effects.SantaHat.name", "&4&lSanta &f&lHat");
+        addMessage("Particle-Effects.CrushedSugarCane.name", "&4&lCrushed &f&lSugar &4&lCane");
+        addMessage("Particle-Effects.EnderAura.name", "&d&lEnder Aura");
+        addMessage("Particle-Effects.FlameFairy.name", "&6&lFlame Fairy");
 
         // PETS
         addMessage("Pets.Piggy.menu-name", "&d&lPiggy");
@@ -226,6 +237,8 @@ public class MessageManager {
         addMessage("Morphs.Unmorph", "%prefix% &9You unmorphed from %morphname%");
         addMessage("Morphs.WitherSkeleton.name", "&8&lWither Skeleton");
         addMessage("Morphs.WitherSkeleton.skill", "&eSneak§7 to: &aBone Bomb");
+        addMessage("Morphs.ElderGuardian.name", "&8&lElder Guardian");
+        addMessage("Morphs.ElderGuardian.skill", "&eLeft-Click§7 to: &aLaser");
 
         addMessage("Hats.Equip", "%prefix% &9You equipped %hatname% &9hat!");
         addMessage("Hats.Unequip", "%prefix% &9You unequipped %hatname% &9hat!");
@@ -270,6 +283,24 @@ public class MessageManager {
         addMessage("Hats.Elf.Name", "&a&lElf");
         addMessage("Hats.Must-Remove-Hat", "%prefix% &c&lYou must remove your helmet to equip a hat!");
 
+        addMessage("Suits.Rave.helmet-name", "&b&lR&a&la&e&lv&6&le &f&lHelmet");
+        addMessage("Suits.Rave.chestplate-name", "&b&lR&a&la&e&lv&6&le &f&lChestplate");
+        addMessage("Suits.Rave.leggings-name", "&b&lR&a&la&e&lv&6&le &f&lLeggings");
+        addMessage("Suits.Rave.boots-name", "&b&lR&a&la&e&lv&6&le &f&lBoots");
+        addMessage("Suits.Astronaut.helmet-name", "&f&lAstronaut &f&lHelmet");
+        addMessage("Suits.Astronaut.chestplate-name", "&f&lAstronaut &f&lChestplate");
+        addMessage("Suits.Astronaut.leggings-name", "&f&lAstronaut &f&lLeggings");
+        addMessage("Suits.Astronaut.boots-name", "&f&lAstronaut &f&lBoots");
+        addMessage("Suits.Diamond.helmet-name", "&b&lDiamond &f&lHelmet");
+        addMessage("Suits.Diamond.chestplate-name", "&b&lDiamond &f&lChestplate");
+        addMessage("Suits.Diamond.leggings-name", "&b&lDiamond &f&lLeggings");
+        addMessage("Suits.Diamond.boots-name", "&b&lDiamond &f&lBoots");
+        addMessage("Suits.Santa.helmet-name", "&4&lSanta &f&lHelmet");
+        addMessage("Suits.Santa.chestplate-name", "&4&lSanta &f&lChestplate");
+        addMessage("Suits.Santa.leggings-name", "&4&lSanta &f&lLeggings");
+        addMessage("Suits.Santa.boots-name", "&4&lSanta &f&lBoots");
+        addMessage("Suits.Equip", "%prefix% &9You equipped %suitname%!");
+        addMessage("Suits.Unequip", "%prefix% &9You unequipped %suitname%!");
 
         addMessage("Menu.Gadgets", "&9&lGadgets");
         addMessage("Menu.Particle-Effects", "&b&lParticle Effects");
@@ -277,6 +308,7 @@ public class MessageManager {
         addMessage("Menu.Pets", "&a&lPets");
         addMessage("Menu.Morphs", "&2&lMorphs");
         addMessage("Menu.Hats", "&b&lHats");
+        addMessage("Menu.Suits", "&c&lSuits");
         addMessage("Menu.Main-Menu", "&c&lMain Menu");
         addMessage("Menu.Activate", "&b&lActivate");
         addMessage("Menu.Deactivate", "&c&lDeactivate");
@@ -295,6 +327,7 @@ public class MessageManager {
         addMessage("Disabled-SelfMorphView", "%prefix% &9you disabled self view for morphs!");
         addMessage("Enabled-Gadgets", "%prefix% &9you enabled gadgets!");
         addMessage("Disabled-Gadgets", "%prefix% &9you disabled gadgets!");
+        addMessage("Not-Allowed-From-Console", "&c&lThis can't be executed from console!");
     }
 
     /**

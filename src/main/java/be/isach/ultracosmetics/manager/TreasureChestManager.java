@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.Cuboid;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,13 +25,13 @@ public class TreasureChestManager implements Listener {
 
     private static Random random = new Random();
 
-    public void openTreasureChest(Player player) {
+    private static void openTreasureChest(Player player) {
         String designPath = getRandomDesign();
         player.closeInventory();
         new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath));
     }
 
-    private String getRandomDesign() {
+    private static String getRandomDesign() {
         Set<String> set = Core.config.getConfigurationSection("TreasureChests.Designs").getKeys(false);
         List<String> list = new ArrayList<>();
         list.addAll(set);
@@ -43,29 +44,38 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().hasItemMeta()
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
-            if (Core.getCustomPlayer((Player) event.getWhoClicked()).getKeys() > 0) {
-                Cuboid c = new Cuboid(event.getWhoClicked().getLocation().add(-2, 0, -2), event.getWhoClicked().getLocation().add(2, 1, 2));
-                if (!c.isEmpty()) {
-                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
-                    return;
-                }
-                for (Entity ent : event.getWhoClicked().getNearbyEntities(5, 5, 5)) {
-                    if (ent instanceof Player && Core.getCustomPlayer((Player) ent).currentTreasureChest != null) {
-                        event.getWhoClicked().closeInventory();
-                        event.getWhoClicked().sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
-                        return;
-                    }
-                }
-                if (!((Player) event.getWhoClicked()).isOnGround()) {
-                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
-                    return;
-                }
-                Core.getCustomPlayer((Player) event.getWhoClicked()).removeKey();
-                openTreasureChest((Player) event.getWhoClicked());
-            } else {
-                event.getWhoClicked().closeInventory();
-                Core.getCustomPlayer((Player) event.getWhoClicked()).openBuyKeyInventory();
+            if (!Core.vaultLoaded && Core.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
+                ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.ANVIL_LAND, 0.2f, 1.2f);
+                return;
             }
+            Player player = (Player) event.getWhoClicked();
+            tryOpenChest(player);
+        }
+    }
+
+    public static void tryOpenChest(Player player) {
+        if (Core.getCustomPlayer(player).getKeys() > 0) {
+            Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
+            if (!c.isEmpty()) {
+                player.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
+                return;
+            }
+            for (Entity ent : player.getNearbyEntities(5, 5, 5)) {
+                if (ent instanceof Player && Core.getCustomPlayer((Player) ent).currentTreasureChest != null) {
+                    player.closeInventory();
+                    player.sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
+                    return;
+                }
+            }
+            if (!player.isOnGround()) {
+                player.sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
+                return;
+            }
+            Core.getCustomPlayer(player).removeKey();
+            openTreasureChest(player);
+        } else {
+            player.closeInventory();
+            Core.getCustomPlayer(player).openKeyPurchaseMenu();
         }
     }
 
@@ -75,8 +85,12 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().hasItemMeta()
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Keys"))) {
+            if (!Core.vaultLoaded && Core.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
+                ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.ANVIL_LAND, 0.2f, 1.2f);
+                return;
+            }
             event.getWhoClicked().closeInventory();
-            Core.getCustomPlayer((Player) event.getWhoClicked()).openBuyKeyInventory();
+            Core.getCustomPlayer((Player) event.getWhoClicked()).openKeyPurchaseMenu();
         }
     }
 
@@ -93,7 +107,7 @@ public class TreasureChestManager implements Listener {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).addKey();
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
                     event.getWhoClicked().closeInventory();
-                    MainMenuManager.openMainMenu((Player) event.getWhoClicked());
+                    MainMenuManager.openMenu((Player) event.getWhoClicked());
                 } else {
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Not-Enough-Money"));
                     event.getWhoClicked().closeInventory();
@@ -101,7 +115,7 @@ public class TreasureChestManager implements Listener {
                 }
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
                 event.getWhoClicked().closeInventory();
-                MainMenuManager.openMainMenu((Player) event.getWhoClicked());
+                MainMenuManager.openMenu((Player) event.getWhoClicked());
             }
         }
     }

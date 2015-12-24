@@ -2,12 +2,10 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.Core;
 import net.minecraft.server.v1_8_R3.EntityEnderDragon;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEnderDragon;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -21,8 +19,8 @@ import java.util.UUID;
 public class MountDragon extends Mount {
 
     public MountDragon(UUID owner) {
-        super(EntityType.ENDER_DRAGON, Material.DRAGON_EGG, (byte) 0, "Dragon", "ultracosmetics.mounts.dragon", owner, MountType.DRAGON,
-                "&7&oBecome a dragon rider!");
+        super(owner, MountType.DRAGON
+        );
         if (owner != null)
             Core.registerListener(this);
     }

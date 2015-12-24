@@ -31,7 +31,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     ArrayList<Item> melonBlocks = new ArrayList<>();
 
     public GadgetMelonThrower(UUID owner) {
-        super(owner, GadgetType.MELON_THROWER);
+        super(owner, GadgetType.MELONTHROWER);
         Core.registerListener(this);
     }
 
@@ -50,7 +50,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.EXPLODE, 1, 1);
         Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.MELON_BLOCK, (byte) 0x0, UUID.randomUUID().toString()));
         item.setPickupDelay(0);
@@ -104,6 +104,6 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

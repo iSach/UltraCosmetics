@@ -2,10 +2,8 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.watchers.SlimeWatcher;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -22,7 +20,7 @@ public class MorphSlime extends Morph {
     private boolean cooldown;
 
     public MorphSlime(UUID owner) {
-        super(DisguiseType.SLIME, Material.SLIME_BLOCK, (byte) 0x0, "Slime", "ultracosmetics.morphs.slime", owner, MorphType.SLIME, "&7&oSplat splat!");
+        super(owner, MorphType.SLIME);
         Core.registerListener(this);
         if(owner != null) {
             Core.registerListener(this);

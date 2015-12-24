@@ -31,12 +31,12 @@ public class GadgetExplosiveSheep extends Gadget {
     ArrayList<Sheep> sheepArrayList = new ArrayList<>();
 
     public GadgetExplosiveSheep(UUID owner) {
-        super(owner, GadgetType.EXPLOSIVE_SHEEP);
+        super(owner, GadgetType.EXPLOSIVESHEEP);
         Core.registerListener(this);
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         Location loc = getPlayer().getLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.5));
         loc.setY(getPlayer().getLocation().getBlockY() + 1);
         Sheep s = getPlayer().getWorld().spawn(loc, Sheep.class);
@@ -65,7 +65,7 @@ public class GadgetExplosiveSheep extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
 
     }
 

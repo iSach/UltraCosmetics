@@ -2,8 +2,6 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Effect;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 
 import java.util.Random;
 import java.util.UUID;
@@ -14,7 +12,7 @@ import java.util.UUID;
 public class MountSkySquid extends Mount {
 
     public MountSkySquid(UUID owner) {
-        super(EntityType.SQUID, Material.INK_SACK, (byte) 0, "SkySquid", "ultracosmetics.mounts.skysquid", owner, MountType.SKYSQUID, "&7&oWat.");
+        super(owner, MountType.SKYSQUID);
 
     }
 

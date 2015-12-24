@@ -1,5 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.util.Vector;
+
 import java.util.UUID;
 
 /**
@@ -8,16 +14,26 @@ import java.util.UUID;
 public class GadgetPartyPopper extends Gadget {
 
     public GadgetPartyPopper(UUID owner) {
-        super(owner, GadgetType.PARTY_POPPER);
+        super(owner, GadgetType.PARTYPOPPER);
+
+        asyncAction = true;
     }
 
     @Override
-    void onInteractRightClick() {
-
+    void onRightClick() {
+        for (int i = 0; i < 30; i++) {
+            Vector rand = new Vector(Math.random() - 0.5D,
+                    Math.random() - 0.5D, Math.random() - 0.5D);
+            Particles.ITEM_CRACK.display(new Particles.ItemData(Material.INK_SACK,
+                            MathUtils.randomByte(15)), getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(1.2),
+                    0.6f, getPlayer().getEyeLocation(), 128);
+        }
+        for (int i = 0; i < 3; i++)
+            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.CHICKEN_EGG_POP, 1, 1.1f);
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
 
     }
 

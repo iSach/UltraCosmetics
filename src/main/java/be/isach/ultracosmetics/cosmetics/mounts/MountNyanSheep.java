@@ -10,9 +10,7 @@ import net.minecraft.server.v1_8_R3.Navigation;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftCreature;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
@@ -31,7 +29,7 @@ import java.util.UUID;
 public class MountNyanSheep extends Mount {
 
     public MountNyanSheep(UUID owner) {
-        super(EntityType.SHEEP, Material.STAINED_GLASS, (byte) new Random().nextInt(15), "NyanSheep", "ultracosmetics.mounts.nyansheep", owner, MountType.NYANSHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan");
+        super(owner, MountType.NYANSHEEP);
 
         if (owner == null) return;
         ((LivingEntity) ent).setNoDamageTicks(Integer.MAX_VALUE);

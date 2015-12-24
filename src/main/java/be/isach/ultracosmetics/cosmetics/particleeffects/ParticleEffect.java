@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -15,9 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,45 +21,38 @@ import java.util.UUID;
  */
 public abstract class ParticleEffect implements Listener {
 
-    private Material material;
-    private Byte data;
-    private String name;
-
+    /**
+     * Current moving status of the player.
+     */
     boolean moving;
 
-    private ParticleEffectType type = ParticleEffectType.DEFAULT;
+    /**
+     * Type of the Effect.
+     */
+    private ParticleEffectType type;
 
-    private String permission;
-
-    int repeatDelay = 1;
-
+    /**
+     * Owner of the Effect.
+     */
     private UUID owner;
 
+    /**
+     * Event Listener, listens to MoveEvent.
+     */
     private Listener listener;
 
-    private Particles effect;
-
-    private String description;
-
+    /**
+     * If true, the effect will ignore moving.
+     */
     protected boolean ignoreMove = false;
 
-    public ParticleEffect(final Particles effect, Material material, Byte data, String configName, String permission, final UUID owner, final ParticleEffectType type, int repeatDelay, String defaultDesc) {
-        this.material = material;
-        this.data = data;
-        this.name = configName;
-        this.permission = permission;
+    public ParticleEffect(final UUID owner, final ParticleEffectType type) {
         this.type = type;
-        this.effect = effect;
-        this.repeatDelay = repeatDelay;
-        if (SettingsManager.getConfig().get("Particle-Effects." + configName + ".Description") == null) {
-            this.description = defaultDesc;
-            SettingsManager.getConfig().set("Particle-Effects." + configName + ".Description", getDescriptionWithColor(), "Description of this particle effect.");
-        } else {
-            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Particle-Effects." + configName + ".Description")));
-        }
+        if (!type.isEnabled())
+            return;
         if (owner != null) {
             this.owner = owner;
-            if (!getPlayer().hasPermission(permission)) {
+            if (!getPlayer().hasPermission(type.getPermission())) {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
@@ -78,72 +67,79 @@ public abstract class ParticleEffect implements Listener {
                                 && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect.getType() == type) {
                             if (getType() != ParticleEffectType.FROZENWALK
                                     && getType() != ParticleEffectType.ENCHANTED
-                                    && getType() != ParticleEffectType.MUSIC) {
+                                    && getType() != ParticleEffectType.MUSIC
+                                    && getType() != ParticleEffectType.SANTAHAT
+                                    && getType() != ParticleEffectType.FLAMEFAIRY
+                                    && getType() != ParticleEffectType.ENDERAURA) {
                                 if (!moving || ignoreMove)
                                     onUpdate();
                                 if (moving) {
                                     boolean c = type == ParticleEffectType.ANGELWINGS;
-                                    if (getEffect() == Particles.REDSTONE) {
+                                    if (getType().getEffect() == Particles.REDSTONE) {
                                         if (!ignoreMove)
                                             for (int i = 0; i < 15; i++)
                                                 if (!c)
-                                                    effect.display(new Particles.OrdinaryColor(255, 0, 0), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
+                                                    type.getEffect().display(new Particles.OrdinaryColor(255, 0, 0), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
                                                 else
-                                                    effect.display(new Particles.OrdinaryColor(255, 255, 255), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
+                                                    type.getEffect().display(new Particles.OrdinaryColor(255, 255, 255), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
+                                    } else if (getType().getEffect() == Particles.ITEM_CRACK) {
+                                        for (int i = 0; i < 15; i++)
+                                            Particles.ITEM_CRACK.display(new Particles.ItemData(Material.INK_SACK, ParticleEffectCrushedSugarCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
                                     } else
-                                        UtilParticles.display(effect, .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
+                                        UtilParticles.display(type.getEffect(), .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
                                     moving = false;
                                 }
                             } else
                                 onUpdate();
-                        } else {
+                        } else
                             cancel();
-                        }
-
                     } catch (NullPointerException exc) {
                         clear();
                         cancel();
                     }
                 }
             };
-            runnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, repeatDelay);
+            runnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, type.getRepeatDelay());
             listener = new ParticleEffectListener(this);
-
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", (Core.placeHolderColor) ? type.getName() : Core.filterColor(type.getName())));
             Core.getCustomPlayer(getPlayer()).currentParticleEffect = this;
         }
     }
 
-    public Particles getEffect() {
-        return effect;
-    }
-
-    public String getConfigName() {
-        return name;
-    }
-
-    public String getName() {
-        return MessageManager.getMessage("Particle-Effects." + name + ".name");
-    }
-
-    public Material getMaterial() {
-        return this.material;
-    }
-
-    public List<String> getDescriptionWithColor() {
-        return Arrays.asList(description.split("\n"));
-    }
-
+    /**
+     * Gets Effect Type.
+     *
+     * @return The Type of the Effect.
+     */
     public ParticleEffectType getType() {
         return this.type;
     }
 
-    public Byte getData() {
-        return this.data;
-    }
-
+    /**
+     * Called each tick (not called if player isn't moving
+     * and that the effect doesn't ignore moving)
+     */
     abstract void onUpdate();
 
+    /**
+     * Gets Effect Owner.
+     */
+    protected UUID getOwner() {
+        return owner;
+    }
+
+    /**
+     * Gets Effect Owner as Player.
+     *
+     * @return Effect Owner as Player.
+     */
+    protected Player getPlayer() {
+        return Bukkit.getPlayer(owner);
+    }
+
+    /**
+     * Clears the effect.
+     */
     public void clear() {
         Core.getCustomPlayer(getPlayer()).currentParticleEffect = null;
         try {
@@ -152,18 +148,13 @@ public abstract class ParticleEffect implements Listener {
         } catch (Exception exc) {
         }
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", (Core.placeHolderColor) ? type.getName() : Core.filterColor(type.getName())));
         owner = null;
     }
 
-    protected UUID getOwner() {
-        return owner;
-    }
-
-    protected Player getPlayer() {
-        return Bukkit.getPlayer(owner);
-    }
-
+    /**
+     * Effect Listener, listens to MoveEvent.
+     */
     public class ParticleEffectListener implements Listener {
         private ParticleEffect particleEffect;
 
@@ -180,68 +171,5 @@ public abstract class ParticleEffect implements Listener {
                     || event.getFrom().getZ() != event.getTo().getZ()))
                 particleEffect.moving = true;
         }
-
     }
-
-    public List<String> getDescription() {
-        List<String> desc = new ArrayList<>();
-        for (String string : description.split("\n")) {
-            desc.add(string.replace('&', '§'));
-        }
-        return desc;
-    }
-
-    private String fromList(List<String> description) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < description.size(); i++) {
-            stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
-        }
-        return stringBuilder.toString();
-    }
-
-    public boolean showsDescription() {
-        return SettingsManager.getConfig().getBoolean("Particle-Effects." + getConfigName() + ".Show-Description");
-    }
-
-    public boolean canBeFound() {
-        return SettingsManager.getConfig().getBoolean("Particle-Effects." + getConfigName() + ".Can-Be-Found-In-Treasure-Chests");
-    }
-
-    public enum ParticleEffectType {
-
-        DEFAULT("", ""),
-        RAINCLOUD("ultracosmetics.particleeffects.raincloud", "RainCloud"),
-        SNOWCLOUD("ultracosmetics.particleeffects.snowcloud", "SnowCloud"),
-        BLOODHELIX("ultracosmetics.particleeffects.bloodhelix", "BloodHelix"),
-        FROSTLORD("ultracosmetics.particleeffects.frostlord", "FrostLord"),
-        FLAMERINGS("ultracosmetics.particleeffects.flamerings", "FlameRings"),
-        INLOVE("ultracosmetics.particleeffects.inlove", "InLove"),
-        GREENSPARKS("ultracosmetics.particleeffects.greensparks", "GreenSparks"),
-        FROZENWALK("ultracosmetics.particleeffects.frozenwalk", "FrozenWalk"),
-        MUSIC("ultracosmetics.particleeffects.music", "Music"),
-        ENCHANTED("ultracosmetics.particleeffects.enchanted", "Enchanted"),
-        INFERNO("ultracosmetics.particleeffects.inferno", "Inferno"),
-        ANGELWINGS("ultracosmetics.particleeffects.angelwings", "AngelWings"),
-        SUPERHERO("ultracosmetics.particleeffects.superhero", "SuperHero"),
-        SANTAHAT("ultracosmetics.particleeffects.santahat", "SantaHat");
-
-
-        String permission;
-        String configName;
-
-        ParticleEffectType(String permission, String configName) {
-            this.permission = permission;
-            this.configName = configName;
-        }
-
-        public String getPermission() {
-            return permission;
-        }
-
-        public boolean isEnabled() {
-            return SettingsManager.getConfig().getBoolean("Particle-Effects." + configName + ".Enabled");
-        }
-
-    }
-
 }

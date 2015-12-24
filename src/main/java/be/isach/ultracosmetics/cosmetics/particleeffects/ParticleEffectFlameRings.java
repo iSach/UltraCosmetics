@@ -1,9 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -16,13 +14,12 @@ public class ParticleEffectFlameRings extends ParticleEffect {
     float step = 0;
 
     public ParticleEffectFlameRings(UUID owner) {
-        super(Particles.FLAME, Material.BLAZE_POWDER, (byte) 0x0, "FlameRings", "ultracosmetics.particleeffects.flamerings", owner,
-                ParticleEffectType.FLAMERINGS, 1,
-                "&7&oWatch out, they are hot!");
+        super(owner,
+                ParticleEffectType.FLAMERINGS
+        );
         if (owner != null) {
 
         }
-        repeatDelay = 2;
     }
 
     @Override
@@ -41,7 +38,7 @@ public class ParticleEffectFlameRings extends ParticleEffect {
             } else {
                 MathUtils.rotateAroundAxisZ(v, 90);
             }
-            UtilParticles.display(getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
+            UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
         }
         step += 3;
     }

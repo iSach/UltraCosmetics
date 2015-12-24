@@ -4,9 +4,7 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 
 import java.util.UUID;
@@ -17,7 +15,7 @@ import java.util.UUID;
 public class MountInfernalHorror extends Mount {
 
     public MountInfernalHorror(UUID owner) {
-        super(EntityType.HORSE, Material.BONE, (byte) 0, "InfernalHorror", "ultracosmetics.mounts.infernalhorror", owner, MountType.INFERNALHORROR, "&7&oThis mount directly comes from hell!");
+        super(owner, MountType.INFERNALHORROR);
         if (ent instanceof Horse) {
             Horse horse = (Horse) ent;
             horse.setVariant(Horse.Variant.SKELETON_HORSE);

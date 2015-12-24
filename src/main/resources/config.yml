@@ -9,6 +9,7 @@ Categories-Enabled:
   Pets: true
   Morphs: true
   Hats: true
+  Suits: true
 
 # Other settings for categories:
 # - The Item in Main Menu.
@@ -34,11 +35,11 @@ Categories:
   Hats:
     Main-Menu-Item: '314:0'
     Go-Back-Arrow: true
-
+  Suits:
+    Main-Menu-Item: '299:0'
+    Go-Back-Arrow: true
 # Treasure Chests Settings.
 # /uc reload will not be enough to toggle them!
-# Also currently requires "Ammo-System-For-Gadgets" toggled on
-# to work.
 #
 # NOTE: Money will be given
 #       to player even if disabled in case
@@ -72,7 +73,7 @@ TreasureChests:
     Money:
       Enabled: true
       Max: 100
-      Chance: 20
+      Chance: 10
       Message:
         enabled: false
         message: '%prefix% &6&l%name% found %money%$'
@@ -84,6 +85,12 @@ TreasureChests:
       Message:
         enabled: false
         message: '%prefix% &6&l%name% found %ammo% %gadget% ammo'
+    Gadgets:
+      Enabled: true
+      Chance: 20
+      Message:
+        enabled: false
+        message: '%prefix% &6&l%name% found gadget %gadget%'
     Mounts:
       Enabled: true
       Chance: 10
@@ -110,10 +117,16 @@ TreasureChests:
         message: '%prefix% &6&l%name% found legendary %effect%'
     Hats:
       Enabled: true
-      Chance: 30
+      Chance: 10
       Message:
         enabled: false
         message: '%prefix% &6&l%name% found rare %hat%'
+    Suits:
+      Enabled: true
+      Chance: 10
+      Message:
+        enabled: false
+        message: '%prefix% &6&l%name% found rare %suit%'
   Designs:
     Classic:
       center-block: '169:0'
@@ -208,37 +221,22 @@ Menu-Item:
   Give-On-Respawn: true
   Slot: 3
   Type: ENDER_CHEST
-
   Data: 0
-
   Displayname: '&6&lCosmetics'
 
 # Settings related to permissions.
 #
 # List for "Type" https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 No-Permission:
-
   Show-In-Lore: true
-
   Lore-Message-Yes: '&o&7Permission: &a&lYes!'
-
   Lore-Message-No: '&o&7Permission: &4&lNo!'
-
   Dont-Show-Item: false
-
   Custom-Item:
     enabled: false
     Type: INK_SACK
     Data: 8
     Name: '&c&lNo Permission'
-
-# When a cosmetic is disabled, want to show an item instead of it?
-Disabled-Items:
-  Show-Custom-Disabled-Item: false
-  Custom-Disabled-Item:
-    Type: INK_SACK
-    Data: 8
-    Name: '&c&lDisabled'
 
 # If set to true, in messages the cosmetics' names
 # won't be colored.

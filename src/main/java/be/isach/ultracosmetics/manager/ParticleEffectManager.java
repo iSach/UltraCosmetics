@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
+import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffectType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -18,10 +18,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Sacha on 11/11/15.
@@ -30,15 +28,20 @@ public class ParticleEffectManager implements Listener {
 
     static List<Player> playerList = new ArrayList<>();
 
-    public static void openParticlesMenu(final Player p) {
+    private final static int[] COSMETICS_SLOTS =
+            {
+                    10, 11, 12, 13, 14, 15, 16,
+                    19, 20, 21, 22, 23, 24, 25,
+                    28, 29, 30, 31, 32, 33, 34
+            };
+
+    public static void openMenu(final Player p, int PAGE) {
+        PAGE = Math.max(1, Math.min(PAGE, getMaxPagesAmount()));
+        final int finalPAGE = PAGE;
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                int listSize = 0;
-                for (ParticleEffect m : Core.getParticleEffects()) {
-                    if (!m.getType().isEnabled()) continue;
-                    listSize++;
-                }
+                int listSize = ParticleEffectType.enabled().size();
                 int slotAmount = 54;
                 if (listSize < 22)
                     slotAmount = 54;
@@ -47,54 +50,45 @@ public class ParticleEffectManager implements Listener {
                 if (listSize < 8)
                     slotAmount = 36;
 
-                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Particle-Effects"));
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Particle-Effects") + " §7§o(" + finalPAGE + "/" + getMaxPagesAmount() + ")");
 
-                int i = 10;
-                for (ParticleEffect particleEffect : Core.getParticleEffects()) {
-                    if (!particleEffect.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
-                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                        String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                        inv.setItem(i, ItemFactory.create(material, data, name));
-                        if (i == 25 || i == 34 || i == 16) {
-                            i += 3;
-                        } else {
-                            i++;
-                        }
-                        continue;
-                    }
-                    if (!particleEffect.getType().isEnabled()) continue;
+                int i = 0;
+                int from = 1;
+                if (finalPAGE > 1)
+                    from = 21 * (finalPAGE - 1) + 1;
+                int to = 21 * finalPAGE;
+                for (int h = from; h <= to; h++) {
+                    if (h > ParticleEffectType.enabled().size())
+                        break;
+                    ParticleEffectType particleEffectType = ParticleEffectType.enabled().get(h - 1);
+                    if (!particleEffectType.isEnabled()) continue;
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item"))
-                        if (!p.hasPermission(particleEffect.getType().getPermission()))
+                        if (!p.hasPermission(particleEffectType.getPermission()))
                             continue;
-                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(particleEffect.getType().getPermission())) {
+                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(particleEffectType.getPermission())) {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                         String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(i, ItemFactory.create(material, data, name));
-                        if (i == 25 || i == 34 || i == 16) {
-                            i += 3;
-                        } else {
-                            i++;
-                        }
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                        i++;
                         continue;
                     }
                     String lore = null;
-                    if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore")) {
-                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(particleEffect.getType().getPermission()) ? "Yes" : "No")))));
-                    }
+                    if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore"))
+                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig()
+                                .get("No-Permission.Lore-Message-" + ((p.hasPermission(particleEffectType.getPermission()) ? "Yes" : "No")))));
                     String toggle = MessageManager.getMessage("Menu.Summon");
                     CustomPlayer cp = Core.getCustomPlayer(p);
-                    if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
+                    if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffectType)
                         toggle = MessageManager.getMessage("Menu.Unsummon");
-                    ItemStack is = ItemFactory.create(particleEffect.getMaterial(), particleEffect.getData(), toggle + " " + particleEffect.getName());
-                    if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffect.getType())
+                    ItemStack is = ItemFactory.create(particleEffectType.getMaterial(), particleEffectType.getData(), toggle + " " + particleEffectType.getName());
+                    if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffectType)
                         is = ItemFactory.addGlow(is);
                     ItemMeta itemMeta = is.getItemMeta();
                     List<String> loreList = new ArrayList<>();
-                    if (particleEffect.showsDescription()) {
+                    if (particleEffectType.showsDescription()) {
                         loreList.add("");
-                        for (String s : particleEffect.getDescription())
+                        for (String s : particleEffectType.getDescription())
                             loreList.add(s);
                         loreList.add("");
                     }
@@ -102,12 +96,8 @@ public class ParticleEffectManager implements Listener {
                         loreList.add(lore);
                     itemMeta.setLore(loreList);
                     is.setItemMeta(itemMeta);
-                    inv.setItem(i, is);
-                    if (i == 25 || i == 34 || i == 16) {
-                        i += 3;
-                    } else {
-                        i++;
-                    }
+                    inv.setItem(COSMETICS_SLOTS[i], is);
+                    i++;
                 }
 
                 if (Category.EFFECTS.hasGoBackArrow())
@@ -126,48 +116,9 @@ public class ParticleEffectManager implements Listener {
         });
     }
 
-    public static void activateParticleEffectByType(ParticleEffect.ParticleEffectType type, final Player PLAYER) {
-        if (!PLAYER.hasPermission(type.getPermission())) {
-            if (!playerList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        playerList.remove(PLAYER);
-                    }
-                }, 1);
-            }
-            return;
-        }
-
-        for (ParticleEffect particleEffect : Core.getParticleEffects()) {
-            if (particleEffect.getType().isEnabled() && particleEffect.getType() == type) {
-                Class particleEffectClass = particleEffect.getClass();
-
-                Class[] cArg = new Class[1]; //Our constructor has 3 arguments
-                cArg[0] = UUID.class; //First argument is of *object* type Long
-
-                UUID uuid = PLAYER.getUniqueId();
-
-                try {
-                    particleEffectClass.getDeclaredConstructor(UUID.class).newInstance(uuid);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     @EventHandler
     public void particleEffectSelection(InventoryClickEvent event) {
-        if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Particle-Effects"))) {
+        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Particle-Effects"))) {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
                     || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
@@ -177,13 +128,14 @@ public class ParticleEffectManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMainMenu((Player) event.getWhoClicked());
+                    MainMenuManager.openMenu((Player) event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Effect"))) {
                     if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentParticleEffect != null) {
+                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
                         event.getWhoClicked().closeInventory();
                         Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                        openParticlesMenu((Player) event.getWhoClicked());
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     } else return;
                     return;
                 }
@@ -207,19 +159,64 @@ public class ParticleEffectManager implements Listener {
 
                         }
                     }
-                    activateParticleEffectByType(getParticleEffectByName(sb.toString()), (Player) event.getWhoClicked());
+                    equipEffect(getEffect(sb.toString()), (Player) event.getWhoClicked());
                 }
 
             }
         }
     }
 
-    public static ParticleEffect.ParticleEffectType getParticleEffectByName(String name) {
-        for (ParticleEffect particleEffect : Core.getParticleEffects()) {
-            if (particleEffect.getName().replace(" ", "").equals(name.replace(" ", ""))) {
-                return particleEffect.getType();
-            }
+    /**
+     * Gets the max amount of pages.
+     *
+     * @return the maximum amount of pages.
+     */
+    private static int getMaxPagesAmount() {
+        int max = 21;
+        int i = ParticleEffectType.enabled().size();
+        if (i % max == 0) return i / max;
+        double j = i / 21;
+        int h = (int) Math.floor(j * 100) / 100;
+        return h + 1;
+    }
+
+    private static int getCurrentPage(Player player) {
+        if (player.getOpenInventory() != null
+                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Particle-Effects"))) {
+            String s = player.getOpenInventory().getTopInventory().getTitle()
+                    .replace(MessageManager.getMessage("Menus.Particle-Effects") + " §7§o(", "")
+                    .replace("/" + getMaxPagesAmount() + ")", "");
+            return Integer.parseInt(s);
         }
+        return 0;
+    }
+
+    public static void equipEffect(final ParticleEffectType TYPE, final Player PLAYER) {
+        if (!PLAYER.hasPermission(TYPE.getPermission())) {
+            if (!playerList.contains(PLAYER)) {
+                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                playerList.add(PLAYER);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        playerList.remove(PLAYER);
+                    }
+                }, 1);
+            }
+            return;
+        }
+        new Thread() {
+            @Override
+            public void run() {
+                TYPE.equip(PLAYER);
+            }
+        }.run();
+    }
+
+    public static ParticleEffectType getEffect(String name) {
+        for (ParticleEffectType effectType : ParticleEffectType.enabled())
+            if (effectType.getName().replace(" ", "").equals(name.replace(" ", "")))
+                return effectType;
         return null;
     }
 

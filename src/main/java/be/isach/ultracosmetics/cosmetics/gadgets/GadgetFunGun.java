@@ -24,14 +24,14 @@ public class GadgetFunGun extends Gadget {
     private List<Projectile> projectiles = new ArrayList<>();
 
     public GadgetFunGun(UUID owner) {
-        super(owner, GadgetType.FUN_GUN);
+        super(owner, GadgetType.FUNGUN);
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         for (int i = 0; i < 5; i++)
             projectiles.add(getPlayer().launchProjectile(Snowball.class));
     }
@@ -53,7 +53,8 @@ public class GadgetFunGun extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {}
+    void onLeftClick() {
+    }
 
     @Override
     void onUpdate() {}

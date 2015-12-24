@@ -10,7 +10,6 @@ import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -23,10 +22,10 @@ import java.util.UUID;
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountMountOfWater extends Mount {
+public class MountOfWater extends Mount {
 
-    public MountMountOfWater(UUID owner) {
-        super(EntityType.HORSE, Material.INK_SACK, (byte) 4, "MountOfWater", "ultracosmetics.mounts.mountofwater", owner, MountType.MOUNTOFWATER, "&7&oThe mount of Poseidon!");
+    public MountOfWater(UUID owner) {
+        super(owner, MountType.MOUNTOFWATER);
         if (owner != null) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

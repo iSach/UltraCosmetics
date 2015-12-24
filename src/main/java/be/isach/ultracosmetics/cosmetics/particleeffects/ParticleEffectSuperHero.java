@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -16,9 +15,9 @@ public class ParticleEffectSuperHero extends ParticleEffect {
     boolean x = true;
 
     public ParticleEffectSuperHero(UUID owner) {
-        super(Particles.REDSTONE, Material.MAGMA_CREAM, (byte) 0, "SuperHero", "ultracosmetics.particleeffects.superhero",
-                owner, ParticleEffectType.SUPERHERO, 2,
-                "&7&oBecome SuperMan!");
+        super(
+                owner, ParticleEffectType.SUPERHERO
+        );
         this.ignoreMove = true;
     }
 

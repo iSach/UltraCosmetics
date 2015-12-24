@@ -2,10 +2,10 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.CustomSlime;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.FlyingSquid;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.RideableSpider;
+import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -24,59 +24,68 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by sacha on 03/08/15.
+ * <p/>
+ * TODO: SubObjects:
+ * - CustomEntityMount
+ * - HorseMount
  */
 public abstract class Mount implements Listener {
 
-    // TODO: Sub-Object for custom entities mounts.
-
-    private Material material;
-    private Byte data;
-    private String name;
-
-    private MountType type = MountType.DEFAULT;
-
-    public EntityType entityType = EntityType.HORSE;
-
-    private String permission;
-
-    Listener listener;
-
-    UUID owner;
-
-    Horse.Variant variant;
-    Horse.Color color;
-
-    public Entity ent;
-    public net.minecraft.server.v1_8_R3.Entity customEnt;
-
-    private String description;
-
+    /**
+     * List of all the CustomEntities. (STATIC)
+     */
     public static List<net.minecraft.server.v1_8_R3.Entity> customEntities = new ArrayList();
 
+    /**
+     * The Type of the Mount.
+     */
+    private MountType type;
+
+    /**
+     * The Event Listener.
+     */
+    private Listener listener;
+
+    /**
+     * The Mount Owner's UUID.
+     */
+    public UUID owner;
+
+    /**
+     * If the mount is a horse, its variant.
+     */
+    public Horse.Variant variant;
+
+    /**
+     * If the mount is a horse, its color.
+     */
+    public Horse.Color color;
+
+    /**
+     * The Entity, if it isn't a Custom Entity.
+     */
+    public Entity ent;
+
+    /**
+     * The CustomEntity if it is a Custom Entity.
+     */
+    public net.minecraft.server.v1_8_R3.Entity customEnt;
+
+    /**
+     * The delay between each mount ticking.
+     */
     public int repeatDelay = 2;
 
-    public Mount(EntityType entityType, Material material, Byte data, String configName, String permission, final UUID owner, final MountType type, String defaultDescription) {
-        this.material = material;
-        this.data = data;
-        this.name = configName;
-        this.permission = permission;
+    public Mount(final UUID owner, final MountType type) {
         this.type = type;
-        this.entityType = entityType;
-        if (SettingsManager.getConfig().get("Mounts." + configName + ".Description") == null) {
-            this.description = defaultDescription;
-            SettingsManager.getConfig().set("Mounts." + configName + ".Description", getDescriptionWithColor(), "Description of this mount.");
-        } else {
-            this.description = fromList(((List<String>) SettingsManager.getConfig().get("Mounts." + configName + ".Description")));
-        }
         if (owner != null) {
             this.owner = owner;
-            if (!getPlayer().hasPermission(permission)) {
+            if (!getPlayer().hasPermission(type.getPermission())) {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
@@ -89,10 +98,12 @@ public abstract class Mount implements Listener {
             if (Core.getCustomPlayer(getPlayer()).currentMount != null)
                 Core.getCustomPlayer(getPlayer()).removeMount();
 
-            if (entityType != EntityType.SQUID
-                    && entityType != EntityType.SLIME
-                    && entityType != EntityType.SPIDER) {
-                this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getEntityType());
+            if (type.getEntityType() != EntityType.SQUID
+                    && type.getEntityType() != EntityType.SLIME
+                    && type.getEntityType() != EntityType.SPIDER) {
+                EntitySpawningManager.setBypass(true);
+                this.ent = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), type.getEntityType());
+                EntitySpawningManager.setBypass(false);
                 if (ent instanceof Ageable) {
                     ((Ageable) ent).setAdult();
                 } else {
@@ -101,7 +112,7 @@ public abstract class Mount implements Listener {
                     }
                 }
                 ent.setCustomNameVisible(true);
-                ent.setCustomName(getName());
+                ent.setCustomName(getType().getName(getPlayer()));
                 ent.setPassenger(getPlayer());
                 if (ent instanceof Horse) {
                     ((Horse) ent).setDomestication(1);
@@ -149,7 +160,9 @@ public abstract class Mount implements Listener {
                 double z = getPlayer().getLocation().getZ();
                 customEnt.setLocation(x, y + 2, z, 0, 0);
 
+                EntitySpawningManager.setBypass(true);
                 ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(customEnt);
+                EntitySpawningManager.setBypass(false);
                 customEnt.getBukkitEntity().setPassenger(getPlayer());
                 customEntities.add(customEnt);
                 BukkitRunnable runnable = new BukkitRunnable() {
@@ -184,54 +197,36 @@ public abstract class Mount implements Listener {
             }
             listener = new MountListener(this);
 
-            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (Core.placeHolderColor) ? getMenuName() : Core.filterColor(getMenuName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (Core.placeHolderColor) ? type.getMenuName() : Core.filterColor(type.getMenuName())));
             Core.getCustomPlayer(getPlayer()).currentMount = this;
         }
     }
 
-    public List<String> getDescriptionWithColor() {
-        return Arrays.asList(description.split("\n"));
-    }
-
-    public EntityType getEntityType() {
-        return entityType;
-    }
-
-    public String getName() {
-        return MessageManager.getMessage("Mounts." + name + ".entity-displayname").replace("%playername%", getPlayer().getName());
-    }
-
-    public String getMenuName() {
-        return MessageManager.getMessage("Mounts." + name + ".menu-name");
-    }
-
-    public String getConfigName() {
-        return name;
-    }
-
-    public Material getMaterial() {
-        return this.material;
-    }
-
-
+    /**
+     * Gets the Mount Type.
+     *
+     * @return The Mount Type.
+     */
     public MountType getType() {
         return this.type;
     }
 
-    public Byte getData() {
-        return this.data;
-    }
-
+    /**
+     * Called with an interval of {repeatDelay} ticks.
+     */
     abstract void onUpdate();
 
+    /**
+     * Clears the Mount.
+     */
     public void clear() {
         if (getPlayer() != null && Core.getCustomPlayer(getPlayer()) != null) {
             Core.getCustomPlayer(getPlayer()).currentMount = null;
             getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
         }
-        if (entityType != EntityType.SQUID
-                && entityType != EntityType.SLIME
-                && entityType != EntityType.SPIDER) {
+        if (type.getEntityType() != EntityType.SQUID
+                && type.getEntityType() != EntityType.SLIME
+                && type.getEntityType() != EntityType.SPIDER) {
             if (ent.getPassenger() != null)
                 ent.getPassenger().eject();
             if (ent != null)
@@ -245,24 +240,39 @@ public abstract class Mount implements Listener {
             }
         }
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", (Core.placeHolderColor) ? getMenuName() : Core.filterColor(getMenuName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", (Core.placeHolderColor) ? type.getMenuName() : Core.filterColor(type.getMenuName())));
         owner = null;
         HandlerList.unregisterAll(this);
         HandlerList.unregisterAll(listener);
         onClear();
     }
 
+    /**
+     * Called when mount is cleared.
+     */
     public void onClear() {
     }
 
+    /**
+     * Gets the Owner as a UUID.
+     *
+     * @return The Owner as a UUID.
+     */
     protected UUID getOwner() {
         return owner;
     }
 
+    /**
+     * Gets the owner as a player.
+     * @return the owner as a player.
+     */
     protected Player getPlayer() {
         return Bukkit.getPlayer(owner);
     }
 
+    /**
+     * The Event Listener.
+     */
     public class MountListener implements Listener {
         private Mount mount;
 
@@ -278,11 +288,15 @@ public abstract class Mount implements Listener {
                 return;
             String name = null;
             try {
-                name = getName();
+                name = type.getName(getPlayer());
             } catch (Exception e) {
             }
 
-            if (name != null && getPlayer() != null /*&& event.getVehicle().getCustomName() != null*/ && event.getVehicle().getCustomName().equals(name) && event.getExited() == getPlayer()) {
+            if (name != null
+                    && owner != null
+                    && getPlayer() != null
+                    && event.getVehicle().getCustomName().equals(name)
+                    && event.getExited() == getPlayer()) {
                 Core.getCustomPlayer(getPlayer()).removeMount();
             }
         }
@@ -316,69 +330,6 @@ public abstract class Mount implements Listener {
                 }
             }
         }
-    }
-
-    public List<String> getDescription() {
-        List<String> desc = new ArrayList<>();
-        for (String string : description.split("\n")) {
-            desc.add(string.replace('&', '§'));
-        }
-        return desc;
-    }
-
-    private String fromList(List<String> description) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < description.size(); i++) {
-            stringBuilder.append(description.get(i) + (i < description.size() - 1 ? "\n" : ""));
-        }
-        return stringBuilder.toString();
-    }
-
-    public boolean showsDescription() {
-        return SettingsManager.getConfig().getBoolean("Mounts." + getConfigName() + ".Show-Description");
-    }
-
-    public boolean canBeFound() {
-        return SettingsManager.getConfig().getBoolean("Mounts." + getConfigName() + ".Can-Be-Found-In-Treasure-Chests");
-    }
-
-    public enum MountType {
-
-        DEFAULT("", ""),
-        DRUGGEDHORSE("ultracosmetics.mounts.druggedhorse", "DruggedHorse"),
-        INFERNALHORROR("ultracosmetics.mounts.infernalhorror", "InfernalHorror"),
-        GLACIALSTEED("ultracosmetics.mounts.glacialsteed", "GlacialSteed"),
-        WALKINGDEAD("ultracosmetics.mounts.walkingdead", "WalkingDead"),
-        MOUNTOFFIRE("ultracosmetics.mounts.mountoffire", "MountOfFire"),
-        MOUNTOFWATER("ultracosmetics.mounts.mountofwater", "MountOfWater"),
-        ECOLOGISTHORSE("ultracosmetics.mounts.ecologisthorse", "EcologistHorse"),
-        SNAKE("ultracosmetics.mounts.snake", "Snake"),
-        NYANSHEEP("ultracosmetics.mounts.nyansheep", "NyanSheep"),
-        DRAGON("ultracosmetics.mounts.dragon", "Dragon"),
-        SKYSQUID("ultracosmetics.mounts.skysquid", "SkySquid"),
-        SLIME("ultracosmetics.mounts.slime", "Slime"),
-        HYPECART("ultracosmetics.mounts.hypecart", "HypeCart"),
-        SPIDER("ultracosmetics.mounts.spider", "Spider"),
-        RUDOLPH("ultracosmetics.mounts.rudolph", "Rudolph"),
-        MOLTENSNAKE("ultracosmetics.mounts.moltensnake", "MoltenSnake");
-
-
-        String permission;
-        String configName;
-
-        MountType(String permission, String configName) {
-            this.permission = permission;
-            this.configName = configName;
-        }
-
-        public String getPermission() {
-            return permission;
-        }
-
-        public boolean isEnabled() {
-            return SettingsManager.getConfig().getBoolean("Mounts." + configName + ".Enabled");
-        }
-
     }
 
 }

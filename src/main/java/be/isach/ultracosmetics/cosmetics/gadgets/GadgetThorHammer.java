@@ -26,13 +26,13 @@ public class GadgetThorHammer extends Gadget implements Listener {
     Vector v;
 
     public GadgetThorHammer(UUID owner) {
-        super(owner, GadgetType.THOR_HAMMER);
+        super(owner, GadgetType.THORHAMMER);
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         final Item i = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.IRON_AXE, (byte) 0, MessageManager.getMessage("Gadgets.ThorHammer.name")));
         i.setPickupDelay(0);
         i.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.4));
@@ -84,7 +84,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
 
     }
 

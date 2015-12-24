@@ -13,11 +13,14 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -34,26 +37,73 @@ import java.util.UUID;
 public abstract class Gadget implements Listener {
 
     /**
-     * If true, it will
+     * If true, it will differentiate left and right click.
      */
     public boolean useTwoInteractMethods;
-    private String configName;
+
+    /**
+     * The Ammo Purchase inventory.
+     */
     private Inventory inv;
+
+    /**
+     * If it should open Gadget Menu after purchase.
+     */
     public boolean openGadgetsInvAfterAmmo;
+
+    /**
+     * Event listener.
+     */
     private Listener listener;
+
+    /**
+     * Type of the Gadget.
+     */
     private GadgetType type;
-    public boolean displayCountdownMessage = true;
+
+    /**
+     * If true, will display cooldown left when fail on use
+     * because cooldown active.
+     */
+    public boolean displayCooldownMessage = true;
+
+    /**
+     * Required permission.
+     */
     private String permission;
+
+    /**
+     * Owner's UUID.
+     */
     private UUID owner;
+
+    /**
+     * If true, it will affect players (velocity).
+     */
     boolean affectPlayers;
+
+    /**
+     * Last Clicked Block by the player.
+     */
     protected Block lastClickedBlock;
+
+    /**
+     * Gadget ItemStack.
+     */
     protected ItemStack itemStack;
 
+    /**
+     * If Gadget interaction should run asynchronously.
+     */
+    protected boolean asyncAction = false;
+
     public Gadget(final UUID owner, final GadgetType type) {
-        this.configName = type.configName;
         this.permission = type.permission;
-        affectPlayers = SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Affect-Players");
         this.type = type;
+        this.affectPlayers = type.affectPlayers();
+        if (!type.isEnabled())
+            return;
+
         this.useTwoInteractMethods = false;
         if (owner != null) {
             this.owner = owner;
@@ -75,7 +125,9 @@ public abstract class Gadget implements Listener {
                             if (Core.cooldownInBar) {
                                 if (getPlayer().getItemInHand() != null
                                         && itemStack != null
-                                        && getPlayer().getItemInHand().isSimilar(itemStack)
+                                        && getPlayer().getItemInHand().hasItemMeta()
+                                        && getPlayer().getItemInHand().getItemMeta().hasDisplayName()
+                                        && getPlayer().getItemInHand().getItemMeta().getDisplayName().contains(getType().getName())
                                         && Core.getCustomPlayer(getPlayer()).canUse(type) != -1)
                                     sendCooldownBar();
                                 double left = Core.getCustomPlayer(getPlayer()).canUse(type);
@@ -93,11 +145,12 @@ public abstract class Gadget implements Listener {
                             }
                         } else {
                             cancel();
-                            unregister();
+                            unregisterListeners();
                         }
                     } catch (NullPointerException exc) {
                         removeItem();
                         onClear();
+                        removeListener();
                         getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())));
                         cancel();
                     }
@@ -106,6 +159,7 @@ public abstract class Gadget implements Listener {
             runnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, 1);
             listener = new GadgetListener(this);
             Core.registerListener(listener);
+            Core.registerListener(this);
             if (getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")) != null) {
                 getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")));
                 getPlayer().getInventory().remove((int) SettingsManager.getConfig().get("Gadget-Slot"));
@@ -120,9 +174,12 @@ public abstract class Gadget implements Listener {
         }
     }
 
-    /*
-    Gadget-Name ■■■■■■■■■■ <time>(0.0)s
+    /**
+     * Unregister Listener.
      */
+    public void removeListener() {
+        HandlerList.unregisterAll(this);
+    }
 
     /**
      * Sends the current cooldown in action bar.
@@ -168,15 +225,35 @@ public abstract class Gadget implements Listener {
         return type.getData();
     }
 
-    abstract void onInteractRightClick();
+    /**
+     * If useTwoInteractMethods is true,
+     * called when only a right click is called.
+     * <p/>
+     * Otherwise, called when a right or left click
+     * is performed.
+     */
+    abstract void onRightClick();
 
-    abstract void onInteractLeftClick();
+    /**
+     * Called when a left click is done with gadget,
+     * only called if useTwoInteractMethods is true.
+     */
+    abstract void onLeftClick();
 
+    /**
+     * Called on each tick.
+     */
     abstract void onUpdate();
 
+    /**
+     * Called when gadget is cleared.
+     */
     public abstract void onClear();
 
-    public void unregister() {
+    /**
+     * unregister listeners.
+     */
+    public void unregisterListeners() {
         try {
             HandlerList.unregisterAll(this);
             HandlerList.unregisterAll(listener);
@@ -184,28 +261,54 @@ public abstract class Gadget implements Listener {
         }
     }
 
+    /**
+     * Gets the owner as a UUID.
+     *
+     * @return the owner as a UUID.
+     */
     protected UUID getOwner() {
         return owner;
     }
 
+    /**
+     * Gets the owner as a player.
+     *
+     * @return the owner as a player.
+     */
     protected Player getPlayer() {
         return Bukkit.getPlayer(owner);
     }
 
+    /**
+     * Removes the item.
+     */
     public void removeItem() {
         itemStack = null;
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
     }
 
+    /**
+     * Gets the price for each ammo purchase.
+     *
+     * @return the price for each ammo purchase.
+     */
     public int getPrice() {
-        return (int) SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Price");
+        return (int) SettingsManager.getConfig().get("Gadgets." + type.getConfigName() + ".Ammo.Price");
     }
 
+    /**
+     * Gets the ammo it should give after a purchase.
+     *
+     * @return the ammo it should give after a purchase.
+     */
     public int getResultAmmoAmount() {
-        return (int) SettingsManager.getConfig().get("Gadgets." + configName + ".Ammo.Result-Amount");
+        return (int) SettingsManager.getConfig().get("Gadgets." + type.getConfigName() + ".Ammo.Result-Amount");
     }
 
-    public void buyAmmo() {
+    /**
+     * Opens Ammo Purchase Menu.
+     */
+    public void openAmmoPurchaseMenu() {
 
         Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Buy-Ammo"));
 
@@ -229,6 +332,9 @@ public abstract class Gadget implements Listener {
 
     public int lastPage = 1;
 
+    /**
+     * Event Listener.
+     */
     public class GadgetListener implements Listener {
         private Gadget gadget;
 
@@ -262,7 +368,7 @@ public abstract class Gadget implements Listener {
                                 Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                                     @Override
                                     public void run() {
-                                        GadgetManager.openGadgetsMenu((Player) event.getWhoClicked(), lastPage);
+                                        GadgetManager.openMenu((Player) event.getWhoClicked(), lastPage);
                                         openGadgetsInvAfterAmmo = false;
                                         lastPage = 1;
                                     }
@@ -283,8 +389,8 @@ public abstract class Gadget implements Listener {
         }
 
         @EventHandler
-        protected void onPlayerInteract(PlayerInteractEvent event) {
-            Player player = event.getPlayer();
+        protected void onPlayerInteract(final PlayerInteractEvent EVENT) {
+            Player player = EVENT.getPlayer();
             UUID uuid = player.getUniqueId();
             CustomPlayer cp = Core.getCustomPlayer(getPlayer());
             if (!uuid.equals(gadget.owner)) return;
@@ -293,8 +399,8 @@ public abstract class Gadget implements Listener {
             if (itemStack.getData().getData() != gadget.getData()) return;
             if (player.getInventory().getHeldItemSlot() != (int) SettingsManager.getConfig().get("Gadget-Slot")) return;
             if (Core.getCustomPlayer(getPlayer()).currentGadget != gadget) return;
-            if (event.getAction() == Action.PHYSICAL) return;
-            event.setCancelled(true);
+            if (EVENT.getAction() == Action.PHYSICAL) return;
+            EVENT.setCancelled(true);
             player.updateInventory();
             if (!Core.getCustomPlayer(getPlayer()).hasGadgetsEnabled()) {
                 getPlayer().sendMessage(MessageManager.getMessage("Gadgets-Enabled-Needed"));
@@ -305,11 +411,11 @@ public abstract class Gadget implements Listener {
 
             if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
                 if (Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) < 1) {
-                    buyAmmo();
+                    openAmmoPurchaseMenu();
                     return;
                 }
             }
-            if (type == GadgetType.PORTAL_GUN) {
+            if (type == GadgetType.PORTALGUN) {
                 if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
                     return;
@@ -327,7 +433,7 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.DISCO_BALL) {
+            if (type == GadgetType.DISCOBALL) {
                 if (Core.discoBalls.size() > 0) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.DiscoBall.Already-Active"));
                     return;
@@ -337,10 +443,25 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.CHRISTMAS_TREE) {
-                if (event.getClickedBlock() == null
-                        || event.getClickedBlock().getType() == Material.AIR) {
+            if (type == GadgetType.CHRISTMASTREE) {
+                if (EVENT.getClickedBlock() == null
+                        || EVENT.getClickedBlock().getType() == Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
+                    return;
+                }
+            }
+            if (type == GadgetType.TRAMPOLINE) {
+                // Check blocks above.
+                Location loc1 = getPlayer().getLocation().add(2, 15, 2);
+                Location loc2 = getPlayer().getLocation().clone().add(-2, 0, -2);
+                Block block = loc1.getBlock().getRelative(3, 0, 0);
+                Block block2 = loc1.getBlock().getRelative(3, 1, 0);
+                Cuboid checkCuboid = new Cuboid(loc1, loc2);
+
+                if (!checkCuboid.isEmpty()
+                        || block.getType() != Material.AIR
+                        || block2.getType() != Material.AIR) {
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
                     return;
                 }
             }
@@ -356,7 +477,7 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.EXPLOSIVE_SHEEP) {
+            if (type == GadgetType.EXPLOSIVESHEEP) {
                 if (Core.explosiveSheep.size() > 0) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ExplosiveSheep.Already-Active"));
                     return;
@@ -375,18 +496,36 @@ public abstract class Gadget implements Listener {
                 itemStack = ItemFactory.create(type.getMaterial(), type.getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget");
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
             }
-            if (event.getClickedBlock() != null
-                    && event.getClickedBlock().getType() != Material.AIR)
-                lastClickedBlock = event.getClickedBlock();
-            if (useTwoInteractMethods) {
-                if (event.getAction() == Action.RIGHT_CLICK_AIR
-                        || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-                    onInteractRightClick();
-                else if (event.getAction() == Action.LEFT_CLICK_BLOCK
-                        || event.getAction() == Action.LEFT_CLICK_AIR)
-                    onInteractLeftClick();
+            if (EVENT.getClickedBlock() != null
+                    && EVENT.getClickedBlock().getType() != Material.AIR)
+                lastClickedBlock = EVENT.getClickedBlock();
+            if (asyncAction) {
+                Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (useTwoInteractMethods) {
+                            if (EVENT.getAction() == Action.RIGHT_CLICK_AIR
+                                    || EVENT.getAction() == Action.RIGHT_CLICK_BLOCK)
+                                onRightClick();
+                            else if (EVENT.getAction() == Action.LEFT_CLICK_BLOCK
+                                    || EVENT.getAction() == Action.LEFT_CLICK_AIR)
+                                onLeftClick();
+                        } else {
+                            onRightClick();
+                        }
+                    }
+                });
             } else {
-                onInteractRightClick();
+                if (useTwoInteractMethods) {
+                    if (EVENT.getAction() == Action.RIGHT_CLICK_AIR
+                            || EVENT.getAction() == Action.RIGHT_CLICK_BLOCK)
+                        onRightClick();
+                    else if (EVENT.getAction() == Action.LEFT_CLICK_BLOCK
+                            || EVENT.getAction() == Action.LEFT_CLICK_AIR)
+                        onLeftClick();
+                } else {
+                    onRightClick();
+                }
             }
 
         }
@@ -409,16 +548,48 @@ public abstract class Gadget implements Listener {
             }
         }
 
+        /**
+         * Cancel players from removing, picking the item in their inventory.
+         *
+         * @param event
+         */
+        @EventHandler(priority = EventPriority.LOWEST)
+        public void cancelMove(InventoryClickEvent event) {
+            Player player = (Player) event.getWhoClicked();
+            if (player == getPlayer()) {
+                if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT
+                        || event.getClick() == ClickType.NUMBER_KEY || event.getClick() == ClickType.UNKNOWN) {
+                    event.setCancelled(true);
+                    player.updateInventory();
+                    return;
+                }
+                if (event.getCurrentItem() != null) {
+                    if (event.getCurrentItem().equals(itemStack)) {
+                        event.setCancelled(true);
+                        player.updateInventory();
+                        return;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Cancel players from removing, picking the item in their inventory.
+         *
+         * @param event
+         */
         @EventHandler
-        protected void onInventoryClick(InventoryClickEvent event) {
-            if (event.getCurrentItem() != null
-                    && event.getCurrentItem().getType() == type.getMaterial()
-                    && event.getCurrentItem().getData().getData() == type.getData()
-                    && event.getCurrentItem().getItemMeta().hasDisplayName()
-                    && event.getCurrentItem().getItemMeta().getDisplayName().endsWith(getName())) {
-                event.setCancelled(true);
+        public void cancelMove(InventoryDragEvent event) {
+            Player player = (Player) event.getWhoClicked();
+            for (ItemStack item : event.getNewItems().values()) {
+                if (item != null
+                        && player == getPlayer()
+                        && item.equals(itemStack)) {
+                    event.setCancelled(true);
+                    ((Player) event.getWhoClicked()).updateInventory();
+                    return;
+                }
             }
         }
     }
-
 }

@@ -26,11 +26,11 @@ public class GadgetBlackHole extends Gadget {
     Item i;
 
     public GadgetBlackHole(UUID owner) {
-        super(owner, GadgetType.BLACK_HOLE);
+        super(owner, GadgetType.BLACKHOLE);
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         if (i != null) {
             i.remove();
             i = null;
@@ -94,6 +94,6 @@ public class GadgetBlackHole extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

@@ -37,7 +37,7 @@ public class GadgetDiscoBall extends Gadget {
     PositionSongPlayer positionSongPlayer;
 
     public GadgetDiscoBall(UUID owner) {
-        super(owner, GadgetType.DISCO_BALL);
+        super(owner, GadgetType.DISCOBALL);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class GadgetDiscoBall extends Gadget {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         armorStand = (ArmorStand) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(0, 3, 0), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
@@ -175,6 +175,6 @@ public class GadgetDiscoBall extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

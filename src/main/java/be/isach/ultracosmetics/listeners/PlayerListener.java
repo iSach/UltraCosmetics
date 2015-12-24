@@ -6,11 +6,14 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,21 +34,7 @@ public class PlayerListener implements Listener {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-                            if (event.getPlayer().getInventory().getItem(slot) != null) {
-                                if (event.getPlayer().getInventory().getItem(slot).hasItemMeta()
-                                        && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                                        && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
-                                    event.getPlayer().getInventory().remove(slot);
-                                    event.getPlayer().getInventory().setItem(slot, null);
-                                }
-                                event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
-                                event.getPlayer().getInventory().remove(slot);
-                            }
-                            String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
-                            Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-                            byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
-                            event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
+                            Core.getPlayerManager().getCustomPlayer(event.getPlayer()).giveMenuItem();
                         }
                     }, 5);
                 }
@@ -65,21 +54,7 @@ public class PlayerListener implements Listener {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-                            if (event.getPlayer().getInventory().getItem(slot) != null) {
-                                if (event.getPlayer().getInventory().getItem(slot).hasItemMeta()
-                                        && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                                        && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
-                                    event.getPlayer().getInventory().remove(slot);
-                                    event.getPlayer().getInventory().setItem(slot, null);
-                                }
-                                event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
-                                event.getPlayer().getInventory().remove(slot);
-                            }
-                            String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
-                            Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-                            byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
-                            event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
+                            Core.getCustomPlayer(event.getPlayer()).giveMenuItem();
                         }
                     }, 5);
                 }
@@ -101,13 +76,46 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPickUp(InventoryClickEvent event) {
+    /**
+     * Cancel players from removing, picking the item in their inventory.
+     *
+     * @param event
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void cancelMove(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if ((event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
+                && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+            event.setCancelled(true);
+            player.updateInventory();
+            return;
+        }
         if (event.getCurrentItem() != null
                 && event.getCurrentItem().hasItemMeta()
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
             event.setCancelled(true);
+            player.updateInventory();
+            return;
+        }
+    }
+
+    /**
+     * Cancel players from removing, picking the item in their inventory.
+     *
+     * @param event
+     */
+    @EventHandler
+    public void cancelMove(InventoryDragEvent event) {
+        for (ItemStack item : event.getNewItems().values()) {
+            if (item != null
+                    && item.hasItemMeta()
+                    && item.getItemMeta().hasDisplayName()
+                    && item.getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                event.setCancelled(true);
+                ((Player) event.getWhoClicked()).updateInventory();
+                return;
+            }
         }
     }
 
@@ -131,14 +139,8 @@ public class PlayerListener implements Listener {
         if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
             Core.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
         Core.getCustomPlayer(event.getPlayer()).clear();
+        Core.getPlayerManager().getCustomPlayer(event.getPlayer()).removeMenuItem();
         Core.getPlayerManager().remove(event.getPlayer());
-        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-        if (event.getPlayer().getInventory().getItem(slot) != null
-                && event.getPlayer().getInventory().getItem(slot).hasItemMeta()
-                && event.getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                && event.getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            event.getPlayer().getInventory().setItem(slot, null);
-        }
     }
 
     @EventHandler
@@ -150,9 +152,16 @@ public class PlayerListener implements Listener {
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
             if (Core.getCustomPlayer(event.getEntity()).currentGadget != null)
                 event.getDrops().remove(event.getEntity().getInventory().getItem((Integer) SettingsManager.getConfig().get("Gadget-Slot")));
-            if (Core.getCustomPlayer(event.getEntity()).currentHat != null) {
+            if (Core.getCustomPlayer(event.getEntity()).currentHat != null)
                 event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentHat.getItemStack());
-            }
+            if (Core.getCustomPlayer(event.getEntity()).currentHelmet != null)
+                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentHelmet.getItemStack());
+            if (Core.getCustomPlayer(event.getEntity()).currentChestplate != null)
+                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentChestplate.getItemStack());
+            if (Core.getCustomPlayer(event.getEntity()).currentLeggings != null)
+                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentLeggings.getItemStack());
+            if (Core.getCustomPlayer(event.getEntity()).currentBoots != null)
+                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentBoots.getItemStack());
             Core.getCustomPlayer(event.getEntity()).clear();
             event.getDrops().remove(event.getEntity().getInventory().getItem(slot));
             event.getEntity().getInventory().setItem(slot, null);
@@ -161,11 +170,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            if (FallDamageManager.shouldBeProtected(event.getEntity())) {
-                event.setCancelled(true);
-            }
-        }
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL
+                && FallDamageManager.shouldBeProtected(event.getEntity()))
+            event.setCancelled(true);
     }
 
     @EventHandler

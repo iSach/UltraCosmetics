@@ -2,20 +2,17 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.PlayerUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +20,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
-import java.text.DecimalFormat;
 import java.util.UUID;
 
 /**
@@ -36,9 +32,9 @@ public class MountRudolph extends Mount {
     Horse horse;
 
     public MountRudolph(UUID owner) {
-        super(EntityType.HORSE, Material.DEAD_BUSH, (byte) 0, "Rudolph",
-                "ultracosmetics.mounts.rudolph", owner, MountType.RUDOLPH,
-                "&7&oWhat would be Christmas\n&7&owithout Rudolph!");
+        super(
+                owner, MountType.RUDOLPH
+        );
 
         if (owner != null) {
             horse = (Horse) ent;
@@ -82,7 +78,7 @@ public class MountRudolph extends Mount {
         Vector vectorLeft = getLeftVector(location).multiply(0.5).multiply(1.6);
         Vector rightVector = getRightVector(location).multiply(0.5).multiply(0.4);
 
-        Vector playerVector = PlayerUtils.getHorizontalDirection(getPlayer()).multiply(0.75);
+        Vector playerVector = PlayerUtils.getHorizontalDirection(getPlayer(), 0.75);
 
         location.add(vectorLeft).add(playerVector).add(0, -1.5, 0);
         left.teleport(location);

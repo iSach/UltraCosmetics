@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -16,10 +15,9 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
     double i = 0;
 
     public ParticleEffectBloodHelix(UUID owner) {
-        super(Particles.REDSTONE, Material.REDSTONE, (byte) 0x0, "BloodHelix", "ultracosmetics.particleeffects.bloodhelix", owner,
-                ParticleEffectType.BLOODHELIX, 1,
-                "&7&oAncient legend says this magic\n&7&o enpowers the blood of its user,\n&7&ogiving them godly powers");
-        repeatDelay = 20;
+        super(owner,
+                ParticleEffectType.BLOODHELIX
+        );
     }
 
     @Override

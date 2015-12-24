@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.pets.Pet;
+import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.util.AnvilGUI;
 import be.isach.ultracosmetics.util.ItemFactory;
 import net.md_5.bungee.api.ChatColor;
@@ -21,25 +21,33 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Sacha on 11/11/15.
  */
 public class PetManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
+    static List<Player> noSpamList = new ArrayList<>();
 
-    public static void openPetsMenu(final Player p) {
+    private final static int[] COSMETICS_SLOTS =
+            {
+                    10, 11, 12, 13, 14, 15, 16,
+                    19, 20, 21, 22, 23, 24, 25,
+                    28, 29, 30, 31, 32, 33, 34
+            };
+
+
+    public static void openMenu(final Player p, int page) {
+        page = Math.max(1, Math.min(page, getMaxPagesAmount()));
+        final int finalPage = page;
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                int listSize = 0;
-                for (Pet m : Core.getPets()) {
-                    if (!m.getType().isEnabled()) continue;
-                    listSize++;
-                }
+                int listSize = PetType.enabled().size();
                 int slotAmount = 54;
                 if (listSize < 22)
                     slotAmount = 54;
@@ -48,46 +56,38 @@ public class PetManager implements Listener {
                 if (listSize < 8)
                     slotAmount = 36;
 
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Pets") +
+                        " §7§o(" + finalPage + "/" + getMaxPagesAmount() + ")");
 
-                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Pets"));
-
-                int i = 10;
-                for (Pet pet : Core.getPets()) {
-                    if (!pet.getType().isEnabled() && (boolean) SettingsManager.getConfig().get("Disabled-Items.Show-Custom-Disabled-Item")) {
-                        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Type"));
-                        Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                        String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                        inv.setItem(i, ItemFactory.create(material, data, name));
-                        if (i == 25 || i == 34 || i == 16) {
-                            i += 3;
-                        } else {
-                            i++;
-                        }
-                        continue;
-                    }
-                    if (!pet.getType().isEnabled()) continue;
+                int i = 0;
+                int from = 1;
+                if (finalPage > 1)
+                    from = 21 * (finalPage - 1) + 1;
+                int to = 21 * finalPage;
+                for (int h = from; h <= to; h++) {
+                    if (h > PetType.enabled().size())
+                        break;
+                    PetType pet = PetType.enabled().get(h - 1);
+                    if (!pet.isEnabled()) continue;
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item"))
-                        if (!p.hasPermission(pet.getType().getPermission()))
+                        if (!p.hasPermission(pet.getPermission()))
                             continue;
-                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(pet.getType().getPermission())) {
+                    if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(pet.getPermission())) {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                         String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(i, ItemFactory.create(material, data, name));
-                        if (i == 25 || i == 34 || i == 16) {
-                            i += 3;
-                        } else {
-                            i++;
-                        }
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                        i++;
                         continue;
                     }
                     String lore = null;
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore")) {
-                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(pet.getType().getPermission()) ? "Yes" : "No")))));
+                        lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig()
+                                .get("No-Permission.Lore-Message-" + ((p.hasPermission(pet.getPermission()) ? "Yes" : "No")))));
                     }
                     String toggle = MessageManager.getMessage("Menu.Spawn");
                     CustomPlayer cp = Core.getCustomPlayer(p);
-                    if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
+                    if (cp.currentPet != null && cp.currentPet.getType() == pet)
                         toggle = MessageManager.getMessage("Menu.Despawn");
                     String customName = "";
                     if (Core.getCustomPlayer(p).getPetName(pet.getConfigName()) != null) {
@@ -96,7 +96,7 @@ public class PetManager implements Listener {
                     ItemStack is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName);
                     if (lore != null)
                         is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName);
-                    if (cp.currentPet != null && cp.currentPet.getType() == pet.getType())
+                    if (cp.currentPet != null && cp.currentPet.getType() == pet)
                         is = ItemFactory.addGlow(is);
                     ItemMeta itemMeta = is.getItemMeta();
                     List<String> loreList = new ArrayList<>();
@@ -110,33 +110,35 @@ public class PetManager implements Listener {
                         loreList.add(lore);
                     itemMeta.setLore(loreList);
                     is.setItemMeta(itemMeta);
-                    inv.setItem(i, is);
-                    if (i == 25 || i == 34 || i == 16) {
-                        i += 3;
-                    } else {
-                        i++;
-                    }
+                    inv.setItem(COSMETICS_SLOTS[i], is);
+                    i++;
                 }
 
                 if (Category.PETS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
+
                 inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Pet")));
                 int d = (Category.PETS.hasGoBackArrow() ? 5 : 6);
                 if (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
                     if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
-                        if (p.hasPermission("ultracosmetics.pets.rename")) {
+                        if (p.hasPermission("ultracosmetics.pets.rename"))
                             if (Core.getCustomPlayer(p).currentPet != null)
-                                inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet").replace("%petname%", Core.getCustomPlayer(p).currentPet.getMenuName())));
+                                inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet")
+                                        .replace("%petname%", Core.getCustomPlayer(p).currentPet.getType().getMenuName())));
                             else
                                 inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
-                        }
-                    } else {
-                        if (Core.getCustomPlayer(p).currentPet != null)
-                            inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet").replace("%petname%", Core.getCustomPlayer(p).currentPet.getMenuName())));
-                        else
-                            inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
-                    }
+                    } else if (Core.getCustomPlayer(p).currentPet != null)
+                        inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet")
+                                .replace("%petname%", Core.getCustomPlayer(p).currentPet.getType().getMenuName())));
+                    else
+                        inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
                 }
+
+                if (finalPage > 1)
+                    inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+                if (finalPage < getMaxPagesAmount())
+                    inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+
                 ItemFactory.fillInventory(inv);
 
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
@@ -151,7 +153,7 @@ public class PetManager implements Listener {
 
     @EventHandler
     public void petSelection(InventoryClickEvent event) {
-        if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Pets"))) {
+        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Pets"))) {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
                     || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
@@ -161,20 +163,22 @@ public class PetManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMainMenu((Player) event.getWhoClicked());
+                    MainMenuManager.openMenu((Player) event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Pet"))) {
                     if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentPet != null) {
+                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
                         event.getWhoClicked().closeInventory();
                         Core.getCustomPlayer((Player) event.getWhoClicked()).removePet();
-                        openPetsMenu((Player) event.getWhoClicked());
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     } else return;
                     return;
                 }
                 if (event.getCurrentItem().getType() == Material.NAME_TAG) {
-                    if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Active-Pet-Needed"))) {
+                    if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Active-Pet-Needed")))
                         return;
-                    } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Rename-Pet").replace("%petname%", Core.getCustomPlayer((Player) event.getWhoClicked()).currentPet.getMenuName()))) {
+                    else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Rename-Pet").replace("%petname%",
+                            Core.getCustomPlayer((Player) event.getWhoClicked()).currentPet.getType().getMenuName()))) {
                         renamePet((Player) event.getWhoClicked());
                         return;
                     }
@@ -182,6 +186,12 @@ public class PetManager implements Listener {
                 event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Despawn"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removePet();
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Previous-Page"))) {
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Spawn"))) {
                     StringBuilder sb = new StringBuilder();
@@ -198,60 +208,64 @@ public class PetManager implements Listener {
 
                         }
                     }
-                    activatePetByType(getPetByName(sb.toString()), (Player) event.getWhoClicked());
+                    equipPet(getPetType(sb.toString()), (Player) event.getWhoClicked());
                 }
 
             }
         }
     }
 
-    public static void activatePetByType(Pet.PetType type, final Player PLAYER) {
-        if (!PLAYER.hasPermission(type.getPermission())) {
-            if (!playerList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                return;
-            }
+    /**
+     * Gets the max amount of pages.
+     *
+     * @return the maximum amount of pages.
+     */
+    private static int getMaxPagesAmount() {
+        int max = 21;
+        int i = PetType.enabled().size();
+        if (i % max == 0) return i / max;
+        double j = i / 21;
+        int h = (int) Math.floor(j * 100) / 100;
+        return h + 1;
+    }
+
+    private static int getCurrentPage(Player player) {
+        if (player.getOpenInventory() != null
+                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Pets"))) {
+            String s = player.getOpenInventory().getTopInventory().getTitle()
+                    .replace(MessageManager.getMessage("Menus.Pets") + " §7§o(", "")
+                    .replace("/" + getMaxPagesAmount() + ")", "");
+            return Integer.parseInt(s);
         }
-        if (playerList.contains(PLAYER))
+        return 0;
+    }
+
+    public static void equipPet(final PetType TYPE, final Player PLAYER) {
+        if (!PLAYER.hasPermission(TYPE.getPermission())) {
+            if (!noSpamList.contains(PLAYER)) {
+                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                noSpamList.add(PLAYER);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        noSpamList.remove(PLAYER);
+                    }
+                }, 1);
+            }
             return;
-        playerList.add(PLAYER);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+        }
+        new Thread() {
             @Override
             public void run() {
-                playerList.remove(PLAYER);
+                TYPE.equip(PLAYER);
             }
-        }, 4);
-
-        for (Pet pet : Core.getPets()) {
-            if (pet.getType().isEnabled() && pet.getType() == type) {
-                Class petClass = pet.getClass();
-
-                Class[] cArg = new Class[1];
-                cArg[0] = UUID.class;
-
-                UUID uuid = PLAYER.getUniqueId();
-
-                try {
-                    petClass.getDeclaredConstructor(UUID.class).newInstance(uuid);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        }.run();
     }
 
-    public static Pet.PetType getPetByName(String name) {
-        for (Pet pet : Core.getPets()) {
-            if (pet.getMenuName().replace(" ", "").equals(name.replace(" ", ""))) {
-                return pet.getType();
-            }
-        }
+    public static PetType getPetType(String name) {
+        for (PetType petType : PetType.enabled())
+            if (petType.getMenuName().replace(" ", "").equals(name.replace(" ", "")))
+                return petType;
         return null;
     }
 
@@ -277,14 +291,18 @@ public class PetManager implements Listener {
                 if (event.getSlot() == AnvilGUI.AnvilSlot.OUTPUT) {
                     event.setWillClose(true);
                     event.setWillDestroy(true);
-                    if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")) {
+                    if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")
+                            && Core.petRenameMoney) {
                         buyRenamePet(p, event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
                     } else {
-                        if (Core.getCustomPlayer(p).currentPet.getType() == Pet.PetType.WITHER)
-                            Core.getCustomPlayer(p).currentPet.ent.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                        if (Core.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
+                            Core.getCustomPlayer(p).currentPet.entity.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                                    .replace('&', '§').replace(" ", ""));
                         else
-                            Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
-                        Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getConfigName(), event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                            Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                                    .replace('&', '§').replace(" ", ""));
+                        Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getType().getConfigName(), event.getName()
+                                .replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
                     }
                 } else {
                     event.setWillClose(false);
@@ -309,7 +327,8 @@ public class PetManager implements Listener {
             inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
         }
 
-        inventory.setItem(13, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet-Purchase").replace("%price%", "" + SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")).replace("%name%", name)));
+        inventory.setItem(13, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet-Purchase")
+                .replace("%price%", "" + SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")).replace("%name%", name)));
 
         ItemFactory.fillInventory(inventory);
 
@@ -335,14 +354,13 @@ public class PetManager implements Listener {
                     if (Core.getCustomPlayer(p).getMoney() >= (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")) {
                         Core.economy.withdrawPlayer(p, (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price"));
                         p.sendMessage(MessageManager.getMessage("Successful-Purchase"));
-                        if (Core.getCustomPlayer(p).currentPet.getType() == Pet.PetType.WITHER)
-                            Core.getCustomPlayer(p).currentPet.ent.setCustomName(name);
+                        if (Core.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
+                            Core.getCustomPlayer(p).currentPet.entity.setCustomName(name);
                         else
                             Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(name);
-                        Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getConfigName(), name);
-                    } else {
+                        Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getType().getConfigName(), name);
+                    } else
                         p.sendMessage(MessageManager.getMessage("Not-Enough-Money"));
-                    }
                     renamePetList.remove(p);
                     p.closeInventory();
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {

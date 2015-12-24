@@ -6,12 +6,10 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
@@ -30,7 +28,7 @@ public class MorphCreeper extends Morph {
     private int charge = 0;
 
     public MorphCreeper(UUID owner) {
-        super(DisguiseType.CREEPER, Material.SULPHUR, (byte) 0, "Creeper", "ultracosmetics.morphs.creeper", owner, MorphType.CREEPER, "&7&oNice housssssssse you got! Sssssssh");
+        super(owner, MorphType.CREEPER);
 
         if (owner != null) {
             CreeperWatcher creeperWatcher = (CreeperWatcher) disguise.getWatcher();
@@ -52,7 +50,7 @@ public class MorphCreeper extends Morph {
                         getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.CREEPER_HISS, 0.2f, 1);
                     } else {
                         if (creeperWatcher.isIgnited()) {
-                            disguise = new MobDisguise(disguiseType);
+                            disguise = new MobDisguise(getType().getDisguiseType());
                             DisguiseAPI.disguiseToAll(getPlayer(), disguise);
                             disguise.setShowName(true);
                             if (!Core.getCustomPlayer(getPlayer()).canSeeSelfMorph())

@@ -27,11 +27,11 @@ public class GadgetBatBlaster extends Gadget {
     private HashMap<Player, ArrayList<Bat>> bats = new HashMap();
 
     public GadgetBatBlaster(UUID owner) {
-        super(owner, GadgetType.BAT_BLASTER);
+        super(owner, GadgetType.BATBLASTER);
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         this.playerVelocity.put(getPlayer(), getPlayer().getEyeLocation());
         this.isActive.put(getPlayer(), Long.valueOf(System.currentTimeMillis()));
 
@@ -117,6 +117,6 @@ public class GadgetBatBlaster extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

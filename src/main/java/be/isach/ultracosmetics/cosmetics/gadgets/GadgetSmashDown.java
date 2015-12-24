@@ -36,13 +36,13 @@ public class GadgetSmashDown extends Gadget {
     GadgetSmashDown instance;
 
     public GadgetSmashDown(UUID owner) {
-        super(owner, GadgetType.SMASH_DOWN);
+        super(owner, GadgetType.SMASHDOWN);
         Core.registerListener(this);
         instance = this;
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.FIREWORK_LAUNCH, 2, 1);
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final int taskId = Bukkit.getScheduler().runTaskTimer(Core.getPlugin(), new Runnable() {
@@ -62,7 +62,7 @@ public class GadgetSmashDown extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 
     @EventHandler

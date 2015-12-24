@@ -36,11 +36,10 @@ public class GadgetManager implements Listener {
                     28, 29, 30, 31, 32, 33, 34
             };
 
-    public static void openGadgetsMenu(final Player p, int page) {
-        int listSize = 0;
-        for (GadgetType gadgetType : GadgetType.values())
-            if (gadgetType.isEnabled())
-                listSize++;
+    public static void openMenu(final Player p, int page) {
+        page = Math.max(1, Math.min(page, getMaxPagesAmount()));
+
+        int listSize = GadgetType.enabled().size();
         int slotAmount = 54;
         if (listSize < 22)
             slotAmount = 54;
@@ -57,17 +56,9 @@ public class GadgetManager implements Listener {
             from = 21 * (page - 1) + 1;
         int to = 21 * page;
         for (int h = from; h <= to; h++) {
-            if (h > GadgetType.values().length)
+            if (h > GadgetType.enabled().size())
                 break;
-            GadgetType g = GadgetType.values()[h - 1];
-            if (!g.isEnabled() && SettingsManager.getConfig().getBoolean("Disabled-Items.Show-Custom-Disabled-Item")) {
-                Material material = Material.valueOf(SettingsManager.getConfig().getString("Disabled-Items.Custom-Disabled-Item.Type"));
-                Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("Disabled-Items.Custom-Disabled-Item.Name")).replace("&", "§");
-                inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
-                i++;
-                continue;
-            }
+            GadgetType g = GadgetType.enabled().get(h - 1);
             if (!g.isEnabled()) continue;
             if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item"))
                 if (!p.hasPermission(g.getPermission()))
@@ -120,7 +111,12 @@ public class GadgetManager implements Listener {
 
         if (Category.GADGETS.hasGoBackArrow())
             inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
+        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
+
+        if (Core.getCustomPlayer(p).hasGadgetsEnabled())
+            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
+        else
+            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
 
         ItemFactory.fillInventory(inv);
 
@@ -139,10 +135,7 @@ public class GadgetManager implements Listener {
      */
     private static int getMaxPagesAmount() {
         int max = 21;
-        int i = 0;
-        for (GadgetType gadgetType : GadgetType.values())
-            if (gadgetType.isEnabled())
-                i++;
+        int i = GadgetType.enabled().size();
         if (i % max == 0) return i / max;
         double j = i / 21;
         int h = (int) Math.floor(j * 100) / 100;
@@ -172,21 +165,29 @@ public class GadgetManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMainMenu((Player) event.getWhoClicked());
+                    MainMenuManager.openMenu((Player) event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Gadget"))) {
                     if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentGadget != null) {
                         int currentPage = getCurrentPage((Player) event.getWhoClicked());
                         event.getWhoClicked().closeInventory();
                         Core.getCustomPlayer((Player) event.getWhoClicked()).removeGadget();
-                        openGadgetsMenu((Player) event.getWhoClicked(), currentPage);
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     } else return;
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
-                    openGadgetsMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Previous-Page"))) {
-                    openGadgetsMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Enable-Gadgets"))) {
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).setGadgetsEnabled(true);
+                    event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Disable-Gadgets"))) {
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).setGadgetsEnabled(false);
+                    event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
                     return;
                 }
                 int currentPage = getCurrentPage((Player) event.getWhoClicked());
@@ -209,7 +210,7 @@ public class GadgetManager implements Listener {
                     equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
                     if (cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
-                        cp.currentGadget.buyAmmo();
+                        cp.currentGadget.openAmmoPurchaseMenu();
                         cp.currentGadget.openGadgetsInvAfterAmmo = true;
                     }
                     return;
@@ -237,7 +238,7 @@ public class GadgetManager implements Listener {
                     equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
                     if (cp.currentGadget != null && Core.isAmmoEnabled() && cp.getAmmo(cp.currentGadget.getType().toString().toLowerCase()) < 1 && cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
-                        cp.currentGadget.buyAmmo();
+                        cp.currentGadget.openAmmoPurchaseMenu();
                     }
                 }
 
@@ -246,11 +247,9 @@ public class GadgetManager implements Listener {
     }
 
     public static GadgetType getGadgetByName(String name) {
-        for (GadgetType type : GadgetType.values()) {
-            if (type.getName().replace(" ", "").equals(name.replace(" ", ""))) {
+        for (GadgetType type : GadgetType.values())
+            if (type.getName().replace(" ", "").equals(name.replace(" ", "")))
                 return type;
-            }
-        }
         return null;
     }
 

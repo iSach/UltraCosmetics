@@ -27,14 +27,14 @@ public class GadgetGhostParty extends Gadget {
     Map<Bat, ArmorStand> bats = new HashMap<>();
 
     public GadgetGhostParty(UUID owner) {
-        super(owner, GadgetType.GHOST_PARTY);
+        super(owner, GadgetType.GHOSTPARTY);
 
         if (owner != null)
             Core.registerListener(this);
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         for (int i = 0; i < 20; i++) {
             Bat bat = getPlayer().getWorld().spawn(getPlayer().getLocation().add(0, 1, 0), Bat.class);
             ArmorStand ghost = bat.getWorld().spawn(bat.getLocation(), ArmorStand.class);
@@ -72,7 +72,7 @@ public class GadgetGhostParty extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
 
     }
 

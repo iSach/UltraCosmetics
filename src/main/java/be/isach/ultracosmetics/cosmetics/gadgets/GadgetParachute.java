@@ -35,11 +35,13 @@ public class GadgetParachute extends Gadget {
 
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
 
         Location loc = getPlayer().getLocation();
 
         getPlayer().teleport(loc.clone().add(0, 35, 0));
+
+        getPlayer().setVelocity(new Vector(0, 0, 0));
 
         for (int i = 0; i < 20; i++) {
             Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(MathUtils.randomDouble(0, 0.5), 3, MathUtils.randomDouble(0, 0.5)), EntityType.CHICKEN);
@@ -55,7 +57,7 @@ public class GadgetParachute extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 
     private void killParachute() {

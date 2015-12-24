@@ -10,12 +10,15 @@ import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
+import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +32,14 @@ import java.util.UUID;
  */
 public class CustomPlayer {
 
+    /**
+     * Player UUID.
+     */
     public UUID uuid;
+
+    /**
+     * Current Cosmetics.
+     */
     public Gadget currentGadget = null;
     public Mount currentMount;
     public ParticleEffect currentParticleEffect;
@@ -37,9 +47,23 @@ public class CustomPlayer {
     public TreasureChest currentTreasureChest;
     public Morph currentMorph;
     public Hat currentHat;
+    public Suit currentHelmet,
+            currentChestplate,
+            currentLeggings,
+            currentBoots;
 
+    /**
+     * Cooldown map storing all the current cooldowns for gadgets.
+     */
     private HashMap<GadgetType, Long> gadgetCooldowns = null;
 
+    /**
+     * Allows to store custom data for each player easily.
+     * <p/>
+     * Created on join, and deleted on quit.
+     *
+     * @param uuid The player UUID.
+     */
     public CustomPlayer(UUID uuid) {
         try {
             this.uuid = uuid;
@@ -87,35 +111,43 @@ public class CustomPlayer {
         return valueMillis / 1000d;
     }
 
+    /**
+     * Sets the cooldown of a gadget.
+     *
+     * @param gadget    The gadget.
+     * @param countdown The cooldown to set.
+     */
     public void setCoolDown(GadgetType gadget, double countdown) {
         gadgetCooldowns.put(gadget, (long) (countdown * 1000 + System.currentTimeMillis()));
     }
 
-    public void removeChest() {
-        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-        if (getPlayer().getInventory().getItem(slot) != null
-                && getPlayer().getInventory().getItem(slot).hasItemMeta()
-                && getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                && getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            getPlayer().getInventory().setItem(slot, null);
-        }
-    }
-
+    /**
+     * Get the player owning the CustomPlayer.
+     *
+     * @return The player owning the CustomPlayer.
+     */
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
     }
 
+    /**
+     * Removes the current gadget.
+     */
     public void removeGadget() {
         if (currentGadget != null) {
             if (getPlayer() != null)
                 getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (Core.placeHolderColor) ? currentGadget.getName() : Core.filterColor(currentGadget.getName())));
             currentGadget.removeItem();
             currentGadget.onClear();
-            currentGadget.unregister();
+            currentGadget.removeListener();
+            currentGadget.unregisterListeners();
             currentGadget = null;
         }
     }
 
+    /**
+     * Removes the current Mount.
+     */
     public void removeMount() {
         if (currentMount != null) {
             currentMount.clear();
@@ -124,15 +156,23 @@ public class CustomPlayer {
         }
     }
 
+    /**
+     * Removes the current Pet.
+     */
     public void removePet() {
         if (currentPet != null) {
             if (currentPet.armorStand != null)
                 currentPet.armorStand.remove();
+            for (Item item : currentPet.items)
+                item.remove();
             currentPet.clear();
             currentPet = null;
         }
     }
 
+    /**
+     * Gives a key to the player.
+     */
     public void addKey() {
         if (Core.usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() + 1);
@@ -140,6 +180,9 @@ public class CustomPlayer {
             Core.sqlUtils.addKey(getPlayer());
     }
 
+    /**
+     * Removes a key to the player.
+     */
     public void removeKey() {
         if (Core.usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() - 1);
@@ -147,6 +190,9 @@ public class CustomPlayer {
             Core.sqlUtils.removeKey(getPlayer());
     }
 
+    /**
+     * @return The amount of keys that the player owns.
+     */
     public int getKeys() {
         if (Core.usingFileStorage())
             return Core.usingFileStorage() ?
@@ -155,6 +201,9 @@ public class CustomPlayer {
         return 0;
     }
 
+    /**
+     * Removes the current hat.
+     */
     public void removeHat() {
         if (currentHat == null) return;
         getPlayer().getInventory().setHelmet(null);
@@ -165,6 +214,63 @@ public class CustomPlayer {
         currentHat = null;
     }
 
+    /**
+     * Removes the current suit of armorSlot.
+     *
+     * @param armorSlot The ArmorSlot to remove.
+     */
+    public void removeSuit(ArmorSlot armorSlot) {
+        switch (armorSlot) {
+            case HELMET:
+                if (currentHelmet != null)
+                    currentHelmet.clear();
+                break;
+            case CHESTPLATE:
+                if (currentChestplate != null)
+                    currentChestplate.clear();
+                break;
+            case LEGGINGS:
+                if (currentLeggings != null)
+                    currentLeggings.clear();
+                break;
+            case BOOTS:
+                if (currentBoots != null)
+                    currentBoots.clear();
+                break;
+        }
+    }
+
+    /**
+     * @param armorSlot The armorslot to get.
+     * @return The Suit from the armor slot.
+     */
+    public Suit getSuit(ArmorSlot armorSlot) {
+        switch (armorSlot) {
+            case HELMET:
+                return currentHelmet;
+            case CHESTPLATE:
+                return currentChestplate;
+            case LEGGINGS:
+                return currentLeggings;
+            case BOOTS:
+                return currentBoots;
+        }
+        return null;
+    }
+
+    /**
+     * Removes entire suit.
+     */
+    public void removeSuit() {
+        for (ArmorSlot armorSlot : ArmorSlot.values())
+            removeSuit(armorSlot);
+    }
+
+    /**
+     * Sets current hat.
+     *
+     * @param hat The new hat.
+     */
     public void setHat(Hat hat) {
 
         removeHat();
@@ -182,6 +288,9 @@ public class CustomPlayer {
         currentHat = hat;
     }
 
+    /**
+     * Clears all gadgets.
+     */
     public void clear() {
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             removeMorph();
@@ -193,10 +302,16 @@ public class CustomPlayer {
         removeMount();
         removeTreasureChest();
         removeHat();
+        for (ArmorSlot armorSlot : ArmorSlot.values())
+            removeSuit(armorSlot);
     }
 
-    public void openBuyKeyInventory() {
-
+    /**
+     * Opens the Key Purchase Menu.
+     */
+    public void openKeyPurchaseMenu() {
+        if (!Core.vaultLoaded)
+            return;
         try {
             final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
 
@@ -224,13 +339,20 @@ public class CustomPlayer {
         }
     }
 
+    /**
+     * Removes current Particle Effect.
+     */
     public void removeParticleEffect() {
         if (currentParticleEffect != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", (Core.placeHolderColor) ? currentParticleEffect.getName() : Core.filterColor(currentParticleEffect.getName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", (Core.placeHolderColor) ?
+                    currentParticleEffect.getType().getName() : Core.filterColor(currentParticleEffect.getType().getName())));
             currentParticleEffect = null;
         }
     }
 
+    /**
+     * Removes current Morph.
+     */
     public void removeMorph() {
         if (currentMorph != null) {
             DisguiseAPI.undisguiseToAll(getPlayer());
@@ -240,6 +362,11 @@ public class CustomPlayer {
         }
     }
 
+    /**
+     * Gets Player's Money.
+     *
+     * @return The money amount the player owns.
+     */
     public int getMoney() {
         try {
             return (int) Core.economy.getBalance(getPlayer());
@@ -249,22 +376,31 @@ public class CustomPlayer {
         }
     }
 
+    /**
+     * Sets the name of a pet.
+     *
+     * @param petName The pet name.
+     * @param name    The new name.
+     */
     public void setPetName(String petName, String name) {
-        if (Core.usingFileStorage()) {
+        if (Core.usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
-        } else {
+        else
             Core.sqlUtils.setName(getPlayer(), petName, name);
-        }
     }
 
+    /**
+     * Gets the name of a pet.
+     * @param petName The pet.
+     * @return The pet name.
+     */
     public String getPetName(String petName) {
         try {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Pet-Names." + petName);
             } else {
-                if (Core.sqlUtils.getPetName(getPlayer(), petName).equalsIgnoreCase("Unknown")) {
+                if (Core.sqlUtils.getPetName(getPlayer(), petName).equalsIgnoreCase("Unknown"))
                     return null;
-                }
                 return Core.sqlUtils.getPetName(getPlayer(), petName);
             }
         } catch (NullPointerException e) {
@@ -272,23 +408,29 @@ public class CustomPlayer {
         }
     }
 
-    public void addAmmo(String name, int i) {
-        if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage()) {
-                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + i);
-            } else {
-                Core.sqlUtils.addAmmo(getPlayer(), name, i);
-            }
-        }
+    /**
+     * Gives ammo to player.
+     *
+     * @param name   The gadget.
+     * @param amount The ammo amount to give.
+     */
+    public void addAmmo(String name, int amount) {
+        if (Core.isAmmoEnabled())
+            if (Core.usingFileStorage())
+                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + amount);
+            else
+                Core.sqlUtils.addAmmo(getPlayer(), name, amount);
         if (currentGadget != null)
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                     ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(),
                             "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString()
                                     .toLowerCase()) + " " + currentGadget.getName(), "§9Gadget"));
-
-
     }
 
+    /**
+     * Sets if player has gadgets enabled.
+     * @param enabled if player has gadgets enabled.
+     */
     public void setGadgetsEnabled(Boolean enabled) {
         try {
             if (Core.usingFileStorage()) {
@@ -304,6 +446,9 @@ public class CustomPlayer {
         }
     }
 
+    /**
+     * @return if the player has gadgets enabled or not.
+     */
     public boolean hasGadgetsEnabled() {
         try {
             if (Core.usingFileStorage()) {
@@ -316,6 +461,10 @@ public class CustomPlayer {
         }
     }
 
+    /**
+     * Sets if a player can see his own morph or not.
+     * @param enabled if player should be able to see his own morph.
+     */
     public void setSeeSelfMorph(Boolean enabled) {
         if (Core.usingFileStorage()) {
             SettingsManager.getData(getPlayer()).set("Third-Person-Morph-View", enabled);
@@ -328,6 +477,9 @@ public class CustomPlayer {
             getPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
     }
 
+    /**
+     * @return if player should be able to see his own morph or not.
+     */
     public boolean canSeeSelfMorph() {
         try {
             if (Core.usingFileStorage()) {
@@ -340,7 +492,11 @@ public class CustomPlayer {
         }
     }
 
-
+    /**
+     * Gets the ammo of a gadget.
+     * @param name The gadget.
+     * @return The ammo of the given gadget.
+     */
     public int getAmmo(String name) {
         if (Core.isAmmoEnabled()) {
             if (Core.usingFileStorage()) {
@@ -352,12 +508,19 @@ public class CustomPlayer {
         return 0;
     }
 
+    /**
+     * Clears current Treasure Chest.
+     */
     public void removeTreasureChest() {
         if (currentTreasureChest == null) return;
         this.currentTreasureChest.clear();
         this.currentTreasureChest = null;
     }
 
+    /**
+     * Removes One Ammo of a gadget.
+     * @param name The gadget.
+     */
     public void removeAmmo(String name) {
         if (Core.isAmmoEnabled()) {
             if (Core.usingFileStorage()) {
@@ -368,6 +531,45 @@ public class CustomPlayer {
         }
     }
 
+    /**
+     * Gives the Menu Item.
+     */
+    public void giveMenuItem() {
+        removeMenuItem();
+        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
+        if (getPlayer().getInventory().getItem(slot) != null) {
+            if (getPlayer().getInventory().getItem(slot).hasItemMeta()
+                    && getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
+                    && getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
+                getPlayer().getInventory().remove(slot);
+                getPlayer().getInventory().setItem(slot, null);
+            }
+            getPlayer().getWorld().dropItemNaturally(getPlayer().getLocation(), getPlayer().getInventory().getItem(slot));
+            getPlayer().getInventory().remove(slot);
+        }
+        String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
+        Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
+        byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
+        getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
+    }
+
+    /**
+     * Removes the menu Item.
+     */
+    public void removeMenuItem() {
+        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
+        if (getPlayer().getInventory().getItem(slot) != null
+                && getPlayer().getInventory().getItem(slot).hasItemMeta()
+                && getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
+                && getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
+                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§")))
+            getPlayer().getInventory().setItem(slot, null);
+    }
+
+    /**
+     * Gets the UUID.
+     * @return The UUID.
+     */
     public UUID getUuid() {
         return uuid;
     }

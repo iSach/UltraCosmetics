@@ -33,16 +33,16 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     int radius = 2;
 
     public GadgetPaintballGun(UUID owner) {
-        super(owner, GadgetType.PAINTBALL_GUN);
+        super(owner, GadgetType.PAINTBALLGUN);
         if (owner != null) {
             Core.registerListener(this);
             radius = SettingsManager.getConfig().getInt("Gadgets." + getType().configName + ".Radius");
         }
-        displayCountdownMessage = false;
+        displayCooldownMessage = false;
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         Projectile projectile = getPlayer().launchProjectile(EnderPearl.class, getPlayer().getLocation().getDirection().multiply(2));
         if (projectiles.containsKey(getOwner()))
             projectiles.get(getOwner()).add(projectile);
@@ -149,7 +149,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 
 

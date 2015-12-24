@@ -38,13 +38,13 @@ public class MainMenuManager implements Listener {
             Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
-                    openMainMenu(EVENT.getPlayer());
+                    openMenu(EVENT.getPlayer());
                 }
             });
         }
     }
 
-    public static void openMainMenu(final Player PLAYER) {
+    public static void openMenu(final Player PLAYER) {
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
@@ -54,14 +54,40 @@ public class MainMenuManager implements Listener {
                     return;
                 }
                 boolean chests = Core.treasureChestsEnabled();
-                int add = 0;
-                if (chests)
-                    add = 9;
-                int slotAmount = 27;
-                if (Core.enabledCategories.size() > 5)
-                    slotAmount = 36;
-                if (chests)
-                    slotAmount = 45;
+                int add = 9;
+                int slotAmount = 45;
+                int d = Core.enabledCategories.size();
+                if (d < 5) {
+                    slotAmount -= 18;
+                    add -= 9;
+                }
+
+                if (!chests && Core.enabledCategories.size() == 1) {
+                    switch (Core.enabledCategories.get(0)) {
+                        case GADGETS:
+                            GadgetManager.openMenu(PLAYER, 1);
+                            break;
+                        case MORPHS:
+                            MorphManager.openMenu(PLAYER, 1);
+                            break;
+                        case HATS:
+                            HatManager.openMenu(PLAYER, 1);
+                            break;
+                        case PETS:
+                            PetManager.openMenu(PLAYER, 1);
+                            break;
+                        case EFFECTS:
+                            ParticleEffectManager.openMenu(PLAYER, 1);
+                            break;
+                        case MOUNTS:
+                            MountManager.openMenu(PLAYER, 1);
+                            break;
+                        case SUITS:
+                            SuitManager.openMenu(PLAYER, 1);
+                            break;
+                    }
+                    return;
+                }
 
                 final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Main-Menu"));
 
@@ -74,20 +100,19 @@ public class MainMenuManager implements Listener {
                     ItemStack chest;
 
                     if (Core.getCustomPlayer(PLAYER).getKeys() == 0)
-                        chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+                        chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), Core.vaultLoaded ?
+                                "" : null, Core.vaultLoaded ? MessageManager.getMessage("Click-Buy-Key") : null, Core.vaultLoaded ? "" : null);
                     else
                         chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
 
-                    ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "", MessageManager.getMessage("Your-Keys").replace("%keys%", Core.getCustomPlayer(PLAYER).getKeys() + ""), "", "", MessageManager.getMessage("Click-Buy-Key"), "");
+                    ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "",
+                            MessageManager.getMessage("Your-Keys").replace("%keys%", Core.getCustomPlayer(PLAYER).getKeys() + ""), Core.vaultLoaded ?
+                                    "" : null, Core.vaultLoaded ? MessageManager.getMessage("Click-Buy-Key") : null, Core.vaultLoaded ? "" : null);
                     inv.setItem(5, keys);
                     inv.setItem(3, chest);
                 }
 
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Cosmetics")));
-                if (Core.getCustomPlayer(PLAYER).hasGadgetsEnabled())
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
-                else
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
+                inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Cosmetics")));
 
                 ItemFactory.fillInventory(inv);
 
@@ -105,11 +130,14 @@ public class MainMenuManager implements Listener {
     private static int[] getMainMenuLayout() {
         int[] layout = new int[]{0};
         switch (Core.enabledCategories.size()) {
+            case 7:
+                layout = new int[]{1, 4, 7, 19, 21, 23, 25};
+                break;
             case 6:
-                layout = new int[]{1, 7, 12, 14, 19, 25};
+                layout = new int[]{1, 4, 7, 19, 22, 25};
                 break;
             case 5:
-                layout = new int[]{9, 11, 13, 15, 17};
+                layout = new int[]{1, 7, 13, 20, 24};
                 break;
             case 4:
                 layout = new int[]{10, 12, 14, 16};
@@ -137,34 +165,29 @@ public class MainMenuManager implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
                     return;
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
-                    GadgetManager.openGadgetsMenu((Player) event.getWhoClicked(), 1);
+                    GadgetManager.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
-                    MountManager.openMountsMenu((Player) event.getWhoClicked());
+                    MountManager.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Pets"))) {
-                    PetManager.openPetsMenu((Player) event.getWhoClicked());
+                    PetManager.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))) {
-                    ParticleEffectManager.openParticlesMenu((Player) event.getWhoClicked());
+                    ParticleEffectManager.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Morphs"))) {
-                    MorphManager.openMorphsMenu((Player) event.getWhoClicked());
+                    MorphManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))) {
+                    SuitManager.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).clear();
                     event.getWhoClicked().closeInventory();
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {
-                    HatManager.openHatsMenu((Player) event.getWhoClicked(), 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Enable-Gadgets"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).setGadgetsEnabled(true);
-                    event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Disable-Gadgets"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).setGadgetsEnabled(false);
-                    event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
+                    HatManager.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 }
             }

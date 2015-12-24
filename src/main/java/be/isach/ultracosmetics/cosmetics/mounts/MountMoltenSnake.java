@@ -1,11 +1,14 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.util.PacketSender;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.MagmaCube;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -26,12 +29,12 @@ public class MountMoltenSnake extends Mount {
     float lastPitch;
 
     public MountMoltenSnake(UUID owner) {
-        super(EntityType.MAGMA_CUBE, Material.MAGMA_CREAM, (byte) 0, "MoltenSnake", "ultracosmetics.mounts.moltensnake", owner, MountType.MOLTENSNAKE, "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.");
+        super(owner, MountType.MOLTENSNAKE);
 
         if (owner == null) return;
 
         MagmaCube magmaCube = (MagmaCube) ent;
-        magmaCube.setSize(3);
+        magmaCube.setSize(2);
         entities.add(magmaCube);
         summonTailPart(25);
     }
@@ -40,12 +43,24 @@ public class MountMoltenSnake extends Mount {
     void onUpdate() {
         Vector playerVector = getPlayer().getLocation().getDirection().multiply(0.7);
         for (int i = 0; i < entities.size(); i++) {
-            Entity entity = entities.get(i);
+            final Entity entity = entities.get(i);
             Location loc = entity.getLocation();
-            if (i == 0)
+            if (i == 0) {
                 entity.setVelocity(playerVector);
-            else {
-                entity.teleport(lastLocation);
+                entity.teleport(loc);
+            } else {
+                if (i != 1)
+                    entity.teleport(lastLocation);
+                else {
+                    entity.teleport(lastLocation.clone().add(0, -1.3, 0));
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            for (Player player : getPlayer().getWorld().getPlayers())
+                                PacketSender.send(player, new PacketPlayOutEntityTeleport(((CraftArmorStand) entity).getHandle()));
+                        }
+                    }.run();
+                }
                 ArmorStand as = ((ArmorStand) entity);
                 as.setHeadPose(new EulerAngle(Math.toRadians(lastPitch), Math.toRadians(lastYaw), 0));
             }
@@ -57,7 +72,7 @@ public class MountMoltenSnake extends Mount {
     }
 
     private void summonTailPart(int j) {
-        Location location = getPlayer().getLocation().add(0, -1.5, 0);
+        Location location = getPlayer().getLocation();
         Vector v = getPlayer().getLocation().getDirection().multiply(-0.25);
         for (int i = 0; i < j; i++) {
             ArmorStand armorStand = getPlayer().getWorld().spawn(location.add(v), ArmorStand.class);

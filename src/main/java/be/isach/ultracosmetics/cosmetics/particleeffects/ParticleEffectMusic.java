@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import org.bukkit.Material;
 
 import java.util.Random;
 import java.util.UUID;
@@ -13,8 +12,8 @@ import java.util.UUID;
 public class ParticleEffectMusic extends ParticleEffect {
 
     public ParticleEffectMusic(UUID owner) {
-        super(Particles.NOTE, Material.JUKEBOX, (byte) 0, "Music", "ultracosmetics.particleeffects.music", owner, ParticleEffectType.MUSIC, 4,
-                "&7&oMuch music");
+        super(owner, ParticleEffectType.MUSIC
+        );
     }
 
     @Override

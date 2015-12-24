@@ -31,7 +31,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     ArrayList<EnderPearl> pearls = new ArrayList<>();
 
     public GadgetEtherealPearl(UUID owner) {
-        super(owner, GadgetType.ETHEREAL_PEARL);
+        super(owner, GadgetType.ETHEREALPEARL);
         if (owner != null)
             Core.registerListener(this);
     }
@@ -44,7 +44,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         if (Core.getCustomPlayer(getPlayer()).currentMount != null)
             Core.getCustomPlayer(getPlayer()).removeMount();
         if (getPlayer().getVehicle() instanceof EnderPearl) {
@@ -162,6 +162,6 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

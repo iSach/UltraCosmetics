@@ -23,18 +23,6 @@ public class CustomConfiguration extends YamlConfiguration {
         this.comments = new LinkedHashMap<>();
     }
 
-    /*public void addDefault(String path, Object defaultValue, String... comments) {
-        if (defaultValue != null && comments != null && comments.length > 0 && !this.comments.containsKey(path)) {
-            List<String> commentsList = new ArrayList<>();
-            for (String comment : comments) {
-                if (comment != null) commentsList.add(comment);
-                else commentsList.add("");
-            }
-            this.comments.put(path, commentsList);
-        }
-        super.addDefault(path, defaultValue);
-    }*/
-
     public void addDefault(String path, Object defaultValue, String... comments) {
         if (!contains(path))
             set(path, defaultValue, comments);
@@ -50,14 +38,6 @@ public class CustomConfiguration extends YamlConfiguration {
             this.comments.put(path, commentsList);
         }
         return super.createSection(path);
-    }
-
-    public Map<String, List<String>> getComments() {
-        return new LinkedHashMap<>(this.comments);
-    }
-
-    public List<String> getComments(String path) {
-        return this.comments.containsKey(path) ? new ArrayList<>(this.comments.get(path)) : new ArrayList<String>();
     }
 
     @Override
@@ -168,22 +148,6 @@ public class CustomConfiguration extends YamlConfiguration {
             this.comments.remove(key);
         }
         super.set(key, value);
-    }
-
-    public void setNewLineAfterHeader(boolean newLineAfterHeader) {
-        this.newLineAfterHeader = newLineAfterHeader;
-    }
-
-    public void setNewLinePerKey(boolean newLinePerKey) {
-        this.newLinePerKey = newLinePerKey;
-    }
-
-    public boolean shouldAddNewLineAfterHeader() {
-        return this.newLineAfterHeader;
-    }
-
-    public boolean shouldAddNewLinePerKey() {
-        return this.newLinePerKey;
     }
 
     public static CustomConfiguration loadConfiguration(File file) {

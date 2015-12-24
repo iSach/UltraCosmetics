@@ -29,12 +29,12 @@ public class GadgetColorBomb extends Gadget {
     private boolean running = false;
 
     public GadgetColorBomb(UUID owner) {
-        super(owner, GadgetType.COLOR_BOMB);
+        super(owner, GadgetType.COLORBOMB);
 
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         Item bomb = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) random.nextInt(15), UUID.randomUUID().toString()));
         bomb.setPickupDelay(50000);
         bomb.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(0.7532));
@@ -90,6 +90,7 @@ public class GadgetColorBomb extends Gadget {
                         i.getWorld().playSound(i.getLocation(), Sound.CHICKEN_EGG_POP, 0.2f, 1);
                         for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
                             if (entity instanceof Player)
+                                if (entity.hasMetadata("NPC")) continue;
                                 if (affectPlayers)
                                     MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                         }
@@ -117,6 +118,6 @@ public class GadgetColorBomb extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

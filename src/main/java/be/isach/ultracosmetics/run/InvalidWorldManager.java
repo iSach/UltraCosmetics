@@ -22,7 +22,7 @@ public class InvalidWorldManager implements Runnable {
             try {
                 if (!((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
                     customPlayer.clear();
-                    customPlayer.removeChest();
+                    customPlayer.removeMenuItem();
                 }
             } catch (Exception exc) {
             }

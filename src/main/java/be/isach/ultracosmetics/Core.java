@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics;
 
-import be.isach.ultracosmetics.commands.UltraCosmeticsCommand;
-import be.isach.ultracosmetics.commands.UltraCosmeticsTabCompleter;
+import be.isach.ultracosmetics.command.CommandManager;
+import be.isach.ultracosmetics.command.subcommands.*;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -9,12 +9,12 @@ import be.isach.ultracosmetics.cosmetics.gadgets.GadgetDiscoBall;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetExplosiveSheep;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
-import be.isach.ultracosmetics.cosmetics.morphs.*;
-import be.isach.ultracosmetics.cosmetics.mounts.*;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
+import be.isach.ultracosmetics.cosmetics.mounts.MountType;
 import be.isach.ultracosmetics.cosmetics.mounts.customentities.CustomEntities;
-import be.isach.ultracosmetics.cosmetics.particleeffects.*;
-import be.isach.ultracosmetics.cosmetics.pets.*;
-import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
+import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffectType;
+import be.isach.ultracosmetics.cosmetics.pets.PetType;
+import be.isach.ultracosmetics.cosmetics.suits.SuitType;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.manager.*;
 import be.isach.ultracosmetics.mysql.MySQLConnection;
@@ -24,7 +24,6 @@ import be.isach.ultracosmetics.run.InvalidWorldManager;
 import be.isach.ultracosmetics.util.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -32,59 +31,142 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by sacha on 03/08/15.
  */
 public class Core extends JavaPlugin {
 
+    /**
+     * Manages sub commands.
+     */
+    public static CommandManager commandManager;
+
+    /**
+     * List containing all the active Disco Balls.
+     */
     public static List<GadgetDiscoBall> discoBalls = Collections.synchronizedList(new ArrayList<GadgetDiscoBall>());
+
+    /**
+     * List containing all the active Explosive Sheep.
+     */
     public static List<GadgetExplosiveSheep> explosiveSheep = Collections.synchronizedList(new ArrayList<GadgetExplosiveSheep>());
 
-    private static List<ParticleEffect> particleEffectList = Collections.synchronizedList(new ArrayList<ParticleEffect>());
-    private static List<Mount> mountList = Collections.synchronizedList(new ArrayList<Mount>());
-    private static List<Pet> petList = Collections.synchronizedList(new ArrayList<Pet>());
-    private static List<TreasureChest> treasureChestList = Collections.synchronizedList(new ArrayList<TreasureChest>());
-    private static List<Morph> morphList = Collections.synchronizedList(new ArrayList<Morph>());
-    private static List<Hat> hatList = Collections.synchronizedList(new ArrayList<Hat>());
+    /**
+     * If true, the color will be removed in placeholders.
+     */
+    public static boolean placeHolderColor;
 
-    public static Boolean placeHolderColor;
+    /**
+     * If true, means vault is loaded and enabled.
+     */
+    public static boolean vaultLoaded;
 
-    private static boolean nbsapiEnabled;
-    private static boolean ammoEnabled;
-    private static boolean fileStorage = true;
-    private static boolean treasureChests;
-    public static boolean cooldownInBar;
+    /**
+     * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
+     */
+    private static boolean noteBlockAPIEnabled;
 
+    /**
+     * Determines if Ammo Use is enabled.
+     */
+    private static boolean ammoEnabled,
+
+    /**
+     * Determines of File Storage is enabled.
+     */
+    fileStorage = true,
+
+    /**
+     * Determines if Treasure Chests are enabled.
+     */
+    treasureChests;
+
+    /**
+     * Determines if Treasure Chest Money Loot enabled.
+     */
+    public static boolean moneyTreasureLoot,
+
+    /**
+     * Determines if Gadget Cooldown should be shown in action bar.
+     */
+    cooldownInBar,
+
+    /**
+     * Determines if Pet Renaming required Money.
+     */
+    petRenameMoney;
+
+    /**
+     * If true, debug messages will be shown.
+     */
     static boolean debug = false;
 
+    /**
+     * List of enabled categories.
+     */
     public static List<Category> enabledCategories = new ArrayList<>();
 
+    /**
+     * The Configuration. (config.yml)
+     */
     public static CustomConfiguration config;
+
+    /**
+     * Config File.
+     */
     public static File file;
 
+    /**
+     * Economy, used only if Vault is enabled.
+     */
     public static Economy economy = null;
 
+    /**
+     * MySQL Stuff.
+     */
     private MySQLConnection sql;
-    public Connection co; // SQL Connection.
-    public Table table; // SQL Table.
-    public static SQLUtils sqlUtils; // SQL Utils.
+    public Connection co;
+    public Table table;
+    public static SQLUtils sqlUtils;
 
+    /**
+     * Instance.
+     */
     private static Core core;
 
+    /**
+     * If true, plugin is outdated.
+     */
     public static boolean outdated;
+
+    /**
+     * Last Version published on spigotmc.org.
+     */
     public static String lastVersion;
 
+    /**
+     * Player Manager instance.
+     */
     private static PlayerManager playerManager;
 
+    /**
+     * Called when plugin is enabled.
+     */
     @Override
     public void onEnable() {
         if (!getServer().getVersion().contains("1.8.8")) {
@@ -111,7 +193,7 @@ public class Core extends JavaPlugin {
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            copy(getResource("config.yml"), file);
+            FileUtils.copy(getResource("config.yml"), file);
             log("Config file doesn't exist yet.");
             log("Creating Config File and loading it.");
         }
@@ -122,6 +204,31 @@ public class Core extends JavaPlugin {
         for (World world : Bukkit.getWorlds())
             enabledWorlds.add(world.getName());
         config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");
+
+        config.set("Disabled-Items", null);
+
+        if (!config.contains("TreasureChests.Loots.Gadgets")) {
+            config.createSection("TreasureChests.Loots.Gadgets", "Chance of getting a GADGET", "This is different from ammo!");
+            config.set("TreasureChests.Loots.Gadgets.Enabled", true);
+            config.set("TreasureChests.Loots.Gadgets.Chance", 20);
+            config.set("TreasureChests.Loots.Gadgets.Message.enabled", false);
+            config.set("TreasureChests.Loots.Gadgets.Message.message", "%prefix% &6&l%name% found gadget %gadget%");
+        }
+        if (!config.contains("TreasureChests.Loots.Suits")) {
+            config.createSection("TreasureChests.Loots.Suits");
+            config.set("TreasureChests.Loots.Suits.Enabled", true);
+            config.set("TreasureChests.Loots.Suits.Chance", 10);
+            config.set("TreasureChests.Loots.Suits.Message.enabled", false);
+            config.set("TreasureChests.Loots.Suits.Message.message", "%prefix% &6&l%name% found suit part: %suitw%");
+        }
+
+        if (!config.contains("Categories.Suits")) {
+            config.createSection("Categories.Suits");
+            config.set("Categories.Suits.Main-Menu-Item", "299:0");
+            config.set("Categories.Suits.Go-Back-Arrow", true);
+        }
+
+        config.addDefault("Categories-Enabled.Suits", true);
 
         config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
 
@@ -159,7 +266,7 @@ public class Core extends JavaPlugin {
             log("");
             log("NoteBlockAPI loaded and hooked.");
             log("");
-            nbsapiEnabled = true;
+            noteBlockAPIEnabled = true;
         }
 
 
@@ -171,31 +278,19 @@ public class Core extends JavaPlugin {
 
         registerListener(new PlayerListener());
 
-        log("Registering pets...");
-        registerPets();
-        log("Pets registered.");
-        log("");
-        log("Registering Mounts...");
-        registerMounts();
-        log("Mounts registered.");
-        log("");
-        log("Registering Particle Effects...");
-        registerParticleEffects();
-        log("Particle Effects registered.");
-        log("");
-
-        log("Loading hats...");
-        hatList.addAll(Arrays.asList(Hat.values()));
-        log("Hats loaded.");
-
         log("");
         log("Registering commands...");
         // Register the command
-        getCommand("ultracosmetics").setExecutor(new UltraCosmeticsCommand());
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("uc");
-        getCommand("ultracosmetics").setAliases(arrayList);
-        getCommand("ultracosmetics").setTabCompleter(new UltraCosmeticsTabCompleter());
+
+        commandManager = new CommandManager(this);
+        commandManager.registerCommand(new GadgetsCommand());
+        commandManager.registerCommand(new SelfViewCommand());
+        commandManager.registerCommand(new MenuCommand());
+        commandManager.registerCommand(new GiveCommand());
+        commandManager.registerCommand(new ToggleCommand());
+        commandManager.registerCommand(new ClearCommand());
+        commandManager.registerCommand(new TreasureCommand());
+
         log("Registered command: '/ultracosmetics'.");
         log("Registered command: '/uc'.");
         log("Registered commands.");
@@ -215,9 +310,6 @@ public class Core extends JavaPlugin {
                 enabledCategories.add(c);
         }
 
-        log("Trying to register Morphs...");
-        tryToRegisterMorphs();
-
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -232,10 +324,14 @@ public class Core extends JavaPlugin {
             public void run() {
                 if (SettingsManager.getConfig().getBoolean("Check-For-Updates"))
                     checkForUpdate();
+                if (outdated)
+                    for (Player p : Bukkit.getOnlinePlayers())
+                        if (p.isOp())
+                            p.sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + lastVersion);
             }
         }.run();
 
-        log("Registering Gadgets...");
+        log("Registering Cosmetics...");
         setupCosmeticsConfigs();
         try {
             config.save(file);
@@ -246,26 +342,34 @@ public class Core extends JavaPlugin {
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             log("");
-            log("§c§lMorphs require Lib's Disguises!");
+            log("Morphs require Lib's Disguises!");
             log("");
-            log("§c§lMorphs are disabling..");
+            log("Morphs are disabling..");
             log("");
         }
-        if (ammoEnabled
-                || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))) {
+
+        petRenameMoney = SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled");
+        if ((ammoEnabled
+                || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled"))
+                && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))) {
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
                 log("");
-                log("§c§lVault not found!");
+                log("Vault not found!");
+                if (petRenameMoney) {
+                    log("  Pet renaming will not require Money.");
+                }
+                if (ammoEnabled) {
+                    log("  Ammo Disabled.");
+                }
                 log("");
-                log("§c§lServer shutting down, please install Vault to use Ammo System!");
-                log("");
-                Bukkit.shutdown();
-                return;
+                petRenameMoney = false;
+                ammoEnabled = false;
             }
         }
 
-        if (ammoEnabled
-                || SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled"))
+        if ((ammoEnabled
+                || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))
+                || (treasureChestsEnabled() && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled"))) && Bukkit.getPluginManager().isPluginEnabled("Vault"))
             setupEconomy();
 
         if (!fileStorage) {
@@ -280,24 +384,12 @@ public class Core extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new FallDamageManager(), 0, 1);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new InvalidWorldManager(), 0, 5);
 
-        if (nbsapiEnabled) {
+        if (noteBlockAPIEnabled) {
             File folder = new File(getDataFolder().getPath() + "/songs/");
             if ((!folder.exists()) || (folder.listFiles().length <= 0))
                 saveResource("songs/GetLucky.nbs", true);
             saveResource("songs/NyanCat.nbs", true);
         }
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
-            @Override
-            public void run() {
-                if (outdated) {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (p.isOp())
-                            p.sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + lastVersion);
-                    }
-                }
-            }
-        }, 20);
 
         log("");
         log("Registering listeners...");
@@ -308,6 +400,7 @@ public class Core extends JavaPlugin {
         registerListener(new ParticleEffectManager());
         registerListener(new PetManager());
         registerListener(new HatManager());
+        registerListener(new SuitManager());
         registerListener(new TreasureChestManager());
         if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
             registerListener(new MorphManager());
@@ -323,10 +416,18 @@ public class Core extends JavaPlugin {
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
     }
 
-    private void log(Object object) {
+    /**
+     * Logs a message in console.
+     *
+     * @param object The message to log.
+     */
+    public static void log(Object object) {
         System.out.println("UltraCosmetics -> " + object.toString());
     }
 
+    /**
+     * Overrides config saving to keep comments.
+     */
     @Override
     public void saveConfig() {
         try {
@@ -336,45 +437,20 @@ public class Core extends JavaPlugin {
         }
     }
 
+    /**
+     * Initialize players.
+     */
     private void initPlayers() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             playerManager.create(p);
-            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
-                int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-                if (p.getInventory().getItem(slot) != null) {
-                    if (p.getInventory().getItem(slot).hasItemMeta()
-                            && p.getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                            && p.getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
-                        p.getInventory().remove(slot);
-                        p.getInventory().setItem(slot, null);
-                    }
-                    p.getWorld().dropItemNaturally(p.getLocation(), p.getInventory().getItem(slot));
-                    p.getInventory().remove(slot);
-                }
-                String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
-                Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-                byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
-                p.getInventory().setItem(slot, ItemFactory.create(material, data, name));
-            }
+            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName()))
+                playerManager.getCustomPlayer(p).giveMenuItem();
         }
     }
 
-    private void copy(InputStream in, File file) {
-        try {
-            OutputStream out = new FileOutputStream(file);
-            byte[] buf = new byte[1024];
-
-            int len;
-            while ((len = in.read(buf)) > 0)
-                out.write(buf, 0, len);
-
-            out.close();
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Starts MySQL loop.
+     */
     private void startMySQL() {
         if (!fileStorage) {
             Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
@@ -441,13 +517,16 @@ public class Core extends JavaPlugin {
         }
     }
 
+    /**
+     * Setup default Cosmetics config.
+     */
     private void setupCosmeticsConfigs() {
         for (GadgetType gadgetType : GadgetType.values()) {
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Enabled", true, "if true, the gadget will be enabled.");
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Show-Description", true, "if true, the description of gadget will be showed.");
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-            if (gadgetType == GadgetType.PAINTBALL_GUN) {
+            if (gadgetType == GadgetType.PAINTBALLGUN) {
                 config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
                 config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Enabled", false, "Should it display particles?");
                 config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
@@ -463,137 +542,109 @@ public class Core extends JavaPlugin {
             }
         }
 
-        for (Mount mount : mountList) {
-            config.addDefault("Mounts." + mount.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
-            config.addDefault("Mounts." + mount.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            config.addDefault("Mounts." + mount.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+        for (MountType mountType : MountType.values()) {
+            config.addDefault("Mounts." + mountType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
+            config.addDefault("Mounts." + mountType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Mounts." + mountType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
-        for (ParticleEffect particleEffect : particleEffectList) {
+        for (ParticleEffectType particleEffect : ParticleEffectType.values()) {
             config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Enabled", true, "if true, the effect will be enabled.");
             config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
             config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
-        for (Pet pet : petList) {
+        for (PetType pet : PetType.values()) {
             config.addDefault("Pets." + pet.getConfigName() + ".Enabled", true, "if true, the pet will be enabled.");
             config.addDefault("Pets." + pet.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
             config.addDefault("Pets." + pet.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
-
-        for (Morph morph : morphList) {
-            config.addDefault("Morphs." + morph.getConfigName() + ".Enabled", true, "if true, the morph will be enabled.");
-            config.addDefault("Morphs." + morph.getConfigName() + ".Show-Description", true, "if true, the description of this morph will be showed.");
-            config.addDefault("Morphs." + morph.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-        }
-
-        for (Hat hat : hatList) {
+        if (enabledCategories.contains(Category.MORPHS))
+            for (MorphType morphType : MorphType.values()) {
+                config.addDefault("Morphs." + morphType.getConfigName() + ".Enabled", true, "if true, the morph will be enabled.");
+                config.addDefault("Morphs." + morphType.getConfigName() + ".Show-Description", true, "if true, the description of this morph will be showed.");
+                config.addDefault("Morphs." + morphType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            }
+        for (Hat hat : Hat.values()) {
             config.addDefault("Hats." + hat.getConfigName() + ".Enabled", true, "if true, the hat will be enabled.");
             config.addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
             config.addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+        }
+        for (be.isach.ultracosmetics.cosmetics.suits.SuitType suit : be.isach.ultracosmetics.cosmetics.suits.SuitType.values()) {
+            config.addDefault("Suits." + suit.getConfigName() + ".Enabled", true, "if true, the suit will be enabled.");
+            config.addDefault("Suits." + suit.getConfigName() + ".Show-Description", true, "if true, the description of this suit will be showed.");
+            config.addDefault("Suits." + suit.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
         try {
             config.save(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        for (GadgetType gadgetType : GadgetType.values())
+            if (gadgetType.isEnabled())
+                GadgetType.gadgetTypes.add(gadgetType);
+        for (MountType mountType : MountType.values())
+            if (mountType.isEnabled())
+                MountType.mountTypes.add(mountType);
+        for (ParticleEffectType particleEffectType : ParticleEffectType.values())
+            if (particleEffectType.isEnabled())
+                ParticleEffectType.enabled.add(particleEffectType);
+        for (PetType petType : PetType.values())
+            if (petType.isEnabled())
+                PetType.enabled.add(petType);
+        if (enabledCategories.contains(Category.MORPHS))
+            for (MorphType morphType : MorphType.values())
+                if (morphType.isEnabled())
+                    MorphType.enabled.add(morphType);
+        for (Hat hat : Hat.values())
+            if (hat.isEnabled())
+                Hat.enabled.add(hat);
+        for (SuitType suit : SuitType.values())
+            if (suit.isEnabled())
+                SuitType.enabled.add(suit);
     }
 
-    private void registerParticleEffects() {
-        particleEffectList.add(new ParticleEffectRainCloud(null));
-        particleEffectList.add(new ParticleEffectSnowCloud(null));
-        particleEffectList.add(new ParticleEffectBloodHelix(null));
-        particleEffectList.add(new ParticleEffectFrostLord(null));
-        particleEffectList.add(new ParticleEffectFlameRings(null));
-        particleEffectList.add(new ParticleEffectInLove(null));
-        particleEffectList.add(new ParticleEffectGreenSparks(null));
-        particleEffectList.add(new ParticleEffectFrozenWalk(null));
-        particleEffectList.add(new ParticleEffectMusic(null));
-        particleEffectList.add(new ParticleEffectEnchanted(null));
-        particleEffectList.add(new ParticleEffectInferno(null));
-        particleEffectList.add(new ParticleEffectAngelWings(null));
-        particleEffectList.add(new ParticleEffectSuperHero(null));
-        particleEffectList.add(new ParticleEffectSantaHat(null));
-    }
-
-    private void tryToRegisterMorphs() {
-        if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            morphList.add(new MorphBat(null));
-            morphList.add(new MorphBlaze(null));
-            morphList.add(new MorphSlime(null));
-            morphList.add(new MorphEnderman(null));
-            morphList.add(new MorphChicken(null));
-            morphList.add(new MorphPig(null));
-            morphList.add(new MorphCreeper(null));
-            morphList.add(new MorphWitherSkeleton(null));
-            morphList.add(new MorphSnowman(null));
-            log("Morphs successfully registered.");
-            log("");
-        } else {
-            log("Morphs couldn't be registered.");
-            log("Lib's Disguises must not be installed.");
-            log("");
-        }
-    }
-
+    /**
+     * Check Treasure Chests requirements.
+     */
     private void checkTreasureChests() {
+        moneyTreasureLoot = SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled");
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Enabled")) {
             treasureChests = true;
-            if (!ammoEnabled || !Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
+                    && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
                 Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
                 Bukkit.getConsoleSender().sendMessage("§c§l");
                 Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests require Vault and Ammo System Enabled!");
+                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests' Money Loot requires Vault!");
                 Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests are turning off...");
+                Bukkit.getConsoleSender().sendMessage("§c§lMoney Loot is turned off!");
                 Bukkit.getConsoleSender().sendMessage("§c§l");
                 Bukkit.getConsoleSender().sendMessage("§c§l");
                 Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
-                treasureChests = false;
+                moneyTreasureLoot = false;
             }
         }
     }
 
+    /**
+     * Setups Vault.
+     *
+     * @return {@code true} if it could be set up, otherwise {@code false}.
+     */
     private boolean setupEconomy() {
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
+        if (economyProvider != null)
             economy = economyProvider.getProvider();
-        }
+
+        vaultLoaded = economy != null;
 
         return (economy != null);
     }
 
-    private void registerPets() {
-        petList.add(new PetPiggy(null));
-        petList.add(new PetSheep(null));
-        petList.add(new PetKitty(null));
-        petList.add(new PetDog(null));
-        petList.add(new PetChick(null));
-        petList.add(new PetCow(null));
-        petList.add(new PetEasterBunny(null));
-        petList.add(new PetWither(null));
-        petList.add(new PetPumpling(null));
-        petList.add(new PetChristmasElf(null));
-    }
-
-    private void registerMounts() {
-        mountList.add(new MountDruggedHorse(null));
-        mountList.add(new MountEcologistHorse(null));
-        mountList.add(new MountGlacialSteed(null));
-        mountList.add(new MountInfernalHorror(null));
-        mountList.add(new MountMountOfFire(null));
-        mountList.add(new MountMountOfWater(null));
-        mountList.add(new MountWalkingDead(null));
-        mountList.add(new MountSnake(null));
-        mountList.add(new MountNyanSheep(null));
-        mountList.add(new MountDragon(null));
-        mountList.add(new MountSkySquid(null));
-        mountList.add(new MountSlime(null));
-        mountList.add(new MountHypeCart(null));
-        mountList.add(new MountSpider(null));
-        mountList.add(new MountRudolph(null));
-    }
-
+    /**
+     * Called when plugin disables.
+     */
     @Override
     public void onDisable() {
         playerManager.dispose();
@@ -604,6 +655,9 @@ public class Core extends JavaPlugin {
         CustomEntities.unregisterEntities();
     }
 
+    /**
+     * Checks for new update.
+     */
     private void checkForUpdate() {
         String currentVersion = Core.getPlugin().getDescription().getVersion()
                 .replace("Beta ", "")
@@ -621,42 +675,32 @@ public class Core extends JavaPlugin {
             outdated = false;
     }
 
+    /**
+     * Get a collection of all the CustomPlayers.
+     *
+     * @return
+     */
     public static Collection<CustomPlayer> getCustomPlayers() {
         return playerManager.getPlayers();
     }
 
-    public static List<Pet> getPets() {
-        return petList;
-    }
-
-    public static List<Mount> getMounts() {
-        return mountList;
-    }
-
-    public static List<Hat> getHats() {
-        return hatList;
-    }
-
-    public static List<Morph> getMorphs() {
-        return morphList;
-    }
-
-    public static List<TreasureChest> getTreasureChests() {
-        return treasureChestList;
-    }
-
-    public static List<ParticleEffect> getParticleEffects() {
-        return particleEffectList;
-    }
-
+    /**
+     * @return if ammo system is enabled, or not.
+     */
     public static boolean isAmmoEnabled() {
         return ammoEnabled;
     }
 
+    /**
+     * @return if NoteBlockAPI is loaded.
+     */
     public static boolean isNoteBlockAPIEnabled() {
-        return nbsapiEnabled;
+        return noteBlockAPIEnabled;
     }
 
+    /**
+     * @return if file storage is used.
+     */
     public static boolean usingFileStorage() {
         return fileStorage;
     }
@@ -665,6 +709,12 @@ public class Core extends JavaPlugin {
         return treasureChests;
     }
 
+    /**
+     * Debugs something.
+     *
+     * @param message The message to print.
+     * @return if debug is turned on or off.
+     */
     public static boolean debug(Object message) {
         if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
         return debug;
@@ -679,22 +729,44 @@ public class Core extends JavaPlugin {
         return core;
     }
 
+    /**
+     * Registers a listener.
+     *
+     * @param listenerClass The listener to register.
+     */
     public static void registerListener(Listener listenerClass) {
         Bukkit.getPluginManager().registerEvents(listenerClass, getPlugin());
     }
 
+    /**
+     * Gets the custom player of a player.
+     *
+     * @param player The player.
+     * @return The CustomPlayer of player.
+     */
     public static CustomPlayer getCustomPlayer(Player player) {
         return playerManager.getCustomPlayer(player);
     }
 
+    /**
+     * Gets the Custom Player Manager.
+     *
+     * @return the Custom Player Manager.
+     */
     public static PlayerManager getPlayerManager() {
         return playerManager;
     }
 
+    /**
+     * Gets last version published on Spigot.
+     *
+     * @return last version published on Spigot.
+     */
     public static String getLastVersion() {
         try {
             HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
             con.setDoOutput(true);
+            con.setConnectTimeout(2000);
             con.setRequestMethod("POST");
             con.getOutputStream().write(
                     ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
@@ -708,11 +780,17 @@ public class Core extends JavaPlugin {
         return null;
     }
 
-    public static CharSequence filterColor(String menuName) {
+    /**
+     * Removes color in a text.
+     *
+     * @param toFilter The text to filter.
+     * @return The filtered text.
+     */
+    public static CharSequence filterColor(String toFilter) {
         Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
         for (Character character : chars)
-            menuName = menuName.replace("§" + character, "");
-        return menuName;
+            toFilter = toFilter.replace("§" + character, "");
+        return toFilter;
     }
 
 }

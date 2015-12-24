@@ -21,11 +21,11 @@ public class GadgetChristmasTree extends Gadget {
     int[] logColor = {101, 67, 33};
 
     public GadgetChristmasTree(UUID owner) {
-        super(owner, GadgetType.CHRISTMAS_TREE);
+        super(owner, GadgetType.CHRISTMASTREE);
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         lastLocation = lastClickedBlock.getLocation().add(0.5d, 1.05d, 0.5d);
         active = true;
         Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
@@ -64,8 +64,6 @@ public class GadgetChristmasTree extends Gadget {
             UtilParticles.display(logColor[0], logColor[1], logColor[2], current);
             current.add(vector);
         }
-        current = null;
-        to = null;
     }
 
     private void drawLeavesAndBalls() {
@@ -111,6 +109,6 @@ public class GadgetChristmasTree extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

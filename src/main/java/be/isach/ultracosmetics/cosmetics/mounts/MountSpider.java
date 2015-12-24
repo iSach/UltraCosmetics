@@ -1,8 +1,5 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-
 import java.util.UUID;
 
 /**
@@ -10,7 +7,7 @@ import java.util.UUID;
  */
 public class MountSpider extends Mount {
     public MountSpider(UUID owner) {
-        super(EntityType.SPIDER, Material.WEB, (byte) 0, "Spider", "ultracosmetics.mounts.spider", owner, MountType.SPIDER, "&7&oYou are the spider jockey!");
+        super(owner, MountType.SPIDER);
     }
 
     @Override

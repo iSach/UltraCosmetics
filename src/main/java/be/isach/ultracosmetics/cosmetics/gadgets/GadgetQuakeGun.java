@@ -24,12 +24,12 @@ public class GadgetQuakeGun extends Gadget {
     List<Firework> fireworkList = new ArrayList<>();
 
     public GadgetQuakeGun(UUID owner) {
-        super(owner, GadgetType.QUAKE_GUN);
+        super(owner, GadgetType.QUAKEGUN);
         Core.registerListener(this);
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.BLAZE_DEATH, 1.5f, 1);
 
         Location location = getPlayer().getEyeLocation().subtract(0, 0.4, 0);
@@ -69,7 +69,7 @@ public class GadgetQuakeGun extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 
     @Override

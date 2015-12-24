@@ -36,7 +36,7 @@ public class GadgetRocket extends Gadget {
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         getPlayer().setVelocity(new Vector(0, 1, 0));
         final Location loc = getPlayer().getLocation();
         loc.setX(loc.getBlockX() + 0.5);
@@ -186,6 +186,6 @@ public class GadgetRocket extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
     }
 }

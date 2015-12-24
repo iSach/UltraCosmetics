@@ -10,7 +10,6 @@ import net.minecraft.server.v1_8_R3.GenericAttributes;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -23,10 +22,10 @@ import java.util.UUID;
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountMountOfFire extends Mount {
+public class MountOfFire extends Mount {
 
-    public MountMountOfFire(UUID owner) {
-        super(EntityType.HORSE, Material.BLAZE_POWDER, (byte) 0, "MountOfFire", "ultracosmetics.mounts.mountoffire", owner, MountType.MOUNTOFFIRE, "&7&oThe mount of Hadès!");
+    public MountOfFire(UUID owner) {
+        super(owner, MountType.MOUNTOFFIRE);
         if (owner != null) {
             Core.registerListener(this);
             Horse horse = (Horse) ent;

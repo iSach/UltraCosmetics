@@ -1,10 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
-import org.bukkit.Material;
 
 import java.util.UUID;
 
@@ -16,9 +14,9 @@ public class ParticleEffectSantaHat extends ParticleEffect {
     public int particles = 12;
 
     public ParticleEffectSantaHat(UUID owner) {
-        super(Particles.REDSTONE, Material.INK_SACK, (byte) 0x1, "SantaHat", "ultracosmetics.particleeffects.santahat",
-                owner, ParticleEffectType.SANTAHAT, 2,
-                "&7&oBecome Santa!");
+        super(
+                owner, ParticleEffectType.SANTAHAT
+        );
         ignoreMove = true;
     }
 

@@ -27,12 +27,12 @@ public class GadgetAntiGravity extends Gadget {
 
 
     public GadgetAntiGravity(UUID owner) {
-        super(owner, GadgetType.ANTI_GRAVITY);
+        super(owner, GadgetType.ANTIGRAVITY);
         Core.registerListener(this);
     }
 
     @Override
-    void onInteractRightClick() {
+    void onRightClick() {
         as = getPlayer().getWorld().spawn(getPlayer().getLocation(), ArmorStand.class);
         as.setGravity(false);
         as.setSmall(true);
@@ -55,7 +55,7 @@ public class GadgetAntiGravity extends Gadget {
     }
 
     @Override
-    void onInteractLeftClick() {
+    void onLeftClick() {
 
     }
 
