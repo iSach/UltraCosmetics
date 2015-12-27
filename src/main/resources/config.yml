@@ -38,6 +38,7 @@ Categories:
   Suits:
     Main-Menu-Item: '299:0'
     Go-Back-Arrow: true
+  Clear-Cosmetic-Item: '152:0'
 # Treasure Chests Settings.
 # /uc reload will not be enough to toggle them!
 #

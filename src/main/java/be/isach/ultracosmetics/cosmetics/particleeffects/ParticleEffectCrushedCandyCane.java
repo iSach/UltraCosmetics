@@ -10,14 +10,14 @@ import java.util.UUID;
 /**
  * Created by Sacha on 18/12/15.
  */
-public class ParticleEffectCrushedSugarCane extends ParticleEffect {
+public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 
     private int step;
 
     private static Random random = new Random();
 
-    public ParticleEffectCrushedSugarCane(UUID owner) {
-        super(owner, ParticleEffectType.CRUSHEDSUGARCANE);
+    public ParticleEffectCrushedCandyCane(UUID owner) {
+        super(owner, ParticleEffectType.CRUSHEDCANDYCANE);
     }
 
     @Override

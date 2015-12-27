@@ -105,19 +105,19 @@ public class MorphManager implements Listener {
                 }
 
                 if (Category.MORPHS.hasGoBackArrow())
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Morph")));
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Morph")));
                 int d = (Category.MORPHS.hasGoBackArrow() ? 5 : 6);
 
                 if (Core.getCustomPlayer(p).canSeeSelfMorph())
-                    inv.setItem(inv.getSize() - d, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0x0, MessageManager.getMessage("Disable-Third-Person-View")));
+                    inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getData(), MessageManager.getMessage("Disable-Third-Person-View")));
                 else
-                    inv.setItem(inv.getSize() - d, ItemFactory.create(Material.ENDER_PEARL, (byte) 0x0, MessageManager.getMessage("Enable-Third-Person-View")));
+                    inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getData(), MessageManager.getMessage("Enable-Third-Person-View")));
 
                 if (finalPAGE > 1)
-                    inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+                    inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
                 if (finalPAGE < getMaxPagesAmount())
-                    inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+                    inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
 
                 ItemFactory.fillInventory(inv);
@@ -214,9 +214,13 @@ public class MorphManager implements Listener {
                 } else return;
                 return;
             }
-            event.getWhoClicked().closeInventory();
+            int currentPage = getCurrentPage((Player) event.getWhoClicked());
+            if (Core.closeAfterSelect)
+                event.getWhoClicked().closeInventory();
             if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unmorph"))) {
                 Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
+                if (!Core.closeAfterSelect)
+                    openMenu((Player) event.getWhoClicked(), currentPage);
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Morph"))) {
                 Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
@@ -235,6 +239,8 @@ public class MorphManager implements Listener {
                     }
                 }
                 equipMorph(getMorph(sb.toString()), (Player) event.getWhoClicked());
+                if(!Core.closeAfterSelect)
+                    openMenu((Player)event.getWhoClicked(), currentPage);
             }
 
         }

@@ -84,7 +84,7 @@ public abstract class ParticleEffect implements Listener {
                                                     type.getEffect().display(new Particles.OrdinaryColor(255, 255, 255), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
                                     } else if (getType().getEffect() == Particles.ITEM_CRACK) {
                                         for (int i = 0; i < 15; i++)
-                                            Particles.ITEM_CRACK.display(new Particles.ItemData(Material.INK_SACK, ParticleEffectCrushedSugarCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
+                                            Particles.ITEM_CRACK.display(new Particles.ItemData(Material.INK_SACK, ParticleEffectCrushedCandyCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
                                     } else
                                         UtilParticles.display(type.getEffect(), .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
                                     moving = false;

@@ -60,6 +60,11 @@ public class ItemFactory {
         }
     }
 
+    public static MaterialData createFromConfig(String path) {
+        String config = SettingsManager.getConfig().getString(path);
+        return getMaterialData(config);
+    }
+
     private static MaterialData getMaterialData(String name) {
         return new MaterialData(Integer.parseInt(name.split(":")[0]),
                 (name.split(":").length > 1 ? (byte) Integer.parseInt(name.split(":")[1]) : (byte) 0));

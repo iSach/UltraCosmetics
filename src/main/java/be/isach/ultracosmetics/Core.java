@@ -15,6 +15,7 @@ import be.isach.ultracosmetics.cosmetics.mounts.customentities.CustomEntities;
 import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffectType;
 import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.cosmetics.suits.SuitType;
+import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.manager.*;
 import be.isach.ultracosmetics.mysql.MySQLConnection;
@@ -109,7 +110,12 @@ public class Core extends JavaPlugin {
     /**
      * Determines if Pet Renaming required Money.
      */
-    petRenameMoney;
+    petRenameMoney,
+
+    /**
+     * Should the GUI close after Cosmetic Selection?
+     */
+    closeAfterSelect;
 
     /**
      * If true, debug messages will be shown.
@@ -228,11 +234,24 @@ public class Core extends JavaPlugin {
             config.set("Categories.Suits.Go-Back-Arrow", true);
         }
 
-        config.addDefault("Categories-Enabled.Suits", true);
+        config.addDefault("Categories.Clear-Cosmetic-Item", "152:0", "Item where user click to clear a cosmetic.");
+        config.addDefault("Categories.Previous-Page-Item", "368:0", "Previous Page Item");
+        config.addDefault("Categories.Next-Page-Item", "381:0", "Next Page Item");
+        config.addDefault("Categories.Back-Main-Menu-Item", "262:0", "Back to Main Menu Item");
+        config.addDefault("Categories.Self-View-Item.When-Enabled", "381:0", "Item in Morphs Menu when Self View enabled.");
+        config.addDefault("Categories.Self-View-Item.When-Disabled", "368:0", "Item in Morphs Menu when Self View disabled.");
+        config.addDefault("Categories.Gadgets-Item.When-Enabled", "351:10", "Item in Gadgets Menu when Gadgets enabled.");
+        config.addDefault("Categories.Gadgets-Item.When-Disabled", "351:8", "Item in Gadgets Menu when Gadgets disabled.");
+        config.addDefault("Categories.Rename-Pet-Item", "421:0", "Item in Pets Menu to rename current pet.");
+        config.addDefault("Categories.Close-GUI-After-Select", true, "Should GUI close after selecting a cosmetic?");
+
+        config.addDefault("Categories-Enabled.Suits", true, "Do you want to enable Suits category?");
 
         config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
 
         saveConfig();
+
+        closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
         log("Configuration loaded.");
         log("");
@@ -402,6 +421,7 @@ public class Core extends JavaPlugin {
         registerListener(new HatManager());
         registerListener(new SuitManager());
         registerListener(new TreasureChestManager());
+        registerListener(new MainListener());
         if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
             registerListener(new MorphManager());
         try {

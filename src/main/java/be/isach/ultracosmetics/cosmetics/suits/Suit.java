@@ -58,7 +58,7 @@ public class Suit {
                     drop(itemStack);
                     getPlayer().getInventory().setHelmet(null);
                 }
-                getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), (byte) 0, getType().getName(getArmorSlot()), "", "§9Suit Part"));
+                getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getHelmet();
                 getCustomPlayer().currentHelmet = this;
                 break;
@@ -68,7 +68,7 @@ public class Suit {
                     drop(itemStack);
                     getPlayer().getInventory().setChestplate(null);
                 }
-                getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), (byte) 0, getType().getName(getArmorSlot()), "", "§9Suit Part"));
+                getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getChestplate();
                 getCustomPlayer().currentChestplate = this;
                 break;
@@ -78,7 +78,7 @@ public class Suit {
                     drop(itemStack);
                     getPlayer().getInventory().setLeggings(null);
                 }
-                getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), (byte) 0, getType().getName(getArmorSlot()), "", "§9Suit Part"));
+                getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getLeggings();
                 getCustomPlayer().currentLeggings = this;
                 break;
@@ -88,7 +88,7 @@ public class Suit {
                     drop(itemStack);
                     getPlayer().getInventory().setBoots(null);
                 }
-                getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), (byte) 0, getType().getName(getArmorSlot()), "", "§9Suit Part"));
+                getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getBoots();
                 getCustomPlayer().currentBoots = this;
                 break;

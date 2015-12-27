@@ -1,5 +1,5 @@
 name: UltraCosmetics
-version: 2.0
+version: 2.0.2
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core
@@ -14,40 +14,41 @@ permissions:
     children:
       - ultracosmetics.gadgets.*
       - ultracosmetics.pets.*
-      - ultracosmetics.particleeffecs.*
+      - ultracosmetics.particleeffects.*
       - ultracosmetics.mounts.*
       - ultracosmetics.morphs.*
-      - ultracosmetics.commands.*
+      - ultracosmetics.command.*
+      - ultracosmetics.suits.*
       - ultracosmetics.openmenu
+      - ultracosmetics.receivechest
   ultracosmetics.openmenu:
    default: true
   ultracosmetics.receivechest:
    default: true
   ultracosmetics.commands.*:
     children:
-      - ultracosmetics.commands.reload
-      - ultracosmetics.commands.clear
-      - ultracosmetics.commands.clear.others
-      - ultracosmetics.commands.toggle
-      - ultracosmetics.commands.toggle.others
-      - ultracosmetics.commands.give
-      - ultracosmetics.commands.chest
-      - ultracosmetics.commands.others
-  ultracosmetics.commands.reload:
+      - ultracosmetics.command.clear
+      - ultracosmetics.command.gadgets
+      - ultracosmetics.command.selfview
+      - ultracosmetics.command.menu
+      - ultracosmetics.command.give.others
+      - ultracosmetics.command.toggle.others
+      - ultracosmetics.command.treasure
+  ultracosmetics.command.clear:
     default: op
-  ultracosmetics.commands.clear:
+  ultracosmetics.command.toggle:
     default: op
-  ultracosmetics.commands.clear.others:
+  ultracosmetics.command.toggle.others:
     default: op
-  ultracosmetics.commands.toggle:
+  ultracosmetics.command.give:
     default: op
-  ultracosmetics.commands.toggle.others:
+  ultracosmetics.command.give.others:
     default: op
-  ultracosmetics.commands.give:
+  ultracosmetics.command.treasure:
     default: op
-  ultracosmetics.commands.chest:
+  ultracosmetics.command.gadgets:
     default: op
-  ultracosmetics.commands.others:
+  ultracosmetics.command.selfview:
     default: op
   ultracosmetics.gadgets.*:
     children: 
@@ -75,6 +76,10 @@ permissions:
       - ultracosmetics.gadgets.ghostparty
       - ultracosmetics.gadgets.firework
       - ultracosmetics.gadgets.christmastree
+      - ultracosmetics.gadgets.partypopper
+      - ultracosmetics.gadgets.trampoline
+      - ultracosmetics.gadgets.snowball
+      - ultracosmetics.gadgets.freezecannon
   ultracosmetics.gadgets.paintballgun:
     default: op
   ultracosmetics.gadgets.batblaster:
@@ -123,6 +128,14 @@ permissions:
     default: op
   ultracosmetics.gadgets.christmastree:
     default: op
+  ultracosmetics.gadgets.freezecannon:
+    default: op
+  ultracosmetics.gadgets.partypopper:
+    default: op
+  ultracosmetics.gadgets.snowball:
+    default: op
+  ultracosmetics.gadgets.trampoline:
+    default: op
   ultracosmetics.particleeffecs.*:
     children:
       - ultracosmetics.particleeffects.raincloud
@@ -139,6 +152,9 @@ permissions:
       - ultracosmetics.particleeffects.angelwings
       - ultracosmetics.particleeffects.superhero
       - ultracosmetics.particleeffects.santahat
+      - ultracosmetics.particleeffects.crushedcandycane
+      - ultracosmetics.particleeffects.enderaura
+      - ultracosmetics.particleeffects.flamefairy
   ultracosmetics.particleeffects.raincloud:
     default: op
   ultracosmetics.particleeffects.snowcloud:
@@ -167,6 +183,12 @@ permissions:
     default: op
   ultracosmetics.particleeffects.santahat:
     default: op
+  ultracosmetics.particleeffects.crushedcandycane:
+    default: op
+  ultracosmetics.particleeffects.flamefairy:
+    default: op
+  ultracosmetics.particleeffects.enderaura:
+    default: op
   ultracosmetics.mounts.*:
     children:
       - ultracosmetics.mounts.druggedhorse
@@ -184,6 +206,7 @@ permissions:
       - ultracosmetics.mounts.hypecart
       - ultracosmetics.mounts.spider
       - ultracosmetics.mounts.rudolph
+      - ultracosmetics.mounts.moltensnake
   ultracosmetics.mounts.druggedhorse:
     default: op
   ultracosmetics.mounts.ecologisthorse:
@@ -213,6 +236,8 @@ permissions:
   ultracosmetics.mounts.spider:
     default: op
   ultracosmetics.mounts.rudolph:
+    default: op
+  ultracosmetics.mounts.moltensnake:
     default: op
   ultracosmetics.pets.*:
     children:
@@ -260,6 +285,7 @@ permissions:
       - ultracosmetics.morphs.creeper
       - ultracosmetics.morphs.witherskeleton
       - ultracosmetics.morphs.snowman
+      - ultracosmetics.morphs.elderguardian
   ultracosmetics.morphs.bat:
     default: op
   ultracosmetics.morphs.blaze:
@@ -277,6 +303,8 @@ permissions:
   ultracosmetics.morphs.witherskeleton:
     default: op
   ultracosmetics.morphs.snowman:
+    default: op
+  ultracosmetics.morphs.elderguardian:
     default: op
   ultracosmetics.hats.*:
     children:
@@ -396,4 +424,66 @@ permissions:
   ultracosmetics.hats.present:
     default: op
   ultracosmetics.hats.elf:
+    default: op
+  ultracosmetics.suits.*:
+    children:
+      - ultracosmetics.suits.rave.*
+      - ultracosmetics.suits.astronaut*
+      - ultracosmetics.suits.diamond.*
+      - ultracosmetics.suits.santa.*
+  ultracosmetics.suits.rave.*:
+    children:
+      - ultracosmetics.suits.rave.helmet
+      - ultracosmetics.suits.rave.chestplate
+      - ultracosmetics.suits.rave.leggings
+      - ultracosmetics.suits.rave.boots
+  ultracosmetics.suits.astronaut.*:
+    children:
+      - ultracosmetics.suits.astronaut.helmet
+      - ultracosmetics.suits.astronaut.chestplate
+      - ultracosmetics.suits.astronaut.leggings
+      - ultracosmetics.suits.astronaut.boots
+  ultracosmetics.suits.diamond.*:
+    children:
+      - ultracosmetics.suits.diamond.helmet
+      - ultracosmetics.suits.diamond.chestplate
+      - ultracosmetics.suits.diamond.leggings
+      - ultracosmetics.suits.diamond.boots
+  ultracosmetics.suits.santa.*:
+    children:
+      - ultracosmetics.suits.santa.helmet
+      - ultracosmetics.suits.santa.chestplate
+      - ultracosmetics.suits.santa.leggings
+      - ultracosmetics.suits.santa.boots
+  ultracosmetics.suits.rave.helmet:
+    default: op
+  ultracosmetics.suits.rave.chestplate:
+    default: op
+  ultracosmetics.suits.rave.leggings:
+    default: op
+  ultracosmetics.suits.rave.boots:
+    default: op
+  ultracosmetics.suits.astronaut.helmet:
+    default: op
+  ultracosmetics.suits.astronaut.chestplate:
+    default: op
+  ultracosmetics.suits.astronaut.leggings:
+    default: op
+  ultracosmetics.suits.astronaut.boots:
+    default: op
+  ultracosmetics.suits.diamond.helmet:
+    default: op
+  ultracosmetics.suits.diamond.chestplate:
+    default: op
+  ultracosmetics.suits.diamond.leggings:
+    default: op
+  ultracosmetics.suits.diamond.boots:
+    default: op
+  ultracosmetics.suits.santa.helmet:
+    default: op
+  ultracosmetics.suits.santa.chestplate:
+    default: op
+  ultracosmetics.suits.santa.leggings:
+    default: op
+  ultracosmetics.suits.santa.boots:
     default: op

@@ -286,7 +286,7 @@ public class SuitManager implements Listener {
         if (item != null
                 && item.hasItemMeta()
                 && item.getItemMeta().hasLore()
-                && item.getItemMeta().getLore().contains("§9Suit Part")) {
+                && item.getItemMeta().getLore().contains(MessageManager.getMessage("Suits.Suit-Part-Lore"))) {
             event.getItemDrop().remove();
             event.getPlayer().closeInventory();
             event.getPlayer().updateInventory();
@@ -303,7 +303,7 @@ public class SuitManager implements Listener {
         if (EVENT.getCurrentItem() != null
                 && EVENT.getCurrentItem().hasItemMeta()
                 && EVENT.getCurrentItem().getItemMeta().hasLore()
-                && EVENT.getCurrentItem().getItemMeta().getLore().contains("§9Suit Part")) {
+                && EVENT.getCurrentItem().getItemMeta().getLore().contains(MessageManager.getMessage("Suits.Suit-Part-Lore"))) {
             EVENT.setCancelled(true);
             EVENT.setResult(Event.Result.DENY);
             EVENT.getWhoClicked().closeInventory();
@@ -314,7 +314,7 @@ public class SuitManager implements Listener {
                         if (itemStack != null
                                 && itemStack.hasItemMeta()
                                 && itemStack.getItemMeta().hasLore()
-                                && itemStack.getItemMeta().getLore().contains("§9Suit Part")
+                                && itemStack.getItemMeta().getLore().contains(MessageManager.getMessage("Suits.Suit-Part-Lore"))
                                 && itemStack != EVENT.getWhoClicked().getInventory().getHelmet())
                             EVENT.getWhoClicked().getInventory().remove(itemStack);
                     }

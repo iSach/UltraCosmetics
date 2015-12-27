@@ -44,22 +44,22 @@ public enum SuitType {
     /**
      * The Helmet material.
      */
-    private Material h,
+    private Material helmet,
 
     /**
      * The Chestplate material.
      */
-    c,
+    chestplate,
 
     /**
      * The Leggings material.
      */
-    l,
+    leggings,
 
     /**
      * The Boots material.
      */
-    b;
+    boots;
 
     /**
      * List of all the enabled Suits.
@@ -81,10 +81,10 @@ public enum SuitType {
         this.permission = "ultracosmetics.suits." + permissionSuffix;
         this.description = defaultDesc;
         this.configName = configName;
-        this.b = b;
-        this.h = h;
-        this.c = c;
-        this.l = l;
+        this.boots = b;
+        this.helmet = h;
+        this.chestplate = c;
+        this.leggings = l;
         this.clazz = clazz;
     }
 
@@ -118,7 +118,7 @@ public enum SuitType {
      * @return The Helmet material in menu
      */
     public Material getHelmet() {
-        return h;
+        return helmet;
     }
 
     /**
@@ -127,7 +127,7 @@ public enum SuitType {
      * @return The Chestplate material in menu
      */
     public Material getChestplate() {
-        return c;
+        return chestplate;
     }
 
     /**
@@ -136,7 +136,7 @@ public enum SuitType {
      * @return The Leggings material in menu
      */
     public Material getLeggings() {
-        return l;
+        return leggings;
     }
 
     /**
@@ -145,7 +145,7 @@ public enum SuitType {
      * @return The Boots material in menu
      */
     public Material getBoots() {
-        return b;
+        return boots;
     }
 
     public Material getMaterial(ArmorSlot armorSlot) {

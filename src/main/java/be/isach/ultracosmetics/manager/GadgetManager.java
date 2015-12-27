@@ -105,18 +105,18 @@ public class GadgetManager implements Listener {
         }
 
         if (page > 1)
-            inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+            inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
         if (page < getMaxPagesAmount())
-            inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+            inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
         if (Category.GADGETS.hasGoBackArrow())
-            inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
+            inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
+        inv.setItem(inv.getSize() - 4, ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Gadget")));
 
         if (Core.getCustomPlayer(p).hasGadgetsEnabled())
-            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
+            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Enabled").getItemType(), ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Enabled").getData(), MessageManager.getMessage("Disable-Gadgets")));
         else
-            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
+            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Disabled").getItemType(), ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Disabled").getData(), MessageManager.getMessage("Enable-Gadgets")));
 
         ItemFactory.fillInventory(inv);
 
@@ -191,7 +191,8 @@ public class GadgetManager implements Listener {
                     return;
                 }
                 int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                event.getWhoClicked().closeInventory();
+                if (Core.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
                 CustomPlayer cp = Core.getCustomPlayer((Player) event.getWhoClicked());
                 if (Core.isAmmoEnabled() && event.getAction() == InventoryAction.PICKUP_HALF) {
                     StringBuilder sb = new StringBuilder();
@@ -218,6 +219,8 @@ public class GadgetManager implements Listener {
 
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Deactivate"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeGadget();
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Activate"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeGadget();
@@ -239,6 +242,9 @@ public class GadgetManager implements Listener {
                     if (cp.currentGadget != null && Core.isAmmoEnabled() && cp.getAmmo(cp.currentGadget.getType().toString().toLowerCase()) < 1 && cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
                         cp.currentGadget.openAmmoPurchaseMenu();
+                    } else {
+                        if (!Core.closeAfterSelect)
+                            openMenu((Player) event.getWhoClicked(), currentPage);
                     }
                 }
 

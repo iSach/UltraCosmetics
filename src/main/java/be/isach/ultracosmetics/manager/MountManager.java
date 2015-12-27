@@ -100,14 +100,15 @@ public class MountManager implements Listener {
                 }
 
                 if (finalPage > 1)
-                    inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+                    inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
                 if (finalPage < getMaxPagesAmount())
-                    inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+                    inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
                 if (Category.MOUNTS.hasGoBackArrow())
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - (Category.MOUNTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Mount")));
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - (Category.MOUNTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Mount")));
 
+                ItemFactory.fillInventory(inv);
 
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                     @Override
@@ -141,9 +142,13 @@ public class MountManager implements Listener {
                     } else return;
                     return;
                 }
-                event.getWhoClicked().closeInventory();
+                int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                if (Core.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Despawn"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeMount();
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
                     openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
@@ -168,6 +173,8 @@ public class MountManager implements Listener {
                         }
                     }
                     equipMount(getMountType(sb.toString()), (Player) event.getWhoClicked());
+                    if(!Core.closeAfterSelect)
+                        openMenu((Player)event.getWhoClicked(), currentPage);
                 }
 
             }

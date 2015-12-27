@@ -37,7 +37,7 @@ public enum PetType {
     private EntityType entityType;
     private Class<? extends Pet> clazz;
 
-    private PetType(String permission, String configName, Material material, byte data, String defaultDesc, EntityType entityType, Class<? extends Pet> clazz) {
+    PetType(String permission, String configName, Material material, byte data, String defaultDesc, EntityType entityType, Class<? extends Pet> clazz) {
         this.permission = permission;
         this.configName = configName;
         this.material = material;
@@ -54,9 +54,9 @@ public enum PetType {
     }
 
     public Pet equip(Player player) {
-        Pet effect = null;
+        Pet pet = null;
         try {
-            effect = (Pet) this.clazz.getDeclaredConstructor(new Class[]{UUID.class}).newInstance(new Object[]{player == null ? null : player.getUniqueId()});
+            pet = this.clazz.getDeclaredConstructor(new Class[]{UUID.class}).newInstance(new Object[]{player == null ? null : player.getUniqueId()});
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -66,7 +66,7 @@ public enum PetType {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        return effect;
+        return pet;
     }
 
     public Material getMaterial() {

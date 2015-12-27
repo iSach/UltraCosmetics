@@ -11,9 +11,11 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -31,6 +33,7 @@ import java.util.Map;
  */
 public class PetManager implements Listener {
 
+    static List<HumanEntity> noSpam = new ArrayList<>();
     static List<Player> noSpamList = new ArrayList<>();
 
     private final static int[] COSMETICS_SLOTS =
@@ -115,29 +118,29 @@ public class PetManager implements Listener {
                 }
 
                 if (Category.PETS.hasGoBackArrow())
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
 
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Pet")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Pet")));
                 int d = (Category.PETS.hasGoBackArrow() ? 5 : 6);
                 if (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
                     if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
                         if (p.hasPermission("ultracosmetics.pets.rename"))
                             if (Core.getCustomPlayer(p).currentPet != null)
-                                inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet")
+                                inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet")
                                         .replace("%petname%", Core.getCustomPlayer(p).currentPet.getType().getMenuName())));
                             else
-                                inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
+                                inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed")));
                     } else if (Core.getCustomPlayer(p).currentPet != null)
-                        inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet")
+                        inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet")
                                 .replace("%petname%", Core.getCustomPlayer(p).currentPet.getType().getMenuName())));
                     else
-                        inv.setItem(inv.getSize() - d, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Active-Pet-Needed")));
+                        inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed")));
                 }
 
                 if (finalPage > 1)
-                    inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+                    inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
                 if (finalPage < getMaxPagesAmount())
-                    inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+                    inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
                 ItemFactory.fillInventory(inv);
 
@@ -152,7 +155,7 @@ public class PetManager implements Listener {
     }
 
     @EventHandler
-    public void petSelection(InventoryClickEvent event) {
+    public void petSelection(final InventoryClickEvent event) {
         if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Pets"))) {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
@@ -183,9 +186,13 @@ public class PetManager implements Listener {
                         return;
                     }
                 }
-                event.getWhoClicked().closeInventory();
+                int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                if (Core.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Despawn"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removePet();
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
                     openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
@@ -208,7 +215,18 @@ public class PetManager implements Listener {
 
                         }
                     }
+                    if(!noSpam.contains(event.getWhoClicked()))
                     equipPet(getPetType(sb.toString()), (Player) event.getWhoClicked());
+                    noSpam.add(event.getWhoClicked());
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                        @Override
+                        public void run() {
+                          noSpam.remove(event.getWhoClicked());
+                        }
+                    }, 1);
+
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                 }
 
             }
@@ -240,15 +258,15 @@ public class PetManager implements Listener {
         return 0;
     }
 
-    public static void equipPet(final PetType TYPE, final Player PLAYER) {
-        if (!PLAYER.hasPermission(TYPE.getPermission())) {
-            if (!noSpamList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                noSpamList.add(PLAYER);
+    public static void equipPet(final PetType type, final Player player) {
+        if (!player.hasPermission(type.getPermission())) {
+            if (!noSpamList.contains(player)) {
+                player.sendMessage(MessageManager.getMessage("No-Permission"));
+                noSpamList.add(player);
                 Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
-                        noSpamList.remove(PLAYER);
+                        noSpamList.remove(player);
                     }
                 }, 1);
             }
@@ -257,7 +275,7 @@ public class PetManager implements Listener {
         new Thread() {
             @Override
             public void run() {
-                TYPE.equip(PLAYER);
+                type.equip(player);
             }
         }.run();
     }

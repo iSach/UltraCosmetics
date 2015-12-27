@@ -51,7 +51,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
                             if (Core.isAmmoEnabled()) {
                                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                             } else {
-                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), "§9Gadget"));
+                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), MessageManager.getMessage("Gadgets.Lore")));
                             }
                             i.remove();
                         }
@@ -70,7 +70,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
                     if (Core.isAmmoEnabled()) {
                         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                     } else {
-                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), "§9Gadget"));
+                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), MessageManager.getMessage("Gadgets.Lore")));
                     }
                     hammer.remove(event.getItem());
                     event.getItem().remove();
