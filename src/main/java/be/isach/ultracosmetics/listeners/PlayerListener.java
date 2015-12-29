@@ -84,19 +84,22 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void cancelMove(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if ((event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
-                && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
-            event.setCancelled(true);
-            player.updateInventory();
-            return;
-        }
-        if (event.getCurrentItem() != null
-                && event.getCurrentItem().hasItemMeta()
-                && event.getCurrentItem().getItemMeta().hasDisplayName()
-                && event.getCurrentItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            event.setCancelled(true);
-            player.updateInventory();
-            return;
+        if (((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(player.getWorld().getName())) {
+            
+            if ((event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+                event.setCancelled(true);
+                player.updateInventory();
+                return;
+            }
+            
+            if (event.getCurrentItem() != null
+                    && event.getCurrentItem().hasItemMeta()
+                    && event.getCurrentItem().getItemMeta().hasDisplayName()
+                    && event.getCurrentItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                event.setCancelled(true);
+                player.updateInventory();
+                return;
+            }
         }
     }
 
