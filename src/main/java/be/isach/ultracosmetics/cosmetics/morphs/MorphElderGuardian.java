@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.cosmetics.morphs.customentities.CustomGuardian;
 import be.isach.ultracosmetics.util.CustomEntityFirework;
+import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import net.minecraft.server.v1_8_R3.World;
@@ -49,7 +50,9 @@ public class MorphElderGuardian extends Morph {
         double z = location.getZ();
         customGuardian.setLocation(x, y, z, 0, 0);
 
+        EntitySpawningManager.setBypass(true);
         world.addEntity(customGuardian);
+        EntitySpawningManager.setBypass(false);
 
         getPlayer().setPassenger(customGuardian.getBukkitEntity());
 

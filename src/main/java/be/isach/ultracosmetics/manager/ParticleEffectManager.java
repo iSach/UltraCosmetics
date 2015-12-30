@@ -26,14 +26,13 @@ import java.util.List;
  */
 public class ParticleEffectManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+    static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
@@ -68,8 +67,11 @@ public class ParticleEffectManager implements Listener {
                     if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(particleEffectType.getPermission())) {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§").replace("{cosmetic-name}", particleEffectType.getName()).replace("&", "§");
+                        List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                        String[] array = new String[npLore.size()];
+                        npLore.toArray(array);
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array));
                         i++;
                         continue;
                     }
@@ -119,62 +121,6 @@ public class ParticleEffectManager implements Listener {
                 });
             }
         });
-    }
-
-    @EventHandler
-    public void particleEffectSelection(InventoryClickEvent event) {
-        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Particle-Effects"))) {
-            event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
-                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
-            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))
-                        || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
-                    return;
-                }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMenu((Player) event.getWhoClicked());
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Effect"))) {
-                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentParticleEffect != null) {
-                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                        event.getWhoClicked().closeInventory();
-                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                        openMenu((Player) event.getWhoClicked(), currentPage);
-                    } else return;
-                    return;
-                }
-                int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                if (Core.closeAfterSelect)
-                    event.getWhoClicked().closeInventory();
-                if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unsummon"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                    if (!Core.closeAfterSelect)
-                        openMenu((Player) event.getWhoClicked(), currentPage);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Summon"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                    StringBuilder sb = new StringBuilder();
-                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Summon"), "");
-                    int j = name.split(" ").length;
-                    if (name.contains("("))
-                        j--;
-                    for (int i = 1; i < j; i++) {
-                        sb.append(name.split(" ")[i]);
-                        try {
-                            if (event.getCurrentItem().getItemMeta().getDisplayName().split(" ")[i + 1] != null)
-                                sb.append(" ");
-                        } catch (Exception exc) {
-
-                        }
-                    }
-                    equipEffect(getEffect(sb.toString()), (Player) event.getWhoClicked());
-                    if(!Core.closeAfterSelect)
-                        openMenu((Player)event.getWhoClicked(), currentPage);
-                }
-
-            }
-        }
     }
 
     /**
@@ -229,6 +175,62 @@ public class ParticleEffectManager implements Listener {
             if (effectType.getName().replace(" ", "").equals(name.replace(" ", "")))
                 return effectType;
         return null;
+    }
+
+    @EventHandler
+    public void particleEffectSelection(InventoryClickEvent event) {
+        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Particle-Effects"))) {
+            event.setCancelled(true);
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
+            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))
+                        || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
+                    return;
+                }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
+                    MainMenuManager.openMenu((Player) event.getWhoClicked());
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Effect"))) {
+                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentParticleEffect != null) {
+                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                        event.getWhoClicked().closeInventory();
+                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                        openMenu((Player) event.getWhoClicked(), currentPage);
+                    } else return;
+                    return;
+                }
+                int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                if (Core.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
+                if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unsummon"))) {
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Summon"))) {
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                    StringBuilder sb = new StringBuilder();
+                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Summon"), "");
+                    int j = name.split(" ").length;
+                    if (name.contains("("))
+                        j--;
+                    for (int i = 1; i < j; i++) {
+                        sb.append(name.split(" ")[i]);
+                        try {
+                            if (event.getCurrentItem().getItemMeta().getDisplayName().split(" ")[i + 1] != null)
+                                sb.append(" ");
+                        } catch (Exception exc) {
+
+                        }
+                    }
+                    equipEffect(getEffect(sb.toString()), (Player) event.getWhoClicked());
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
+                }
+
+            }
+        }
     }
 
 }

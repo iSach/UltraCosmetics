@@ -27,14 +27,13 @@ import java.util.List;
  */
 public class GadgetManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+    static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
@@ -66,8 +65,11 @@ public class GadgetManager implements Listener {
             if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled") && !p.hasPermission(g.getPermission())) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", g.getName()).replace("&", "§");
+                List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                String[] array = new String[npLore.size()];
+                npLore.toArray(array);
+                inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array));
                 i++;
                 continue;
             }
@@ -153,6 +155,35 @@ public class GadgetManager implements Listener {
         return 0;
     }
 
+    public static GadgetType getGadgetByName(String name) {
+        for (GadgetType type : GadgetType.values())
+            if (type.getName().replace(" ", "").equals(name.replace(" ", "")))
+                return type;
+        return null;
+    }
+
+    public static void equipGadget(final GadgetType type, final Player PLAYER) {
+        if (!PLAYER.hasPermission(type.getPermission())) {
+            if (!playerList.contains(PLAYER)) {
+                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                playerList.add(PLAYER);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        playerList.remove(PLAYER);
+                    }
+                }, 1);
+            }
+            return;
+        }
+        new Thread() {
+            @Override
+            public void run() {
+                type.equip(PLAYER);
+            }
+        }.run();
+    }
+
     @EventHandler
     public void gadgetSelection(InventoryClickEvent event) {
         if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Gadgets"))) {
@@ -225,7 +256,7 @@ public class GadgetManager implements Listener {
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Activate"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeGadget();
                     StringBuilder sb = new StringBuilder();
-                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Activate"), "");
+                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Activate"), "");
                     int j = name.split(" ").length;
                     if (name.contains("("))
                         j--;
@@ -250,35 +281,6 @@ public class GadgetManager implements Listener {
 
             }
         }
-    }
-
-    public static GadgetType getGadgetByName(String name) {
-        for (GadgetType type : GadgetType.values())
-            if (type.getName().replace(" ", "").equals(name.replace(" ", "")))
-                return type;
-        return null;
-    }
-
-    public static void equipGadget(final GadgetType type, final Player PLAYER) {
-        if (!PLAYER.hasPermission(type.getPermission())) {
-            if (!playerList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        playerList.remove(PLAYER);
-                    }
-                }, 1);
-            }
-            return;
-        }
-        new Thread() {
-            @Override
-            public void run() {
-                type.equip(PLAYER);
-            }
-        }.run();
     }
 
 }

@@ -30,9 +30,10 @@ import java.util.UUID;
 /**
  * Created by sacha on 03/08/15.
  * <p/>
- * TODO: SubObjects:
- * - CustomEntityMount
- * - HorseMount
+ * TODO:
+ *   - SubObjects:
+ *     - CustomEntityMount
+ *     - HorseMount
  */
 public abstract class Mount implements Listener {
 
@@ -40,46 +41,38 @@ public abstract class Mount implements Listener {
      * List of all the CustomEntities. (STATIC)
      */
     public static List<net.minecraft.server.v1_8_R3.Entity> customEntities = new ArrayList();
-
-    /**
-     * The Type of the Mount.
-     */
-    private MountType type;
-
-    /**
-     * The Event Listener.
-     */
-    private Listener listener;
-
     /**
      * The Mount Owner's UUID.
      */
     public UUID owner;
-
     /**
      * If the mount is a horse, its variant.
      */
     public Horse.Variant variant;
-
     /**
      * If the mount is a horse, its color.
      */
     public Horse.Color color;
-
     /**
      * The Entity, if it isn't a Custom Entity.
      */
     public Entity ent;
-
     /**
      * The CustomEntity if it is a Custom Entity.
      */
     public net.minecraft.server.v1_8_R3.Entity customEnt;
-
     /**
      * The delay between each mount ticking.
      */
     public int repeatDelay = 2;
+    /**
+     * The Type of the Mount.
+     */
+    private MountType type;
+    /**
+     * The Event Listener.
+     */
+    private Listener listener;
 
     public Mount(final UUID owner, final MountType type) {
         this.type = type;
@@ -295,6 +288,8 @@ public abstract class Mount implements Listener {
             if (name != null
                     && owner != null
                     && getPlayer() != null
+                    && event.getVehicle() != null
+                    && event.getExited() != null
                     && event.getVehicle().getCustomName().equals(name)
                     && event.getExited() == getPlayer()) {
                 Core.getCustomPlayer(getPlayer()).removeMount();

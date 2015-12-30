@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>be.isach</groupId>
     <artifactId>UltraCosmetics</artifactId>
-    <version>2.0.2-RELEASE</version>
+    <version>2.0.3-SNAPSHOT</version>
 
     <repositories>
         <!-- NoteBlockAPI repositery -->
@@ -63,7 +63,6 @@
         <system>jenkins</system>
         <url>http://ci.isach.be/job/UltraCosmetics/</url>
     </ciManagement>
-
     <build>
         <plugins>
             <plugin>
@@ -74,6 +73,15 @@
                     <source>1.7</source>
                     <target>1.7</target>
                     <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+
+                    <outputDirectory>../../Users/Sacha/Desktop/LOCAL/plugins/</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

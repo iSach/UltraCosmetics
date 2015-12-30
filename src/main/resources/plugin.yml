@@ -1,5 +1,5 @@
 name: UltraCosmetics
-version: 2.0.2
+version: Pre-2.0.3
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core
@@ -22,10 +22,10 @@ permissions:
       - ultracosmetics.openmenu
       - ultracosmetics.receivechest
   ultracosmetics.openmenu:
-   default: true
+    default: true
   ultracosmetics.receivechest:
-   default: true
-  ultracosmetics.commands.*:
+    default: true
+  ultracosmetics.command.*:
     children:
       - ultracosmetics.command.clear
       - ultracosmetics.command.gadgets

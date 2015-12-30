@@ -42,10 +42,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by sacha on 03/08/15.
@@ -76,27 +73,6 @@ public class Core extends JavaPlugin {
      * If true, means vault is loaded and enabled.
      */
     public static boolean vaultLoaded;
-
-    /**
-     * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
-     */
-    private static boolean noteBlockAPIEnabled;
-
-    /**
-     * Determines if Ammo Use is enabled.
-     */
-    private static boolean ammoEnabled,
-
-    /**
-     * Determines of File Storage is enabled.
-     */
-    fileStorage = true,
-
-    /**
-     * Determines if Treasure Chests are enabled.
-     */
-    treasureChests;
-
     /**
      * Determines if Treasure Chest Money Loot enabled.
      */
@@ -116,59 +92,194 @@ public class Core extends JavaPlugin {
      * Should the GUI close after Cosmetic Selection?
      */
     closeAfterSelect;
-
-    /**
-     * If true, debug messages will be shown.
-     */
-    static boolean debug = false;
-
     /**
      * List of enabled categories.
      */
     public static List<Category> enabledCategories = new ArrayList<>();
-
     /**
      * The Configuration. (config.yml)
      */
     public static CustomConfiguration config;
-
     /**
      * Config File.
      */
     public static File file;
-
     /**
      * Economy, used only if Vault is enabled.
      */
     public static Economy economy = null;
-
-    /**
-     * MySQL Stuff.
-     */
-    private MySQLConnection sql;
-    public Connection co;
-    public Table table;
     public static SQLUtils sqlUtils;
-
-    /**
-     * Instance.
-     */
-    private static Core core;
-
     /**
      * If true, plugin is outdated.
      */
     public static boolean outdated;
-
     /**
      * Last Version published on spigotmc.org.
      */
     public static String lastVersion;
+    /**
+     * If true, debug messages will be shown.
+     */
+    static boolean debug = false;
+    /**
+     * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
+     */
+    private static boolean noteBlockAPIEnabled;
+    /**
+     * Determines if Ammo Use is enabled.
+     */
+    private static boolean ammoEnabled,
 
+    /**
+     * Determines of File Storage is enabled.
+     */
+    fileStorage = true,
+
+    /**
+     * Determines if Treasure Chests are enabled.
+     */
+    treasureChests;
+    /**
+     * Instance.
+     */
+    private static Core core;
     /**
      * Player Manager instance.
      */
     private static PlayerManager playerManager;
+    public Connection co;
+    public Table table;
+    /**
+     * MySQL Stuff.
+     */
+    private MySQLConnection sql;
+
+    /**
+     * Logs a message in console.
+     *
+     * @param object The message to log.
+     */
+    public static void log(Object object) {
+        System.out.println("UltraCosmetics -> " + object.toString());
+    }
+
+    /**
+     * Get a collection of all the CustomPlayers.
+     *
+     * @return
+     */
+    public static Collection<CustomPlayer> getCustomPlayers() {
+        return playerManager.getPlayers();
+    }
+
+    /**
+     * @return if ammo system is enabled, or not.
+     */
+    public static boolean isAmmoEnabled() {
+        return ammoEnabled;
+    }
+
+    /**
+     * @return if NoteBlockAPI is loaded.
+     */
+    public static boolean isNoteBlockAPIEnabled() {
+        return noteBlockAPIEnabled;
+    }
+
+    /**
+     * @return if file storage is used.
+     */
+    public static boolean usingFileStorage() {
+        return fileStorage;
+    }
+
+    public static boolean treasureChestsEnabled() {
+        return treasureChests;
+    }
+
+    /**
+     * Debugs something.
+     *
+     * @param message The message to print.
+     * @return if debug is turned on or off.
+     */
+    public static boolean debug(Object message) {
+        if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
+        return debug;
+    }
+
+    /**
+     * Gets the UltraCosmetics Plugin Object.
+     *
+     * @return
+     */
+    public static Plugin getPlugin() {
+        return core;
+    }
+
+    /**
+     * Registers a listener.
+     *
+     * @param listenerClass The listener to register.
+     */
+    public static void registerListener(Listener listenerClass) {
+        Bukkit.getPluginManager().registerEvents(listenerClass, getPlugin());
+    }
+
+    /**
+     * Gets the custom player of a player.
+     *
+     * @param player The player.
+     * @return The CustomPlayer of player.
+     */
+    public static CustomPlayer getCustomPlayer(Player player) {
+        return playerManager.getCustomPlayer(player);
+    }
+
+    /**
+     * Gets the Custom Player Manager.
+     *
+     * @return the Custom Player Manager.
+     */
+    public static PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    /**
+     * Gets last version published on Spigot.
+     *
+     * @return last version published on Spigot.
+     */
+    public static String getLastVersion() {
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
+            con.setDoOutput(true);
+            con.setConnectTimeout(2000);
+            con.setRequestMethod("POST");
+            con.getOutputStream().write(
+                    ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
+            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
+            if (version.length() <= 7) {
+                return version;
+            }
+        } catch (Exception ex) {
+            System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
+        }
+        return null;
+    }
+
+    /**
+     * Removes color in a text.
+     *
+     * @param toFilter The text to filter.
+     * @return The filtered text.
+     */
+    public static CharSequence filterColor(String toFilter) {
+        Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
+        for (Character character : chars)
+            toFilter = toFilter.replace("§" + character, "");
+        return toFilter;
+    }
 
     /**
      * Called when plugin is enabled.
@@ -244,6 +355,7 @@ public class Core extends JavaPlugin {
         config.addDefault("Categories.Gadgets-Item.When-Disabled", "351:8", "Item in Gadgets Menu when Gadgets disabled.");
         config.addDefault("Categories.Rename-Pet-Item", "421:0", "Item in Pets Menu to rename current pet.");
         config.addDefault("Categories.Close-GUI-After-Select", true, "Should GUI close after selecting a cosmetic?");
+        config.addDefault("No-Permission.Custom-Item.Lore", Arrays.asList("", "&c&lYou do not have permission for this!", ""));
 
         config.addDefault("Categories-Enabled.Suits", true, "Do you want to enable Suits category?");
 
@@ -434,15 +546,6 @@ public class Core extends JavaPlugin {
         log("");
         log("UltraCosmetics finished loading and is now enabled!");
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-    }
-
-    /**
-     * Logs a message in console.
-     *
-     * @param object The message to log.
-     */
-    public static void log(Object object) {
-        System.out.println("UltraCosmetics -> " + object.toString());
     }
 
     /**
@@ -693,124 +796,6 @@ public class Core extends JavaPlugin {
                 outdated = false;
         } else
             outdated = false;
-    }
-
-    /**
-     * Get a collection of all the CustomPlayers.
-     *
-     * @return
-     */
-    public static Collection<CustomPlayer> getCustomPlayers() {
-        return playerManager.getPlayers();
-    }
-
-    /**
-     * @return if ammo system is enabled, or not.
-     */
-    public static boolean isAmmoEnabled() {
-        return ammoEnabled;
-    }
-
-    /**
-     * @return if NoteBlockAPI is loaded.
-     */
-    public static boolean isNoteBlockAPIEnabled() {
-        return noteBlockAPIEnabled;
-    }
-
-    /**
-     * @return if file storage is used.
-     */
-    public static boolean usingFileStorage() {
-        return fileStorage;
-    }
-
-    public static boolean treasureChestsEnabled() {
-        return treasureChests;
-    }
-
-    /**
-     * Debugs something.
-     *
-     * @param message The message to print.
-     * @return if debug is turned on or off.
-     */
-    public static boolean debug(Object message) {
-        if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
-        return debug;
-    }
-
-    /**
-     * Gets the UltraCosmetics Plugin Object.
-     *
-     * @return
-     */
-    public static Plugin getPlugin() {
-        return core;
-    }
-
-    /**
-     * Registers a listener.
-     *
-     * @param listenerClass The listener to register.
-     */
-    public static void registerListener(Listener listenerClass) {
-        Bukkit.getPluginManager().registerEvents(listenerClass, getPlugin());
-    }
-
-    /**
-     * Gets the custom player of a player.
-     *
-     * @param player The player.
-     * @return The CustomPlayer of player.
-     */
-    public static CustomPlayer getCustomPlayer(Player player) {
-        return playerManager.getCustomPlayer(player);
-    }
-
-    /**
-     * Gets the Custom Player Manager.
-     *
-     * @return the Custom Player Manager.
-     */
-    public static PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
-    /**
-     * Gets last version published on Spigot.
-     *
-     * @return last version published on Spigot.
-     */
-    public static String getLastVersion() {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-            con.setDoOutput(true);
-            con.setConnectTimeout(2000);
-            con.setRequestMethod("POST");
-            con.getOutputStream().write(
-                    ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
-            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
-            if (version.length() <= 7) {
-                return version;
-            }
-        } catch (Exception ex) {
-            System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
-        }
-        return null;
-    }
-
-    /**
-     * Removes color in a text.
-     *
-     * @param toFilter The text to filter.
-     * @return The filtered text.
-     */
-    public static CharSequence filterColor(String toFilter) {
-        Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
-        for (Character character : chars)
-            toFilter = toFilter.replace("§" + character, "");
-        return toFilter;
     }
 
 }

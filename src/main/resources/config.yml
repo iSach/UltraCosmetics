@@ -237,7 +237,11 @@ No-Permission:
     enabled: false
     Type: INK_SACK
     Data: 8
-    Name: '&c&lNo Permission'
+    Name: '&c&l{cosmetic-name}'
+    Lore:
+      - ''
+      - '&c&lYou do not have permission for this!'
+      - ''
 
 # If set to true, in messages the cosmetics' names
 # won't be colored.

@@ -27,14 +27,13 @@ import java.util.List;
  */
 public class MorphManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+    static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
@@ -71,8 +70,11 @@ public class MorphManager implements Listener {
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled") && !p.hasPermission(morphType.getPermission())) {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§").replace("{cosmetic-name}", morphType.getName()).replace("&", "§");
+                        List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                        String[] array = new String[npLore.size()];
+                        npLore.toArray(array);
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array));
                         i++;
                         continue;
                     }
@@ -92,12 +94,14 @@ public class MorphManager implements Listener {
                         loreList.add("");
                         for (String s : morphType.getDescription())
                             loreList.add(s);
-                        loreList.add("");
                     }
-                    if (lore != null)
+                    if (lore != null) {
+                        loreList.add("");
                         loreList.add(lore);
+                    }
                     loreList.add("");
                     loreList.add(morphType.getSkill());
+                    loreList.add("");
                     itemMeta.setLore(loreList);
                     is.setItemMeta(itemMeta);
                     inv.setItem(COSMETICS_SLOTS[i], is);
@@ -159,6 +163,31 @@ public class MorphManager implements Listener {
             if (morphType.getName().replace(" ", "").equals(name.replace(" ", "")))
                 return morphType;
         return null;
+    }
+
+    /**
+     * Gets the max amount of pages.
+     *
+     * @return the maximum amount of pages.
+     */
+    private static int getMaxPagesAmount() {
+        int max = 21;
+        int i = MorphType.enabled().size();
+        if (i % max == 0) return i / max;
+        double j = i / 21;
+        int h = (int) Math.floor(j * 100) / 100;
+        return h + 1;
+    }
+
+    private static int getCurrentPage(Player player) {
+        if (player.getOpenInventory() != null
+                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Morphs"))) {
+            String s = player.getOpenInventory().getTopInventory().getTitle()
+                    .replace(MessageManager.getMessage("Menus.Morphs") + " §7§o(", "")
+                    .replace("/" + getMaxPagesAmount() + ")", "");
+            return Integer.parseInt(s);
+        }
+        return 0;
     }
 
     @EventHandler
@@ -225,7 +254,7 @@ public class MorphManager implements Listener {
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Morph"))) {
                 Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
                 StringBuilder sb = new StringBuilder();
-                String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Morph"), "");
+                String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Morph"), "");
                 int j = name.split(" ").length;
                 if (name.contains("("))
                     j--;
@@ -239,36 +268,11 @@ public class MorphManager implements Listener {
                     }
                 }
                 equipMorph(getMorph(sb.toString()), (Player) event.getWhoClicked());
-                if(!Core.closeAfterSelect)
-                    openMenu((Player)event.getWhoClicked(), currentPage);
+                if (!Core.closeAfterSelect)
+                    openMenu((Player) event.getWhoClicked(), currentPage);
             }
 
         }
-    }
-
-    /**
-     * Gets the max amount of pages.
-     *
-     * @return the maximum amount of pages.
-     */
-    private static int getMaxPagesAmount() {
-        int max = 21;
-        int i = MorphType.enabled().size();
-        if (i % max == 0) return i / max;
-        double j = i / 21;
-        int h = (int) Math.floor(j * 100) / 100;
-        return h + 1;
-    }
-
-    private static int getCurrentPage(Player player) {
-        if (player.getOpenInventory() != null
-                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Morphs"))) {
-            String s = player.getOpenInventory().getTopInventory().getTitle()
-                    .replace(MessageManager.getMessage("Menus.Morphs") + " §7§o(", "")
-                    .replace("/" + getMaxPagesAmount() + ")", "");
-            return Integer.parseInt(s);
-        }
-        return 0;
     }
 
 }
