@@ -52,6 +52,8 @@ public class CustomPlayer {
             currentLeggings,
             currentBoots;
 
+    public boolean isLoaded = false;
+    
     /**
      * Cooldown map storing all the current cooldowns for gadgets.
      */
@@ -86,9 +88,12 @@ public class CustomPlayer {
                 SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
+            isLoaded =true;
+            
         } catch (Exception exc) {
             // Player couldn't be found.
             System.out.println("UltraCosmetics ERR -> " + "Couldn't find player with UUID: " + uuid);
+            isLoaded = false;
             return;
         }
 
@@ -536,7 +541,9 @@ public class CustomPlayer {
      * Gives the Menu Item.
      */
     public void giveMenuItem() {
+    	try{
         removeMenuItem();
+    	} catch (Exception e){}; 
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (getPlayer().getInventory().getItem(slot) != null) {
             if (getPlayer().getInventory().getItem(slot).hasItemMeta()
