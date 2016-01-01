@@ -28,14 +28,13 @@ import java.util.List;
  */
 public class HatManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+    static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
@@ -71,8 +70,11 @@ public class HatManager implements Listener {
                     if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(hat.getPermission())) {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", hat.getName()).replace("&", "§");
+                        List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                        String[] array = new String[npLore.size()];
+                        npLore.toArray(array);
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array));
                         i++;
                         continue;
                     }
@@ -106,13 +108,13 @@ public class HatManager implements Listener {
                 }
 
                 if (finalPage > 1)
-                    inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+                    inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
                 if (finalPage < getMaxPagesAmount())
-                    inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+                    inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
                 if (Category.HATS.hasGoBackArrow())
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - (Category.HATS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Hat")));
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - (Category.HATS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Hat")));
 
                 ItemFactory.fillInventory(inv);
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
@@ -137,6 +139,41 @@ public class HatManager implements Listener {
         double j = i / 21;
         int h = (int) Math.floor(j * 100) / 100;
         return h + 1;
+    }
+
+    public static void equipHat(Hat hat, final Player PLAYER) {
+        if (!PLAYER.hasPermission(hat.getPermission())) {
+            if (!playerList.contains(PLAYER)) {
+                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                playerList.add(PLAYER);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        playerList.remove(PLAYER);
+                    }
+                }, 1);
+            }
+            return;
+        }
+        Core.getCustomPlayer(PLAYER).setHat(hat);
+    }
+
+    public static Hat getHatByType(String name) {
+        for (Hat hat : Hat.values())
+            if (hat.getName().replace(" ", "").equals(name.replace(" ", "")))
+                return hat;
+        return null;
+    }
+
+    private static int getCurrentPage(Player player) {
+        if (player.getOpenInventory() != null
+                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Hats"))) {
+            String s = player.getOpenInventory().getTopInventory().getTitle()
+                    .replace(MessageManager.getMessage("Menus.Hats") + " §7§o(", "")
+                    .replace("/" + getMaxPagesAmount() + ")", "");
+            return Integer.parseInt(s);
+        }
+        return 0;
     }
 
     /**
@@ -187,41 +224,6 @@ public class HatManager implements Listener {
         }
     }
 
-    public static void equipHat(Hat hat, final Player PLAYER) {
-        if (!PLAYER.hasPermission(hat.getPermission())) {
-            if (!playerList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        playerList.remove(PLAYER);
-                    }
-                }, 1);
-            }
-            return;
-        }
-        Core.getCustomPlayer(PLAYER).setHat(hat);
-    }
-
-    public static Hat getHatByType(String name) {
-        for (Hat hat : Hat.values())
-            if (hat.getName().replace(" ", "").equals(name.replace(" ", "")))
-                return hat;
-        return null;
-    }
-
-    private static int getCurrentPage(Player player) {
-        if (player.getOpenInventory() != null
-                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Hats"))) {
-            String s = player.getOpenInventory().getTopInventory().getTitle()
-                    .replace(MessageManager.getMessage("Menus.Hats") + " §7§o(", "")
-                    .replace("/" + getMaxPagesAmount() + ")", "");
-            return Integer.parseInt(s);
-        }
-        return 0;
-    }
-
     @EventHandler
     public void hatSelection(InventoryClickEvent event) {
         if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Hats"))) {
@@ -251,14 +253,18 @@ public class HatManager implements Listener {
                     openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
                     return;
                 }
-                event.getWhoClicked().closeInventory();
+                int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                if (Core.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unequip"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Equip"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
                     StringBuilder sb = new StringBuilder();
-                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Equip"), "");
+                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Equip"), "");
                     int j = name.split(" ").length;
                     if (name.contains("("))
                         j--;
@@ -272,6 +278,8 @@ public class HatManager implements Listener {
                         }
                     }
                     equipHat(getHatByType(sb.toString()), (Player) event.getWhoClicked());
+                    if(!Core.closeAfterSelect)
+                        openMenu((Player)event.getWhoClicked(), currentPage);
                 }
 
             }

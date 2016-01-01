@@ -26,18 +26,17 @@ import java.util.List;
  */
 public class ParticleEffectManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+    static List<Player> playerList = new ArrayList<>();
 
-    public static void openMenu(final Player p, int PAGE) {
-        PAGE = Math.max(1, Math.min(PAGE, getMaxPagesAmount()));
-        final int finalPAGE = PAGE;
+    public static void openMenu(final Player p, int page) {
+        page = Math.max(1, Math.min(page, getMaxPagesAmount()));
+        final int finalPage = page;
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
@@ -50,13 +49,13 @@ public class ParticleEffectManager implements Listener {
                 if (listSize < 8)
                     slotAmount = 36;
 
-                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Particle-Effects") + " §7§o(" + finalPAGE + "/" + getMaxPagesAmount() + ")");
+                final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Particle-Effects") + " §7§o(" + finalPage + "/" + getMaxPagesAmount() + ")");
 
                 int i = 0;
                 int from = 1;
-                if (finalPAGE > 1)
-                    from = 21 * (finalPAGE - 1) + 1;
-                int to = 21 * finalPAGE;
+                if (finalPage > 1)
+                    from = 21 * (finalPage - 1) + 1;
+                int to = 21 * finalPage;
                 for (int h = from; h <= to; h++) {
                     if (h > ParticleEffectType.enabled().size())
                         break;
@@ -68,8 +67,11 @@ public class ParticleEffectManager implements Listener {
                     if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(particleEffectType.getPermission())) {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§").replace("{cosmetic-name}", particleEffectType.getName()).replace("&", "§");
+                        List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                        String[] array = new String[npLore.size()];
+                        npLore.toArray(array);
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array));
                         i++;
                         continue;
                     }
@@ -101,8 +103,13 @@ public class ParticleEffectManager implements Listener {
                 }
 
                 if (Category.EFFECTS.hasGoBackArrow())
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - (Category.EFFECTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Effect")));
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - (Category.EFFECTS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Effect")));
+
+                if (finalPage > 1)
+                    inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
+                if (finalPage < getMaxPagesAmount())
+                    inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
                 ItemFactory.fillInventory(inv);
 
@@ -114,56 +121,6 @@ public class ParticleEffectManager implements Listener {
                 });
             }
         });
-    }
-
-    @EventHandler
-    public void particleEffectSelection(InventoryClickEvent event) {
-        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Particle-Effects"))) {
-            event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
-                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
-            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))
-                        || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
-                    return;
-                }
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMenu((Player) event.getWhoClicked());
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Effect"))) {
-                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentParticleEffect != null) {
-                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                        event.getWhoClicked().closeInventory();
-                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                        openMenu((Player) event.getWhoClicked(), currentPage);
-                    } else return;
-                    return;
-                }
-                event.getWhoClicked().closeInventory();
-                if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unsummon"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Summon"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                    StringBuilder sb = new StringBuilder();
-                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Summon"), "");
-                    int j = name.split(" ").length;
-                    if (name.contains("("))
-                        j--;
-                    for (int i = 1; i < j; i++) {
-                        sb.append(name.split(" ")[i]);
-                        try {
-                            if (event.getCurrentItem().getItemMeta().getDisplayName().split(" ")[i + 1] != null)
-                                sb.append(" ");
-                        } catch (Exception exc) {
-
-                        }
-                    }
-                    equipEffect(getEffect(sb.toString()), (Player) event.getWhoClicked());
-                }
-
-            }
-        }
     }
 
     /**
@@ -218,6 +175,62 @@ public class ParticleEffectManager implements Listener {
             if (effectType.getName().replace(" ", "").equals(name.replace(" ", "")))
                 return effectType;
         return null;
+    }
+
+    @EventHandler
+    public void particleEffectSelection(InventoryClickEvent event) {
+        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Particle-Effects"))) {
+            event.setCancelled(true);
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
+            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))
+                        || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
+                    return;
+                }
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
+                    MainMenuManager.openMenu((Player) event.getWhoClicked());
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Effect"))) {
+                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentParticleEffect != null) {
+                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                        event.getWhoClicked().closeInventory();
+                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                        openMenu((Player) event.getWhoClicked(), currentPage);
+                    } else return;
+                    return;
+                }
+                int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                if (Core.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
+                if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unsummon"))) {
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Summon"))) {
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                    StringBuilder sb = new StringBuilder();
+                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Summon"), "");
+                    int j = name.split(" ").length;
+                    if (name.contains("("))
+                        j--;
+                    for (int i = 1; i < j; i++) {
+                        sb.append(name.split(" ")[i]);
+                        try {
+                            if (event.getCurrentItem().getItemMeta().getDisplayName().split(" ")[i + 1] != null)
+                                sb.append(" ");
+                        } catch (Exception exc) {
+
+                        }
+                    }
+                    equipEffect(getEffect(sb.toString()), (Player) event.getWhoClicked());
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
+                }
+
+            }
+        }
     }
 
 }

@@ -44,13 +44,13 @@ public class MainMenuManager implements Listener {
         }
     }
 
-    public static void openMenu(final Player PLAYER) {
+    public static void openMenu(final Player player) {
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
             @Override
             public void run() {
-                if (!PLAYER.hasPermission("ultracosmetics.openmenu")) {
-                    PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                    PLAYER.closeInventory();
+                if (!player.hasPermission("ultracosmetics.openmenu")) {
+                    player.sendMessage(MessageManager.getMessage("No-Permission"));
+                    player.closeInventory();
                     return;
                 }
                 boolean chests = Core.treasureChestsEnabled();
@@ -65,25 +65,25 @@ public class MainMenuManager implements Listener {
                 if (!chests && Core.enabledCategories.size() == 1) {
                     switch (Core.enabledCategories.get(0)) {
                         case GADGETS:
-                            GadgetManager.openMenu(PLAYER, 1);
+                            GadgetManager.openMenu(player, 1);
                             break;
                         case MORPHS:
-                            MorphManager.openMenu(PLAYER, 1);
+                            MorphManager.openMenu(player, 1);
                             break;
                         case HATS:
-                            HatManager.openMenu(PLAYER, 1);
+                            HatManager.openMenu(player, 1);
                             break;
                         case PETS:
-                            PetManager.openMenu(PLAYER, 1);
+                            PetManager.openMenu(player, 1);
                             break;
                         case EFFECTS:
-                            ParticleEffectManager.openMenu(PLAYER, 1);
+                            ParticleEffectManager.openMenu(player, 1);
                             break;
                         case MOUNTS:
-                            MountManager.openMenu(PLAYER, 1);
+                            MountManager.openMenu(player, 1);
                             break;
                         case SUITS:
-                            SuitManager.openMenu(PLAYER, 1);
+                            SuitManager.openMenu(player, 1);
                             break;
                     }
                     return;
@@ -99,27 +99,27 @@ public class MainMenuManager implements Listener {
                 if (chests) {
                     ItemStack chest;
 
-                    if (Core.getCustomPlayer(PLAYER).getKeys() == 0)
+                    if (Core.getCustomPlayer(player).getKeys() == 0)
                         chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), Core.vaultLoaded ?
                                 "" : null, Core.vaultLoaded ? MessageManager.getMessage("Click-Buy-Key") : null, Core.vaultLoaded ? "" : null);
                     else
                         chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
 
                     ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "",
-                            MessageManager.getMessage("Your-Keys").replace("%keys%", Core.getCustomPlayer(PLAYER).getKeys() + ""), Core.vaultLoaded ?
+                            MessageManager.getMessage("Your-Keys").replace("%keys%", Core.getCustomPlayer(player).getKeys() + ""), Core.vaultLoaded ?
                                     "" : null, Core.vaultLoaded ? MessageManager.getMessage("Click-Buy-Key") : null, Core.vaultLoaded ? "" : null);
                     inv.setItem(5, keys);
                     inv.setItem(3, chest);
                 }
 
-                inv.setItem(inv.getSize() - 5, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Cosmetics")));
+                inv.setItem(inv.getSize() - 5, ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Cosmetics")));
 
                 ItemFactory.fillInventory(inv);
 
                 Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
-                        PLAYER.openInventory(inv);
+                        player.openInventory(inv);
                     }
                 });
 

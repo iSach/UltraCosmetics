@@ -27,14 +27,13 @@ import java.util.List;
  */
 public class GadgetManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+    static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
@@ -66,8 +65,11 @@ public class GadgetManager implements Listener {
             if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled") && !p.hasPermission(g.getPermission())) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", g.getName()).replace("&", "§");
+                List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                String[] array = new String[npLore.size()];
+                npLore.toArray(array);
+                inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array));
                 i++;
                 continue;
             }
@@ -105,18 +107,18 @@ public class GadgetManager implements Listener {
         }
 
         if (page > 1)
-            inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+            inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
         if (page < getMaxPagesAmount())
-            inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+            inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
         if (Category.GADGETS.hasGoBackArrow())
-            inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-        inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Gadget")));
+            inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
+        inv.setItem(inv.getSize() - 4, ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Gadget")));
 
         if (Core.getCustomPlayer(p).hasGadgetsEnabled())
-            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(Material.INK_SACK, (byte) 0xa, MessageManager.getMessage("Disable-Gadgets")));
+            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Enabled").getItemType(), ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Enabled").getData(), MessageManager.getMessage("Disable-Gadgets")));
         else
-            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(Material.INK_SACK, (byte) 0x8, MessageManager.getMessage("Enable-Gadgets")));
+            inv.setItem(inv.getSize() - (Category.GADGETS.hasGoBackArrow() ? 5 : 6), ItemFactory.create(ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Disabled").getItemType(), ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Disabled").getData(), MessageManager.getMessage("Enable-Gadgets")));
 
         ItemFactory.fillInventory(inv);
 
@@ -151,6 +153,35 @@ public class GadgetManager implements Listener {
             return Integer.parseInt(s);
         }
         return 0;
+    }
+
+    public static GadgetType getGadgetByName(String name) {
+        for (GadgetType type : GadgetType.values())
+            if (type.getName().replace(" ", "").equals(name.replace(" ", "")))
+                return type;
+        return null;
+    }
+
+    public static void equipGadget(final GadgetType type, final Player PLAYER) {
+        if (!PLAYER.hasPermission(type.getPermission())) {
+            if (!playerList.contains(PLAYER)) {
+                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
+                playerList.add(PLAYER);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        playerList.remove(PLAYER);
+                    }
+                }, 1);
+            }
+            return;
+        }
+        new Thread() {
+            @Override
+            public void run() {
+                type.equip(PLAYER);
+            }
+        }.run();
     }
 
     @EventHandler
@@ -191,7 +222,8 @@ public class GadgetManager implements Listener {
                     return;
                 }
                 int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                event.getWhoClicked().closeInventory();
+                if (Core.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
                 CustomPlayer cp = Core.getCustomPlayer((Player) event.getWhoClicked());
                 if (Core.isAmmoEnabled() && event.getAction() == InventoryAction.PICKUP_HALF) {
                     StringBuilder sb = new StringBuilder();
@@ -218,11 +250,13 @@ public class GadgetManager implements Listener {
 
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Deactivate"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeGadget();
+                    if (!Core.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Activate"))) {
                     Core.getCustomPlayer((Player) event.getWhoClicked()).removeGadget();
                     StringBuilder sb = new StringBuilder();
-                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Activate"), "");
+                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Activate"), "");
                     int j = name.split(" ").length;
                     if (name.contains("("))
                         j--;
@@ -239,40 +273,14 @@ public class GadgetManager implements Listener {
                     if (cp.currentGadget != null && Core.isAmmoEnabled() && cp.getAmmo(cp.currentGadget.getType().toString().toLowerCase()) < 1 && cp.currentGadget.getType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
                         cp.currentGadget.openAmmoPurchaseMenu();
+                    } else {
+                        if (!Core.closeAfterSelect)
+                            openMenu((Player) event.getWhoClicked(), currentPage);
                     }
                 }
 
             }
         }
-    }
-
-    public static GadgetType getGadgetByName(String name) {
-        for (GadgetType type : GadgetType.values())
-            if (type.getName().replace(" ", "").equals(name.replace(" ", "")))
-                return type;
-        return null;
-    }
-
-    public static void equipGadget(final GadgetType type, final Player PLAYER) {
-        if (!PLAYER.hasPermission(type.getPermission())) {
-            if (!playerList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
-                    @Override
-                    public void run() {
-                        playerList.remove(PLAYER);
-                    }
-                }, 1);
-            }
-            return;
-        }
-        new Thread() {
-            @Override
-            public void run() {
-                type.equip(PLAYER);
-            }
-        }.run();
     }
 
 }

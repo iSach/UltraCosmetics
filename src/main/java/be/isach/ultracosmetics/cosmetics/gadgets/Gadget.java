@@ -167,7 +167,7 @@ public abstract class Gadget implements Listener {
             String d = Core.isAmmoEnabled() && getType().requiresAmmo() ?
                     "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " "
                     : "";
-            itemStack = ItemFactory.create(type.getMaterial(), type.getData(), d + getName(), "§9Gadget");
+            itemStack = ItemFactory.create(type.getMaterial(), type.getData(), d + getName(), MessageManager.getMessage("Gadgets.Lore"));
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())));
             Core.getCustomPlayer(getPlayer()).currentGadget = this;
@@ -487,13 +487,13 @@ public abstract class Gadget implements Listener {
             if (coolDown != -1) {
                 String timeLeft = new DecimalFormat("#.#").format(coolDown);
                 if (type.getCountdown() > 1)
-                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", getName()).replace("%time%", timeLeft));
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", (Core.placeHolderColor) ? getName() : Core.filterColor(getName())).replace("%time%", timeLeft));
                 return;
             } else
                 cp.setCoolDown(getType(), type.getCountdown());
             if (Core.isAmmoEnabled() && getType().requiresAmmo()) {
                 Core.getCustomPlayer(getPlayer()).removeAmmo(getType().toString().toLowerCase());
-                itemStack = ItemFactory.create(type.getMaterial(), type.getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), "§9Gadget");
+                itemStack = ItemFactory.create(type.getMaterial(), type.getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), MessageManager.getMessage("Gadgets.Lore"));
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
             }
             if (EVENT.getClickedBlock() != null

@@ -132,6 +132,7 @@ public class MessageManager {
         addMessage("Gadgets.PartyPopper.name", "&e&lParty Popper");
         addMessage("Gadgets.Trampoline.name", "&9&lTrampoline");
         addMessage("Gadgets.Gadget-Ready-ActionBar", "%gadgetname% §f§lis ready!");
+        addMessage("Gadgets.Lore", "&9Gadget");
 
         // MOUNTS
         addMessage("Mounts.DruggedHorse.menu-name", "&2&lDrugged Horse");
@@ -187,7 +188,7 @@ public class MessageManager {
         addMessage("Particle-Effects.AngelWings.name", "&f&lAngel Wings");
         addMessage("Particle-Effects.SuperHero.name", "&4&lSuper Hero");
         addMessage("Particle-Effects.SantaHat.name", "&4&lSanta &f&lHat");
-        addMessage("Particle-Effects.CrushedSugarCane.name", "&4&lCrushed &f&lSugar &4&lCane");
+        addMessage("Particle-Effects.CrushedCandyCane.name", "&4&lCrushed &f&lCandy &4&lCane");
         addMessage("Particle-Effects.EnderAura.name", "&d&lEnder Aura");
         addMessage("Particle-Effects.FlameFairy.name", "&6&lFlame Fairy");
 
@@ -301,6 +302,7 @@ public class MessageManager {
         addMessage("Suits.Santa.boots-name", "&4&lSanta &f&lBoots");
         addMessage("Suits.Equip", "%prefix% &9You equipped %suitname%!");
         addMessage("Suits.Unequip", "%prefix% &9You unequipped %suitname%!");
+        addMessage("Suits.Suit-Part-Lore", "&9Suits Part");
 
         addMessage("Menu.Gadgets", "&9&lGadgets");
         addMessage("Menu.Particle-Effects", "&b&lParticle Effects");

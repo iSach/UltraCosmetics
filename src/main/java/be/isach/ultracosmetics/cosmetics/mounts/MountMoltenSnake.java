@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.PacketSender;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
 import org.bukkit.Location;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
@@ -80,6 +82,7 @@ public class MountMoltenSnake extends Mount {
             armorStand.setVisible(false);
             armorStand.setGravity(false);
             armorStand.setHelmet(new ItemStack(Material.NETHERRACK));
+            armorStand.setMetadata("NO_INTER", new FixedMetadataValue(Core.getPlugin(), ""));
         }
     }
 

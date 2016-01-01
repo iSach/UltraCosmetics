@@ -31,8 +31,10 @@ public enum ParticleEffectType {
     ANGELWINGS("angelwings", "AngelWings", 2, Particles.REDSTONE, Material.FEATHER, (byte) 0, ParticleEffectAngelWings.class, "&7&oBecome an angel!"),
     SUPERHERO("superhero", "SuperHero", 2, Particles.REDSTONE, Material.GLOWSTONE_DUST, (byte) 0, ParticleEffectSuperHero.class, "&7&oBecome Superman!"),
     SANTAHAT("santahat", "SantaHat", 2, Particles.REDSTONE, Material.BEACON, (byte) 378, ParticleEffectSantaHat.class, "&7&oBecome Santa!"),
-    CRUSHEDSUGARCANE("crushedsugarcane", "CrushedSugarCane", 1, Particles.ITEM_CRACK, Material.INK_SACK, (byte) 1, ParticleEffectCrushedSugarCane.class, "&7&oThere's no such thing as too much\n&7&oChristmas Candy. Do not listen\n&7&oto your dentist."),
-    ENDERAURA("enderaura", "EnderAura", 1, Particles.PORTAL, Material.EYE_OF_ENDER, (byte) 0, ParticleEffectEnderAura.class, "&7&oThese mystic particle attach to\n&7&oonly the most legendary of players!"),
+    CRUSHEDCANDYCANE("crushedcandycane", "CrushedCandyCane", 1, Particles.ITEM_CRACK, Material.INK_SACK, (byte) 1, ParticleEffectCrushedCandyCane.class,
+            "&7&oThere's no such thing as too much\n&7&oChristmas Candy. Do not listen\n&7&oto your dentist."),
+    ENDERAURA("enderaura", "EnderAura", 1, Particles.PORTAL, Material.EYE_OF_ENDER, (byte) 0, ParticleEffectEnderAura.class, "&7&oThese mystic particle attach" +
+            " to\n&7&oonly the most legendary of players!"),
     FLAMEFAIRY("flamefairy", "FlameFairy", 1, Particles.FLAME, Material.BLAZE_POWDER, (byte) 0, ParticleEffectFlameFairy.class, "&7&oHEY!!");
 
     private String permission, configName, description;

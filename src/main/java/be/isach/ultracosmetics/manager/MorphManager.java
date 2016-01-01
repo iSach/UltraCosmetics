@@ -27,14 +27,13 @@ import java.util.List;
  */
 public class MorphManager implements Listener {
 
-    static List<Player> playerList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+    static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
@@ -71,8 +70,11 @@ public class MorphManager implements Listener {
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled") && !p.hasPermission(morphType.getPermission())) {
                         Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                         Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name));
+                        String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§").replace("{cosmetic-name}", morphType.getName()).replace("&", "§");
+                        List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                        String[] array = new String[npLore.size()];
+                        npLore.toArray(array);
+                        inv.setItem(COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array));
                         i++;
                         continue;
                     }
@@ -92,12 +94,14 @@ public class MorphManager implements Listener {
                         loreList.add("");
                         for (String s : morphType.getDescription())
                             loreList.add(s);
-                        loreList.add("");
                     }
-                    if (lore != null)
+                    if (lore != null) {
+                        loreList.add("");
                         loreList.add(lore);
+                    }
                     loreList.add("");
                     loreList.add(morphType.getSkill());
+                    loreList.add("");
                     itemMeta.setLore(loreList);
                     is.setItemMeta(itemMeta);
                     inv.setItem(COSMETICS_SLOTS[i], is);
@@ -105,19 +109,19 @@ public class MorphManager implements Listener {
                 }
 
                 if (Category.MORPHS.hasGoBackArrow())
-                    inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Morph")));
+                    inv.setItem(inv.getSize() - 6, ItemFactory.create(ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getItemType(), ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item").getData(), MessageManager.getMessage("Menu.Main-Menu")));
+                inv.setItem(inv.getSize() - 4, ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Morph")));
                 int d = (Category.MORPHS.hasGoBackArrow() ? 5 : 6);
 
                 if (Core.getCustomPlayer(p).canSeeSelfMorph())
-                    inv.setItem(inv.getSize() - d, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0x0, MessageManager.getMessage("Disable-Third-Person-View")));
+                    inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getData(), MessageManager.getMessage("Disable-Third-Person-View")));
                 else
-                    inv.setItem(inv.getSize() - d, ItemFactory.create(Material.ENDER_PEARL, (byte) 0x0, MessageManager.getMessage("Enable-Third-Person-View")));
+                    inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getData(), MessageManager.getMessage("Enable-Third-Person-View")));
 
                 if (finalPAGE > 1)
-                    inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
+                    inv.setItem(inv.getSize() - 18, ItemFactory.create(ItemFactory.createFromConfig("Categories.Previous-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Previous-Page-Item").getData(), MessageManager.getMessage("Menu.Previous-Page")));
                 if (finalPAGE < getMaxPagesAmount())
-                    inv.setItem(inv.getSize() - 10, ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0, MessageManager.getMessage("Menu.Next-Page")));
+                    inv.setItem(inv.getSize() - 10, ItemFactory.create(ItemFactory.createFromConfig("Categories.Next-Page-Item").getItemType(), ItemFactory.createFromConfig("Categories.Next-Page-Item").getData(), MessageManager.getMessage("Menu.Next-Page")));
 
 
                 ItemFactory.fillInventory(inv);
@@ -159,6 +163,31 @@ public class MorphManager implements Listener {
             if (morphType.getName().replace(" ", "").equals(name.replace(" ", "")))
                 return morphType;
         return null;
+    }
+
+    /**
+     * Gets the max amount of pages.
+     *
+     * @return the maximum amount of pages.
+     */
+    private static int getMaxPagesAmount() {
+        int max = 21;
+        int i = MorphType.enabled().size();
+        if (i % max == 0) return i / max;
+        double j = i / 21;
+        int h = (int) Math.floor(j * 100) / 100;
+        return h + 1;
+    }
+
+    private static int getCurrentPage(Player player) {
+        if (player.getOpenInventory() != null
+                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Morphs"))) {
+            String s = player.getOpenInventory().getTopInventory().getTitle()
+                    .replace(MessageManager.getMessage("Menus.Morphs") + " §7§o(", "")
+                    .replace("/" + getMaxPagesAmount() + ")", "");
+            return Integer.parseInt(s);
+        }
+        return 0;
     }
 
     @EventHandler
@@ -214,14 +243,18 @@ public class MorphManager implements Listener {
                 } else return;
                 return;
             }
-            event.getWhoClicked().closeInventory();
+            int currentPage = getCurrentPage((Player) event.getWhoClicked());
+            if (Core.closeAfterSelect)
+                event.getWhoClicked().closeInventory();
             if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unmorph"))) {
                 Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
+                if (!Core.closeAfterSelect)
+                    openMenu((Player) event.getWhoClicked(), currentPage);
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Morph"))) {
                 Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
                 StringBuilder sb = new StringBuilder();
-                String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Morph"), "");
+                String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Morph"), "");
                 int j = name.split(" ").length;
                 if (name.contains("("))
                     j--;
@@ -235,34 +268,11 @@ public class MorphManager implements Listener {
                     }
                 }
                 equipMorph(getMorph(sb.toString()), (Player) event.getWhoClicked());
+                if (!Core.closeAfterSelect)
+                    openMenu((Player) event.getWhoClicked(), currentPage);
             }
 
         }
-    }
-
-    /**
-     * Gets the max amount of pages.
-     *
-     * @return the maximum amount of pages.
-     */
-    private static int getMaxPagesAmount() {
-        int max = 21;
-        int i = MorphType.enabled().size();
-        if (i % max == 0) return i / max;
-        double j = i / 21;
-        int h = (int) Math.floor(j * 100) / 100;
-        return h + 1;
-    }
-
-    private static int getCurrentPage(Player player) {
-        if (player.getOpenInventory() != null
-                && player.getOpenInventory().getTopInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Morphs"))) {
-            String s = player.getOpenInventory().getTopInventory().getTitle()
-                    .replace(MessageManager.getMessage("Menus.Morphs") + " §7§o(", "")
-                    .replace("/" + getMaxPagesAmount() + ")", "");
-            return Integer.parseInt(s);
-        }
-        return 0;
     }
 
 }

@@ -24,7 +24,6 @@ public class SQLUtils {
         try {
 
             if (!core.table.select().where("uuid", p.getUniqueId().toString()).execute().next()) {
-
                 core.table.insert().insert("uuid").value(p.getUniqueId().toString()).execute();
                 core.table.update().set("username", p.getName()).where("uuid", p.getUniqueId().toString()).execute();
                 return;

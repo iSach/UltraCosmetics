@@ -194,11 +194,7 @@ public class CustomPlayer {
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        if (Core.usingFileStorage())
-            return Core.usingFileStorage() ?
-                    (int) SettingsManager.getData(getPlayer()).get("Keys") :
-                    Core.sqlUtils.getKeys(getPlayer());
-        return 0;
+        return Core.usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : Core.sqlUtils.getKeys(getPlayer());
     }
 
     /**
@@ -391,6 +387,7 @@ public class CustomPlayer {
 
     /**
      * Gets the name of a pet.
+     *
      * @param petName The pet.
      * @return The pet name.
      */
@@ -424,11 +421,12 @@ public class CustomPlayer {
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                     ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(),
                             "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString()
-                                    .toLowerCase()) + " " + currentGadget.getName(), "§9Gadget"));
+                                    .toLowerCase()) + " " + currentGadget.getName(), MessageManager.getMessage("Gadgets.Lore")));
     }
 
     /**
      * Sets if player has gadgets enabled.
+     *
      * @param enabled if player has gadgets enabled.
      */
     public void setGadgetsEnabled(Boolean enabled) {
@@ -463,6 +461,7 @@ public class CustomPlayer {
 
     /**
      * Sets if a player can see his own morph or not.
+     *
      * @param enabled if player should be able to see his own morph.
      */
     public void setSeeSelfMorph(Boolean enabled) {
@@ -494,6 +493,7 @@ public class CustomPlayer {
 
     /**
      * Gets the ammo of a gadget.
+     *
      * @param name The gadget.
      * @return The ammo of the given gadget.
      */
@@ -519,6 +519,7 @@ public class CustomPlayer {
 
     /**
      * Removes One Ammo of a gadget.
+     *
      * @param name The gadget.
      */
     public void removeAmmo(String name) {
@@ -568,6 +569,7 @@ public class CustomPlayer {
 
     /**
      * Gets the UUID.
+     *
      * @return The UUID.
      */
     public UUID getUuid() {

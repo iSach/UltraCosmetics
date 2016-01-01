@@ -33,13 +33,11 @@ import java.util.List;
  */
 public class SuitManager implements Listener {
 
-    static List<Player> noSpamList = new ArrayList<>();
-
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 12, 14, 16
             };
-
+    static List<Player> noSpamList = new ArrayList<>();
 
     public static void openMenu(final Player p, final int PAGE) {
         Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
@@ -71,8 +69,11 @@ public class SuitManager implements Listener {
                         if ((boolean) SettingsManager.getConfig().get("No-Permission.Custom-Item.enabled") && !p.hasPermission(suit.getPermission(armorSlot))) {
                             Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                             Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                            String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§");
-                            inv.setItem(COSMETICS_SLOTS[i] + d * 9, ItemFactory.create(material, data, name));
+                            String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("&", "§").replace("{cosmetic-name}", suit.getName(armorSlot)).replace("&", "§");
+                            List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
+                            String[] array = new String[npLore.size()];
+                            npLore.toArray(array);
+                            inv.setItem(COSMETICS_SLOTS[i] + d * 9, ItemFactory.create(material, data, name, array));
                             shouldIncrement = true;
                             continue;
                         }
@@ -140,7 +141,7 @@ public class SuitManager implements Listener {
                 if (Category.SUITS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
 
-                inv.setItem(inv.getSize() - 4, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Suit")));
+                inv.setItem(inv.getSize() - (Category.SUITS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Suit")));
 
                 if (PAGE > 1)
                     inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
@@ -157,74 +158,6 @@ public class SuitManager implements Listener {
                 });
             }
         });
-    }
-
-    @EventHandler
-    public void suitSelection(InventoryClickEvent event) {
-        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Suits"))) {
-            event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
-                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
-            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))
-                        || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE)
-                    return;
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMenu((Player) event.getWhoClicked());
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Suit"))) {
-                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentHelmet != null
-                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentChestplate != null
-                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentLeggings != null
-                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentBoots != null) {
-                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit();
-                        openMenu((Player) event.getWhoClicked(), currentPage);
-                    } else return;
-                    return;
-                }
-
-                int s = event.getSlot();
-                int t = (s - (s % 9)) / 9;
-                ArmorSlot armorSlot = t < 5 ? ArmorSlot.values()[t - 1] : null;
-
-                if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unequip"))) {
-                    if (armorSlot == null)
-                        return;
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit(armorSlot);
-                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
-                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Previous-Page"))) {
-                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Equip"))) {
-                    StringBuilder sb = new StringBuilder();
-                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replace(MessageManager.getMessage("Menu.Equip"), "");
-
-                    if (armorSlot == null)
-                        return;
-
-                    int j = name.split(" ").length;
-                    if (name.contains("("))
-                        j--;
-                    for (int i = 1; i < j; i++) {
-                        sb.append(name.split(" ")[i]);
-                        try {
-                            if (event.getCurrentItem().getItemMeta().getDisplayName().split(" ")[i + 1] != null)
-                                sb.append(" ");
-                        } catch (Exception exc) {
-
-                        }
-                    }
-                    equipSuit(getSuitType(sb.toString(), armorSlot), (Player) event.getWhoClicked(), armorSlot);
-                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
-                }
-
-            }
-        }
     }
 
     /**
@@ -275,6 +208,81 @@ public class SuitManager implements Listener {
         }.run();
     }
 
+    public static SuitType getSuitType(String name, ArmorSlot armorSlot) {
+        for (SuitType suitType : SuitType.enabled())
+            if (suitType.getName(armorSlot).replace(" ", "").equals(name.replace(" ", "")))
+                return suitType;
+        return null;
+    }
+
+    @EventHandler
+    public void suitSelection(InventoryClickEvent event) {
+        if (event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Suits"))) {
+            event.setCancelled(true);
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
+            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))
+                        || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE)
+                    return;
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
+                    MainMenuManager.openMenu((Player) event.getWhoClicked());
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Suit"))) {
+                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentHelmet != null
+                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentChestplate != null
+                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentLeggings != null
+                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentBoots != null) {
+                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit();
+                        openMenu((Player) event.getWhoClicked(), currentPage);
+                    } else return;
+                    return;
+                }
+
+                int s = event.getSlot();
+                int t = (s - (s % 9)) / 9;
+                ArmorSlot armorSlot = t < 5 ? ArmorSlot.values()[t - 1] : null;
+
+                if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unequip"))) {
+                    if (armorSlot == null)
+                        return;
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit(armorSlot);
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Previous-Page"))) {
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Equip"))) {
+                    StringBuilder sb = new StringBuilder();
+                    String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Equip"), "");
+
+                    if (armorSlot == null)
+                        return;
+
+                    int j = name.split(" ").length;
+                    if (name.contains("("))
+                        j--;
+                    for (int i = 1; i < j; i++) {
+                        sb.append(name.split(" ")[i]);
+                        try {
+                            if (event.getCurrentItem().getItemMeta().getDisplayName().split(" ")[i + 1] != null)
+                                sb.append(" ");
+                        } catch (Exception exc) {
+
+                        }
+                    }
+                    equipSuit(getSuitType(sb.toString(), armorSlot), (Player) event.getWhoClicked(), armorSlot);
+                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
+                }
+
+            }
+        }
+    }
+
     /**
      * Cancel players from dropping the suit in their inventory.
      *
@@ -286,7 +294,7 @@ public class SuitManager implements Listener {
         if (item != null
                 && item.hasItemMeta()
                 && item.getItemMeta().hasLore()
-                && item.getItemMeta().getLore().contains("§9Suit Part")) {
+                && item.getItemMeta().getLore().contains(MessageManager.getMessage("Suits.Suit-Part-Lore"))) {
             event.getItemDrop().remove();
             event.getPlayer().closeInventory();
             event.getPlayer().updateInventory();
@@ -303,7 +311,7 @@ public class SuitManager implements Listener {
         if (EVENT.getCurrentItem() != null
                 && EVENT.getCurrentItem().hasItemMeta()
                 && EVENT.getCurrentItem().getItemMeta().hasLore()
-                && EVENT.getCurrentItem().getItemMeta().getLore().contains("§9Suit Part")) {
+                && EVENT.getCurrentItem().getItemMeta().getLore().contains(MessageManager.getMessage("Suits.Suit-Part-Lore"))) {
             EVENT.setCancelled(true);
             EVENT.setResult(Event.Result.DENY);
             EVENT.getWhoClicked().closeInventory();
@@ -314,20 +322,13 @@ public class SuitManager implements Listener {
                         if (itemStack != null
                                 && itemStack.hasItemMeta()
                                 && itemStack.getItemMeta().hasLore()
-                                && itemStack.getItemMeta().getLore().contains("§9Suit Part")
+                                && itemStack.getItemMeta().getLore().contains(MessageManager.getMessage("Suits.Suit-Part-Lore"))
                                 && itemStack != EVENT.getWhoClicked().getInventory().getHelmet())
                             EVENT.getWhoClicked().getInventory().remove(itemStack);
                     }
                 }
             }, 1);
         }
-    }
-
-    public static SuitType getSuitType(String name, ArmorSlot armorSlot) {
-        for (SuitType suitType : SuitType.enabled())
-            if (suitType.getName(armorSlot).replace(" ", "").equals(name.replace(" ", "")))
-                return suitType;
-        return null;
     }
 
 }

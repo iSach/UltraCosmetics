@@ -120,9 +120,8 @@ public abstract class Pet implements Listener {
                             entity.remove();
                             if (getPlayer() != null)
                                 Core.getCustomPlayer(getPlayer()).currentPet = null;
-                            for (Item i : items) {
+                            for (Item i : items)
                                 i.remove();
-                            }
                             items.clear();
                             try {
                                 HandlerList.unregisterAll(pet);
@@ -141,6 +140,13 @@ public abstract class Pet implements Listener {
                         followPlayer();
                     } else {
                         cancel();
+                        if (armorStand != null)
+                            armorStand.remove();
+                        for (Item i : items)
+                            i.remove();
+                        items.clear();
+                        clear();
+                        return;
                     }
                     if (armorStand != null) {
                         if (getType().getEntityType() == EntityType.ZOMBIE)
@@ -161,6 +167,9 @@ public abstract class Pet implements Listener {
                     cancel();
                     if (armorStand != null)
                         armorStand.remove();
+                    for (Item i : items)
+                        i.remove();
+                    items.clear();
                     clear();
                 }
             }
@@ -293,6 +302,8 @@ public abstract class Pet implements Listener {
      * Called when a player gets his pet cleared.
      */
     public void clear() {
+        if (armorStand != null)
+            armorStand.remove();
         if (getType().getEntityType() != EntityType.ZOMBIE)
             entity.remove();
         else {
@@ -304,8 +315,6 @@ public abstract class Pet implements Listener {
         for (Item i : items)
             i.remove();
         items.clear();
-        if (armorStand != null)
-            armorStand.remove();
         try {
             HandlerList.unregisterAll(this);
             HandlerList.unregisterAll(listener);

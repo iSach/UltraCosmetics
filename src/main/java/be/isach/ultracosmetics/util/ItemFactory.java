@@ -34,7 +34,7 @@ public class ItemFactory {
             List<String> finalLore = new ArrayList<>();
             for (String s : lore)
                 if (s != null)
-                    finalLore.add(s);
+                    finalLore.add(s.replace("&", "§"));
             itemMeta.setLore(finalLore);
         }
         itemStack.setItemMeta(itemMeta);
@@ -58,6 +58,11 @@ public class ItemFactory {
                     inventory.setItem(i, itemStack);
             }
         }
+    }
+
+    public static MaterialData createFromConfig(String path) {
+        String config = SettingsManager.getConfig().getString(path);
+        return getMaterialData(config);
     }
 
     private static MaterialData getMaterialData(String name) {
