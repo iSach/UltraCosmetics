@@ -75,6 +75,15 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+
+                    <!--<outputDirectory>../../Users/Sacha/Desktop/LOCAL/plugins/</outputDirectory>-->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

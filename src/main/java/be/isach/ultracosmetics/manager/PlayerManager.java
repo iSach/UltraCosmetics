@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.CustomPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Sacha on 16/12/15.
@@ -13,7 +14,7 @@ public class PlayerManager {
     private Map<UUID, CustomPlayer> playerCache;
 
     public PlayerManager() {
-        this.playerCache = new HashMap<>();
+        this.playerCache = new ConcurrentHashMap<>();
     }
 
     public CustomPlayer getCustomPlayer(Player player) {
@@ -31,12 +32,6 @@ public class PlayerManager {
 
     public boolean remove(Player player) {
         return playerCache.remove(player.getUniqueId()) != null;
-    }
-
-    public void clearPlayers() {
-        Iterator<CustomPlayer> i = playerCache.values().iterator();
-        while (i.hasNext())
-            i.next().clear();
     }
 
     public Collection<CustomPlayer> getPlayers() {
