@@ -51,32 +51,26 @@ public class CustomPlayer {
             currentChestplate,
             currentLeggings,
             currentBoots;
-
-   
-    
-    
-    /**
-     * Cooldown map storing all the current cooldowns for gadgets.
-     */
-    private HashMap<GadgetType, Long> gadgetCooldowns = null;
-
     /**
      *  boolean to identify if player is loaded correctly
      */
     public boolean isLoaded = false;
-    
+    /**
+     * Cooldown map storing all the current cooldowns for gadgets.
+     */
+    private HashMap<GadgetType, Long> gadgetCooldowns = null;
     /**
      *  Cache boolean  for SQL to minimize SQL query
-     *  
+     *
      *  -1 unload
      *   0 disable
      *   1 enable
      */
-    
+
     private short cache_hasGadgetsEnable = -1;
     private short cache_canSeeSelfMorph = -1;
-    
-    
+
+
     /**
      * Allows to store custom data for each player easily.
      * <p/>
@@ -106,7 +100,7 @@ public class CustomPlayer {
                 SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
-            isLoaded =true;
+            isLoaded = true;
             
         } catch (Exception exc) {
             // Player couldn't be found.
@@ -313,9 +307,10 @@ public class CustomPlayer {
     public void clear() {
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             removeMorph();
-            try{
-            	DisguiseAPI.undisguiseToAll(getPlayer());
-            }catch(Exception e){}
+            try {
+                DisguiseAPI.undisguiseToAll(getPlayer());
+            } catch (Exception e) {
+            }
         }
         removeGadget();
         removeParticleEffect();
@@ -461,14 +456,14 @@ public class CustomPlayer {
             } else {
                 Core.sqlUtils.setGadgetsEnabled(getPlayer(), enabled);
             }
-            if (enabled){
+            if (enabled) {
                 getPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
                 this.cache_hasGadgetsEnable = 1;
-            }else{
+            } else {
                 getPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
                 this.cache_hasGadgetsEnable = 0;
             }
-           } catch (NullPointerException e) {
+        } catch (NullPointerException e) {
         }
     }
 
@@ -476,10 +471,10 @@ public class CustomPlayer {
      * @return if the player has gadgets enabled or not.
      */
     public boolean hasGadgetsEnabled() {
-    	if(this.cache_hasGadgetsEnable > -1)
-    		return cache_hasGadgetsEnable == 0 ? false : true;
-    	
-    	
+        if (this.cache_hasGadgetsEnable > -1)
+            return cache_hasGadgetsEnable == 0 ? false : true;
+
+
         try {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
@@ -502,10 +497,10 @@ public class CustomPlayer {
         } else {
             Core.sqlUtils.setSeeSelfMorph(getPlayer(), enabled);
         }
-        if (enabled){
+        if (enabled) {
             getPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
             this.cache_canSeeSelfMorph = 1;
-        }else{
+        } else {
             getPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
             this.cache_canSeeSelfMorph = 0;
         }
@@ -515,9 +510,9 @@ public class CustomPlayer {
      * @return if player should be able to see his own morph or not.
      */
     public boolean canSeeSelfMorph() {
-    	if(this.cache_canSeeSelfMorph > -1)
-    		return this.cache_canSeeSelfMorph == 0 ? false : true;
-    	
+        if (this.cache_canSeeSelfMorph > -1)
+            return this.cache_canSeeSelfMorph == 0 ? false : true;
+
         try {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
@@ -574,9 +569,11 @@ public class CustomPlayer {
      * Gives the Menu Item.
      */
     public void giveMenuItem() {
-    	try{
+        try {
         removeMenuItem();
-    	} catch (Exception e){}; 
+        } catch (Exception e) {
+        }
+        ;
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (getPlayer().getInventory().getItem(slot) != null) {
             if (getPlayer().getInventory().getItem(slot).hasItemMeta()
