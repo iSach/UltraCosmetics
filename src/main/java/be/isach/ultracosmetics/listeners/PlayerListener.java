@@ -1,9 +1,11 @@
 package be.isach.ultracosmetics.listeners;
 
 import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,11 +32,15 @@ public class PlayerListener implements Listener {
             @Override
             public void run() {
                 Core.getPlayerManager().create(event.getPlayer());
+               
                 if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
                     Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            Core.getPlayerManager().getCustomPlayer(event.getPlayer()).giveMenuItem();
+                        	CustomPlayer cp =  Core.getPlayerManager().getCustomPlayer(event.getPlayer());
+	                        if(cp != null){
+	                            cp.giveMenuItem();
+	                        }
                         }
                     }, 5);
                 }
