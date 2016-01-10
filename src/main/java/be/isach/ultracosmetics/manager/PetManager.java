@@ -368,7 +368,7 @@ public class PetManager implements Listener {
                 String name = renamePetList.get(p);
                 event.setCancelled(true);
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) {
-                    if (Core.getCustomPlayer(p).getMoney() >= (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")) {
+                    if (Core.getCustomPlayer(p).getBalance() >= (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")) {
                         Core.economy.withdrawPlayer(p, (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price"));
                         p.sendMessage(MessageManager.getMessage("Successful-Purchase"));
                         if (Core.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)

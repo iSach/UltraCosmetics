@@ -15,18 +15,6 @@ public class FallDamageManager implements Runnable {
     public static List<Entity> noFallDamage = Collections.synchronizedList(new ArrayList<Entity>());
     public static List<Entity> queue = Collections.synchronizedList(new ArrayList<Entity>());
 
-    @Override
-    public void run() {
-        Iterator<Entity> iter = noFallDamage.iterator();
-        while (iter.hasNext()) {
-            Entity ent = iter.next();
-            if (ent.isOnGround())
-                iter.remove();
-        }
-        noFallDamage.addAll(queue);
-        queue.clear();
-    }
-
     public static void addNoFall(Entity entity) {
         if (!queue.contains(entity)
                 && !noFallDamage.contains(entity))
@@ -36,5 +24,16 @@ public class FallDamageManager implements Runnable {
     public static boolean shouldBeProtected(Entity entity) {
         return noFallDamage.contains(entity)
                 || queue.contains(entity);
+    }
+
+    @Override
+    public void run() {
+        for (Iterator<Entity> iterator = noFallDamage.iterator(); iterator.hasNext(); ) {
+            Entity ent = iterator.next();
+            if (ent.isOnGround())
+                iterator.remove();
+        }
+        noFallDamage.addAll(queue);
+        queue.clear();
     }
 }

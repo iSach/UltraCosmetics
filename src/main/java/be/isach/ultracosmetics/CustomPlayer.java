@@ -52,7 +52,7 @@ public class CustomPlayer {
             currentLeggings,
             currentBoots;
     /**
-     *  boolean to identify if player is loaded correctly
+     * boolean to identify if player is loaded correctly
      */
     public boolean isLoaded = false;
     /**
@@ -60,11 +60,11 @@ public class CustomPlayer {
      */
     private HashMap<GadgetType, Long> gadgetCooldowns = null;
     /**
-     *  Cache boolean  for SQL to minimize SQL query
-     *
-     *  -1 unload
-     *   0 disable
-     *   1 enable
+     * Cache boolean  for SQL to minimize SQL query
+     * <p/>
+     * -1 unload
+     * 0 disable
+     * 1 enable
      */
 
     private short cache_hasGadgetsEnable = -1;
@@ -101,7 +101,7 @@ public class CustomPlayer {
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
             isLoaded = true;
-            
+
         } catch (Exception exc) {
             // Player couldn't be found.
             System.out.println("UltraCosmetics ERR -> " + "Couldn't find player with UUID: " + uuid);
@@ -253,6 +253,17 @@ public class CustomPlayer {
         }
     }
 
+    public double getBalance() {
+        try {
+            if (Core.vaultLoaded && Core.economy != null)
+                return Core.economy.getBalance(getPlayer());
+        } catch (Exception exc) {
+            Core.log("Error happened while getting a player's balance.");
+            return 0;
+        }
+        return 0;
+    }
+
     /**
      * @param armorSlot The armorslot to get.
      * @return The Suit from the armor slot.
@@ -373,22 +384,7 @@ public class CustomPlayer {
         if (currentMorph != null) {
             DisguiseAPI.undisguiseToAll(getPlayer());
             currentMorph.clear();
-            //getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", currentMorph.getName()));
             currentMorph = null;
-        }
-    }
-
-    /**
-     * Gets Player's Money.
-     *
-     * @return The money amount the player owns.
-     */
-    public int getMoney() {
-        try {
-            return (int) Core.economy.getBalance(getPlayer());
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            return 0;
         }
     }
 
@@ -570,7 +566,7 @@ public class CustomPlayer {
      */
     public void giveMenuItem() {
         try {
-        removeMenuItem();
+            removeMenuItem();
         } catch (Exception e) {
         }
         ;
@@ -595,6 +591,8 @@ public class CustomPlayer {
      * Removes the menu Item.
      */
     public void removeMenuItem() {
+        if (getPlayer() == null)
+            return;
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (getPlayer().getInventory().getItem(slot) != null
                 && getPlayer().getInventory().getItem(slot).hasItemMeta()
