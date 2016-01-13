@@ -294,6 +294,7 @@ public abstract class Pet implements Listener {
         for (Item i : items)
             i.remove();
         items.clear();
+        pathUpdater.shutdown();
         try {
             HandlerList.unregisterAll(this);
             HandlerList.unregisterAll(listener);
