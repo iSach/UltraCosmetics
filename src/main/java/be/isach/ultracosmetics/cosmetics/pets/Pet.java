@@ -9,6 +9,7 @@ import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_8_R3.PathEntity;
 import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -29,6 +30,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by sacha on 03/08/15.
@@ -65,6 +68,16 @@ public abstract class Pet implements Listener {
      * Listens for pet damage.
      */
     private Listener listener;
+    
+    /**
+     * Runs the task for pets following players
+     */
+    private ExecutorService pathUpdater;
+    
+    /**
+     * Task that forces pets to follow player
+     */
+    private Runnable followTask;
 
     /**
      * If Pet is a normal entity, it will be stored here.
@@ -78,6 +91,8 @@ public abstract class Pet implements Listener {
 
     public Pet(final UUID owner, final PetType type) {
         this.type = type;
+        this.pathUpdater = Executors.newSingleThreadExecutor();
+        this.followTask = new FollowPlayer();
 
         if (owner == null) return;
 
@@ -137,7 +152,7 @@ public abstract class Pet implements Listener {
                             && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentPet.getType() == type) {
                         if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
                             onUpdate();
-                        followPlayer();
+                        pathUpdater.submit(followTask);
                     } else {
                         cancel();
                         if (armorStand != null)
@@ -249,42 +264,6 @@ public abstract class Pet implements Listener {
     }
 
     /**
-     * Called each tick to follow the player or TP to him.
-     */
-    private void followPlayer() {
-        new Thread() {
-            @Override
-            public void run() {
-                if (getPlayer() == null)
-                    return;
-                if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
-                    return;
-
-                net.minecraft.server.v1_8_R3.Entity petEntity = getType().getEntityType() == EntityType.ZOMBIE ? customEnt : ((CraftEntity) entity).getHandle();
-                ((EntityInsentient) petEntity).getNavigation().a(2);
-                Location targetLocation = getPlayer().getLocation();
-                PathEntity path;
-                path = ((EntityInsentient) petEntity).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
-                try {
-                    int distance = (int) Bukkit.getPlayer(getPlayer().getName()).getLocation().distance(petEntity.getBukkitEntity().getLocation());
-                    if (distance > 10 && petEntity.valid && getPlayer().isOnGround()) {
-                        petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                    }
-                    if (path != null && distance > 3.3) {
-                        double speed = 1.05d;
-                        if (getType().getEntityType() == EntityType.ZOMBIE)
-                            speed *= 1.5;
-                        ((EntityInsentient) petEntity).getNavigation().a(path, speed);
-                        ((EntityInsentient) petEntity).getNavigation().a(speed);
-                    }
-                } catch (IllegalArgumentException exception) {
-                    petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                }
-            }
-        }.run();
-    }
-
-    /**
      * Get the pet type.
      *
      * @return The pet type.
@@ -345,6 +324,41 @@ public abstract class Pet implements Listener {
     protected final Player getPlayer() {
         return Bukkit.getPlayer(owner);
     }
+    
+    /**
+     * Force pet to follow player
+     */
+    private class FollowPlayer implements Runnable {
+    	@Override
+        public void run() {
+            if (getPlayer() == null)
+                return;
+            if (Core.getCustomPlayer(getPlayer()).currentTreasureChest != null)
+                return;
+
+            net.minecraft.server.v1_8_R3.Entity petEntity = getType().getEntityType() == EntityType.ZOMBIE ? customEnt : ((CraftEntity) entity).getHandle();
+            ((EntityInsentient) petEntity).getNavigation().a(2);
+            Location targetLocation = getPlayer().getLocation();
+            PathEntity path;
+            path = ((EntityInsentient) petEntity).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
+            try {
+                int distance = (int) Bukkit.getPlayer(getPlayer().getName()).getLocation().distance(petEntity.getBukkitEntity().getLocation());
+                if (distance > 10 && petEntity.valid && getPlayer().isOnGround()) {
+                    petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
+                }
+                if (path != null && distance > 3.3) {
+                    double speed = 1.05d;
+                    if (getType().getEntityType() == EntityType.ZOMBIE)
+                        speed *= 1.5;
+                    ((EntityInsentient) petEntity).getNavigation().a(path, speed);
+                    ((EntityInsentient) petEntity).getNavigation().a(speed);
+                }
+            } catch (IllegalArgumentException exception) {
+                petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
+            }
+        }
+    }
+    
 
     /**
      * Event Listener.
