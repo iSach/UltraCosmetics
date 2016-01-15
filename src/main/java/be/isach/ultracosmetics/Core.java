@@ -627,12 +627,6 @@ public class Core extends JavaPlugin {
                         Bukkit.getLogger().info("");
                         Bukkit.getConsoleSender().sendMessage("§c§lError:");
                         e.printStackTrace();
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§c§lServer shutting down, please check the MySQL info!");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.shutdown();
 
                     }
                 }

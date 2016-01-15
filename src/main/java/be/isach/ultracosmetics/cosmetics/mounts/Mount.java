@@ -288,6 +288,7 @@ public abstract class Mount implements Listener {
             if (name != null
                     && owner != null
                     && getPlayer() != null
+                    && Core.getCustomPlayer(getPlayer()) != null
                     && event.getVehicle() != null
                     && event.getExited() != null
                     && event.getVehicle().getCustomName().equals(name)

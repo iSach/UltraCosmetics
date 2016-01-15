@@ -38,21 +38,6 @@ public class TreasureChestManager implements Listener {
         return list.get(random.nextInt(set.size()));
     }
 
-    @EventHandler
-    public void openChest(InventoryClickEvent event) {
-        if (event.getCurrentItem() != null
-                && event.getCurrentItem().hasItemMeta()
-                && event.getCurrentItem().getItemMeta().hasDisplayName()
-                && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
-            if (!Core.vaultLoaded && Core.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.ANVIL_LAND, 0.2f, 1.2f);
-                return;
-            }
-            Player player = (Player) event.getWhoClicked();
-            tryOpenChest(player);
-        }
-    }
-
     public static void tryOpenChest(Player player) {
         if (Core.getCustomPlayer(player).getKeys() > 0) {
             Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
@@ -80,6 +65,21 @@ public class TreasureChestManager implements Listener {
     }
 
     @EventHandler
+    public void openChest(InventoryClickEvent event) {
+        if (event.getCurrentItem() != null
+                && event.getCurrentItem().hasItemMeta()
+                && event.getCurrentItem().getItemMeta().hasDisplayName()
+                && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
+            if (!Core.vaultLoaded && Core.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
+                ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.ANVIL_LAND, 0.2f, 1.2f);
+                return;
+            }
+            Player player = (Player) event.getWhoClicked();
+            tryOpenChest(player);
+        }
+    }
+
+    @EventHandler
     public void buyKeyOpenInv(InventoryClickEvent event) {
         if (event.getCurrentItem() != null
                 && event.getCurrentItem().hasItemMeta()
@@ -102,7 +102,7 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().hasItemMeta()
                 && event.getCurrentItem().getItemMeta().hasDisplayName()) {
             if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) {
-                if (Core.economy.getBalance((Player) event.getWhoClicked()) >= (int) SettingsManager.getConfig().get("TreasureChests.Key-Price")) {
+                if (Core.getCustomPlayer((Player) event.getWhoClicked()).getBalance() >= (int) SettingsManager.getConfig().get("TreasureChests.Key-Price")) {
                     Core.economy.withdrawPlayer((Player) event.getWhoClicked(), (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"));
                     Core.getCustomPlayer((Player) event.getWhoClicked()).addKey();
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));

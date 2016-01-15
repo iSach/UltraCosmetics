@@ -28,6 +28,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,62 +42,52 @@ public abstract class Gadget implements Listener {
      * If true, it will differentiate left and right click.
      */
     public boolean useTwoInteractMethods;
-
-    /**
-     * The Ammo Purchase inventory.
-     */
-    private Inventory inv;
-
     /**
      * If it should open Gadget Menu after purchase.
      */
     public boolean openGadgetsInvAfterAmmo;
-
-    /**
-     * Event listener.
-     */
-    private Listener listener;
-
-    /**
-     * Type of the Gadget.
-     */
-    private GadgetType type;
-
     /**
      * If true, will display cooldown left when fail on use
      * because cooldown active.
      */
     public boolean displayCooldownMessage = true;
-
-    /**
-     * Required permission.
-     */
-    private String permission;
-
-    /**
-     * Owner's UUID.
-     */
-    private UUID owner;
-
-    /**
-     * If true, it will affect players (velocity).
-     */
-    boolean affectPlayers;
-
+    public int lastPage = 1;
     /**
      * Last Clicked Block by the player.
      */
     protected Block lastClickedBlock;
-
     /**
      * Gadget ItemStack.
      */
     protected ItemStack itemStack;
-
     /**
      * If Gadget interaction should run asynchronously.
      */
     protected boolean asyncAction = false;
+    /**
+     * If true, it will affect players (velocity).
+     */
+    boolean affectPlayers;
+    /**
+     * The Ammo Purchase inventory.
+     */
+    private Inventory inv;
+    /**
+     * Event listener.
+     */
+    private Listener listener;
+    /**
+     * Type of the Gadget.
+     */
+    private GadgetType type;
+    /**
+     * Required permission.
+     */
+    private String permission;
+    /**
+     * Owner's UUID.
+     */
+    private UUID owner;
 
     public Gadget(final UUID owner, final GadgetType type) {
         this.permission = type.permission;
@@ -113,7 +105,11 @@ public abstract class Gadget implements Listener {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
-            final DecimalFormat decimalFormat = new DecimalFormat("0.0");
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
+            otherSymbols.setDecimalSeparator('.');
+            otherSymbols.setGroupingSeparator('.');
+            otherSymbols.setPatternSeparator('.');
+            final DecimalFormat decimalFormat = new DecimalFormat("0.0", otherSymbols);
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -201,7 +197,11 @@ public abstract class Gadget implements Listener {
             stringBuilder.append(color + "█");
         }
 
-        DecimalFormat decimalFormat = new DecimalFormat("0.0");
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
+        otherSymbols.setDecimalSeparator('.');
+        otherSymbols.setGroupingSeparator('.');
+        otherSymbols.setPatternSeparator('.');
+        final DecimalFormat decimalFormat = new DecimalFormat("0.0", otherSymbols);
         String timeLeft = decimalFormat.format(currentCooldown) + "s";
 
         PlayerUtils.sendInActionBar(getPlayer(),
@@ -330,8 +330,6 @@ public abstract class Gadget implements Listener {
         this.inv = inventory;
     }
 
-    public int lastPage = 1;
-
     /**
      * Event Listener.
      */
@@ -360,7 +358,7 @@ public abstract class Gadget implements Listener {
                     String purchase = MessageManager.getMessage("Purchase");
                     String cancel = MessageManager.getMessage("Cancel");
                     if (displayName.equals(purchase)) {
-                        if (Core.economy.getBalance((Player) event.getWhoClicked()) >= getPrice()) {
+                        if (Core.getCustomPlayer((Player) event.getWhoClicked()).getBalance() >= getPrice()) {
                             Core.economy.withdrawPlayer((Player) event.getWhoClicked(), getPrice());
                             Core.getCustomPlayer((Player) event.getWhoClicked()).addAmmo(type.toString().toLowerCase(), getResultAmmoAmount());
                             event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));

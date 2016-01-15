@@ -229,14 +229,9 @@ public class SuitManager implements Listener {
                     MainMenuManager.openMenu((Player) event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Suit"))) {
-                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentHelmet != null
-                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentChestplate != null
-                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentLeggings != null
-                            && Core.getCustomPlayer((Player) event.getWhoClicked()).currentBoots != null) {
-                        int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit();
-                        openMenu((Player) event.getWhoClicked(), currentPage);
-                    } else return;
+                    int currentPage = getCurrentPage((Player) event.getWhoClicked());
+                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit();
+                    openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 }
 

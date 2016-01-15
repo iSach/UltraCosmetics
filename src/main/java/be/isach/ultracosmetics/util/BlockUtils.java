@@ -216,22 +216,20 @@ public class BlockUtils {
                         && !isPortalBlock(BLOCK)
                         && !isRocketBlock(BLOCK)
                         && !isTreasureChestBlock(BLOCK)
+                        && !blocksToRestore.containsKey(BLOCK.getLocation())
                         && net.minecraft.server.v1_8_R3.Block.getById(BLOCK.getTypeId()).getMaterial().isSolid()
                         && a(bUp)
                         && BLOCK.getType().getId() != 43
                         && BLOCK.getType().getId() != 44) {
-                    if (!blocksToRestore.containsKey(BLOCK.getLocation())) {
-                        blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
-                        for (Player player : BLOCK.getLocation().getWorld().getPlayers())
-                            player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
-                        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
-                            @Override
-                            public void run() {
-                                restoreBlockAt(BLOCK.getLocation());
-
-                            }
-                        }, TICK_DELAY);
-                    }
+                    blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
+                    for (Player player : BLOCK.getLocation().getWorld().getPlayers())
+                        player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
+                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                        @Override
+                        public void run() {
+                            restoreBlockAt(BLOCK.getLocation());
+                        }
+                    }, TICK_DELAY);
                 }
 
             }
