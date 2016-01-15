@@ -224,7 +224,7 @@ public abstract class Pet implements Listener {
                 armorStand.setSmall(true);
                 armorStand.setCustomName(getType().getEntityName(getPlayer()));
                 armorStand.setCustomNameVisible(true);
-
+                armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getPlugin(),"C_AD_ArmorStand"));
                 if (Core.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()) != null)
                     armorStand.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()));
 
@@ -250,7 +250,7 @@ public abstract class Pet implements Listener {
             armorStand.setSmall(true);
             armorStand.setCustomName(getType().getEntityName(getPlayer()));
             armorStand.setCustomNameVisible(true);
-
+            armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getPlugin(),"C_AD_ArmorStand"));
             if (Core.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()) != null)
                 armorStand.setCustomName(Core.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()));
 
