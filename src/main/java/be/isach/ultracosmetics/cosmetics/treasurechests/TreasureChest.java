@@ -481,6 +481,7 @@ public class TreasureChest
         armorStand.setBasePlate(false);
         armorStand.setCustomName(s);
         armorStand.setCustomNameVisible(true);
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getPlugin(),"C_AD_ArmorStand"));
         this.holograms.add(armorStand);
     }
 
