@@ -4,12 +4,9 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityBoat;
-import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftBoat;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEnderDragon;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,7 +17,8 @@ import org.bukkit.util.Vector;
 import java.util.UUID;
 
 /**
- * Created by sacha on 17/08/15.
+ * Created by Matthew on 23/01/16.
+ * Copy from iSach's Dragon Mount
  */
 public class MountFlyingBoat extends Mount {
 
