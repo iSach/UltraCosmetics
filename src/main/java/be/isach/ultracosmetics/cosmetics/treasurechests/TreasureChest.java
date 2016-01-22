@@ -38,7 +38,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-//test
+
 public class TreasureChest
         implements Listener {
     Map<Location, Material> oldMaterials = new HashMap();
