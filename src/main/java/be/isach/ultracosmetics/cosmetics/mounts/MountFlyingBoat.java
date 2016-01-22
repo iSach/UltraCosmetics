@@ -58,7 +58,7 @@ public class MountFlyingBoat extends Mount {
     }
 
     @EventHandler
-    public void stopDragonDamage(EntityExplodeEvent event) {
+    public void stopBoatDamage(EntityExplodeEvent event) {
         Entity e = event.getEntity();
         if (e instanceof EntityBoat && e == ent)
             event.setCancelled(true);
