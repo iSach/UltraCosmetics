@@ -40,6 +40,8 @@ public enum MountType {
     MOLTENSNAKE("ultracosmetics.mounts.moltensnake", "MoltenSnake", Material.MAGMA_CREAM, (byte) 0, EntityType.MAGMA_CUBE,
             "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", MountMoltenSnake.class),
     FLYINGBOAT("ultracosmetics.mounts.flyingboat", "FlyingBoat", Material.BOAT, (byte) 0, EntityType.BOAT, "&7&oWow,Flying!", MountFlyingBoat.class);
+  
+  
     private String permission, configName, description;
     private Material material;
     private byte data;
