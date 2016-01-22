@@ -167,6 +167,8 @@ public class MessageManager {
         addMessage("Mounts.Rudolph.entity-displayname", "&l%playername%'s rudolph");
         addMessage("Mounts.MoltenSnake.menu-name", "&c&lMolten Snake");
         addMessage("Mounts.MoltenSnake.entity-displayname", "&l%playername%'s Molten Snake");
+        addMessage("Mounts.FlyingBoat.menu-name", "&a&lFlying Boat");
+        addMessage("Mounts.FlyingBoat.entity-displayname", "&l%playername%'s Flying Boat");
         addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
         addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
 
