@@ -30,13 +30,13 @@ import java.util.UUID;
  * Created by Matthew on 23/01/16.
  * Copy from iSach's Dragon Mount
  */
-public class MountFlyingBoat extends Mount {
+public class MountFlyingShip extends Mount {
 
 	long nextAllowTime = 0;
 	Entity currentboom = null;
 	
-    public MountFlyingBoat(UUID owner) {
-        super(owner, MountType.FLYINGBOAT
+    public MountFlyingShip(UUID owner) {
+        super(owner, MountType.FLYINGSHIP
         );
         if (owner != null)
             Core.registerListener(this);

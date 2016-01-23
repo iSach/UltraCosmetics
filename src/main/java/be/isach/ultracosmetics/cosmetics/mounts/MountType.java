@@ -39,7 +39,7 @@ public enum MountType {
             "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reeinder?", MountRudolph.class),
     MOLTENSNAKE("ultracosmetics.mounts.moltensnake", "MoltenSnake", Material.MAGMA_CREAM, (byte) 0, EntityType.MAGMA_CUBE,
             "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", MountMoltenSnake.class),
-    FLYINGBOAT("ultracosmetics.mounts.flyingboat", "FlyingBoat", Material.BOAT, (byte) 0, EntityType.BOAT, "&7&oWow,Flying!", MountFlyingBoat.class);
+    FLYINGSHIP("ultracosmetics.mounts.flyingship", "FlyingShip", Material.BOAT, (byte) 0, EntityType.BOAT, "&7&oBomb them all!", MountFlyingShip.class);
   
   
     private String permission, configName, description;
