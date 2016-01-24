@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Bat;
@@ -107,7 +106,7 @@ public class GadgetBatBlaster extends Gadget {
         if (this.bats.containsKey(getPlayer())) {
             for (Bat bat : this.bats.get(getPlayer())) {
                 if (bat.isValid()) {
-                    bat.getWorld().spigot().playEffect(bat.getLocation(), Effect.SMOKE);
+                    UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
                 }
                 bat.remove();
             }

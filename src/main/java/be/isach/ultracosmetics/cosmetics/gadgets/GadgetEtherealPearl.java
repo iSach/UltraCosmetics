@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.Core;
 import org.bukkit.*;
 import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -104,6 +105,8 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             runnableHashMap.get(getPlayer()).cancel();
             runnableHashMap.remove(getPlayer());
             spawnRandomFirework(getPlayer().getLocation());
+            for (Entity entity : pearls)
+                entity.remove();
         }
     }
 

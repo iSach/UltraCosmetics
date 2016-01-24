@@ -7,7 +7,10 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntitySheep;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftSheep;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.Sheep;
@@ -119,7 +122,7 @@ public class GadgetExplosiveSheep extends Gadget {
 
             if (time < 0.5) {
                 s.getWorld().playSound(s.getLocation(), Sound.EXPLODE, 2, 1);
-                s.getWorld().spigot().playEffect(s.getLocation(), Effect.EXPLOSION_HUGE);
+                UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
                 for (int i = 0; i < 50; i++) {
                     final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
                     try {

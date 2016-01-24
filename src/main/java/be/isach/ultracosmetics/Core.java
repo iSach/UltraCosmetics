@@ -122,6 +122,10 @@ public class Core extends JavaPlugin {
      */
     static boolean debug = false;
     /**
+     * If true, the server is using Spigot and not CraftBukkit/Bukkit.
+     */
+    private static boolean usingSpigot = false;
+    /**
      * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
      */
     private static boolean noteBlockAPIEnabled;
@@ -281,6 +285,10 @@ public class Core extends JavaPlugin {
         return toFilter;
     }
 
+    public static boolean usingSpigot() {
+        return usingSpigot;
+    }
+
     /**
      * Called when plugin is enabled.
      */
@@ -291,6 +299,9 @@ public class Core extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        if (getServer().getVersion().contains("Spigot"))
+            usingSpigot = true;
 
         playerManager = new PlayerManager();
 

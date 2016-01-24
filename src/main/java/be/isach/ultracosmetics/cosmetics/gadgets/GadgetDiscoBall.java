@@ -44,7 +44,8 @@ public class GadgetDiscoBall extends Gadget {
     public void onClear() {
         try {
             running = false;
-            armorStand.getWorld().spigot().playEffect(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), Effect.STEP_SOUND, Material.STAINED_CLAY.getId(), 4, 0, 0, 0, 1, 200, 32);
+            if (Core.usingSpigot())
+                armorStand.getWorld().spigot().playEffect(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), Effect.STEP_SOUND, Material.STAINED_CLAY.getId(), 4, 0, 0, 0, 1, 200, 32);
             armorStand.remove();
             armorStand = null;
             i = 0;
@@ -113,12 +114,13 @@ public class GadgetDiscoBall extends Gadget {
             angle = 2 * Math.PI * i / 100;
             x = Math.cos(angle) * 4;
             z = Math.sin(angle) * 4;
-            drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), Effect.POTION_SWIRL, 20);
+            if (Core.usingSpigot())
+                drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), false, 20);
             i += 6;
             angle2 = 2 * Math.PI * i2 / 100;
             x2 = Math.cos(angle2) * 4;
             z2 = Math.sin(angle2) * 4;
-            drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), Effect.COLOURED_DUST, 50);
+            drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), true, 50);
             i2 += 0.4;
             for (Entity ent : getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5))
                 if (ent.isOnGround()
@@ -143,7 +145,7 @@ public class GadgetDiscoBall extends Gadget {
         return entities;
     }
 
-    public void drawParticleLine(Location a, Location b, Effect effect, int particles) {
+    public void drawParticleLine(Location a, Location b, boolean dust, int particles) {
         Location location = a.clone();
         Location target = b.clone();
         double amount = particles;
@@ -153,7 +155,7 @@ public class GadgetDiscoBall extends Gadget {
 
         float ratio = length / particles;
         Vector v = link.multiply(ratio);
-        if (effect == Effect.POTION_SWIRL)
+        if (!dust)
             MathUtils.rotateAroundAxisX(v, i);
         else {
             MathUtils.rotateAroundAxisZ(v, i2 / 5);
@@ -166,11 +168,11 @@ public class GadgetDiscoBall extends Gadget {
                 step = 0;
             step++;
             loc.add(v);
-            if (effect == Effect.COLOURED_DUST) {
-                location.getWorld().spigot().playEffect(loc, effect, 0, 0, 0, 0, 0, 0, 1, 32);
+            if (dust) {
+                UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
                 continue;
             }
-            location.getWorld().spigot().playEffect(loc, effect);
+            location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
         }
     }
 

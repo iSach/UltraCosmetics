@@ -6,7 +6,7 @@
 
     <groupId>be.isach</groupId>
     <artifactId>UltraCosmetics</artifactId>
-    <version>2.0.4-RELEASE</version>
+    <version>2.0.5-RELEASE</version>
 
     <repositories>
         <!-- NoteBlockAPI repositery -->
@@ -32,30 +32,59 @@
     </repositories>
 
     <dependencies>
+
         <!-- Spigot dependency -->
+        <!--<dependency>-->
+        <!--<groupId>org.spigotmc</groupId>-->
+        <!--<artifactId>spigot</artifactId>-->
+        <!--<version>1.8.8-R0.1-SNAPSHOT</version>-->
+        <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; NoteBlockAPI dependency &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>com.xxmicloxx</groupId>-->
+        <!--<artifactId>NoteBlockAPI</artifactId>-->
+        <!--<version>1.8.7</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>net.milkbowl.vault</groupId>-->
+        <!--<artifactId>VaultAPI</artifactId>-->
+        <!--<version>1.5</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>LibsDisguises</groupId>-->
+        <!--<artifactId>LibsDisguises</artifactId>-->
+        <!--<version>8.6.8-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <!-- LOCAL WHEN REPOSITERIES ARE DOWN, STUPID WEBSITES -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>/Users/Sacha/Desktop/LOCAL/spigot-1.8.8.jar</systemPath>
         </dependency>
-        <!-- NoteBlockAPI dependency -->
         <dependency>
             <groupId>com.xxmicloxx</groupId>
             <artifactId>NoteBlockAPI</artifactId>
             <version>1.8.7</version>
+            <scope>system</scope>
+            <systemPath>/Users/Sacha/Desktop/LOCAL/plugins/NoteBlockAPI-1.1.0.jar</systemPath>
         </dependency>
-        <!-- Vault dependency -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.5</version>
+            <scope>system</scope>
+            <systemPath>/Users/Sacha/Desktop/LOCAL/plugins/Vault.jar</systemPath>
         </dependency>
-        <!-- Lib's Disguises dependency -->
         <dependency>
             <groupId>LibsDisguises</groupId>
             <artifactId>LibsDisguises</artifactId>
-            <version>8.6.5-SNAPSHOT</version>
+            <version>8.6.8-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>/Users/Sacha/Desktop/LOCAL/plugins/LibsDisguises.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -81,7 +110,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <!--<outputDirectory>../../Users/Sacha/Desktop/LOCAL/plugins/</outputDirectory>-->
+                    <outputDirectory>../../Users/Sacha/Desktop/LOCAL/plugins/</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

@@ -8,6 +8,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Created by sacha on 21/07/15.
@@ -19,9 +21,8 @@ public class SettingsManager {
     private static SettingsManager messages = new SettingsManager("messages");
 
     private static SettingsManager conf;
-
-    private File file;
     public FileConfiguration fileConfiguration;
+    private File file;
 
     /**
      * Creates a new file and defines fileConfiguration and file.
@@ -87,6 +88,21 @@ public class SettingsManager {
      */
     public static SettingsManager getData(Player p) {
         return new SettingsManager("/data/" + p.getUniqueId().toString());
+    }
+
+    /**
+     * Gets the data settings manager of a uuid.
+     *
+     * @param p The player.
+     * @return the data settings manager of a uuid.
+     */
+    public static SettingsManager getData(UUID uuid) {
+        return new SettingsManager("/data/" + uuid.toString());
+    }
+
+    public static boolean hasData(UUID uuid) {
+        return Arrays.asList(Core.getPlugin().getDataFolder()
+                .listFiles()).contains(new File(uuid.toString() + ".yml"));
     }
 
     public void reload() {

@@ -7,6 +7,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * Created by sacha on 15/08/15.
@@ -46,15 +47,12 @@ public class SQLUtils {
         }
     }
 
-    public int getAmmo(Player p, String name) {
-
+    public int getAmmo(UUID uuid, String name) {
         try {
-            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            ResultSet res = core.table.select().where("uuid", uuid.toString()).execute();
             res.first();
             return res.getInt(name.replace("_", ""));
-
         } catch (SQLException e) {
-
             return 0;
         }
     }
@@ -67,8 +65,17 @@ public class SQLUtils {
             return res.getString("name" + pet);
 
         } catch (SQLException e) {
-
             return "Unknown";
+        }
+    }
+
+    public boolean exists(UUID uuid) {
+        try {
+            ResultSet resultSet = core.table.select().where("uuid", uuid.toString()).execute();
+            resultSet.first();
+            return resultSet.next();
+        } catch (SQLException e) {
+            return false;
         }
     }
 
@@ -87,9 +94,9 @@ public class SQLUtils {
         }
     }
 
-    public int getKeys(Player p) {
+    public int getKeys(UUID uuid) {
         try {
-            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            ResultSet res = core.table.select().where("uuid", uuid.toString()).execute();
             res.first();
             return res.getInt("treasureKeys");
         } catch (SQLException e) {
@@ -97,20 +104,20 @@ public class SQLUtils {
         }
     }
 
-    public void removeKey(Player p) {
-        core.table.update().set("treasureKeys", getKeys(p) - 1).where("uuid", p.getUniqueId().toString()).execute();
+    public void removeKey(UUID uuid) {
+        core.table.update().set("treasureKeys", getKeys(uuid) - 1).where("uuid", uuid.toString()).execute();
     }
 
-    public void addKey(Player p) {
-        core.table.update().set("treasureKeys", getKeys(p) + 1).where("uuid", p.getUniqueId().toString()).execute();
+    public void addKey(UUID uuid) {
+        core.table.update().set("treasureKeys", getKeys(uuid) + 1).where("uuid", uuid.toString()).execute();
     }
 
-    public void removeAmmo(Player p, String name) {
-        core.table.update().set(name.replace("_", ""), getAmmo(p, name) - 1).where("uuid", p.getUniqueId().toString()).execute();
+    public void removeAmmo(UUID uuid, String name) {
+        core.table.update().set(name.replace("_", ""), getAmmo(uuid, name) - 1).where("uuid", uuid.toString()).execute();
     }
 
-    public void addAmmo(Player p, String name, int i) {
-        core.table.update().set(name.replace("_", ""), getAmmo(p, name) + i).where("uuid", p.getUniqueId().toString()).execute();
+    public void addAmmo(UUID uuid, String name, int i) {
+        core.table.update().set(name.replace("_", ""), getAmmo(uuid, name) + i).where("uuid", uuid.toString()).execute();
     }
 
     public void setGadgetsEnabled(Player p, boolean enabled) {
