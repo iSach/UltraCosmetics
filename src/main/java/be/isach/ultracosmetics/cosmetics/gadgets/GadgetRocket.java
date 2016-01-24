@@ -26,10 +26,10 @@ import java.util.UUID;
  */
 public class GadgetRocket extends Gadget {
 
+    public List<Block> blocks = new ArrayList<>();
     boolean launching;
     ArmorStand armorStand;
     List<FallingBlock> fallingBlocks = new ArrayList<>();
-    public List<Block> blocks = new ArrayList<>();
 
     public GadgetRocket(UUID owner) {
         super(owner, GadgetType.ROCKET);
@@ -145,6 +145,8 @@ public class GadgetRocket extends Gadget {
     }
 
     boolean isStillCurrentGadget() {
+        if (getPlayer() == null)
+            return false;
         return Core.getCustomPlayer(getPlayer()).currentGadget == this;
     }
 

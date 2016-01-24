@@ -92,39 +92,59 @@ public class Core extends JavaPlugin {
      * Should the GUI close after Cosmetic Selection?
      */
     closeAfterSelect;
+
+    /**
+     * Current UC version.
+     */
+    public static String currentVersion;
+
     /**
      * List of enabled categories.
      */
     public static List<Category> enabledCategories = new ArrayList<>();
+
     /**
      * The Configuration. (config.yml)
      */
     public static CustomConfiguration config;
+
     /**
      * Config File.
      */
     public static File file;
+
     /**
      * Economy, used only if Vault is enabled.
      */
     public static Economy economy = null;
+
     public static SQLUtils sqlUtils;
+
     /**
      * If true, plugin is outdated.
      */
     public static boolean outdated;
+
     /**
      * Last Version published on spigotmc.org.
      */
     public static String lastVersion;
+
     /**
      * If true, debug messages will be shown.
      */
     static boolean debug = false;
+
+    /**
+     * If true, the server is using Spigot and not CraftBukkit/Bukkit.
+     */
+    private static boolean usingSpigot = false;
+
     /**
      * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
      */
     private static boolean noteBlockAPIEnabled;
+
     /**
      * Determines if Ammo Use is enabled.
      */
@@ -281,6 +301,10 @@ public class Core extends JavaPlugin {
         return toFilter;
     }
 
+    public static boolean usingSpigot() {
+        return usingSpigot;
+    }
+
     /**
      * Called when plugin is enabled.
      */
@@ -292,7 +316,11 @@ public class Core extends JavaPlugin {
             return;
         }
 
+        if (getServer().getVersion().contains("Spigot"))
+            usingSpigot = true;
+
         playerManager = new PlayerManager();
+        currentVersion = getDescription().getVersion();
 
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
         log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded...");
@@ -546,6 +574,8 @@ public class Core extends JavaPlugin {
         log("");
         log("UltraCosmetics finished loading and is now enabled!");
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+
+        GeneralUtil.printPermissions();
     }
 
     /**

@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Sacha on 24/12/15.
@@ -33,6 +35,15 @@ public class GeneralUtil {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+
+        writer.println();
+        writer.println("UltraCosmetics v" + Core.currentVersion + " permissions.");
+        writer.println("Generated automatically on " + dateFormat.format(date));
+        writer.println();
+        writer.println();
 
         writer.println("General permissions, enabled by default.");
         writer.println("  - ultracosmetics.receivechest");

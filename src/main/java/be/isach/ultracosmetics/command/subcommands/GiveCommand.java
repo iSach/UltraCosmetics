@@ -3,11 +3,15 @@ package be.isach.ultracosmetics.command.subcommands;
 import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /**
  * Created by Sacha on 21/12/15.
@@ -31,12 +35,23 @@ public class GiveCommand extends SubCommand {
             return;
         }
 
-        Player receiver = sender;
+        OfflinePlayer receiver = sender;
 
         String arg1 = args[1].toLowerCase();
         if (arg1.startsWith("k")) { // Giving key.
             if (args.length > 3) {
                 receiver = Bukkit.getPlayer(args[3]);
+                if (receiver == null
+                        && Bukkit.getOfflinePlayer(args[3]) == null) {
+                    sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
+                    return;
+                }
+                if (Bukkit.getOfflinePlayer(args[3]) != null) {
+                    sender.sendMessage("  §c§lPlayer " + args[3] + " is offline.");
+
+                    receiver = Bukkit.getOfflinePlayer(args[3]);
+                }
+
                 if (receiver == null) {
                     sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
                     return;
@@ -51,7 +66,7 @@ public class GiveCommand extends SubCommand {
             int keys = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[2])));
 
             for (int i = 0; i < keys; i++)
-                Core.getPlayerManager().getCustomPlayer(receiver).addKey();
+                addKey(receiver);
             sender.sendMessage("  §c§l" + keys + " treasure keys given to " + receiver.getName());
             return;
 
@@ -62,8 +77,19 @@ public class GiveCommand extends SubCommand {
             }
             if (args.length > 4) {
                 receiver = Bukkit.getPlayer(args[4]);
+                if (receiver == null
+                        && Bukkit.getOfflinePlayer(args[4]) == null) {
+                    sender.sendMessage("  §c§lPlayer " + args[4] + " not found and has never come!");
+                    return;
+                }
+                if (Bukkit.getOfflinePlayer(args[4]) != null) {
+                    sender.sendMessage("  §c§lPlayer " + args[4] + " is offline.");
+
+                    receiver = Bukkit.getOfflinePlayer(args[4]);
+                }
+
                 if (receiver == null) {
-                    sender.sendMessage("  §c§lPlayer " + args[4] + " not found!");
+                    sender.sendMessage("  §c§lPlayer " + args[4] + " not found and has never come!");
                     return;
                 }
             }
@@ -88,7 +114,7 @@ public class GiveCommand extends SubCommand {
                 return;
             }
             int ammo = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[3])));
-            Core.getPlayerManager().getCustomPlayer(receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
+            addAmmo(gadgetType, receiver, ammo);
             sender.sendMessage("  §c§l" + ammo + " " + gadgetType.toString().toLowerCase() + " ammo given to " + receiver.getName());
             return;
         } else {
@@ -110,13 +136,24 @@ public class GiveCommand extends SubCommand {
             return;
         }
 
-        Player receiver;
+        OfflinePlayer receiver;
 
         String arg1 = args[1].toLowerCase();
         if (arg1.startsWith("k")) {
             receiver = Bukkit.getPlayer(args[3]);
+            if (receiver == null
+                    && Bukkit.getOfflinePlayer(args[3]) == null) {
+                sender.sendMessage("  §c§lPlayer " + args[3] + " not found and has never come!");
+                return;
+            }
+            if (Bukkit.getOfflinePlayer(args[3]) != null) {
+                sender.sendMessage("  §c§lPlayer " + args[3] + " is offline.");
+
+                receiver = Bukkit.getOfflinePlayer(args[3]);
+            }
+
             if (receiver == null) {
-                sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
+                sender.sendMessage("  §c§lPlayer " + args[3] + " not found and has never come!");
                 return;
             }
 
@@ -128,7 +165,7 @@ public class GiveCommand extends SubCommand {
             int keys = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[2])));
 
             for (int i = 0; i < keys; i++)
-                Core.getPlayerManager().getCustomPlayer(receiver).addKey();
+                addKey(receiver);
             sender.sendMessage("  §c§l" + keys + " treasure keys given to " + receiver.getName());
             return;
 
@@ -138,6 +175,17 @@ public class GiveCommand extends SubCommand {
                 return;
             }
             receiver = Bukkit.getPlayer(args[4]);
+            if (receiver == null
+                    && Bukkit.getOfflinePlayer(args[4]) == null) {
+                sender.sendMessage("  §c§lPlayer " + args[4] + " not found!");
+                return;
+            }
+            if (Bukkit.getOfflinePlayer(args[4]) != null) {
+                sender.sendMessage("  §c§lPlayer " + args[4] + " is offline.");
+
+                receiver = Bukkit.getOfflinePlayer(args[4]);
+            }
+
             if (receiver == null) {
                 sender.sendMessage("  §c§lPlayer " + args[4] + " not found!");
                 return;
@@ -163,12 +211,43 @@ public class GiveCommand extends SubCommand {
                 return;
             }
             int ammo = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[3])));
-            Core.getPlayerManager().getCustomPlayer(receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
+            addAmmo(gadgetType, receiver, ammo);
             sender.sendMessage("  §c§l" + ammo + " " + gadgetType.toString().toLowerCase() + " ammo given to " + receiver.getName());
             return;
         } else {
             sender.sendMessage("  §c§lIncorrect Usage. /uc give <key|ammo> <amount> <player>");
             return;
         }
+    }
+
+    private void addKey(OfflinePlayer offlinePlayer) {
+        if (offlinePlayer == null || offlinePlayer.getUniqueId() == null)
+            return;
+        if (offlinePlayer instanceof Player)
+            Core.getPlayerManager().getCustomPlayer((Player) offlinePlayer).addKey();
+        else {
+            if (Core.usingFileStorage())
+                SettingsManager.getData(offlinePlayer.getUniqueId()).set("Keys", getKeys(offlinePlayer.getUniqueId()) + 1);
+            else
+                Core.sqlUtils.addKey(offlinePlayer.getUniqueId());
+        }
+    }
+
+    private void addAmmo(GadgetType gadgetType, OfflinePlayer receiver, int ammo) {
+        if (receiver == null || receiver.getUniqueId() == null)
+            return;
+        if (receiver instanceof Player)
+            Core.getPlayerManager().getCustomPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
+        else {
+            if (Core.usingFileStorage())
+                SettingsManager.getData(receiver.getUniqueId()).set("Ammo." + gadgetType.toString().toLowerCase(),
+                        ((int) SettingsManager.getData(receiver.getUniqueId()).get("Ammo." + gadgetType.toString().toLowerCase())) + ammo);
+            else
+                Core.sqlUtils.addAmmo(receiver.getUniqueId(), gadgetType.toString().toLowerCase(), ammo);
+        }
+    }
+
+    private int getKeys(UUID uuid) {
+        return Core.usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : Core.sqlUtils.getKeys(uuid);
     }
 }

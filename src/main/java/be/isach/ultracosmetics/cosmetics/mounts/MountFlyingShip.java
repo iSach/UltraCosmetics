@@ -5,17 +5,14 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityBoat;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftBoat;
 import org.bukkit.entity.Animals;
-import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -36,8 +33,7 @@ public class MountFlyingShip extends Mount {
 	Entity currentboom = null;
 	
     public MountFlyingShip(UUID owner) {
-        super(owner, MountType.FLYINGSHIP
-        );
+        super(owner, MountType.FLYINGSHIP);
         if (owner != null)
             Core.registerListener(this);
     }

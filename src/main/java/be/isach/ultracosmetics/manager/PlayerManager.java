@@ -1,9 +1,13 @@
 package be.isach.ultracosmetics.manager;
 
+import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.config.SettingsManager;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -36,6 +40,13 @@ public class PlayerManager {
 
     public Collection<CustomPlayer> getPlayers() {
         return playerCache.values();
+    }
+
+    public boolean hasNeverCome(UUID uuid) {
+        if (Core.usingFileStorage())
+            return !SettingsManager.hasData(uuid);
+        else
+            return !Core.sqlUtils.exists(uuid);
     }
 
     public void dispose() {

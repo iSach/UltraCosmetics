@@ -91,7 +91,7 @@ public class MountNyanSheep extends Mount {
             EntityCreature ec = ((CraftCreature) ent).getHandle();
             ec.S = 1;
             Navigation nav = (Navigation) ec.getNavigation();
-            nav.a(loc.getX(), loc.getY(), loc.getZ(), 1.8d * 1.0D);
+            nav.a(loc.getX(), loc.getY(), loc.getZ(), 1.8d);
         } catch (Exception exc) {
             Core.getCustomPlayer(getPlayer()).removeMount();
         }

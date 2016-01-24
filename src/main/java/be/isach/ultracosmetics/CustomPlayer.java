@@ -15,8 +15,8 @@ import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -194,7 +194,7 @@ public class CustomPlayer {
         if (Core.usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() + 1);
         else
-            Core.sqlUtils.addKey(getPlayer());
+            Core.sqlUtils.addKey(getPlayer().getUniqueId());
     }
 
     /**
@@ -204,14 +204,14 @@ public class CustomPlayer {
         if (Core.usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() - 1);
         else
-            Core.sqlUtils.removeKey(getPlayer());
+            Core.sqlUtils.removeKey(getPlayer().getUniqueId());
     }
 
     /**
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        return Core.usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : Core.sqlUtils.getKeys(getPlayer());
+        return Core.usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : Core.sqlUtils.getKeys(getPlayer().getUniqueId());
     }
 
     /**
@@ -432,7 +432,7 @@ public class CustomPlayer {
             if (Core.usingFileStorage())
                 SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + amount);
             else
-                Core.sqlUtils.addAmmo(getPlayer(), name, amount);
+                Core.sqlUtils.addAmmo(getPlayer().getUniqueId(), name, amount);
         if (currentGadget != null)
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                     ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(),
@@ -527,13 +527,11 @@ public class CustomPlayer {
      * @return The ammo of the given gadget.
      */
     public int getAmmo(String name) {
-        if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage()) {
+        if (Core.isAmmoEnabled())
+            if (Core.usingFileStorage())
                 return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name);
-            } else {
-                return Core.sqlUtils.getAmmo(getPlayer(), name);
-            }
-        }
+            else
+                return Core.sqlUtils.getAmmo(getPlayer().getUniqueId(), name);
         return 0;
     }
 
@@ -556,7 +554,7 @@ public class CustomPlayer {
             if (Core.usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) - 1);
             } else {
-                Core.sqlUtils.removeAmmo(getPlayer(), name);
+                Core.sqlUtils.removeAmmo(getPlayer().getUniqueId(), name);
             }
         }
     }
@@ -565,11 +563,12 @@ public class CustomPlayer {
      * Gives the Menu Item.
      */
     public void giveMenuItem() {
+        if (getPlayer() == null)
+            return;
         try {
             removeMenuItem();
         } catch (Exception e) {
         }
-        ;
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (getPlayer().getInventory().getItem(slot) != null) {
             if (getPlayer().getInventory().getItem(slot).hasItemMeta()

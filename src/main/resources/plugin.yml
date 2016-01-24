@@ -1,5 +1,5 @@
 name: UltraCosmetics
-version: 2.0.4
+version: 2.0.5
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core
@@ -12,7 +12,6 @@ commands:
 permissions:
   ultracosmetics.*:
     children:
-      - ultracosmetics.gadgets.*
       - ultracosmetics.pets.*
       - ultracosmetics.particleeffects.*
       - ultracosmetics.mounts.*
@@ -207,6 +206,7 @@ permissions:
       - ultracosmetics.mounts.spider
       - ultracosmetics.mounts.rudolph
       - ultracosmetics.mounts.moltensnake
+      - ultracosmetics.mounts.flyingship
   ultracosmetics.mounts.druggedhorse:
     default: op
   ultracosmetics.mounts.ecologisthorse:
@@ -238,6 +238,8 @@ permissions:
   ultracosmetics.mounts.rudolph:
     default: op
   ultracosmetics.mounts.moltensnake:
+    default: op
+  ultracosmetics.mounts.flyingship:
     default: op
   ultracosmetics.pets.*:
     children:
