@@ -1,5 +1,5 @@
 name: UltraCosmetics
-version: Pre-2.0.5
+version: 2.0.5
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.Core

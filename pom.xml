@@ -110,7 +110,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>../../Users/Sacha/Desktop/LOCAL/plugins/</outputDirectory>
+                    <!--<outputDirectory>../../Users/Sacha/Desktop/LOCAL/plugins/</outputDirectory>-->
                 </configuration>
             </plugin>
         </plugins>
