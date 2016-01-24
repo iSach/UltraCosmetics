@@ -16,7 +16,6 @@ import java.util.UUID;
  * Created by Sacha on 18/12/15.
  */
 public enum MountType {
-
     DRUGGEDHORSE("ultracosmetics.mounts.druggedhorse", "DruggedHorse", Material.SUGAR, (byte) 0, EntityType.HORSE, "&7&oThat is just too much!", MountDruggedHorse.class),
     INFERNALHORROR("ultracosmetics.mounts.infernalhorror", "InfernalHorror", Material.BONE, (byte) 0, EntityType.HORSE,
             "&7&oThis mount comes directly from... hell!", MountInfernalHorror.class),
@@ -39,9 +38,10 @@ public enum MountType {
     RUDOLPH("ultracosmetics.mounts.rudolph", "Rudolph", Material.DEAD_BUSH, (byte) 0, EntityType.HORSE,
             "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reeinder?", MountRudolph.class),
     MOLTENSNAKE("ultracosmetics.mounts.moltensnake", "MoltenSnake", Material.MAGMA_CREAM, (byte) 0, EntityType.MAGMA_CUBE,
-            "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", MountMoltenSnake.class);
-
-
+            "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", MountMoltenSnake.class),
+    FLYINGSHIP("ultracosmetics.mounts.flyingship", "FlyingShip", Material.BOAT, (byte) 0, EntityType.BOAT, "&7&oBomb them all!", MountFlyingShip.class);
+  
+  
     private String permission, configName, description;
     private Material material;
     private byte data;

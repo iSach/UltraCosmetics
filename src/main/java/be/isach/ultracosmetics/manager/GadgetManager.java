@@ -7,8 +7,9 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.util.ItemFactory;
-import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,7 +49,6 @@ public class GadgetManager implements Listener {
             slotAmount = 36;
 
         final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Gadgets") + " §7§o(" + page + "/" + getMaxPagesAmount() + ")");
-
         int i = 0;
         int from = 1;
         if (page > 1)

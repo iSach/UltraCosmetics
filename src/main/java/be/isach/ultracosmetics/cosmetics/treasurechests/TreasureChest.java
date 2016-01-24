@@ -10,6 +10,7 @@ import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EntityItem;
 import net.minecraft.server.v1_8_R3.TileEntityChest;
 import net.minecraft.server.v1_8_R3.TileEntityEnderChest;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,6 +33,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Chest;
 import org.bukkit.material.EnderChest;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
