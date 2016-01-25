@@ -79,7 +79,7 @@ public class MountFlyingShip extends Mount {
                     double X = Math.sin(pitch) * Math.cos(yaw);
                     double Y = Math.sin(pitch) * Math.sin(yaw);
                     double Z = Math.cos(pitch);
-        			MathUtils.applyVelocity(i,  new Vector(X, Z, Y));
+        			MathUtils.applyVelocity(i,  new Vector(X, Z, Y).multiply(1.3D).add(new Vector(0, 1.4D, 0)));
         		}
         		UtilParticles.display(Particles.EXPLOSION_HUGE, l);
         		l.getWorld().playSound(l, Sound.EXPLODE, 1, 1);
