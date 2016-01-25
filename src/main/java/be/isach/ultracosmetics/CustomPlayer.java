@@ -101,7 +101,7 @@ public class CustomPlayer {
                 SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
-            isLoaded = true;
+           
 
         } catch (Exception exc) {
             // Player couldn't be found.
@@ -116,6 +116,8 @@ public class CustomPlayer {
 	        }catch(Exception e){
 	            System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
 	        }
+        }else{
+        	isLoaded = true;
         }
 
     }
@@ -477,7 +479,9 @@ public class CustomPlayer {
     public boolean hasGadgetsEnabled() {
         if (this.cache_hasGadgetsEnable > -1)
             return cache_hasGadgetsEnable == 0 ? false : true;
-
+        // Make sure it won't be affected before load finished, especially for SQL
+        if(!isLoaded)
+        	return false;
 
         try {
             if (Core.usingFileStorage()) {
@@ -522,7 +526,9 @@ public class CustomPlayer {
     public boolean canSeeSelfMorph() {
         if (this.cache_canSeeSelfMorph > -1)
             return this.cache_canSeeSelfMorph == 0 ? false : true;
-
+        // Make sure it won't be affected before load finished, especially for SQL
+        if(!isLoaded)
+        	return false;
         try {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");

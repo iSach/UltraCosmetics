@@ -38,6 +38,7 @@ public class SQLLoaderManager {
 						//pre load two value then cache into server's
 						current.hasGadgetsEnabled();
 						current.canSeeSelfMorph();
+						current.isLoaded = true;
 						iter.remove();
 					}catch(Exception e){
 						iter.remove();
