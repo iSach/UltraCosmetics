@@ -169,6 +169,12 @@ public class Core extends JavaPlugin {
     private static PlayerManager playerManager;
     public Connection co;
     public Table table;
+    
+    /**
+     * SQLLoader Manager instance
+     */
+    private static SQLLoaderManager sqlloader;
+    
     /**
      * MySQL Stuff.
      */
@@ -263,6 +269,14 @@ public class Core extends JavaPlugin {
      */
     public static PlayerManager getPlayerManager() {
         return playerManager;
+    }
+    
+    /**
+     * Gets the SQLloader Manager
+     * @return the SQLloader Manager
+     */
+    public static SQLLoaderManager getSQLLoader(){
+		return sqlloader;
     }
 
     /**
@@ -647,7 +661,9 @@ public class Core extends JavaPlugin {
                             PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
                             statement.executeUpdate();
                         }
-
+                        
+                        log("initial SQLLoader to reduce lag when table is large");
+                        sqlloader = new SQLLoaderManager();
                     } catch (Exception e) {
 
                         Bukkit.getLogger().info("");

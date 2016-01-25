@@ -15,6 +15,7 @@ import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -108,7 +109,14 @@ public class CustomPlayer {
             isLoaded = false;
             return;
         }
-
+        // sql loader thread add player to pre-load
+        if(!Core.usingFileStorage()){
+	        try{
+	        	Core.getSQLLoader().addPreloadPlayer(uuid);
+	        }catch(Exception e){
+	            System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
+	        }
+        }
 
     }
 
@@ -475,7 +483,13 @@ public class CustomPlayer {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
             } else {
-                return Core.sqlUtils.hasGadgetsEnabled(getPlayer());
+            	if(Core.sqlUtils.hasGadgetsEnabled(getPlayer())){
+            		cache_hasGadgetsEnable = 1;
+            		return true;
+            	}else{
+            		cache_hasGadgetsEnable = 0;
+            		return false;
+            	}
             }
         } catch (NullPointerException e) {
             return true;
@@ -513,7 +527,14 @@ public class CustomPlayer {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
             } else {
-                return Core.sqlUtils.canSeeSelfMorph(getPlayer());
+            	if(Core.sqlUtils.canSeeSelfMorph(getPlayer())){
+            		cache_canSeeSelfMorph = 1;
+            		return true;
+            	}else{
+            		cache_canSeeSelfMorph = 0;
+            		return false;
+            	}
+                
             }
         } catch (NullPointerException e) {
             return false;
