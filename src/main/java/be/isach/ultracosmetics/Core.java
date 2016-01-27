@@ -73,6 +73,22 @@ public class Core extends JavaPlugin {
      * If true, means vault is loaded and enabled.
      */
     public static boolean vaultLoaded;
+
+    /**
+     * Menu Listeners.
+     */
+    private Listener
+
+            /**
+             * Main Menu Listener.
+             */
+            mainMenuListener,
+
+    /**
+     * Morph Menu Listener.
+     */
+    morphMenuListener;
+
     /**
      * Determines if Treasure Chest Money Loot enabled.
      */
@@ -151,7 +167,7 @@ public class Core extends JavaPlugin {
     private static boolean ammoEnabled,
 
     /**
-     * Determines of File Storage is enabled.
+     * Determines if File Storage is enabled.
      */
     fileStorage = true,
 
@@ -159,16 +175,27 @@ public class Core extends JavaPlugin {
      * Determines if Treasure Chests are enabled.
      */
     treasureChests;
+
     /**
      * Instance.
      */
     private static Core core;
+
     /**
      * Player Manager instance.
      */
     private static PlayerManager playerManager;
+
+    /**
+     * MySQL Connection.
+     */
     public Connection co;
+
+    /**
+     * MySQL Table.
+     */
     public Table table;
+
     /**
      * MySQL Stuff.
      */
@@ -552,7 +579,8 @@ public class Core extends JavaPlugin {
 
         log("");
         log("Registering listeners...");
-        registerListener(new MainMenuManager());
+        mainMenuListener = new MainMenuManager();
+        registerListener(mainMenuListener);
         registerListener(new GadgetManager());
         registerListener(new PetManager());
         registerListener(new MountManager());
@@ -562,8 +590,10 @@ public class Core extends JavaPlugin {
         registerListener(new SuitManager());
         registerListener(new TreasureChestManager());
         registerListener(new MainListener());
-        if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
-            registerListener(new MorphManager());
+        if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+            morphMenuListener = new MorphManager();
+            registerListener(morphMenuListener);
+        }
         try {
             config.save(file);
         } catch (IOException e) {
@@ -794,6 +824,11 @@ public class Core extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        if(mainMenuListener != null)
+            ((MainMenuManager)mainMenuListener).dispose();
+        if(morphMenuListener != null)
+            ((MorphManager)morphMenuListener).dispose();
+
         playerManager.dispose();
         try {
             BlockUtils.forceRestore();

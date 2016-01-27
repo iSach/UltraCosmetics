@@ -21,11 +21,26 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Sacha on 11/11/15.
  */
 public class MorphManager implements Listener {
+
+    /**
+     * Runs the task for pets following players
+     */
+    private ExecutorService asyncMenuSelectionService;
+
+    public MorphManager() {
+        asyncMenuSelectionService = Executors.newSingleThreadExecutor();
+    }
+
+    public void dispose() {
+        asyncMenuSelectionService.shutdown();
+    }
 
     private final static int[] COSMETICS_SLOTS =
             {
@@ -191,7 +206,7 @@ public class MorphManager implements Listener {
     }
 
     @EventHandler
-    public void morphSelection(InventoryClickEvent event) {
+    public void morphSelection(final InventoryClickEvent event) {
         if (!event.getInventory().getTitle().startsWith(MessageManager.getMessage("Menus.Morphs"))) return;
         event.setCancelled(true);
         if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
@@ -271,7 +286,6 @@ public class MorphManager implements Listener {
                 if (!Core.closeAfterSelect)
                     openMenu((Player) event.getWhoClicked(), currentPage);
             }
-
         }
     }
 

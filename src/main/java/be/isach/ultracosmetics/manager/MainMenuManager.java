@@ -18,27 +18,42 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by sacha on 03/08/15.
  */
 public class MainMenuManager implements Listener {
 
+    /**
+     * Runs the task for pets following players
+     */
+    private ExecutorService asyncMenuSelectionService;
+
+    public MainMenuManager() {
+        asyncMenuSelectionService = Executors.newSingleThreadExecutor();
+    }
+
+    public void dispose() {
+        asyncMenuSelectionService.shutdown();
+    }
+
     @EventHandler
-    public void onInteract(final PlayerInteractEvent EVENT) {
-        if (Core.getCustomPlayer(EVENT.getPlayer()).currentTreasureChest != null) {
-            EVENT.setCancelled(true);
+    public void onInteract(final PlayerInteractEvent event) {
+        if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null) {
+            event.setCancelled(true);
             return;
         }
-        if (EVENT.getItem() != null
-                && EVENT.getItem().hasItemMeta()
-                && EVENT.getItem().getItemMeta().hasDisplayName()
-                && EVENT.getItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            EVENT.setCancelled(true);
+        if (event.getItem() != null
+                && event.getItem().hasItemMeta()
+                && event.getItem().getItemMeta().hasDisplayName()
+                && event.getItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            event.setCancelled(true);
             Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
-                    openMenu(EVENT.getPlayer());
+                    openMenu(event.getPlayer());
                 }
             });
         }
@@ -157,41 +172,46 @@ public class MainMenuManager implements Listener {
 
     @EventHandler
     public void mainMenuSelection(final InventoryClickEvent event) {
-        if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Main-Menu"))) {
-            event.setCancelled(true);
-            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
-                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
-            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
-                    return;
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
-                    GadgetManager.openMenu((Player) event.getWhoClicked(), 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
-                    MountManager.openMenu((Player) event.getWhoClicked(), 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Pets"))) {
-                    PetManager.openMenu((Player) event.getWhoClicked(), 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))) {
-                    ParticleEffectManager.openMenu((Player) event.getWhoClicked(), 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Morphs"))) {
-                    MorphManager.openMenu((Player) event.getWhoClicked(), 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))) {
-                    SuitManager.openMenu((Player) event.getWhoClicked(), 1);
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).clear();
-                    event.getWhoClicked().closeInventory();
-                    return;
-                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {
-                    HatManager.openMenu((Player) event.getWhoClicked(), 1);
-                    return;
+        asyncMenuSelectionService.submit(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Main-Menu"))) {
+                    event.setCancelled(true);
+                    if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                            || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
+                    if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
+                            return;
+                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
+                            GadgetManager.openMenu((Player) event.getWhoClicked(), 1);
+                            return;
+                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
+                            MountManager.openMenu((Player) event.getWhoClicked(), 1);
+                            return;
+                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Pets"))) {
+                            PetManager.openMenu((Player) event.getWhoClicked(), 1);
+                            return;
+                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))) {
+                            ParticleEffectManager.openMenu((Player) event.getWhoClicked(), 1);
+                            return;
+                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Morphs"))) {
+                            MorphManager.openMenu((Player) event.getWhoClicked(), 1);
+                            return;
+                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))) {
+                            SuitManager.openMenu((Player) event.getWhoClicked(), 1);
+                            return;
+                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
+                            Core.getCustomPlayer((Player) event.getWhoClicked()).clear();
+                            event.getWhoClicked().closeInventory();
+                            return;
+                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {
+                            HatManager.openMenu((Player) event.getWhoClicked(), 1);
+                            return;
+                        }
+                    }
                 }
             }
-        }
+        });
     }
 
     @EventHandler
