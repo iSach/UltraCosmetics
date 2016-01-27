@@ -33,6 +33,34 @@
 
     <dependencies>
 
+<<<<<<< HEAD:maven_old/pom.xml
+=======
+        <!-- Spigot dependency -->
+        <!-- <dependency> -->
+        <!--<groupId>org.spigotmc</groupId>-->
+        <!--<artifactId>spigot</artifactId>-->
+        <!--<version>1.8.8-R0.1-SNAPSHOT</version>-->
+        <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; NoteBlockAPI dependency &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>com.xxmicloxx</groupId>-->
+        <!--<artifactId>NoteBlockAPI</artifactId>-->
+        <!--<version>1.8.7</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>net.milkbowl.vault</groupId>-->
+        <!--<artifactId>VaultAPI</artifactId>-->
+        <!--<version>1.5</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>LibsDisguises</groupId>-->
+        <!--<artifactId>LibsDisguises</artifactId>-->
+        <!--<version>8.6.8-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <!-- LOCAL WHEN REPOSITERIES ARE DOWN, STUPID WEBSITES -->
+>>>>>>> 66099c1a60982df357138a81bb2e402c25913583:pom.xml
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>

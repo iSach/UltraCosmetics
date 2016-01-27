@@ -15,6 +15,7 @@ import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -100,7 +101,7 @@ public class CustomPlayer {
                 SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
-            isLoaded = true;
+           
 
         } catch (Exception exc) {
             // Player couldn't be found.
@@ -108,7 +109,16 @@ public class CustomPlayer {
             isLoaded = false;
             return;
         }
-
+        // sql loader thread add player to pre-load
+        if(!Core.usingFileStorage()){
+	        try{
+	        	Core.getSQLLoader().addPreloadPlayer(uuid);
+	        }catch(Exception e){
+	            System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
+	        }
+        }else{
+        	isLoaded = true;
+        }
 
     }
 
@@ -469,13 +479,21 @@ public class CustomPlayer {
     public boolean hasGadgetsEnabled() {
         if (this.cache_hasGadgetsEnable > -1)
             return cache_hasGadgetsEnable == 0 ? false : true;
-
+        // Make sure it won't be affected before load finished, especially for SQL
+        if(!isLoaded)
+        	return false;
 
         try {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
             } else {
-                return Core.sqlUtils.hasGadgetsEnabled(getPlayer());
+            	if(Core.sqlUtils.hasGadgetsEnabled(getPlayer())){
+            		cache_hasGadgetsEnable = 1;
+            		return true;
+            	}else{
+            		cache_hasGadgetsEnable = 0;
+            		return false;
+            	}
             }
         } catch (NullPointerException e) {
             return true;
@@ -508,12 +526,21 @@ public class CustomPlayer {
     public boolean canSeeSelfMorph() {
         if (this.cache_canSeeSelfMorph > -1)
             return this.cache_canSeeSelfMorph == 0 ? false : true;
-
+        // Make sure it won't be affected before load finished, especially for SQL
+        if(!isLoaded)
+        	return false;
         try {
             if (Core.usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
             } else {
-                return Core.sqlUtils.canSeeSelfMorph(getPlayer());
+            	if(Core.sqlUtils.canSeeSelfMorph(getPlayer())){
+            		cache_canSeeSelfMorph = 1;
+            		return true;
+            	}else{
+            		cache_canSeeSelfMorph = 0;
+            		return false;
+            	}
+                
             }
         } catch (NullPointerException e) {
             return false;
