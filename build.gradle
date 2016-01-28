@@ -3,9 +3,9 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 group = 'be.isach'
-version = '2.0.6-SNAPSHOT'
+version = '2.0.6-RELEASE'
 
-libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins/'
+//libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins/'
 
 compileJava.options.encoding = 'UTF-8'
 

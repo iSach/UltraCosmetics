@@ -217,7 +217,7 @@ public class MorphManager implements Listener {
                 return;
             }
             if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                MainMenuManager.openMenu((Player) event.getWhoClicked());
+                Core.openMainMenuFromOther((Player)event.getWhoClicked());
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Enable-Third-Person-View"))) {
                 Core.getCustomPlayer((Player) event.getWhoClicked()).setSeeSelfMorph(true);

@@ -281,7 +281,7 @@ public class PetManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMenu((Player) event.getWhoClicked());
+                    Core.openMainMenuFromOther((Player)event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Pet"))) {
                     if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentPet != null) {

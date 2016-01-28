@@ -112,7 +112,12 @@ public class Core extends JavaPlugin {
     /**
      * Current UC version.
      */
-    public static String currentVersion;
+    public static String currentVersion,
+
+    /**
+     * Command to execute when going back to Main Menu.
+     */
+    customBackMenuCommand;
 
     /**
      * List of enabled categories.
@@ -154,7 +159,12 @@ public class Core extends JavaPlugin {
     /**
      * If true, the server is using Spigot and not CraftBukkit/Bukkit.
      */
-    private static boolean usingSpigot = false;
+    private static boolean usingSpigot = false,
+
+    /**
+     * True -> should execute custom command when going back to main menu.
+     */
+    customCommandBackArrow;
 
     /**
      * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
@@ -195,16 +205,12 @@ public class Core extends JavaPlugin {
      * MySQL Table.
      */
     public Table table;
-<<<<<<< HEAD
 
-=======
-    
     /**
      * SQLLoader Manager instance
      */
     private static SQLLoaderManager sqlloader;
-    
->>>>>>> 66099c1a60982df357138a81bb2e402c25913583
+
     /**
      * MySQL Stuff.
      */
@@ -300,13 +306,14 @@ public class Core extends JavaPlugin {
     public static PlayerManager getPlayerManager() {
         return playerManager;
     }
-    
+
     /**
      * Gets the SQLloader Manager
+     *
      * @return the SQLloader Manager
      */
-    public static SQLLoaderManager getSQLLoader(){
-		return sqlloader;
+    public static SQLLoaderManager getSQLLoader() {
+        return sqlloader;
     }
 
     /**
@@ -428,12 +435,17 @@ public class Core extends JavaPlugin {
         config.addDefault("Categories.Rename-Pet-Item", "421:0", "Item in Pets Menu to rename current pet.");
         config.addDefault("Categories.Close-GUI-After-Select", true, "Should GUI close after selecting a cosmetic?");
         config.addDefault("No-Permission.Custom-Item.Lore", Arrays.asList("", "&c&lYou do not have permission for this!", ""));
+        config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Enabled", false);
+        config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Command", "cc open custommenu.yml {player}");
 
         config.addDefault("Categories-Enabled.Suits", true, "Do you want to enable Suits category?");
 
         config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
 
         saveConfig();
+
+        customCommandBackArrow = config.getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled");
+        customBackMenuCommand = config.getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
 
         closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
@@ -694,7 +706,7 @@ public class Core extends JavaPlugin {
                             PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
                             statement.executeUpdate();
                         }
-                        
+
                         log("initial SQLLoader to reduce lag when table is large");
                         sqlloader = new SQLLoaderManager();
                     } catch (Exception e) {
@@ -843,10 +855,10 @@ public class Core extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        if(mainMenuListener != null)
-            ((MainMenuManager)mainMenuListener).dispose();
-        if(morphMenuListener != null)
-            ((MorphManager)morphMenuListener).dispose();
+        if (mainMenuListener != null)
+            ((MainMenuManager) mainMenuListener).dispose();
+        if (morphMenuListener != null)
+            ((MorphManager) morphMenuListener).dispose();
 
         playerManager.dispose();
         try {
@@ -876,4 +888,10 @@ public class Core extends JavaPlugin {
             outdated = false;
     }
 
+    public static void openMainMenuFromOther(Player whoClicked) {
+        if (customCommandBackArrow)
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), customBackMenuCommand.replace("{player}", whoClicked.getName()));
+        else
+            MainMenuManager.openMenu(whoClicked);
+    }
 }
