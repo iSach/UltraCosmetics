@@ -109,6 +109,7 @@ public class GadgetExplosiveSheep extends Gadget {
             this.gadgetExplosiveSheep = gadgetExplosiveSheep;
         }
 
+
         @Override
         public void run() {
             if (red) {

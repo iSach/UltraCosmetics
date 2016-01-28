@@ -73,6 +73,22 @@ public class Core extends JavaPlugin {
      * If true, means vault is loaded and enabled.
      */
     public static boolean vaultLoaded;
+
+    /**
+     * Menu Listeners.
+     */
+    private Listener
+
+            /**
+             * Main Menu Listener.
+             */
+            mainMenuListener,
+
+    /**
+     * Morph Menu Listener.
+     */
+    morphMenuListener;
+
     /**
      * Determines if Treasure Chest Money Loot enabled.
      */
@@ -96,7 +112,12 @@ public class Core extends JavaPlugin {
     /**
      * Current UC version.
      */
-    public static String currentVersion;
+    public static String currentVersion,
+
+    /**
+     * Command to execute when going back to Main Menu.
+     */
+    customBackMenuCommand;
 
     /**
      * List of enabled categories.
@@ -138,7 +159,12 @@ public class Core extends JavaPlugin {
     /**
      * If true, the server is using Spigot and not CraftBukkit/Bukkit.
      */
-    private static boolean usingSpigot = false;
+    private static boolean usingSpigot = false,
+
+    /**
+     * True -> should execute custom command when going back to main menu.
+     */
+    customCommandBackArrow;
 
     /**
      * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
@@ -151,7 +177,7 @@ public class Core extends JavaPlugin {
     private static boolean ammoEnabled,
 
     /**
-     * Determines of File Storage is enabled.
+     * Determines if File Storage is enabled.
      */
     fileStorage = true,
 
@@ -159,22 +185,32 @@ public class Core extends JavaPlugin {
      * Determines if Treasure Chests are enabled.
      */
     treasureChests;
+
     /**
      * Instance.
      */
     private static Core core;
+
     /**
      * Player Manager instance.
      */
     private static PlayerManager playerManager;
+
+    /**
+     * MySQL Connection.
+     */
     public Connection co;
+
+    /**
+     * MySQL Table.
+     */
     public Table table;
-    
+
     /**
      * SQLLoader Manager instance
      */
     private static SQLLoaderManager sqlloader;
-    
+
     /**
      * MySQL Stuff.
      */
@@ -270,13 +306,14 @@ public class Core extends JavaPlugin {
     public static PlayerManager getPlayerManager() {
         return playerManager;
     }
-    
+
     /**
      * Gets the SQLloader Manager
+     *
      * @return the SQLloader Manager
      */
-    public static SQLLoaderManager getSQLLoader(){
-		return sqlloader;
+    public static SQLLoaderManager getSQLLoader() {
+        return sqlloader;
     }
 
     /**
@@ -398,12 +435,17 @@ public class Core extends JavaPlugin {
         config.addDefault("Categories.Rename-Pet-Item", "421:0", "Item in Pets Menu to rename current pet.");
         config.addDefault("Categories.Close-GUI-After-Select", true, "Should GUI close after selecting a cosmetic?");
         config.addDefault("No-Permission.Custom-Item.Lore", Arrays.asList("", "&c&lYou do not have permission for this!", ""));
+        config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Enabled", false);
+        config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Command", "cc open custommenu.yml {player}");
 
         config.addDefault("Categories-Enabled.Suits", true, "Do you want to enable Suits category?");
 
         config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
 
         saveConfig();
+
+        customCommandBackArrow = config.getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled");
+        customBackMenuCommand = config.getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
 
         closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
@@ -566,7 +608,8 @@ public class Core extends JavaPlugin {
 
         log("");
         log("Registering listeners...");
-        registerListener(new MainMenuManager());
+        mainMenuListener = new MainMenuManager();
+        registerListener(mainMenuListener);
         registerListener(new GadgetManager());
         registerListener(new PetManager());
         registerListener(new MountManager());
@@ -576,8 +619,10 @@ public class Core extends JavaPlugin {
         registerListener(new SuitManager());
         registerListener(new TreasureChestManager());
         registerListener(new MainListener());
-        if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
-            registerListener(new MorphManager());
+        if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+            morphMenuListener = new MorphManager();
+            registerListener(morphMenuListener);
+        }
         try {
             config.save(file);
         } catch (IOException e) {
@@ -661,7 +706,7 @@ public class Core extends JavaPlugin {
                             PreparedStatement statement = co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
                             statement.executeUpdate();
                         }
-                        
+
                         log("initial SQLLoader to reduce lag when table is large");
                         sqlloader = new SQLLoaderManager();
                     } catch (Exception e) {
@@ -810,6 +855,11 @@ public class Core extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        if (mainMenuListener != null)
+            ((MainMenuManager) mainMenuListener).dispose();
+        if (morphMenuListener != null)
+            ((MorphManager) morphMenuListener).dispose();
+
         playerManager.dispose();
         try {
             BlockUtils.forceRestore();
@@ -838,4 +888,10 @@ public class Core extends JavaPlugin {
             outdated = false;
     }
 
+    public static void openMainMenuFromOther(Player whoClicked) {
+        if (customCommandBackArrow)
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), customBackMenuCommand.replace("{player}", whoClicked.getName()));
+        else
+            MainMenuManager.openMenu(whoClicked);
+    }
 }

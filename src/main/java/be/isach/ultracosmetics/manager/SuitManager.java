@@ -226,7 +226,7 @@ public class SuitManager implements Listener {
                         || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE)
                     return;
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    MainMenuManager.openMenu((Player) event.getWhoClicked());
+                    Core.openMainMenuFromOther((Player)event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Suit"))) {
                     int currentPage = getCurrentPage((Player) event.getWhoClicked());
