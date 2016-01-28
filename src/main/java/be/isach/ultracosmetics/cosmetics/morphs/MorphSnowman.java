@@ -26,7 +26,7 @@ public class MorphSnowman extends Morph {
             if(coolDown > System.currentTimeMillis() ) return;
         	event.setCancelled(true);
             event.getPlayer().throwSnowball();
-            coolDown = System.currentTimeMillis() + 1000;
+            coolDown = System.currentTimeMillis() + 500;
         }
     }
 }
