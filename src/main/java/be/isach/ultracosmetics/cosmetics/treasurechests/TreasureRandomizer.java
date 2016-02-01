@@ -337,8 +337,12 @@ public class TreasureRandomizer {
     }
 
     public void giveNothing() {
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
-        itemStack = new ItemStack(Material.BARRIER);
+        try{
+        	giveMoney();
+        }catch(Exception e){
+        	 name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
+             itemStack = new ItemStack(Material.BARRIER);
+        }
     }
 
     public void giveMoney() {
