@@ -12,6 +12,7 @@ import java.util.UUID;
  */
 public class MorphSnowman extends Morph {
 
+	private long coolDown = 0;
     public MorphSnowman(UUID owner) {
         super(owner, MorphType.SNOWNMAN);
         if (owner != null)
@@ -22,8 +23,10 @@ public class MorphSnowman extends Morph {
     public void onLeftClick(PlayerInteractEvent event) {
         if ((event.getAction() == Action.LEFT_CLICK_AIR
                 || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
-            event.setCancelled(true);
+            if(coolDown > System.currentTimeMillis() ) return;
+        	event.setCancelled(true);
             event.getPlayer().throwSnowball();
+            coolDown = System.currentTimeMillis() + 500;
         }
     }
 }

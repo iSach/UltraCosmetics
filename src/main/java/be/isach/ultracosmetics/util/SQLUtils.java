@@ -43,7 +43,8 @@ public class SQLUtils {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+        	//exception catch when player triggered join event but offline when trigger this.
         }
     }
 

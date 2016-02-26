@@ -85,7 +85,6 @@ public class CustomPlayer {
 
             gadgetCooldowns = new HashMap<>();
 
-            SettingsManager.getData(getPlayer());
             if (Core.usingFileStorage())
                 SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
 
