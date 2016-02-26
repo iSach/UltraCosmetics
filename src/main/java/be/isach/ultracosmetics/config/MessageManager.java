@@ -24,7 +24,6 @@ public class MessageManager {
         addMessage("Cosmetic-Disabled", "%prefix% &c&lThis cosmetic is disabled!");
         addMessage("Invalid-Gadget", "%prefix% &c&lInvalid Gadget!");
         addMessage("Invalid-Pet", "%prefix% &c&lInvalid Pet!");
-        addMessage("Invalid-Pet", "%prefix% &c&lInvalid Suit!");
         addMessage("Invalid-Mount", "%prefix% &c&lInvalid Mount!");
         addMessage("Invalid-Effect", "%prefix% &c&lInvalid Effect!");
         addMessage("Invalid-Morph", "%prefix% &c&lInvalid Morph!");
@@ -218,6 +217,7 @@ public class MessageManager {
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
+        //MORPHS
         addMessage("Morphs.Blaze.name", "&6&lBlaze");
         addMessage("Morphs.Blaze.skill", "&eCrouch§7 to: &aFly");
         addMessage("Morphs.Chicken.name", "&f&lChicken");
@@ -243,6 +243,7 @@ public class MessageManager {
         addMessage("Morphs.ElderGuardian.name", "&8&lElder Guardian");
         addMessage("Morphs.ElderGuardian.skill", "&eLeft-Click§7 to: &aLaser");
 
+        //HATS
         addMessage("Hats.Equip", "%prefix% &9You equipped %hatname% &9hat!");
         addMessage("Hats.Unequip", "%prefix% &9You unequipped %hatname% &9hat!");
         addMessage("Hats.Astronaut.Name", "&7&lAstronaut");
@@ -286,6 +287,7 @@ public class MessageManager {
         addMessage("Hats.Elf.Name", "&a&lElf");
         addMessage("Hats.Must-Remove-Hat", "%prefix% &c&lYou must remove your helmet to equip a hat!");
 
+        //SUITS
         addMessage("Suits.Rave.helmet-name", "&b&lR&a&la&e&lv&6&le &f&lHelmet");
         addMessage("Suits.Rave.chestplate-name", "&b&lR&a&la&e&lv&6&le &f&lChestplate");
         addMessage("Suits.Rave.leggings-name", "&b&lR&a&la&e&lv&6&le &f&lLeggings");
@@ -306,6 +308,7 @@ public class MessageManager {
         addMessage("Suits.Unequip", "%prefix% &9You unequipped %suitname%!");
         addMessage("Suits.Suit-Part-Lore", "&9Suits Part");
 
+        //MENU
         addMessage("Menu.Gadgets", "&9&lGadgets");
         addMessage("Menu.Particle-Effects", "&b&lParticle Effects");
         addMessage("Menu.Mounts", "&6&lMounts");

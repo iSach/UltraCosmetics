@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ItemFactory;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -201,7 +203,11 @@ public class MainMenuManager implements Listener {
                             SuitManager.openMenu((Player) event.getWhoClicked(), 1);
                             return;
                         } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
-                            Core.getCustomPlayer((Player) event.getWhoClicked()).clear();
+                        	new BukkitRunnable(){
+                        		public void run(){
+                        			Core.getCustomPlayer((Player) event.getWhoClicked()).clear();
+                        		}
+                        	}.runTask(Core.getPlugin());
                             event.getWhoClicked().closeInventory();
                             return;
                         } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {

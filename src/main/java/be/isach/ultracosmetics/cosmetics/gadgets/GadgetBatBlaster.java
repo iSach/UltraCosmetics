@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -12,9 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 
 /**
  * Created by sacha on 03/08/15.
@@ -80,7 +81,7 @@ public class GadgetBatBlaster extends Gadget {
                                 v.setY(7.5);
 
                             if (other.isOnGround())
-                                v.setY(v.getY() + 0.2d);
+                                v.setY(v.getY() + 0.4d);
 
                             other.setFallDistance(0);
 

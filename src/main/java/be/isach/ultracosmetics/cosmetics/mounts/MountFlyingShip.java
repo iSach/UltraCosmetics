@@ -5,11 +5,13 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityBoat;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftBoat;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -19,6 +21,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -31,11 +34,13 @@ public class MountFlyingShip extends Mount {
 
 	long nextAllowTime = 0;
 	Entity currentboom = null;
+	//ArmorStand nameTag = null;
 	
     public MountFlyingShip(UUID owner) {
         super(owner, MountType.FLYINGSHIP);
         if (owner != null)
             Core.registerListener(this);
+      //  spawnNameTag();
     }
 
     @Override
@@ -59,9 +64,10 @@ public class MountFlyingShip extends Mount {
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
         ec.getBukkitEntity().setVelocity(vector);
-
+     
         ec.pitch = getPlayer().getLocation().getPitch();
         ec.yaw = getPlayer().getLocation().getYaw() - 180;
+        
         if(currentboom != null){
         	if(currentboom.isDead()){
         		currentboom = null;
@@ -88,7 +94,19 @@ public class MountFlyingShip extends Mount {
         	}
         }
     }
-
+/*
+    private void spawnNameTag(){
+    	 nameTag = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
+    	 nameTag.setVisible(false);
+    	 nameTag.setSmall(true);
+    	 nameTag.setCustomName(getType().getName(getPlayer()));
+         nameTag.setCustomNameVisible(true);
+         //hide name of ent
+         ent.setCustomNameVisible(false);
+         nameTag.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getPlugin(),"C_AD_ArmorStand"));
+         //getPlayer().setPassenger(nameTag);
+    }
+    */
     @EventHandler
     public void stopBoatDamage(EntityExplodeEvent event) {
         Entity e = event.getEntity();
@@ -150,6 +168,16 @@ public class MountFlyingShip extends Mount {
     	if(currentboom != null){
     		currentboom.remove();
     	}
+    	/*
+    	if(owner != null){
+    		nameTag.getVehicle().eject();
+    	}
+    	try{
+    		nameTag.remove();
+    	}catch(Exception e){
+    		
+    	}
+    	*/
     }
     
 }
