@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -35,7 +35,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     public GadgetPaintballGun(UUID owner) {
         super(owner, GadgetType.PAINTBALLGUN);
         if (owner != null) {
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
             radius = SettingsManager.getConfig().getInt("Gadgets." + getType().configName + ".Radius");
         }
         displayCooldownMessage = false;

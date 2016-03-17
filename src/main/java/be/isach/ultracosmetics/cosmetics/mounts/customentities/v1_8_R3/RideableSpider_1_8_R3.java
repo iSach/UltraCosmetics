@@ -1,23 +1,24 @@
 package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3;
 
-import be.isach.ultracosmetics.cosmetics.mounts.Mount;
+import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.util.BlockUtils;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
+import org.bukkit.entity.Entity;
 
 import java.lang.reflect.Field;
 
 /**
  * Created by Sacha on 18/10/15.
  */
-public class RideableSpider_1_8_R3 extends EntitySpider {
+public class RideableSpider_1_8_R3 extends EntitySpider implements IMountCustomEntity {
 
     boolean isOnGround;
 
     public RideableSpider_1_8_R3(World world) {
         super(world);
 
-        if (!Mount.customEntities.contains(this)) return;
+        if (!CustomEntities_1_8_R3.customEntities.contains(this)) return;
 
         removeSelectors();
     }
@@ -45,7 +46,7 @@ public class RideableSpider_1_8_R3 extends EntitySpider {
     @Override
     public void g(float sideMot, float forMot) {
         if (this.passenger != null && this.passenger instanceof EntityHuman
-                && Mount.customEntities.contains(this)) {
+                && CustomEntities_1_8_R3.customEntities.contains(this)) {
             this.lastYaw = this.yaw = this.passenger.yaw;
             this.pitch = this.passenger.pitch * 0.5F;
             this.setYawPitch(this.yaw, this.pitch);//Update the pitch and yaw
@@ -186,5 +187,10 @@ public class RideableSpider_1_8_R3 extends EntitySpider {
         }
 
 
+    }
+
+    @Override
+    public Entity getEntity() {
+        return getBukkitEntity();
     }
 }

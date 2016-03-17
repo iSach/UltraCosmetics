@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -40,21 +40,21 @@ public abstract class Morph implements Listener {
 
         this.owner = owner;
 
-        if (Core.getCustomPlayer(getPlayer()).currentMorph != null)
-            Core.getCustomPlayer(getPlayer()).removeMorph();
+        if (UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != null)
+            UltraCosmetics.getCustomPlayer(getPlayer()).removeMorph();
 
         if (!getPlayer().hasPermission(getType().getPermission())) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
 
-        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", (Core.placeHolderColor) ?
-                getType().getName() : Core.filterColor(getType().getName())));
-        Core.getCustomPlayer(getPlayer()).currentMorph = this;
+        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ?
+                getType().getName() : UltraCosmetics.filterColor(getType().getName())));
+        UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph = this;
 
         disguise = new MobDisguise(getType().getDisguiseType());
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
-        if (!Core.getCustomPlayer(getPlayer()).canSeeSelfMorph())
+        if (!UltraCosmetics.getCustomPlayer(getPlayer()).canSeeSelfMorph())
             disguise.setViewSelfDisguise(false);
         disguise.setModifyBoundingBox(true);
         disguise.setShowName(true);
@@ -65,10 +65,10 @@ public abstract class Morph implements Listener {
      */
     public void clear() {
         DisguiseAPI.undisguiseToAll(getPlayer());
-        Core.getCustomPlayer(getPlayer()).currentMorph = null;
+        UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph = null;
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", (Core.placeHolderColor) ?
-                    getType().getName() : Core.filterColor(getType().getName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ?
+                    getType().getName() : UltraCosmetics.filterColor(getType().getName())));
         owner = null;
         try {
             HandlerList.unregisterAll(this);

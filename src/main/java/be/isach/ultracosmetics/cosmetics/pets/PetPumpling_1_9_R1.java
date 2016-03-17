@@ -1,9 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.pets.CustomEntityPet_1_9_R1;
-import be.isach.ultracosmetics.cosmetics.pets.Pet;
-import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -40,4 +37,6 @@ public class PetPumpling_1_9_R1 extends CustomEntityPet_1_9_R1 {
             }
         }, 5);
     }
+
+
 }

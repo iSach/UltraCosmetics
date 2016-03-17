@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -38,7 +38,7 @@ public class MorphCreeper extends Morph {
                 @Override
                 public void run() {
                     if (getPlayer() == null
-                            || Core.getCustomPlayer(getPlayer()).currentMorph != creeper) {
+                            || UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != creeper) {
                         cancel();
                         return;
                     }
@@ -53,7 +53,7 @@ public class MorphCreeper extends Morph {
                             disguise = new MobDisguise(getType().getDisguiseType());
                             DisguiseAPI.disguiseToAll(getPlayer(), disguise);
                             disguise.setShowName(true);
-                            if (!Core.getCustomPlayer(getPlayer()).canSeeSelfMorph())
+                            if (!UltraCosmetics.getCustomPlayer(getPlayer()).canSeeSelfMorph())
                                 disguise.setViewSelfDisguise(false);
                         }
                         if (charge == 100) {
@@ -92,7 +92,7 @@ public class MorphCreeper extends Morph {
 
 
                 }
-            }.runTaskTimer(Core.getPlugin(), 0, 1);
+            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
         }
     }
 

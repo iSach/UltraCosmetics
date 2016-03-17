@@ -1,10 +1,9 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ItemFactory;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,30 +19,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by sacha on 03/08/15.
  */
 public class MainMenuManager implements Listener {
 
-    /**
-     * Runs the task for pets following players
-     */
-    private ExecutorService asyncMenuSelectionService;
-
-    public MainMenuManager() {
-        asyncMenuSelectionService = Executors.newSingleThreadExecutor();
-    }
-
-    public void dispose() {
-        asyncMenuSelectionService.shutdown();
-    }
-
     @EventHandler
     public void onInteract(final PlayerInteractEvent event) {
-        if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null) {
+        if (UltraCosmetics.getCustomPlayer(event.getPlayer()).currentTreasureChest != null) {
             event.setCancelled(true);
             return;
         }
@@ -52,7 +36,7 @@ public class MainMenuManager implements Listener {
                 && event.getItem().getItemMeta().hasDisplayName()
                 && event.getItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
             event.setCancelled(true);
-            Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     openMenu(event.getPlayer());
@@ -62,7 +46,7 @@ public class MainMenuManager implements Listener {
     }
 
     public static void openMenu(final Player player) {
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (!player.hasPermission("ultracosmetics.openmenu")) {
@@ -70,17 +54,17 @@ public class MainMenuManager implements Listener {
                     player.closeInventory();
                     return;
                 }
-                boolean chests = Core.treasureChestsEnabled();
+                boolean chests = UltraCosmetics.getInstance().areTreasureChestsEnabled();
                 int add = 9;
                 int slotAmount = 45;
-                int d = Core.enabledCategories.size();
+                int d = UltraCosmetics.enabledCategories.size();
                 if (d < 5) {
                     slotAmount -= 18;
                     add -= 9;
                 }
 
-                if (!chests && Core.enabledCategories.size() == 1) {
-                    switch (Core.enabledCategories.get(0)) {
+                if (!chests && UltraCosmetics.enabledCategories.size() == 1) {
+                    switch (UltraCosmetics.enabledCategories.get(0)) {
                         case GADGETS:
                             GadgetManager.openMenu(player, 1);
                             break;
@@ -108,23 +92,23 @@ public class MainMenuManager implements Listener {
 
                 final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Main-Menu"));
 
-                for (int i = 0; i < Core.enabledCategories.size(); i++) {
-                    ItemStack is = Core.enabledCategories.get(i).getItemStack().clone();
+                for (int i = 0; i < UltraCosmetics.enabledCategories.size(); i++) {
+                    ItemStack is = UltraCosmetics.enabledCategories.get(i).getItemStack().clone();
                     inv.setItem(getMainMenuLayout()[i] + add, is);
                 }
 
                 if (chests) {
                     ItemStack chest;
 
-                    if (Core.getCustomPlayer(player).getKeys() == 0)
-                        chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), Core.vaultLoaded ?
-                                "" : null, Core.vaultLoaded ? MessageManager.getMessage("Click-Buy-Key") : null, Core.vaultLoaded ? "" : null);
+                    if (UltraCosmetics.getCustomPlayer(player).getKeys() == 0)
+                        chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Dont-Have-Key"), UltraCosmetics.getInstance().isVaultLoaded() ?
+                                "" : null, UltraCosmetics.getInstance().isVaultLoaded() ? MessageManager.getMessage("Click-Buy-Key") : null, UltraCosmetics.getInstance().isVaultLoaded() ? "" : null);
                     else
                         chest = ItemFactory.create(Material.CHEST, (byte) 0x0, MessageManager.getMessage("Treasure-Chests"), "", MessageManager.getMessage("Click-Open-Chest"), "");
 
                     ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "",
-                            MessageManager.getMessage("Your-Keys").replace("%keys%", Core.getCustomPlayer(player).getKeys() + ""), Core.vaultLoaded ?
-                                    "" : null, Core.vaultLoaded ? MessageManager.getMessage("Click-Buy-Key") : null, Core.vaultLoaded ? "" : null);
+                            MessageManager.getMessage("Your-Keys").replace("%keys%", UltraCosmetics.getCustomPlayer(player).getKeys() + ""), UltraCosmetics.getInstance().isVaultLoaded() ?
+                                    "" : null, UltraCosmetics.getInstance().isVaultLoaded() ? MessageManager.getMessage("Click-Buy-Key") : null, UltraCosmetics.getInstance().isVaultLoaded() ? "" : null);
                     inv.setItem(5, keys);
                     inv.setItem(3, chest);
                 }
@@ -133,7 +117,7 @@ public class MainMenuManager implements Listener {
 
                 ItemFactory.fillInventory(inv);
 
-                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         player.openInventory(inv);
@@ -146,7 +130,7 @@ public class MainMenuManager implements Listener {
 
     private static int[] getMainMenuLayout() {
         int[] layout = new int[]{0};
-        switch (Core.enabledCategories.size()) {
+        switch (UltraCosmetics.enabledCategories.size()) {
             case 7:
                 layout = new int[]{1, 4, 7, 19, 21, 23, 25};
                 break;
@@ -174,50 +158,45 @@ public class MainMenuManager implements Listener {
 
     @EventHandler
     public void mainMenuSelection(final InventoryClickEvent event) {
-        asyncMenuSelectionService.submit(new Runnable() {
-            @Override
-            public void run() {
-                if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Main-Menu"))) {
-                    event.setCancelled(true);
-                    if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
-                            || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
-                    if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
-                            return;
-                        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
-                            GadgetManager.openMenu((Player) event.getWhoClicked(), 1);
-                            return;
-                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
-                            MountManager.openMenu((Player) event.getWhoClicked(), 1);
-                            return;
-                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Pets"))) {
-                            PetManager.openMenu((Player) event.getWhoClicked(), 1);
-                            return;
-                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))) {
-                            ParticleEffectManager.openMenu((Player) event.getWhoClicked(), 1);
-                            return;
-                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Morphs"))) {
-                            MorphManager.openMenu((Player) event.getWhoClicked(), 1);
-                            return;
-                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))) {
-                            SuitManager.openMenu((Player) event.getWhoClicked(), 1);
-                            return;
-                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
-                        	new BukkitRunnable(){
-                        		public void run(){
-                        			Core.getCustomPlayer((Player) event.getWhoClicked()).clear();
-                        		}
-                        	}.runTask(Core.getPlugin());
-                            event.getWhoClicked().closeInventory();
-                            return;
-                        } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {
-                            HatManager.openMenu((Player) event.getWhoClicked(), 1);
-                            return;
+        if (event.getInventory().getTitle().equals(MessageManager.getMessage("Menus.Main-Menu"))) {
+            event.setCancelled(true);
+            if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()
+                    || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
+            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
+                    return;
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
+                    GadgetManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
+                    MountManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Pets"))) {
+                    PetManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))) {
+                    ParticleEffectManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Morphs"))) {
+                    MorphManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))) {
+                    SuitManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
+                    new BukkitRunnable() {
+                        public void run() {
+                            UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).clear();
                         }
-                    }
+                    }.runTask(UltraCosmetics.getInstance());
+                    event.getWhoClicked().closeInventory();
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {
+                    HatManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
                 }
             }
-        });
+        }
     }
 
     @EventHandler

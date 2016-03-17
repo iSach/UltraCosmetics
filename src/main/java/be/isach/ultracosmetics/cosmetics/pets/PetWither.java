@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftWither;
+import be.isach.ultracosmetics.UltraCosmetics;
+import org.bukkit.entity.Wither;
 
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ public class PetWither extends Pet {
 
     @Override
     void onUpdate() {
-        ((CraftWither) entity).getHandle().r(600);
+        UltraCosmetics.getInstance().getEntityUtil().resetWitherSize((Wither)getEntity());
     }
 
 }

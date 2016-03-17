@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.command.subcommands;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.*;
@@ -49,10 +49,10 @@ public class MenuCommand extends SubCommand {
             MainMenuManager.openMenu(sender);
         else if (s.startsWith("b")) {
             sender.closeInventory();
-            Core.getCustomPlayer(sender).openKeyPurchaseMenu();
+            UltraCosmetics.getCustomPlayer(sender).openKeyPurchaseMenu();
         } else
             sender.sendMessage("§c§l/uc menu <menu>\n§c§lInvalid Menu\n§c§lAvailable Menus: main,"
-                    + (Core.treasureChestsEnabled() ? " buykey," : "")
+                    + (UltraCosmetics.getInstance().areTreasureChestsEnabled() ? " buykey," : "")
                     + (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") ? " renamepet," : "") +
                     " gadgets, particleeffects, pets, mounts, suits, hats, morphs");
     }

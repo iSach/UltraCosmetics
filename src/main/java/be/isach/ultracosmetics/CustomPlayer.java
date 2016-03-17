@@ -85,18 +85,18 @@ public class CustomPlayer {
 
             gadgetCooldowns = new HashMap<>();
 
-            if (Core.usingFileStorage())
+            if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
 
-            if (Core.isAmmoEnabled()) {
-                if (!Core.usingFileStorage())
-                    Core.sqlUtils.initStats(getPlayer());
+            if (UltraCosmetics.getInstance().isAmmoEnabled()) {
+                if (!UltraCosmetics.getInstance().usingFileStorage())
+                    UltraCosmetics.sqlUtils.initStats(getPlayer());
                 else
                     for (GadgetType type : GadgetType.values())
                         if (type.isEnabled())
                             SettingsManager.getData(getPlayer()).addDefault("Ammo." + type.toString().toLowerCase(), 0);
             }
-            if (Core.usingFileStorage()) {
+            if (UltraCosmetics.getInstance().usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
@@ -109,9 +109,9 @@ public class CustomPlayer {
             return;
         }
         // sql loader thread add player to pre-load
-        if(!Core.usingFileStorage()){
+        if(!UltraCosmetics.getInstance().usingFileStorage()){
 	        try{
-	        	Core.getSQLLoader().addPreloadPlayer(uuid);
+	        	UltraCosmetics.getSQLLoader().addPreloadPlayer(uuid);
 	        }catch(Exception e){
 	            System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
 	        }
@@ -162,7 +162,7 @@ public class CustomPlayer {
     public void removeGadget() {
         if (currentGadget != null) {
             if (getPlayer() != null)
-                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (Core.placeHolderColor) ? currentGadget.getName() : Core.filterColor(currentGadget.getName())));
+                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? currentGadget.getName() : UltraCosmetics.filterColor(currentGadget.getName())));
             currentGadget.removeItem();
             currentGadget.onClear();
             currentGadget.removeListener();
@@ -200,27 +200,27 @@ public class CustomPlayer {
      * Gives a key to the player.
      */
     public void addKey() {
-        if (Core.usingFileStorage())
+        if (UltraCosmetics.getInstance().usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() + 1);
         else
-            Core.sqlUtils.addKey(getPlayer().getUniqueId());
+            UltraCosmetics.sqlUtils.addKey(getPlayer().getUniqueId());
     }
 
     /**
      * Removes a key to the player.
      */
     public void removeKey() {
-        if (Core.usingFileStorage())
+        if (UltraCosmetics.getInstance().usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() - 1);
         else
-            Core.sqlUtils.removeKey(getPlayer().getUniqueId());
+            UltraCosmetics.sqlUtils.removeKey(getPlayer().getUniqueId());
     }
 
     /**
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        return Core.usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : Core.sqlUtils.getKeys(getPlayer().getUniqueId());
+        return UltraCosmetics.getInstance().usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : UltraCosmetics.sqlUtils.getKeys(getPlayer().getUniqueId());
     }
 
     /**
@@ -232,7 +232,7 @@ public class CustomPlayer {
 
         getPlayer().sendMessage(MessageManager.getMessage("Hats.Unequip")
                 .replace("%hatname%",
-                        (Core.placeHolderColor) ? currentHat.getName() : Core.filterColor(currentHat.getName())));
+                        (UltraCosmetics.getInstance().placeholdersHaveColor()) ? currentHat.getName() : UltraCosmetics.filterColor(currentHat.getName())));
         currentHat = null;
     }
 
@@ -264,10 +264,10 @@ public class CustomPlayer {
 
     public double getBalance() {
         try {
-            if (Core.vaultLoaded && Core.economy != null)
-                return Core.economy.getBalance(getPlayer());
+            if (UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.economy != null)
+                return UltraCosmetics.economy.getBalance(getPlayer());
         } catch (Exception exc) {
-            Core.log("Error happened while getting a player's balance.");
+            UltraCosmetics.log("Error happened while getting a player's balance.");
             return 0;
         }
         return 0;
@@ -317,7 +317,7 @@ public class CustomPlayer {
 
         getPlayer().sendMessage(MessageManager.getMessage("Hats.Equip")
                 .replace("%hatname%",
-                        (Core.placeHolderColor) ? hat.getName() : Core.filterColor(hat.getName())));
+                        (UltraCosmetics.getInstance().placeholdersHaveColor()) ? hat.getName() : UltraCosmetics.filterColor(hat.getName())));
         currentHat = hat;
     }
 
@@ -346,7 +346,7 @@ public class CustomPlayer {
      * Opens the Key Purchase Menu.
      */
     public void openKeyPurchaseMenu() {
-        if (!Core.vaultLoaded)
+        if (!UltraCosmetics.getInstance().isVaultLoaded())
             return;
         try {
             final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
@@ -364,7 +364,7 @@ public class CustomPlayer {
 
             ItemFactory.fillInventory(inventory);
 
-            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     getPlayer().openInventory(inventory);
@@ -380,8 +380,8 @@ public class CustomPlayer {
      */
     public void removeParticleEffect() {
         if (currentParticleEffect != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", (Core.placeHolderColor) ?
-                    currentParticleEffect.getType().getName() : Core.filterColor(currentParticleEffect.getType().getName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ?
+                    currentParticleEffect.getType().getName() : UltraCosmetics.filterColor(currentParticleEffect.getType().getName())));
             currentParticleEffect = null;
         }
     }
@@ -404,10 +404,8 @@ public class CustomPlayer {
      * @param name    The new name.
      */
     public void setPetName(String petName, String name) {
-        if (Core.usingFileStorage())
-            SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
-        else
-            Core.sqlUtils.setName(getPlayer(), petName, name);
+        if (UltraCosmetics.getInstance().usingFileStorage()) SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
+        else UltraCosmetics.sqlUtils.setName(getPlayer(), petName, name);
     }
 
     /**
@@ -418,12 +416,12 @@ public class CustomPlayer {
      */
     public String getPetName(String petName) {
         try {
-            if (Core.usingFileStorage()) {
+            if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Pet-Names." + petName);
             } else {
-                if (Core.sqlUtils.getPetName(getPlayer(), petName).equalsIgnoreCase("Unknown"))
+                if (UltraCosmetics.sqlUtils.getPetName(getPlayer(), petName).equalsIgnoreCase("Unknown"))
                     return null;
-                return Core.sqlUtils.getPetName(getPlayer(), petName);
+                return UltraCosmetics.sqlUtils.getPetName(getPlayer(), petName);
             }
         } catch (NullPointerException e) {
             return null;
@@ -437,15 +435,15 @@ public class CustomPlayer {
      * @param amount The ammo amount to give.
      */
     public void addAmmo(String name, int amount) {
-        if (Core.isAmmoEnabled())
-            if (Core.usingFileStorage())
+        if (UltraCosmetics.getInstance().isAmmoEnabled())
+            if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + amount);
             else
-                Core.sqlUtils.addAmmo(getPlayer().getUniqueId(), name, amount);
+                UltraCosmetics.sqlUtils.addAmmo(getPlayer().getUniqueId(), name, amount);
         if (currentGadget != null)
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                     ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(),
-                            "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString()
+                            "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString()
                                     .toLowerCase()) + " " + currentGadget.getName(), MessageManager.getMessage("Gadgets.Lore")));
     }
 
@@ -456,10 +454,10 @@ public class CustomPlayer {
      */
     public void setGadgetsEnabled(Boolean enabled) {
         try {
-            if (Core.usingFileStorage()) {
+            if (UltraCosmetics.getInstance().usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).set("Gadgets-Enabled", enabled);
             } else {
-                Core.sqlUtils.setGadgetsEnabled(getPlayer(), enabled);
+                UltraCosmetics.sqlUtils.setGadgetsEnabled(getPlayer(), enabled);
             }
             if (enabled) {
                 getPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
@@ -483,10 +481,10 @@ public class CustomPlayer {
         	return false;
 
         try {
-            if (Core.usingFileStorage()) {
+            if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
             } else {
-            	if(Core.sqlUtils.hasGadgetsEnabled(getPlayer())){
+            	if(UltraCosmetics.sqlUtils.hasGadgetsEnabled(getPlayer())){
             		cache_hasGadgetsEnable = 1;
             		return true;
             	}else{
@@ -505,10 +503,10 @@ public class CustomPlayer {
      * @param enabled if player should be able to see his own morph.
      */
     public void setSeeSelfMorph(Boolean enabled) {
-        if (Core.usingFileStorage()) {
+        if (UltraCosmetics.getInstance().usingFileStorage()) {
             SettingsManager.getData(getPlayer()).set("Third-Person-Morph-View", enabled);
         } else {
-            Core.sqlUtils.setSeeSelfMorph(getPlayer(), enabled);
+            UltraCosmetics.sqlUtils.setSeeSelfMorph(getPlayer(), enabled);
         }
         if (enabled) {
             getPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
@@ -529,10 +527,10 @@ public class CustomPlayer {
         if(!isLoaded)
         	return false;
         try {
-            if (Core.usingFileStorage()) {
+            if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
             } else {
-            	if(Core.sqlUtils.canSeeSelfMorph(getPlayer())){
+            	if(UltraCosmetics.sqlUtils.canSeeSelfMorph(getPlayer())){
             		cache_canSeeSelfMorph = 1;
             		return true;
             	}else{
@@ -553,11 +551,11 @@ public class CustomPlayer {
      * @return The ammo of the given gadget.
      */
     public int getAmmo(String name) {
-        if (Core.isAmmoEnabled())
-            if (Core.usingFileStorage())
+        if (UltraCosmetics.getInstance().isAmmoEnabled())
+            if (UltraCosmetics.getInstance().usingFileStorage())
                 return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name);
             else
-                return Core.sqlUtils.getAmmo(getPlayer().getUniqueId(), name);
+                return UltraCosmetics.sqlUtils.getAmmo(getPlayer().getUniqueId(), name);
         return 0;
     }
 
@@ -576,11 +574,11 @@ public class CustomPlayer {
      * @param name The gadget.
      */
     public void removeAmmo(String name) {
-        if (Core.isAmmoEnabled()) {
-            if (Core.usingFileStorage()) {
+        if (UltraCosmetics.getInstance().isAmmoEnabled()) {
+            if (UltraCosmetics.getInstance().usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) - 1);
             } else {
-                Core.sqlUtils.removeAmmo(getPlayer().getUniqueId(), name);
+                UltraCosmetics.sqlUtils.removeAmmo(getPlayer().getUniqueId(), name);
             }
         }
     }

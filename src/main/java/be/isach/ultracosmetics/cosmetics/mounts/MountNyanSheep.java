@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.UtilParticles;
 import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
 import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
@@ -30,13 +30,15 @@ public class MountNyanSheep extends Mount {
 
     public MountNyanSheep(UUID owner) {
         super(owner, MountType.NYANSHEEP);
+    }
 
-        if (owner == null) return;
-        ((LivingEntity) ent).setNoDamageTicks(Integer.MAX_VALUE);
+    @Override
+    protected void onEquip() {
+        ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
         if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
-            Song s = NBSDecoder.parse(new File(Core.getPlugin().getDataFolder(), "/songs/NyanCat.nbs"));
+            Song s = NBSDecoder.parse(new File(UltraCosmetics.getInstance().getDataFolder(), "/songs/NyanCat.nbs"));
             final PositionSongPlayer positionSongPlayer = new PositionSongPlayer(s);
-            positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
+            positionSongPlayer.setTargetLocation(((LivingEntity) entity).getEyeLocation());
             positionSongPlayer.setPlaying(true);
             for (Player p : Bukkit.getOnlinePlayers())
                 positionSongPlayer.addPlayer(p);
@@ -44,15 +46,15 @@ public class MountNyanSheep extends Mount {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (ent.isValid() && ent.getPassenger() == getPlayer()) {
-                        if (Core.isNoteBlockAPIEnabled())
-                            positionSongPlayer.setTargetLocation(((LivingEntity) ent).getEyeLocation());
+                    if (entity.isValid() && entity.getPassenger() == getPlayer()) {
+                        if (UltraCosmetics.getInstance().isNoteBlockAPIEnabled())
+                            positionSongPlayer.setTargetLocation(((LivingEntity) entity).getEyeLocation());
                     } else {
                         positionSongPlayer.setPlaying(false);
                         cancel();
                     }
                 }
-            }.runTaskTimer(Core.getPlugin(), 0, 1);
+            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
         }
     }
 
@@ -60,7 +62,7 @@ public class MountNyanSheep extends Mount {
     void onUpdate() {
         move();
 
-        ((Sheep) ent).setColor(DyeColor.values()[new Random().nextInt(15)]);
+        ((Sheep) entity).setColor(DyeColor.values()[new Random().nextInt(15)]);
 
         List<RGBColor> colors = new ArrayList<>();
 
@@ -75,7 +77,7 @@ public class MountNyanSheep extends Mount {
         for (RGBColor rgbColor : colors) {
             for (int i = 0; i < 10; i++)
                 UtilParticles.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue(),
-                        ent.getLocation().add(ent.getLocation().getDirection()
+                        entity.getLocation().add(entity.getLocation().getDirection()
                                 .normalize().multiply(-1).multiply(1.4)).add(0, y, 0));
             y -= 0.2;
         }
@@ -88,12 +90,12 @@ public class MountNyanSheep extends Mount {
             Player player = getPlayer();
             Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
             Location loc = player.getLocation().add(vel);
-            EntityCreature ec = ((CraftCreature) ent).getHandle();
+            EntityCreature ec = ((CraftCreature) entity).getHandle();
             ec.S = 1;
             Navigation nav = (Navigation) ec.getNavigation();
             nav.a(loc.getX(), loc.getY(), loc.getZ(), 1.8d);
         } catch (Exception exc) {
-            Core.getCustomPlayer(getPlayer()).removeMount();
+            UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
         }
     }
 

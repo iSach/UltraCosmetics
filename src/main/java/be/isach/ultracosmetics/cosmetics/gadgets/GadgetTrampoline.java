@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -72,7 +72,7 @@ public class GadgetTrampoline extends Gadget {
 
     @Override
     void onUpdate() {
-        Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Entity entity : EntityUtils.getEntitiesInRadius(initialCenter, 4d)) {
@@ -128,7 +128,7 @@ public class GadgetTrampoline extends Gadget {
         genLadder(get(-3, 1, 0));
         genLadder(get(-3, 0, 0));
 
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 clearBlocks();

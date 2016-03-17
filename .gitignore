@@ -6,14 +6,12 @@ target/*
 .DS_STORE
 .idea/
 .idea/*
-<<<<<<< HEAD
-=======
+
 UltraCosmetics.iml
 module_ultracosmetics.xml
 ultracosmetics.properties
 ultracosmetics.xml
 
->>>>>>> 50c71231dd795c0e4d35b54f9b08211802871118
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

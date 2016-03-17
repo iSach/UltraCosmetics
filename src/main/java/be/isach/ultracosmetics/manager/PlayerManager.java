@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
 import org.bukkit.entity.Player;
@@ -43,10 +43,10 @@ public class PlayerManager {
     }
 
     public boolean hasNeverCome(UUID uuid) {
-        if (Core.usingFileStorage())
+        if (UltraCosmetics.getInstance().usingFileStorage())
             return !SettingsManager.hasData(uuid);
         else
-            return !Core.sqlUtils.exists(uuid);
+            return !UltraCosmetics.sqlUtils.exists(uuid);
     }
 
     public void dispose() {

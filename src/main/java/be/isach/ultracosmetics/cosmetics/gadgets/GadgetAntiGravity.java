@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -28,7 +28,7 @@ public class GadgetAntiGravity extends Gadget {
 
     public GadgetAntiGravity(UUID owner) {
         super(owner, GadgetType.ANTIGRAVITY);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -39,12 +39,12 @@ public class GadgetAntiGravity extends Gadget {
         running = true;
         as.setVisible(false);
         as.setHelmet(new ItemStack(Material.SEA_LANTERN));
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 as.remove();
                 as = null;
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         running = false;

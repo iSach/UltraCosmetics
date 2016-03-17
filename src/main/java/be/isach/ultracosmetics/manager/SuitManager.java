@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -40,7 +40,7 @@ public class SuitManager implements Listener {
     static List<Player> noSpamList = new ArrayList<>();
 
     public static void openMenu(final Player p, final int PAGE) {
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 int slotAmount = 54;
@@ -82,7 +82,7 @@ public class SuitManager implements Listener {
                             lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig()
                                     .get("No-Permission.Lore-Message-" + ((p.hasPermission(suit.getPermission(armorSlot)) ? "Yes" : "No")))));
                         String toggle = MessageManager.getMessage("Menu.Equip");
-                        CustomPlayer cp = Core.getCustomPlayer(p);
+                        CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
                         Suit current = null;
                         switch (armorSlot) {
                             case HELMET:
@@ -150,7 +150,7 @@ public class SuitManager implements Listener {
 
                 ItemFactory.fillInventory(inv);
 
-                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         p.openInventory(inv);
@@ -191,7 +191,7 @@ public class SuitManager implements Listener {
             if (!noSpamList.contains(player)) {
                 player.sendMessage(MessageManager.getMessage("No-Permission"));
                 noSpamList.add(player);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         noSpamList.remove(player);
@@ -226,11 +226,11 @@ public class SuitManager implements Listener {
                         || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE)
                     return;
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    Core.openMainMenuFromOther((Player)event.getWhoClicked());
+                    UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Suit"))) {
                     int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit();
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeSuit();
                     openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 }
@@ -242,7 +242,7 @@ public class SuitManager implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unequip"))) {
                     if (armorSlot == null)
                         return;
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeSuit(armorSlot);
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeSuit(armorSlot);
                     openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
@@ -310,7 +310,7 @@ public class SuitManager implements Listener {
             EVENT.setCancelled(true);
             EVENT.setResult(Event.Result.DENY);
             EVENT.getWhoClicked().closeInventory();
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     for (ItemStack itemStack : EVENT.getWhoClicked().getInventory().getContents()) {

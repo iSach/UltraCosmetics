@@ -2,16 +2,16 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.CustomEntities_1_8_R3;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.CustomSlime_1_8_R3;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.FlyingSquid_1_8_R3;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.RideableSpider_1_8_R3;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1.CustomSlime_1_9_R1;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1.CustomEntities_1_9_R1;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1.FlyingSquid_1_9_R1;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1.RideableSpider_1_9_R1;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_9_R1.Entity;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
@@ -33,31 +33,31 @@ public class MountCustomEntity_1_9_R1 extends Mount {
     @Override
     public void equip() {
         if (getType() == MountType.SKYSQUID)
-            customEnt = new FlyingSquid_1_8_R3(((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new FlyingSquid_1_9_R1(((CraftPlayer) getPlayer()).getHandle().getWorld());
         else if (getType() == MountType.SLIME)
-            customEnt = new CustomSlime_1_8_R3(((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new CustomSlime_1_9_R1(((CraftPlayer) getPlayer()).getHandle().getWorld());
         else if (getType() == MountType.SPIDER)
-            customEnt = new RideableSpider_1_8_R3(((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new RideableSpider_1_9_R1(((CraftPlayer) getPlayer()).getHandle().getWorld());
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();
-        customEnt.setLocation(x, y + 2, z, 0, 0);
+        getCustomEntity().setLocation(x, y + 2, z, 0, 0);
 
         EntitySpawningManager.setBypass(true);
-        ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(customEnt);
+        ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         EntitySpawningManager.setBypass(false);
-        customEnt.getBukkitEntity().setPassenger(getPlayer());
-        CustomEntities_1_8_R3.customEntities.add(customEnt);
+        UltraCosmetics.getInstance().getEntityUtil().setPassenger(getEntity(), getPlayer());
+        CustomEntities_1_9_R1.customEntities.add(getCustomEntity());
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    if (customEnt.getBukkitEntity().getPassenger() != getPlayer() && customEnt.ticksLived > 10) {
+                    if (getEntity().getPassenger() != getPlayer() && getCustomEntity().ticksLived > 10) {
                         clear();
                         cancel();
                         return;
                     }
-                    if (!customEnt.valid) {
+                    if (!getCustomEntity().valid) {
                         cancel();
                         return;
                     }
@@ -86,7 +86,7 @@ public class MountCustomEntity_1_9_R1 extends Mount {
     @Override
     protected void removeEntity() {
         getCustomEntity().dead = true;
-        CustomEntities_1_8_R3.customEntities.remove(customEntity);
+        CustomEntities_1_9_R1.customEntities.remove(customEntity);
     }
 
 

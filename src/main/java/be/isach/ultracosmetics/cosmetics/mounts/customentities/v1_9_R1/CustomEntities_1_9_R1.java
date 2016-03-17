@@ -1,31 +1,34 @@
 package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1;
 
-import be.isach.ultracosmetics.cosmetics.morphs.customentities.CustomGuardian;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.CustomSlime;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.FlyingSquid;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.RideableSpider;
-import be.isach.ultracosmetics.cosmetics.pets.customentities.Pumpling1_8_R3;
-import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.EntityTypes;
+import be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_9_R1.CustomGuardian_1_9_R1;
+import be.isach.ultracosmetics.cosmetics.pets.v1_9_R1.Pumpling1_9_R1;
+import net.minecraft.server.v1_9_R1.Entity;
+import net.minecraft.server.v1_9_R1.EntityInsentient;
+import net.minecraft.server.v1_9_R1.EntityTypes;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public enum CustomEntities_1_9_R1 {
 
-    FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid.class, FlyingSquid.class),
-    PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling1_8_R3.class, Pumpling1_8_R3.class),
-    SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime.class, CustomSlime.class),
-    RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
-    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
+    FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid_1_9_R1.class, FlyingSquid_1_9_R1.class),
+    PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling1_9_R1.class, Pumpling1_9_R1.class),
+    SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime_1_9_R1.class, CustomSlime_1_9_R1.class),
+    RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider_1_9_R1.class, RideableSpider_1_9_R1.class),
+    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian_1_9_R1.class, CustomGuardian_1_9_R1.class);
 
     private String name;
     private int id;
     private EntityType entityType;
     private Class<? extends EntityInsentient> nmsClass;
     private Class<? extends EntityInsentient> customClass;
+
+    // mounts
+    public static List<Entity> customEntities = new ArrayList();
 
     CustomEntities_1_9_R1(String name, int id, EntityType entityType,
                           Class<? extends EntityInsentient> nmsClass,

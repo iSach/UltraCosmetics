@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -40,7 +40,7 @@ public class GadgetBatBlaster extends Gadget {
         for (int i = 0; i < 16; i++) {
             ((ArrayList) this.bats.get(getPlayer())).add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 onClear();
@@ -70,7 +70,7 @@ public class GadgetBatBlaster extends Gadget {
                     bat.setVelocity(loc.getDirection().clone().multiply(0.5D).add(rand));
 
                     for (Player other : getPlayer().getWorld().getPlayers())
-                        if (!other.equals(getPlayer()) && Core.getCustomPlayer(other).hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)) {
+                        if (!other.equals(getPlayer()) && UltraCosmetics.getCustomPlayer(other).hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)) {
 
                             Vector v = bat.getLocation().getDirection();
                             v.normalize();

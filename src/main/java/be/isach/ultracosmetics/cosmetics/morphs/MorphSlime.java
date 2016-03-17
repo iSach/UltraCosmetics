@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import me.libraryaddict.disguise.disguisetypes.watchers.SlimeWatcher;
 import org.bukkit.Bukkit;
@@ -21,9 +21,9 @@ public class MorphSlime extends Morph {
 
     public MorphSlime(UUID owner) {
         super(owner, MorphType.SLIME);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
         if(owner != null) {
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
             SlimeWatcher slimeWatcher = (SlimeWatcher)disguise.getWatcher();
             slimeWatcher.setSize(3);
         }
@@ -31,16 +31,16 @@ public class MorphSlime extends Morph {
 
     @EventHandler
     public void onKick(PlayerKickEvent event) {
-        if(event.getPlayer() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && event.getReason().equalsIgnoreCase("Flying is not enabled on this server"))
+        if(event.getPlayer() == getPlayer() && UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph == this && event.getReason().equalsIgnoreCase("Flying is not enabled on this server"))
             event.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        if (event.getPlayer() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown) {
+        if (event.getPlayer() == getPlayer() && UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown) {
             MathUtils.applyVelocity(getPlayer(), new Vector(0, 2.3, 0));
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
@@ -51,7 +51,7 @@ public class MorphSlime extends Morph {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if(event.getEntity() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+        if(event.getEntity() == getPlayer() && UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
             event.setCancelled(true);
     }
 

@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -39,7 +39,7 @@ public class HatManager implements Listener {
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
         final int finalPage = page;
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 int listSize = Hat.enabled().size();
@@ -82,7 +82,7 @@ public class HatManager implements Listener {
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore"))
                         lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(hat.getPermission()) ? "Yes" : "No")))));
                     String toggle = MessageManager.getMessage("Menu.Equip");
-                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
                     if (cp.currentHat != null && cp.currentHat == hat)
                         toggle = MessageManager.getMessage("Menu.Unequip");
                     ItemStack is = hat.getItemStack().clone();
@@ -117,7 +117,7 @@ public class HatManager implements Listener {
                 inv.setItem(inv.getSize() - (Category.HATS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Hat")));
 
                 ItemFactory.fillInventory(inv);
-                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         p.openInventory(inv);
@@ -146,7 +146,7 @@ public class HatManager implements Listener {
             if (!playerList.contains(PLAYER)) {
                 PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
                 playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         playerList.remove(PLAYER);
@@ -155,7 +155,7 @@ public class HatManager implements Listener {
             }
             return;
         }
-        Core.getCustomPlayer(PLAYER).setHat(hat);
+        UltraCosmetics.getCustomPlayer(PLAYER).setHat(hat);
     }
 
     public static Hat getHatByType(String name) {
@@ -208,7 +208,7 @@ public class HatManager implements Listener {
             EVENT.setCancelled(true);
             EVENT.setResult(Event.Result.DENY);
             EVENT.getWhoClicked().closeInventory();
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     for (ItemStack itemStack : EVENT.getWhoClicked().getInventory().getContents()) {
@@ -236,13 +236,13 @@ public class HatManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    Core.openMainMenuFromOther((Player)event.getWhoClicked());
+                    UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Hat"))) {
-                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentHat != null) {
+                    if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentHat != null) {
                         int currentPage = getCurrentPage((Player) event.getWhoClicked());
                         event.getWhoClicked().closeInventory();
-                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
+                        UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
                         openMenu((Player) event.getWhoClicked(), currentPage);
                     } else return;
                     return;
@@ -254,15 +254,15 @@ public class HatManager implements Listener {
                     return;
                 }
                 int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                if (Core.closeAfterSelect)
+                if (UltraCosmetics.closeAfterSelect)
                     event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unequip"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
-                    if (!Core.closeAfterSelect)
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
+                    if (!UltraCosmetics.closeAfterSelect)
                         openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Equip"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeHat();
                     StringBuilder sb = new StringBuilder();
                     String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Equip"), "");
                     int j = name.split(" ").length;
@@ -278,7 +278,7 @@ public class HatManager implements Listener {
                         }
                     }
                     equipHat(getHatByType(sb.toString()), (Player) event.getWhoClicked());
-                    if(!Core.closeAfterSelect)
+                    if(!UltraCosmetics.closeAfterSelect)
                         openMenu((Player)event.getWhoClicked(), currentPage);
                 }
 

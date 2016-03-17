@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import org.bukkit.Material;
@@ -38,7 +38,7 @@ public enum GadgetType {
     ROCKET(Material.FIREWORK, (byte) 0, 60, "ultracosmetics.gadgets.rocket", "Rocket", "&7&oHouston, we have got a problem..", GadgetRocket.class),
     BLACKHOLE(Material.STAINED_CLAY, (byte) 15, 35, "ultracosmetics.gadgets.blackhole", "BlackHole", "&7&oYou should not get caught by it..", GadgetBlackHole.class),
     TSUNAMI(Material.WATER_BUCKET, (byte) 0, 12, "ultracosmetics.gadgets.tsunami", "Tsunami", "&9&oTSUNAMI!!\n&7&oJUMP!\n&7&oLet's go!", GadgetTsunami.class),
-    TNT(Material.TNT, (byte) 0, 10, "ultracosmetics.gadgets.tnt", "TNT", "&7&oBlow some people up!\n&7&oKABOOM!", GadgetTNT.class),
+    TNT(Material.TNT, (byte) 0, 10, "ultracosmetics.gadgets.tnt", "wNT", "&7&oBlow some people up!\n&7&oKABOOM!", GadgetTNT.class),
     FUNGUN(Material.BLAZE_ROD, (byte) 0, 4, "ultracosmetics.gadgets.fungun", "FunGun", "&7&oWoow! So much fun in a gun!", GadgetFunGun.class),
     PARACHUTE(Material.LEASH, (byte) 0, 60, "ultracosmetics.gadgets.parachute", "Parachute", "&7&oGERONIMOooo!", GadgetParachute.class),
     QUAKEGUN(Material.DIAMOND_HOE, (byte) 0, 3, "ultracosmetics.gadgets.quakegun", "QuakeGun", "&7&oGet a real Rail Gun" +
@@ -84,7 +84,7 @@ public enum GadgetType {
             this.countdown = Double.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown")));
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            Core.config.addDefault("Gadgets." + configName + ".Description", getDescriptionWithColor(), "Description of this gadget.");
+            UltraCosmetics.config.addDefault("Gadgets." + configName + ".Description", getDescriptionWithColor(), "Description of this gadget.");
         } else
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Gadgets." + configName + ".Description")));
     }

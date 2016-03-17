@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.treasurechests;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.material.MaterialData;
 
@@ -50,7 +50,7 @@ public class TreasureChestDesign {
     }
 
     private String g(String s) {
-        return Core.config.getString("TreasureChests.Designs." + s);
+        return UltraCosmetics.config.getString("TreasureChests.Designs." + s);
     }
 
     public ChestType getChestType() {

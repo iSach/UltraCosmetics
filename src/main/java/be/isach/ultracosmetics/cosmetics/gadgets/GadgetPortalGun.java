@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -163,7 +163,7 @@ public class GadgetPortalGun extends Gadget {
                         loc.setYaw(getYaw(redBlockFace));
                         getPlayer().teleport(loc);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             teleported = false;
@@ -216,7 +216,7 @@ public class GadgetPortalGun extends Gadget {
                         loc.setYaw(getYaw(blueBlockFace));
                         getPlayer().teleport(loc);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             teleported = false;

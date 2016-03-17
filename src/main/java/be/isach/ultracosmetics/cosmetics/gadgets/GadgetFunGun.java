@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
@@ -27,7 +27,7 @@ public class GadgetFunGun extends Gadget {
         super(owner, GadgetType.FUNGUN);
 
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
+            Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
     }
 
     @Override

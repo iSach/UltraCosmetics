@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -45,7 +45,7 @@ public class PetManager implements Listener {
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
         final int finalPage = page;
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 int listSize = PetType.enabled().size();
@@ -90,12 +90,12 @@ public class PetManager implements Listener {
                                 .get("No-Permission.Lore-Message-" + ((p.hasPermission(pet.getPermission()) ? "Yes" : "No")))));
                     }
                     String toggle = MessageManager.getMessage("Menu.Spawn");
-                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
                     if (cp.currentPet != null && cp.currentPet.getType() == pet)
                         toggle = MessageManager.getMessage("Menu.Despawn");
                     String customName = "";
-                    if (Core.getCustomPlayer(p).getPetName(pet.getConfigName()) != null) {
-                        customName = " §f§l(§r" + Core.getCustomPlayer(p).getPetName(pet.getConfigName()) + "§f§l)";
+                    if (UltraCosmetics.getCustomPlayer(p).getPetName(pet.getConfigName()) != null) {
+                        customName = " §f§l(§r" + UltraCosmetics.getCustomPlayer(p).getPetName(pet.getConfigName()) + "§f§l)";
                     }
                     ItemStack is = ItemFactory.create(pet.getMaterial(), pet.getData(), toggle + " " + pet.getMenuName() + customName);
                     if (lore != null)
@@ -126,14 +126,14 @@ public class PetManager implements Listener {
                 if (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
                     if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
                         if (p.hasPermission("ultracosmetics.pets.rename"))
-                            if (Core.getCustomPlayer(p).currentPet != null)
+                            if (UltraCosmetics.getCustomPlayer(p).currentPet != null)
                                 inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet")
-                                        .replace("%petname%", Core.getCustomPlayer(p).currentPet.getType().getMenuName())));
+                                        .replace("%petname%", UltraCosmetics.getCustomPlayer(p).currentPet.getType().getMenuName())));
                             else
                                 inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed")));
-                    } else if (Core.getCustomPlayer(p).currentPet != null)
+                    } else if (UltraCosmetics.getCustomPlayer(p).currentPet != null)
                         inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet")
-                                .replace("%petname%", Core.getCustomPlayer(p).currentPet.getType().getMenuName())));
+                                .replace("%petname%", UltraCosmetics.getCustomPlayer(p).currentPet.getType().getMenuName())));
                     else
                         inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed")));
                 }
@@ -145,7 +145,7 @@ public class PetManager implements Listener {
 
                 ItemFactory.fillInventory(inv);
 
-                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         p.openInventory(inv);
@@ -185,7 +185,7 @@ public class PetManager implements Listener {
             if (!noSpamList.contains(player)) {
                 player.sendMessage(MessageManager.getMessage("No-Permission"));
                 noSpamList.add(player);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         noSpamList.remove(player);
@@ -220,16 +220,16 @@ public class PetManager implements Listener {
                     event.setWillClose(true);
                     event.setWillDestroy(true);
                     if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")
-                            && Core.petRenameMoney) {
+                            && UltraCosmetics.petRenameMoney) {
                         buyRenamePet(p, event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
                     } else {
-                        if (Core.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
-                            Core.getCustomPlayer(p).currentPet.entity.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                        if (UltraCosmetics.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
+                            UltraCosmetics.getCustomPlayer(p).currentPet.entity.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
                                     .replace('&', '§').replace(" ", ""));
                         else
-                            Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                            UltraCosmetics.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
                                     .replace('&', '§').replace(" ", ""));
-                        Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getType().getConfigName(), event.getName()
+                        UltraCosmetics.getCustomPlayer(p).setPetName(UltraCosmetics.getCustomPlayer(p).currentPet.getType().getConfigName(), event.getName()
                                 .replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
                     }
                 } else {
@@ -260,7 +260,7 @@ public class PetManager implements Listener {
 
         ItemFactory.fillInventory(inventory);
 
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 renamePetList.put(p, name);
@@ -281,13 +281,13 @@ public class PetManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    Core.openMainMenuFromOther((Player)event.getWhoClicked());
+                    UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Pet"))) {
-                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentPet != null) {
+                    if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentPet != null) {
                         int currentPage = getCurrentPage((Player) event.getWhoClicked());
                         event.getWhoClicked().closeInventory();
-                        Core.getCustomPlayer((Player) event.getWhoClicked()).removePet();
+                        UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removePet();
                         openMenu((Player) event.getWhoClicked(), currentPage);
                     } else return;
                     return;
@@ -296,17 +296,17 @@ public class PetManager implements Listener {
                     if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Active-Pet-Needed")))
                         return;
                     else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Rename-Pet").replace("%petname%",
-                            Core.getCustomPlayer((Player) event.getWhoClicked()).currentPet.getType().getMenuName()))) {
+                            UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentPet.getType().getMenuName()))) {
                         renamePet((Player) event.getWhoClicked());
                         return;
                     }
                 }
                 int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                if (Core.closeAfterSelect)
+                if (UltraCosmetics.closeAfterSelect)
                     event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Despawn"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removePet();
-                    if (!Core.closeAfterSelect)
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removePet();
+                    if (!UltraCosmetics.closeAfterSelect)
                         openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
@@ -333,14 +333,14 @@ public class PetManager implements Listener {
                     if (!noSpam.contains(event.getWhoClicked()))
                         equipPet(getPetType(sb.toString()), (Player) event.getWhoClicked());
                     noSpam.add(event.getWhoClicked());
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             noSpam.remove(event.getWhoClicked());
                         }
                     }, 1);
 
-                    if (!Core.closeAfterSelect)
+                    if (!UltraCosmetics.closeAfterSelect)
                         openMenu((Player) event.getWhoClicked(), currentPage);
                 }
 
@@ -368,14 +368,14 @@ public class PetManager implements Listener {
                 String name = renamePetList.get(p);
                 event.setCancelled(true);
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) {
-                    if (Core.getCustomPlayer(p).getBalance() >= (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")) {
-                        Core.economy.withdrawPlayer(p, (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price"));
+                    if (UltraCosmetics.getCustomPlayer(p).getBalance() >= (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")) {
+                        UltraCosmetics.economy.withdrawPlayer(p, (int) SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price"));
                         p.sendMessage(MessageManager.getMessage("Successful-Purchase"));
-                        if (Core.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
-                            Core.getCustomPlayer(p).currentPet.entity.setCustomName(name);
+                        if (UltraCosmetics.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
+                            UltraCosmetics.getCustomPlayer(p).currentPet.entity.setCustomName(name);
                         else
-                            Core.getCustomPlayer(p).currentPet.armorStand.setCustomName(name);
-                        Core.getCustomPlayer(p).setPetName(Core.getCustomPlayer(p).currentPet.getType().getConfigName(), name);
+                            UltraCosmetics.getCustomPlayer(p).currentPet.armorStand.setCustomName(name);
+                        UltraCosmetics.getCustomPlayer(p).setPetName(UltraCosmetics.getCustomPlayer(p).currentPet.getType().getConfigName(), name);
                     } else
                         p.sendMessage(MessageManager.getMessage("Not-Enough-Money"));
                     renamePetList.remove(p);

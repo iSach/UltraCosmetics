@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.listeners;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -27,38 +27,38 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Core.getPlayerManager().create(event.getPlayer());
+                UltraCosmetics.getPlayerManager().create(event.getPlayer());
 
                 if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
-                            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(event.getPlayer());
+                            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(event.getPlayer());
                             if (cp != null && event.getPlayer() != null)
                                 cp.giveMenuItem();
                         }
                     }, 5);
                 }
-                if (Core.outdated)
+                if (UltraCosmetics.outdated)
                     if (event.getPlayer().isOp())
-                        event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + Core.lastVersion);
+                        event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + UltraCosmetics.lastVersion);
             }
         });
     }
 
     @EventHandler
     public void onWorldChange(final PlayerChangedWorldEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
-                            Core.getCustomPlayer(event.getPlayer()).giveMenuItem();
+                            UltraCosmetics.getCustomPlayer(event.getPlayer()).giveMenuItem();
                         }
                     }, 5);
                 }
@@ -143,11 +143,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        if (Core.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
-            Core.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
-        Core.getCustomPlayer(event.getPlayer()).clear();
-        Core.getPlayerManager().getCustomPlayer(event.getPlayer()).removeMenuItem();
-        Core.getPlayerManager().remove(event.getPlayer());
+        if (UltraCosmetics.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
+            UltraCosmetics.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
+        UltraCosmetics.getCustomPlayer(event.getPlayer()).clear();
+        UltraCosmetics.getPlayerManager().getCustomPlayer(event.getPlayer()).removeMenuItem();
+        UltraCosmetics.getPlayerManager().remove(event.getPlayer());
     }
 
     @EventHandler
@@ -157,19 +157,19 @@ public class PlayerListener implements Listener {
                 && event.getEntity().getInventory().getItem(slot).hasItemMeta()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().hasDisplayName()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            if (Core.getCustomPlayer(event.getEntity()).currentGadget != null)
+            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentGadget != null)
                 event.getDrops().remove(event.getEntity().getInventory().getItem((Integer) SettingsManager.getConfig().get("Gadget-Slot")));
-            if (Core.getCustomPlayer(event.getEntity()).currentHat != null)
-                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentHat.getItemStack());
-            if (Core.getCustomPlayer(event.getEntity()).currentHelmet != null)
-                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentHelmet.getItemStack());
-            if (Core.getCustomPlayer(event.getEntity()).currentChestplate != null)
-                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentChestplate.getItemStack());
-            if (Core.getCustomPlayer(event.getEntity()).currentLeggings != null)
-                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentLeggings.getItemStack());
-            if (Core.getCustomPlayer(event.getEntity()).currentBoots != null)
-                event.getDrops().remove(Core.getCustomPlayer(event.getEntity()).currentBoots.getItemStack());
-            Core.getCustomPlayer(event.getEntity()).clear();
+            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentHat != null)
+                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentHat.getItemStack());
+            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentHelmet != null)
+                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentHelmet.getItemStack());
+            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentChestplate != null)
+                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentChestplate.getItemStack());
+            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentLeggings != null)
+                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentLeggings.getItemStack());
+            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots != null)
+                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots.getItemStack());
+            UltraCosmetics.getCustomPlayer(event.getEntity()).clear();
             event.getDrops().remove(event.getEntity().getInventory().getItem(slot));
             event.getEntity().getInventory().setItem(slot, null);
         }

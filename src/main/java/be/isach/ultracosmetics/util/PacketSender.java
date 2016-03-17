@@ -1,7 +1,5 @@
 package be.isach.ultracosmetics.util;
 
-import net.minecraft.server.v1_8_R3.Packet;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,10 +13,18 @@ public class PacketSender {
      * @param player Packet destinator.
      * @param packet The packet to send.
      */
-    public static void send(Player player, Packet packet) {
+    public static void send(Player player, Object packet) {
         if (player == null || packet == null)
             return;
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+        try {
+            Object craftPlayer = ReflectionUtils.PackageType.CRAFTBUKKIT_ENTITY.getClass("CraftPlayer").cast(player);
+            Object handle = player.getClass().getMethod("getHandle").invoke(craftPlayer);
+            Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
+            playerConnection.getClass().getMethod("sendPacket", ReflectionUtils.PackageType.MINECRAFT_SERVER
+                    .getClass("Packet")).invoke(playerConnection, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
@@ -43,17 +43,13 @@ public class BlockUtils {
      */
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
         List<Block> blocks = new ArrayList<>();
-
-        int bX = location.getBlockX();
-        int bY = location.getBlockY();
-        int bZ = location.getBlockZ();
-
-        for (int x = bX - radius; x <= bX + radius; x++) {
-            for (int y = bY - radius; y <= bY + radius; y++) {
+        int bX = location.getBlockX(),
+                bY = location.getBlockY(),
+                bZ = location.getBlockZ();
+        for (int x = bX - radius; x <= bX + radius; x++)
+            for (int y = bY - radius; y <= bY + radius; y++)
                 for (int z = bZ - radius; z <= bZ + radius; z++) {
-
                     double distance = ((bX - x) * (bX - x) + (bY - y) * (bY - y) + (bZ - z) * (bZ - z));
-
                     if (distance < radius * radius
                             && !(hollow && distance < ((radius - 1) * (radius - 1)))) {
                         Location l = new Location(location.getWorld(), x, y, z);
@@ -61,10 +57,6 @@ public class BlockUtils {
                             blocks.add(l.getBlock());
                     }
                 }
-
-            }
-        }
-
         return blocks;
     }
 
@@ -88,7 +80,7 @@ public class BlockUtils {
      * @return {@code true} if the block is part of a rocket, otherwise {@code false}.
      */
     public static boolean isRocketBlock(Block b) {
-        for (CustomPlayer cp : Core.getCustomPlayers()) {
+        for (CustomPlayer cp : UltraCosmetics.getCustomPlayers()) {
             if (cp.currentGadget != null
                     && cp.currentGadget.getType() == GadgetType.ROCKET) {
                 GadgetRocket rocket = (GadgetRocket) cp.currentGadget;
@@ -119,7 +111,7 @@ public class BlockUtils {
      * @param LOCATION The location of the block to restore.
      */
     public static void restoreBlockAt(final Location LOCATION) {
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (!blocksToRestore.containsKey(LOCATION)) return;
@@ -143,7 +135,7 @@ public class BlockUtils {
      * @param TICK_DELAY The delay after which the block is restored.
      */
     public static void setToRestoreIgnoring(final Block BLOCK, final Material NEW_TYPE, final byte NEW_DATA, final int TICK_DELAY) {
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (blocksToRestore.containsKey(BLOCK.getLocation())) return;
@@ -151,7 +143,7 @@ public class BlockUtils {
                     blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
                     for (Player player : BLOCK.getLocation().getWorld().getPlayers())
                         player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             restoreBlockAt(BLOCK.getLocation());
@@ -172,7 +164,7 @@ public class BlockUtils {
      * @param TICK_DELAY The delay after which the block is restored.
      */
     public static void setToRestore(final Block BLOCK, final Material NEW_TYPE, final byte NEW_DATA, final int TICK_DELAY) {
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (blocksToRestore.containsKey(BLOCK.getLocation())) return;
@@ -224,7 +216,7 @@ public class BlockUtils {
                     blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
                     for (Player player : BLOCK.getLocation().getWorld().getPlayers())
                         player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             restoreBlockAt(BLOCK.getLocation());

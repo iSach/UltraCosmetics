@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEnderDragon;
 import org.bukkit.entity.EnderDragon;
@@ -22,15 +22,15 @@ public class MountDragon extends Mount {
         super(owner, MountType.DRAGON
         );
         if (owner != null)
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
     void onUpdate() {
-        if (ent.getPassenger() == null)
+        if (entity.getPassenger() == null)
             clear();
 
-        EntityEnderDragon ec = ((CraftEnderDragon) ent).getHandle();
+        EntityEnderDragon ec = ((CraftEnderDragon) entity).getHandle();
 
         ec.hurtTicks = -1;
 
@@ -57,7 +57,7 @@ public class MountDragon extends Mount {
         Entity e = event.getEntity();
         if (e instanceof EnderDragonPart)
             e = ((EnderDragonPart) e).getParent();
-        if (e instanceof EnderDragon && e == ent)
+        if (e instanceof EnderDragon && e == entity)
             event.setCancelled(true);
 
     }
@@ -68,7 +68,7 @@ public class MountDragon extends Mount {
         if (e instanceof EnderDragonPart) {
             e = ((EnderDragonPart) e).getParent();
         }
-        if (e instanceof EnderDragon && e == ent) {
+        if (e instanceof EnderDragon && e == entity) {
             event.setCancelled(true);
 
         }

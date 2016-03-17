@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -38,14 +38,14 @@ public class MorphChicken extends Morph {
 
         if (owner != null) {
 
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
 
             final MorphChicken chicken = this;
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (getPlayer() == null
-                            || Core.getCustomPlayer(getPlayer()).currentMorph != chicken) {
+                            || UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != chicken) {
                         cancel();
                         return;
                     }
@@ -58,14 +58,14 @@ public class MorphChicken extends Morph {
                     }
 
                 }
-            }.runTaskTimer(Core.getPlugin(), 0, 1);
+            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
         }
     }
 
 
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        if (event.getPlayer() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown) {
+        if (event.getPlayer() == getPlayer() && UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown) {
             final List<Item> items = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
                 final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(Material.EGG, (byte) 0x0, UUID.randomUUID().toString()));
@@ -74,7 +74,7 @@ public class MorphChicken extends Morph {
                 i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5));
                 i.getWorld().playSound(i.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
             }
-            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                 BukkitRunnable followRunnable;
 
                 @Override
@@ -111,8 +111,8 @@ public class MorphChicken extends Morph {
                             }
                         }
                     };
-                    followRunnable.runTaskTimer(Core.getPlugin(), 0, 1);
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    followRunnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             for (Chicken chicken : chickens) {
@@ -126,7 +126,7 @@ public class MorphChicken extends Morph {
                 }
             }, 50);
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;

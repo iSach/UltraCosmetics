@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import org.bukkit.inventory.ItemStack;
@@ -67,8 +67,8 @@ public enum Category {
      * @return {@code true} if has arrow, otherwise {@code false}
      */
     public boolean hasGoBackArrow() {
-        if (!Core.treasureChestsEnabled()
-                && Core.enabledCategories.size() == 1)
+        if (!UltraCosmetics.getInstance().areTreasureChestsEnabled()
+                && UltraCosmetics.enabledCategories.size() == 1)
             return false;
         return (boolean) (SettingsManager.getConfig().get("Categories." + configPath + ".Go-Back-Arrow"));
     }

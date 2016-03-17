@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.command.subcommands;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -224,12 +224,12 @@ public class GiveCommand extends SubCommand {
         if (offlinePlayer == null || offlinePlayer.getUniqueId() == null)
             return;
         if (offlinePlayer instanceof Player)
-            Core.getPlayerManager().getCustomPlayer((Player) offlinePlayer).addKey();
+            UltraCosmetics.getPlayerManager().getCustomPlayer((Player) offlinePlayer).addKey();
         else {
-            if (Core.usingFileStorage())
+            if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(offlinePlayer.getUniqueId()).set("Keys", getKeys(offlinePlayer.getUniqueId()) + 1);
             else
-                Core.sqlUtils.addKey(offlinePlayer.getUniqueId());
+                UltraCosmetics.sqlUtils.addKey(offlinePlayer.getUniqueId());
         }
     }
 
@@ -237,17 +237,17 @@ public class GiveCommand extends SubCommand {
         if (receiver == null || receiver.getUniqueId() == null)
             return;
         if (receiver instanceof Player)
-            Core.getPlayerManager().getCustomPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
+            UltraCosmetics.getPlayerManager().getCustomPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
         else {
-            if (Core.usingFileStorage())
+            if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(receiver.getUniqueId()).set("Ammo." + gadgetType.toString().toLowerCase(),
                         ((int) SettingsManager.getData(receiver.getUniqueId()).get("Ammo." + gadgetType.toString().toLowerCase())) + ammo);
             else
-                Core.sqlUtils.addAmmo(receiver.getUniqueId(), gadgetType.toString().toLowerCase(), ammo);
+                UltraCosmetics.sqlUtils.addAmmo(receiver.getUniqueId(), gadgetType.toString().toLowerCase(), ammo);
         }
     }
 
     private int getKeys(UUID uuid) {
-        return Core.usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : Core.sqlUtils.getKeys(uuid);
+        return UltraCosmetics.getInstance().usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : UltraCosmetics.sqlUtils.getKeys(uuid);
     }
 }

@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.command;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.command.Command;
@@ -37,7 +37,7 @@ public class CommandManager implements CommandExecutor {
      */
     public void registerCommand(SubCommand meCommand) {
         commands.add(meCommand);
-        Core.log("  Registered subcommand '" + meCommand.aliases[0] + "'");
+        UltraCosmetics.log("  Registered subcommand '" + meCommand.aliases[0] + "'");
     }
 
     public void showHelp(CommandSender commandSender, int page) {

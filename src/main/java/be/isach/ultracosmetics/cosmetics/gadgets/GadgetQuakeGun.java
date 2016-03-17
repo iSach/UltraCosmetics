@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.util.CustomEntityFirework;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_8_R3;
+import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_9_R1;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFirework;
@@ -25,7 +27,7 @@ public class GadgetQuakeGun extends Gadget {
 
     public GadgetQuakeGun(UUID owner) {
         super(owner, GadgetType.QUAKEGUN);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -52,12 +54,15 @@ public class GadgetQuakeGun extends Gadget {
                         FireworkEffect.Builder builder = FireworkEffect.builder();
                         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                                 .withColor(Color.RED).withFade(Color.ORANGE).build();
-                        CustomEntityFirework.spawn(location, effect);
+                        if (UltraCosmetics.getServerVersion() == ServerVersion.v1_8_R3)
+                            CustomEntityFirework_1_8_R3.spawn(location, effect);
+                        else if (UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1)
+                            CustomEntityFirework_1_9_R1.spawn(location, effect);
                         break;
                     }
                 }
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework firework : fireworkList) {

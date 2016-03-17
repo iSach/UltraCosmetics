@@ -1,16 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PlayerUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.EntityHorse;
-import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
@@ -37,14 +34,13 @@ public class MountRudolph extends Mount {
         );
 
         if (owner != null) {
-            horse = (Horse) ent;
+            horse = (Horse) entity;
             horse.setColor(Horse.Color.DARK_BROWN);
             horse.setVariant(Horse.Variant.MULE);
             color = Horse.Color.DARK_BROWN;
             variant = Horse.Variant.MULE;
             horse.setJumpStrength(0.7);
-            EntityHorse entityHorse = ((CraftHorse) horse).getHandle();
-            entityHorse.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4);
+            UltraCosmetics.getInstance().getEntityUtil().setHorseSpeed(horse, 0.4d);
             left = spawnArmorStand(false);
             right = spawnArmorStand(true);
             moveAntlers();
@@ -62,7 +58,7 @@ public class MountRudolph extends Mount {
         else
             armorStand.setRightArmPose(new EulerAngle(MathUtils.PI, Math.PI / 4 + -(Math.PI / 2), MathUtils.PI / 4));
         armorStand.setItemInHand(new ItemStack(Material.DEAD_BUSH));
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getPlugin(), getPlayer().getUniqueId().toString()));
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(UltraCosmetics.getInstance(), getPlayer().getUniqueId().toString()));
         return armorStand;
     }
 

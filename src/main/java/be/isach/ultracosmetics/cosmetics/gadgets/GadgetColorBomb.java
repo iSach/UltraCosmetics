@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -47,7 +47,7 @@ public class GadgetColorBomb extends Gadget {
 
             running = true;
             bomb.setVelocity(new Vector(0, 0, 0));
-            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     onClear();
@@ -78,7 +78,7 @@ public class GadgetColorBomb extends Gadget {
                         items.remove(item);
                     }
                 }
-                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         if (bomb == null)

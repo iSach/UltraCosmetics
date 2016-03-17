@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -16,32 +18,32 @@ import java.util.UUID;
  * Created by Sacha on 18/12/15.
  */
 public enum MountType {
-    DRUGGEDHORSE("ultracosmetics.mounts.druggedhorse", "DruggedHorse", Material.SUGAR, (byte) 0, EntityType.HORSE, "&7&oThat is just too much!", MountDruggedHorse.class),
+    DRUGGEDHORSE("ultracosmetics.mounts.druggedhorse", "DruggedHorse", Material.SUGAR, (byte) 0, EntityType.HORSE, "&7&oThat is just too much!", MountDruggedHorse.class, false),
     INFERNALHORROR("ultracosmetics.mounts.infernalhorror", "InfernalHorror", Material.BONE, (byte) 0, EntityType.HORSE,
-            "&7&oThis mount comes directly from... hell!", MountInfernalHorror.class),
+            "&7&oThis mount comes directly from... hell!", MountInfernalHorror.class, false),
     GLACIALSTEED("ultracosmetics.mounts.glacialsteed", "GlacialSteed", Material.PACKED_ICE, (byte) 0, EntityType.HORSE,
-            "&7&oThis mount comes from North Pole!", MountGlacialSteed.class),
-    WALKINGDEAD("ultracosmetics.mounts.walkingdead", "WalkingDead", Material.ROTTEN_FLESH, (byte) 0, EntityType.HORSE, "&7&oGraaaaw...", MountWalkingDead.class),
-    MOUNTOFFIRE("ultracosmetics.mounts.mountoffire", "MountOfFire", Material.BLAZE_POWDER, (byte) 0, EntityType.HORSE, "&7&oThe mount of Hadès!", MountOfFire.class),
-    MOUNTOFWATER("ultracosmetics.mounts.mountofwater", "MountOfWater", Material.INK_SACK, (byte) 4, EntityType.HORSE, "&7&oThe mount of Poséidon!", MountOfWater.class),
-    ECOLOGISTHORSE("ultracosmetics.mounts.ecologisthorse", "EcologistHorse", Material.RED_ROSE, (byte) 0, EntityType.HORSE, "&7&oBecome ecologist!", MountEcologistHorse.class),
-    SNAKE("ultracosmetics.mounts.snake", "Snake", Material.SEEDS, (byte) 0, EntityType.SHEEP, "&7&oWatch out! It may bite..", MountSnake.class),
+            "&7&oThis mount comes from North Pole!", MountGlacialSteed.class, false),
+    WALKINGDEAD("ultracosmetics.mounts.walkingdead", "WalkingDead", Material.ROTTEN_FLESH, (byte) 0, EntityType.HORSE, "&7&oGraaaaw...", MountWalkingDead.class, false),
+    MOUNTOFFIRE("ultracosmetics.mounts.mountoffire", "MountOfFire", Material.BLAZE_POWDER, (byte) 0, EntityType.HORSE, "&7&oThe mount of Hadès!", MountOfFire.class, false),
+    MOUNTOFWATER("ultracosmetics.mounts.mountofwater", "MountOfWater", Material.INK_SACK, (byte) 4, EntityType.HORSE, "&7&oThe mount of Poséidon!", MountOfWater.class, false),
+    ECOLOGISTHORSE("ultracosmetics.mounts.ecologisthorse", "EcologistHorse", Material.RED_ROSE, (byte) 0, EntityType.HORSE, "&7&oBecome ecologist!", MountEcologistHorse.class, false),
+    SNAKE("ultracosmetics.mounts.snake", "Snake", Material.SEEDS, (byte) 0, EntityType.SHEEP, "&7&oWatch out! It may bite..", MountSnake.class, false),
     NYANSHEEP("ultracosmetics.mounts.nyansheep", "NyanSheep", Material.STAINED_GLASS, (byte) 9, EntityType.SHEEP,
-            "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", MountNyanSheep.class),
+            "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", MountNyanSheep.class, false),
     DRAGON("ultracosmetics.mounts.dragon", "Dragon", Material.DRAGON_EGG, (byte) 0, EntityType.ENDER_DRAGON,
-            "&7&oBecome a drigon rider!", MountDragon.class),
-    SKYSQUID("ultracosmetics.mounts.skysquid", "SkySquid", Material.INK_SACK, (byte) 0, EntityType.SQUID, "&7&oWat.", MountSkySquid.class),
-    SLIME("ultracosmetics.mounts.slime", "Slime", Material.SLIME_BALL, (byte) 0, EntityType.SLIME, "&7&oSplat! Splat!", MountSlime.class),
+            "&7&oBecome a drigon rider!", MountDragon.class, false),
+    SKYSQUID("ultracosmetics.mounts.skysquid", "SkySquid", Material.INK_SACK, (byte) 0, EntityType.SQUID, "&7&oWat.", MountSkySquid_1_8_R3.class, true),
+    SLIME("ultracosmetics.mounts.slime", "Slime", Material.SLIME_BALL, (byte) 0, EntityType.SLIME, "&7&oSplat! Splat!", MountSlime_1_9_R1.class, true),
     HYPECART("ultracosmetics.mounts.hypecart", "HypeCart", Material.MINECART, (byte) 0, EntityType.MINECART,
-            "&7&oEver wanted to drive a F1?\n&7&oNow you can!", MountHypeCart.class),
-    SPIDER("ultracosmetics.mounts.spider", "Spider", Material.WEB, (byte) 0, EntityType.SPIDER, "&7&oYOU are the spider jockey!", MountSpider.class),
+            "&7&oEver wanted to drive a F1?\n&7&oNow you can!", MountHypeCart.class, false),
+    SPIDER("ultracosmetics.mounts.spider", "Spider", Material.WEB, (byte) 0, EntityType.SPIDER, "&7&oYOU are the spider jockey!", MountSpider_1_8_R3.class, true),
     RUDOLPH("ultracosmetics.mounts.rudolph", "Rudolph", Material.DEAD_BUSH, (byte) 0, EntityType.HORSE,
-            "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reeinder?", MountRudolph.class),
+            "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reeinder?", MountRudolph.class, false),
     MOLTENSNAKE("ultracosmetics.mounts.moltensnake", "MoltenSnake", Material.MAGMA_CREAM, (byte) 0, EntityType.MAGMA_CUBE,
-            "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", MountMoltenSnake.class),
-    FLYINGSHIP("ultracosmetics.mounts.flyingship", "FlyingShip", Material.BOAT, (byte) 0, EntityType.BOAT, "&7&oBomb them all!", MountFlyingShip.class);
-  
-  
+            "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", MountMoltenSnake.class, false),
+    FLYINGSHIP("ultracosmetics.mounts.flyingship", "FlyingShip", Material.BOAT, (byte) 0, EntityType.BOAT, "&7&oBomb them all!", MountFlyingShip.class, false);
+
+
     private String permission, configName, description;
     private Material material;
     private byte data;
@@ -49,13 +51,46 @@ public enum MountType {
     private Class<? extends Mount> clazz;
     public static List<MountType> mountTypes = new ArrayList<>();
 
-    MountType(String permission, String configName, Material material, byte data, EntityType entityType, String defaultDescription, Class<? extends Mount> mountClass) {
+    MountType(String permission, String configName, Material material, byte data, EntityType entityType, String defaultDescription, Class<? extends Mount> mountClass, boolean customEntity) {
         this.permission = permission;
         this.configName = configName;
         this.material = material;
         this.data = data;
         this.entityType = entityType;
         this.clazz = mountClass;
+
+        if (customEntity) {
+            Bukkit.broadcastMessage(UltraCosmetics.getServerVersion().toString());
+            switch (UltraCosmetics.getServerVersion()) {
+                default:
+                    switch (entityType) {
+                        case SQUID:
+                            this.clazz = MountSkySquid_1_8_R3.class;
+                            break;
+                        case SPIDER:
+                            this.clazz = MountSpider_1_8_R3.class;
+                            break;
+                        case SLIME:
+                            this.clazz = MountCustomEntity_1_8_R3.class;
+                            break;
+                    }
+                    break;
+                case v1_9_R1:
+                    switch (entityType) {
+                        case SQUID:
+                            this.clazz = MountSkySquid_1_9_R1.class;
+                            break;
+                        case SPIDER:
+                            this.clazz = MountSpider_1_9_R1.class;
+                            break;
+                        case SLIME:
+                            this.clazz = MountSlime_1_9_R1.class;
+                            break;
+                    }
+                    break;
+            }
+        } else
+            this.clazz = mountClass;
 
         if (SettingsManager.getConfig().get("Mounts." + configName + ".Description") == null) {
             this.description = defaultDescription;
@@ -117,6 +152,7 @@ public enum MountType {
         Mount mount = null;
         try {
             mount = clazz.getDeclaredConstructor(UUID.class).newInstance(player == null ? null : player.getUniqueId());
+            mount.equip();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

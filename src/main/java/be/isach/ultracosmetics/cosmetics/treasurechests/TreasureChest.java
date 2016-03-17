@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.treasurechests;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -68,12 +68,12 @@ public class TreasureChest
         this.particleEffect = design.getEffect();
         this.owner = owner;
 
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
 
         this.player = getPlayer();
 
-        if (Core.getCustomPlayer(getPlayer()).currentMorph != null)
-            Core.getCustomPlayer(getPlayer()).setSeeSelfMorph(false);
+        if (UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != null)
+            UltraCosmetics.getCustomPlayer(getPlayer()).setSeeSelfMorph(false);
 
         this.randomGenerator = new TreasureRandomizer(getPlayer(), getPlayer().getLocation());
 
@@ -81,7 +81,7 @@ public class TreasureChest
             int i = 5;
 
             public void run() {
-                if ((getPlayer() == null) || (Core.getCustomPlayer(getPlayer()).currentTreasureChest != instance)) {
+                if ((getPlayer() == null) || (UltraCosmetics.getCustomPlayer(getPlayer()).currentTreasureChest != instance)) {
                     cancel();
                     return;
                 }
@@ -95,7 +95,7 @@ public class TreasureChest
                                     cancel();
                                     return;
                                 }
-                                if ((getPlayer() == null) || (Core.getCustomPlayer(getPlayer()).currentTreasureChest != instance)) {
+                                if ((getPlayer() == null) || (UltraCosmetics.getCustomPlayer(getPlayer()).currentTreasureChest != instance)) {
                                     cancel();
                                     return;
                                 }
@@ -149,10 +149,10 @@ public class TreasureChest
                                         }
                                     }
                                 };
-                                RUNNABLES[1].runTaskLater(Core.getPlugin(), 30L);
+                                RUNNABLES[1].runTaskLater(UltraCosmetics.getInstance(), 30L);
                             }
                         };
-                        RUNNABLES[0].runTaskTimer(Core.getPlugin(), 0L, 50L);
+                        RUNNABLES[0].runTaskTimer(UltraCosmetics.getInstance(), 0L, 50L);
                     }
                     Block lampBlock;
                     if (this.i == 5) {
@@ -214,26 +214,26 @@ public class TreasureChest
                 }
             }
         };
-        runnable.runTaskTimer(Core.getPlugin(), 0L, 12L);
+        runnable.runTaskTimer(UltraCosmetics.getInstance(), 0L, 12L);
 
         final TreasureChest treasureChest = this;
 
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             public void run() {
-                if (Core.getCustomPlayer(player).currentTreasureChest == treasureChest)
+                if (UltraCosmetics.getCustomPlayer(player).currentTreasureChest == treasureChest)
                     forceOpen(45);
             }
         }
                 , 1200L);
 
-        Core.getCustomPlayer(getPlayer()).currentTreasureChest = this;
+        UltraCosmetics.getCustomPlayer(getPlayer()).currentTreasureChest = this;
 
         new BukkitRunnable() {
             public void run() {
                 if ((getPlayer() == null) ||
-                        (Core.getCustomPlayer(TreasureChest.this
+                        (UltraCosmetics.getCustomPlayer(TreasureChest.this
                                 .getPlayer()) == null) ||
-                        (Core.getCustomPlayer(TreasureChest.this
+                        (UltraCosmetics.getCustomPlayer(TreasureChest.this
                                 .getPlayer()).currentTreasureChest != treasureChest)) {
                     for (Entity entity : holograms)
                         entity.remove();
@@ -245,9 +245,9 @@ public class TreasureChest
                 if (getPlayer().getLocation().distance(center) > 1.5D)
                     getPlayer().teleport(center);
                 for (Entity ent : player.getNearbyEntities(2.0D, 2.0D, 2.0D))
-                    if ((Core.getCustomPlayer(player).currentPet == null) || (
-                            (ent != Core.getCustomPlayer(player).currentPet) &&
-                                    (!Core.getCustomPlayer(player).currentPet.items
+                    if ((UltraCosmetics.getCustomPlayer(player).currentPet == null) || (
+                            (ent != UltraCosmetics.getCustomPlayer(player).currentPet) &&
+                                    (!UltraCosmetics.getCustomPlayer(player).currentPet.items
                                             .contains(ent)))) {
                         if ((!items.contains(ent)) &&
                                 (ent != TreasureChest.this
@@ -262,7 +262,7 @@ public class TreasureChest
                     }
             }
         }
-                .runTaskTimer(Core.getPlugin(), 0L, 1L);
+                .runTaskTimer(UltraCosmetics.getInstance(), 0L, 1L);
     }
 
     public Player getPlayer() {
@@ -279,7 +279,7 @@ public class TreasureChest
             BlockUtils.treasureBlocks.remove(b);
         }
         if (!this.stopping) {
-            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                 public void run() {
                     for (Entity hologram : holograms)
                         hologram.remove();
@@ -308,8 +308,8 @@ public class TreasureChest
                         chestsToRemove.clear();
                     if (blocksToRestore != null)
                         blocksToRestore.clear();
-                    if (Core.getCustomPlayer(getPlayer()) != null)
-                        Core.getCustomPlayer(getPlayer()).currentTreasureChest = null;
+                    if (UltraCosmetics.getCustomPlayer(getPlayer()) != null)
+                        UltraCosmetics.getCustomPlayer(getPlayer()).currentTreasureChest = null;
                     owner = null;
                     if (randomGenerator != null)
                         randomGenerator.clear();
@@ -337,7 +337,7 @@ public class TreasureChest
             this.chestsToRemove.clear();
             this.blocksToRestore.clear();
             if (getPlayer() != null)
-                Core.getCustomPlayer(getPlayer()).currentTreasureChest = null;
+                UltraCosmetics.getCustomPlayer(getPlayer()).currentTreasureChest = null;
             this.owner = null;
             if (this.randomGenerator != null)
                 this.randomGenerator.clear();
@@ -408,7 +408,7 @@ public class TreasureChest
 
                 this.items.add(ei.getBukkitEntity());
                 final String nameas = this.randomGenerator.getName();
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
                         spawnHologram(b.getLocation().clone().add(0.5D, 0.3D, 0.5D), nameas);
                     }
@@ -420,7 +420,7 @@ public class TreasureChest
             }
             this.chests.clear();
 
-            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                 public void run() {
                     clear();
                 }
@@ -483,7 +483,7 @@ public class TreasureChest
         armorStand.setBasePlate(false);
         armorStand.setCustomName(s);
         armorStand.setCustomNameVisible(true);
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getPlugin(),"C_AD_ArmorStand"));
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(UltraCosmetics.getInstance(),"C_AD_ArmorStand"));
         this.holograms.add(armorStand);
     }
 
@@ -503,7 +503,7 @@ public class TreasureChest
                 this.randomGenerator.giveRandomThing();
 
                 this.cooldown = true;
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
                         cooldown = false;
                     }
@@ -535,7 +535,7 @@ public class TreasureChest
 
                 this.items.add(ei.getBukkitEntity());
                 final String nameas = this.randomGenerator.getName();
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
                         spawnHologram(event.getClickedBlock().getLocation().add(0.5D, 0.3D, 0.5D), nameas);
                     }
@@ -546,7 +546,7 @@ public class TreasureChest
                 this.chests.remove(event.getClickedBlock());
                 this.chestsToRemove.add(event.getClickedBlock());
                 if (this.chestsLeft == 0)
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         public void run() {
                             clear();
                         }

@@ -1,15 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
-import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.util.PacketSender;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.MagmaCube;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.EulerAngle;
@@ -35,7 +31,7 @@ public class MountMoltenSnake extends Mount {
 
         if (owner == null) return;
 
-        MagmaCube magmaCube = (MagmaCube) ent;
+        MagmaCube magmaCube = (MagmaCube) entity;
         magmaCube.setSize(2);
         entities.add(magmaCube);
         summonTailPart(25);
@@ -55,13 +51,13 @@ public class MountMoltenSnake extends Mount {
                     entity.teleport(lastLocation);
                 else {
                     entity.teleport(lastLocation.clone().add(0, -1.3, 0));
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            for (Player player : getPlayer().getWorld().getPlayers())
-                                PacketSender.send(player, new PacketPlayOutEntityTeleport(((CraftArmorStand) entity).getHandle()));
-                        }
-                    }.run();
+//                    new Thread() {
+//                        @Override
+//                        public void run() {
+//                            for (Player player : getPlayer().getWorld().getPlayers())
+//                                PacketSender.send(player, new PacketPlayOutEntityTeleport(((CraftArmorStand) entity).getHandle()));
+//                        }
+//                    }.run();
                 }
                 ArmorStand as = ((ArmorStand) entity);
                 as.setHeadPose(new EulerAngle(Math.toRadians(lastPitch), Math.toRadians(lastYaw), 0));
@@ -82,7 +78,7 @@ public class MountMoltenSnake extends Mount {
             armorStand.setVisible(false);
             armorStand.setGravity(false);
             armorStand.setHelmet(new ItemStack(Material.NETHERRACK));
-            armorStand.setMetadata("NO_INTER", new FixedMetadataValue(Core.getPlugin(), ""));
+            armorStand.setMetadata("NO_INTER", new FixedMetadataValue(UltraCosmetics.getInstance(), ""));
         }
     }
 

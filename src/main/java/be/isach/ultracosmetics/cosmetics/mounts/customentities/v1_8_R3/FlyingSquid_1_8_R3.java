@@ -1,8 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3;
 
-import be.isach.ultracosmetics.cosmetics.mounts.Mount;
+import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
+import org.bukkit.entity.Entity;
 
 import java.lang.reflect.Field;
 
@@ -11,13 +12,13 @@ import java.lang.reflect.Field;
  * <p/>
  * Created by Sacha on 11/10/15.
  */
-public class FlyingSquid_1_8_R3 extends EntitySquid {
+public class FlyingSquid_1_8_R3 extends EntitySquid implements IMountCustomEntity {
 
 
     public FlyingSquid_1_8_R3(World world) {
         super(world);
 
-        if(!Mount.customEntities.contains(this)) return;
+        if(!CustomEntities_1_8_R3.customEntities.contains(this)) return;
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
             bField.setAccessible(true);
@@ -35,7 +36,7 @@ public class FlyingSquid_1_8_R3 extends EntitySquid {
     @Override
     public void g(float sideMot, float forMot) {
         if (this.passenger != null && this.passenger instanceof EntityHuman
-                && Mount.customEntities.contains(this)) {
+                && CustomEntities_1_8_R3.customEntities.contains(this)) {
             this.lastYaw = this.yaw = this.passenger.yaw;
             this.pitch = this.passenger.pitch * 0.5F;
             this.setYawPitch(this.yaw, this.pitch);//Update the pitch and yaw
@@ -171,7 +172,10 @@ public class FlyingSquid_1_8_R3 extends EntitySquid {
             this.aK = 0.02F;
             super.g(sideMot, forMot);
         }
+    }
 
-
+    @Override
+    public Entity getEntity() {
+        return getBukkitEntity();
     }
 }

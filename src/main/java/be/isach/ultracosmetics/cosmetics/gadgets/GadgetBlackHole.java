@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -39,7 +39,7 @@ public class GadgetBlackHole extends Gadget {
         item.setPickupDelay(Integer.MAX_VALUE);
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
         i = item;
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (i != null) {
@@ -75,7 +75,7 @@ public class GadgetBlackHole extends Gadget {
                 for (final Entity ENT : i.getNearbyEntities(5, 3, 5)) {
                     Vector vector = i.getLocation().toVector().subtract(ENT.getLocation().toVector());
                     MathUtils.applyVelocity(ENT, vector);
-                    Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             if (ENT instanceof Player)

@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ public class GadgetParachute extends Gadget {
         super(owner, GadgetType.PARACHUTE);
 
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
+            Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
     }
 
 
@@ -48,7 +48,7 @@ public class GadgetParachute extends Gadget {
             chickens.add(chicken);
             chicken.setLeashHolder(getPlayer());
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 active = true;

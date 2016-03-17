@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -30,7 +30,7 @@ public class GadgetGhostParty extends Gadget {
         super(owner, GadgetType.GHOSTPARTY);
 
         if (owner != null)
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class GadgetGhostParty extends Gadget {
             bat.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 160, 1));
             bats.put(bat, ghost);
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 killBats();

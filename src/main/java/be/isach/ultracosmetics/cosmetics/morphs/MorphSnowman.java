@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -16,7 +16,7 @@ public class MorphSnowman extends Morph {
     public MorphSnowman(UUID owner) {
         super(owner, MorphType.SNOWNMAN);
         if (owner != null)
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
     }
 
     @EventHandler

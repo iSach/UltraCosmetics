@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -28,7 +28,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
     public GadgetThorHammer(UUID owner) {
         super(owner, GadgetType.THORHAMMER);
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, Core.getPlugin());
+            Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
     }
 
     @Override
@@ -39,17 +39,17 @@ public class GadgetThorHammer extends Gadget implements Listener {
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
         hammer.add(i);
         v = getPlayer().getEyeLocation().getDirection().multiply(1.4).add(new Vector(0, 1, 0));
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 i.setVelocity(getPlayer().getEyeLocation().toVector().subtract(i.getLocation().toVector()).multiply(0.2).add(new Vector(0, 0, 0)));
                 v = null;
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         if (i.isValid()) {
-                            if (Core.isAmmoEnabled()) {
-                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
+                            if (UltraCosmetics.getInstance().isAmmoEnabled()) {
+                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                             } else {
                                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), MessageManager.getMessage("Gadgets.Lore")));
                             }
@@ -67,8 +67,8 @@ public class GadgetThorHammer extends Gadget implements Listener {
             event.setCancelled(true);
             if (event.getPlayer() == getPlayer()) {
                 if (event.getItem().getTicksLived() > 5) {
-                    if (Core.isAmmoEnabled()) {
-                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + Core.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
+                    if (UltraCosmetics.getInstance().isAmmoEnabled()) {
+                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                     } else {
                         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), MessageManager.getMessage("Gadgets.Lore")));
                     }

@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  * Created by Sacha on 11/10/15.
  */
-public class MountSkySquid_1_9_R1 extends MountCustomEntity_1_8_R3 {
+public class MountSkySquid_1_9_R1 extends MountCustomEntity_1_9_R1 {
 
     public MountSkySquid_1_9_R1(UUID owner) {
         super(owner, MountType.SKYSQUID);

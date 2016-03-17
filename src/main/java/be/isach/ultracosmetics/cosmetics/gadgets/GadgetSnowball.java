@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -28,7 +28,7 @@ public class GadgetSnowball extends Gadget {
     void onRightClick() {
         Snowball snowball = getPlayer().launchProjectile(Snowball.class);
         snowball.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.85d));
-        snowball.setMetadata("NO_DAMAGE", new FixedMetadataValue(Core.getPlugin(), ""));
+        snowball.setMetadata("NO_DAMAGE", new FixedMetadataValue(UltraCosmetics.getInstance(), ""));
     }
 
     @Override

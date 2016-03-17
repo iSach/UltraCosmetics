@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -35,7 +35,7 @@ public class GadgetExplosiveSheep extends Gadget {
 
     public GadgetExplosiveSheep(UUID owner) {
         super(owner, GadgetType.EXPLOSIVESHEEP);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class GadgetExplosiveSheep extends Gadget {
             exc.printStackTrace();
         }
 
-        Core.explosiveSheep.add(this);
+        UltraCosmetics.getInstance().explosiveSheep.add(this);
 
         new SheepColorRunnable(7, true, s, this);
     }
@@ -91,7 +91,7 @@ public class GadgetExplosiveSheep extends Gadget {
 
     @Override
     public void onClear() {
-        Core.explosiveSheep.remove(this);
+        UltraCosmetics.getInstance().explosiveSheep.remove(this);
         HandlerList.unregisterAll(this);
     }
 
@@ -105,7 +105,7 @@ public class GadgetExplosiveSheep extends Gadget {
             this.red = red;
             this.time = time;
             this.s = s;
-            this.runTaskLater(Core.getPlugin(), (int) time);
+            this.runTaskLater(UltraCosmetics.getInstance(), (int) time);
             this.gadgetExplosiveSheep = gadgetExplosiveSheep;
         }
 
@@ -155,12 +155,12 @@ public class GadgetExplosiveSheep extends Gadget {
                     } catch (Exception exc) {
                         exc.printStackTrace();
                     }
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             UtilParticles.display(Particles.LAVA, sheep.getLocation(), 5);
                             sheep.remove();
-                            Core.explosiveSheep.remove(gadgetExplosiveSheep);
+                            UltraCosmetics.getInstance().explosiveSheep.remove(gadgetExplosiveSheep);
                         }
                     }, 110);
                 }

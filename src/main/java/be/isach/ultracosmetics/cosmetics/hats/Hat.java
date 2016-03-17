@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.hats;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -87,7 +87,7 @@ public enum Hat {
         this.permission = configName.toLowerCase();
         if (SettingsManager.getConfig().get("Hats." + configName + ".Description") == null) {
             this.description = defaultDesc;
-            Core.config.addDefault("Hats." + configName + ".Description", getColoredDescription(), "description of this hat.");
+            UltraCosmetics.config.addDefault("Hats." + configName + ".Description", getColoredDescription(), "description of this hat.");
         } else {
             this.description = fromList(((List<String>) SettingsManager.getConfig().get("Hats." + configName + ".Description")));
         }

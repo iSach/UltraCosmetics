@@ -1,9 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_9_R1;
 
 import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
-import net.minecraft.server.v1_8_R3.EntityGuardian;
-import net.minecraft.server.v1_8_R3.World;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
+import net.minecraft.server.v1_9_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_9_R1.EntityGuardian;
+import net.minecraft.server.v1_9_R1.SoundEffect;
+import net.minecraft.server.v1_9_R1.World;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
 
 /**
@@ -22,38 +24,31 @@ public class CustomGuardian_1_9_R1 extends EntityGuardian {
     }
 
     public void target(ArmorStand armorStand) {
-        getDataWatcher().watch(17, armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId());
+        getDataWatcher().set(DataWatcherRegistry.c.a(17), (float) (armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId()));
+//        getDataWatcher().set(armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId(), 17);
     }
 
     @Override
-    protected String z() {
-        if (custom)
-            return null;
-        else
-            return super.z();
+    protected SoundEffect G() {
+        if (custom) return null;
+        else return super.G();
     }
 
     @Override
-    public void t_() {
-        if (!custom)
-            super.t_();
-        else
-            setHealth(getMaxHealth());
+    protected SoundEffect bR() {
+        if (custom) return null;
+        else return super.bR();
     }
 
     @Override
-    protected String bo() {
-        if (custom)
-            return null;
-        else
-            return super.bo();
+    protected SoundEffect bS() {
+        if (custom) return null;
+        else return super.bS();
     }
 
     @Override
-    protected String bp() {
-        if (custom)
-            return null;
-        else
-            return super.bp();
+    public void m() {
+        if (!custom) super.m();
+        else setHealth(getMaxHealth());
     }
 }

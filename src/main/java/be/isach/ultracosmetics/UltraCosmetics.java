@@ -11,7 +11,8 @@ import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
 import be.isach.ultracosmetics.cosmetics.mounts.MountType;
-import be.isach.ultracosmetics.cosmetics.mounts.customentities.CustomEntities;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.CustomEntities_1_8_R3;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1.CustomEntities_1_9_R1;
 import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffectType;
 import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.cosmetics.suits.SuitType;
@@ -23,12 +24,15 @@ import be.isach.ultracosmetics.mysql.Table;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldManager;
 import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.v1_8_R3.EntityUtil_1_8_R3;
+import be.isach.ultracosmetics.util.v1_8_R3.PathfinderUtil_1_8_R3;
+import be.isach.ultracosmetics.util.v1_9_R1.EntityUtil_1_9_R1;
+import be.isach.ultracosmetics.util.v1_9_R1.PathfinderUtil_1_9_R1;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -49,8 +53,6 @@ import java.util.*;
  */
 public class UltraCosmetics extends JavaPlugin {
 
-    public static
-
     /**
      * Manages sub commands.
      */
@@ -59,12 +61,12 @@ public class UltraCosmetics extends JavaPlugin {
     /**
      * List containing all the active Disco Balls.
      */
-    public static List<GadgetDiscoBall> discoBalls = Collections.synchronizedList(new ArrayList<GadgetDiscoBall>());
+    public List<GadgetDiscoBall> discoBalls = Collections.synchronizedList(new ArrayList<GadgetDiscoBall>());
 
     /**
      * List containing all the active Explosive Sheep.
      */
-    public static List<GadgetExplosiveSheep> explosiveSheep = Collections.synchronizedList(new ArrayList<GadgetExplosiveSheep>());
+    public List<GadgetExplosiveSheep> explosiveSheep = Collections.synchronizedList(new ArrayList<GadgetExplosiveSheep>());
 
     /**
      * If true, the color will be removed in placeholders.
@@ -74,7 +76,7 @@ public class UltraCosmetics extends JavaPlugin {
     /**
      * If true, means vault is loaded and enabled.
      */
-    public boolean vaultLoaded;
+    private boolean vaultLoaded;
 
     /**
      * Menu Listeners.
@@ -188,10 +190,17 @@ public class UltraCosmetics extends JavaPlugin {
      */
     treasureChests;
 
+    private IEntityUtil entityUtil;
+
     /**
      * Instance.
      */
     private static UltraCosmetics core;
+
+    /**
+     * Server NMS version.
+     */
+    private static ServerVersion serverVersion;
 
     /**
      * Player Manager instance.
@@ -202,6 +211,8 @@ public class UltraCosmetics extends JavaPlugin {
      * MySQL Connection.
      */
     public Connection co;
+
+    public IPathfinderUtil pathfinderUtil;
 
     /**
      * MySQL Table.
@@ -239,25 +250,25 @@ public class UltraCosmetics extends JavaPlugin {
     /**
      * @return if ammo system is enabled, or not.
      */
-    public static boolean isAmmoEnabled() {
+    public boolean isAmmoEnabled() {
         return ammoEnabled;
     }
 
     /**
      * @return if NoteBlockAPI is loaded.
      */
-    public static boolean isNoteBlockAPIEnabled() {
+    public boolean isNoteBlockAPIEnabled() {
         return noteBlockAPIEnabled;
     }
 
     /**
      * @return if file storage is used.
      */
-    public static boolean usingFileStorage() {
+    public boolean usingFileStorage() {
         return fileStorage;
     }
 
-    public static boolean treasureChestsEnabled() {
+    public boolean areTreasureChestsEnabled() {
         return treasureChests;
     }
 
@@ -277,7 +288,7 @@ public class UltraCosmetics extends JavaPlugin {
      *
      * @return
      */
-    public static Plugin getPlugin() {
+    public static UltraCosmetics getInstance() {
         return core;
     }
 
@@ -286,8 +297,8 @@ public class UltraCosmetics extends JavaPlugin {
      *
      * @param listenerClass The listener to register.
      */
-    public static void registerListener(Listener listenerClass) {
-        Bukkit.getPluginManager().registerEvents(listenerClass, getPlugin());
+    public void registerListener(Listener listenerClass) {
+        Bukkit.getPluginManager().registerEvents(listenerClass, getInstance());
     }
 
     /**
@@ -341,6 +352,7 @@ public class UltraCosmetics extends JavaPlugin {
         return null;
     }
 
+
     /**
      * Removes color in a text.
      *
@@ -354,6 +366,10 @@ public class UltraCosmetics extends JavaPlugin {
         return toFilter;
     }
 
+    public static ServerVersion getServerVersion() {
+        return serverVersion;
+    }
+
     public static boolean usingSpigot() {
         return usingSpigot;
     }
@@ -363,10 +379,29 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        if (!getServer().getVersion().contains("1.8.8")) {
-            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 to work!\n\n----------------------------");
+        if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9")) {
+            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or 1.9 to work!\n\n----------------------------");
             getServer().getPluginManager().disablePlugin(this);
             return;
+        }
+
+        String mcVersion = "1.8.8";
+
+        try {
+            mcVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
+        }
+
+        switch (mcVersion) {
+            default:
+                serverVersion = ServerVersion.v1_8_R3;
+                break;
+            case "v1_8_R1":
+                serverVersion = ServerVersion.v1_8_R1;
+            case "v1_8_R2":
+                serverVersion = ServerVersion.v1_8_R2;
+            case "v1_9_R1":
+                serverVersion = ServerVersion.v1_9_R1;
         }
 
         if (getServer().getVersion().contains("Spigot"))
@@ -376,7 +411,7 @@ public class UltraCosmetics extends JavaPlugin {
         currentVersion = getDescription().getVersion();
 
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-        log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded...");
+        log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded... (server: " + serverVersion.getName() + ")");
 
         log("");
         log("Thanks for having downloaded it!");
@@ -457,7 +492,18 @@ public class UltraCosmetics extends JavaPlugin {
         core = this;
 
         log("Registering Custom Entities...");
-        CustomEntities.registerEntities();
+        switch (serverVersion) {
+            case v1_8_R3:
+                CustomEntities_1_8_R3.registerEntities();
+                pathfinderUtil = new PathfinderUtil_1_8_R3();
+                entityUtil = new EntityUtil_1_8_R3();
+                break;
+            case v1_9_R1:
+                CustomEntities_1_9_R1.registerEntities();
+                pathfinderUtil = new PathfinderUtil_1_9_R1();
+                entityUtil = new EntityUtil_1_9_R1();
+                break;
+        }
         log("Custom Entities registered.");
         log("");
 
@@ -586,7 +632,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         if ((ammoEnabled
                 || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))
-                || (treasureChestsEnabled() && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled"))) && Bukkit.getPluginManager().isPluginEnabled("Vault"))
+                || (areTreasureChestsEnabled() && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled"))) && Bukkit.getPluginManager().isPluginEnabled("Vault"))
             setupEconomy();
 
         if (!fileStorage) {
@@ -633,10 +679,9 @@ public class UltraCosmetics extends JavaPlugin {
         log("Listeners registered.");
         log("");
         log("");
-        log("UltraCosmetics finished loading and is now enabled!");
+        log("UltraCosmetics successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
-        GeneralUtil.printPermissions();
     }
 
     /**
@@ -660,6 +705,22 @@ public class UltraCosmetics extends JavaPlugin {
             if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName()))
                 playerManager.getCustomPlayer(p).giveMenuItem();
         }
+    }
+
+    /**
+     * Check if placeholders should be colored.
+     *
+     * @return
+     */
+    public boolean placeholdersHaveColor() {
+        return placeHolderColor;
+    }
+
+    /**
+     * @return {@code true} if vault is loaded, otherwise {@code false}
+     */
+    public boolean isVaultLoaded() {
+        return vaultLoaded;
     }
 
     /**
@@ -853,28 +914,48 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     /**
+     * @return Entity Util class.
+     */
+    public IEntityUtil getEntityUtil() {
+        return entityUtil;
+    }
+
+    /**
      * Called when plugin disables.
      */
     @Override
     public void onDisable() {
-        if (mainMenuListener != null)
-            ((MainMenuManager) mainMenuListener).dispose();
         if (morphMenuListener != null)
             ((MorphManager) morphMenuListener).dispose();
 
-        playerManager.dispose();
+        if (playerManager != null)
+            playerManager.dispose();
         try {
             BlockUtils.forceRestore();
+            switch (serverVersion) {
+                case v1_8_R3:
+                    CustomEntities_1_8_R3.unregisterEntities();
+                    break;
+                case v1_9_R1:
+                    CustomEntities_1_9_R1.unregisterEntities();
+                    break;
+            }
         } catch (Exception e) {
         }
-        CustomEntities.unregisterEntities();
+    }
+
+    /**
+     * @return Command Manager.
+     */
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     /**
      * Checks for new update.
      */
     private void checkForUpdate() {
-        String currentVersion = UltraCosmetics.getPlugin().getDescription().getVersion()
+        String currentVersion = UltraCosmetics.getInstance().getDescription().getVersion()
                 .replace("Beta ", "")
                 .replace("Pre-", "")
                 .replace("Release ", "")

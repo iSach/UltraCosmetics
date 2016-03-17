@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.treasurechests;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -89,7 +89,7 @@ public class TreasureRandomizer {
         this.loc = location.add(0.5, 0, 0.5);
         this.player = player;
         // add ammo.
-        if (Core.isAmmoEnabled() && ammoList.isEmpty())
+        if (UltraCosmetics.getInstance().isAmmoEnabled() && ammoList.isEmpty())
             for (GadgetType type : GadgetType.values())
                 if (type.isEnabled()
                         && player.hasPermission(type.getPermission())
@@ -109,7 +109,7 @@ public class TreasureRandomizer {
                         && petType.canBeFound())
                     this.petList.add(petType);
         if (morphList.isEmpty()
-                && Core.enabledCategories.contains(Category.MORPHS))
+                && UltraCosmetics.enabledCategories.contains(Category.MORPHS))
             for (MorphType morph : MorphType.enabled())
                 if (!player.hasPermission(morph.getPermission())
                         && morph.canBeFound())
@@ -173,7 +173,7 @@ public class TreasureRandomizer {
 
         if (Category.MORPHS.isEnabled()
                 && !morphList.isEmpty()
-                && Core.enabledCategories.contains(Category.MORPHS)
+                && UltraCosmetics.enabledCategories.contains(Category.MORPHS)
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Morphs.Enabled"))
             setupChance(RESULT_TYPES, MORPHS_CHANCE, ResultType.MORPH);
         if (Category.EFFECTS.isEnabled()
@@ -182,7 +182,7 @@ public class TreasureRandomizer {
             setupChance(RESULT_TYPES, EFFECTS_CHANCE, ResultType.EFFECT);
         if (Category.GADGETS.isEnabled()) {
             if (!ammoList.isEmpty()
-                    && Core.isAmmoEnabled()
+                    && UltraCosmetics.getInstance().isAmmoEnabled()
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Enabled"))
                 setupChance(RESULT_TYPES, AMMO_CHANCE, ResultType.AMMO);
             if (!gadgetList.isEmpty()
@@ -202,7 +202,7 @@ public class TreasureRandomizer {
                 && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Hats.Enabled"))
             setupChance(RESULT_TYPES, HATS_CHANCE, ResultType.HAT);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled")
-                && Core.moneyTreasureLoot)
+                && UltraCosmetics.moneyTreasureLoot)
             setupChance(RESULT_TYPES, MONEY_CHANCE, ResultType.MONEY);
         if (Category.SUITS.isEnabled()) {
             if (!helmetList.isEmpty()
@@ -250,7 +250,7 @@ public class TreasureRandomizer {
                     giveMoney();
                     break;
                 case AMMO:
-                    if (!Core.isAmmoEnabled()) {
+                    if (!UltraCosmetics.getInstance().isAmmoEnabled()) {
                         giveRandomThing();
                         break;
                     }
@@ -348,7 +348,7 @@ public class TreasureRandomizer {
     public void giveMoney() {
         int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max"));
         name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
-        Core.economy.depositPlayer(player, money);
+        UltraCosmetics.economy.depositPlayer(player, money);
         itemStack = new ItemStack(Material.DOUBLE_PLANT);
         if (money > 3 * (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max") / 4)
             spawnRandomFirework(loc);
@@ -362,13 +362,13 @@ public class TreasureRandomizer {
         int ammo = MathUtils.randomRangeInt((int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Min"), (int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Max"));
         name = MessageManager.getMessage("Treasure-Chests-Loot.Ammo").replace("%name%", g.getName()).replace("%ammo%", ammo + "");
         ammoList.remove(i);
-        Core.getCustomPlayer(player).addAmmo(g.toString().toLowerCase(), ammo);
+        UltraCosmetics.getCustomPlayer(player).addAmmo(g.toString().toLowerCase(), ammo);
         itemStack = new MaterialData(g.getMaterial(), g.getData()).toItemStack(1);
         if (ammo > 50) {
             spawnRandomFirework(loc);
         }
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Message.enabled"))
-            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%name%", player.getName()).replace("%ammo%", ammo + "").replace("%gadget%", (Core.placeHolderColor) ? g.getName() : Core.filterColor(g.getName())));
+            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%name%", player.getName()).replace("%ammo%", ammo + "").replace("%gadget%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? g.getName() : UltraCosmetics.filterColor(g.getName())));
 
     }
 
@@ -397,7 +397,7 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Suits.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Suits.Message.message")).replace("%name%", player.getName())
-                    .replace("%suit%", (Core.placeHolderColor) ? suitType.getName(armorSlot) : Core.filterColor(suitType.getName(armorSlot))));
+                    .replace("%suit%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? suitType.getName(armorSlot) : UltraCosmetics.filterColor(suitType.getName(armorSlot))));
     }
 
     public void giveRandomGadget() {
@@ -410,7 +410,7 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Gadgets.Message.message")).replace("%name%", player.getName())
-                    .replace("%gadget%", (Core.placeHolderColor) ? gadget.getName() : Core.filterColor(gadget.getName())));
+                    .replace("%gadget%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? gadget.getName() : UltraCosmetics.filterColor(gadget.getName())));
     }
 
     public void giveRandomHat() {
@@ -422,7 +422,7 @@ public class TreasureRandomizer {
         itemStack = hat.getItemStack().clone();
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Hats.Message.enabled"))
-            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Hats.Message.message")).replace("%name%", player.getName()).replace("%hat%", (Core.placeHolderColor) ? hat.getName() : Core.filterColor(hat.getName())));
+            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Hats.Message.message")).replace("%name%", player.getName()).replace("%hat%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? hat.getName() : UltraCosmetics.filterColor(hat.getName())));
     }
 
     public void giveRandomPet() {
@@ -435,7 +435,7 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Pets.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Pets.Message.message")).replace("%name%", player.getName())
-                    .replace("%pet%", (Core.placeHolderColor) ? pet.getMenuName() : Core.filterColor(pet.getMenuName())));
+                    .replace("%pet%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? pet.getMenuName() : UltraCosmetics.filterColor(pet.getMenuName())));
     }
 
     public void giveRandomMount() {
@@ -448,8 +448,8 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Mounts.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Mounts.Message.message"))
-                    .replace("%name%", player.getName()).replace("%mount%", (Core.placeHolderColor)
-                            ? mount.getMenuName() : Core.filterColor(mount.getMenuName())));
+                    .replace("%name%", player.getName()).replace("%mount%", (UltraCosmetics.getInstance().placeholdersHaveColor())
+                            ? mount.getMenuName() : UltraCosmetics.filterColor(mount.getMenuName())));
     }
 
     public void giveRandomEffect() {
@@ -461,7 +461,7 @@ public class TreasureRandomizer {
         givePermission(particleEffect.getPermission());
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Effects.Message.enabled"))
-            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Effects.Message.message")).replace("%name%", player.getName()).replace("%effect%", (Core.placeHolderColor) ? particleEffect.getName() : Core.filterColor(particleEffect.getName())));
+            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Effects.Message.message")).replace("%name%", player.getName()).replace("%effect%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? particleEffect.getName() : UltraCosmetics.filterColor(particleEffect.getName())));
     }
 
     public void giveRandomMorph() {
@@ -474,12 +474,12 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Morphs.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Morphs.Message.message"))
-                    .replace("%name%", player.getName()).replace("%morph%", (Core.placeHolderColor) ? morph.getName() : Core.filterColor(morph.getName())));
+                    .replace("%name%", player.getName()).replace("%morph%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? morph.getName() : UltraCosmetics.filterColor(morph.getName())));
     }
 
 
     public static FireworkEffect getRandomFireworkEffect() {
-        if (!Core.getPlugin().isEnabled())
+        if (!UltraCosmetics.getInstance().isEnabled())
             return null;
         Random r = new Random();
         FireworkEffect.Builder builder = FireworkEffect.builder();
@@ -493,7 +493,7 @@ public class TreasureRandomizer {
     }
 
     public void spawnRandomFirework(Location location) {
-        if (!Core.getPlugin().isEnabled())
+        if (!UltraCosmetics.getInstance().isEnabled())
             return;
         final ArrayList<Firework> fireworks = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
@@ -504,7 +504,7 @@ public class TreasureRandomizer {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)

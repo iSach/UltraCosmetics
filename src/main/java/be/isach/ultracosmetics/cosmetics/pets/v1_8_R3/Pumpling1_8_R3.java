@@ -1,22 +1,27 @@
 package be.isach.ultracosmetics.cosmetics.pets.v1_8_R3;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.pets.Pet;
+import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.Zombie;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sacha on 18/10/15.
  */
-public class Pumpling1_8_R3 extends EntityZombie {
+public class Pumpling1_8_R3 extends EntityZombie implements IPetCustomEntity {
 
     boolean isCustomEntity;
+
+    /**
+     * Static list of all the custom entities.
+     */
+    public static List<Entity> customEntities = new ArrayList();
 
     public Pumpling1_8_R3(World world) {
         super(world);
@@ -26,15 +31,19 @@ public class Pumpling1_8_R3 extends EntityZombie {
         Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
-                if (Pet.customEntities.contains(instance)) {
+                if (customEntities.contains(instance)) {
                     isCustomEntity = true;
-                    removeSelectors();
+                    UltraCosmetics.getInstance().pathfinderUtil.removePathFinders(getBukkitEntity());
                     setInvisible(true);
                     setBaby(true);
                     setEquipment(4, new ItemStack(Blocks.PUMPKIN));
                 }
             }
         }, 4);
+    }
+
+    public org.bukkit.entity.Entity getEntity() {
+        return getBukkitEntity();
     }
 
     @Override
@@ -80,21 +89,6 @@ public class Pumpling1_8_R3 extends EntityZombie {
         if (isCustomEntity) {
             fireTicks = 0;
             UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
-        }
-    }
-
-    private void removeSelectors() {
-        try {
-            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-            bField.setAccessible(true);
-            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
-            bField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            bField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-        } catch (Exception exc) {
-            exc.printStackTrace();
         }
     }
 }

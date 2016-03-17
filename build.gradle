@@ -3,9 +3,9 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 group = 'be.isach'
-version = '2.0.6-RELEASE'
+version = '2.1-RELEASE'
 
-//libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins/'
+libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins/'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -46,6 +46,9 @@ repositories {
             artifact '[module]/[module]-[revision].[ext]'
         }
     }
+    flatDir {
+        dirs '/Java/BuildTools'
+    }
     mavenCentral()
 }
 
@@ -55,7 +58,9 @@ configurations {
 }
 
 dependencies {
-    provided 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
+    provided name: 'spigot-1.8.8-R0.1-SNAPSHOT'
+    provided name: 'spigot-1.9'
+//    provided 'org.spigotmc:spigot:1.9-R0.1-SNAPSHOT'
     provided 'com.comphenix.protocol:ProtocolLib:3.6.4'
     provided 'LibsDisguises:LibsDisguises:8.6.7-SNAPSHOT'
     provided 'com.xxmicloxx:NoteBlockAPI:1.0-SNAPSHOT'

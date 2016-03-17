@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -28,7 +28,7 @@ public class MorphPig extends Morph {
                 @Override
                 public void run() {
                     if (getPlayer() == null
-                            || Core.getCustomPlayer(getPlayer()).currentMorph != pig) {
+                            || UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != pig) {
                         cancel();
                         return;
                     }
@@ -40,7 +40,7 @@ public class MorphPig extends Morph {
                                     && ent != disguise.getEntity()
                                     && !cooldown) {
                                 cooldown = true;
-                                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                                     @Override
                                     public void run() {
                                         cooldown = false;
@@ -57,7 +57,7 @@ public class MorphPig extends Morph {
                         }
                     }
                 }
-            }.runTaskTimer(Core.getPlugin(), 0, 1);
+            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
         }
     }
 

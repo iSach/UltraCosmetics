@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
@@ -43,10 +43,10 @@ public class GadgetBlizzardBlaster extends Gadget {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
-        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(Core.getPlugin(), new BukkitRunnable() {
+        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(UltraCosmetics.getInstance(), new BukkitRunnable() {
             @Override
             public void run() {
-                if (Core.getCustomPlayer(getPlayer()).currentGadget != instance) {
+                if (UltraCosmetics.getCustomPlayer(getPlayer()).currentGadget != instance) {
                     cancel();
                     return;
                 }
@@ -74,7 +74,7 @@ public class GadgetBlizzardBlaster extends Gadget {
                         PacketSender.send(player, new PacketPlayOutEntityEquipment(as.getId(), 4, CraftItemStack.asNMSCopy(new ItemStack(Material.PACKED_ICE))));
                     }
                     UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
-                    Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             for (Player player : getPlayer().getWorld().getPlayers())
@@ -87,7 +87,7 @@ public class GadgetBlizzardBlaster extends Gadget {
                             if (!cooldownJump.contains(ent) && ent != getPlayer()) {
                                 MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
                                 cooldownJump.add(ent);
-                                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                                     @Override
                                     public void run() {
                                         cooldownJump.remove(ent);
@@ -100,7 +100,7 @@ public class GadgetBlizzardBlaster extends Gadget {
             }
         }, 0, 1).getTaskId();
 
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.getScheduler().cancelTask(i);

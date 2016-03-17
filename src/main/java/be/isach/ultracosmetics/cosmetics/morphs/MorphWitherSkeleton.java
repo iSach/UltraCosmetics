@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ public class MorphWitherSkeleton extends Morph {
 
     public MorphWitherSkeleton(UUID owner) {
         super(owner, MorphType.WITHERSKELETON);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @EventHandler
@@ -34,7 +34,7 @@ public class MorphWitherSkeleton extends Morph {
         if (event.getPlayer() == getPlayer()
                 && !inCooldown) {
             inCooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     inCooldown = false;
@@ -50,7 +50,7 @@ public class MorphWitherSkeleton extends Morph {
                 bone.setVelocity(MathUtils.getRandomVector());
                 items.add(bone);
             }
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                    for(Entity bone : items)

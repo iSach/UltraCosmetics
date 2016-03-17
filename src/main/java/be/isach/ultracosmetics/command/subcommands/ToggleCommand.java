@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.command.subcommands;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
@@ -73,7 +73,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentGadget != null &&
                     cp.currentGadget.getType() == gadgetType) {
                 cp.removeGadget();
@@ -99,7 +99,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentPet != null &&
                     cp.currentPet.getType() == petType) {
                 cp.removePet();
@@ -125,7 +125,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentParticleEffect != null &&
                     cp.currentParticleEffect.getType() == effectType) {
                 cp.removeParticleEffect();
@@ -151,7 +151,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentMount != null &&
                     cp.currentMount.getType() == mountType) {
                 cp.removeMount();
@@ -177,7 +177,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentMorph != null &&
                     cp.currentMorph.getType() == morphType) {
                 cp.removeMorph();
@@ -203,7 +203,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentHat != null &&
                     cp.currentHat == hat) {
                 cp.removeHat();
@@ -263,7 +263,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer customPlayer = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer customPlayer = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (customPlayer.getSuit(armorSlot) != null
                     && customPlayer.getSuit(armorSlot).getType() == suitType) {
                 customPlayer.removeSuit(armorSlot);
@@ -318,7 +318,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentGadget != null &&
                     cp.currentGadget.getType() == gadgetType) {
                 cp.removeGadget();
@@ -344,7 +344,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentPet != null &&
                     cp.currentPet.getType() == petType) {
                 cp.removePet();
@@ -370,7 +370,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentParticleEffect != null &&
                     cp.currentParticleEffect.getType() == effectType) {
                 cp.removeParticleEffect();
@@ -396,7 +396,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentMount != null &&
                     cp.currentMount.getType() == mountType) {
                 cp.removeMount();
@@ -422,7 +422,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentMorph != null &&
                     cp.currentMorph.getType() == morphType) {
                 cp.removeMorph();
@@ -448,7 +448,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer cp = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentHat != null &&
                     cp.currentHat == hat) {
                 cp.removeHat();
@@ -508,7 +508,7 @@ public class ToggleCommand extends SubCommand {
                 return;
             }
 
-            CustomPlayer customPlayer = Core.getPlayerManager().getCustomPlayer(receiver);
+            CustomPlayer customPlayer = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (customPlayer.getSuit(armorSlot) != null
                     && customPlayer.getSuit(armorSlot).getType() == suitType) {
                 customPlayer.removeSuit(armorSlot);

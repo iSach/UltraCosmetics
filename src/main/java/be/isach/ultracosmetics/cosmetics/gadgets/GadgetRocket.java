@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.Particles;
@@ -42,7 +42,7 @@ public class GadgetRocket extends Gadget {
         loc.setX(loc.getBlockX() + 0.5);
         loc.setY(loc.getBlockY());
         loc.setZ(loc.getBlockZ() + 0.5);
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
 
             @Override
             public void run() {
@@ -69,7 +69,7 @@ public class GadgetRocket extends Gadget {
 
             }
         }, 10);
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
 
             @Override
             public void run() {
@@ -119,7 +119,7 @@ public class GadgetRocket extends Gadget {
                             fallingBlocks.add(base);
                             top.setPassenger(getPlayer());
                             launching = true;
-                            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                                 @Override
                                 public void run() {
                                     if (!isStillCurrentGadget()) {
@@ -139,7 +139,7 @@ public class GadgetRocket extends Gadget {
                         }
                     }
                 };
-                runnable.runTaskTimer(Core.getPlugin(), 0, 20);
+                runnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 20);
             }
         }, 12);
     }
@@ -147,7 +147,7 @@ public class GadgetRocket extends Gadget {
     boolean isStillCurrentGadget() {
         if (getPlayer() == null)
             return false;
-        return Core.getCustomPlayer(getPlayer()).currentGadget == this;
+        return UltraCosmetics.getCustomPlayer(getPlayer()).currentGadget == this;
     }
 
     @Override

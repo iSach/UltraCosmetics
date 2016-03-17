@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -37,7 +37,7 @@ public class ParticleEffectManager implements Listener {
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
         final int finalPage = page;
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 int listSize = ParticleEffectType.enabled().size();
@@ -80,7 +80,7 @@ public class ParticleEffectManager implements Listener {
                         lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig()
                                 .get("No-Permission.Lore-Message-" + ((p.hasPermission(particleEffectType.getPermission()) ? "Yes" : "No")))));
                     String toggle = MessageManager.getMessage("Menu.Summon");
-                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
                     if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffectType)
                         toggle = MessageManager.getMessage("Menu.Unsummon");
                     ItemStack is = ItemFactory.create(particleEffectType.getMaterial(), particleEffectType.getData(), toggle + " " + particleEffectType.getName());
@@ -113,7 +113,7 @@ public class ParticleEffectManager implements Listener {
 
                 ItemFactory.fillInventory(inv);
 
-                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         p.openInventory(inv);
@@ -153,7 +153,7 @@ public class ParticleEffectManager implements Listener {
             if (!playerList.contains(PLAYER)) {
                 PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
                 playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         playerList.remove(PLAYER);
@@ -189,27 +189,27 @@ public class ParticleEffectManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    Core.openMainMenuFromOther((Player)event.getWhoClicked());
+                    UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Effect"))) {
-                    if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentParticleEffect != null) {
+                    if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentParticleEffect != null) {
                         int currentPage = getCurrentPage((Player) event.getWhoClicked());
                         event.getWhoClicked().closeInventory();
-                        Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                        UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
                         openMenu((Player) event.getWhoClicked(), currentPage);
                     } else return;
                     return;
                 }
                 int currentPage = getCurrentPage((Player) event.getWhoClicked());
-                if (Core.closeAfterSelect)
+                if (UltraCosmetics.closeAfterSelect)
                     event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unsummon"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
-                    if (!Core.closeAfterSelect)
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                    if (!UltraCosmetics.closeAfterSelect)
                         openMenu((Player) event.getWhoClicked(), currentPage);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Summon"))) {
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeParticleEffect();
                     StringBuilder sb = new StringBuilder();
                     String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Summon"), "");
                     int j = name.split(" ").length;
@@ -225,7 +225,7 @@ public class ParticleEffectManager implements Listener {
                         }
                     }
                     equipEffect(getEffect(sb.toString()), (Player) event.getWhoClicked());
-                    if (!Core.closeAfterSelect)
+                    if (!UltraCosmetics.closeAfterSelect)
                         openMenu((Player) event.getWhoClicked(), currentPage);
                 }
 

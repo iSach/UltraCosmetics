@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.*;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
@@ -34,7 +34,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     public GadgetEtherealPearl(UUID owner) {
         super(owner, GadgetType.ETHEREALPEARL);
         if (owner != null)
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -46,8 +46,8 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     void onRightClick() {
-        if (Core.getCustomPlayer(getPlayer()).currentMount != null)
-            Core.getCustomPlayer(getPlayer()).removeMount();
+        if (UltraCosmetics.getCustomPlayer(getPlayer()).currentMount != null)
+            UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
         if (getPlayer().getVehicle() instanceof EnderPearl) {
             getPlayer().getVehicle().remove();
         }
@@ -87,7 +87,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             }
         };
         runnableHashMap.put(getPlayer(), runnable);
-        runnable.runTaskTimer(Core.getPlugin(), 0, 10);
+        runnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 10);
     }
 
     @EventHandler
@@ -126,7 +126,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)

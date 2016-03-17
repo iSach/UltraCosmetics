@@ -1,12 +1,15 @@
 package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3;
 
-import be.isach.ultracosmetics.cosmetics.morphs.customentities.CustomGuardian;
-import be.isach.ultracosmetics.cosmetics.pets.customentities.Pumpling1_8_R3;
+import be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_8_R3.CustomGuardian_1_8_R3;
+import be.isach.ultracosmetics.cosmetics.pets.v1_8_R3.Pumpling1_8_R3;
+import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
@@ -16,13 +19,16 @@ public enum CustomEntities_1_8_R3 {
     PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling1_8_R3.class, Pumpling1_8_R3.class),
     SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime_1_8_R3.class, CustomSlime_1_8_R3.class),
     RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider_1_8_R3.class, RideableSpider_1_8_R3.class),
-    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
+    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian_1_8_R3.class, CustomGuardian_1_8_R3.class);
 
     private String name;
     private int id;
     private EntityType entityType;
     private Class<? extends EntityInsentient> nmsClass;
     private Class<? extends EntityInsentient> customClass;
+
+    // mounts
+    public static List<Entity> customEntities = new ArrayList();
 
     CustomEntities_1_8_R3(String name, int id, EntityType entityType,
                           Class<? extends EntityInsentient> nmsClass,

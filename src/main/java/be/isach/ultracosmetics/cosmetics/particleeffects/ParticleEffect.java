@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -56,15 +56,15 @@ public abstract class ParticleEffect implements Listener {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
                 return;
             }
-            if (Core.getCustomPlayer(getPlayer()).currentParticleEffect != null)
-                Core.getCustomPlayer(getPlayer()).removeParticleEffect();
+            if (UltraCosmetics.getCustomPlayer(getPlayer()).currentParticleEffect != null)
+                UltraCosmetics.getCustomPlayer(getPlayer()).removeParticleEffect();
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
                     try {
                         if (Bukkit.getPlayer(owner) != null
-                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect != null
-                                && Core.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect.getType() == type) {
+                                && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect != null
+                                && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentParticleEffect.getType() == type) {
                             if (getType() != ParticleEffectType.FROZENWALK
                                     && getType() != ParticleEffectType.ENCHANTED
                                     && getType() != ParticleEffectType.MUSIC
@@ -99,10 +99,10 @@ public abstract class ParticleEffect implements Listener {
                     }
                 }
             };
-            runnable.runTaskTimerAsynchronously(Core.getPlugin(), 0, type.getRepeatDelay());
+            runnable.runTaskTimerAsynchronously(UltraCosmetics.getInstance(), 0, type.getRepeatDelay());
             listener = new ParticleEffectListener(this);
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", (Core.placeHolderColor) ? type.getName() : Core.filterColor(type.getName())));
-            Core.getCustomPlayer(getPlayer()).currentParticleEffect = this;
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? type.getName() : UltraCosmetics.filterColor(type.getName())));
+            UltraCosmetics.getCustomPlayer(getPlayer()).currentParticleEffect = this;
         }
     }
 
@@ -141,14 +141,14 @@ public abstract class ParticleEffect implements Listener {
      * Clears the effect.
      */
     public void clear() {
-        Core.getCustomPlayer(getPlayer()).currentParticleEffect = null;
+        UltraCosmetics.getCustomPlayer(getPlayer()).currentParticleEffect = null;
         try {
             HandlerList.unregisterAll(this);
             HandlerList.unregisterAll(listener);
         } catch (Exception exc) {
         }
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", (Core.placeHolderColor) ? type.getName() : Core.filterColor(type.getName())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%mountname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? type.getName() : UltraCosmetics.filterColor(type.getName())));
         owner = null;
     }
 
@@ -160,7 +160,7 @@ public abstract class ParticleEffect implements Listener {
 
         public ParticleEffectListener(ParticleEffect particleEffect) {
             this.particleEffect = particleEffect;
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
         }
 
         @EventHandler

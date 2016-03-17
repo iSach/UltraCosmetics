@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
@@ -24,7 +24,7 @@ public class MorphEnderman extends Morph {
     public MorphEnderman(UUID owner) {
         super(owner, MorphType.ENDERMAN);
         if (owner != null) {
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
             getPlayer().setAllowFlight(true);
         }
     }
@@ -40,7 +40,7 @@ public class MorphEnderman extends Morph {
                 return;
             }
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
@@ -74,7 +74,7 @@ public class MorphEnderman extends Morph {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)

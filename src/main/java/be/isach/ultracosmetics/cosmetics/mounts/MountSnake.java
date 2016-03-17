@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import net.minecraft.server.v1_8_R3.EntityCreature;
 import org.bukkit.Bukkit;
@@ -27,15 +27,17 @@ public class MountSnake extends Mount {
 
     public MountSnake(UUID owner) {
         super(owner, MountType.SNAKE);
+    }
 
-        if (owner == null) return;
+    @Override
+    protected void onEquip() {
         color = MathUtils.randomRangeInt(0, 14);
-        ((LivingEntity) ent).setNoDamageTicks(Integer.MAX_VALUE);
-        ((Sheep) ent).setColor(DyeColor.values()[color]);
+        ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
+        ((Sheep) entity).setColor(DyeColor.values()[color]);
         tailMap.put(getPlayer(), new ArrayList());
-        ((ArrayList) tailMap.get(getPlayer())).add(ent);
+        ((ArrayList) tailMap.get(getPlayer())).add(entity);
         addSheepToTail(4);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class MountSnake extends Mount {
     @Override
     void onUpdate() {
         if (getPlayer() != null)
-            Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     if (getPlayer() != null) {

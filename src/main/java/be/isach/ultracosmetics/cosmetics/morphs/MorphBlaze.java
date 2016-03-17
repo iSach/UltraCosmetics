@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Sound;
@@ -21,14 +21,14 @@ public class MorphBlaze extends Morph {
 
         if (owner != null) {
 
-            Core.registerListener(this);
+            UltraCosmetics.getInstance().registerListener(this);
 
             final MorphBlaze blaze = this;
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (getPlayer() == null
-                            || Core.getCustomPlayer(getPlayer()).currentMorph != blaze) {
+                            || UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != blaze) {
                         cancel();
                         return;
                     }
@@ -40,20 +40,20 @@ public class MorphBlaze extends Morph {
                         getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
                     }
                 }
-            }.runTaskTimer(Core.getPlugin(), 0, 1);
+            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
         }
     }
 
     @EventHandler
     public void onKick(PlayerKickEvent event) {
-        if(event.getPlayer() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && event.getReason().contains("Flying"))
+        if(event.getPlayer() == getPlayer() && UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph == this && event.getReason().contains("Flying"))
             event.setCancelled(true);
 
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if(event.getEntity() == getPlayer() && Core.getCustomPlayer(getPlayer()).currentMorph == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+        if(event.getEntity() == getPlayer() && UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
             event.setCancelled(true);
     }
 }

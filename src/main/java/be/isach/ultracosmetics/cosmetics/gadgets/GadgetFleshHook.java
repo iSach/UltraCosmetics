@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.EntityEffect;
@@ -25,7 +25,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
 
     public GadgetFleshHook(UUID owner) {
         super(owner, GadgetType.FLESHHOOK);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @org.bukkit.event.EventHandler

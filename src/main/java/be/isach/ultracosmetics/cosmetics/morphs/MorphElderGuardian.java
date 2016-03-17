@@ -1,11 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
-import be.isach.ultracosmetics.cosmetics.morphs.customentities.CustomGuardian;
-import be.isach.ultracosmetics.util.CustomEntityFirework;
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_8_R3.CustomGuardian_1_8_R3;
+import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_8_R3;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_9_R1;
 import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -31,16 +33,16 @@ import java.util.UUID;
 public class MorphElderGuardian extends Morph {
 
     private boolean cooldown;
-    private CustomGuardian customGuardian;
+    private CustomGuardian_1_8_R3 customGuardian;
 
     public MorphElderGuardian(UUID owner) {
         super(owner, MorphType.ELDERGUARDIAN);
         if (owner == null) return;
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
 
         World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
 
-        customGuardian = new CustomGuardian(world);
+        customGuardian = new CustomGuardian_1_8_R3(world);
         MorphType.customEntities.add(customGuardian);
         customGuardian.check();
 
@@ -69,12 +71,12 @@ public class MorphElderGuardian extends Morph {
                 }
                 if (customGuardian == null
                         || !customGuardian.isAlive()) {
-                    Core.getPlayerManager().getCustomPlayer(getPlayer()).removeMorph();
+                    UltraCosmetics.getPlayerManager().getCustomPlayer(getPlayer()).removeMorph();
                     cancel();
                     return;
                 }
             }
-        }.runTaskTimerAsynchronously(Core.getPlugin(), 0, 1);
+        }.runTaskTimerAsynchronously(UltraCosmetics.getInstance(), 0, 1);
 
     }
 
@@ -85,7 +87,7 @@ public class MorphElderGuardian extends Morph {
                 && event.getPlayer() == getPlayer()) {
             shootLaser();
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
@@ -117,13 +119,17 @@ public class MorphElderGuardian extends Morph {
 
         customGuardian.target(armorStand);
 
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 FireworkEffect.Builder builder = FireworkEffect.builder();
                 FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                         .withColor(Color.TEAL).withFade(Color.TEAL).build();
-                CustomEntityFirework.spawn(TO, effect);
+
+                if (UltraCosmetics.getServerVersion() == ServerVersion.v1_8_R3)
+                    CustomEntityFirework_1_8_R3.spawn(TO, effect);
+                else if (UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1)
+                    CustomEntityFirework_1_9_R1.spawn(TO, effect);
 
                 Vector vector = TO.toVector().subtract(FROM.toVector());
 

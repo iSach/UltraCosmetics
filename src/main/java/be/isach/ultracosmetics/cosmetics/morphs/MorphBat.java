@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -16,7 +16,7 @@ import java.util.UUID;
 public class MorphBat extends Morph {
     public MorphBat(UUID owner) {
         super(owner, MorphType.BAT);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
         if (owner != null)
             getPlayer().setAllowFlight(true);
     }

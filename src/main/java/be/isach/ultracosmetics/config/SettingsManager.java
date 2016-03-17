@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.config;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.CustomConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,15 +31,15 @@ public class SettingsManager {
      */
     private SettingsManager(String fileName) {
 
-        if (!Core.getPlugin().getDataFolder().exists()) {
-            Core.getPlugin().getDataFolder().mkdir();
+        if (!UltraCosmetics.getInstance().getDataFolder().exists()) {
+            UltraCosmetics.getInstance().getDataFolder().mkdir();
         }
 
-        File f = new File(Core.getPlugin().getDataFolder(), "/data");
+        File f = new File(UltraCosmetics.getInstance().getDataFolder(), "/data");
         if (!f.exists())
             f.mkdirs();
 
-        file = new File(Core.getPlugin().getDataFolder(), fileName + ".yml");
+        file = new File(UltraCosmetics.getInstance().getDataFolder(), fileName + ".yml");
 
         if (!file.exists()) {
             try {
@@ -58,8 +58,8 @@ public class SettingsManager {
      * @param fileName
      */
     private SettingsManager() {
-        file = new File(Core.getPlugin().getDataFolder(), "config.yml");
-        fileConfiguration = Core.config;
+        file = new File(UltraCosmetics.getInstance().getDataFolder(), "config.yml");
+        fileConfiguration = UltraCosmetics.config;
     }
 
     /**
@@ -77,7 +77,7 @@ public class SettingsManager {
      * @return the messages SettingsManager.
      */
     public static CustomConfiguration getConfig() {
-        return Core.config;
+        return UltraCosmetics.config;
     }
 
     /**
@@ -101,7 +101,7 @@ public class SettingsManager {
     }
 
     public static boolean hasData(UUID uuid) {
-        return Arrays.asList(Core.getPlugin().getDataFolder()
+        return Arrays.asList(UltraCosmetics.getInstance().getDataFolder()
                 .listFiles()).contains(new File(uuid.toString() + ".yml"));
     }
 

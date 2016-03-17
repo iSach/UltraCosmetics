@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -53,7 +53,7 @@ public class MorphManager implements Listener {
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
         final int finalPAGE = page;
-        Bukkit.getScheduler().runTaskAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 int listSize = MorphType.enabled().size();
@@ -97,7 +97,7 @@ public class MorphManager implements Listener {
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore"))
                         lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(morphType.getPermission()) ? "Yes" : "No")))));
                     String toggle = MessageManager.getMessage("Menu.Morph");
-                    CustomPlayer cp = Core.getCustomPlayer(p);
+                    CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
                     if (cp.currentMorph != null && cp.currentMorph.getType() == morphType)
                         toggle = MessageManager.getMessage("Menu.Unmorph");
                     ItemStack is = ItemFactory.create(morphType.getMaterial(), morphType.getData(), toggle + " " + morphType.getName());
@@ -128,7 +128,7 @@ public class MorphManager implements Listener {
                 inv.setItem(inv.getSize() - 4, ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Morph")));
                 int d = (Category.MORPHS.hasGoBackArrow() ? 5 : 6);
 
-                if (Core.getCustomPlayer(p).canSeeSelfMorph())
+                if (UltraCosmetics.getCustomPlayer(p).canSeeSelfMorph())
                     inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getData(), MessageManager.getMessage("Disable-Third-Person-View")));
                 else
                     inv.setItem(inv.getSize() - d, ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getData(), MessageManager.getMessage("Enable-Third-Person-View")));
@@ -141,7 +141,7 @@ public class MorphManager implements Listener {
 
                 ItemFactory.fillInventory(inv);
 
-                Bukkit.getScheduler().runTask(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         p.openInventory(inv);
@@ -156,7 +156,7 @@ public class MorphManager implements Listener {
             if (!playerList.contains(PLAYER)) {
                 PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
                 playerList.add(PLAYER);
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         playerList.remove(PLAYER);
@@ -217,29 +217,29 @@ public class MorphManager implements Listener {
                 return;
             }
             if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                Core.openMainMenuFromOther((Player)event.getWhoClicked());
+                UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Enable-Third-Person-View"))) {
-                Core.getCustomPlayer((Player) event.getWhoClicked()).setSeeSelfMorph(true);
+                UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).setSeeSelfMorph(true);
                 event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0x0, MessageManager.getMessage("Disable-Third-Person-View")));
-                if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
-                    Morph morph = Core.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
+                if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
+                    Morph morph = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
                     morph.disguise = new me.libraryaddict.disguise.disguisetypes.MobDisguise(morph.getType().getDisguiseType());
                     me.libraryaddict.disguise.DisguiseAPI.disguiseToAll(event.getWhoClicked(), morph.disguise);
                     morph.disguise.setShowName(true);
-                    if (!Core.getCustomPlayer((Player) event.getWhoClicked()).canSeeSelfMorph())
+                    if (!UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).canSeeSelfMorph())
                         morph.disguise.setViewSelfDisguise(false);
                 }
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Disable-Third-Person-View"))) {
-                Core.getCustomPlayer((Player) event.getWhoClicked()).setSeeSelfMorph(false);
+                UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).setSeeSelfMorph(false);
                 event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.ENDER_PEARL, (byte) 0x0, MessageManager.getMessage("Enable-Third-Person-View")));
-                if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
-                    Morph morph = Core.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
+                if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
+                    Morph morph = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
                     morph.disguise = new me.libraryaddict.disguise.disguisetypes.MobDisguise(morph.getType().getDisguiseType());
                     me.libraryaddict.disguise.DisguiseAPI.disguiseToAll(event.getWhoClicked(), morph.disguise);
                     morph.disguise.setShowName(true);
-                    if (!Core.getCustomPlayer((Player) event.getWhoClicked()).canSeeSelfMorph())
+                    if (!UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).canSeeSelfMorph())
                         morph.disguise.setViewSelfDisguise(false);
                 }
                 return;
@@ -250,24 +250,24 @@ public class MorphManager implements Listener {
                 openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) - 1);
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Morph"))) {
-                if (Core.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
+                if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
                     int currentPage = getCurrentPage((Player) event.getWhoClicked());
                     event.getWhoClicked().closeInventory();
-                    Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
+                    UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
                     openMenu((Player) event.getWhoClicked(), currentPage);
                 } else return;
                 return;
             }
             int currentPage = getCurrentPage((Player) event.getWhoClicked());
-            if (Core.closeAfterSelect)
+            if (UltraCosmetics.closeAfterSelect)
                 event.getWhoClicked().closeInventory();
             if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unmorph"))) {
-                Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
-                if (!Core.closeAfterSelect)
+                UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
+                if (!UltraCosmetics.closeAfterSelect)
                     openMenu((Player) event.getWhoClicked(), currentPage);
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Morph"))) {
-                Core.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
+                UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeMorph();
                 StringBuilder sb = new StringBuilder();
                 String name = event.getCurrentItem().getItemMeta().getDisplayName().replaceFirst(MessageManager.getMessage("Menu.Morph"), "");
                 int j = name.split(" ").length;
@@ -283,7 +283,7 @@ public class MorphManager implements Listener {
                     }
                 }
                 equipMorph(getMorph(sb.toString()), (Player) event.getWhoClicked());
-                if (!Core.closeAfterSelect)
+                if (!UltraCosmetics.closeAfterSelect)
                     openMenu((Player) event.getWhoClicked(), currentPage);
             }
         }

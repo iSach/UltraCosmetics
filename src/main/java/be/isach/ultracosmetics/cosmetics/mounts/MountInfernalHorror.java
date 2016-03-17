@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityHorse;
@@ -16,18 +17,17 @@ public class MountInfernalHorror extends Mount {
 
     public MountInfernalHorror(UUID owner) {
         super(owner, MountType.INFERNALHORROR);
-        if (ent instanceof Horse) {
-            Horse horse = (Horse) ent;
+        if (entity instanceof Horse) {
+            Horse horse = (Horse) entity;
             horse.setVariant(Horse.Variant.SKELETON_HORSE);
             variant = Horse.Variant.SKELETON_HORSE;
             horse.setJumpStrength(0.7);
-            EntityHorse entityHorse = ((CraftHorse) horse).getHandle();
-            entityHorse.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4);
+            UltraCosmetics.getInstance().getEntityUtil().setHorseSpeed(horse, 0.4d);
         }
     }
 
     @Override
     void onUpdate() {
-        UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, ent.getLocation().clone().add(0, 1, 0), 5);
+        UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
     }
 }

@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.*;
 import org.bukkit.entity.Chicken;
@@ -34,7 +34,7 @@ public class GadgetChickenator extends Gadget {
         CHICKEN.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
         getPlayer().playSound(getPlayer().getLocation(), Sound.CHICKEN_IDLE, 1.4f, 1.5f);
         getPlayer().playSound(getPlayer().getLocation(), Sound.EXPLODE, 0.3f, 1.5f);
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 spawnRandomFirework(CHICKEN.getLocation());
@@ -46,7 +46,7 @@ public class GadgetChickenator extends Gadget {
                     ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0, r.nextDouble() - 0.5));
                     items.add(ITEM);
                 }
-                Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         for (Item i : items)
@@ -85,7 +85,7 @@ public class GadgetChickenator extends Gadget {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)

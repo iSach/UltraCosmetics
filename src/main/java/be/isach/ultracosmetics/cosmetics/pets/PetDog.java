@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -21,11 +21,16 @@ public class PetDog extends Pet {
 
     public PetDog(UUID owner) {
         super(owner, PetType.DOG);
-        if (owner != null) {
-            Wolf w = (Wolf) entity;
-            w.setTamed(true);
-            w.setSitting(false);
-        }
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                if (getOwner() != null && getEntity() != null) {
+                    Wolf w = (Wolf) entity;
+                    w.setTamed(true);
+                    w.setSitting(false);
+                }
+            }
+        }, 30);
     }
 
     @Override
@@ -36,7 +41,7 @@ public class PetDog extends Pet {
         ITEM.setPickupDelay(30000);
         ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
         items.add(ITEM);
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 ITEM.remove();

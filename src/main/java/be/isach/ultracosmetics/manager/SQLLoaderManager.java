@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 
 public class SQLLoaderManager {
@@ -34,7 +34,7 @@ public class SQLLoaderManager {
 							iter.remove();
 							continue;
 						}
-						current = Core.getPlayerManager().getCustomPlayer(p);
+						current = UltraCosmetics.getPlayerManager().getCustomPlayer(p);
 						//pre load two value then cache into server's
 						current.hasGadgetsEnabled();
 						current.canSeeSelfMorph();
@@ -47,7 +47,7 @@ public class SQLLoaderManager {
 					}
 				}
 			}
-		}.runTaskTimer(Core.getPlugin(), 0, 10);
+		}.runTaskTimer(UltraCosmetics.getInstance(), 0, 10);
 	}
 	
 	

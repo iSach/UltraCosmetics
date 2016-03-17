@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.entity.Player;
 
 import java.sql.DatabaseMetaData;
@@ -14,9 +14,9 @@ import java.util.UUID;
  */
 public class SQLUtils {
 
-    private Core core;
+    private UltraCosmetics core;
 
-    public SQLUtils(Core core) {
+    public SQLUtils(UltraCosmetics core) {
         this.core = core;
     }
 

@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -103,10 +103,10 @@ public class Suit {
                 }
                 onUpdate();
             }
-        }.runTaskTimerAsynchronously(Core.getPlugin(), 0, 1);
+        }.runTaskTimerAsynchronously(UltraCosmetics.getInstance(), 0, 1);
 
-        getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", (Core.placeHolderColor)
-                ? getType().getName(getArmorSlot()) : Core.filterColor(getType().getName(getArmorSlot()))));
+        getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", (UltraCosmetics.getInstance().placeholdersHaveColor())
+                ? getType().getName(getArmorSlot()) : UltraCosmetics.filterColor(getType().getName(getArmorSlot()))));
     }
 
     /**
@@ -133,7 +133,7 @@ public class Suit {
      * @return The CustomPlayer of the Owner.
      */
     public CustomPlayer getCustomPlayer() {
-        return Core.getPlayerManager().getCustomPlayer(getPlayer());
+        return UltraCosmetics.getPlayerManager().getCustomPlayer(getPlayer());
     }
 
     /**
@@ -161,8 +161,8 @@ public class Suit {
                 break;
         }
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Suits.Unequip").replace("%suitname%", (Core.placeHolderColor)
-                    ? getType().getName(getArmorSlot()) : Core.filterColor(getType().getName(getArmorSlot()))));
+            getPlayer().sendMessage(MessageManager.getMessage("Suits.Unequip").replace("%suitname%", (UltraCosmetics.getInstance().placeholdersHaveColor())
+                    ? getType().getName(getArmorSlot()) : UltraCosmetics.filterColor(getType().getName(getArmorSlot()))));
         owner = null;
         armorSlot = null;
         suitType = null;

@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -37,7 +37,7 @@ public class GadgetSmashDown extends Gadget {
 
     public GadgetSmashDown(UUID owner) {
         super(owner, GadgetType.SMASHDOWN);
-        Core.registerListener(this);
+        UltraCosmetics.getInstance().registerListener(this);
         instance = this;
     }
 
@@ -45,13 +45,13 @@ public class GadgetSmashDown extends Gadget {
     void onRightClick() {
         getPlayer().playSound(getPlayer().getLocation(), Sound.FIREWORK_LAUNCH, 2, 1);
         getPlayer().setVelocity(new Vector(0, 3, 0));
-        final int taskId = Bukkit.getScheduler().runTaskTimer(Core.getPlugin(), new Runnable() {
+        final int taskId = Bukkit.getScheduler().runTaskTimer(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
             }
         }, 0, 1).getTaskId();
-        Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.getScheduler().cancelTask(taskId);
@@ -90,7 +90,7 @@ public class GadgetSmashDown extends Gadget {
                 if (i == 5) {
                     cancel();
                 }
-                if (Core.getCustomPlayer(getPlayer()).currentGadget != instance) {
+                if (UltraCosmetics.getCustomPlayer(getPlayer()).currentGadget != instance) {
                     cancel();
                     return;
                 }
@@ -141,7 +141,7 @@ public class GadgetSmashDown extends Gadget {
                 }
                 i++;
             }
-        }.runTaskTimer(Core.getPlugin(), 0, 1);
+        }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
     }
 
     @EventHandler

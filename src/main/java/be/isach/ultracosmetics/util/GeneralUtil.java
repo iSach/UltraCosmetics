@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
@@ -29,7 +29,7 @@ public class GeneralUtil {
     public static void printPermissions() {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(new File(Core.getPlugin().getDataFolder(), "permissions.yml"), "UTF-8");
+            writer = new PrintWriter(new File(UltraCosmetics.getInstance().getDataFolder(), "permissions.yml"), "UTF-8");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -40,7 +40,7 @@ public class GeneralUtil {
         Date date = new Date();
 
         writer.println();
-        writer.println("UltraCosmetics v" + Core.currentVersion + " permissions.");
+        writer.println("UltraCosmetics v" + UltraCosmetics.currentVersion + " permissions.");
         writer.println("Generated automatically on " + dateFormat.format(date));
         writer.println();
         writer.println();
@@ -51,7 +51,7 @@ public class GeneralUtil {
         writer.println("");
         writer.println("Commands:");
         writer.println("  - ultracosmetics.command.*");
-        for (SubCommand subCommand : Core.commandManager.commands)
+        for (SubCommand subCommand : UltraCosmetics.getInstance().getCommandManager().commands)
             writer.println("  - " + subCommand.getPermission());
         writer.println("");
         writer.println("Gadgets:");

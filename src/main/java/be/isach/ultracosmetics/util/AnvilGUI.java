@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -142,7 +142,7 @@ public class AnvilGUI {
                         if (player.getGameMode() == GameMode.ADVENTURE
                                 || player.getGameMode() == GameMode.SURVIVAL
                                 && player.getLevel() > 0)
-                            Bukkit.getScheduler().runTaskLater(Core.getPlugin(), new Runnable() {
+                            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                                 @Override
                                 public void run() {
                                     player.setLevel(player.getLevel());
@@ -186,7 +186,7 @@ public class AnvilGUI {
             }
         };
 
-        Bukkit.getPluginManager().registerEvents(listener, Core.getPlugin());
+        Bukkit.getPluginManager().registerEvents(listener, UltraCosmetics.getInstance());
     }
 
     public Player getPlayer() {
