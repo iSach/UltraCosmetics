@@ -1,23 +1,28 @@
-package be.isach.ultracosmetics.cosmetics.mounts.customentities;
+package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1;
 
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
+import be.isach.ultracosmetics.util.BlockUtils;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 
 import java.lang.reflect.Field;
 
 /**
- * Custom Squid class.
- * <p/>
- * Created by Sacha on 11/10/15.
+ * Created by Sacha on 17/10/15.
  */
-public class FlyingSquid extends EntitySquid {
+public class CustomSlime_1_9_R1 extends EntitySlime {
 
+    boolean isOnGround;
 
-    public FlyingSquid(World world) {
+    public CustomSlime_1_9_R1(World world) {
         super(world);
 
-        if(!Mount.customEntities.contains(this)) return;
+        if (!Mount.customEntities.contains(this)) return;
+
+        removeSelectors();
+    }
+
+    private void removeSelectors() {
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
             bField.setAccessible(true);
@@ -32,8 +37,15 @@ public class FlyingSquid extends EntitySquid {
         }
     }
 
+    /**
+     * WASD Control.
+     * @param sideMot
+     * @param forMot
+     */
     @Override
     public void g(float sideMot, float forMot) {
+        if (getSize() != 3)
+            setSize(3);
         if (this.passenger != null && this.passenger instanceof EntityHuman
                 && Mount.customEntities.contains(this)) {
             this.lastYaw = this.yaw = this.passenger.yaw;
@@ -51,18 +63,21 @@ public class FlyingSquid extends EntitySquid {
             }
             jump.setAccessible(true);
 
-            try {
-                if (jump.getBoolean(this.passenger)) {
-                    this.motY = 0.5D;    // Used all the time in NMS for entity jumping
+            if (jump != null && BlockUtils.isOnGround(this.getBukkitEntity())) {
+                try {
+                    if (jump.getBoolean(this.passenger)) {
+                        double jumpHeight = 0.3D;
+                        this.motY = jumpHeight;
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
 
-            this.S = 1.0F;// The custom entity will now automatically climb up 1 high blocks
+            this.S = 1.0F;
             this.aK = this.yaw;
             if (!this.world.isClientSide) {
-                this.k(0.35f*2);
+                this.k(0.2f);
 
                 if (bM()) {
                     if (V()) {
@@ -156,7 +171,7 @@ public class FlyingSquid extends EntitySquid {
             }
 
 
-            this.ay = this.az;//Some extra things
+            this.ay = this.az;
             double d0 = this.locX - this.lastX;
             double d1 = this.locZ - this.lastZ;
             float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;

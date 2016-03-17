@@ -1,30 +1,23 @@
-package be.isach.ultracosmetics.cosmetics.mounts.customentities;
+package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1;
 
-import be.isach.ultracosmetics.Core;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
-import be.isach.ultracosmetics.util.BlockUtils;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 
 import java.lang.reflect.Field;
 
 /**
- * Created by Sacha on 17/10/15.
+ * Custom Squid class.
+ * <p/>
+ * Created by Sacha on 11/10/15.
  */
-public class CustomSlime extends EntitySlime {
+public class FlyingSquid_1_9_R1 extends EntitySquid {
 
-    boolean isOnGround;
 
-    public CustomSlime(World world) {
+    public FlyingSquid_1_9_R1(World world) {
         super(world);
 
-        if (!Mount.customEntities.contains(this)) return;
-
-        removeSelectors();
-    }
-
-    private void removeSelectors() {
+        if(!Mount.customEntities.contains(this)) return;
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
             bField.setAccessible(true);
@@ -39,15 +32,8 @@ public class CustomSlime extends EntitySlime {
         }
     }
 
-    /**
-     * WASD Control.
-     * @param sideMot
-     * @param forMot
-     */
     @Override
     public void g(float sideMot, float forMot) {
-        if (getSize() != 3)
-            setSize(3);
         if (this.passenger != null && this.passenger instanceof EntityHuman
                 && Mount.customEntities.contains(this)) {
             this.lastYaw = this.yaw = this.passenger.yaw;
@@ -65,21 +51,18 @@ public class CustomSlime extends EntitySlime {
             }
             jump.setAccessible(true);
 
-            if (jump != null && BlockUtils.isOnGround(this.getBukkitEntity())) {
-                try {
-                    if (jump.getBoolean(this.passenger)) {
-                        double jumpHeight = 0.3D;
-                        this.motY = jumpHeight;
-                    }
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+            try {
+                if (jump.getBoolean(this.passenger)) {
+                    this.motY = 0.5D;    // Used all the time in NMS for entity jumping
                 }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
 
-            this.S = 1.0F;
+            this.S = 1.0F;// The custom entity will now automatically climb up 1 high blocks
             this.aK = this.yaw;
             if (!this.world.isClientSide) {
-                this.k(0.2f);
+                this.k(0.35f*2);
 
                 if (bM()) {
                     if (V()) {
@@ -173,7 +156,7 @@ public class CustomSlime extends EntitySlime {
             }
 
 
-            this.ay = this.az;
+            this.ay = this.az;//Some extra things
             double d0 = this.locX - this.lastX;
             double d1 = this.locZ - this.lastZ;
             float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;

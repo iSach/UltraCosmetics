@@ -1,12 +1,12 @@
-package be.isach.ultracosmetics.cosmetics.pets.customentities;
+package be.isach.ultracosmetics.cosmetics.pets.v1_9_R1;
 
-import be.isach.ultracosmetics.Core;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
+import org.bukkit.craftbukkit.v1_9_R1.util.UnsafeList;
 import org.bukkit.entity.Zombie;
 
 import java.lang.reflect.Field;
@@ -14,16 +14,16 @@ import java.lang.reflect.Field;
 /**
  * Created by Sacha on 18/10/15.
  */
-public class Pumpling extends EntityZombie {
+public class Pumpling1_9_R1 extends EntityZombie {
 
     boolean isCustomEntity;
 
-    public Pumpling(World world) {
+    public Pumpling1_9_R1(World world) {
         super(world);
 
-        final Pumpling instance = this;
+        final Pumpling1_9_R1 instance = this;
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Core.getPlugin(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (Pet.customEntities.contains(instance)) {
@@ -31,47 +31,36 @@ public class Pumpling extends EntityZombie {
                     removeSelectors();
                     setInvisible(true);
                     setBaby(true);
-                    setEquipment(4, new ItemStack(Blocks.PUMPKIN));
+                    setEquipment(EnumItemSlot.HEAD, new ItemStack(Blocks.PUMPKIN));
                 }
             }
         }, 4);
     }
 
     @Override
-    protected String z() { // say
+    protected SoundEffect G() { // say
         if (isCustomEntity) {
-            makeSound("mob.ghast.scream", 0.05f, 2f);
+            a(SoundEffects.bM, 0.05f, 2f);
             return null;
-        } else
-            super.z();
-        return "mob.zombie.say";
+        } else return super.G();
     }
 
     @Override
-    protected String bo() { // Hurt
-        if (isCustomEntity)
-            return null;
-        else
-            super.z();
-        return "mob.zombie.hurt";
+    protected SoundEffect bR() { // Hurt
+        if (isCustomEntity) return null;
+        else return super.bR();
     }
 
     @Override
-    protected String bp() { // Death
-        if (isCustomEntity)
-            return null;
-        else
-            super.z();
-        return "mob.zombie.death";
+    protected SoundEffect bS() { // Death
+        if (isCustomEntity) return null;
+        else return super.bS();
     }
 
     @Override
     protected void a(BlockPosition blockposition, Block block) {
-        if (isCustomEntity) {
-            return;
-        } else {
-            super.a(blockposition, block);
-        }
+        if (isCustomEntity) return;
+        else super.a(blockposition, block);
     }
 
     @Override

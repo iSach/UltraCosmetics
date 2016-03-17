@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.cosmetics.morphs.customentities;
+package be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_8_R3;
 
 import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
 import net.minecraft.server.v1_8_R3.EntityGuardian;
@@ -9,11 +9,11 @@ import org.bukkit.entity.ArmorStand;
 /**
  * Created by Sacha on 19/12/15.
  */
-public class CustomGuardian extends EntityGuardian {
+public class CustomGuardian_1_8_R3 extends EntityGuardian {
 
     private boolean custom;
 
-    public CustomGuardian(World world) {
+    public CustomGuardian_1_8_R3(World world) {
         super(world);
     }
 

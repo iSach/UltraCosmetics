@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.cosmetics.mounts.customentities;
+package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1;
 
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.util.BlockUtils;
@@ -10,11 +10,11 @@ import java.lang.reflect.Field;
 /**
  * Created by Sacha on 18/10/15.
  */
-public class RideableSpider extends EntitySpider {
+public class RideableSpider_1_9_R1 extends EntitySpider {
 
     boolean isOnGround;
 
-    public RideableSpider(World world) {
+    public RideableSpider_1_9_R1(World world) {
         super(world);
 
         if (!Mount.customEntities.contains(this)) return;

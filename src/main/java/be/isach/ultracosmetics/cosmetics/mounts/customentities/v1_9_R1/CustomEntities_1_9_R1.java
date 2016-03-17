@@ -1,7 +1,10 @@
-package be.isach.ultracosmetics.cosmetics.mounts.customentities;
+package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1;
 
 import be.isach.ultracosmetics.cosmetics.morphs.customentities.CustomGuardian;
-import be.isach.ultracosmetics.cosmetics.pets.customentities.Pumpling;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.CustomSlime;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.FlyingSquid;
+import be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_8_R3.RideableSpider;
+import be.isach.ultracosmetics.cosmetics.pets.customentities.Pumpling1_8_R3;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 import org.bukkit.entity.EntityType;
@@ -10,10 +13,10 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public enum CustomEntities {
+public enum CustomEntities_1_9_R1 {
 
     FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid.class, FlyingSquid.class),
-    PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling.class, Pumpling.class),
+    PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling1_8_R3.class, Pumpling1_8_R3.class),
     SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime.class, CustomSlime.class),
     RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
     CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
@@ -24,9 +27,9 @@ public enum CustomEntities {
     private Class<? extends EntityInsentient> nmsClass;
     private Class<? extends EntityInsentient> customClass;
 
-    CustomEntities(String name, int id, EntityType entityType,
-                   Class<? extends EntityInsentient> nmsClass,
-                   Class<? extends EntityInsentient> customClass) {
+    CustomEntities_1_9_R1(String name, int id, EntityType entityType,
+                          Class<? extends EntityInsentient> nmsClass,
+                          Class<? extends EntityInsentient> customClass) {
         this.name = name;
         this.id = id;
         this.entityType = entityType;
@@ -55,13 +58,13 @@ public enum CustomEntities {
     }
 
     public static void registerEntities() {
-        for (CustomEntities entity : values())
+        for (CustomEntities_1_9_R1 entity : values())
             a(entity.getCustomClass(), entity.getName(), entity.getID());
     }
 
     @SuppressWarnings("rawtypes")
     public static void unregisterEntities() {
-        for (CustomEntities entity : values()) {
+        for (CustomEntities_1_9_R1 entity : values()) {
             try {
                 ((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
             } catch (Exception e) {
@@ -75,7 +78,7 @@ public enum CustomEntities {
             }
         }
 
-        for (CustomEntities entity : values())
+        for (CustomEntities_1_9_R1 entity : values())
             try {
                 a(entity.getNMSClass(), entity.getName(), entity.getID());
             } catch (Exception e) {
