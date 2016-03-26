@@ -5,11 +5,9 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_8_R3.EntityBoat;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftBoat;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -46,9 +44,6 @@ public class MountFlyingShip extends Mount {
         if (entity.getPassenger() == null)
             clear();
 
-        EntityBoat ec = ((CraftBoat) entity).getHandle();
-
-
         Vector vector = getPlayer().getLocation().toVector();
 
         double rotX = getPlayer().getLocation().getYaw();
@@ -61,17 +56,21 @@ public class MountFlyingShip extends Mount {
         vector.setX(-h * Math.sin(Math.toRadians(rotX)));
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
-        ec.getBukkitEntity().setVelocity(vector);
-
-        ec.pitch = getPlayer().getLocation().getPitch();
-        ec.yaw = getPlayer().getLocation().getYaw() - 180;
+        UltraCosmetics.getInstance().getEntityUtil().moveShip(getPlayer(), entity, vector);
 
         if (currentboom != null) {
             if (currentboom.isDead()) {
                 currentboom = null;
                 return;
             }
-            currentboom.getWorld().playSound(currentboom.getLocation(), Sound.CLICK, 1, 1);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    currentboom.getWorld().playSound(currentboom.getLocation(), Sound.valueOf("CLICK"), 1.0f, 1.0f);
+                    break;
+                case v1_9_R1:
+                    currentboom.getWorld().playSound(currentboom.getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
+                    break;
+            }
             if (currentboom.isOnGround()) {
                 Location l = currentboom.getLocation().clone();
                 for (Entity i : currentboom.getNearbyEntities(3, 3, 3)) {
@@ -86,7 +85,14 @@ public class MountFlyingShip extends Mount {
                     MathUtils.applyVelocity(i, new Vector(X, Z, Y).multiply(1.3D).add(new Vector(0, 1.4D, 0)));
                 }
                 UtilParticles.display(Particles.EXPLOSION_HUGE, l);
-                l.getWorld().playSound(l, Sound.EXPLODE, 1, 1);
+                switch (UltraCosmetics.getServerVersion()) {
+                    case v1_8_R3:
+                        l.getWorld().playSound(l, Sound.valueOf("EXPLODE"), 1.0f, 1.0f);
+                        break;
+                    case v1_9_R1:
+                        l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+                        break;
+                }
                 currentboom.remove();
                 currentboom = null;
             }
@@ -127,11 +133,25 @@ public class MountFlyingShip extends Mount {
         }
 
         if (System.currentTimeMillis() < nextAllowTime) {
-            getPlayer().playSound(getPlayer().getLocation(), Sound.ITEM_PICKUP, 1, 1);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("ITEM_PICKUP"), 1.0f, 1.0f);
+                    break;
+                case v1_9_R1:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0f, 1.0f);
+                    break;
+            }
             return;
         }
 
-        getPlayer().playSound(getPlayer().getLocation(), Sound.CLICK, 1, 1);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CLICK"), 1.0f, 1.0f);
+                break;
+            case v1_9_R1:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
+                break;
+        }
         nextAllowTime = System.currentTimeMillis() + 10000;
         currentboom = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.PRIMED_TNT);
         currentboom.setCustomName(ChatColor.RED + ChatColor.BOLD.toString() + "!!!!!!!");

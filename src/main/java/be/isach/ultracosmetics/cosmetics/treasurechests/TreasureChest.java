@@ -107,7 +107,14 @@ public class TreasureChest
 
                                             Block b = getChestLocation(i, center.clone()).getBlock();
                                             b.setType(design.getChestType().getType());
-                                            getPlayer().playSound(getPlayer().getLocation(), Sound.ANVIL_LAND, 2, 1);
+                                            switch (UltraCosmetics.getServerVersion()) {
+                                                case v1_8_R3:
+                                                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("ANVIL_LAND"), 1.4f, 1.5f);
+                                                    break;
+                                                case v1_9_R1:
+                                                    getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_ANVIL_LAND, 1.4f, 1.5f);
+                                                    break;
+                                            }
                                             UtilParticles.display(Particles.SMOKE_LARGE, b.getLocation(), 5);
                                             UtilParticles.display(Particles.LAVA, b.getLocation(), 5);
                                             BlockFace blockFace = BlockFace.SOUTH;

@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Material;
@@ -29,7 +30,14 @@ public class GadgetPartyPopper extends Gadget {
                     0.6f, getPlayer().getEyeLocation(), 128);
         }
         for (int i = 0; i < 3; i++)
-            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.CHICKEN_EGG_POP, 1, 1.1f);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("CHICKEN_EGG_POP"), 1.0f, 1.0f);
+                    break;
+                case v1_9_R1:
+                    getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_CHICKEN_EGG, 1.0f, 1.0f);
+                    break;
+            }
     }
 
     @Override

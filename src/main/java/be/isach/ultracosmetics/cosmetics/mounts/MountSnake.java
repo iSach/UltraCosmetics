@@ -2,11 +2,9 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
-import net.minecraft.server.v1_8_R3.EntityCreature;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftCreature;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -56,9 +54,6 @@ public class MountSnake extends Mount {
                 @Override
                 public void run() {
                     if (getPlayer() != null) {
-
-                        double multiplier = 0.5D;
-
                         Vector vel = getPlayer().getLocation().getDirection().setY(0).normalize().multiply(4);
 
                         Creature before = null;
@@ -77,9 +72,8 @@ public class MountSnake extends Mount {
                                 tp.setYaw(tail.getLocation().getYaw());
                                 tail.teleport(tp);
                             }
-                            EntityCreature ec = ((CraftCreature) tail).getHandle();
-                            ec.S = 1;
-                            ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), (1.0D + 2.0D * multiplier) * 1.0D);
+
+                            UltraCosmetics.getInstance().getEntityUtil().move(tail, loc);
 
                             before = tail;
 

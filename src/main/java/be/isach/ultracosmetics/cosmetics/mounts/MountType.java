@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -105,6 +106,7 @@ public enum MountType {
     }
 
     public boolean isEnabled() {
+        if((this == DRAGON || this == FLYINGSHIP) && UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1) return false;
         return SettingsManager.getConfig().getBoolean("Mounts." + configName + ".Enabled");
     }
 

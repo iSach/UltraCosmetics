@@ -4,15 +4,10 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.EntitySheep;
-import net.minecraft.server.v1_8_R3.GenericAttributes;
-import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftSheep;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -21,7 +16,6 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
@@ -47,20 +41,7 @@ public class GadgetExplosiveSheep extends Gadget {
         s.setNoDamageTicks(100000);
         sheepArrayList.add(s);
 
-        EntitySheep entitySheep = ((CraftSheep) s).getHandle();
-
-        try {
-            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-            bField.setAccessible(true);
-            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
-            bField.set(entitySheep.goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            bField.set(entitySheep.targetSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(entitySheep.goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(entitySheep.targetSelector, new UnsafeList<PathfinderGoalSelector>());
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
+        UltraCosmetics.getInstance().getEntityUtil().clearPathfinders(s);
 
         UltraCosmetics.getInstance().explosiveSheep.add(this);
 
@@ -112,17 +93,28 @@ public class GadgetExplosiveSheep extends Gadget {
 
         @Override
         public void run() {
-            if (red) {
-                s.setColor(DyeColor.RED);
-            } else {
-                s.setColor(DyeColor.WHITE);
+            if (red) s.setColor(DyeColor.RED);
+            else s.setColor(DyeColor.WHITE);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    s.getWorld().playSound(s.getLocation(), Sound.valueOf("CLICK"), 5f, 1f);
+                    break;
+                case v1_9_R1:
+                    s.getWorld().playSound(s.getLocation(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
+                    break;
             }
-            s.getWorld().playSound(s.getLocation(), Sound.CLICK, 5, 1);
             red = !red;
             time -= 0.2;
 
             if (time < 0.5) {
-                s.getWorld().playSound(s.getLocation(), Sound.EXPLODE, 2, 1);
+                switch (UltraCosmetics.getServerVersion()) {
+                    case v1_8_R3:
+                        s.getWorld().playSound(s.getLocation(), Sound.valueOf("EXPLODE"), 1.4f, 1.5f);
+                        break;
+                    case v1_9_R1:
+                        s.getWorld().playSound(s.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
+                        break;
+                }
                 UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
                 for (int i = 0; i < 50; i++) {
                     final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
@@ -135,26 +127,8 @@ public class GadgetExplosiveSheep extends Gadget {
                     sheep.setBaby();
                     sheep.setAgeLock(true);
                     sheep.setNoDamageTicks(120);
-                    EntitySheep entitySheep = ((CraftSheep) sheep).getHandle();
-
-                    try {
-                        Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-                        bField.setAccessible(true);
-                        Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-                        cField.setAccessible(true);
-                        bField.set(entitySheep.goalSelector, new UnsafeList<PathfinderGoalSelector>());
-                        bField.set(entitySheep.targetSelector, new UnsafeList<PathfinderGoalSelector>());
-                        cField.set(entitySheep.goalSelector, new UnsafeList<PathfinderGoalSelector>());
-                        cField.set(entitySheep.targetSelector, new UnsafeList<PathfinderGoalSelector>());
-
-
-                        entitySheep.goalSelector.a(3, new CustomPathFinderGoalPanic(entitySheep, 0.4d));
-
-                        entitySheep.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(1.4D);
-
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
+                    UltraCosmetics.getInstance().getEntityUtil().clearPathfinders(sheep);
+                    UltraCosmetics.getInstance().getEntityUtil().makePanic(sheep);
                     Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {

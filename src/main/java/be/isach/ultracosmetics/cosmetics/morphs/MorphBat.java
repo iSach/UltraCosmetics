@@ -31,7 +31,14 @@ public class MorphBat extends Morph {
             MathUtils.applyVelocity(getPlayer(), v);
             event.getPlayer().setFlying(false);
             event.setCancelled(true);
-            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BAT_LOOP, 0.4f, 1);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("BAT_LOOP"), 0.4f, 1.0f);
+                    break;
+                case v1_9_R1:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_BAT_LOOP, 0.4f, 1.0f);
+                    break;
+            }
         }
     }
 

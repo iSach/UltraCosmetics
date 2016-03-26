@@ -36,7 +36,14 @@ public class MorphBlaze extends Morph {
                     if (getPlayer().isSneaking()) {
                         UtilParticles.display(Particles.FLAME, getPlayer().getLocation());
                         UtilParticles.display(Particles.LAVA, getPlayer().getLocation());
-                        getPlayer().playSound(getPlayer().getLocation(), Sound.FIZZ, 0.05f, 1);
+                        switch (UltraCosmetics.getServerVersion()) {
+                            case v1_8_R3:
+                                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("FIZZ"), 0.1f, 1.5f);
+                                break;
+                            case v1_9_R1:
+                                getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 0.1f, 1.5f);
+                                break;
+                        }
                         getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
                     }
                 }

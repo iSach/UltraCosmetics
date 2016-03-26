@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.util;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Wither;
+import org.bukkit.Location;
+import org.bukkit.entity.*;
+import org.bukkit.util.Vector;
 
 /**
  * Created by Sacha on 14/03/16.
@@ -14,4 +14,23 @@ public interface IEntityUtil {
     void resetWitherSize(Wither wither);
 
     void setHorseSpeed(Horse horse, double speed);
+
+    void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v);
+
+    void clearBlizzard(final Player player);
+
+    void clearPathfinders(Entity entity);
+
+    void makePanic(Entity entity);
+
+    void sendDestroyPacket(Player player, Entity entity);
+
+    void move(Creature creature, Location location);
+
+    void moveDragon(Player player, Vector vector, Entity entity);
+
+    void setClimb(Entity entity);
+
+    void moveShip(Player player, Entity entity, Vector vector);
+
 }

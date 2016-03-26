@@ -313,7 +313,14 @@ public class TreasureRandomizer {
             else
                 giveRandomThing();
         }
-        loc.getWorld().playSound(loc, Sound.CHEST_OPEN, 3, 1);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                loc.getWorld().playSound(loc, Sound.valueOf("CHEST_OPEN"), 1.4f, 1.5f);
+                break;
+            case v1_9_R1:
+                loc.getWorld().playSound(loc, Sound.BLOCK_CHEST_OPEN, 1.4f, 1.5f);
+                break;
+        }
     }
 
     private boolean d(String s) {

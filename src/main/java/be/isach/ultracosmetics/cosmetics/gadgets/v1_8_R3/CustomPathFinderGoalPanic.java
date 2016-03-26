@@ -37,7 +37,10 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
     }
 
     public void c() {
-        this.b.getNavigation().a(this.c, this.d, this.e, this.a);
+        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
+        if(vec3d == null) return;
+
+        this.b.getNavigation().a(vec3d.a, vec3d.b, vec3d.c, this.a);
     }
 
     public boolean b() {

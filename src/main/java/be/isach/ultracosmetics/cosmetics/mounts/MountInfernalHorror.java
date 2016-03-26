@@ -3,9 +3,6 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.EntityHorse;
-import net.minecraft.server.v1_8_R3.GenericAttributes;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHorse;
 import org.bukkit.entity.Horse;
 
 import java.util.UUID;
@@ -17,10 +14,15 @@ public class MountInfernalHorror extends Mount {
 
     public MountInfernalHorror(UUID owner) {
         super(owner, MountType.INFERNALHORROR);
+    }
+
+    @Override
+    protected void onEquip() {
         if (entity instanceof Horse) {
             Horse horse = (Horse) entity;
             horse.setVariant(Horse.Variant.SKELETON_HORSE);
             variant = Horse.Variant.SKELETON_HORSE;
+            horse.setVariant(Horse.Variant.SKELETON_HORSE);
             horse.setJumpStrength(0.7);
             UltraCosmetics.getInstance().getEntityUtil().setHorseSpeed(horse, 0.4d);
         }

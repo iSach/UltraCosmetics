@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.mounts.customentities.v1_9_R1;
 
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import net.minecraft.server.v1_9_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_9_R1.util.UnsafeList;
 
 import java.lang.reflect.Field;
@@ -42,7 +43,10 @@ public class RideableSpider_1_9_R1 extends EntitySpider implements IMountCustomE
      * @param sideMot
      * @param forMot
      */
+    @Override
     public void g(float sideMot, float forMot) {
+        if (!CustomEntities_1_9_R1.customEntities.contains(this)) super.g(sideMot, forMot);
+
         Entity passenger = null;
 
         for (Entity ent : bu())
@@ -56,6 +60,11 @@ public class RideableSpider_1_9_R1 extends EntitySpider implements IMountCustomE
             this.aM = this.aK = this.yaw;
             sideMot = ((EntityLiving) passenger).bd * 0.25f;
             forMot = ((EntityLiving) passenger).be * 0.5f;
+            Bukkit.broadcastMessage("----------------");
+            Bukkit.broadcastMessage("SIDE: " + sideMot);
+            Bukkit.broadcastMessage("FOR: " + forMot);
+            Bukkit.broadcastMessage("----------------");
+
             if (forMot <= 0.0F) {
                 forMot *= 0.25F;
             }
@@ -70,8 +79,9 @@ public class RideableSpider_1_9_R1 extends EntitySpider implements IMountCustomE
 
             if (jump != null) {
                 try {
-                    if (jump.getBoolean(passenger) && this.onGround)
+                    if (jump.getBoolean(passenger) && this.onGround) {
                         this.motY = 0.4D;
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -83,7 +93,6 @@ public class RideableSpider_1_9_R1 extends EntitySpider implements IMountCustomE
                 this.l(0.35f);
                 super.g(sideMot, forMot);
             }
-
 
             this.aB = this.aC;
             double d0 = this.locX - this.lastX;

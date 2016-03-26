@@ -7,10 +7,7 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_8_R3;
 import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_9_R1;
-import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFirework;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
@@ -32,7 +29,14 @@ public class GadgetQuakeGun extends Gadget {
 
     @Override
     void onRightClick() {
-        getPlayer().playSound(getPlayer().getLocation(), Sound.BLAZE_DEATH, 1.5f, 1);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("BLAZE_DEATH"), 1.4f, 1.5f);
+                break;
+            case v1_9_R1:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_BLAZE_DEATH, 1.4f, 1.5f);
+                break;
+        }
 
         Location location = getPlayer().getEyeLocation().subtract(0, 0.4, 0);
         Vector vector = location.getDirection();
@@ -65,10 +69,8 @@ public class GadgetQuakeGun extends Gadget {
         Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
-                for (Firework firework : fireworkList) {
-                    PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(((CraftFirework) firework).getHandle().getId());
-                    ((CraftPlayer) getPlayer()).getHandle().playerConnection.sendPacket(packet);
-                }
+                for (Firework firework : fireworkList)
+                    UltraCosmetics.getInstance().getEntityUtil().sendDestroyPacket(getPlayer(), firework);
             }
         }, 6);
     }

@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -67,8 +66,6 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
 
         UtilParticles.display(Particles.LAVA, currentLocation);
         UtilParticles.display(Particles.FLAME, currentLocation);
-
-        currentLocation.getWorld().playSound(currentLocation, Sound.CAT_PURREOW, 0.5f, 2.7f);
     }
 
     private Location generateNewTarget() {

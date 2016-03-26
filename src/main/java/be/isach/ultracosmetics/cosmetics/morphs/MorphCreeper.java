@@ -47,7 +47,14 @@ public class MorphCreeper extends Morph {
                         creeperWatcher.setIgnited(true);
                         if (charge + 4 <= 100)
                             charge += 4;
-                        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.CREEPER_HISS, 0.2f, 1);
+                        switch (UltraCosmetics.getServerVersion()) {
+                            case v1_8_R3:
+                                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CREEPER_HISS"), 1.4f, 1.5f);
+                                break;
+                            case v1_9_R1:
+                                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.4f, 1.5f);
+                                break;
+                        }
                     } else {
                         if (creeperWatcher.isIgnited()) {
                             disguise = new MobDisguise(getType().getDisguiseType());
@@ -58,7 +65,14 @@ public class MorphCreeper extends Morph {
                         }
                         if (charge == 100) {
                             UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
-                            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.EXPLODE, 1, 1);
+                            switch (UltraCosmetics.getServerVersion()) {
+                                case v1_8_R3:
+                                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 1.4f, 1.5f);
+                                    break;
+                                case v1_9_R1:
+                                    getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
+                                    break;
+                            }
 
                             for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {
                                 if (ent instanceof Creature || ent instanceof Player) {

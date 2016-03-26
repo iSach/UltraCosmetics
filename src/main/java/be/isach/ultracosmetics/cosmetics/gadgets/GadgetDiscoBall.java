@@ -63,7 +63,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setVisible(false);
         armorStand.setGravity(false);
         armorStand.setSmall(false);
-        armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
+        armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte)3, " "));
         running = true;
         UltraCosmetics.getInstance().discoBalls.add(this);
         if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
@@ -104,7 +104,8 @@ public class GadgetDiscoBall extends Gadget {
     void onUpdate() {
         if (running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
-            armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
+            if (UltraCosmetics.getInstance().getServerVersion() != ServerVersion.v1_9_R1)
+                armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
             UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
             UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
             Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
@@ -126,11 +127,9 @@ public class GadgetDiscoBall extends Gadget {
                         && affectPlayers)
                     MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
 
-
             for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false))
                 if (b.getType() == Material.WOOL || b.getType() == Material.CARPET)
                     BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
-
         }
     }
 

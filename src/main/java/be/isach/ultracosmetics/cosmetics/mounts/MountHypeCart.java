@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.PlayerUtils;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftMinecartRideable;
 
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ public class MountHypeCart extends Mount {
     void onUpdate() {
         if (entity.isOnGround())
             entity.setVelocity(PlayerUtils.getHorizontalDirection(getPlayer(), 7.6));
-        ((CraftMinecartRideable) entity).getHandle().S = 1;
+        UltraCosmetics.getInstance().getEntityUtil().setClimb(entity);
     }
 
     @Override

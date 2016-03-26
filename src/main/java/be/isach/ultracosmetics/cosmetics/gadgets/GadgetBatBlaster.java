@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
-
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -12,10 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
-import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by sacha on 03/08/15.
@@ -89,7 +88,14 @@ public class GadgetBatBlaster extends Gadget {
                                 MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
 
 
-                            bat.getWorld().playSound(bat.getLocation(), Sound.BAT_HURT, 1.0F, 1.0F);
+                            switch (UltraCosmetics.getServerVersion()) {
+                                case v1_8_R3:
+                                    bat.getWorld().playSound(bat.getLocation(), Sound.valueOf("BAT_HURT"), 1.0f, 1.0f);
+                                    break;
+                                case v1_9_R1:
+                                    bat.getWorld().playSound(bat.getLocation(), Sound.ENTITY_BAT_HURT, 1.0f, 1.0f);
+                                    break;
+                            }
                             UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
 
                             bat.remove();

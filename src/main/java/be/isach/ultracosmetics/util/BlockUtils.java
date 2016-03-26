@@ -209,7 +209,7 @@ public class BlockUtils {
                         && !isRocketBlock(BLOCK)
                         && !isTreasureChestBlock(BLOCK)
                         && !blocksToRestore.containsKey(BLOCK.getLocation())
-                        && net.minecraft.server.v1_8_R3.Block.getById(BLOCK.getTypeId()).getMaterial().isSolid()
+                        && BLOCK.getType().isSolid()
                         && a(bUp)
                         && BLOCK.getType().getId() != 43
                         && BLOCK.getType().getId() != 44) {
@@ -241,7 +241,7 @@ public class BlockUtils {
 
     private static boolean a(Block b) {
         if (b.getType() == Material.AIR
-                || net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid())
+                || b.getType().isSolid())
             return true;
         return false;
     }

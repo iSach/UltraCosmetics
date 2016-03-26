@@ -28,9 +28,10 @@ public class MountMoltenSnake extends Mount {
 
     public MountMoltenSnake(UUID owner) {
         super(owner, MountType.MOLTENSNAKE);
+    }
 
-        if (owner == null) return;
-
+    @Override
+    protected void onEquip() {
         MagmaCube magmaCube = (MagmaCube) entity;
         magmaCube.setSize(2);
         entities.add(magmaCube);

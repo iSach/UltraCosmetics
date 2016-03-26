@@ -5,12 +5,10 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
 import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.Song;
-import net.minecraft.server.v1_8_R3.EntityCreature;
-import net.minecraft.server.v1_8_R3.Navigation;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftCreature;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
@@ -35,6 +33,7 @@ public class MountNyanSheep extends Mount {
     @Override
     protected void onEquip() {
         ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
+        UltraCosmetics.getInstance().getEntityUtil().clearPathfinders(entity);
         if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
             Song s = NBSDecoder.parse(new File(UltraCosmetics.getInstance().getDataFolder(), "/songs/NyanCat.nbs"));
             final PositionSongPlayer positionSongPlayer = new PositionSongPlayer(s);
@@ -90,10 +89,8 @@ public class MountNyanSheep extends Mount {
             Player player = getPlayer();
             Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
             Location loc = player.getLocation().add(vel);
-            EntityCreature ec = ((CraftCreature) entity).getHandle();
-            ec.S = 1;
-            Navigation nav = (Navigation) ec.getNavigation();
-            nav.a(loc.getX(), loc.getY(), loc.getZ(), 1.8d);
+
+            UltraCosmetics.getInstance().getEntityUtil().move((Creature) entity, loc);
         } catch (Exception exc) {
             UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
         }

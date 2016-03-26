@@ -135,7 +135,14 @@ public abstract class Gadget implements Listener {
                                                 MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar").
                                                         replace("%gadgetname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ?
                                                                 getName() : UltraCosmetics.filterColor(getName())));
-                                        getPlayer().playSound(getPlayer().getLocation(), Sound.NOTE_STICKS, 1f, 1f);
+                                        switch (UltraCosmetics.getServerVersion()) {
+                                            case v1_8_R3:
+                                                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("NOTE_STICKS"), 1.4f, 1.5f);
+                                                break;
+                                            case v1_9_R1:
+                                                getPlayer().playSound(getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
+                                                break;
+                                        }
                                     }
                                 }
                             }

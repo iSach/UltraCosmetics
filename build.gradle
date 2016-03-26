@@ -58,11 +58,12 @@ configurations {
 }
 
 dependencies {
-    provided name: 'spigot-1.8.8-R0.1-SNAPSHOT'
     provided name: 'spigot-1.9'
-//    provided 'org.spigotmc:spigot:1.9-R0.1-SNAPSHOT'
+    provided name: 'spigot-1.8.8'
     provided 'com.comphenix.protocol:ProtocolLib:3.6.4'
     provided 'LibsDisguises:LibsDisguises:8.6.7-SNAPSHOT'
     provided 'com.xxmicloxx:NoteBlockAPI:1.0-SNAPSHOT'
-    provided 'net.milkbowl.vault:VaultAPI:1.5'
+    compile('net.milkbowl.vault:VaultAPI:1.5') {
+        exclude group: 'org.bukkit'
+    }
 }

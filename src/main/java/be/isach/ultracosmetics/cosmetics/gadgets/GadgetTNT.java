@@ -72,7 +72,14 @@ public class GadgetTNT extends Gadget {
         if (entities.contains(event.getEntity())) {
             event.setCancelled(true);
             UtilParticles.display(Particles.EXPLOSION_HUGE, event.getEntity().getLocation());
-            event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 1.4f, 1.5f);
+                    break;
+                case v1_9_R1:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
+                    break;
+            }
 
             for (Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {
                 if (ent instanceof Creature || ent instanceof Player) {

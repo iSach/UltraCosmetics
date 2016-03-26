@@ -71,7 +71,14 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
             if (!UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.ANVIL_LAND, 0.2f, 1.2f);
+                switch (UltraCosmetics.getServerVersion()) {
+                    case v1_8_R3:
+                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.valueOf("ANVIL_LAND"), .2f, 1.2f);
+                        break;
+                    case v1_9_R1:
+                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
+                        break;
+                }
                 return;
             }
             Player player = (Player) event.getWhoClicked();
@@ -86,7 +93,14 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Keys"))) {
             if (!UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                ((Player) event.getWhoClicked()).playSound(event.getWhoClicked().getLocation(), Sound.ANVIL_LAND, 0.2f, 1.2f);
+                switch (UltraCosmetics.getServerVersion()) {
+                    case v1_8_R3:
+                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.valueOf("ANVIL_LAND"), .2f, 1.2f);
+                        break;
+                    case v1_9_R1:
+                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
+                        break;
+                }
                 return;
             }
             event.getWhoClicked().closeInventory();

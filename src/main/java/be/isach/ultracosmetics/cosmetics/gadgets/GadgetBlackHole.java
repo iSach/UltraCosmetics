@@ -5,9 +5,11 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -52,6 +54,10 @@ public class GadgetBlackHole extends Gadget {
 
     @Override
     void onUpdate() {
+        EntityPlayer entityHuman = ((CraftPlayer)getPlayer()).getHandle();
+
+        Bukkit.broadcastMessage(entityHuman.bd + "");
+        Bukkit.broadcastMessage(entityHuman.be + "");
         if (i != null && i.isOnGround()) {
             int strands = 6;
             int particles = 25;

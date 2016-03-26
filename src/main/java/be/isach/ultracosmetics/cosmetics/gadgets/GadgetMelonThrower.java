@@ -40,7 +40,14 @@ public class GadgetMelonThrower extends Gadget implements Listener {
         if (melons.contains(event.getItem()) && event.getItem().getTicksLived() > 5
                 && affectPlayers) {
             event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 2));
-            event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.BURP, 1, 1f);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("BURP"), 1.4f, 1.5f);
+                    break;
+                case v1_9_R1:
+                    getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_PLAYER_BURP, 1.4f, 1.5f);
+                    break;
+            }
             event.setCancelled(true);
             melons.remove(event.getItem());
             event.getItem().remove();
@@ -51,7 +58,14 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 
     @Override
     void onRightClick() {
-        getPlayer().playSound(getPlayer().getLocation(), Sound.EXPLODE, 1, 1);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 1.4f, 1.5f);
+                break;
+            case v1_9_R1:
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
+                break;
+        }
         Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.MELON_BLOCK, (byte) 0x0, UUID.randomUUID().toString()));
         item.setPickupDelay(0);
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));

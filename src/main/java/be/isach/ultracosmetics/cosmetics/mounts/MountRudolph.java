@@ -29,10 +29,11 @@ public class MountRudolph extends Mount {
     Horse horse;
 
     public MountRudolph(UUID owner) {
-        super(
-                owner, MountType.RUDOLPH
-        );
+        super(owner, MountType.RUDOLPH);
+    }
 
+    @Override
+    protected void onEquip() {
         if (owner != null) {
             horse = (Horse) entity;
             horse.setColor(Horse.Color.DARK_BROWN);

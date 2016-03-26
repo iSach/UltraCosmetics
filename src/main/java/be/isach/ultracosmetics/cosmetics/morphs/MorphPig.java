@@ -46,7 +46,14 @@ public class MorphPig extends Morph {
                                         cooldown = false;
                                     }
                                 }, 20);
-                                ent.getWorld().playSound(ent.getLocation(), Sound.PIG_IDLE, 0.3f, 1);
+                                switch (UltraCosmetics.getServerVersion()) {
+                                    case v1_8_R3:
+                                        getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("PIG_IDLE"), 0.2f, 1.5f);
+                                        break;
+                                    case v1_9_R1:
+                                        getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_PIG_AMBIENT, 0.2f, 1.5f);
+                                        break;
+                                }
                                 Vector vEnt = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).add(new Vector(0, 0.6, 0));
                                 Vector vPig = getPlayer().getLocation().toVector().subtract(ent.getLocation().toVector()).add(new Vector(0, 0.6, 0));
                                 vEnt.setY(0.5);

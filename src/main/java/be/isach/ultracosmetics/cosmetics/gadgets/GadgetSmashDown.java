@@ -43,7 +43,14 @@ public class GadgetSmashDown extends Gadget {
 
     @Override
     void onRightClick() {
-        getPlayer().playSound(getPlayer().getLocation(), Sound.FIREWORK_LAUNCH, 2, 1);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("FIREWORK_LAUNCH"), 2.0f, 1.0f);
+                break;
+            case v1_9_R1:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 2.0f, 1.0f);
+                break;
+        }
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final int taskId = Bukkit.getScheduler().runTaskTimer(UltraCosmetics.getInstance(), new Runnable() {
             @Override
@@ -81,7 +88,14 @@ public class GadgetSmashDown extends Gadget {
 
     private void playBoomEffect() {
         final Location loc = getPlayer().getLocation();
-        loc.getWorld().playSound(loc, Sound.EXPLODE, 2, 1);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                loc.getWorld().playSound(loc, Sound.valueOf("EXPLODE"), 2.0f, 1.0f);
+                break;
+            case v1_9_R1:
+                loc.getWorld().playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f);
+                break;
+        }
         new BukkitRunnable() {
             int i = 1;
 
@@ -123,7 +137,7 @@ public class GadgetSmashDown extends Gadget {
                                 && b.getType() != Material.STATIONARY_LAVA
                                 && !BlockUtils.isRocketBlock(b)
                                 && !BlockUtils.isTreasureChestBlock(b)
-                                && net.minecraft.server.v1_8_R3.Block.getById(b.getTypeId()).getMaterial().isSolid()
+                                && b.getType().isSolid()
                                 && b.getType().getId() != 43
                                 && b.getType().getId() != 44
                                 && b.getRelative(BlockFace.UP).getType() == Material.AIR) {
@@ -151,7 +165,14 @@ public class GadgetSmashDown extends Gadget {
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
             Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.getMaterial(fb.getBlockId()), fb.getBlockData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
-            fb.getWorld().playSound(fb.getLocation(), Sound.STEP_STONE, 1, 1);
+            switch (UltraCosmetics.getServerVersion()) {
+                case v1_8_R3:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("STEP_STONE"), 1.0f, 1.0f);
+                    break;
+                case v1_9_R1:
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_STONE_STEP, 1.0f, 1.0f);
+                    break;
+            }
             event.getEntity().remove();
         }
     }

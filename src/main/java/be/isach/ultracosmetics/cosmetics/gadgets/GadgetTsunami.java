@@ -36,7 +36,7 @@ public class GadgetTsunami extends Gadget {
             @Override
             public void run() {
                 if (loc.getBlock().getType() != Material.AIR
-                        && net.minecraft.server.v1_8_R3.Block.getById(loc.getBlock().getTypeId()).getMaterial().isSolid())
+                        && loc.getBlock().getType().isSolid())
                     loc.add(0, 1, 0);
                 if (loc.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR)
                     loc.add(0, -1, 0);

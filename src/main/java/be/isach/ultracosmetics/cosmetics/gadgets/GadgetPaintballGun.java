@@ -51,7 +51,14 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             projectilesList.add(projectile);
             projectiles.put(getOwner(), projectilesList);
         }
-        getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.CHICKEN_EGG_POP, 1.5F, 1.2F);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CHICKEN_EGG_POP"), 1.5f, 1.2f);
+                break;
+            case v1_9_R1:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CHICKEN_EGG, 1.5f, 1.2f);
+                break;
+        }
     }
 
     public boolean mapContainsProjectile(Projectile projectile) {

@@ -24,8 +24,10 @@ import be.isach.ultracosmetics.mysql.Table;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldManager;
 import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.v1_8_R3.ActionBar_1_8_R3;
 import be.isach.ultracosmetics.util.v1_8_R3.EntityUtil_1_8_R3;
 import be.isach.ultracosmetics.util.v1_8_R3.PathfinderUtil_1_8_R3;
+import be.isach.ultracosmetics.util.v1_9_R1.ActionBar_1_9_R1;
 import be.isach.ultracosmetics.util.v1_9_R1.EntityUtil_1_9_R1;
 import be.isach.ultracosmetics.util.v1_9_R1.PathfinderUtil_1_9_R1;
 import net.milkbowl.vault.economy.Economy;
@@ -191,6 +193,11 @@ public class UltraCosmetics extends JavaPlugin {
     treasureChests;
 
     private IEntityUtil entityUtil;
+
+    /**
+     * Action Bar Sender.
+     */
+    private IActionBar actionBarUtil;
 
     /**
      * Instance.
@@ -398,10 +405,13 @@ public class UltraCosmetics extends JavaPlugin {
                 break;
             case "v1_8_R1":
                 serverVersion = ServerVersion.v1_8_R1;
+                break;
             case "v1_8_R2":
                 serverVersion = ServerVersion.v1_8_R2;
+                break;
             case "v1_9_R1":
                 serverVersion = ServerVersion.v1_9_R1;
+                break;
         }
 
         if (getServer().getVersion().contains("Spigot"))
@@ -497,11 +507,13 @@ public class UltraCosmetics extends JavaPlugin {
                 CustomEntities_1_8_R3.registerEntities();
                 pathfinderUtil = new PathfinderUtil_1_8_R3();
                 entityUtil = new EntityUtil_1_8_R3();
+                actionBarUtil = new ActionBar_1_8_R3();
                 break;
             case v1_9_R1:
                 CustomEntities_1_9_R1.registerEntities();
                 pathfinderUtil = new PathfinderUtil_1_9_R1();
                 entityUtil = new EntityUtil_1_9_R1();
+                actionBarUtil = new ActionBar_1_9_R1();
                 break;
         }
         log("Custom Entities registered.");
@@ -705,6 +717,10 @@ public class UltraCosmetics extends JavaPlugin {
             if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName()))
                 playerManager.getCustomPlayer(p).giveMenuItem();
         }
+    }
+
+    public IActionBar getActionBarUtil() {
+        return actionBarUtil;
     }
 
     /**

@@ -28,18 +28,24 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
         this.a(1);
     }
 
+    @Override
     public boolean a() {
         Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
+        if (vec3d == null) return false; //
         this.c = vec3d.x;
         this.d = vec3d.y;
         this.e = vec3d.z;
         return true;
     }
 
+    @Override
     public void c() {
-        this.b.getNavigation().a(this.c, this.d, this.e, this.a);
+        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
+        if (vec3d == null) return; // IN AIR
+        this.b.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 3);
     }
 
+    @Override
     public boolean b() {
         // CraftBukkit start - introduce a temporary timeout hack until this is fixed properly
         if ((this.b.ticksLived - this.b.hurtTimestamp) > 100) {
@@ -47,7 +53,7 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
             return false;
         }
         // CraftBukkit end
-        return !this.b.getNavigation().m();
+        return !this.b.getNavigation().n();
     }
 
 

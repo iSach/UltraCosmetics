@@ -1,8 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import net.minecraft.server.v1_8_R3.EntityEnderDragon;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEnderDragon;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
@@ -19,8 +17,7 @@ import java.util.UUID;
 public class MountDragon extends Mount {
 
     public MountDragon(UUID owner) {
-        super(owner, MountType.DRAGON
-        );
+        super(owner, MountType.DRAGON);
         if (owner != null)
             UltraCosmetics.getInstance().registerListener(this);
     }
@@ -29,10 +26,6 @@ public class MountDragon extends Mount {
     void onUpdate() {
         if (entity.getPassenger() == null)
             clear();
-
-        EntityEnderDragon ec = ((CraftEnderDragon) entity).getHandle();
-
-        ec.hurtTicks = -1;
 
         Vector vector = getPlayer().getLocation().toVector();
 
@@ -46,10 +39,7 @@ public class MountDragon extends Mount {
         vector.setX(-h * Math.sin(Math.toRadians(rotX)));
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
-        ec.getBukkitEntity().setVelocity(vector);
-
-        ec.pitch = getPlayer().getLocation().getPitch();
-        ec.yaw = getPlayer().getLocation().getYaw() - 180;
+        UltraCosmetics.getInstance().getEntityUtil().moveDragon(getPlayer(), vector, entity);
     }
 
     @EventHandler

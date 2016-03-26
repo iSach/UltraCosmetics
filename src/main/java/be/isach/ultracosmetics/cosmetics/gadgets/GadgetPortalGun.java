@@ -38,7 +38,14 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     void onRightClick() {
-        getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 1.5f);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("ENDERMAN_TELEPORT"), .2f, 1.5f);
+                break;
+            case v1_9_R1:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2f, 1.5f);
+                break;
+        }
         UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Particles.REDSTONE, 100, 0, 0, 255);
         locBlue = getPlayer().getTargetBlock((Set<Material>) null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks((Set<Material>) null, 20);
@@ -60,7 +67,14 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     void onLeftClick() {
-        getPlayer().playSound(getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 0.2f, 1.5f);
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R3:
+                getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("ENDERMAN_TELEPORT"), .2f, 1.5f);
+                break;
+            case v1_9_R1:
+                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2f, 1.5f);
+                break;
+        }
         UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock((HashSet<Material>) null, 20).getLocation(), Particles.REDSTONE, 100, 255, 0, 0);
         locRed = getPlayer().getTargetBlock((Set<Material>) null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks((Set<Material>) null, 20);
