@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.cosmetics.gadgets;
+package be.isach.ultracosmetics.cosmetics.gadgets.v1_8_R3;
 
 import net.minecraft.server.v1_8_R3.*;
 
