@@ -56,8 +56,6 @@ public class GadgetBlackHole extends Gadget {
     void onUpdate() {
         EntityPlayer entityHuman = ((CraftPlayer)getPlayer()).getHandle();
 
-        Bukkit.broadcastMessage(entityHuman.bd + "");
-        Bukkit.broadcastMessage(entityHuman.be + "");
         if (i != null && i.isOnGround()) {
             int strands = 6;
             int particles = 25;
