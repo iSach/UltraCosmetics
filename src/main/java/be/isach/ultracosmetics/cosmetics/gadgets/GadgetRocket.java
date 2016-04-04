@@ -148,7 +148,7 @@ public class GadgetRocket extends Gadget {
                                     FallDamageManager.addNoFall(getPlayer());
                                     switch (UltraCosmetics.getServerVersion()) {
                                         case v1_8_R3:
-                                            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODe"), 3.0f, 1.0f);
+                                            getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 3.0f, 1.0f);
                                             break;
                                         case v1_9_R1:
                                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 3.0f, 1.0f);
