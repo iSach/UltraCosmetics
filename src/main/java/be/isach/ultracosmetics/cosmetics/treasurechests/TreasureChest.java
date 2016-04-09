@@ -382,7 +382,7 @@ public class TreasureChest
         int i;
         if (delay == 0) {
             this.stopping = true;
-            for (i = 0; i < 4; i++) {
+            for (i = 0; i < this.chestsLeft; i++) {
                 this.randomGenerator.giveRandomThing();
                 getPlayer().sendMessage(MessageManager.getMessage("You-Won-Treasure-Chests").replace("%name%", this.randomGenerator.getName()));
             }
