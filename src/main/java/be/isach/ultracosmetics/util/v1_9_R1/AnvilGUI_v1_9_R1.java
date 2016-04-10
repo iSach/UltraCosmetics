@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.util;
+package be.isach.ultracosmetics.util.v1_9_R1;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import net.minecraft.server.v1_8_R3.*;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 /**
  * Created by sacha on 23/08/15.
  */
-public class AnvilGUI {
+public class AnvilGUI_v1_9_R1 {
     private class AnvilContainer extends ContainerAnvil {
         public AnvilContainer(EntityHuman entity) {
             super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
@@ -111,7 +111,7 @@ public class AnvilGUI {
 
     private Listener listener;
 
-    public AnvilGUI(final Player player, final AnvilClickEventHandler handler) {
+    public AnvilGUI_v1_9_R1(final Player player, final AnvilClickEventHandler handler) {
         this.player = player;
         this.handler = handler;
 
@@ -125,7 +125,7 @@ public class AnvilGUI {
                     if (event.getInventory().equals(inv)) {
                         event.setCancelled(true);
 
-                        org.bukkit.inventory.ItemStack item = event.getCurrentItem();
+                        ItemStack item = event.getCurrentItem();
                         int slot = event.getRawSlot();
                         String name = "";
 
@@ -171,7 +171,7 @@ public class AnvilGUI {
                 if (event.getPlayer() instanceof Player) {
                     Player player = (Player) event.getPlayer();
                     Inventory inv = event.getInventory();
-                    if (inv.equals(AnvilGUI.this.inv)) {
+                    if (inv.equals(AnvilGUI_v1_9_R1.this.inv)) {
                         inv.clear();
                         destroy();
                     }

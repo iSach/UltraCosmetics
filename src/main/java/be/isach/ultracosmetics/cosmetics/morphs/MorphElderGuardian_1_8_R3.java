@@ -30,12 +30,12 @@ import java.util.UUID;
 /**
  * Created by Sacha on 19/12/15.
  */
-public class MorphElderGuardian extends Morph {
+public class MorphElderGuardian_1_8_R3 extends Morph {
 
     private boolean cooldown;
     private CustomGuardian_1_8_R3 customGuardian;
 
-    public MorphElderGuardian(UUID owner) {
+    public MorphElderGuardian_1_8_R3(UUID owner) {
         super(owner, MorphType.ELDERGUARDIAN);
         if (owner == null) return;
         UltraCosmetics.getInstance().registerListener(this);
