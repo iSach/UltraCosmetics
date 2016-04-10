@@ -40,10 +40,6 @@ public class ItemFactory {
         return itemStack;
     }
 
-    public static ItemStack create(Material material, byte data, String displayName) {
-        return create(material, data, displayName, "");
-    }
-
     public static void fillInventory(Inventory inventory) {
         if (SettingsManager.getConfig().getBoolean("Fill-Blank-Slots-With-Item.Enabled")) {
             MaterialData materialData = getMaterialData(UltraCosmetics.config.getString("Fill-Blank-Slots-With-Item.Item"));

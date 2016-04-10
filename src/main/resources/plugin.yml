@@ -1,5 +1,5 @@
 name: UltraCosmetics
-version: 2.1
+version: 2.1.2
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
@@ -135,7 +135,7 @@ permissions:
     default: op
   ultracosmetics.gadgets.trampoline:
     default: op
-  ultracosmetics.particleeffecs.*:
+  ultracosmetics.particleeffects.*:
     children:
       - ultracosmetics.particleeffects.raincloud
       - ultracosmetics.particleeffects.snowcloud

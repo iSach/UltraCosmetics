@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_9_R1;
 
-import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphElderGuardian_1_9_R1;
 import net.minecraft.server.v1_9_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_9_R1.EntityGuardian;
 import net.minecraft.server.v1_9_R1.SoundEffect;
@@ -20,7 +20,7 @@ public class CustomGuardian_1_9_R1 extends EntityGuardian {
     }
 
     public void check() {
-        custom = MorphType.customEntities.contains(this);
+        custom = MorphElderGuardian_1_9_R1.customEntities.contains(this);
     }
 
     public void target(ArmorStand armorStand) {

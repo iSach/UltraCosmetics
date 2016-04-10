@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.GadgetManager;
@@ -10,7 +10,6 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -51,6 +50,8 @@ public abstract class Gadget implements Listener {
      * because cooldown active.
      */
     public boolean displayCooldownMessage = true;
+
+
     public int lastPage = 1;
     /**
      * Last Clicked Block by the player.
@@ -390,7 +391,7 @@ public abstract class Gadget implements Listener {
         }
 
         public boolean isSameInventory(Inventory first, Inventory second) {
-            return ((CraftInventory) first).getInventory().equals(((CraftInventory) second).getInventory());
+            return UltraCosmetics.getInstance().getEntityUtil().isSameInventory(first, second);
         }
 
         @EventHandler

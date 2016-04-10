@@ -1,7 +1,11 @@
 package be.isach.ultracosmetics.util;
 
+import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 /**
@@ -33,4 +37,13 @@ public interface IEntityUtil {
 
     void moveShip(Player player, Entity entity, Vector vector);
 
+    void playChestAnimation(Block b, boolean open, TreasureChestDesign design);
+
+    Entity spawnItem(ItemStack itemStack, Location blockLocation);
+
+    boolean isSameInventory(Inventory first, Inventory second);
+
+    void follow(Entity toFollow, Entity follower);
+
+    void chickenFall(Player player);
 }

@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -141,7 +141,7 @@ public class SuitManager implements Listener {
                 if (Category.SUITS.hasGoBackArrow())
                     inv.setItem(inv.getSize() - 6, ItemFactory.create(Material.ARROW, (byte) 0x0, MessageManager.getMessage("Menu.Main-Menu")));
 
-                inv.setItem(inv.getSize() - (Category.SUITS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Clear-Suit")));
+                inv.setItem(inv.getSize() - (Category.SUITS.hasGoBackArrow() ? 4 : 5), ItemFactory.create(ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getItemType(), ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item").getData(), MessageManager.getMessage("Clear-Suit")));
 
                 if (PAGE > 1)
                     inv.setItem(inv.getSize() - 18, ItemFactory.create(Material.ENDER_PEARL, (byte) 0, MessageManager.getMessage("Menu.Previous-Page")));
@@ -226,7 +226,7 @@ public class SuitManager implements Listener {
                         || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE)
                     return;
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
+                    UltraCosmetics.openMainMenuFromOther((Player) event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Suit"))) {
                     int currentPage = getCurrentPage((Player) event.getWhoClicked());
@@ -239,11 +239,14 @@ public class SuitManager implements Listener {
                 int t = (s - (s % 9)) / 9;
                 ArmorSlot armorSlot = t < 5 ? ArmorSlot.values()[t - 1] : null;
 
+                if (UltraCosmetics.closeAfterSelect)
+                    event.getWhoClicked().closeInventory();
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Menu.Unequip"))) {
                     if (armorSlot == null)
                         return;
                     UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).removeSuit(armorSlot);
-                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
+                    if (!UltraCosmetics.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {
                     openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()) + 1);
@@ -271,7 +274,10 @@ public class SuitManager implements Listener {
                         }
                     }
                     equipSuit(getSuitType(sb.toString(), armorSlot), (Player) event.getWhoClicked(), armorSlot);
-                    openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
+
+
+                    if (!UltraCosmetics.closeAfterSelect)
+                        openMenu((Player) event.getWhoClicked(), getCurrentPage((Player) event.getWhoClicked()));
                 }
 
             }

@@ -1,10 +1,10 @@
 package be.isach.ultracosmetics.util.v1_9_R1;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;

@@ -1,13 +1,14 @@
 package be.isach.ultracosmetics.manager;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.pets.PetType;
-import be.isach.ultracosmetics.util.AnvilGUI;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.v1_8_R3.AnvilGUI_v1_8_R3;
+import be.isach.ultracosmetics.util.v1_9_R1.AnvilGUI_v1_9_R1;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -213,33 +214,70 @@ public class PetManager implements Listener {
 
     public static void renamePet(final Player p) {
 
-        AnvilGUI gui = new AnvilGUI(p, new AnvilGUI.AnvilClickEventHandler() {
-            @Override
-            public void onAnvilClick(AnvilGUI.AnvilClickEvent event) {
-                if (event.getSlot() == AnvilGUI.AnvilSlot.OUTPUT) {
-                    event.setWillClose(true);
-                    event.setWillDestroy(true);
-                    if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")
-                            && UltraCosmetics.petRenameMoney) {
-                        buyRenamePet(p, event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
-                    } else {
-                        if (UltraCosmetics.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
-                            UltraCosmetics.getCustomPlayer(p).currentPet.entity.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
-                                    .replace('&', '§').replace(" ", ""));
-                        else
-                            UltraCosmetics.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
-                                    .replace('&', '§').replace(" ", ""));
-                        UltraCosmetics.getCustomPlayer(p).setPetName(UltraCosmetics.getCustomPlayer(p).currentPet.getType().getConfigName(), event.getName()
-                                .replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+        switch (UltraCosmetics.getServerVersion()) {
+            case v1_8_R1:
+            case v1_8_R2:
+            case v1_8_R3:
+                AnvilGUI_v1_8_R3 gui = new AnvilGUI_v1_8_R3(p, new AnvilGUI_v1_8_R3.AnvilClickEventHandler() {
+                    @Override
+                    public void onAnvilClick(AnvilGUI_v1_8_R3.AnvilClickEvent event) {
+                        if (event.getSlot() == AnvilGUI_v1_8_R3.AnvilSlot.OUTPUT) {
+                            event.setWillClose(true);
+                            event.setWillDestroy(true);
+                            if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")
+                                    && UltraCosmetics.petRenameMoney) {
+                                buyRenamePet(p, event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                            } else {
+                                if (UltraCosmetics.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
+                                    UltraCosmetics.getCustomPlayer(p).currentPet.entity.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                                            .replace('&', '§').replace(" ", ""));
+                                else
+                                    UltraCosmetics.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                                            .replace('&', '§').replace(" ", ""));
+                                UltraCosmetics.getCustomPlayer(p).setPetName(UltraCosmetics.getCustomPlayer(p).currentPet.getType().getConfigName(), event.getName()
+                                        .replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                            }
+                        } else {
+                            event.setWillClose(false);
+                            event.setWillDestroy(false);
+                        }
                     }
-                } else {
-                    event.setWillClose(false);
-                    event.setWillDestroy(false);
-                }
-            }
-        });
-        gui.setSlot(AnvilGUI.AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
-        gui.open();
+                });
+
+                gui.setSlot(AnvilGUI_v1_8_R3.AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
+                gui.open();
+                break;
+            case v1_9_R1:
+                AnvilGUI_v1_9_R1 anvilGUI_v1_9_r1 = new AnvilGUI_v1_9_R1(p, new AnvilGUI_v1_9_R1.AnvilClickEventHandler() {
+                    @Override
+                    public void onAnvilClick(AnvilGUI_v1_9_R1.AnvilClickEvent event) {
+                        if (event.getSlot() == AnvilGUI_v1_9_R1.AnvilSlot.OUTPUT) {
+                            event.setWillClose(true);
+                            event.setWillDestroy(true);
+                            if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")
+                                    && UltraCosmetics.petRenameMoney) {
+                                buyRenamePet(p, event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                            } else {
+                                if (UltraCosmetics.getCustomPlayer(p).currentPet.getType() == PetType.WITHER)
+                                    UltraCosmetics.getCustomPlayer(p).currentPet.entity.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                                            .replace('&', '§').replace(" ", ""));
+                                else
+                                    UltraCosmetics.getCustomPlayer(p).currentPet.armorStand.setCustomName(event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "")
+                                            .replace('&', '§').replace(" ", ""));
+                                UltraCosmetics.getCustomPlayer(p).setPetName(UltraCosmetics.getCustomPlayer(p).currentPet.getType().getConfigName(), event.getName()
+                                        .replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace('&', '§').replace(" ", ""));
+                            }
+                        } else {
+                            event.setWillClose(false);
+                            event.setWillDestroy(false);
+                        }
+                    }
+                });
+
+                anvilGUI_v1_9_r1.setSlot(AnvilGUI_v1_9_R1.AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
+                anvilGUI_v1_9_r1.open();
+                break;
+        }
     }
 
     private static void buyRenamePet(final Player p, final String name) {
@@ -281,7 +319,7 @@ public class PetManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
+                    UltraCosmetics.openMainMenuFromOther((Player) event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Pet"))) {
                     if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentPet != null) {
@@ -292,7 +330,7 @@ public class PetManager implements Listener {
                     } else return;
                     return;
                 }
-                if (event.getCurrentItem().getType() == Material.NAME_TAG) {
+                if (event.getCurrentItem().getType() == ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType()) {
                     if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Active-Pet-Needed")))
                         return;
                     else if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith(MessageManager.getMessage("Rename-Pet").replace("%petname%",

@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ServerVersion;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -61,7 +60,6 @@ public enum MountType {
         this.clazz = mountClass;
 
         if (customEntity) {
-            Bukkit.broadcastMessage(UltraCosmetics.getServerVersion().toString());
             switch (UltraCosmetics.getServerVersion()) {
                 default:
                     switch (entityType) {
@@ -106,7 +104,7 @@ public enum MountType {
     }
 
     public boolean isEnabled() {
-        if((this == DRAGON || this == FLYINGSHIP) && UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1) return false;
+        if((this == DRAGON || this == FLYINGSHIP || this == SPIDER || this == SKYSQUID || this == SLIME) && UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1) return false;
         return SettingsManager.getConfig().getBoolean("Mounts." + configName + ".Enabled");
     }
 

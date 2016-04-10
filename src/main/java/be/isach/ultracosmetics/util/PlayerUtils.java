@@ -21,7 +21,7 @@ public class PlayerUtils {
     }
 
     public static void sendInActionBar(Player player, String message) {
-        UltraCosmetics.getInstance().getActionBarUtil().sendActionBar(player, message);
+        UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(player, message);
     }
 
 }

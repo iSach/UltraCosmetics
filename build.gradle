@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 group = 'be.isach'
-version = '2.1-RELEASE'
+version = '2.1.2-RELEASE'
 
 libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins/'
 
@@ -47,7 +47,7 @@ repositories {
         }
     }
     flatDir {
-        dirs '/Java/BuildTools'
+        dirs '/Java/BuildTools/'
     }
     mavenCentral()
 }
@@ -58,11 +58,17 @@ configurations {
 }
 
 dependencies {
-    provided name: 'spigot-1.9'
+    provided name: 'spigot-1.9.2'
     provided name: 'spigot-1.8.8'
-    provided 'com.comphenix.protocol:ProtocolLib:3.6.4'
-    provided 'LibsDisguises:LibsDisguises:8.6.7-SNAPSHOT'
-    provided 'com.xxmicloxx:NoteBlockAPI:1.0-SNAPSHOT'
+    compile('com.comphenix.protocol:ProtocolLib:3.6.4') {
+        exclude group: 'org.bukkit'
+    }
+    compile('LibsDisguises:LibsDisguises:8.6.7-SNAPSHOT') {
+        exclude group: 'org.bukkit'
+    }
+    compile('com.xxmicloxx:NoteBlockAPI:1.0-SNAPSHOT') {
+        exclude group: 'org.bukkit'
+    }
     compile('net.milkbowl.vault:VaultAPI:1.5') {
         exclude group: 'org.bukkit'
     }

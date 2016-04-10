@@ -1,9 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.util.ServerVersion;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import net.minecraft.server.v1_8_R3.Entity;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -18,27 +19,22 @@ import java.util.UUID;
  */
 public enum MorphType {
 
-    BAT("ultracosmetics.morphs.bat", "Bat", Material.COAL, (byte) 0, DisguiseType.BAT, "&7&oBecome a bat!", MorphBat.class),
-    BLAZE("ultracosmetics.morphs.blaze", "Blaze", Material.BLAZE_POWDER, (byte) 0, DisguiseType.BLAZE, "&7&oIt might be hot on there..", MorphBlaze.class),
-    CHICKEN("ultracosmetics.morphs.chicken", "Chicken", Material.EGG, (byte) 0, DisguiseType.CHICKEN, "&7&oBecome a chicken!", MorphChicken.class),
-    PIG("ultracosmetics.morphs.pig", "Pig", Material.PORK, (byte) 0, DisguiseType.PIG, "&7&oMust hold your carrot!", MorphPig.class),
+    BAT("ultracosmetics.morphs.bat", "Bat", Material.COAL, (byte) 0, DisguiseType.BAT, "&7&oBecome a bat!", MorphBat.class, false),
+    BLAZE("ultracosmetics.morphs.blaze", "Blaze", Material.BLAZE_POWDER, (byte) 0, DisguiseType.BLAZE, "&7&oIt might be hot on there..", MorphBlaze.class, false),
+    CHICKEN("ultracosmetics.morphs.chicken", "Chicken", Material.EGG, (byte) 0, DisguiseType.CHICKEN, "&7&oBecome a chicken!", MorphChicken.class, false),
+    PIG("ultracosmetics.morphs.pig", "Pig", Material.PORK, (byte) 0, DisguiseType.PIG, "&7&oMust hold your carrot!", MorphPig.class, false),
     ENDERMAN("ultracosmetics.morphs.enderman", "Enderman", Material.ENDER_PEARL, (byte) 0, DisguiseType.ENDERMAN, "&7&oI go from there to\n" +
-            "&7&othere, then you lost me..", MorphEnderman.class),
-    SLIME("ultracosmetics.morphs.slime", "Slime", Material.SLIME_BALL, (byte) 0, DisguiseType.SLIME, "&7&oSplat splat!", MorphSlime.class),
-    CREEPER("ultracosmetics.morphs.creeper", "Creeper", Material.SULPHUR, (byte) 0, DisguiseType.CREEPER, "&7&oHey What'sssssss up?", MorphCreeper.class),
-    WITHERSKELETON("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", Material.SKULL_ITEM, (byte) 1, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class),
-    SNOWNMAN("ultracosmetics.morphs.snowman", "Snowman", Material.SNOW_BALL, (byte) 0, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class),
-    ELDERGUARDIAN("ultracosmetics.morphs.elderguardian", "ElderGuardian", Material.PRISMARINE_CRYSTALS, (byte) 0, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", MorphElderGuardian.class);
+            "&7&othere, then you lost me..", MorphEnderman.class, false),
+    SLIME("ultracosmetics.morphs.slime", "Slime", Material.SLIME_BALL, (byte) 0, DisguiseType.SLIME, "&7&oSplat splat!", MorphSlime.class, false),
+    CREEPER("ultracosmetics.morphs.creeper", "Creeper", Material.SULPHUR, (byte) 0, DisguiseType.CREEPER, "&7&oHey What'sssssss up?", MorphCreeper.class, false),
+    WITHERSKELETON("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", Material.SKULL_ITEM, (byte) 1, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class, false),
+    SNOWNMAN("ultracosmetics.morphs.snowman", "Snowman", Material.SNOW_BALL, (byte) 0, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class, false),
+    ELDERGUARDIAN("ultracosmetics.morphs.elderguardian", "ElderGuardian", Material.PRISMARINE_CRYSTALS, (byte) 0, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", MorphElderGuardian_1_8_R3.class, true);
 
     /**
      * List of all the enabled Morphs.
      */
     public static List<MorphType> enabled = new ArrayList<>();
-
-    /**
-     * List of the custom entities.
-     */
-    public static List<Entity> customEntities = new ArrayList<>();
 
     /**
      * Morph Description.
@@ -75,13 +71,22 @@ public enum MorphType {
      */
     private Class<? extends Morph> clazz;
 
-    MorphType(String permission, String configName, Material material, byte data, DisguiseType disguiseType, String defaultDesc, Class<? extends Morph> clazz) {
+    MorphType(String permission, String configName, Material material, byte data, DisguiseType disguiseType, String defaultDesc, Class<? extends Morph> clazz, boolean customEntity) {
         this.permission = permission;
         this.configName = configName;
         this.material = material;
         this.data = data;
         this.disguiseType = disguiseType;
         this.clazz = clazz;
+        if(customEntity)
+        switch (UltraCosmetics.getServerVersion()) {
+            default:
+                this.clazz = MorphElderGuardian_1_8_R3.class;
+                break;
+            case v1_9_R1:
+                this.clazz = MorphElderGuardian_1_9_R1.class;
+                break;
+        }
 
         if (SettingsManager.getConfig().get("Morphs." + configName + ".Description") == null) {
             this.description = defaultDesc;
@@ -145,6 +150,7 @@ public enum MorphType {
      * @return {@code true} if the morphtype is enabled, otherwise {@code false}.
      */
     public boolean isEnabled() {
+        if(UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1 && this == ELDERGUARDIAN) return false;
         return SettingsManager.getConfig().getBoolean("Morphs." + configName + ".Enabled");
     }
 

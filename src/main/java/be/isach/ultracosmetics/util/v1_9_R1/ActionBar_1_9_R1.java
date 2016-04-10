@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  */
 public class ActionBar_1_9_R1 implements IActionBar {
     @Override
-    public void sendActionBar(Player player, String message) {
+    public void sendActionMessage(Player player, String message) {
         CraftPlayer p = (CraftPlayer) player;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);

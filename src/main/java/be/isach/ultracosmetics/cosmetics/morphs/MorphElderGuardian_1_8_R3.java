@@ -2,12 +2,10 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_8_R3.CustomGuardian_1_8_R3;
-import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_8_R3;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_9_R1;
+import be.isach.ultracosmetics.util.customfirework.CustomEntityFirework_1_8_R3;
 import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -25,6 +23,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -35,6 +35,11 @@ public class MorphElderGuardian_1_8_R3 extends Morph {
     private boolean cooldown;
     private CustomGuardian_1_8_R3 customGuardian;
 
+    /**
+     * List of the custom entities.
+     */
+    public static List<net.minecraft.server.v1_8_R3.Entity> customEntities = new ArrayList<>();
+
     public MorphElderGuardian_1_8_R3(UUID owner) {
         super(owner, MorphType.ELDERGUARDIAN);
         if (owner == null) return;
@@ -43,7 +48,7 @@ public class MorphElderGuardian_1_8_R3 extends Morph {
         World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
 
         customGuardian = new CustomGuardian_1_8_R3(world);
-        MorphType.customEntities.add(customGuardian);
+        customEntities.add(customGuardian);
         customGuardian.check();
 
         Location location = getPlayer().getLocation();
@@ -126,10 +131,7 @@ public class MorphElderGuardian_1_8_R3 extends Morph {
                 FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                         .withColor(Color.TEAL).withFade(Color.TEAL).build();
 
-                if (UltraCosmetics.getServerVersion() == ServerVersion.v1_8_R3)
-                    CustomEntityFirework_1_8_R3.spawn(TO, effect);
-                else if (UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1)
-                    CustomEntityFirework_1_9_R1.spawn(TO, effect);
+                CustomEntityFirework_1_8_R3.spawn(TO, effect);
 
                 Vector vector = TO.toVector().subtract(FROM.toVector());
 
@@ -154,6 +156,6 @@ public class MorphElderGuardian_1_8_R3 extends Morph {
         super.clear();
         if (customGuardian != null)
             customGuardian.dead = true;
-        MorphType.customEntities.remove(customGuardian);
+        customEntities.remove(customGuardian);
     }
 }

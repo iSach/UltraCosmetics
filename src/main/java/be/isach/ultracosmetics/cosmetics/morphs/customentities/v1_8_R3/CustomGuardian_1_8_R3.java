@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs.customentities.v1_8_R3;
 
-import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphElderGuardian_1_8_R3;
 import net.minecraft.server.v1_8_R3.EntityGuardian;
 import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftArmorStand;
@@ -18,7 +18,7 @@ public class CustomGuardian_1_8_R3 extends EntityGuardian {
     }
 
     public void check() {
-        custom = MorphType.customEntities.contains(this);
+        custom = MorphElderGuardian_1_8_R3.customEntities.contains(this);
     }
 
     public void target(ArmorStand armorStand) {

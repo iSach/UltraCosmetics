@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;

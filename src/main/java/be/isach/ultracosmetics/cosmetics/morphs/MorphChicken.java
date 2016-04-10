@@ -4,15 +4,9 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PathEntity;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -50,12 +44,7 @@ public class MorphChicken extends Morph {
                         return;
                     }
 
-                    EntityPlayer entityPlayer = ((CraftPlayer) getPlayer()).getHandle();
-                    if (!entityPlayer.onGround && entityPlayer.motY < 0.0D) {
-                        Vector v = getPlayer().getVelocity();
-                        getPlayer().setVelocity(v);
-                        entityPlayer.motY *= 0.85;
-                    }
+                    UltraCosmetics.getInstance().getEntityUtil().chickenFall(getPlayer());
 
                 }
             }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
@@ -110,16 +99,7 @@ public class MorphChicken extends Morph {
                         public void run() {
                             try {
                                 for (Chicken chicken : chickens) {
-                                    net.minecraft.server.v1_8_R3.Entity pett = ((CraftEntity) chicken).getHandle();
-                                    ((EntityInsentient) pett).getNavigation().a(2);
-                                    Object petf = ((CraftEntity) chicken).getHandle();
-                                    Location targetLocation = getPlayer().getLocation();
-                                    PathEntity path;
-                                    path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
-                                    if (path != null) {
-                                        ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
-                                        ((EntityInsentient) petf).getNavigation().a(1.05D);
-                                    }
+                                    UltraCosmetics.getInstance().getEntityUtil().follow(getPlayer(), chicken);
                                 }
                             } catch (Exception exc) {
                             }

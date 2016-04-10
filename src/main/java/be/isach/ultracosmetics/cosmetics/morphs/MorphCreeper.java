@@ -8,10 +8,7 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -89,7 +86,7 @@ public class MorphCreeper extends Morph {
                                     MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
                                 }
                             }
-                            sendActionBar(getPlayer(), "");
+                            UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), "");
                             charge = 0;
                             return;
                         }
@@ -98,22 +95,15 @@ public class MorphCreeper extends Morph {
                     }
                     if (charge > 0 && charge < 100) {
                         if (charge < 5) {
-                            sendActionBar(getPlayer(), "");
+                            UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), "");
                         } else
-                            sendActionBar(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
+                            UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
                     } else if (charge == 100)
-                        sendActionBar(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
+                        UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
 
 
                 }
             }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
         }
-    }
-
-    public static void sendActionBar(Player player, String message) {
-        CraftPlayer p = (CraftPlayer) player;
-        IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(ppoc);
     }
 }

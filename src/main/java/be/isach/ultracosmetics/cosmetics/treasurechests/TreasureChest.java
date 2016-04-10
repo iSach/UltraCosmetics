@@ -2,15 +2,7 @@ package be.isach.ultracosmetics.cosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.EntityItem;
-import net.minecraft.server.v1_8_R3.TileEntityChest;
-import net.minecraft.server.v1_8_R3.TileEntityEnderChest;
-
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,8 +10,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -39,8 +29,8 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
-public class TreasureChest
-        implements Listener {
+public class TreasureChest implements Listener {
+
     Map<Location, Material> oldMaterials = new HashMap();
     Map<Location, Byte> oldDatas = new HashMap();
     ArrayList<Block> blocksToRestore = new ArrayList();
@@ -369,10 +359,8 @@ public class TreasureChest
     public void onMove(PlayerMoveEvent event) {
         if ((event.getPlayer() == getPlayer()) && (
                 (event.getFrom().getBlockX() != event.getTo().getBlockX()) ||
-                        (event
-                                .getFrom().getBlockY() != event.getTo().getBlockY()) ||
-                        (event
-                                .getFrom().getBlockZ() != event.getTo().getBlockZ()))) {
+                        (event.getFrom().getBlockY() != event.getTo().getBlockY()) ||
+                        (event.getFrom().getBlockZ() != event.getTo().getBlockZ()))) {
             event.setCancelled(true);
             event.getPlayer().teleport(event.getFrom());
         }
@@ -388,7 +376,7 @@ public class TreasureChest
             }
         } else {
             for (final Block b : this.chests) {
-                playChestAction(b, true);
+                UltraCosmetics.getInstance().getEntityUtil().playChestAnimation(b, true, design);
                 this.randomGenerator.loc = b.getLocation().clone().add(0.0D, 1.0D, 0.0D);
                 this.randomGenerator.giveRandomThing();
                 org.bukkit.inventory.ItemStack is = this.randomGenerator.getItemStack();
@@ -396,31 +384,15 @@ public class TreasureChest
                 itemMeta.setDisplayName(UUID.randomUUID().toString());
                 is.setItemMeta(itemMeta);
 
-                EntityItem ei = new EntityItem(
-                        ((CraftWorld) b
-                                .getLocation().clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle(), b
-                        .getLocation().clone().add(0.5D, 1.2D, 0.5D).getX(), b
-                        .getLocation().clone().add(0.5D, 1.2D, 0.5D).getY(), b
-                        .getLocation().clone().add(0.5D, 1.2D, 0.5D).getZ(),
-                        CraftItemStack.asNMSCopy(is)) {
-                    public boolean a(EntityItem entityitem) {
-                        return false;
-                    }
-                };
-                ei.getBukkitEntity().setVelocity(new Vector(0.0D, 0.25D, 0.0D));
-                ei.pickupDelay = 2147483647;
-                ei.getBukkitEntity().setCustomName(UUID.randomUUID().toString());
+                Entity entity = UltraCosmetics.getInstance().getEntityUtil().spawnItem(is, b.getLocation());
 
-                ((CraftWorld) b.getLocation().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addEntity(ei);
-
-                this.items.add(ei.getBukkitEntity());
+                this.items.add(entity);
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
-                        spawnHologram(b.getLocation().clone().add(0.5D, 0.3D, 0.5D), nameas);
+                        spawnHologram(b.getLocation().clone().add(0.5D, UltraCosmetics.getInstance().getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
                     }
-                }
-                        , 15L);
+                }, 15L);
 
                 this.chestsLeft -= 1;
                 this.chestsToRemove.add(b);
@@ -469,19 +441,6 @@ public class TreasureChest
         }
     }
 
-    public void playChestAction(Block b, boolean open) {
-        Location location = b.getLocation();
-        net.minecraft.server.v1_8_R3.World world = ((CraftWorld) location.getWorld()).getHandle();
-        BlockPosition position = new BlockPosition(location.getX(), location.getY(), location.getZ());
-        if (design.getChestType() == ChestType.ENDER) {
-            TileEntityEnderChest tileChest = (TileEntityEnderChest) world.getTileEntity(position);
-            world.playBlockAction(position, tileChest.w(), 1, open ? 1 : 0);
-        } else {
-            TileEntityChest tileChest = (TileEntityChest) world.getTileEntity(position);
-            world.playBlockAction(position, tileChest.w(), 1, open ? 1 : 0);
-        }
-    }
-
     private void spawnHologram(Location location, String s) {
         ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
         armorStand.setSmall(true);
@@ -500,12 +459,9 @@ public class TreasureChest
                 (event.getClickedBlock().getType() == Material.CHEST
                         || event.getClickedBlock().getType() == Material.ENDER_CHEST
                         || event.getClickedBlock().getType() == Material.TRAPPED_CHEST) &&
-                (this.chests
-                        .contains(event
-                                .getClickedBlock())) && (!this.cooldown)) {
-            if (event
-                    .getPlayer() == getPlayer()) {
-                playChestAction(event.getClickedBlock(), true);
+                (this.chests.contains(event.getClickedBlock())) && (!this.cooldown)) {
+            if (event.getPlayer() == getPlayer()) {
+                UltraCosmetics.getInstance().getEntityUtil().playChestAnimation(event.getClickedBlock(), true, design);
                 this.randomGenerator.loc = event.getClickedBlock().getLocation().add(0.0D, 1.0D, 0.0D);
                 this.randomGenerator.giveRandomThing();
 
@@ -514,37 +470,20 @@ public class TreasureChest
                     public void run() {
                         cooldown = false;
                     }
-                }
-                        , 3L);
+                }, 3L);
 
                 org.bukkit.inventory.ItemStack is = this.randomGenerator.getItemStack();
                 ItemMeta itemMeta = is.getItemMeta();
                 itemMeta.setDisplayName(UUID.randomUUID().toString());
                 is.setItemMeta(itemMeta);
 
-                EntityItem ei = new EntityItem(
-                        ((CraftWorld) event
-                                .getClickedBlock().getLocation().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle(), event
-                        .getClickedBlock().getLocation().add(0.5D, 1.2D, 0.5D).getX(), event
-                        .getClickedBlock().getLocation().add(0.5D, 1.2D, 0.5D).getY(), event
-                        .getClickedBlock().getLocation().add(0.5D, 1.2D, 0.5D).getZ(),
-                        CraftItemStack.asNMSCopy(is)) {
-                    public boolean a(EntityItem entityitem) {
-                        return false;
-                    }
-                };
-                ei.getBukkitEntity().setVelocity(new Vector(0.0D, 0.25D, 0.0D));
-                ei.pickupDelay = 2147483647;
-                ei.getBukkitEntity().setCustomName(UUID.randomUUID().toString());
-                ei.pickupDelay = 20;
+                Entity itemEntity = UltraCosmetics.getInstance().getEntityUtil().spawnItem(is, event.getClickedBlock().getLocation());
 
-                ((CraftWorld) event.getClickedBlock().getLocation().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addEntity(ei);
-
-                this.items.add(ei.getBukkitEntity());
+                this.items.add(itemEntity);
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
-                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, 0.3D, 0.5D), nameas);
+                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, UltraCosmetics.getInstance().getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
                     }
                 }
                         , 15L);

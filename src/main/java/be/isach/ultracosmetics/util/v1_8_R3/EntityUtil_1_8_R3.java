@@ -2,18 +2,22 @@ package be.isach.ultracosmetics.util.v1_8_R3;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.gadgets.v1_8_R3.CustomPathFinderGoalPanic;
+import be.isach.ultracosmetics.cosmetics.treasurechests.ChestType;
+import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.*;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.*;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Wither;
+import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
@@ -128,7 +132,7 @@ public class EntityUtil_1_8_R3 implements IEntityUtil {
 
     @Override
     public void sendDestroyPacket(Player player, org.bukkit.entity.Entity entity) {
-       PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(((CraftEntity) entity).getHandle().getId());
+        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(((CraftEntity) entity).getHandle().getId());
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
@@ -167,5 +171,72 @@ public class EntityUtil_1_8_R3 implements IEntityUtil {
 
         ec.pitch = player.getLocation().getPitch();
         ec.yaw = player.getLocation().getYaw() - 180;
+    }
+
+    @Override
+    public void playChestAnimation(Block b, boolean open, TreasureChestDesign design) {
+        Location location = b.getLocation();
+        net.minecraft.server.v1_8_R3.World world = ((CraftWorld) location.getWorld()).getHandle();
+        BlockPosition position = new BlockPosition(location.getX(), location.getY(), location.getZ());
+        if (design.getChestType() == ChestType.ENDER) {
+            TileEntityEnderChest tileChest = (TileEntityEnderChest) world.getTileEntity(position);
+            world.playBlockAction(position, tileChest.w(), 1, open ? 1 : 0);
+        } else {
+            TileEntityChest tileChest = (TileEntityChest) world.getTileEntity(position);
+            world.playBlockAction(position, tileChest.w(), 1, open ? 1 : 0);
+        }
+    }
+
+    @Override
+    public org.bukkit.entity.Entity spawnItem(ItemStack itemStack, Location blockLocation) {
+        EntityItem ei = new EntityItem(
+                ((CraftWorld)blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle(),
+                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getX(),
+                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getY(),
+                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getZ(),
+                CraftItemStack.asNMSCopy(itemStack)) {
+
+
+            public boolean a(EntityItem entityitem) {
+                return false;
+            }
+        };
+        ei.getBukkitEntity().setVelocity(new Vector(0.0D, 0.25D, 0.0D));
+        ei.pickupDelay = 2147483647;
+        ei.getBukkitEntity().setCustomName(UUID.randomUUID().toString());
+        ei.pickupDelay = 20;
+
+        ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addEntity(ei);
+
+        return ei.getBukkitEntity();
+    }
+
+    @Override
+    public boolean isSameInventory(Inventory first, Inventory second) {
+        return ((CraftInventory) first).getInventory().equals(((CraftInventory) second).getInventory());
+    }
+
+    @Override
+    public void follow(Entity toFollow, Entity follower) {
+        net.minecraft.server.v1_8_R3.Entity pett = ((CraftEntity) follower).getHandle();
+        ((EntityInsentient) pett).getNavigation().a(2);
+        Object petf = ((CraftEntity) follower).getHandle();
+        Location targetLocation = toFollow.getLocation();
+        PathEntity path;
+        path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
+        if (path != null) {
+            ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
+            ((EntityInsentient) petf).getNavigation().a(1.05D);
+        }
+    }
+
+    @Override
+    public void chickenFall(Player player) {
+        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+        if (!entityPlayer.onGround && entityPlayer.motY < 0.0D) {
+            Vector v = player.getVelocity();
+            player.setVelocity(v);
+            entityPlayer.motY *= 0.85;
+        }
     }
 }

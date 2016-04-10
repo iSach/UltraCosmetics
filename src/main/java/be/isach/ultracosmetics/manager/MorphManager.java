@@ -221,7 +221,7 @@ public class MorphManager implements Listener {
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Enable-Third-Person-View"))) {
                 UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).setSeeSelfMorph(true);
-                event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.EYE_OF_ENDER, (byte) 0x0, MessageManager.getMessage("Disable-Third-Person-View")));
+                event.getInventory().setItem(event.getSlot(), ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled").getData(), MessageManager.getMessage("Disable-Third-Person-View")));
                 if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
                     Morph morph = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
                     morph.disguise = new me.libraryaddict.disguise.disguisetypes.MobDisguise(morph.getType().getDisguiseType());
@@ -233,7 +233,7 @@ public class MorphManager implements Listener {
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Disable-Third-Person-View"))) {
                 UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).setSeeSelfMorph(false);
-                event.getInventory().setItem(event.getSlot(), ItemFactory.create(Material.ENDER_PEARL, (byte) 0x0, MessageManager.getMessage("Enable-Third-Person-View")));
+                event.getInventory().setItem(event.getSlot(), ItemFactory.create(ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getItemType(), ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled").getData(), MessageManager.getMessage("Enable-Third-Person-View")));
                 if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph != null) {
                     Morph morph = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
                     morph.disguise = new me.libraryaddict.disguise.disguisetypes.MobDisguise(morph.getType().getDisguiseType());
