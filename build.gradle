@@ -1,74 +1,66 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
 
-task getHomeDir << {
-    println gradle.gradleHomeDir
+    group = 'be.isach'
+    version = '2.1.2-RELEASE'
+
+    compileJava.options.encoding = 'UTF-8'
+
+    configurations {
+        shaded
+        compile.extendsFrom shaded
+    }
+
+    afterEvaluate{
+        jar {
+            dependsOn configurations.shaded
+            from configurations.shaded.collect {
+                    it.isDirectory() ?
+                            it :
+                            zipTree(it)
+                }
+        }
+    }
 }
 
-group = 'be.isach'
-version = '2.1.2-RELEASE'
-
-libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins/'
-
-compileJava.options.encoding = 'UTF-8'
-
-repositories {
-    repositories {
-        maven {
-            url 'http://server.o2gaming.com/repo/'
+dependencies{
+    subprojects.each{ p ->
+        shaded(p) {
+            transitive false
         }
     }
+}
+
+subprojects {
     repositories {
-        maven {
-            url 'http://repo.howaner.de'
+        mavenLocal()
+        mavenCentral()
+        ivy {
+            url 'http://www.tcpr.ca/files/'
+            layout 'pattern', {
+                artifact '[module]/[module]-[revision].[ext]'
+            }
         }
-    }
-    repositories {
         maven {
-            url 'http://isach.be/repo'
+            url 'https://hub.spigotmc.org/nexus/content/groups/public/'
         }
-    }
-    repositories {
+        maven {
+            url 'https://oss.sonatype.org/content/groups/public/'
+        }
         maven {
             url 'http://nexus.theyeticave.net/content/repositories/pub_releases'
         }
-    }
-    repositories {
+        maven {
+            url 'http://repo.md-5.net/content/repositories/releases'
+        }
+        maven {
+            url 'http://repo.howaner.de'
+        }
         maven {
             url 'http://repo.dmulloy2.net/content/groups/public/'
         }
     }
-    ivy {
-        url "http://www.tcpr.ca/files/"
-        layout 'pattern', {
-            artifact '[module]/[module]-[revision].[ext]'
-        }
-    }
-    flatDir {
-        dirs '/Java/BuildTools/'
-    }
-    mavenCentral()
 }
 
-configurations {
-    provided
-    compile.extendsFrom provided
-}
-
-
-dependencies {
-    provided name: 'spigot-1.9.2'
-    provided name: 'spigot-1.8.8'
-    provided name: 'LibsDisguises'
-    compile('com.comphenix.protocol:ProtocolLib:3.6.4') {
-        exclude group: 'org.bukkit'
-    }
-    compile('com.xxmicloxx:NoteBlockAPI:1.0-SNAPSHOT') {
-        exclude group: 'org.bukkit'
-    }
-    compile('net.milkbowl.vault:VaultAPI:1.6') {
-        exclude group:'org.bukkit'
-    }
-
-}
