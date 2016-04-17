@@ -565,7 +565,6 @@ public class UltraCosmetics extends JavaPlugin {
         commandManager.registerCommand(new ToggleCommand());
         commandManager.registerCommand(new ClearCommand());
         commandManager.registerCommand(new TreasureCommand());
-        commandManager.registerCommand(new TestCommand());
 
         log("Registered command: '/ultracosmetics'.");
         log("Registered command: '/uc'.");
