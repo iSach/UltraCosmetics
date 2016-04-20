@@ -1,0 +1,8 @@
+dependencies {
+    compile 'com.comphenix.protocol:ProtocolLib:3.6.4'
+    compile name: 'LibsDisguises', version:'unspecified'
+    compile 'com.xxmicloxx:NoteBlockAPI:1.0-SNAPSHOT'
+    compile('net.milkbowl.vault:VaultAPI:1.5') {
+        exclude group: 'org.bukkit'
+    }
+}
