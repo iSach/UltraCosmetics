@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/UltraCosmetics.iml" filepath="$PROJECT_DIR$/UltraCosmetics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_8_R3/v1_8_R3.iml" filepath="$PROJECT_DIR$/v1_8_R3/v1_8_R3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_9_R1/v1_9_R1.iml" filepath="$PROJECT_DIR$/v1_9_R1/v1_9_R1.iml" />
+    </modules>
+  </component>
+</project>
