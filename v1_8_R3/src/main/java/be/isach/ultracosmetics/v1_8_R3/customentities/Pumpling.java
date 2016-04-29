@@ -33,7 +33,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
             public void run() {
                 if (customEntities.contains(instance)) {
                     isCustomEntity = true;
-                    UltraCosmetics.getInstance().pathfinderUtil.removePathFinders(getBukkitEntity());
+                    UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(getBukkitEntity());
                     setInvisible(true);
                     setBaby(true);
                     setEquipment(4, new ItemStack(Blocks.PUMPKIN));

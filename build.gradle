@@ -17,10 +17,10 @@ allprojects {
         jar {
             dependsOn configurations.shaded
             from configurations.shaded.collect {
-                    it.isDirectory() ?
-                            it :
-                            zipTree(it)
-                }
+                it.isDirectory() ?
+                        it :
+                        zipTree(it)
+            }
         }
     }
 }
@@ -63,4 +63,3 @@ subprojects {
         }
     }
 }
-

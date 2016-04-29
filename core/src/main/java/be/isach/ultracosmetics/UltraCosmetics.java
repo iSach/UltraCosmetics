@@ -209,8 +209,6 @@ public class UltraCosmetics extends JavaPlugin {
      */
     public Connection co;
 
-    public IPathfinderUtil pathfinderUtil;
-
     /**
      * MySQL Table.
      */
@@ -501,6 +499,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             versionManager.load();
         } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
             log("No module found for " + serverVersion + " disabling");
         }
         versionManager.getModule().enable();
@@ -733,6 +732,10 @@ public class UltraCosmetics extends JavaPlugin {
 
     public AAnvilGUI newAnvilGUI(Player player, AAnvilGUI.AnvilClickEventHandler handler){
         return versionManager.newAnvilGUI(player , handler);
+    }
+
+    public IPathfinderUtil getPathfinderUtil() {
+        return versionManager.getPathfinderUtil();
     }
 
     public IPlayerFollower newPlayerFollower(Pet pet , Player player){

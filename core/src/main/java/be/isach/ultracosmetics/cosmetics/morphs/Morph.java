@@ -57,7 +57,7 @@ public abstract class Morph implements Listener {
         if (!UltraCosmetics.getCustomPlayer(getPlayer()).canSeeSelfMorph())
             disguise.setViewSelfDisguise(false);
         disguise.setModifyBoundingBox(true);
-        disguise.setShowName(true);
+//        disguise.setShowName(true);
     }
 
     /**

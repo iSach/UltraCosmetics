@@ -29,7 +29,7 @@ public enum MorphType {
     CREEPER("ultracosmetics.morphs.creeper", "Creeper", Material.SULPHUR, (byte) 0, DisguiseType.CREEPER, "&7&oHey What'sssssss up?", MorphCreeper.class),
     WITHERSKELETON("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", Material.SKULL_ITEM, (byte) 1, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class),
     SNOWNMAN("ultracosmetics.morphs.snowman", "Snowman", Material.SNOW_BALL, (byte) 0, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class),
-    ELDERGUARDIAN("ultracosmetics.morphs.elderguardian", "ElderGuardian", Material.PRISMARINE_CRYSTALS, (byte) 0, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", UltraCosmetics.getInstance().getMorphs().getElderGuardianClass());
+    ELDERGUARDIAN("ultracosmetics.morphs.elderguardian", "ElderGuardian", Material.PRISMARINE_CRYSTALS, (byte) 0, DisguiseType.valueOf("ELDER_GUARDIAN"), "&7&oBecome an Elder Guardian!!", UltraCosmetics.getInstance().getMorphs().getElderGuardianClass());
 
     /**
      * List of all the enabled Morphs.
