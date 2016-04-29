@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: net.milkbowl.vault:VaultAPI:1.5">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/net/milkbowl/vault/VaultAPI/1.5/VaultAPI-1.5.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
