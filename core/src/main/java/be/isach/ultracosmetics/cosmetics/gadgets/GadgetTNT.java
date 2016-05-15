@@ -53,6 +53,7 @@ public class GadgetTNT extends Gadget {
     @EventHandler
     public void onItemFrameBreak(HangingBreakEvent event) {
         for (Entity ent : entities) {
+            if(ent.getWorld() != event.getEntity().getWorld()) continue;
             if (ent.getLocation().distance(event.getEntity().getLocation()) < 15)
                 event.setCancelled(true);
         }
@@ -61,6 +62,7 @@ public class GadgetTNT extends Gadget {
     @EventHandler
     public void onVehicleDestroy(VehicleDestroyEvent event) {
         for (Entity tnt : entities) {
+            if(tnt.getWorld() != event.getVehicle().getWorld()) continue;
             if (tnt.getLocation().distance(event.getVehicle().getLocation()) < 10) {
                 event.setCancelled(true);
             }

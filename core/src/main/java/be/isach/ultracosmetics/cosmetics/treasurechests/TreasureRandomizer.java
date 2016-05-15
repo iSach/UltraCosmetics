@@ -353,6 +353,10 @@ public class TreasureRandomizer {
     }
 
     public void giveMoney() {
+        if(!UltraCosmetics.getInstance().isVaultLoaded()) {
+            giveNothing();
+            return;
+        }
         int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max"));
         name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
         UltraCosmetics.economy.depositPlayer(player, money);

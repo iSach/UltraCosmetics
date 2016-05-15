@@ -209,8 +209,6 @@ public class UltraCosmetics extends JavaPlugin {
      */
     public Connection co;
 
-    public IPathfinderUtil pathfinderUtil;
-
     /**
      * MySQL Table.
      */
@@ -394,20 +392,14 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
         }
 
-        switch (mcVersion) {
-            default:
-                serverVersion = ServerVersion.v1_8_R3;
-                break;
-            case "v1_8_R1":
-                serverVersion = ServerVersion.v1_8_R1;
-                break;
-            case "v1_8_R2":
-                serverVersion = ServerVersion.v1_8_R2;
-                break;
-            case "v1_9_R1":
-                serverVersion = ServerVersion.v1_9_R1;
-                break;
-        }
+        if(mcVersion.startsWith("v")) {
+            try {
+                serverVersion = ServerVersion.valueOf(mcVersion);
+            } catch (Exception exc) {
+                log("This NMS version isn't supported. (" + mcVersion + ")!");
+                Bukkit.getPluginManager().disablePlugin(this);
+            }
+        } else serverVersion = ServerVersion.v1_8_R3;
 
         if (getServer().getVersion().contains("Spigot"))
             usingSpigot = true;
@@ -501,6 +493,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             versionManager.load();
         } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
             log("No module found for " + serverVersion + " disabling");
         }
         versionManager.getModule().enable();
@@ -601,7 +594,7 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        log("Gadgets Registered.");
+        log("Cosmetics Registered.");
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             log("");
@@ -733,6 +726,10 @@ public class UltraCosmetics extends JavaPlugin {
 
     public AAnvilGUI newAnvilGUI(Player player, AAnvilGUI.AnvilClickEventHandler handler){
         return versionManager.newAnvilGUI(player , handler);
+    }
+
+    public IPathfinderUtil getPathfinderUtil() {
+        return versionManager.getPathfinderUtil();
     }
 
     public IPlayerFollower newPlayerFollower(Pet pet , Player player){

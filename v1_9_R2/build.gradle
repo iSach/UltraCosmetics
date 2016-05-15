@@ -1,0 +1,6 @@
+dependencies {
+    compile 'spigot:spigot:latest'
+    shaded (project(':core')) {
+        transitive false
+    }
+}

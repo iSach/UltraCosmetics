@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 public class VersionManager {
     private final String PACKAGE = "be.isach.ultracosmetics";
@@ -22,6 +21,7 @@ public class VersionManager {
     private IMorphs morphs;
     private Constructor<? extends IPlayerFollower> playerFolowerConstructor;
     private Constructor<? extends AAnvilGUI> anvilGUIConstructor;
+    private IPathfinderUtil pathfinderUtil;
 
     public VersionManager(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
@@ -34,13 +34,14 @@ public class VersionManager {
         entityUtil = loadModule("EntityUtil");
         actionBarUtil = loadModule("ActionBar");
         itemGlower = loadModule("ItemGlower");
+        pathfinderUtil = loadModule("PathfinderUtil");
         fireworkFactory = loadModule("FireworkFactory");
         mounts = loadModule("Mounts");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
         anvilGUIConstructor = (Constructor<AAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI") , Player.class , AAnvilGUI.AnvilClickEventHandler.class);
         anvilGUIConstructor.setAccessible(true);
-        playerFolowerConstructor = (Constructor<? extends IPlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pet.PlayerFollower") , Pet.class , Player.class);
+        playerFolowerConstructor = (Constructor<? extends IPlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pets.PlayerFollower") , Pet.class , Player.class);
         playerFolowerConstructor.setAccessible(true);
     }
     @SuppressWarnings("unchecked")
@@ -85,6 +86,10 @@ public class VersionManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public IPathfinderUtil getPathfinderUtil() {
+        return pathfinderUtil;
     }
 
     public IPets getPets() {

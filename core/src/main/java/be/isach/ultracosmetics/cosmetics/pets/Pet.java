@@ -161,7 +161,7 @@ public abstract class Pet implements Listener {
             else ((Ageable) entity).setAdult();
             ((Ageable) entity).setAgeLock(true);
         }
-        UltraCosmetics.getInstance().pathfinderUtil.removePathFinders(entity);
+        UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(entity);
 
 
         this.entity.setPassenger(armorStand);

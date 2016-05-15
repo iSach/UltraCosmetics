@@ -56,7 +56,7 @@ public class MorphCreeper extends Morph {
                         if (creeperWatcher.isIgnited()) {
                             disguise = new MobDisguise(getType().getDisguiseType());
                             DisguiseAPI.disguiseToAll(getPlayer(), disguise);
-                            disguise.setShowName(true);
+//                            disguise.setShowName(true);
                             if (!UltraCosmetics.getCustomPlayer(getPlayer()).canSeeSelfMorph())
                                 disguise.setViewSelfDisguise(false);
                         }

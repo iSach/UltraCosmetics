@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.1.2-RELEASE'
+    version = '2.1.3-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -17,10 +17,10 @@ allprojects {
         jar {
             dependsOn configurations.shaded
             from configurations.shaded.collect {
-                    it.isDirectory() ?
-                            it :
-                            zipTree(it)
-                }
+                it.isDirectory() ?
+                        it :
+                        zipTree(it)
+            }
         }
     }
 }
@@ -63,4 +63,3 @@ subprojects {
         }
     }
 }
-

@@ -1,5 +1,5 @@
 dependencies {
-    compile 'spigot:spigot:1.9-R0.1-SNAPSHOT-latest'
+    compile 'spigot:spigot:1.9.2-R0.1-SNAPSHOT-latest'
     shaded (project(':core')) {
         transitive false
     }

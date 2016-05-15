@@ -46,7 +46,9 @@ public class GiveCommand extends SubCommand {
                     sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
                     return;
                 }
-                if (Bukkit.getOfflinePlayer(args[3]) != null) {
+                if (Bukkit.getOfflinePlayer(args[3]) != null
+                        && Bukkit.getOfflinePlayer(args[3]).hasPlayedBefore()
+                        && Bukkit.getPlayer(args[3]) == null) {
                     sender.sendMessage("  §c§lPlayer " + args[3] + " is offline.");
 
                     receiver = Bukkit.getOfflinePlayer(args[3]);
@@ -57,7 +59,6 @@ public class GiveCommand extends SubCommand {
                     return;
                 }
             }
-
             if (!MathUtils.isInteger(args[2])) {
                 sender.sendMessage("  §c§l" + args[2] + " isn't a number!");
                 return;
@@ -67,6 +68,7 @@ public class GiveCommand extends SubCommand {
 
             for (int i = 0; i < keys; i++)
                 addKey(receiver);
+
             sender.sendMessage("  §c§l" + keys + " treasure keys given to " + receiver.getName());
             return;
 
@@ -82,7 +84,9 @@ public class GiveCommand extends SubCommand {
                     sender.sendMessage("  §c§lPlayer " + args[4] + " not found and has never come!");
                     return;
                 }
-                if (Bukkit.getOfflinePlayer(args[4]) != null) {
+                if (Bukkit.getOfflinePlayer(args[4]) != null
+                        && Bukkit.getOfflinePlayer(args[4]).hasPlayedBefore()
+                        && Bukkit.getPlayer(args[4]) == null) {
                     sender.sendMessage("  §c§lPlayer " + args[4] + " is offline.");
 
                     receiver = Bukkit.getOfflinePlayer(args[4]);
