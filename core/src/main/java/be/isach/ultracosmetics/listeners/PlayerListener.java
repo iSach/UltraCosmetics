@@ -194,6 +194,25 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onPlayerSwapoffHand(PlayerSwapHandItemsEvent event) {
+        if (event.getMainHandItem() != null
+                && event.getMainHandItem().hasItemMeta()
+                && event.getMainHandItem().getItemMeta().hasDisplayName()
+                && event.getMainHandItem().getItemMeta().getDisplayName()
+                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            event.setCancelled(true);
+        }
+        if (event.getOffHandItem() != null
+                && event.getOffHandItem().hasItemMeta()
+                && event.getOffHandItem().getItemMeta().hasDisplayName()
+                && event.getOffHandItem().getItemMeta().getDisplayName()
+                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            event.setCancelled(true);
+        }
+    }
+
+
+    @EventHandler
     public void onPlayerInteractGhost(PlayerInteractAtEntityEvent event) {
         if (event.getRightClicked() != null
                 && event.getRightClicked().hasMetadata("C_AD_ArmorStand"))

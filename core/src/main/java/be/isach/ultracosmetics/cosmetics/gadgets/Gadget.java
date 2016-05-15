@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -50,7 +51,6 @@ public abstract class Gadget implements Listener {
      * because cooldown active.
      */
     public boolean displayCooldownMessage = true;
-
 
     public int lastPage = 1;
     /**
@@ -575,6 +575,24 @@ public abstract class Gadget implements Listener {
                         player.updateInventory();
                         return;
                     }
+                }
+            }
+        }
+
+        @EventHandler
+        public void cancelOffHandMove(PlayerSwapHandItemsEvent event) {
+            if (event.getMainHandItem() != null) {
+                if (event.getMainHandItem().equals(itemStack)) {
+                    event.setCancelled(true);
+                    event.getPlayer().updateInventory();
+                    return;
+                }
+            }
+            if (event.getOffHandItem() != null) {
+                if (event.getOffHandItem().equals(itemStack)) {
+                    event.setCancelled(true);
+                    event.getPlayer().updateInventory();
+                    return;
                 }
             }
         }

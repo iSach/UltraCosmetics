@@ -28,10 +28,12 @@ public class FallDamageManager implements Runnable {
 
     @Override
     public void run() {
-        for (Iterator<Entity> iterator = noFallDamage.iterator(); iterator.hasNext(); ) {
-            Entity ent = iterator.next();
-            if (ent.isOnGround())
-                iterator.remove();
+        synchronized (noFallDamage) {
+            for (Iterator<Entity> iterator = noFallDamage.iterator(); iterator.hasNext(); ) {
+                Entity ent = iterator.next();
+                if (ent.isOnGround())
+                    iterator.remove();
+            }
         }
         noFallDamage.addAll(queue);
         queue.clear();

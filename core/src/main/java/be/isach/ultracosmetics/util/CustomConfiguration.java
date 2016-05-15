@@ -41,6 +41,12 @@ public class CustomConfiguration extends YamlConfiguration {
     }
 
     @Override
+    public void addDefault(String path, Object value) {
+            if (!contains(path))
+                set(path, value);
+    }
+
+    @Override
     public void load(File file) throws IOException, InvalidConfigurationException {
         super.load(file);
 
