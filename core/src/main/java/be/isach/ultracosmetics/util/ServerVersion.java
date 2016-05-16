@@ -20,4 +20,8 @@ public enum ServerVersion {
     public String getName() {
         return name;
     }
+
+    public boolean is1_9(){
+        return name.contains("1.9");
+    }
 }

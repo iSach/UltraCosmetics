@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
                             if (cp != null && event.getPlayer() != null)
                                 cp.giveMenuItem();
                         }
-                    }, 5);
+                    }, 10);
                 }
                 if (UltraCosmetics.outdated)
                     if (event.getPlayer().isOp())
@@ -192,25 +192,6 @@ public class PlayerListener implements Listener {
             event.getItem().remove();
         }
     }
-
-    @EventHandler
-    public void onPlayerSwapoffHand(PlayerSwapHandItemsEvent event) {
-        if (event.getMainHandItem() != null
-                && event.getMainHandItem().hasItemMeta()
-                && event.getMainHandItem().getItemMeta().hasDisplayName()
-                && event.getMainHandItem().getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            event.setCancelled(true);
-        }
-        if (event.getOffHandItem() != null
-                && event.getOffHandItem().hasItemMeta()
-                && event.getOffHandItem().getItemMeta().hasDisplayName()
-                && event.getOffHandItem().getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            event.setCancelled(true);
-        }
-    }
-
 
     @EventHandler
     public void onPlayerInteractGhost(PlayerInteractAtEntityEvent event) {

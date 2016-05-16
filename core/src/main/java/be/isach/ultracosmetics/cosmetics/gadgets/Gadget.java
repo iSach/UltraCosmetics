@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.manager.GadgetManager;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PlayerUtils;
+import com.google.common.util.concurrent.ServiceManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -22,7 +23,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -90,13 +90,21 @@ public abstract class Gadget implements Listener {
      */
     private UUID owner;
 
+    /**
+     * an extra listener to keep 1.8 support
+     */
+    private Gadget_1_9 extraListener;
+
     public Gadget(final UUID owner, final GadgetType type) {
         this.permission = type.permission;
         this.type = type;
         this.affectPlayers = type.affectPlayers();
         if (!type.isEnabled())
             return;
-
+        if(UltraCosmetics.getServerVersion().is1_9()){
+            extraListener = new Gadget_1_9(this);
+            UltraCosmetics.getInstance().registerListener(extraListener);
+        }
         this.useTwoInteractMethods = false;
         if (owner != null) {
             this.owner = owner;
@@ -183,6 +191,11 @@ public abstract class Gadget implements Listener {
      */
     public void removeListener() {
         HandlerList.unregisterAll(this);
+        try {
+            HandlerList.unregisterAll(extraListener);
+        }catch(NullPointerException e){
+
+        }
     }
 
     /**
@@ -265,6 +278,7 @@ public abstract class Gadget implements Listener {
         try {
             HandlerList.unregisterAll(this);
             HandlerList.unregisterAll(listener);
+            HandlerList.unregisterAll(extraListener);
         } catch (Exception exc) {
         }
     }
@@ -311,6 +325,14 @@ public abstract class Gadget implements Listener {
      */
     public int getResultAmmoAmount() {
         return (int) SettingsManager.getConfig().get("Gadgets." + type.getConfigName() + ".Ammo.Result-Amount");
+    }
+
+    /**
+     *  get the gadget item
+     * @return gadget item
+     */
+    public ItemStack getItemStack(){
+        return itemStack;
     }
 
     /**
@@ -579,23 +601,6 @@ public abstract class Gadget implements Listener {
             }
         }
 
-        @EventHandler
-        public void cancelOffHandMove(PlayerSwapHandItemsEvent event) {
-            if (event.getMainHandItem() != null) {
-                if (event.getMainHandItem().equals(itemStack)) {
-                    event.setCancelled(true);
-                    event.getPlayer().updateInventory();
-                    return;
-                }
-            }
-            if (event.getOffHandItem() != null) {
-                if (event.getOffHandItem().equals(itemStack)) {
-                    event.setCancelled(true);
-                    event.getPlayer().updateInventory();
-                    return;
-                }
-            }
-        }
 
         /**
          * Cancel players from removing, picking the item in their inventory.

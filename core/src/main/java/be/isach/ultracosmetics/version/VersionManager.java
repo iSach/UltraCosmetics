@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.version;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
+import be.isach.ultracosmetics.listeners.PlayerListener_1_9;
 import be.isach.ultracosmetics.util.ReflectionUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.entity.Player;
@@ -25,6 +27,10 @@ public class VersionManager {
 
     public VersionManager(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
+        if(serverVersion.is1_9()){
+            UltraCosmetics.getInstance().registerListener(new PlayerListener_1_9());
+        }
+
     }
 
 
