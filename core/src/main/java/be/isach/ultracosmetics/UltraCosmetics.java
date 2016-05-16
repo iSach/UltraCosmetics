@@ -18,6 +18,7 @@ import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.cosmetics.suits.SuitType;
 import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
+import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.manager.*;
 import be.isach.ultracosmetics.mysql.MySQLConnection;
 import be.isach.ultracosmetics.mysql.Table;
@@ -186,7 +187,6 @@ public class UltraCosmetics extends JavaPlugin {
      * Determines if Treasure Chests are enabled.
      */
     treasureChests;
-
 
 
     /**
@@ -392,7 +392,7 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
         }
 
-        if(mcVersion.startsWith("v")) {
+        if (mcVersion.startsWith("v")) {
             try {
                 serverVersion = ServerVersion.valueOf(mcVersion);
             } catch (Exception exc) {
@@ -533,6 +533,8 @@ public class UltraCosmetics extends JavaPlugin {
         log("");
 
         registerListener(new PlayerListener());
+        if (serverVersion == ServerVersion.v1_9_R2 || serverVersion == ServerVersion.v1_9_R1)
+            registerListener(new PlayerSwapItemListener());
 
         log("");
         log("Registering commands...");
@@ -704,7 +706,7 @@ public class UltraCosmetics extends JavaPlugin {
         return versionManager.getActionBarUtil();
     }
 
-    public IItemGlower getItemGlower(){
+    public IItemGlower getItemGlower() {
         return versionManager.getItemGlower();
     }
 
@@ -724,17 +726,18 @@ public class UltraCosmetics extends JavaPlugin {
         return versionManager.getMorphs();
     }
 
-    public AAnvilGUI newAnvilGUI(Player player, AAnvilGUI.AnvilClickEventHandler handler){
-        return versionManager.newAnvilGUI(player , handler);
+    public AAnvilGUI newAnvilGUI(Player player, AAnvilGUI.AnvilClickEventHandler handler) {
+        return versionManager.newAnvilGUI(player, handler);
     }
 
     public IPathfinderUtil getPathfinderUtil() {
         return versionManager.getPathfinderUtil();
     }
 
-    public IPlayerFollower newPlayerFollower(Pet pet , Player player){
-        return versionManager.newPlayerFollower(pet , player);
+    public IPlayerFollower newPlayerFollower(Pet pet, Player player) {
+        return versionManager.newPlayerFollower(pet, player);
     }
+
     /**
      * Check if placeholders should be colored.
      *

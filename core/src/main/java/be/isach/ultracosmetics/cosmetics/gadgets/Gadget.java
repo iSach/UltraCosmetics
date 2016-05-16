@@ -314,6 +314,15 @@ public abstract class Gadget implements Listener {
     }
 
     /**
+     * Gets the gadget current Item Stack.
+     *
+     * @return
+     */
+    public ItemStack getItemStack() {
+        return itemStack;
+    }
+
+    /**
      * Opens Ammo Purchase Menu.
      */
     public void openAmmoPurchaseMenu() {
@@ -575,24 +584,6 @@ public abstract class Gadget implements Listener {
                         player.updateInventory();
                         return;
                     }
-                }
-            }
-        }
-
-        @EventHandler
-        public void cancelOffHandMove(PlayerSwapHandItemsEvent event) {
-            if (event.getMainHandItem() != null) {
-                if (event.getMainHandItem().equals(itemStack)) {
-                    event.setCancelled(true);
-                    event.getPlayer().updateInventory();
-                    return;
-                }
-            }
-            if (event.getOffHandItem() != null) {
-                if (event.getOffHandItem().equals(itemStack)) {
-                    event.setCancelled(true);
-                    event.getPlayer().updateInventory();
-                    return;
                 }
             }
         }
