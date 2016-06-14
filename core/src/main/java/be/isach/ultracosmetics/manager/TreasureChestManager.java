@@ -79,7 +79,7 @@ public class TreasureChestManager implements Listener {
                     case v1_8_R3:
                         ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.valueOf("ANVIL_LAND"), .2f, 1.2f);
                         break;
-                    case v1_9_R1:
+                    default:
                         ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
                         break;
                 }
@@ -101,7 +101,7 @@ public class TreasureChestManager implements Listener {
                     case v1_8_R3:
                         ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.valueOf("ANVIL_LAND"), .2f, 1.2f);
                         break;
-                    case v1_9_R1:
+                    default:
                         ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
                         break;
                 }

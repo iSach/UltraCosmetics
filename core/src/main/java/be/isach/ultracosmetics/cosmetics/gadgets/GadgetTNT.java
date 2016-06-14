@@ -78,7 +78,7 @@ public class GadgetTNT extends Gadget {
                 case v1_8_R3:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 1.4f, 1.5f);
                     break;
-                case v1_9_R1:
+                default:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
                     break;
             }

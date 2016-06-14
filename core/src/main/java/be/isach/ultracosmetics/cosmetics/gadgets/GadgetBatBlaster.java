@@ -92,7 +92,7 @@ public class GadgetBatBlaster extends Gadget {
                                 case v1_8_R3:
                                     bat.getWorld().playSound(bat.getLocation(), Sound.valueOf("BAT_HURT"), 1.0f, 1.0f);
                                     break;
-                                case v1_9_R1:
+                                default:
                                     bat.getWorld().playSound(bat.getLocation(), Sound.ENTITY_BAT_HURT, 1.0f, 1.0f);
                                     break;
                             }

@@ -63,7 +63,7 @@ public class MountFlyingShip extends Mount {
                 case v1_8_R3:
                     currentboom.getWorld().playSound(currentboom.getLocation(), Sound.valueOf("CLICK"), 1.0f, 1.0f);
                     break;
-                case v1_9_R1:
+                default:
                     currentboom.getWorld().playSound(currentboom.getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
                     break;
             }
@@ -85,7 +85,7 @@ public class MountFlyingShip extends Mount {
                     case v1_8_R3:
                         l.getWorld().playSound(l, Sound.valueOf("EXPLODE"), 1.0f, 1.0f);
                         break;
-                    case v1_9_R1:
+                    default:
                         l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
                         break;
                 }
@@ -133,7 +133,7 @@ public class MountFlyingShip extends Mount {
                 case v1_8_R3:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("ITEM_PICKUP"), 1.0f, 1.0f);
                     break;
-                case v1_9_R1:
+                default:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0f, 1.0f);
                     break;
             }
@@ -144,7 +144,7 @@ public class MountFlyingShip extends Mount {
             case v1_8_R3:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CLICK"), 1.0f, 1.0f);
                 break;
-            case v1_9_R1:
+            default:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
                 break;
         }

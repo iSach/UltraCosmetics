@@ -37,7 +37,7 @@ public class GadgetChickenator extends Gadget {
                 getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CHICKEN_IDLE"), 1.4f, 1.5f);
                 getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 0.3f, 1.5f);
                 break;
-            case v1_9_R1:
+            default:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CHICKEN_AMBIENT, 1.4f, 1.5f);
                 getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.3f, 1.5f);
                 break;
@@ -50,7 +50,7 @@ public class GadgetChickenator extends Gadget {
                     case v1_8_R3:
                         getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CHICKEN_HURT"), 1.4f, 1.5f);
                         break;
-                    case v1_9_R1:
+                    default:
                         getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CHICKEN_HURT, 1.4f, 1.5f);
                         break;
                 }

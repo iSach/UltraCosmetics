@@ -44,7 +44,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
                 case v1_8_R3:
                     getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("BURP"), 1.4f, 1.5f);
                     break;
-                case v1_9_R1:
+                default:
                     getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_PLAYER_BURP, 1.4f, 1.5f);
                     break;
             }
@@ -62,7 +62,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
             case v1_8_R3:
                 getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 1.4f, 1.5f);
                 break;
-            case v1_9_R1:
+            default:
                 getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
                 break;
         }

@@ -45,7 +45,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                     case v1_8_R3:
                         getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("DIG_SNOW"), .5f, 1.5f);
                         break;
-                    case v1_9_R1:
+                    default:
                         getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_SNOW_BREAK, .5f, 1.5f);
                         break;
                 }

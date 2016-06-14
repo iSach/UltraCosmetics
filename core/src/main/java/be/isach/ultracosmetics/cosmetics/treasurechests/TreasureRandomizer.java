@@ -317,7 +317,7 @@ public class TreasureRandomizer {
             case v1_8_R3:
                 loc.getWorld().playSound(loc, Sound.valueOf("CHEST_OPEN"), 1.4f, 1.5f);
                 break;
-            case v1_9_R1:
+            default:
                 loc.getWorld().playSound(loc, Sound.BLOCK_CHEST_OPEN, 1.4f, 1.5f);
                 break;
         }

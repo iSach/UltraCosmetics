@@ -92,7 +92,7 @@ public class GadgetColorBomb extends Gadget {
                             case v1_8_R3:
                                 i.getWorld().playSound(i.getLocation(), Sound.valueOf("CHICKEN_EGG_POP"), 0.2f, 1.0f);
                                 break;
-                            case v1_9_R1:
+                            default:
                                 i.getWorld().playSound(i.getLocation(), Sound.ENTITY_CHICKEN_EGG, 0.2f, 1.0f);
                                 break;
                         }

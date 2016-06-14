@@ -101,7 +101,7 @@ public class TreasureChest implements Listener {
                                                 case v1_8_R3:
                                                     getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("ANVIL_LAND"), 1.4f, 1.5f);
                                                     break;
-                                                case v1_9_R1:
+                                                default:
                                                     getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_ANVIL_LAND, 1.4f, 1.5f);
                                                     break;
                                             }
@@ -390,7 +390,7 @@ public class TreasureChest implements Listener {
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
-                        spawnHologram(b.getLocation().clone().add(0.5D, UltraCosmetics.getInstance().getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
+                        spawnHologram(b.getLocation().clone().add(0.5D, UltraCosmetics.getInstance().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0 ? -0.7 : 0.3D, 0.5D), nameas);
                     }
                 }, 15L);
 
@@ -483,7 +483,7 @@ public class TreasureChest implements Listener {
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
-                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, UltraCosmetics.getInstance().getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
+                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, UltraCosmetics.getInstance().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0 ? -0.7 : 0.3D, 0.5D), nameas);
                     }
                 }
                         , 15L);

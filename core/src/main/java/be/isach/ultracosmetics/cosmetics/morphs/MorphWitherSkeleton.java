@@ -62,7 +62,7 @@ public class MorphWitherSkeleton extends Morph {
                 case v1_8_R3:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("SKELETON_HURT"), 0.4f, (float)Math.random() + 1);
                     break;
-                case v1_9_R1:
+                default:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_SKELETON_HURT, 0.4f, (float)Math.random() + 1);
                     break;
             }
