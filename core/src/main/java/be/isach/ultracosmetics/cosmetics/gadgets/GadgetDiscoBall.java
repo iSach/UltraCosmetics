@@ -104,8 +104,7 @@ public class GadgetDiscoBall extends Gadget {
     void onUpdate() {
         if (running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
-            if (UltraCosmetics.getInstance().getServerVersion() != ServerVersion.v1_9_R1)
-                armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
+            armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
             UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
             UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
             Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));

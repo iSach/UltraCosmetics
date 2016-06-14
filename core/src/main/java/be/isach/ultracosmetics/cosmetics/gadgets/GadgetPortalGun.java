@@ -42,7 +42,7 @@ public class GadgetPortalGun extends Gadget {
             case v1_8_R3:
                 getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("ENDERMAN_TELEPORT"), .2f, 1.5f);
                 break;
-            case v1_9_R1:
+            default:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2f, 1.5f);
                 break;
         }
@@ -71,7 +71,7 @@ public class GadgetPortalGun extends Gadget {
             case v1_8_R3:
                 getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("ENDERMAN_TELEPORT"), .2f, 1.5f);
                 break;
-            case v1_9_R1:
+            default:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2f, 1.5f);
                 break;
         }

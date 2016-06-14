@@ -47,7 +47,7 @@ public class GadgetSmashDown extends Gadget {
             case v1_8_R3:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("FIREWORK_LAUNCH"), 2.0f, 1.0f);
                 break;
-            case v1_9_R1:
+            default:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 2.0f, 1.0f);
                 break;
         }
@@ -92,7 +92,7 @@ public class GadgetSmashDown extends Gadget {
             case v1_8_R3:
                 loc.getWorld().playSound(loc, Sound.valueOf("EXPLODE"), 2.0f, 1.0f);
                 break;
-            case v1_9_R1:
+            default:
                 loc.getWorld().playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f);
                 break;
         }
@@ -169,7 +169,7 @@ public class GadgetSmashDown extends Gadget {
                 case v1_8_R3:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("STEP_STONE"), 1.0f, 1.0f);
                     break;
-                case v1_9_R1:
+                default:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_STONE_STEP, 1.0f, 1.0f);
                     break;
             }

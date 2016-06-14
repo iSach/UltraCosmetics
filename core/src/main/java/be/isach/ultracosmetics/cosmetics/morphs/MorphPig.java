@@ -50,7 +50,7 @@ public class MorphPig extends Morph {
                                     case v1_8_R3:
                                         getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("PIG_IDLE"), 0.2f, 1.5f);
                                         break;
-                                    case v1_9_R1:
+                                    default:
                                         getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_PIG_AMBIENT, 0.2f, 1.5f);
                                         break;
                                 }

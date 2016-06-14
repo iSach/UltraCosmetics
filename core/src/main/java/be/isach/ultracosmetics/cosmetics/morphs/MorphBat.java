@@ -35,7 +35,7 @@ public class MorphBat extends Morph {
                 case v1_8_R3:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("BAT_LOOP"), 0.4f, 1.0f);
                     break;
-                case v1_9_R1:
+                default:
                     getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_BAT_LOOP, 0.4f, 1.0f);
                     break;
             }

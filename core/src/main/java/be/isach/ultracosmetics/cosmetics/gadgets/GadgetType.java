@@ -171,7 +171,7 @@ public enum GadgetType {
     }
 
     public boolean isEnabled() {
-        if(this == ROCKET && UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1) return false;
+        if(this == ROCKET && UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) return false;
         return SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Enabled");
     }
 }

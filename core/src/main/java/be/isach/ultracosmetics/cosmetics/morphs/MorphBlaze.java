@@ -40,7 +40,7 @@ public class MorphBlaze extends Morph {
                             case v1_8_R3:
                                 getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("FIZZ"), 0.1f, 1.5f);
                                 break;
-                            case v1_9_R1:
+                            default:
                                 getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 0.1f, 1.5f);
                                 break;
                         }

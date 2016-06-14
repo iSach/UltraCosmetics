@@ -53,7 +53,7 @@ public class GadgetFunGun extends Gadget {
             case v1_8_R3:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CAT_MEOW"), 1.4f, 1.5f);
                 break;
-            case v1_9_R1:
+            default:
                 getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CAT_PURREOW, 1.4f, 1.5f);
                 break;
         }

@@ -379,8 +379,8 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9")) {
-            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or 1.9 to work!\n\n----------------------------");
+        if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9") && !getServer().getVersion().contains("1.10")) {
+            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8, 1.9 or 1.10 to work!\n\n----------------------------");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -409,6 +409,13 @@ public class UltraCosmetics extends JavaPlugin {
 
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
         log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded... (server: " + serverVersion.getName() + ")");
+
+        if (serverVersion == ServerVersion.v1_10_R1)
+        {
+            log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+            log("WARNING : You're running the 1.10 version of UltraCosmetics. This is a simply adaptation of the 1.9.X version for 1.10, and can contains some bugs.");
+            log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+        }
 
         log("");
         log("Thanks for having downloaded it!");
@@ -533,7 +540,7 @@ public class UltraCosmetics extends JavaPlugin {
         log("");
 
         registerListener(new PlayerListener());
-        if (serverVersion == ServerVersion.v1_9_R2 || serverVersion == ServerVersion.v1_9_R1)
+        if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0)
             registerListener(new PlayerSwapItemListener());
 
         log("");

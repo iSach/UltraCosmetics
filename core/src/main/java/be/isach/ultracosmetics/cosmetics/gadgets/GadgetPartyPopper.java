@@ -34,7 +34,7 @@ public class GadgetPartyPopper extends Gadget {
                 case v1_8_R3:
                     getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("CHICKEN_EGG_POP"), 1.0f, 1.0f);
                     break;
-                case v1_9_R1:
+                default:
                     getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_CHICKEN_EGG, 1.0f, 1.0f);
                     break;
             }

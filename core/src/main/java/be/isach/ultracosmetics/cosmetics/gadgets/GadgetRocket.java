@@ -89,7 +89,7 @@ public class GadgetRocket extends Gadget {
                                 case v1_8_R3:
                                     getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("NOTE_STICKS"), 1.0f, 1.0f);
                                     break;
-                                case v1_9_R1:
+                                default:
                                     getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_NOTE_BASEDRUM, 1.0f, 1.0f);
                                     break;
                             }
@@ -105,7 +105,7 @@ public class GadgetRocket extends Gadget {
                                 case v1_8_R3:
                                     getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 1.0f, 1.0f);
                                     break;
-                                case v1_9_R1:
+                                default:
                                     getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
                                     break;
                             }
@@ -150,7 +150,7 @@ public class GadgetRocket extends Gadget {
                                         case v1_8_R3:
                                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.valueOf("EXPLODE"), 3.0f, 1.0f);
                                             break;
-                                        case v1_9_R1:
+                                        default:
                                             getPlayer().getWorld().playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 3.0f, 1.0f);
                                             break;
                                     }
@@ -183,7 +183,7 @@ public class GadgetRocket extends Gadget {
                 case v1_8_R3:
                     armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.valueOf("FIZZ"), 0.025f, 1.0f);
                     break;
-                case v1_9_R1:
+                default:
                     armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.BLOCK_LAVA_EXTINGUISH, 0.025f, 1.0f);
                     break;
             }
@@ -201,7 +201,7 @@ public class GadgetRocket extends Gadget {
                     armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.valueOf("BAT_LOOP"), 1.5f, 1.0f);
                     armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.valueOf("FIZZ"), 0.025f, 1.0f);
                     break;
-                case v1_9_R1:
+                default:
                     armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.ENTITY_BAT_LOOP, 1.5f, 1.0f);
                     armorStand.getWorld().playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.BLOCK_LAVA_EXTINGUISH, 0.025f, 1.0f);
                     break;

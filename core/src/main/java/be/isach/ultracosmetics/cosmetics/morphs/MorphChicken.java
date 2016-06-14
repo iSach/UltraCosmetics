@@ -65,7 +65,7 @@ public class MorphChicken extends Morph {
                     case v1_8_R3:
                         getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CHICKEN_EGG_POP"), .5f, 1.5f);
                         break;
-                    case v1_9_R1:
+                    default:
                         getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CHICKEN_EGG, .5f, 1.5f);
                         break;
                 }
@@ -82,7 +82,7 @@ public class MorphChicken extends Morph {
                             case v1_8_R3:
                                 i.getWorld().playSound(i.getLocation(), Sound.valueOf("ZOMBIE_WOODBREAK"), .05f, 1f);
                                 break;
-                            case v1_9_R1:
+                            default:
                                 i.getWorld().playSound(i.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_DOOR_WOOD, .05f, 1f);
                                 break;
                         }
