@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.listeners.v1_9;
 
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,6 +36,21 @@ public class PlayerSwapItemListener implements Listener {
                     return;
                 }
             }
+        }
+
+        if (event.getMainHandItem() != null
+                && event.getMainHandItem().hasItemMeta()
+                && event.getMainHandItem().getItemMeta().hasDisplayName()
+                && event.getMainHandItem().getItemMeta().getDisplayName()
+                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            event.setCancelled(true);
+        }
+        if (event.getOffHandItem() != null
+                && event.getOffHandItem().hasItemMeta()
+                && event.getOffHandItem().getItemMeta().hasDisplayName()
+                && event.getOffHandItem().getItemMeta().getDisplayName()
+                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            event.setCancelled(true);
         }
     }
 

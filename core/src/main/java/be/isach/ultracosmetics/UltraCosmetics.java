@@ -540,7 +540,7 @@ public class UltraCosmetics extends JavaPlugin {
         log("");
 
         registerListener(new PlayerListener());
-        if (serverVersion == ServerVersion.v1_9_R2 || serverVersion == ServerVersion.v1_9_R1)
+        if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0)
             registerListener(new PlayerSwapItemListener());
 
         log("");
