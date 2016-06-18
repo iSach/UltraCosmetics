@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 /**
  * Created by Sacha on 20/12/15.
  */
-public class GadgetsCommand extends SubCommand {
+public class SubCommandGadgets extends SubCommand {
 
 
-    public GadgetsCommand() {
+    public SubCommandGadgets() {
         super("Toggle Gadgets", "ultracosmetics.command.gadgets", "/uc gadgets", "gadgets");
     }
 

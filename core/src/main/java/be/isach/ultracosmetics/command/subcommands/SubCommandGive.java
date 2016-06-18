@@ -16,9 +16,9 @@ import java.util.UUID;
 /**
  * Created by Sacha on 21/12/15.
  */
-public class GiveCommand extends SubCommand {
+public class SubCommandGive extends SubCommand {
 
-    public GiveCommand() {
+    public SubCommandGive() {
         super("Gives Ammo/Key.", "ultracosmetics.command.give", "/uc give <key|ammo> <amount> [player]", "give");
     }
 

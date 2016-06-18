@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.v1_9_R2.pets;
 
+import be.isach.ultracosmetics.v1_9_R2.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_9_R2.customentities.Pumpling;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -97,7 +98,7 @@ public abstract class CustomEntityPet extends Pet {
         double z = getPlayer().getLocation().getZ();
 
         customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        Pumpling.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
+        CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
@@ -118,7 +119,7 @@ public abstract class CustomEntityPet extends Pet {
     @Override
     protected void removeEntity() {
         getCustomEntity().dead = true;
-        Pumpling.customEntities.remove(customEntity);
+        CustomEntities.customEntities.remove(customEntity);
     }
 
     @Override

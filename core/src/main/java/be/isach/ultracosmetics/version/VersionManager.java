@@ -27,7 +27,6 @@ public class VersionManager {
         this.serverVersion = serverVersion;
     }
 
-
     @SuppressWarnings("unchecked")
     public void load() throws ReflectiveOperationException {
         module = loadModule("Module");

@@ -47,5 +47,5 @@ public interface IEntityUtil {
 
     void chickenFall(Player player);
 
-    void sendTeleportPacket(Player player , Entity entity);
+    void sendTeleportPacket(Player player, Entity entity);
 }

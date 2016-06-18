@@ -20,9 +20,9 @@ import org.bukkit.entity.Player;
 /**
  * Created by Sacha on 21/12/15.
  */
-public class ToggleCommand extends SubCommand {
+public class SubCommandToggle extends SubCommand {
 
-    public ToggleCommand() {
+    public SubCommandToggle() {
         super("Toggles a cosmetic.", "ultracosmetics.command.toggle", "/uc toggle <type> <cosmetic> [player]", "toggle");
     }
 

@@ -72,7 +72,7 @@ public enum MountType {
     }
 
     public boolean isEnabled() {
-        if((this == DRAGON || this == FLYINGSHIP || this == SPIDER || this == SKYSQUID || this == SLIME) && (UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1 || UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R2)) return false;
+        if((this == FLYINGSHIP || this == SKYSQUID) && (UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1 || UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R2)) return false;
         return SettingsManager.getConfig().getBoolean("Mounts." + configName + ".Enabled");
     }
 

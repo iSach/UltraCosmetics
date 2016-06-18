@@ -1,7 +1,7 @@
 dependencies {
     compile 'spigot:spigot:latest'
-    compile 'com.comphenix.protocol:ProtocolLib:3.6.4'
-    compile ('LibsDisguises:LibsDisguises:8.2.6') {
+//    compile 'com.comphenix.protocol:ProtocolLib:3.6.4'
+    compile ('LibsDisguises:LibsDisguises:9.0.7') {
         exclude group: 'org.spigotmc'
     }
     compile 'com.xxmicloxx:NoteBlockAPI:1.0-SNAPSHOT'

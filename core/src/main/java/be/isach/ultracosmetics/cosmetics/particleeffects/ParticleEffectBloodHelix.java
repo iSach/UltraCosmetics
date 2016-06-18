@@ -29,8 +29,8 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
         double particles = 100;
 
         for (int step = 0; step < 100; step += 4) {
-            double inc = (2 * Math.PI) / particles;
-            double angle = step * inc + i;
+            double interval = (2 * Math.PI) / particles;
+            double angle = step * interval + i;
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
@@ -40,8 +40,8 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
             radius -= 0.044f;
         }
         for (int step = 0; step < 100; step += 4) {
-            double inc = (2 * Math.PI) / particles;
-            double angle = step * inc + i + 3.5;
+            double interval = (2 * Math.PI) / particles;
+            double angle = step * interval + i + 3.5;
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius2);
             v.setZ(Math.sin(angle) * radius2);

@@ -28,7 +28,11 @@ import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.version.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -541,13 +545,13 @@ public class UltraCosmetics extends JavaPlugin {
         // Register the command
 
         commandManager = new CommandManager(this);
-        commandManager.registerCommand(new GadgetsCommand());
-        commandManager.registerCommand(new SelfViewCommand());
-        commandManager.registerCommand(new MenuCommand());
-        commandManager.registerCommand(new GiveCommand());
-        commandManager.registerCommand(new ToggleCommand());
-        commandManager.registerCommand(new ClearCommand());
-        commandManager.registerCommand(new TreasureCommand());
+        commandManager.registerCommand(new SubCommandGadgets());
+        commandManager.registerCommand(new SubCommandSelfView());
+        commandManager.registerCommand(new SubCommandMenu());
+        commandManager.registerCommand(new SubCommandGive());
+        commandManager.registerCommand(new SubCommandToggle());
+        commandManager.registerCommand(new SubCommandClear());
+        commandManager.registerCommand(new SubCommandTreasure());
 
         log("Registered command: '/ultracosmetics'.");
         log("Registered command: '/uc'.");

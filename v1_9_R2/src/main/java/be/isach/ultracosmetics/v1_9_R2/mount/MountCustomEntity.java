@@ -40,7 +40,7 @@ public abstract class MountCustomEntity extends Mount {
         else if (getType() == MountType.SLIME)
             customEntity = new CustomSlime(((CraftPlayer) getPlayer()).getHandle().getWorld());
         else if (getType() == MountType.SPIDER)
-            customEntity = new RideableSpider(((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new RideableSpider(((CraftWorld) getPlayer().getWorld()).getHandle());
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();

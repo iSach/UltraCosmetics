@@ -16,30 +16,8 @@ import java.util.List;
  */
 public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
-    boolean isCustomEntity;
-
-    /**
-     * Static list of all the custom entities.
-     */
-    public static List<Entity> customEntities = new ArrayList();
-
     public Pumpling(World world) {
         super(world);
-
-        final Pumpling instance = this;
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (customEntities.contains(instance)) {
-                    isCustomEntity = true;
-                    UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(getBukkitEntity());
-                    setInvisible(true);
-                    setBaby(true);
-                    setSlot(EnumItemSlot.HEAD, new ItemStack(Blocks.PUMPKIN));
-                }
-            }
-        }, 4);
     }
 
     public org.bukkit.entity.Entity getEntity() {
@@ -48,7 +26,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     @Override
     protected SoundEffect G() { // say
-        if (isCustomEntity) {
+        if (!CustomEntities.customEntities.contains(this)) {
             a(SoundEffects.bM, 0.05f, 2f);
             return null;
         } else return super.G();
@@ -56,28 +34,31 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     @Override
     protected SoundEffect bR() { // Hurt
-        if (isCustomEntity) return null;
+        if (!CustomEntities.customEntities.contains(this)) return null;
         else return super.bR();
     }
 
     @Override
     protected SoundEffect bS() { // Death
-        if (isCustomEntity) return null;
+        if (!CustomEntities.customEntities.contains(this)) return null;
         else return super.bS();
     }
 
     @Override
     protected void a(BlockPosition blockposition, Block block) {
-        if (isCustomEntity) return;
+        if (!CustomEntities.customEntities.contains(this)) return;
         else super.a(blockposition, block);
     }
 
     @Override
     public void m() {
         super.m();
-        if (isCustomEntity) {
-            fireTicks = 0;
-            UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
-        }
+        if (!CustomEntities.customEntities.contains(this)) return;
+        fireTicks = 0;
+        UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
+        UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(getBukkitEntity());
+        setInvisible(true);
+        setBaby(true);
+        setSlot(EnumItemSlot.HEAD, new ItemStack(Blocks.PUMPKIN));
     }
 }

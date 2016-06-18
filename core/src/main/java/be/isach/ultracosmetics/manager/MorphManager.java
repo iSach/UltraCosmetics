@@ -226,7 +226,6 @@ public class MorphManager implements Listener {
                     Morph morph = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
                     morph.disguise = new me.libraryaddict.disguise.disguisetypes.MobDisguise(morph.getType().getDisguiseType());
                     me.libraryaddict.disguise.DisguiseAPI.disguiseToAll(event.getWhoClicked(), morph.disguise);
-//                    morph.disguise.setShowName(true);
                     if (!UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).canSeeSelfMorph())
                         morph.disguise.setViewSelfDisguise(false);
                 }
@@ -238,9 +237,8 @@ public class MorphManager implements Listener {
                     Morph morph = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentMorph;
                     morph.disguise = new me.libraryaddict.disguise.disguisetypes.MobDisguise(morph.getType().getDisguiseType());
                     me.libraryaddict.disguise.DisguiseAPI.disguiseToAll(event.getWhoClicked(), morph.disguise);
-//                    morph.disguise.setShowName(true);
                     if (!UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).canSeeSelfMorph())
-                        morph.disguise.setViewSelfDisguise(false);
+                        morph.getDisguise().setViewSelfDisguise(false);
                 }
                 return;
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Menu.Next-Page"))) {

@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 /**
  * Created by Sacha on 22/12/15.
  */
-public class TreasureCommand extends SubCommand {
+public class SubCommandTreasure extends SubCommand {
 
-    public TreasureCommand() {
+    public SubCommandTreasure() {
         super("Starts Treasure Chest.", "ultracosmetics.command.treasure", "/uc treasure <player> <x> <y> <z> <world>", "treasure");
     }
 

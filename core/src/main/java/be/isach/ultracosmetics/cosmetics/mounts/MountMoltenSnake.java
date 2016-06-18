@@ -52,13 +52,6 @@ public class MountMoltenSnake extends Mount {
                     entity.teleport(lastLocation);
                 else {
                     entity.teleport(lastLocation.clone().add(0, -1.3, 0));
-//                    new Thread() {
-//                        @Override
-//                        public void run() {
-//                            for (Player player : getPlayer().getWorld().getPlayers())
-//                                PacketSender.send(player, new PacketPlayOutEntityTeleport(((CraftArmorStand) entity).getHandle()));
-//                        }
-//                    }.run();
                 }
                 ArmorStand as = ((ArmorStand) entity);
                 as.setHeadPose(new EulerAngle(Math.toRadians(lastPitch), Math.toRadians(lastYaw), 0));

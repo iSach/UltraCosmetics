@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 /**
  * Created by Sacha on 22/12/15.
  */
-public class ClearCommand extends SubCommand {
+public class SubCommandClear extends SubCommand {
 
-    public ClearCommand() {
+    public SubCommandClear() {
         super("Clears a Cosmetic.", "ultracosmetics.command.clear", "/uc clear <player> [type]", "clear");
     }
 

@@ -11,10 +11,9 @@ import org.bukkit.entity.Player;
 /**
  * Created by Sacha on 21/12/15.
  */
-public class MenuCommand extends SubCommand {
+public class SubCommandMenu extends SubCommand {
 
-
-    public MenuCommand() {
+    public SubCommandMenu() {
         super("Opens Specified Menu", "ultracosmetics.command.menu", "/uc menu <menu> [page]", "menu");
     }
 

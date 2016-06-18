@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 /**
  * Created by Sacha on 20/12/15.
  */
-public class SelfViewCommand extends SubCommand {
+public class SubCommandSelfView extends SubCommand {
 
-    public SelfViewCommand() {
+    public SubCommandSelfView() {
         super("Toggle Morph Self View", "ultracosmetics.command.selfview", "/uc selfview", "selfview");
     }
 

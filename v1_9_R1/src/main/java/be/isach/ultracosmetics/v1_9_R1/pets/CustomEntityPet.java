@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.v1_9_R1.pets;
 
+import be.isach.ultracosmetics.v1_9_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_9_R1.customentities.Pumpling;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -33,7 +34,6 @@ public abstract class CustomEntityPet extends Pet {
 
     public CustomEntityPet(UUID owner, PetType petType) {
         super(owner, petType);
-
     }
 
     @Override
@@ -97,8 +97,8 @@ public abstract class CustomEntityPet extends Pet {
         double z = getPlayer().getLocation().getZ();
 
         customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        Pumpling.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);
+        CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
@@ -118,7 +118,7 @@ public abstract class CustomEntityPet extends Pet {
     @Override
     protected void removeEntity() {
         getCustomEntity().dead = true;
-        Pumpling.customEntities.remove(customEntity);
+        CustomEntities.customEntities.remove(((CraftEntity) customEntity.getEntity()).getHandle());
     }
 
     @Override

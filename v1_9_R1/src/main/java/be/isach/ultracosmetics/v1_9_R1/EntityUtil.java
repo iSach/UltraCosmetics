@@ -30,11 +30,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void setPassenger(org.bukkit.entity.Entity vehicle, org.bukkit.entity.Entity passenger) {
-        Entity craftVehicle = ((CraftEntity) vehicle).getHandle();
-        Entity craftPassenger = ((CraftEntity) passenger).getHandle();
-        if (craftVehicle.passengers.size() >= 1)
-            craftVehicle.passengers.set(0, craftPassenger);
-        else craftVehicle.passengers.add(craftPassenger);
+        vehicle.setPassenger(passenger);
     }
 
     @Override
@@ -159,6 +155,10 @@ public class EntityUtil implements IEntityUtil {
 
         ec.pitch = player.getLocation().getPitch();
         ec.yaw = player.getLocation().getYaw() - 180;
+
+        Vector v = ec.getBukkitEntity().getLocation().getDirection();
+        Vector v1 = ec.getBukkitEntity().getLocation().getDirection().multiply(-1);
+        ec.move(v1.getX(), v.getY(), v1.getZ());
     }
 
     @Override
@@ -174,6 +174,8 @@ public class EntityUtil implements IEntityUtil {
 
         ec.pitch = player.getLocation().getPitch();
         ec.yaw = player.getLocation().getYaw() - 180;
+
+        ec.move(1, 0, 0);
     }
 
     @Override

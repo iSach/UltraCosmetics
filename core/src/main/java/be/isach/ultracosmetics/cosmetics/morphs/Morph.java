@@ -56,7 +56,7 @@ public abstract class Morph implements Listener {
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
         if (!UltraCosmetics.getCustomPlayer(getPlayer()).canSeeSelfMorph())
             disguise.setViewSelfDisguise(false);
-        disguise.setModifyBoundingBox(true);
+//        disguise.setModifyBoundingBox(true);
 //        disguise.setShowName(true);
     }
 
@@ -83,6 +83,13 @@ public abstract class Morph implements Listener {
      */
     public MorphType getType() {
         return this.type;
+    }
+
+    /**
+     * @return Disguise.
+     */
+    public MobDisguise getDisguise() {
+        return disguise;
     }
 
     /**
