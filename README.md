@@ -12,3 +12,5 @@ Create the file extending Gadget/Pet/etc... and make your gadget. (you can have 
 know how to do)
 
 Done! :)
+
+Nightly Builds: http://ci.isach.be/job/UltraCosmetics/
