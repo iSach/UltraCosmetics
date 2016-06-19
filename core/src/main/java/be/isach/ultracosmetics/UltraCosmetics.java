@@ -28,11 +28,7 @@ import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.version.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -383,7 +379,7 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9")) {
+        if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9") && !getServer().getVersion().contains("1.10")) {
             System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or 1.9 to work!\n\n----------------------------");
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -404,6 +400,8 @@ public class UltraCosmetics extends JavaPlugin {
                 Bukkit.getPluginManager().disablePlugin(this);
             }
         } else serverVersion = ServerVersion.v1_8_R3;
+
+        SoundUtil.setServerVersion(serverVersion);
 
         if (getServer().getVersion().contains("Spigot"))
             usingSpigot = true;
@@ -537,7 +535,7 @@ public class UltraCosmetics extends JavaPlugin {
         log("");
 
         registerListener(new PlayerListener());
-        if (serverVersion == ServerVersion.v1_9_R2 || serverVersion == ServerVersion.v1_9_R1)
+        if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0)
             registerListener(new PlayerSwapItemListener());
 
         log("");
@@ -679,8 +677,8 @@ public class UltraCosmetics extends JavaPlugin {
         log("");
         log("");
         log("UltraCosmetics successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
-        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
+        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
     }
 
     /**

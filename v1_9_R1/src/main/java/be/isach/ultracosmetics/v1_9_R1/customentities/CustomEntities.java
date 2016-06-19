@@ -14,8 +14,8 @@ public enum CustomEntities {
     PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, EntityZombie.class, Pumpling.class),
     SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, EntitySlime.class, CustomSlime.class),
     RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, EntitySpider.class, RideableSpider.class),
-    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, EntityGuardian.class, CustomGuardian.class),
-    PET_RABBIT("PetRabbit", EntityType.RABBIT.getTypeId(), EntityType.RABBIT, EntityRabbit.class, CustomEntityRabbit.class);
+    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, EntityGuardian.class, CustomGuardian.class);
+
 
     public static List<Entity> customEntities = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public enum CustomEntities {
         for (BiomeBase biomeBase : BiomeBase.i) {
             if (biomeBase == null)
                 break;
-            for (String field : new String[] { "u", "v", "w", "x" })
+            for (String field : new String[]{"u", "v", "w", "x"})
                 try {
                     Field list = BiomeBase.class.getDeclaredField(field);
                     list.setAccessible(true);
@@ -107,7 +107,7 @@ public enum CustomEntities {
             if (biomeBase == null)
                 break;
 
-            for (String field : new String[] { "u", "v", "w", "x" })
+            for (String field : new String[]{"u", "v", "w", "x"})
                 try {
                     Field list = BiomeBase.class.getDeclaredField(field);
                     list.setAccessible(true);
@@ -131,7 +131,7 @@ public enum CustomEntities {
         return field.get(null);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static void a(Class paramClass, String paramString, int paramInt) {
         try {
             ((Map) getPrivateStatic(EntityTypes.class, "c")).put(paramString, paramClass);
@@ -142,6 +142,7 @@ public enum CustomEntities {
                     paramInt);
             ((Map) getPrivateStatic(EntityTypes.class, "g")).put(paramString,
                     paramInt);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 }

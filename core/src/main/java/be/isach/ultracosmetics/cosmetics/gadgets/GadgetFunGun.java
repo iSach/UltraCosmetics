@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -49,14 +50,7 @@ public class GadgetFunGun extends Gadget {
 
         UtilParticles.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
         UtilParticles.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
-        switch (UltraCosmetics.getServerVersion()) {
-            case v1_8_R3:
-                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CAT_MEOW"), 1.4f, 1.5f);
-                break;
-            case v1_9_R1:
-                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CAT_PURREOW, 1.4f, 1.5f);
-                break;
-        }
+        SoundUtil.playSound(getPlayer(), Sound.ENTITY_CAT_PURREOW, 1.4f, 1.5f);
     }
 
     @Override

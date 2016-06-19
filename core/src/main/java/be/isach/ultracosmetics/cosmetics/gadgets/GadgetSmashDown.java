@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -43,14 +44,7 @@ public class GadgetSmashDown extends Gadget {
 
     @Override
     void onRightClick() {
-        switch (UltraCosmetics.getServerVersion()) {
-            case v1_8_R3:
-                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("FIREWORK_LAUNCH"), 2.0f, 1.0f);
-                break;
-            case v1_9_R1:
-                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 2.0f, 1.0f);
-                break;
-        }
+        SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final int taskId = Bukkit.getScheduler().runTaskTimer(UltraCosmetics.getInstance(), new Runnable() {
             @Override
@@ -88,14 +82,7 @@ public class GadgetSmashDown extends Gadget {
 
     private void playBoomEffect() {
         final Location loc = getPlayer().getLocation();
-        switch (UltraCosmetics.getServerVersion()) {
-            case v1_8_R3:
-                loc.getWorld().playSound(loc, Sound.valueOf("EXPLODE"), 2.0f, 1.0f);
-                break;
-            case v1_9_R1:
-                loc.getWorld().playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f);
-                break;
-        }
+        SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f);
         new BukkitRunnable() {
             int i = 1;
 
@@ -165,14 +152,7 @@ public class GadgetSmashDown extends Gadget {
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
             Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.getMaterial(fb.getBlockId()), fb.getBlockData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
-            switch (UltraCosmetics.getServerVersion()) {
-                case v1_8_R3:
-                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("STEP_STONE"), 1.0f, 1.0f);
-                    break;
-                case v1_9_R1:
-                    getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_STONE_STEP, 1.0f, 1.0f);
-                    break;
-            }
+            SoundUtil.playSound(getPlayer().getLocation(), Sound.BLOCK_STONE_STEP, 1.0f, 1.0f);
             event.getEntity().remove();
         }
     }

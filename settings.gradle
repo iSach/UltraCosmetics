@@ -1,2 +1,3 @@
-include 'v1_8_R3', 'v1_9_R1' , 'v1_9_R2', 'core'
+include 'v1_8_R3', 'v1_9_R1' , 'v1_9_R2', 'v1_10_R1', 'core'
 rootProject.name = 'UltraCosmetics'
+

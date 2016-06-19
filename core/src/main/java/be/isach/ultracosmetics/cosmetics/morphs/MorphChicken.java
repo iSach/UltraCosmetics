@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -61,14 +62,7 @@ public class MorphChicken extends Morph {
                 items.add(i);
                 Random r = new Random();
                 i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5));
-                switch (UltraCosmetics.getServerVersion()) {
-                    case v1_8_R3:
-                        getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("CHICKEN_EGG_POP"), .5f, 1.5f);
-                        break;
-                    case v1_9_R1:
-                        getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_CHICKEN_EGG, .5f, 1.5f);
-                        break;
-                }
+                SoundUtil.playSound(getPlayer(), Sound.ENTITY_CHICKEN_EGG, .5f, 1.5f);
             }
             Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                 BukkitRunnable followRunnable;
@@ -78,14 +72,7 @@ public class MorphChicken extends Morph {
                     final List<Chicken> chickens = new ArrayList<>();
                     for (Item i : items) {
                         Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.STAINED_CLAY, (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
-                        switch (UltraCosmetics.getServerVersion()) {
-                            case v1_8_R3:
-                                i.getWorld().playSound(i.getLocation(), Sound.valueOf("ZOMBIE_WOODBREAK"), .05f, 1f);
-                                break;
-                            case v1_9_R1:
-                                i.getWorld().playSound(i.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_DOOR_WOOD, .05f, 1f);
-                                break;
-                        }
+                        SoundUtil.playSound(i.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_DOOR_WOOD, .05f, 1f);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
                         chicken.setAgeLock(true);
                         chicken.setBaby();

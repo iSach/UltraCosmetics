@@ -3,8 +3,8 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
@@ -27,14 +27,7 @@ public class GadgetQuakeGun extends Gadget {
 
     @Override
     void onRightClick() {
-        switch (UltraCosmetics.getServerVersion()) {
-            case v1_8_R3:
-                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("BLAZE_DEATH"), 1.4f, 1.5f);
-                break;
-            case v1_9_R1:
-                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_BLAZE_DEATH, 1.4f, 1.5f);
-                break;
-        }
+        SoundUtil.playSound(getPlayer(), Sound.ENTITY_BLAZE_DEATH, 1.4f, 1.5f);
 
         Location location = getPlayer().getEyeLocation().subtract(0, 0.4, 0);
         Vector vector = location.getDirection();

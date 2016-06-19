@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
@@ -31,14 +32,7 @@ public class MorphBat extends Morph {
             MathUtils.applyVelocity(getPlayer(), v);
             event.getPlayer().setFlying(false);
             event.setCancelled(true);
-            switch (UltraCosmetics.getServerVersion()) {
-                case v1_8_R3:
-                    getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("BAT_LOOP"), 0.4f, 1.0f);
-                    break;
-                case v1_9_R1:
-                    getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_BAT_LOOP, 0.4f, 1.0f);
-                    break;
-            }
+            SoundUtil.playSound(getPlayer(), Sound.ENTITY_BAT_LOOP, 0.4f, 1.0f);
         }
     }
 

@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.manager.GadgetManager;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PlayerUtils;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -22,7 +23,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -136,14 +136,7 @@ public abstract class Gadget implements Listener {
                                                 MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar").
                                                         replace("%gadgetname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ?
                                                                 getName() : UltraCosmetics.filterColor(getName())));
-                                        switch (UltraCosmetics.getServerVersion()) {
-                                            case v1_8_R3:
-                                                getPlayer().playSound(getPlayer().getLocation(), Sound.valueOf("NOTE_STICKS"), 1.4f, 1.5f);
-                                                break;
-                                            case v1_9_R1:
-                                                getPlayer().playSound(getPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
-                                                break;
-                                        }
+                                        SoundUtil.playSound(getPlayer(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
                                     }
                                 }
                             }

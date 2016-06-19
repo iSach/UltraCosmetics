@@ -13,6 +13,7 @@ import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.SuitType;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -313,14 +314,7 @@ public class TreasureRandomizer {
             else
                 giveRandomThing();
         }
-        switch (UltraCosmetics.getServerVersion()) {
-            case v1_8_R3:
-                loc.getWorld().playSound(loc, Sound.valueOf("CHEST_OPEN"), 1.4f, 1.5f);
-                break;
-            case v1_9_R1:
-                loc.getWorld().playSound(loc, Sound.BLOCK_CHEST_OPEN, 1.4f, 1.5f);
-                break;
-        }
+        SoundUtil.playSound(loc, Sound.BLOCK_CHEST_OPEN, 1.4f, 1.5f);
     }
 
     private boolean d(String s) {

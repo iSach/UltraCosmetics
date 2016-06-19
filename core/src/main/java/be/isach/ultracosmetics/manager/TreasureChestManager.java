@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.Cuboid;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
@@ -75,14 +76,7 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
             if (!UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                switch (UltraCosmetics.getServerVersion()) {
-                    case v1_8_R3:
-                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.valueOf("ANVIL_LAND"), .2f, 1.2f);
-                        break;
-                    case v1_9_R1:
-                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
-                        break;
-                }
+                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
                 return;
             }
             Player player = (Player) event.getWhoClicked();
@@ -97,14 +91,7 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Keys"))) {
             if (!UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                switch (UltraCosmetics.getServerVersion()) {
-                    case v1_8_R3:
-                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.valueOf("ANVIL_LAND"), .2f, 1.2f);
-                        break;
-                    case v1_9_R1:
-                        ((Player)event.getWhoClicked()).playSound((event.getWhoClicked()).getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
-                        break;
-                }
+                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
                 return;
             }
             event.getWhoClicked().closeInventory();

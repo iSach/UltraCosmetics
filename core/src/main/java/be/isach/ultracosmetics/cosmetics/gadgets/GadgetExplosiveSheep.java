@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -95,26 +96,12 @@ public class GadgetExplosiveSheep extends Gadget {
         public void run() {
             if (red) s.setColor(DyeColor.RED);
             else s.setColor(DyeColor.WHITE);
-            switch (UltraCosmetics.getServerVersion()) {
-                case v1_8_R3:
-                    s.getWorld().playSound(s.getLocation(), Sound.valueOf("CLICK"), 5f, 1f);
-                    break;
-                case v1_9_R1:
-                    s.getWorld().playSound(s.getLocation(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
-                    break;
-            }
+            SoundUtil.playSound(s.getLocation(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
             red = !red;
             time -= 0.2;
 
             if (time < 0.5) {
-                switch (UltraCosmetics.getServerVersion()) {
-                    case v1_8_R3:
-                        s.getWorld().playSound(s.getLocation(), Sound.valueOf("EXPLODE"), 1.4f, 1.5f);
-                        break;
-                    case v1_9_R1:
-                        s.getWorld().playSound(s.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
-                        break;
-                }
+                SoundUtil.playSound(s.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
                 UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
                 for (int i = 0; i < 50; i++) {
                     final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);

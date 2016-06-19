@@ -1389,7 +1389,7 @@ public enum Particles {
                 return;
             }
             try {
-                version = Integer.parseInt(Character.toString(PackageType.getServerVersion().charAt(3)));
+                version = Integer.parseInt(PackageType.getServerVersion().split("_")[1]);
                 if (version > 7) {
                     enumParticle = PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
                 }

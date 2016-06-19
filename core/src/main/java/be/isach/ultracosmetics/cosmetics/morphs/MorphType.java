@@ -141,7 +141,7 @@ public enum MorphType {
      * @return {@code true} if the morphtype is enabled, otherwise {@code false}.
      */
     public boolean isEnabled() {
-        if(UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1 && this == ELDERGUARDIAN) return false;
+        if(UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0 && this == ELDERGUARDIAN) return false;
         return SettingsManager.getConfig().getBoolean("Morphs." + configName + ".Enabled");
     }
 
