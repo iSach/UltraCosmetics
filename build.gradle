@@ -28,7 +28,7 @@ allprojects {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-boolean local = true
+boolean local = false
 
 if (local) libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins'
 
