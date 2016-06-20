@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -59,7 +60,7 @@ public class MorphWitherSkeleton extends Morph {
                     items.clear();
                 }
             }, 50);
-            SoundUtil.playSound(getPlayer(), Sound.ENTITY_SKELETON_HURT, 0.4f, (float) Math.random() + 1f);
+            SoundUtil.playSound(getPlayer(), Sounds.SKELETON_HURT, 0.4f, (float) Math.random() + 1f);
         }
     }
 }

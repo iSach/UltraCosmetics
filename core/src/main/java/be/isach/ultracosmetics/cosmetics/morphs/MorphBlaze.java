@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Sound;
@@ -37,7 +38,7 @@ public class MorphBlaze extends Morph {
                     if (getPlayer().isSneaking()) {
                         UtilParticles.display(Particles.FLAME, getPlayer().getLocation());
                         UtilParticles.display(Particles.LAVA, getPlayer().getLocation());
-                        SoundUtil.playSound(getPlayer(), Sound.BLOCK_LAVA_EXTINGUISH, 0.1f, 1.5f);
+                        SoundUtil.playSound(getPlayer(), Sounds.FIZZ, 0.1f, 1.5f);
                         getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
                     }
                 }

@@ -1,10 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -89,7 +86,7 @@ public class GadgetBatBlaster extends Gadget {
                                 MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
 
 
-                            SoundUtil.playSound(bat.getLocation(), Sound.ENTITY_BAT_HURT, 1.0f, 1.0f);
+                            SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
                             UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
 
                             bat.remove();

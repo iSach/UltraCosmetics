@@ -5,10 +5,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.GadgetManager;
-import be.isach.ultracosmetics.util.Cuboid;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.PlayerUtils;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -136,7 +133,7 @@ public abstract class Gadget implements Listener {
                                                 MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar").
                                                         replace("%gadgetname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ?
                                                                 getName() : UltraCosmetics.filterColor(getName())));
-                                        SoundUtil.playSound(getPlayer(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
+                                        SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
                                     }
                                 }
                             }

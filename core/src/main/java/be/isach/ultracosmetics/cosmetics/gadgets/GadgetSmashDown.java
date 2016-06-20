@@ -1,11 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,7 +40,7 @@ public class GadgetSmashDown extends Gadget {
 
     @Override
     void onRightClick() {
-        SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 2.0f, 1.0f);
+        SoundUtil.playSound(getPlayer().getLocation(), Sounds.FIREWORK_LAUNCH, 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final int taskId = Bukkit.getScheduler().runTaskTimer(UltraCosmetics.getInstance(), new Runnable() {
             @Override
@@ -82,7 +78,7 @@ public class GadgetSmashDown extends Gadget {
 
     private void playBoomEffect() {
         final Location loc = getPlayer().getLocation();
-        SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f);
+        SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 2.0f, 1.0f);
         new BukkitRunnable() {
             int i = 1;
 
@@ -152,7 +148,7 @@ public class GadgetSmashDown extends Gadget {
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
             Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.getMaterial(fb.getBlockId()), fb.getBlockData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
-            SoundUtil.playSound(getPlayer().getLocation(), Sound.BLOCK_STONE_STEP, 1.0f, 1.0f);
+            SoundUtil.playSound(getPlayer().getLocation(), Sounds.STEP_GRASS, 1.0f, 1.0f);
             event.getEntity().remove();
         }
     }

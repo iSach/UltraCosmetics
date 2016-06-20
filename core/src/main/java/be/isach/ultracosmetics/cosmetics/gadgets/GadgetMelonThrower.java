@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -41,7 +42,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
         if (melons.contains(event.getItem()) && event.getItem().getTicksLived() > 5
                 && affectPlayers) {
             event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 2));
-            SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_PLAYER_BURP, 1.4f, 1.5f);
+            SoundUtil.playSound(getPlayer().getLocation(), Sounds.BURP, 1.4f, 1.5f);
             event.setCancelled(true);
             melons.remove(event.getItem());
             event.getItem().remove();
@@ -52,7 +53,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 
     @Override
     void onRightClick() {
-        SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
+        SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
         Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.MELON_BLOCK, (byte) 0x0, UUID.randomUUID().toString()));
         item.setPickupDelay(0);
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));

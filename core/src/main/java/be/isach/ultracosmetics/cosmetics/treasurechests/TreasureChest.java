@@ -98,7 +98,7 @@ public class TreasureChest implements Listener {
 
                                             Block b = getChestLocation(i, center.clone()).getBlock();
                                             b.setType(design.getChestType().getType());
-                                            SoundUtil.playSound(getPlayer(), Sound.BLOCK_ANVIL_LAND, 1.4f, 1.5f);
+                                            SoundUtil.playSound(getPlayer(), Sounds.ANVIL_LAND, 1.4f, 1.5f);
                                             UtilParticles.display(Particles.SMOKE_LARGE, b.getLocation(), 5);
                                             UtilParticles.display(Particles.LAVA, b.getLocation(), 5);
                                             BlockFace blockFace = BlockFace.SOUTH;

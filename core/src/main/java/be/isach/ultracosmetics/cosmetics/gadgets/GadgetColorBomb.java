@@ -1,11 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -88,7 +84,7 @@ public class GadgetColorBomb extends Gadget {
                         i.setPickupDelay(500000);
                         i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                         items.add(i);
-                        SoundUtil.playSound(i.getLocation(), Sound.ENTITY_CHICKEN_EGG, .2f, 1.0f);
+                        SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
                         for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
                             if (entity instanceof Player)
                                 if (entity.hasMetadata("NPC")) continue;

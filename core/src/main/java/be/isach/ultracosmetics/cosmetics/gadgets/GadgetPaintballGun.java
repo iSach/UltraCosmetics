@@ -2,10 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -52,7 +49,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             projectilesList.add(projectile);
             projectiles.put(getOwner(), projectilesList);
         }
-        SoundUtil.playSound(getPlayer(), Sound.ENTITY_CHICKEN_EGG, 1.5f, 1.2f);
+        SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, 1.5f, 1.2f);
     }
 
     public boolean mapContainsProjectile(Projectile projectile) {

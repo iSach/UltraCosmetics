@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Bukkit;
@@ -85,7 +86,7 @@ public class GadgetRocket extends Gadget {
                                 return;
                             }
                             getPlayer().sendTitle("§c§l" + i, "");
-                            SoundUtil.playSound(getPlayer(), Sound.BLOCK_NOTE_BASEDRUM, 1.0f, 1.0f);
+                            SoundUtil.playSound(getPlayer(), Sounds.NOTE_BASS_DRUM, 1.0f, 1.0f);
                             i--;
                         } else {
                             if (!isStillCurrentGadget()) {
@@ -94,7 +95,7 @@ public class GadgetRocket extends Gadget {
                             }
 
                             getPlayer().sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"), "");
-                            SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+                            SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
                             armorStand.remove();
                             armorStand = null;
 
@@ -132,7 +133,7 @@ public class GadgetRocket extends Gadget {
                                         fb.remove();
                                     fallingBlocks.clear();
                                     FallDamageManager.addNoFall(getPlayer());
-                                    SoundUtil.playSound(getPlayer().getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
+                                    SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
                                     UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
                                     launching = false;
                                 }
@@ -158,7 +159,7 @@ public class GadgetRocket extends Gadget {
             if (armorStand.getPassenger() == null)
                 armorStand.setPassenger(getPlayer());
             UtilParticles.display(Particles.SMOKE_LARGE, 0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
-            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.BLOCK_LAVA_EXTINGUISH, 0.025f, 1.0f);
+            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.FIZZ, 0.025f, 1.0f);
         }
         for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.setVelocity(new Vector(0, 0.8, 0));
@@ -169,8 +170,8 @@ public class GadgetRocket extends Gadget {
             }
             UtilParticles.display(Particles.FLAME, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
             UtilParticles.display(Particles.LAVA, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
-            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.ENTITY_BAT_LOOP, 1.5f, 1.0f);
-            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sound.BLOCK_LAVA_EXTINGUISH, 0.025f, 1.0f);
+            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.BAT_LOOP, 1.5f, 1.0f);
+            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.FIZZ, 0.025f, 1.0f);
         }
     }
 

@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Bukkit;
@@ -50,7 +51,7 @@ public class GadgetFunGun extends Gadget {
 
         UtilParticles.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
         UtilParticles.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
-        SoundUtil.playSound(getPlayer(), Sound.ENTITY_CAT_PURREOW, 1.4f, 1.5f);
+        SoundUtil.playSound(getPlayer(), Sounds.CAT_PURREOW, 1.4f, 1.5f);
     }
 
     @Override

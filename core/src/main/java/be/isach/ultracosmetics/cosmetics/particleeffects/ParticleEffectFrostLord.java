@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Location;
@@ -41,7 +42,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                 stepY = 0;
                 step = 0;
                 radius = 1.5f;
-                SoundUtil.playSound(getPlayer(), Sound.BLOCK_SNOW_BREAK, .5f, 1.5f);
+                SoundUtil.playSound(getPlayer(), Sounds.DIG_SNOW, .5f, 1.5f);
                 UtilParticles.display(getType().getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
             }
         }

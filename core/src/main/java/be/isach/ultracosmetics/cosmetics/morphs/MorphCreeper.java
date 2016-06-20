@@ -2,10 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
@@ -45,7 +42,7 @@ public class MorphCreeper extends Morph {
                         creeperWatcher.setIgnited(true);
                         if (charge + 4 <= 100)
                             charge += 4;
-                        SoundUtil.playSound(getPlayer(), Sound.ENTITY_CREEPER_PRIMED, 1.4f, 1.5f);
+                        SoundUtil.playSound(getPlayer(), Sounds.CREEPER_HISS, 1.4f, 1.5f);
                     } else {
                         if (creeperWatcher.isIgnited()) {
                             disguise = new MobDisguise(getType().getDisguiseType());
@@ -56,7 +53,7 @@ public class MorphCreeper extends Morph {
                         }
                         if (charge == 100) {
                             UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
-                            SoundUtil.playSound(getPlayer(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
+                            SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 1.4f, 1.5f);
 
                             for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {
                                 if (ent instanceof Creature || ent instanceof Player) {

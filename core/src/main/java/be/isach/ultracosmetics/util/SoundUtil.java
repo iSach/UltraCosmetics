@@ -13,39 +13,27 @@ import org.bukkit.entity.Player;
  */
 public class SoundUtil {
 
-    private static ServerVersion serverVersion;
-
-    public static void setServerVersion(ServerVersion serverVersion) {
-        SoundUtil.serverVersion = serverVersion;
+    public static void playSound(Location location, Sounds sound, float volume, float speed) {
+        location.getWorld().playSound(location, sound.bukkitSound(), volume, speed);
     }
 
-    public static void playSound(Location location, Sound sound, float volume, float speed) {
-        if (serverVersion.compareTo(ServerVersion.v1_9_R1) < 0)
-            location.getWorld().playSound(location, Sounds.valueOf(sound.toString()).bukkitSound(), volume, speed);
-        else
-            location.getWorld().playSound(location, sound, volume, speed);
-    }
-
-    public static void playSound(Location location, Sound sound, float volume) {
+    public static void playSound(Location location, Sounds sound, float volume) {
         playSound(location, sound, volume, 1f);
     }
 
-    public static void playSound(Location location, Sound sound) {
+    public static void playSound(Location location, Sounds sound) {
         playSound(location, sound, 1f, 1f);
     }
 
-    public static void playSound(Player player, Sound sound, float volume, float speed) {
-        if (serverVersion.compareTo(ServerVersion.v1_9_R1) < 0)
-            player.playSound(player.getLocation(), Sounds.valueOf(sound.toString()).bukkitSound(), volume, speed);
-        else
-            player.playSound(player.getLocation(), sound, volume, speed);
+    public static void playSound(Player player, Sounds sound, float volume, float speed) {
+        player.playSound(player.getLocation(), sound.bukkitSound(), volume, speed);
     }
 
-    public static void playSound(Player player, Sound sound, float volume) {
+    public static void playSound(Player player, Sounds sound, float volume) {
         playSound(player, sound, volume, 1f);
     }
 
-    public static void playSound(Player player, Sound sound) {
+    public static void playSound(Player player, Sounds sound) {
         playSound(player, sound, 1f, 1f);
     }
 

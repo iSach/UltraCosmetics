@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
@@ -76,7 +77,7 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
             if (!UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
+                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
                 return;
             }
             Player player = (Player) event.getWhoClicked();
@@ -91,7 +92,7 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().getItemMeta().hasDisplayName()
                 && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Keys"))) {
             if (!UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 1.2f);
+                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
                 return;
             }
             event.getWhoClicked().closeInventory();

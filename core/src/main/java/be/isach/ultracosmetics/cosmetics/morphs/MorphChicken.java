@@ -1,10 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -62,7 +59,7 @@ public class MorphChicken extends Morph {
                 items.add(i);
                 Random r = new Random();
                 i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5));
-                SoundUtil.playSound(getPlayer(), Sound.ENTITY_CHICKEN_EGG, .5f, 1.5f);
+                SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, .5f, 1.5f);
             }
             Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                 BukkitRunnable followRunnable;
@@ -72,7 +69,7 @@ public class MorphChicken extends Morph {
                     final List<Chicken> chickens = new ArrayList<>();
                     for (Item i : items) {
                         Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.STAINED_CLAY, (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
-                        SoundUtil.playSound(i.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_DOOR_WOOD, .05f, 1f);
+                        SoundUtil.playSound(i.getLocation(), Sounds.ZOMBIE_WOOD, .05f, 1f);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
                         chicken.setAgeLock(true);
                         chicken.setBaby();

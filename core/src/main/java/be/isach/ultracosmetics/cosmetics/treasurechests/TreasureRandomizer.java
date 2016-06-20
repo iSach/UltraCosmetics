@@ -14,6 +14,7 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.SuitType;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.*;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -314,7 +315,7 @@ public class TreasureRandomizer {
             else
                 giveRandomThing();
         }
-        SoundUtil.playSound(loc, Sound.BLOCK_CHEST_OPEN, 1.4f, 1.5f);
+        SoundUtil.playSound(loc, Sounds.CHEST_OPEN, 1.4f, 1.5f);
     }
 
     private boolean d(String s) {

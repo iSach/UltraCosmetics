@@ -401,8 +401,6 @@ public class UltraCosmetics extends JavaPlugin {
             }
         } else serverVersion = ServerVersion.v1_8_R3;
 
-        SoundUtil.setServerVersion(serverVersion);
-
         if (getServer().getVersion().contains("Spigot"))
             usingSpigot = true;
 

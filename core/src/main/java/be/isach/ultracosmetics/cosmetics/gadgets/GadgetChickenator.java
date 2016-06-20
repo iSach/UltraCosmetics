@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.*;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
@@ -33,13 +34,13 @@ public class GadgetChickenator extends Gadget {
         final Chicken CHICKEN = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getEyeLocation(), EntityType.CHICKEN);
         CHICKEN.setNoDamageTicks(500);
         CHICKEN.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
-        SoundUtil.playSound(getPlayer(), Sound.ENTITY_CHICKEN_AMBIENT, 1.4f, 1.5f);
-        SoundUtil.playSound(getPlayer(), Sound.ENTITY_GENERIC_EXPLODE, 0.3f, 1.5f);
+        SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_IDLE, 1.4f, 1.5f);
+        SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 0.3f, 1.5f);
         Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
                 spawnRandomFirework(CHICKEN.getLocation());
-                SoundUtil.playSound(getPlayer(), Sound.ENTITY_CHICKEN_HURT, 1.4f, 1.5f);
+                SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_HURT, 1.4f, 1.5f);
                 CHICKEN.remove();
                 for (int i = 0; i < 30; i++) {
                     final Item ITEM = CHICKEN.getWorld().dropItem(CHICKEN.getLocation(), ItemFactory.create(Material.COOKED_CHICKEN, (byte) 0, UUID.randomUUID().toString()));

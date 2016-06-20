@@ -1,10 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -96,12 +93,12 @@ public class GadgetExplosiveSheep extends Gadget {
         public void run() {
             if (red) s.setColor(DyeColor.RED);
             else s.setColor(DyeColor.WHITE);
-            SoundUtil.playSound(s.getLocation(), Sound.UI_BUTTON_CLICK, 1.4f, 1.5f);
+            SoundUtil.playSound(s.getLocation(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
             red = !red;
             time -= 0.2;
 
             if (time < 0.5) {
-                SoundUtil.playSound(s.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.4f, 1.5f);
+                SoundUtil.playSound(s.getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
                 UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
                 for (int i = 0; i < 50; i++) {
                     final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
