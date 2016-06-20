@@ -1,5 +1,5 @@
 # UltraCosmetics
-UltraCosmetics is a Spigot 1.8.8 plugin which adds cool cosmetics for your server hub.
+UltraCosmetics is a Spigot 1.8.8/1.9.x/1.10 plugin which adds cool cosmetics for your server hub.
 
 You must use Spigot, and not CraftBukkit for this plugin!
 
