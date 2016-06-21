@@ -496,6 +496,9 @@ permissions:
         - ultracosmetics.emotes.happy
         - ultracosmetics.emotes.cheeky
         - ultracosmetics.emotes.love
+        - ultracosmetics.emotes.dealwithit
+        - ultracosmetics.emotes.cool
+        - ultracosmetics.emotes.surprised
   ultracosmetics.emotes.cry:
       default: op
   ultracosmetics.emotes.angry:
@@ -505,4 +508,10 @@ permissions:
   ultracosmetics.emotes.cheeky:
       default: op
   ultracosmetics.emotes.love:
+      default: op
+  ultracosmetics.emotes.dealwithit:
+      default: op
+  ultracosmetics.emotes.cool:
+      default: op
+  ultracosmetics.emotes.surprised:
       default: op
