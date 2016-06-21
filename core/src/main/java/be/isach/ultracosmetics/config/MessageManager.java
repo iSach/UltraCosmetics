@@ -29,6 +29,7 @@ public class MessageManager {
         addMessage("Invalid-Morph", "%prefix% &c&lInvalid Morph!");
         addMessage("Invalid-Hat", "%prefix% &c&lInvalid Hat!");
         addMessage("Invalid-Suit", "%prefix% &c&lInvalid Suit!");
+        addMessage("Invalid-Emote", "%prefix% &c&lInvalid Emote!");
         addMessage("Invalid-Menu", "%prefix% &c&lInvalid Menu!");
         addMessage("Ammo", "&7Your ammo: &e%ammo%");
         addMessage("Purchase", "&a&lPURCHASE");
@@ -318,6 +319,9 @@ public class MessageManager {
         addMessage("Emotes.Happy.Name", "&e&lHappy");
         addMessage("Emotes.Cheeky.Name", "&6&lCheeky");
         addMessage("Emotes.Love.Name", "&4&lLove");
+        addMessage("Emotes.DealWithIt.Name", "&7&lDeal With it");
+        addMessage("Emotes.Cool.Name", "&9&lCool");
+        addMessage("Emotes.Surprised.Name", "&6&lSurprised");
         addMessage("Emotes.Must-Remove-Helmet", "%prefix% &c&lYou must remove your helmet to equip an emote!");
 
         //MENU

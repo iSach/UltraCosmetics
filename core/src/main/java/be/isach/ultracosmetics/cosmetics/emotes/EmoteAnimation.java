@@ -64,7 +64,7 @@ class EmoteAnimation extends BukkitRunnable {
             }
         } else {
             if (currentFrame <= 0) {
-                if (intervalTick >= INTERVAL_BETWEEN_REPLAY) {
+                if (intervalTick >= INTERVAL_BETWEEN_REPLAY / ticksPerFrame) {
                     up = true;
                     intervalTick = 0;
                 } else {

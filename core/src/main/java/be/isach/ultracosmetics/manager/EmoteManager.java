@@ -292,7 +292,6 @@ public class EmoteManager implements Listener {
                         }
                     }
                     EmoteType emoteType = getEmoteType(sb.toString());
-                    System.out.println(emoteType);
                     equipEmote(emoteType, (Player) event.getWhoClicked());
                     if (!UltraCosmetics.closeAfterSelect)
                         openMenu((Player) event.getWhoClicked(), currentPage);

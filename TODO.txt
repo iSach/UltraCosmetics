@@ -1,0 +1,2 @@
+Disable collision between HumanEntity and Pets.
+Test Pet Renaming.

@@ -34,7 +34,7 @@ public class Emote {
 
         this.owner = owner;
         this.equipped = false;
-        this.animation = new EmoteAnimation(1, this);
+        this.animation = new EmoteAnimation(getEmoteType().getTicksPerFrame(), this);
 
         if (!getPlayer().hasPermission(getEmoteType().getPermission())) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));

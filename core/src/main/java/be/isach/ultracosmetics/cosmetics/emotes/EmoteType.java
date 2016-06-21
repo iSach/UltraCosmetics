@@ -30,19 +30,14 @@ public class EmoteType {
     public static final List<EmoteType> ENABLED = new ArrayList<>();
     public static final List<EmoteType> VALUES = new ArrayList<>();
 
-    public static final EmoteType CRY = new EmoteType("ultracosmetics.emotes.cry", "Cry", "&7&oAre you really sad? :(");
-    public static final EmoteType ANGRY = new EmoteType("ultracosmetics.emotes.angry", "Angry", "&7&oShow your rage to the other players!");
-    public static final EmoteType HAPPY = new EmoteType("ultracosmetics.emotes.happy", "Happy", "&7&oDon't worry, be happy!");
-    public static final EmoteType CHEEKY = new EmoteType("ultracosmetics.emotes.cheeky", "Cheeky", "&7&oYou like being cheeky? Well, this emote is for you!");
-    public static final EmoteType LOVE = new EmoteType("ultracosmetics.emotes.love", "Love", "&7&oYou have beautiful eyes, do you know that?");
-
-    private List<ItemStack> frames;
-
-    private static Class<Emote> CLASS = Emote.class;
-
-    private String permission;
-    private String configName;
-    private String description;
+    public static final EmoteType CRY = new EmoteType("ultracosmetics.emotes.cry", "Cry", "&7&oAre you really sad? :(", 1);
+    public static final EmoteType ANGRY = new EmoteType("ultracosmetics.emotes.angry", "Angry", "&7&oShow your rage to the other players!", 1);
+    public static final EmoteType HAPPY = new EmoteType("ultracosmetics.emotes.happy", "Happy", "&7&oDon't worry, be happy!", 1);
+    public static final EmoteType CHEEKY = new EmoteType("ultracosmetics.emotes.cheeky", "Cheeky", "&7&oYou like being cheeky? Well, this emote is for you!", 1);
+    public static final EmoteType LOVE = new EmoteType("ultracosmetics.emotes.love", "Love", "&7&oYou have beautiful eyes, do you know that?", 2);
+    public static final EmoteType DEAL_WITH_IT = new EmoteType("ultracosmetics.emotes.dealwithit", "DealWithIt", "&7&oDo you feel like showing off? This emote is for you!", 3);
+    public static final EmoteType COOL = new EmoteType("ultracosmetics.emotes.cool", "Cool", "&7&oKeep cool man!", 2);
+    public static final EmoteType SURPRISED = new EmoteType("ultracosmetics.emotes.surprised", "Surprised", "&7&oOH LORD!!!", 1);
 
     static {
 
@@ -147,11 +142,51 @@ public class EmoteType {
         LOVE.appendTexture("a080c9bfc64aeb5aed2acaa885d6fcbbd5e5ddf468956d3f1b1e455774d48893");
 
         /* LOVE END */
+
+        /* DEAL WITH IT BEGIN */
+
+        DEAL_WITH_IT.appendTexture("72bb8ba79648718fe80687ed4df2b9e284e732583e05658e227efd7fdf80f4");
+        DEAL_WITH_IT.appendTexture("29b5b1f2c92a1283456f608b29ec3617191aba2bd31bd4b4b08e6cba6806227");
+        DEAL_WITH_IT.appendTexture("7959ef5fabb3f83fb19bba6ca67bb97758eec60235cf46e71d834b237337c4");
+        DEAL_WITH_IT.appendTexture("6313411e97963d104322218967a85a5d691330bad5f7192e3781d9565ebbdf");
+        DEAL_WITH_IT.appendTexture("fa3f7f2f6970d32db284261520c8c441fe4b3268ac0c99aeb4a5248656bd");
+
+        /* DEAL WITH IT END */
+
+        /* COOL BEGIN */
+
+        COOL.appendTexture("a21e6dbfd74a1859ddbae3380fc1ab71f2389745945fc92329b164635bd14f");
+        COOL.appendTexture("3733db9a94bfe15cdbb7ca5832c85cfada98ad2c839934766bdc41f977b5c163");
+        for (int i = 0; i < 4; i++)
+        COOL.appendTexture("766b3eef3c726ecb816c43839189eeb8e36382e3e5fe41128372785185a322");
+
+        /* COOL END */
+
+        /* SURPRISED BEGIN */
+
+        SURPRISED.appendTexture("6b7f24bb6a4585de8f42303161bded5c8398ce375631be149460d6835aec44e");
+        SURPRISED.appendTexture("33c760f660d447846ab6b3d5a914c4b01f10672b63d4311d468b6dc28ba0e3");
+        SURPRISED.appendTexture("382d15e94182206025973ff1928f4456bf7abaff737942d54b1c5699892c");
+        SURPRISED.appendTexture("9d641bd33180c53dcc77e3d4c665935e63011d87ae9796a2ae7bd334cd64");
+        for (int i = 0; i < 8; i++)
+            SURPRISED.appendTexture("4c3b089e446f065dd9059519c85c45aebb53891be3c3a7ed5b5eb61a96747");
+
+        /* SURPRISED END */
     }
 
-    public EmoteType(String permission, String configName, String defaultDesc) {
+    private List<ItemStack> frames;
+
+    private static Class<Emote> CLASS = Emote.class;
+
+    private String permission;
+    private String configName;
+    private String description;
+    private int ticksPerFrame;
+
+    public EmoteType(String permission, String configName, String defaultDesc, int ticksPerFrame) {
         this.permission = permission;
         this.configName = configName;
+        this.ticksPerFrame = ticksPerFrame;
         this.frames = new ArrayList<>();
 
         if (SettingsManager.getConfig().get("Emotes." + configName + ".Description") == null) {
@@ -165,8 +200,10 @@ public class EmoteType {
 
     public Emote equip(Player player) {
         if (player.getInventory().getHelmet() != null) {
-            if(UltraCosmetics.getCustomPlayer(player).currentHat != null) {
+            if (UltraCosmetics.getCustomPlayer(player).currentHat != null) {
                 UltraCosmetics.getCustomPlayer(player).removeHat();
+            } else if (UltraCosmetics.getCustomPlayer(player).currentEmote != null) {
+                UltraCosmetics.getCustomPlayer(player).removeEmote();
             } else {
                 player.sendMessage(MessageManager.getMessage("Emotes.Must-Remove-Helmet"));
                 return null;
@@ -246,6 +283,10 @@ public class EmoteType {
         return SettingsManager.getConfig().getBoolean("Emotes." + configName + ".Enabled");
     }
 
+    public int getTicksPerFrame() {
+        return ticksPerFrame;
+    }
+
     public ItemStack getSkull(String url) {
         url = "http://textures.minecraft.net/texture/" + url;
         ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
@@ -273,9 +314,16 @@ public class EmoteType {
         return skull;
     }
 
-    public static EmoteType valueOf(String name) {
-        for(EmoteType emoteType : values()) {
-            if(emoteType.toString().toLowerCase().equals(name.toLowerCase())) return emoteType;
+    @Override
+    public String toString() {
+        return configName;
+    }
+
+    public static EmoteType valueOf(String name) throws NullPointerException {
+        for (EmoteType emoteType : values()) {
+            if (emoteType.getConfigName().equalsIgnoreCase(name)) {
+                return emoteType;
+            }
         }
         return null;
     }

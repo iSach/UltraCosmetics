@@ -161,10 +161,15 @@ public class SubCommandToggle extends SubCommand {
 
             MountManager.equipMount(mountType, receiver);
         } else if (type.startsWith("e")) {
-            EmoteType emoteType;
+            EmoteType emoteType = null;
+            boolean stopNow = false;
             try {
                 emoteType = EmoteType.valueOf(args[2].toUpperCase());
             } catch (IllegalArgumentException exc) {
+                stopNow = true;
+            }
+
+            if(stopNow || emoteType == null) {
                 sender.sendMessage(MessageManager.getMessage("Invalid-Emote"));
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < EmoteType.enabled().size(); i++)
