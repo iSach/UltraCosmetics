@@ -28,7 +28,7 @@ allprojects {
     }
 }
 
-boolean local = true
+boolean local = false
 
 if (local) libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins'
 
