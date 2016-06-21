@@ -63,9 +63,8 @@ public class ItemFactory {
                 (name.split(":").length > 1 ? (byte) Integer.parseInt(name.split(":")[1]) : (byte) 0));
     }
 
-    public static ItemStack createSkull(String urlToFormat) {
-        String url = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" + urlToFormat;
-        ItemStack head = create(Material.SKULL_ITEM, (byte) 3, "§8§oHat");
+    public static ItemStack createSkull(String url, String name) {
+        ItemStack head = create(Material.SKULL_ITEM, (byte) 3, name);
 
         if (url.isEmpty()) return head;
 

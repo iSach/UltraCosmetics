@@ -57,6 +57,7 @@ public class MessageManager {
         addMessage("Clear-Morph", "§c§lClear current morph");
         addMessage("Clear-Hat", "§c§lClear current hat");
         addMessage("Clear-Suit", "§c§lClear current suit");
+        addMessage("Clear-Emote", "§c§lClear current emote");
         addMessage("Rename-Pet-Purchase", "§c§lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
 
         addMessage("Active-Pet-Needed", "§c§lYou need to spawn a pet to rename it");
@@ -71,6 +72,7 @@ public class MessageManager {
         addMessage("Treasure-Chests-Loot.Money", "&e&l%money%$");
         addMessage("Treasure-Chests-Loot.gadget", "%gadget% gadget");
         addMessage("Treasure-Chests-Loot.Suit", "%suit%");
+        addMessage("Treasure-Chests-Loot.Emote", "%emote% emote");
         addMessage("Treasure-Chests-Loot.Nothing", "&c&lNothing");
 
         //Menus
@@ -82,6 +84,7 @@ public class MessageManager {
         addMessage("Menus.Hats", "&lHats");
         addMessage("Menus.Particle-Effects", "&lParticle Effects");
         addMessage("Menus.Suits", "&lSuits");
+        addMessage("Menus.Emotes", "&lEmotes");
         addMessage("Menus.Buy-Ammo", "&lBuy Ammo");
         addMessage("Menus.Rename-Pet", "&lRename Pet");
         addMessage("Disable-Gadgets", "&c&lDisable Gadgets");
@@ -308,6 +311,16 @@ public class MessageManager {
         addMessage("Suits.Unequip", "%prefix% &9You unequipped %suitname%!");
         addMessage("Suits.Suit-Part-Lore", "&9Suits Part");
 
+        addMessage("Emotes.Equip", "%prefix% &9You equipped %emotename%");
+        addMessage("Emotes.Unequip", "%prefix% &9You unequipped %emotename%");
+        addMessage("Emotes.Cry.Name", "&9&lCry");
+        addMessage("Emotes.Angry.Name", "&c&lAngry");
+        addMessage("Emotes.Happy.Name", "&e&lHappy");
+        addMessage("Emotes.Cheeky.Name", "&6&lCheeky");
+        addMessage("Emotes.Surprised.Name", "&f&lSurprised");
+        addMessage("Emotes.Love.Name", "&4&lLove");
+        addMessage("Emotes.Tired.Name", "&3&lTired");
+
         //MENU
         addMessage("Menu.Gadgets", "&9&lGadgets");
         addMessage("Menu.Particle-Effects", "&b&lParticle Effects");
@@ -316,6 +329,7 @@ public class MessageManager {
         addMessage("Menu.Morphs", "&2&lMorphs");
         addMessage("Menu.Hats", "&b&lHats");
         addMessage("Menu.Suits", "&c&lSuits");
+        addMessage("Menu.Emotes", "&e&lEmotes");
         addMessage("Menu.Main-Menu", "&c&lMain Menu");
         addMessage("Menu.Activate", "&b&lActivate");
         addMessage("Menu.Deactivate", "&c&lDeactivate");

@@ -1,8 +1,14 @@
 package be.isach.ultracosmetics.cosmetics.emotes;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
+import be.isach.ultracosmetics.cosmetics.pets.PetType;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
 /**
  * Project: UltraCosmetics
@@ -17,8 +23,67 @@ public class Emote {
 
     private EmoteType emoteType;
 
-    public Emote(UUID owner, EmoteType emoteType) {
-        //...
+    private EmoteAnimation animation;
+
+    private boolean equipped;
+    private String name;
+
+    public Emote(final UUID owner, final EmoteType emoteType) {
+        this.emoteType = emoteType;
+
+        if (owner == null) return;
+
+        this.owner = owner;
+        this.equipped = false;
+        this.animation = new EmoteAnimation(1, this);
+
+        if (!getPlayer().hasPermission(getEmoteType().getPermission())) {
+            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
+            return;
+        }
+        UltraCosmetics.getCustomPlayer(getPlayer()).setEmote(this);
     }
 
+    public void equip() {
+        animation.start();
+        this.equipped = true;
+    }
+
+    public void clear() {
+        animation.cancel();
+        this.equipped = false;
+    }
+
+    public boolean isEquipped() {
+        return equipped;
+    }
+
+    /**
+     * @return EmoteType.
+     */
+    public EmoteType getEmoteType() {
+        return emoteType;
+    }
+
+    /**
+     * Get the pet owner.
+     *
+     * @return the UUID of the owner.
+     */
+    protected final UUID getOwner() {
+        return owner;
+    }
+
+    /**
+     * Get the player owner.
+     *
+     * @return The player from getOwner.
+     */
+    protected final Player getPlayer() {
+        return Bukkit.getPlayer(owner);
+    }
+
+    public String getName() {
+        return "test";
+    }
 }

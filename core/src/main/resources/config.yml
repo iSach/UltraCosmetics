@@ -10,6 +10,7 @@ Categories-Enabled:
   Morphs: true
   Hats: true
   Suits: true
+  Emotes: true
 
 # Other settings for categories:
 # - The Item in Main Menu.
@@ -37,6 +38,8 @@ Categories:
     Go-Back-Arrow: true
   Suits:
     Main-Menu-Item: '299:0'
+    Go-Back-Arrow: true
+  Suits:
     Go-Back-Arrow: true
   Clear-Cosmetic-Item: '152:0'
 # Treasure Chests Settings.

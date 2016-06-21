@@ -3,6 +3,8 @@ package be.isach.ultracosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.emotes.Emote;
+import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
@@ -52,6 +54,8 @@ public class CustomPlayer {
             currentChestplate,
             currentLeggings,
             currentBoots;
+    public Emote currentEmote;
+
     /**
      * boolean to identify if player is loaded correctly
      */
@@ -100,7 +104,7 @@ public class CustomPlayer {
                 SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
                 SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
             }
-           
+
 
         } catch (Exception exc) {
             // Player couldn't be found.
@@ -109,14 +113,14 @@ public class CustomPlayer {
             return;
         }
         // sql loader thread add player to pre-load
-        if(!UltraCosmetics.getInstance().usingFileStorage()){
-	        try{
-	        	UltraCosmetics.getSQLLoader().addPreloadPlayer(uuid);
-	        }catch(Exception e){
-	            System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
-	        }
-        }else{
-        	isLoaded = true;
+        if (!UltraCosmetics.getInstance().usingFileStorage()) {
+            try {
+                UltraCosmetics.getSQLLoader().addPreloadPlayer(uuid);
+            } catch (Exception e) {
+                System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
+            }
+        } else {
+            isLoaded = true;
         }
 
     }
@@ -170,6 +174,21 @@ public class CustomPlayer {
             currentGadget = null;
         }
     }
+
+    /**
+     * Removes the current emote.
+     */
+    public void removeEmote() {
+        if (currentEmote != null) {
+            if (getPlayer() != null)
+                getPlayer().sendMessage(MessageManager.getMessage("Emotes.Unequip")
+                        .replace("%emotename%", (UltraCosmetics.getInstance().placeholdersHaveColor())
+                                ? currentEmote.getName() : UltraCosmetics.filterColor(currentEmote.getName())));
+            currentEmote.clear();
+            currentEmote = null;
+        }
+    }
+
 
     /**
      * Removes the current Mount.
@@ -322,6 +341,19 @@ public class CustomPlayer {
     }
 
     /**
+     * Sets Emote.
+     *
+     * @param emote new Emote.
+     */
+    public void setEmote(Emote emote) {
+        getPlayer().sendMessage(MessageManager.getMessage("Emotes.Equip")
+                .replace("%emotename%",
+                        (UltraCosmetics.getInstance().placeholdersHaveColor())
+                                ? emote.getName() : UltraCosmetics.filterColor(emote.getName())));
+        currentEmote = emote;
+    }
+
+    /**
      * Clears all gadgets.
      */
     public void clear() {
@@ -338,6 +370,7 @@ public class CustomPlayer {
         removeMount();
         removeTreasureChest();
         removeHat();
+        removeEmote();
         for (ArmorSlot armorSlot : ArmorSlot.values())
             removeSuit(armorSlot);
     }
@@ -404,7 +437,8 @@ public class CustomPlayer {
      * @param name    The new name.
      */
     public void setPetName(String petName, String name) {
-        if (UltraCosmetics.getInstance().usingFileStorage()) SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
+        if (UltraCosmetics.getInstance().usingFileStorage())
+            SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
         else UltraCosmetics.sqlUtils.setName(getPlayer(), petName, name);
     }
 
@@ -477,20 +511,20 @@ public class CustomPlayer {
         if (this.cache_hasGadgetsEnable > -1)
             return cache_hasGadgetsEnable == 0 ? false : true;
         // Make sure it won't be affected before load finished, especially for SQL
-        if(!isLoaded)
-        	return false;
+        if (!isLoaded)
+            return false;
 
         try {
             if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
             } else {
-            	if(UltraCosmetics.sqlUtils.hasGadgetsEnabled(getPlayer())){
-            		cache_hasGadgetsEnable = 1;
-            		return true;
-            	}else{
-            		cache_hasGadgetsEnable = 0;
-            		return false;
-            	}
+                if (UltraCosmetics.sqlUtils.hasGadgetsEnabled(getPlayer())) {
+                    cache_hasGadgetsEnable = 1;
+                    return true;
+                } else {
+                    cache_hasGadgetsEnable = 0;
+                    return false;
+                }
             }
         } catch (NullPointerException e) {
             return true;
@@ -524,20 +558,20 @@ public class CustomPlayer {
         if (this.cache_canSeeSelfMorph > -1)
             return this.cache_canSeeSelfMorph == 0 ? false : true;
         // Make sure it won't be affected before load finished, especially for SQL
-        if(!isLoaded)
-        	return false;
+        if (!isLoaded)
+            return false;
         try {
             if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
             } else {
-            	if(UltraCosmetics.sqlUtils.canSeeSelfMorph(getPlayer())){
-            		cache_canSeeSelfMorph = 1;
-            		return true;
-            	}else{
-            		cache_canSeeSelfMorph = 0;
-            		return false;
-            	}
-                
+                if (UltraCosmetics.sqlUtils.canSeeSelfMorph(getPlayer())) {
+                    cache_canSeeSelfMorph = 1;
+                    return true;
+                } else {
+                    cache_canSeeSelfMorph = 0;
+                    return false;
+                }
+
             }
         } catch (NullPointerException e) {
             return false;

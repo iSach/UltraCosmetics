@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.manager;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -86,14 +87,18 @@ public class MainMenuManager implements Listener {
                         case SUITS:
                             SuitManager.openMenu(player, 1);
                             break;
+                        case EMOTES:
+                            EmoteManager.openMenu(player, 1);
+                            break;
                     }
                     return;
                 }
 
                 final Inventory inv = Bukkit.createInventory(null, slotAmount, MessageManager.getMessage("Menus.Main-Menu"));
 
+                ItemStack is = null;
                 for (int i = 0; i < UltraCosmetics.enabledCategories.size(); i++) {
-                    ItemStack is = UltraCosmetics.enabledCategories.get(i).getItemStack().clone();
+                    is = UltraCosmetics.enabledCategories.get(i).getItemStack().clone();
                     inv.setItem(getMainMenuLayout()[i] + add, is);
                 }
 
@@ -131,6 +136,9 @@ public class MainMenuManager implements Listener {
     private static int[] getMainMenuLayout() {
         int[] layout = new int[]{0};
         switch (UltraCosmetics.enabledCategories.size()) {
+            case 8:
+                layout = new int[]{1, 3, 5, 7, 19, 21, 23, 25};
+                break;
             case 7:
                 layout = new int[]{1, 4, 7, 19, 21, 23, 25};
                 break;
@@ -182,6 +190,9 @@ public class MainMenuManager implements Listener {
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))) {
                     SuitManager.openMenu((Player) event.getWhoClicked(), 1);
+                    return;
+                } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Emotes"))) {
+                    EmoteManager.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
                     new BukkitRunnable() {

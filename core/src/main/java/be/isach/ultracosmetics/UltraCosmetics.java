@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.command.subcommands.*;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetDiscoBall;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetExplosiveSheep;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
@@ -228,151 +229,6 @@ public class UltraCosmetics extends JavaPlugin {
      * Server version manager
      */
     private VersionManager versionManager;
-
-    /**
-     * Logs a message in console.
-     *
-     * @param object The message to log.
-     */
-    public static void log(Object object) {
-        System.out.println("UltraCosmetics -> " + object.toString());
-    }
-
-    /**
-     * Get a collection of all the CustomPlayers.
-     *
-     * @return
-     */
-    public static Collection<CustomPlayer> getCustomPlayers() {
-        return playerManager.getPlayers();
-    }
-
-    /**
-     * @return if ammo system is enabled, or not.
-     */
-    public boolean isAmmoEnabled() {
-        return ammoEnabled;
-    }
-
-    /**
-     * @return if NoteBlockAPI is loaded.
-     */
-    public boolean isNoteBlockAPIEnabled() {
-        return noteBlockAPIEnabled;
-    }
-
-    /**
-     * @return if file storage is used.
-     */
-    public boolean usingFileStorage() {
-        return fileStorage;
-    }
-
-    public boolean areTreasureChestsEnabled() {
-        return treasureChests;
-    }
-
-    /**
-     * Debugs something.
-     *
-     * @param message The message to print.
-     * @return if debug is turned on or off.
-     */
-    public static boolean debug(Object message) {
-        if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
-        return debug;
-    }
-
-    /**
-     * Gets the UltraCosmetics Plugin Object.
-     *
-     * @return
-     */
-    public static UltraCosmetics getInstance() {
-        return core;
-    }
-
-    /**
-     * Registers a listener.
-     *
-     * @param listenerClass The listener to register.
-     */
-    public void registerListener(Listener listenerClass) {
-        Bukkit.getPluginManager().registerEvents(listenerClass, getInstance());
-    }
-
-    /**
-     * Gets the custom player of a player.
-     *
-     * @param player The player.
-     * @return The CustomPlayer of player.
-     */
-    public static CustomPlayer getCustomPlayer(Player player) {
-        return playerManager.getCustomPlayer(player);
-    }
-
-    /**
-     * Gets the Custom Player Manager.
-     *
-     * @return the Custom Player Manager.
-     */
-    public static PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
-    /**
-     * Gets the SQLloader Manager
-     *
-     * @return the SQLloader Manager
-     */
-    public static SQLLoaderManager getSQLLoader() {
-        return sqlloader;
-    }
-
-    /**
-     * Gets last version published on Spigot.
-     *
-     * @return last version published on Spigot.
-     */
-    public static String getLastVersion() {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-            con.setDoOutput(true);
-            con.setConnectTimeout(2000);
-            con.setRequestMethod("POST");
-            con.getOutputStream().write(
-                    ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
-            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
-            if (version.length() <= 7) {
-                return version;
-            }
-        } catch (Exception ex) {
-            System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
-        }
-        return null;
-    }
-
-
-    /**
-     * Removes color in a text.
-     *
-     * @param toFilter The text to filter.
-     * @return The filtered text.
-     */
-    public static CharSequence filterColor(String toFilter) {
-        Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
-        for (Character character : chars)
-            toFilter = toFilter.replace("§" + character, "");
-        return toFilter;
-    }
-
-    public static ServerVersion getServerVersion() {
-        return serverVersion;
-    }
-
-    public static boolean usingSpigot() {
-        return usingSpigot;
-    }
 
     /**
      * Called when plugin is enabled.
@@ -660,6 +516,7 @@ public class UltraCosmetics extends JavaPlugin {
         registerListener(new PetManager());
         registerListener(new HatManager());
         registerListener(new SuitManager());
+        registerListener(new EmoteManager());
         registerListener(new TreasureChestManager());
         registerListener(new MainListener());
         if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
@@ -680,6 +537,151 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     /**
+     * Logs a message in console.
+     *
+     * @param object The message to log.
+     */
+    public static void log(String object) {
+        System.out.println("UltraCosmetics -> " + object.toString());
+    }
+
+    /**
+     * Get a collection of all the CustomPlayers.
+     *
+     * @return
+     */
+    public static Collection<CustomPlayer> getCustomPlayers() {
+        return playerManager.getPlayers();
+    }
+
+    /**
+     * @return if ammo system is enabled, or not.
+     */
+    public boolean isAmmoEnabled() {
+        return ammoEnabled;
+    }
+
+    /**
+     * @return if NoteBlockAPI is loaded.
+     */
+    public boolean isNoteBlockAPIEnabled() {
+        return noteBlockAPIEnabled;
+    }
+
+    /**
+     * @return if file storage is used.
+     */
+    public boolean usingFileStorage() {
+        return fileStorage;
+    }
+
+    public boolean areTreasureChestsEnabled() {
+        return treasureChests;
+    }
+
+    /**
+     * Debugs something.
+     *
+     * @param message The message to print.
+     * @return if debug is turned on or off.
+     */
+    public static boolean debug(Object message) {
+        if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
+        return debug;
+    }
+
+    /**
+     * Gets the UltraCosmetics Plugin Object.
+     *
+     * @return
+     */
+    public static UltraCosmetics getInstance() {
+        return core;
+    }
+
+    /**
+     * Registers a listener.
+     *
+     * @param listenerClass The listener to register.
+     */
+    public void registerListener(Listener listenerClass) {
+        Bukkit.getPluginManager().registerEvents(listenerClass, getInstance());
+    }
+
+    /**
+     * Gets the custom player of a player.
+     *
+     * @param player The player.
+     * @return The CustomPlayer of player.
+     */
+    public static CustomPlayer getCustomPlayer(Player player) {
+        return playerManager.getCustomPlayer(player);
+    }
+
+    /**
+     * Gets the Custom Player Manager.
+     *
+     * @return the Custom Player Manager.
+     */
+    public static PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    /**
+     * Gets the SQLloader Manager
+     *
+     * @return the SQLloader Manager
+     */
+    public static SQLLoaderManager getSQLLoader() {
+        return sqlloader;
+    }
+
+    /**
+     * Gets last version published on Spigot.
+     *
+     * @return last version published on Spigot.
+     */
+    public static String getLastVersion() {
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
+            con.setDoOutput(true);
+            con.setConnectTimeout(2000);
+            con.setRequestMethod("POST");
+            con.getOutputStream().write(
+                    ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
+            String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
+            if (version.length() <= 7) {
+                return version;
+            }
+        } catch (Exception ex) {
+            System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
+        }
+        return null;
+    }
+
+
+    /**
+     * Removes color in a text.
+     *
+     * @param toFilter The text to filter.
+     * @return The filtered text.
+     */
+    public static CharSequence filterColor(String toFilter) {
+        Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
+        for (Character character : chars)
+            toFilter = toFilter.replace("§" + character, "");
+        return toFilter;
+    }
+
+    public static ServerVersion getServerVersion() {
+        return serverVersion;
+    }
+
+    public static boolean usingSpigot() {
+        return usingSpigot;
+    }
+
+    /**
      * Overrides config saving to keep comments.
      */
     @Override
@@ -697,7 +699,8 @@ public class UltraCosmetics extends JavaPlugin {
     private void initPlayers() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             playerManager.create(p);
-            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName()))
+            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join")
+                    && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName()))
                 playerManager.getCustomPlayer(p).giveMenuItem();
         }
     }
@@ -823,6 +826,11 @@ public class UltraCosmetics extends JavaPlugin {
      * Setup default Cosmetics config.
      */
     private void setupCosmeticsConfigs() {
+        for(Category category : Category.values()) {
+            config.addDefault("Categories-Enabled." + category.getConfigPath(), true);
+            config.addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
+        }
+
         for (GadgetType gadgetType : GadgetType.values()) {
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Enabled", true, "if true, the gadget will be enabled.");
@@ -877,6 +885,12 @@ public class UltraCosmetics extends JavaPlugin {
             config.addDefault("Suits." + suit.getConfigName() + ".Show-Description", true, "if true, the description of this suit will be showed.");
             config.addDefault("Suits." + suit.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
+
+        for (EmoteType emoteType : EmoteType.values()) {
+            config.addDefault("Emotes." + emoteType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
+            config.addDefault("Emotes." + emoteType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Emotes." + emoteType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+        }
         try {
             config.save(file);
         } catch (IOException e) {
@@ -904,6 +918,9 @@ public class UltraCosmetics extends JavaPlugin {
         for (SuitType suit : SuitType.values())
             if (suit.isEnabled())
                 SuitType.enabled.add(suit);
+        for (EmoteType emoteType : EmoteType.values())
+            if (emoteType.isEnabled())
+                EmoteType.ENABLED.add(emoteType);
     }
 
     /**
