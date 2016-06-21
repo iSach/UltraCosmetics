@@ -356,7 +356,14 @@ public class CustomPlayer {
     /**
      * Clears all gadgets.
      */
-    public void clear() {
+    public boolean clear() {
+        boolean toReturn = currentGadget != null
+                || currentParticleEffect != null
+                || currentPet != null
+                || currentMount != null
+                || currentTreasureChest != null
+                || currentHat != null
+                || currentEmote != null;
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             removeMorph();
             try {
@@ -373,6 +380,7 @@ public class CustomPlayer {
         removeEmote();
         for (ArmorSlot armorSlot : ArmorSlot.values())
             removeSuit(armorSlot);
+        return toReturn;
     }
 
     /**

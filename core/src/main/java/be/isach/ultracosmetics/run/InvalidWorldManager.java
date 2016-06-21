@@ -13,19 +13,19 @@ import java.util.List;
  * Package: be.isach.ultracosmetics.run
  * Created by: Sacha
  * Created on: 21th June, 2016
- *             at 14:03
+ * at 14:03
  */
 public class InvalidWorldManager implements Runnable {
 
     @Override
     public void run() {
-        for(CustomPlayer customPlayer : UltraCosmetics.getCustomPlayers()) {
+        for (CustomPlayer customPlayer : UltraCosmetics.getCustomPlayers()) {
             Player p = customPlayer.getPlayer();
             try {
                 if (!((List) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
-                    customPlayer.clear();
                     customPlayer.removeMenuItem();
-                    customPlayer.getPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));
+                    if (customPlayer.clear())
+                        customPlayer.getPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));
                 }
             } catch (Exception exc) {
             }

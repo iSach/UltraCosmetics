@@ -447,6 +447,16 @@ public class UltraCosmetics extends JavaPlugin {
 
         log("Registering Cosmetics...");
         setupCosmeticsConfigs();
+
+        enabledCategories.clear();
+        for (Category c : Category.values()) {
+            if (c == Category.MORPHS)
+                if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
+                    continue;
+            if (c.isEnabled())
+                enabledCategories.add(c);
+        }
+
         try {
             config.save(file);
         } catch (IOException e) {
