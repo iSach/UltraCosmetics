@@ -27,19 +27,6 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
         super(world);
 
         final Pumpling instance = this;
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (customEntities.contains(instance)) {
-                    isCustomEntity = true;
-                    UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(getBukkitEntity());
-                    setInvisible(true);
-                    setBaby(true);
-                    setEquipment(4, new ItemStack(Blocks.PUMPKIN));
-                }
-            }
-        }, 4);
     }
 
     public org.bukkit.entity.Entity getEntity() {
@@ -88,7 +75,11 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
         super.m();
         if (isCustomEntity) {
             fireTicks = 0;
-            UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
+            UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);                    isCustomEntity = true;
+            UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(getBukkitEntity());
+            setInvisible(true);
+            setBaby(true);
+            setEquipment(4, new ItemStack(Blocks.PUMPKIN));
         }
     }
 }

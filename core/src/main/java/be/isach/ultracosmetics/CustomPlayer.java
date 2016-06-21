@@ -509,7 +509,7 @@ public class CustomPlayer {
      */
     public boolean hasGadgetsEnabled() {
         if (this.cache_hasGadgetsEnable > -1)
-            return cache_hasGadgetsEnable == 0 ? false : true;
+            return cache_hasGadgetsEnable != 0;
         // Make sure it won't be affected before load finished, especially for SQL
         if (!isLoaded)
             return false;
@@ -556,7 +556,7 @@ public class CustomPlayer {
      */
     public boolean canSeeSelfMorph() {
         if (this.cache_canSeeSelfMorph > -1)
-            return this.cache_canSeeSelfMorph == 0 ? false : true;
+            return this.cache_canSeeSelfMorph != 0;
         // Make sure it won't be affected before load finished, especially for SQL
         if (!isLoaded)
             return false;

@@ -11,7 +11,7 @@ public class MessageManager {
      * Set up the messages in the config.
      */
     public MessageManager() {
-        this.settingsManager = SettingsManager.getMessages();
+        settingsManager = SettingsManager.getMessages();
         loadMessages();
     }
 
@@ -317,9 +317,8 @@ public class MessageManager {
         addMessage("Emotes.Angry.Name", "&c&lAngry");
         addMessage("Emotes.Happy.Name", "&e&lHappy");
         addMessage("Emotes.Cheeky.Name", "&6&lCheeky");
-        addMessage("Emotes.Surprised.Name", "&f&lSurprised");
         addMessage("Emotes.Love.Name", "&4&lLove");
-        addMessage("Emotes.Tired.Name", "&3&lTired");
+        addMessage("Emotes.Must-Remove-Helmet", "%prefix% &c&lYou must remove your helmet to equip an emote!");
 
         //MENU
         addMessage("Menu.Gadgets", "&9&lGadgets");
@@ -349,6 +348,7 @@ public class MessageManager {
         addMessage("Enabled-Gadgets", "%prefix% &9you enabled gadgets!");
         addMessage("Disabled-Gadgets", "%prefix% &9you disabled gadgets!");
         addMessage("Not-Allowed-From-Console", "&c&lThis can't be executed from console!");
+        addMessage("World-Disabled", "%prefix% &c&lCosmetics are disabled in this world!");
     }
 
     /**

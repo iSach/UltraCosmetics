@@ -26,7 +26,6 @@ public class Emote {
     private EmoteAnimation animation;
 
     private boolean equipped;
-    private String name;
 
     public Emote(final UUID owner, final EmoteType emoteType) {
         this.emoteType = emoteType;
@@ -50,7 +49,8 @@ public class Emote {
     }
 
     public void clear() {
-        animation.cancel();
+        animation.stop();
+        getPlayer().getInventory().setHelmet(null);
         this.equipped = false;
     }
 
@@ -84,6 +84,6 @@ public class Emote {
     }
 
     public String getName() {
-        return "test";
+        return getEmoteType().getName();
     }
 }

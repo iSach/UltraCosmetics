@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.CustomPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
@@ -159,6 +160,32 @@ public class SubCommandToggle extends SubCommand {
             }
 
             MountManager.equipMount(mountType, receiver);
+        } else if (type.startsWith("e")) {
+            EmoteType emoteType;
+            try {
+                emoteType = EmoteType.valueOf(args[2].toUpperCase());
+            } catch (IllegalArgumentException exc) {
+                sender.sendMessage(MessageManager.getMessage("Invalid-Emote"));
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < EmoteType.enabled().size(); i++)
+                    sb.append(EmoteType.enabled().get(i).toString().toLowerCase() + ((i != EmoteType.enabled().size() - 1) ? "§f§l, §c" : ""));
+                sender.sendMessage("§c§lEmote Types: §c" + sb.toString());
+                return;
+            }
+
+            if (!emoteType.isEnabled()) {
+                sender.sendMessage("  §c§lThis emote isn't enabled!");
+                return;
+            }
+
+            CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            if (cp.currentEmote != null &&
+                    cp.currentEmote.getEmoteType() == emoteType) {
+                cp.removePet();
+                return;
+            }
+
+            EmoteManager.equipEmote(emoteType, receiver);
         } else if (type.startsWith("mor")) {
             MorphType morphType;
             try {

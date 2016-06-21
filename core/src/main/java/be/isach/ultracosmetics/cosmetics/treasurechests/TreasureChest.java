@@ -265,8 +265,8 @@ public class TreasureChest implements Listener {
     public void clear() {
         for (Block b : this.blocksToRestore) {
 //            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
-            b.setType((Material) this.oldMaterials.get(b.getLocation()));
-            b.setData(((Byte) this.oldDatas.get(b.getLocation())).byteValue());
+            b.setType(this.oldMaterials.get(b.getLocation()));
+            b.setData(this.oldDatas.get(b.getLocation()).byteValue());
             BlockUtils.treasureBlocks.remove(b);
         }
         if (!this.stopping) {
@@ -384,7 +384,7 @@ public class TreasureChest implements Listener {
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
-                        spawnHologram(b.getLocation().clone().add(0.5D, UltraCosmetics.getInstance().getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
+                        spawnHologram(b.getLocation().clone().add(0.5D, UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
                     }
                 }, 15L);
 
@@ -436,6 +436,9 @@ public class TreasureChest implements Listener {
     }
 
     private void spawnHologram(Location location, String s) {
+        if(UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
+            location.setY(location.getY() - 1);
+        }
         ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
         armorStand.setSmall(true);
         armorStand.setVisible(false);
@@ -477,7 +480,7 @@ public class TreasureChest implements Listener {
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                     public void run() {
-                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, UltraCosmetics.getInstance().getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
+                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, UltraCosmetics.getServerVersion() == ServerVersion.v1_9_R1 ? -0.7 : 0.3D, 0.5D), nameas);
                     }
                 }, 15L);
 

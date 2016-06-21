@@ -47,7 +47,7 @@ public enum PetType {
 
         if (SettingsManager.getConfig().get(new StringBuilder().append("Pets.").append(configName).append(".Description").toString()) == null) {
             this.description = defaultDesc;
-            UltraCosmetics.config.addDefault(new StringBuilder().append("Pets.").append(configName).append(".Description").toString(), getDescriptionColored(), new String[]{"description of this pet."});
+            UltraCosmetics.config.addDefault(new StringBuilder().append("Pets.").append(configName).append(".Description").toString(), getDescriptionColored(), "description of this pet.");
         } else {
             this.description = fromList((List) SettingsManager.getConfig().get(new StringBuilder().append("Pets.").append(configName).append(".Description").toString()));
         }
@@ -56,7 +56,7 @@ public enum PetType {
     public Pet equip(Player player) {
         Pet pet = null;
         try {
-            pet = this.clazz.getDeclaredConstructor(new Class[]{UUID.class}).newInstance(new Object[]{player == null ? null : player.getUniqueId()});
+            pet = this.clazz.getDeclaredConstructor(new Class[]{UUID.class}).newInstance(player == null ? null : player.getUniqueId());
             pet.equip();
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -128,7 +128,7 @@ public enum PetType {
     private String fromList(List<String> description) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < description.size(); i++)
-            stringBuilder.append(new StringBuilder().append((String) description.get(i)).append(i < description.size() - 1 ? "\n" : "").toString());
+            stringBuilder.append(new StringBuilder().append(description.get(i)).append(i < description.size() - 1 ? "\n" : "").toString());
         return stringBuilder.toString();
     }
 }

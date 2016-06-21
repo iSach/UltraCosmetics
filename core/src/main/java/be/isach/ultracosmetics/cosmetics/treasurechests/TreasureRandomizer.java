@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
@@ -48,6 +49,7 @@ public class TreasureRandomizer {
     public static List<SuitType> chestplateList = new ArrayList<>();
     public static List<SuitType> leggingList = new ArrayList<>();
     public static List<SuitType> bootList = new ArrayList<>();
+    public static List<EmoteType> emoteList = new ArrayList<>();
 
     private static Random random = new Random();
 
@@ -63,7 +65,8 @@ public class TreasureRandomizer {
         HELMET,
         CHESTPLATE,
         LEGGINGS,
-        BOOTS
+        BOOTS,
+        EMOTE
     }
 
     private static final List<ResultType> RESULT_TYPES = new ArrayList<>();
@@ -80,6 +83,7 @@ public class TreasureRandomizer {
     private static final int CHESTPLATE_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
     private static final int LEGGINGS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
     private static final int BOOTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
+    private static final int EMOTES_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Emotes.Chance");
 
     private static void setupChance(List<ResultType> resultRef, int percent, ResultType resultType) {
         for (int i = 0; i < percent; i++) {
@@ -97,60 +101,66 @@ public class TreasureRandomizer {
                         && player.hasPermission(type.getPermission())
                         && type.requiresAmmo()
                         && type.canBeFound())
-                    this.ammoList.add(type);
+                    ammoList.add(type);
         // Add GADGETS! (Not ammo)
         if (gadgetList.isEmpty())
             for (GadgetType type : GadgetType.values())
                 if (type.isEnabled()
                         && !player.hasPermission(type.getPermission())
                         && type.canBeFound())
-                    this.gadgetList.add(type);
+                    gadgetList.add(type);
         if (petList.isEmpty())
             for (PetType petType : PetType.enabled())
                 if (!player.hasPermission(petType.getPermission())
                         && petType.canBeFound())
-                    this.petList.add(petType);
+                    petList.add(petType);
         if (morphList.isEmpty()
                 && UltraCosmetics.enabledCategories.contains(Category.MORPHS))
             for (MorphType morph : MorphType.enabled())
                 if (!player.hasPermission(morph.getPermission())
                         && morph.canBeFound())
-                    this.morphList.add(morph);
+                    morphList.add(morph);
         if (particleEffectList.isEmpty())
             for (ParticleEffectType type : ParticleEffectType.enabled())
                 if (!player.hasPermission(type.getPermission())
                         && type.canBeFound())
-                    this.particleEffectList.add(type);
+                    particleEffectList.add(type);
         if (mountList.isEmpty())
             for (MountType type : MountType.enabled())
                 if (!player.hasPermission(type.getPermission())
                         && type.canBeFound())
-                    this.mountList.add(type);
+                    mountList.add(type);
         if (hatList.isEmpty())
             for (Hat hat : Hat.enabled())
                 if (hat.canBeFound()
                         && !player.hasPermission(hat.getPermission()))
-                    this.hatList.add(hat);
+                    hatList.add(hat);
         if (helmetList.isEmpty())
             for (SuitType suit : SuitType.enabled())
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.HELMET)))
-                    this.helmetList.add(suit);
+                    helmetList.add(suit);
         if (chestplateList.isEmpty())
             for (SuitType suit : SuitType.enabled())
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.CHESTPLATE)))
-                    this.chestplateList.add(suit);
+                    chestplateList.add(suit);
         if (leggingList.isEmpty())
             for (SuitType suit : SuitType.enabled())
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.LEGGINGS)))
-                    this.leggingList.add(suit);
+                    leggingList.add(suit);
         if (bootList.isEmpty())
             for (SuitType suit : SuitType.enabled())
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.BOOTS)))
-                    this.bootList.add(suit);
+                    bootList.add(suit);
+        if (emoteList.isEmpty())
+            for (EmoteType emoteType : EmoteType.enabled())
+                if (emoteType.canBeFound()
+                        && !player.hasPermission(emoteType.getPermission()))
+                    emoteList.add(emoteType);
+
 
         if (!Category.MOUNTS.isEnabled())
             mountList.clear();
@@ -172,6 +182,8 @@ public class TreasureRandomizer {
             leggingList.clear();
             bootList.clear();
         }
+        if (!Category.EMOTES.isEnabled())
+            emoteList.clear();
 
         if (Category.MORPHS.isEnabled()
                 && !morphList.isEmpty()
@@ -220,6 +232,10 @@ public class TreasureRandomizer {
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Suits.Enabled"))
                 setupChance(RESULT_TYPES, BOOTS_CHANCE, ResultType.BOOTS);
         }
+        if (Category.EMOTES.isEnabled()
+                && !emoteList.isEmpty()
+                && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Emotes.Enabled"))
+            setupChance(RESULT_TYPES, EMOTES_CHANCE, ResultType.EMOTE);
     }
 
     private String getMessage(String s) {
@@ -288,28 +304,31 @@ public class TreasureRandomizer {
                 case BOOTS:
                     giveRandomSuit(ArmorSlot.BOOTS);
                     break;
+                case EMOTE:
+                    giveRandomEmote();
+                    break;
             }
 
         } catch (IndexOutOfBoundsException exception) {
-            if ((d("Gadgets") ? gadgetList.isEmpty() : true)
-                    && (d("Gadgets-Ammo") ? ammoList.isEmpty() : true)
-                    && (d("Pets") ? petList.isEmpty() : true)
-                    && (d("Morphs") ? morphList.isEmpty() : true)
-                    && (d("Mounts") ? mountList.isEmpty() : true)
-                    && (d("Hats") ? hatList.isEmpty() : true)
-                    && (d("Effects") ? particleEffectList.isEmpty() : true)
+            if ((!d("Gadgets") || gadgetList.isEmpty())
+                    && (!d("Gadgets-Ammo") || ammoList.isEmpty())
+                    && (!d("Pets") || petList.isEmpty())
+                    && (!d("Morphs") || morphList.isEmpty())
+                    && (!d("Mounts") || mountList.isEmpty())
+                    && (!d("Hats") || hatList.isEmpty())
+                    && (!d("Effects") || particleEffectList.isEmpty())
                     || RESULT_TYPES.isEmpty())
                 giveNothing();
             else
                 giveRandomThing();
         } catch (IllegalArgumentException exception) {
-            if ((d("Gadgets") ? gadgetList.isEmpty() : true)
-                    && (d("Gadgets-Ammo") ? ammoList.isEmpty() : true)
-                    && (d("Pets") ? petList.isEmpty() : true)
-                    && (d("Morphs") ? morphList.isEmpty() : true)
-                    && (d("Mounts") ? mountList.isEmpty() : true)
-                    && (d("Hats") ? hatList.isEmpty() : true)
-                    && (d("Effects") ? particleEffectList.isEmpty() : true)
+            if ((!d("Gadgets") || gadgetList.isEmpty())
+                    && (!d("Gadgets-Ammo") || ammoList.isEmpty())
+                    && (!d("Pets") || petList.isEmpty())
+                    && (!d("Morphs") || morphList.isEmpty())
+                    && (!d("Mounts") || mountList.isEmpty())
+                    && (!d("Hats") || hatList.isEmpty())
+                    && (!d("Effects") || particleEffectList.isEmpty())
                     || RESULT_TYPES.isEmpty())
                 giveNothing();
             else
@@ -334,21 +353,31 @@ public class TreasureRandomizer {
         mountList.clear();
         morphList.clear();
         hatList.clear();
+        helmetList.clear();
+        chestplateList.clear();
+        leggingList.clear();
+        bootList.clear();
+        emoteList.clear();
         RESULT_TYPES.clear();
         types.clear();
     }
 
     public void giveNothing() {
-        try{
-        	giveMoney();
-        }catch(Exception e){
-        	 name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
-             itemStack = new ItemStack(Material.BARRIER);
+        if(UltraCosmetics.getInstance().isVaultLoaded()) {
+            try {
+                giveMoney();
+            } catch (Exception e) {
+                name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
+                itemStack = new ItemStack(Material.BARRIER);
+            }
+        } else {
+            name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
+            itemStack = new ItemStack(Material.BARRIER);
         }
     }
 
     public void giveMoney() {
-        if(!UltraCosmetics.getInstance().isVaultLoaded()) {
+        if (!UltraCosmetics.getInstance().isVaultLoaded()) {
             giveNothing();
             return;
         }
@@ -442,6 +471,19 @@ public class TreasureRandomizer {
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Pets.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Pets.Message.message")).replace("%name%", player.getName())
                     .replace("%pet%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? pet.getMenuName() : UltraCosmetics.filterColor(pet.getMenuName())));
+    }
+
+    public void giveRandomEmote() {
+        int i = random.nextInt(emoteList.size());
+        EmoteType emoteType = emoteList.get(i);
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Emote").replace("%emote%", emoteType.getName());
+        emoteList.remove(i);
+        givePermission(emoteType.getPermission());
+        itemStack = new ItemStack(emoteType.getFrames().get(emoteType.getMaxFrames() - 1));
+        spawnRandomFirework(loc);
+        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Emotes.Message.enabled"))
+            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Emotes.Message.message")).replace("%name%", player.getName())
+                    .replace("%emote%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? emoteType.getName() : UltraCosmetics.filterColor(emoteType.getName())));
     }
 
     public void giveRandomMount() {

@@ -4,9 +4,12 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.2.1-RELEASE'
+    version = '2.3-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
+
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
 
     configurations {
         shaded
@@ -25,10 +28,7 @@ allprojects {
     }
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
-boolean local = true
+boolean local = false
 
 if (local) libsDirName = '/Users/Sacha/Desktop/LOCAL/plugins'
 

@@ -830,6 +830,10 @@ public class UltraCosmetics extends JavaPlugin {
             config.addDefault("Categories-Enabled." + category.getConfigPath(), true);
             config.addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
         }
+        config.addDefault("TreasureChests.Loots.Emotes.Enabled", true);
+        config.addDefault("TreasureChests.Loots.Emotes.Chance", 5);
+        config.addDefault("TreasureChests.Loots.Emotes.Message.enabled", true);
+        config.addDefault("TreasureChests.Loots.Emotes.Message.message", "%prefix% &6&l%name% found rare %emote%");
 
         for (GadgetType gadgetType : GadgetType.values()) {
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");

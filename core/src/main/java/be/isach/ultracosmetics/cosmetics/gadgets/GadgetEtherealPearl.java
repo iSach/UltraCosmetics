@@ -92,7 +92,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && runnableHashMap.containsKey((Player) event.getEntity()))
+        if (event.getEntity() instanceof Player && runnableHashMap.containsKey(event.getEntity()))
             event.setCancelled(true);
     }
 

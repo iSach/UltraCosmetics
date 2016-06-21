@@ -1,5 +1,5 @@
 name: UltraCosmetics
-version: 2.2.1
+version: 2.3
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
@@ -489,3 +489,20 @@ permissions:
     default: op
   ultracosmetics.suits.santa.boots:
     default: op
+  ultracosmetics.emotes.*:
+      children:
+        - ultracosmetics.emotes.cry
+        - ultracosmetics.emotes.angry
+        - ultracosmetics.emotes.happy
+        - ultracosmetics.emotes.cheeky
+        - ultracosmetics.emotes.love
+  ultracosmetics.emotes.cry:
+      default: op
+  ultracosmetics.emotes.angry:
+      default: op
+  ultracosmetics.emotes.happy:
+      default: op
+  ultracosmetics.emotes.cheeky:
+      default: op
+  ultracosmetics.emotes.love:
+      default: op

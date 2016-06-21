@@ -68,9 +68,7 @@ public class BlockUtils {
      */
     public static boolean isOnGround(Entity entity) {
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        if (block.getType().isSolid())
-            return true;
-        return false;
+        return block.getType().isSolid();
     }
 
     /**
@@ -240,10 +238,8 @@ public class BlockUtils {
 
 
     private static boolean a(Block b) {
-        if (b.getType() == Material.AIR
-                || b.getType().isSolid())
-            return true;
-        return false;
+        return b.getType() == Material.AIR
+                || b.getType().isSolid();
     }
 
     /**

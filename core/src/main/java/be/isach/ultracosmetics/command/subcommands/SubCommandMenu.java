@@ -46,6 +46,8 @@ public class SubCommandMenu extends SubCommand {
             MountManager.openMenu(sender, page);
         else if (s.startsWith("ma"))
             MainMenuManager.openMenu(sender);
+        else if (s.startsWith("e"))
+            EmoteManager.openMenu(sender, page);
         else if (s.startsWith("b")) {
             sender.closeInventory();
             UltraCosmetics.getCustomPlayer(sender).openKeyPurchaseMenu();
@@ -53,7 +55,7 @@ public class SubCommandMenu extends SubCommand {
             sender.sendMessage("§c§l/uc menu <menu>\n§c§lInvalid Menu\n§c§lAvailable Menus: main,"
                     + (UltraCosmetics.getInstance().areTreasureChestsEnabled() ? " buykey," : "")
                     + (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") ? " renamepet," : "") +
-                    " gadgets, particleeffects, pets, mounts, suits, hats, morphs");
+                    " gadgets, particleeffects, pets, mounts, suits, hats, morphs, emotes");
     }
 
     @Override

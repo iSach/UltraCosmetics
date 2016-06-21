@@ -93,7 +93,7 @@ public class EmoteManager implements Listener {
                         toggle = MessageManager.getMessage("Menu.Unequip");
                     ItemStack is;
                     if (emoteType.getFrames().size() > 0) {
-                        is = emoteType.getFrames().get(0).clone();
+                        is = emoteType.getFrames().get(emoteType.getMaxFrames() - 1).clone();
                     } else {
                         is = ItemFactory.create(Material.SKULL_ITEM, (byte) 3, "");
                     }
@@ -168,7 +168,8 @@ public class EmoteManager implements Listener {
         }
 
         Emote emote = emoteType.equip(player);
-        emote.equip();
+        if (emote != null)
+            emote.equip();
     }
 
     public static EmoteType getEmoteType(String name) {

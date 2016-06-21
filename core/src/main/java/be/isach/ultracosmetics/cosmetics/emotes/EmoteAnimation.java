@@ -12,18 +12,19 @@ import org.bukkit.scheduler.BukkitRunnable;
  * Created on: 17th June, 2016
  * at 02:48
  */
-public class EmoteAnimation extends BukkitRunnable {
+class EmoteAnimation extends BukkitRunnable {
 
     private static final int INTERVAL_BETWEEN_REPLAY = 20;
 
     private int ticks, ticksPerFrame, currentFrame, intervalTick;
     private Emote emote;
-    private boolean up = true;
+    private boolean running, up = true;
 
-    public EmoteAnimation(int ticksPerFrame, Emote emote) {
+    EmoteAnimation(int ticksPerFrame, Emote emote) {
         this.ticksPerFrame = ticksPerFrame;
         this.emote = emote;
         this.ticks = 0;
+        this.running = false;
     }
 
     @Override
@@ -36,23 +37,34 @@ public class EmoteAnimation extends BukkitRunnable {
         }
     }
 
-    public void start() {
+    void start() {
+        this.running = true;
         runTaskTimer(UltraCosmetics.getInstance(), 0, ticksPerFrame);
     }
 
-    private void updateTexture() {
-        emote.getPlayer().getInventory().setHelmet(getType().getFrames().get(currentFrame));
-//        emote.getPlayer().updateInventory();
+    public void pause() {
+        this.running = !running;
+    }
 
-        if(up) {
-            if(currentFrame >= getType().getMaxFrames() - 1) {
+    void stop() {
+        this.running = false;
+        cancel();
+    }
+
+    private void updateTexture() {
+        if (!running) return;
+
+        emote.getPlayer().getInventory().setHelmet(getType().getFrames().get(currentFrame));
+
+        if (up) {
+            if (currentFrame >= getType().getMaxFrames() - 1) {
                 up = false;
             } else {
                 currentFrame++;
             }
         } else {
-            if(currentFrame <= 0) {
-                if(intervalTick >= INTERVAL_BETWEEN_REPLAY) {
+            if (currentFrame <= 0) {
+                if (intervalTick >= INTERVAL_BETWEEN_REPLAY) {
                     up = true;
                     intervalTick = 0;
                 } else {

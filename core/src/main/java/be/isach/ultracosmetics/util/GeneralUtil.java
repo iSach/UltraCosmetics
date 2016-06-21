@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
@@ -91,6 +92,11 @@ public class GeneralUtil {
             for (ArmorSlot armorSlot : ArmorSlot.values())
                 writer.println("  - " + suit.getPermission(armorSlot));
         }
+        writer.println("");
+        writer.println("Emotes:");
+        writer.println("  - ultracosmetics.emotes.*");
+        for (EmoteType emoteType : EmoteType.values())
+            writer.println("  - " + emoteType.getPermission());
         writer.println("");
 
         writer.close();

@@ -25,7 +25,7 @@ public abstract class AAnvilGUI {
 
         private int slot;
 
-        private AnvilSlot(int slot) {
+        AnvilSlot(int slot) {
             this.slot = slot;
         }
 
@@ -83,7 +83,7 @@ public abstract class AAnvilGUI {
     }
 
     public interface AnvilClickEventHandler {
-        public void onAnvilClick(AnvilClickEvent event);
+        void onAnvilClick(AnvilClickEvent event);
     }
 
     protected Player player;
