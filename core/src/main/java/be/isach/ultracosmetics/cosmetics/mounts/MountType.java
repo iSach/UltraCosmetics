@@ -31,7 +31,7 @@ public enum MountType {
     NYANSHEEP("ultracosmetics.mounts.nyansheep", "NyanSheep", Material.STAINED_GLASS, (byte) 9, EntityType.SHEEP,
             "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", MountNyanSheep.class),
     DRAGON("ultracosmetics.mounts.dragon", "Dragon", Material.DRAGON_EGG, (byte) 0, EntityType.ENDER_DRAGON,
-            "&7&oBecome a drigon rider!", MountDragon.class),
+            "&7&oBecome a dragon rider!", MountDragon.class),
     SKYSQUID("ultracosmetics.mounts.skysquid", "SkySquid", Material.INK_SACK, (byte) 0, EntityType.SQUID, "&7&oWat.", UltraCosmetics.getInstance().getMounts().getSquidClass()),
     SLIME("ultracosmetics.mounts.slime", "Slime", Material.SLIME_BALL, (byte) 0, EntityType.SLIME, "&7&oSplat! Splat!", UltraCosmetics.getInstance().getMounts().getSlimeClass()),
     HYPECART("ultracosmetics.mounts.hypecart", "HypeCart", Material.MINECART, (byte) 0, EntityType.MINECART,

@@ -44,8 +44,8 @@ public class EntityUtil implements IEntityUtil {
     }
 
     Random r = new Random();
-    Map<Player, List<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
-    Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
+    private Map<Player, List<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
+    private Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
 
     @Override
     public void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v) {

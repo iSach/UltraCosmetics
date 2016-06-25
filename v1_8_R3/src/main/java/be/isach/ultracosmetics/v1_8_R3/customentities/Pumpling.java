@@ -16,13 +16,6 @@ import java.util.List;
  */
 public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
-    boolean isCustomEntity;
-
-    /**
-     * Static list of all the custom entities.
-     */
-    public static List<Entity> customEntities = new ArrayList();
-
     public Pumpling(World world) {
         super(world);
 
@@ -35,7 +28,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     @Override
     protected String z() { // say
-        if (isCustomEntity) {
+        if (isCustomEntity()) {
             makeSound("mob.ghast.scream", 0.05f, 2f);
             return null;
         } else
@@ -45,7 +38,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     @Override
     protected String bo() { // Hurt
-        if (isCustomEntity)
+        if (isCustomEntity())
             return null;
         else
             super.z();
@@ -54,7 +47,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     @Override
     protected String bp() { // Death
-        if (isCustomEntity)
+        if (isCustomEntity())
             return null;
         else
             super.z();
@@ -63,7 +56,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     @Override
     protected void a(BlockPosition blockposition, Block block) {
-        if (isCustomEntity) {
+        if (isCustomEntity()) {
             return;
         } else {
             super.a(blockposition, block);
@@ -73,13 +66,17 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     @Override
     public void m() {
         super.m();
-        if (isCustomEntity) {
+        if (isCustomEntity()) {
             fireTicks = 0;
-            UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);                    isCustomEntity = true;
+            UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
             UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(getBukkitEntity());
             setInvisible(true);
             setBaby(true);
             setEquipment(4, new ItemStack(Blocks.PUMPKIN));
         }
+    }
+
+    private boolean isCustomEntity() {
+        return CustomEntities.customEntities.contains(this);
     }
 }

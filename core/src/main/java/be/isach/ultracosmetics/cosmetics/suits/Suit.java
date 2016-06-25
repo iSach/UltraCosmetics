@@ -53,6 +53,8 @@ public class Suit {
             case HELMET:
                 if (getCustomPlayer().currentHat != null)
                     getCustomPlayer().removeHat();
+                if(getCustomPlayer().currentEmote != null)
+                    getCustomPlayer().removeEmote();
                 if (getPlayer().getInventory().getHelmet() != null) {
                     ItemStack itemStack = getPlayer().getInventory().getHelmet();
                     drop(itemStack);

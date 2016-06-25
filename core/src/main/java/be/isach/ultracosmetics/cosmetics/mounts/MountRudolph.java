@@ -74,7 +74,7 @@ public class MountRudolph extends Mount {
 
         Vector playerVector = PlayerUtils.getHorizontalDirection(getPlayer(), 0.75);
 
-        location.add(vectorLeft).add(playerVector).add(0, -1.5, 0);
+        location.add(vectorLeft).add(playerVector).add(0, -1.7, 0);
         left.teleport(location);
 
         location.subtract(vectorLeft).add(rightVector);
@@ -94,7 +94,7 @@ public class MountRudolph extends Mount {
                     UltraCosmetics.getInstance().getEntityUtil().sendTeleportPacket(player , left);
                 }
             }
-        }.run();
+        }.start();
     }
 
     @Override

@@ -35,7 +35,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void resetWitherSize(Wither wither) {
-        ((CraftWither) wither).getHandle().l(600);
+        ((CraftWither) wither).getHandle().g(600);
     }
 
     @Override

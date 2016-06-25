@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.v1_8_R3.mount;
 
 import be.isach.ultracosmetics.cosmetics.mounts.MountType;
+import org.bukkit.entity.Slime;
 
 import java.util.UUID;
 
@@ -15,5 +16,6 @@ public class MountSlime extends MountCustomEntity {
 
     @Override
     protected void onUpdate() {
+        ((Slime)getEntity()).setSize(3);
     }
 }

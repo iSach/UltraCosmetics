@@ -29,21 +29,6 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
         setAI(false);
     }
 
-    private void removeSelectors() {
-        try {
-            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-            bField.setAccessible(true);
-            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
-            bField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            bField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-    }
-
     @Override
     public void g(float sideMot, float forMot) {
         if (!CustomEntities.customEntities.contains(this)) return;

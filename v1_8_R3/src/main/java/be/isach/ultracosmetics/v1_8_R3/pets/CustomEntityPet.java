@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
+import be.isach.ultracosmetics.v1_8_R3.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_8_R3.customentities.Pumpling;
 import net.minecraft.server.v1_8_R3.Entity;
 import org.bukkit.Bukkit;
@@ -96,7 +97,7 @@ public class CustomEntityPet extends Pet {
         double z = getPlayer().getLocation().getZ();
 
         customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        Pumpling.customEntities.add(((org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity) customEntity.getEntity()).getHandle());
+        CustomEntities.customEntities.add(((org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
@@ -117,7 +118,7 @@ public class CustomEntityPet extends Pet {
     @Override
     protected void removeEntity() {
         getCustomEntity().dead = true;
-        Pumpling.customEntities.remove(customEntity);
+        CustomEntities.customEntities.remove(customEntity);
     }
 
     @Override

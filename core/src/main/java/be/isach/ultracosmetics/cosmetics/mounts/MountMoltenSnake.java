@@ -20,11 +20,11 @@ import java.util.UUID;
  */
 public class MountMoltenSnake extends Mount {
 
-    List<Entity> entities = new ArrayList<>();
-    Entity last;
-    Location lastLocation;
-    float lastYaw;
-    float lastPitch;
+    private List<Entity> entities = new ArrayList<>();
+    private Entity last;
+    private Location lastLocation;
+    private float lastYaw;
+    private float lastPitch;
 
     public MountMoltenSnake(UUID owner) {
         super(owner, MountType.MOLTENSNAKE);
@@ -46,12 +46,13 @@ public class MountMoltenSnake extends Mount {
             Location loc = entity.getLocation();
             if (i == 0) {
                 entity.setVelocity(playerVector);
-                entity.teleport(loc);
+                entity.teleport(loc.clone().add(0, -1.3, 0));
             } else {
                 if (i != 1)
                     entity.teleport(lastLocation);
                 else {
                     entity.teleport(lastLocation.clone().add(0, -1.3, 0));
+//                    ((ArmorStand)entity).setHelmet(null);
                 }
                 ArmorStand as = ((ArmorStand) entity);
                 as.setHeadPose(new EulerAngle(Math.toRadians(lastPitch), Math.toRadians(lastYaw), 0));

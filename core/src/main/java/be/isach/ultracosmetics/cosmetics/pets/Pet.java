@@ -83,7 +83,7 @@ public abstract class Pet implements Listener {
      * Equips the pet.
      */
     public void equip() {
-        this.followTask = UltraCosmetics.getInstance().newPlayerFollower(this , getPlayer());
+        this.followTask = UltraCosmetics.getInstance().newPlayerFollower(this, getPlayer());
         if (UltraCosmetics.getCustomPlayer(getPlayer()).currentPet != null)
             UltraCosmetics.getCustomPlayer(getPlayer()).removePet();
         UltraCosmetics.getCustomPlayer(getPlayer()).currentPet = this;
@@ -93,6 +93,7 @@ public abstract class Pet implements Listener {
         armorStand = (ArmorStand) this.getPlayer().getWorld().spawnEntity(this.getPlayer().getLocation(), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
+        armorStand.setGravity(false);
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(UltraCosmetics.getInstance(), "C_AD_ArmorStand"));
@@ -136,8 +137,9 @@ public abstract class Pet implements Listener {
                         clear();
                         return;
                     }
-                    if (armorStand != null)
-                        UltraCosmetics.getInstance().getEntityUtil().setPassenger(getEntity(), armorStand);
+                    if (armorStand != null && getType() != PetType.WITHER) {
+                        armorStand.teleport(getEntity().getLocation().add(0, -0.7, 0));
+                    }
                 } catch (NullPointerException exc) {
                     exc.printStackTrace();
                     cancel();
@@ -164,15 +166,15 @@ public abstract class Pet implements Listener {
         UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(entity);
 
 
-        this.entity.setPassenger(armorStand);
+//        this.entity.setPassenger(armorStand);
         if (getType() == PetType.WITHER) {
             this.entity.setCustomName(getType().getEntityName(getPlayer()));
             this.entity.setCustomNameVisible(true);
 
             if (UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()) != null)
                 this.entity.setCustomName(UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()));
-        } else
-            this.entity.setPassenger(armorStand);
+            armorStand.remove();
+        }
         this.entity.setMetadata("Pet", new FixedMetadataValue(UltraCosmetics.getInstance(), "UltraCosmetics"));
 
         getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", (UltraCosmetics.getInstance().placeholdersHaveColor())
@@ -220,7 +222,7 @@ public abstract class Pet implements Listener {
         owner = null;
     }
 
-    public boolean isCustomEntity(){
+    public boolean isCustomEntity() {
         return false;
     }
 

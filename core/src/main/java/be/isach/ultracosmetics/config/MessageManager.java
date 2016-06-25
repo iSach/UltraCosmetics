@@ -289,6 +289,7 @@ public class MessageManager {
         addMessage("Hats.Snowman.Name", "&f&lSnowman");
         addMessage("Hats.Present.Name", "&c&lPresent");
         addMessage("Hats.Elf.Name", "&a&lElf");
+        addMessage("Hats.Bedrock.Name", "&8&lBedrock");
         addMessage("Hats.Must-Remove-Hat", "%prefix% &c&lYou must remove your helmet to equip a hat!");
 
         //SUITS
