@@ -253,6 +253,7 @@ permissions:
       - ultracosmetics.pets.wither
       - ultracosmetics.pets.pumpling
       - ultracosmetics.pets.christmaself
+      - ultracosmetics.pets.mooshroom
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -275,6 +276,8 @@ permissions:
   ultracosmetics.pets.rename:
     default: op
   ultracosmetics.pets.christmaself:
+    default: op
+  ultracosmetics.pets.mooshroom:
     default: op
   ultracosmetics.morphs.*:
     children:

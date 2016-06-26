@@ -218,6 +218,8 @@ public class MessageManager {
         addMessage("Pets.Pumpling.entity-displayname", "&l%playername%'s pumpling");
         addMessage("Pets.ChristmasElf.menu-name", "&a&lChristmas Elf");
         addMessage("Pets.ChristmasElf.entity-displayname", "&l%playername%'s Christmas elf");
+        addMessage("Pets.Mooshroom.menu-name", "&4&lMooshroom");
+        addMessage("Pets.Mooshroom.entity-displayname", "&l%playername%'s Mooshroom");
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
