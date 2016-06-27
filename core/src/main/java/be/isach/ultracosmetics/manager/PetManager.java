@@ -212,7 +212,7 @@ public class PetManager implements Listener {
     /* =+=+=+=+=+=+=+=+=+=+=+= Rename pet part =+=+=+=+=+=+=+=+=+=+= */
 
     public static void renamePet(final Player p) {
-        UltraCosmetics.getInstance().newAnvilGUI(p , new AAnvilGUI.AnvilClickEventHandler() {
+        AAnvilGUI gui = UltraCosmetics.getInstance().newAnvilGUI(p , new AAnvilGUI.AnvilClickEventHandler() {
             @Override
             public void onAnvilClick(AAnvilGUI.AnvilClickEvent event) {
                 if (event.getSlot() == AAnvilGUI.AnvilSlot.OUTPUT) {
@@ -238,6 +238,8 @@ public class PetManager implements Listener {
 
             }
         });
+        gui.setSlot(AAnvilGUI.AnvilSlot.INPUT_LEFT, ItemFactory.create(Material.NAME_TAG, (byte) 0, "Type here"));
+        gui.open();
     }
 
     private static void buyRenamePet(final Player p, final String name) {

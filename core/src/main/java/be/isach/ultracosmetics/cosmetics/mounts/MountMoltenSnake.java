@@ -52,7 +52,7 @@ public class MountMoltenSnake extends Mount {
                     entity.teleport(lastLocation);
                 else {
                     entity.teleport(lastLocation.clone().add(0, -1.3, 0));
-//                    ((ArmorStand)entity).setHelmet(null);
+                    ((ArmorStand)entity).setHelmet(null);
                 }
                 ArmorStand as = ((ArmorStand) entity);
                 as.setHeadPose(new EulerAngle(Math.toRadians(lastPitch), Math.toRadians(lastYaw), 0));
