@@ -21,12 +21,14 @@ public enum PetType {
     SHEEP("ultracosmetics.pets.sheep", "Sheep", Material.WOOL, (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class),
     EASTERBUNNY("ultracosmetics.pets.easterbunny", "EasterBunny", Material.CARROT_ITEM, (byte) 0, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class),
     COW("ultracosmetics.pets.cow", "Cow", Material.MILK_BUCKET, (byte) 0, "&7&oMoooo!", EntityType.COW, PetCow.class),
+    MOOSHROOM("ultracosmetics.pets.mooshroom", "Mooshroom", Material.RED_MUSHROOM, (byte) 0, "&7&oMoooo!", EntityType.MUSHROOM_COW, PetMooshroom.class),
     KITTY("ultracosmetics.pets.kitty", "Kitty", Material.RAW_FISH, (byte) 0, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class),
     DOG("ultracosmetics.pets.dog", "Dog", Material.BONE, (byte) 0, "&7&oWoof!", EntityType.WOLF, PetDog.class),
     CHICK("ultracosmetics.pets.chick", "Chick", Material.EGG, (byte) 0, "&7&oBwaaaaaaak!!", EntityType.CHICKEN, PetChick.class),
     WITHER("ultracosmetics.pets.wither", "Wither", Material.SKULL_ITEM, (byte) 1, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class),
     PUMPLING("ultracosmetics.pets.pumpling", "Pumpling", Material.PUMPKIN, (byte) 0, "&7&oJust a little floating pumpkin", EntityType.ZOMBIE, UltraCosmetics.getInstance().getPets().getPumplingClass()),
-    CHRISTMASELF("ultracosmetics.pets.christmaself", "ChristmasElf", Material.MONSTER_EGG, (byte) 120, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class);
+    CHRISTMASELF("ultracosmetics.pets.christmaself", "ChristmasElf", Material.MONSTER_EGG, (byte) 120, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class),
+    COMPANIONCUBE("ultracosmetics.pets.companioncube", "CompanionCube", Material.NOTE_BLOCK, (byte) 0, "&7&oThe Companion Cube cannot speak!", EntityType.ZOMBIE, UltraCosmetics.getInstance().getPets().getCompanionCubeClass());
 
     public static List<PetType> enabled = new ArrayList();
     private String permission;

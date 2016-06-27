@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.v1_10_R1.pets;
 
 import be.isach.ultracosmetics.v1_10_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_10_R1.customentities.Pumpling;
+import be.isach.ultracosmetics.v1_10_R1.customentities.CompanionCube;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
@@ -97,7 +98,11 @@ public abstract class CustomEntityPet extends Pet {
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();
 
-        customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
+        if (this instanceof PetPumpling) {
+            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
+        } else if (this instanceof PetCompanionCube) {
+            customEntity = new CompanionCube(((CraftPlayer) getPlayer()).getHandle().getWorld());
+        }
         CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
