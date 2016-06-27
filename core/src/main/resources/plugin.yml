@@ -252,6 +252,7 @@ permissions:
       - ultracosmetics.pets.easterbunny
       - ultracosmetics.pets.wither
       - ultracosmetics.pets.pumpling
+      - ultracosmetics.pets.companioncube
       - ultracosmetics.pets.christmaself
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
@@ -273,6 +274,8 @@ permissions:
   ultracosmetics.pets.pumpling:
     default: op
   ultracosmetics.pets.rename:
+    default: op
+  ultracosmetics.pets.companioncube:
     default: op
   ultracosmetics.pets.christmaself:
     default: op

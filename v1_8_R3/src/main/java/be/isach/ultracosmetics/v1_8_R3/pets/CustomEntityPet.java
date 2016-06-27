@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_8_R3.customentities.Pumpling;
+import be.isach.ultracosmetics.v1_8_R3.customentities.CompanionCube;
 import net.minecraft.server.v1_8_R3.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
@@ -96,7 +97,11 @@ public class CustomEntityPet extends Pet {
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();
 
-        customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
+        if (this instanceof PetPumpling) {
+            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
+        } else if (this instanceof PetCompanionCube) {
+            customEntity = new CompanionCube(((CraftPlayer) getPlayer()).getHandle().getWorld());
+        }
         CustomEntities.customEntities.add(((org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
