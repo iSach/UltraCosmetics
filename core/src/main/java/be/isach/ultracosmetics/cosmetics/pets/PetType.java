@@ -28,7 +28,7 @@ public enum PetType {
     WITHER("ultracosmetics.pets.wither", "Wither", Material.SKULL_ITEM, (byte) 1, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class),
     PUMPLING("ultracosmetics.pets.pumpling", "Pumpling", Material.PUMPKIN, (byte) 0, "&7&oJust a little floating pumpkin", EntityType.ZOMBIE, UltraCosmetics.getInstance().getPets().getPumplingClass()),
     CHRISTMASELF("ultracosmetics.pets.christmaself", "ChristmasElf", Material.MONSTER_EGG, (byte) 120, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class),
-    COMPANIONCUBE("ultracosmetics.pets.companioncube", "CompanionCube", Material.MONSTER_EGG, (byte) 120, "&7&oThe Companion Cube cannot speak!", EntityType.ZOMBIE, UltraCosmetics.getInstance().getPets().getCompanionCubeClass());
+    COMPANIONCUBE("ultracosmetics.pets.companioncube", "CompanionCube", Material.NOTE_BLOCK, (byte) 0, "&7&oThe Companion Cube cannot speak!", EntityType.ZOMBIE, UltraCosmetics.getInstance().getPets().getCompanionCubeClass());
 
     public static List<PetType> enabled = new ArrayList();
     private String permission;
