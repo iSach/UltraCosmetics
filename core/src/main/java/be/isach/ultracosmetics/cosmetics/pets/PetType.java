@@ -21,6 +21,7 @@ public enum PetType {
     SHEEP("ultracosmetics.pets.sheep", "Sheep", Material.WOOL, (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class),
     EASTERBUNNY("ultracosmetics.pets.easterbunny", "EasterBunny", Material.CARROT_ITEM, (byte) 0, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class),
     COW("ultracosmetics.pets.cow", "Cow", Material.MILK_BUCKET, (byte) 0, "&7&oMoooo!", EntityType.COW, PetCow.class),
+    MOOSHROOM("ultracosmetics.pets.mooshroom", "Mooshroom", Material.RED_MUSHROOM, (byte) 0, "&7&oMoooo!", EntityType.MUSHROOM_COW, PetMooshroom.class),
     KITTY("ultracosmetics.pets.kitty", "Kitty", Material.RAW_FISH, (byte) 0, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class),
     DOG("ultracosmetics.pets.dog", "Dog", Material.BONE, (byte) 0, "&7&oWoof!", EntityType.WOLF, PetDog.class),
     CHICK("ultracosmetics.pets.chick", "Chick", Material.EGG, (byte) 0, "&7&oBwaaaaaaak!!", EntityType.CHICKEN, PetChick.class),
