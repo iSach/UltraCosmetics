@@ -9,6 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
@@ -154,11 +155,11 @@ public class GadgetPortalGun extends Gadget {
                     teleport(getPlayer(), locRed);
                     getPlayer().setVelocity(getVectorFromBlockFace(redBlockFace));
                     if (redBlockFace == BlockFace.UP || redBlockFace == BlockFace.DOWN) {
-                        Location loc = getPlayer().getLocation().clone();
+                        Location loc = locRed.clone();
                         loc.setPitch(getPitch(redBlockFace));
                         teleport(getPlayer(), loc);
                     } else {
-                        Location loc = getPlayer().getLocation().clone();
+                        Location loc = locRed.clone();
                         loc.setYaw(getYaw(redBlockFace));
                         teleport(getPlayer(), loc);
                     }
@@ -189,7 +190,7 @@ public class GadgetPortalGun extends Gadget {
                     }
                 }
                 MathUtils.rotateVector(v, x, 0, z);
-                UtilParticles.display(0, 0, 255, loc.add(v));
+                UtilParticles.display(31, 0, 127, loc.add(v));
             }
         }
         if (locRed != null) {
@@ -207,11 +208,11 @@ public class GadgetPortalGun extends Gadget {
                     teleport(getPlayer(), locBlue);
                     getPlayer().setVelocity(getVectorFromBlockFace(blueBlockFace));
                     if (blueBlockFace == BlockFace.UP || blueBlockFace == BlockFace.DOWN) {
-                        Location loc = getPlayer().getLocation().clone();
+                        Location loc = locBlue.clone();
                         loc.setPitch(getPitch(blueBlockFace));
                         teleport(getPlayer(), loc);
                     } else {
-                        Location loc = getPlayer().getLocation().clone();
+                        Location loc = locBlue.clone();
                         loc.setYaw(getYaw(blueBlockFace));
                         teleport(getPlayer(), loc);
                     }
@@ -271,6 +272,9 @@ public class GadgetPortalGun extends Gadget {
             @Override
             public void run() {
                 entity.teleport(location);
+                if(entity instanceof Player) {
+                    SoundUtil.playSound(((Player) entity), Sounds.ENDERMAN_TELEPORT);
+                }
             }
         });
     }

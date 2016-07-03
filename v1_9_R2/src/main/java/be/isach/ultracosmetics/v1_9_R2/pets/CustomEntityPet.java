@@ -99,9 +99,8 @@ public abstract class CustomEntityPet extends Pet {
 
         if (this instanceof PetPumpling) {
             customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        } else if (this instanceof PetCompanionCube) {
-            customEntity = new CompanionCube(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        }        CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
+        }
+        CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);

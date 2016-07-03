@@ -98,8 +98,6 @@ public class CustomEntityPet extends Pet {
 
         if (this instanceof PetPumpling) {
             customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld(), getPlayer());
-        } else if (this instanceof PetCompanionCube) {
-            customEntity = new CompanionCube(((CraftPlayer) getPlayer()).getHandle().getWorld());
         }
         CustomEntities.customEntities.add(((org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);

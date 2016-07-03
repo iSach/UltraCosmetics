@@ -68,5 +68,8 @@ subprojects {
         maven {
             url 'http://repo.dmulloy2.net/content/groups/public/'
         }
+        maven {
+            url 'http://repo.sinndev.com/content/repositories/releases/'
+        }
     }
 }
