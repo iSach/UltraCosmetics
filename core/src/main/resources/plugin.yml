@@ -1,5 +1,5 @@
 name: UltraCosmetics
-version: 2.3.4
+version: @VERSION@
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
