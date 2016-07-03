@@ -8,3 +8,11 @@ dependencies {
         exclude group: 'org.bukkit'
     }
 }
+
+processResources {
+	inputs.property("version", project.version)
+	
+	filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+	    'VERSION': project.version.split('-')[0]
+    ]
+}
