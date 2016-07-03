@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.v1_9_R1.pets;
 
-import be.isach.ultracosmetics.v1_9_R1.customentities.CompanionCube;
 import be.isach.ultracosmetics.v1_9_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_9_R1.customentities.Pumpling;
 import be.isach.ultracosmetics.UltraCosmetics;

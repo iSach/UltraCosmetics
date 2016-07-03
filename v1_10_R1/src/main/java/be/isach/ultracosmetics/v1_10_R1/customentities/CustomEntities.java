@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.v1_10_R1.customentities;
 
-import be.isach.ultracosmetics.v1_10_R1.pets.PetCompanionCube;
 import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.entity.EntityType;
 

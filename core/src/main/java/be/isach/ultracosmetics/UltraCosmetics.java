@@ -988,6 +988,8 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        Pet.purgeNames();
+
         if (morphMenuListener != null)
             ((MorphManager) morphMenuListener).dispose();
 

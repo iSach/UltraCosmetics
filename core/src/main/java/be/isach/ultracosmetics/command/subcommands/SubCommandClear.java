@@ -31,38 +31,34 @@ public class SubCommandClear extends SubCommand {
         Player receiver;
         if (args.length < 2) {
             sender.sendMessage("§c§l  Incorrect Usage. " + getUsage());
-        } else {
-            if (sender.hasPermission(getPermission() + ".others")) {
-                receiver = Bukkit.getPlayer(args[1]);
-                if (receiver == null) {
-                    sender.sendMessage("  §c§lPlayer " + args[1] + " not found!");
-                    return;
-                }
-                if (args.length < 3) {
-                    UltraCosmetics.getPlayerManager().getCustomPlayer(receiver).clear();
-                    return;
-                } else {
-                    CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
-                    String s = args[2].toLowerCase();
-                    if (s.startsWith("g"))
-                        cp.removeGadget();
-                    else if (s.startsWith("pa"))
-                        cp.removeParticleEffect();
-                    else if (s.startsWith("pe"))
-                        cp.removePet();
-                    else if (s.startsWith("h"))
-                        cp.removeHat();
-                    else if (s.startsWith("s"))
-                        cp.removeSuit();
-                    else if (s.startsWith("mor"))
-                        cp.removeMorph();
-                    else if (s.startsWith("mou"))
-                        cp.removeMount();
-                    else
-                        sender.sendMessage("§c§l/uc menu <menu>\n§c§lInvalid Type.\n§c§lAvailable types: gadgets, particleeffects, pets, mounts, suits, hats, morphs");
-                    return;
-                }
-            }
+            return;
+        }
+
+        if (!sender.hasPermission(getPermission() + ".others")) return;
+        receiver = Bukkit.getPlayer(args[1]);
+
+        if (receiver == null) {
+            sender.sendMessage("  §c§lPlayer " + args[1] + " not found!");
+            return;
+        }
+        if (args.length < 3) {
+            UltraCosmetics.getPlayerManager().getCustomPlayer(receiver).clear();
+            return;
+        }
+
+        CustomPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+        String s = args[2].toLowerCase();
+
+        if (s.startsWith("g")) cp.removeGadget();
+        else if (s.startsWith("pa")) cp.removeParticleEffect();
+        else if (s.startsWith("pe")) cp.removePet();
+        else if (s.startsWith("h")) cp.removeHat();
+        else if (s.startsWith("s")) cp.removeSuit();
+        else if (s.startsWith("mor")) cp.removeMorph();
+        else if (s.startsWith("mou")) cp.removeMount();
+        else if (s.startsWith("e")) cp.removeEmote();
+        else {
+            sender.sendMessage("§c§l/uc menu <menu>\n§c§lInvalid Type.\n§c§lAvailable types: gadgets, particleeffects, pets, mounts, suits, hats, morphs");
         }
     }
 }

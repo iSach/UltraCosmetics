@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
@@ -150,16 +151,16 @@ public class GadgetPortalGun extends Gadget {
                 }
                 if (toDistance.distance(locBlue) < 1.01) {
                     teleported = true;
-                    getPlayer().teleport(locRed);
+                    teleport(getPlayer(), locRed);
                     getPlayer().setVelocity(getVectorFromBlockFace(redBlockFace));
                     if (redBlockFace == BlockFace.UP || redBlockFace == BlockFace.DOWN) {
                         Location loc = getPlayer().getLocation().clone();
                         loc.setPitch(getPitch(redBlockFace));
-                        getPlayer().teleport(loc);
+                        teleport(getPlayer(), loc);
                     } else {
                         Location loc = getPlayer().getLocation().clone();
                         loc.setYaw(getYaw(redBlockFace));
-                        getPlayer().teleport(loc);
+                        teleport(getPlayer(), loc);
                     }
                     Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
@@ -203,16 +204,16 @@ public class GadgetPortalGun extends Gadget {
                 }
                 if (toDistance.distance(locRed) < 1.1) {
                     teleported = true;
-                    getPlayer().teleport(locBlue);
+                    teleport(getPlayer(), locBlue);
                     getPlayer().setVelocity(getVectorFromBlockFace(blueBlockFace));
                     if (blueBlockFace == BlockFace.UP || blueBlockFace == BlockFace.DOWN) {
                         Location loc = getPlayer().getLocation().clone();
                         loc.setPitch(getPitch(blueBlockFace));
-                        getPlayer().teleport(loc);
+                        teleport(getPlayer(), loc);
                     } else {
                         Location loc = getPlayer().getLocation().clone();
                         loc.setYaw(getYaw(blueBlockFace));
-                        getPlayer().teleport(loc);
+                        teleport(getPlayer(), loc);
                     }
                     Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
@@ -263,6 +264,15 @@ public class GadgetPortalGun extends Gadget {
         } else {
             return axis[Math.round(yaw / 90f) & 0x3];
         }
+    }
+
+    private void teleport(final Entity entity, final Location location) {
+        Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                entity.teleport(location);
+            }
+        });
     }
 
     @Override

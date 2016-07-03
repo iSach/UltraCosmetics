@@ -15,6 +15,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +24,8 @@ import java.util.concurrent.Executors;
  * Created by sacha on 03/08/15.
  */
 public abstract class Pet implements Listener {
+
+    public static final List<ArmorStand> PET_NAMES = new ArrayList<>();
 
     /**
      * List of items popping out from Pet.
@@ -97,6 +100,7 @@ public abstract class Pet implements Listener {
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(UltraCosmetics.getInstance(), "C_AD_ArmorStand"));
+        PET_NAMES.add(armorStand);
         if (UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()) != null)
             armorStand.setCustomName(UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()));
 
@@ -275,8 +279,17 @@ public abstract class Pet implements Listener {
             if (event.getPlayer() == getPlayer())
                 pet.getEntity().teleport(getPlayer());
         }
+    }
 
-
+    public static void purgeNames() {
+        synchronized (PET_NAMES) {
+            for(ArmorStand armorStand : PET_NAMES) {
+                if(armorStand.isValid()) {
+                    armorStand.remove();
+                }
+            }
+            PET_NAMES.clear();
+        }
     }
 
 }

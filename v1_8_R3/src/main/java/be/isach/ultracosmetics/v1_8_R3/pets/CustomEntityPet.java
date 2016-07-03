@@ -8,7 +8,6 @@ import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_8_R3.customentities.Pumpling;
-import be.isach.ultracosmetics.v1_8_R3.customentities.CompanionCube;
 import net.minecraft.server.v1_8_R3.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
@@ -98,7 +97,7 @@ public class CustomEntityPet extends Pet {
         double z = getPlayer().getLocation().getZ();
 
         if (this instanceof PetPumpling) {
-            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld(), getPlayer());
         } else if (this instanceof PetCompanionCube) {
             customEntity = new CompanionCube(((CraftPlayer) getPlayer()).getHandle().getWorld());
         }

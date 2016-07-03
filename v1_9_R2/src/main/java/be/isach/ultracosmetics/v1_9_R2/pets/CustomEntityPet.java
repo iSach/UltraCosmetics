@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.v1_9_R2.pets;
 
 import be.isach.ultracosmetics.v1_9_R2.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_9_R2.customentities.Pumpling;
-import be.isach.ultracosmetics.v1_9_R2.customentities.CompanionCube;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
