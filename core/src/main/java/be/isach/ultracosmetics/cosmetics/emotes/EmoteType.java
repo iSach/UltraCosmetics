@@ -180,7 +180,7 @@ public class EmoteType {
         WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
         for (int i = 0; i < 2; i++)
             WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 1; i++)
             WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
         for (int i = 0; i < 2; i++)
             WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
