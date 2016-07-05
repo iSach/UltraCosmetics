@@ -176,14 +176,11 @@ public class EmoteType {
         
 		/* WINK BEGIN */
 		
-		WINK.appendTexture("6b7f24bb6a4585de8f42303161bded5c8398ce375631be149460d6835aec44e");
-		WINK.appendTexture("33c760f660d447846ab6b3d5a914c4b01f10672b63d4311d468b6dc28ba0e3");
-		WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
+		WINK.appendTexture("ef66c7485ccb853a6538122e45c8a4821fbe097f96a6060feb981f7a2bba890");
+		WINK.appendTexture("a5d43eb0ec5f6de1d469b69680978a6dd7117772ee0d82ffdf08749e84df7ed");
 		for (int i = 0; i < 2; i++)
-			WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
-		for (int i = 0; i < 2; i++)
-			WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
-		for (int i = 0; i < 1; i++)
+			WINK.appendTexture("473e72cc371de25f3305665769dd7e9ff1161695252e799612580deeedd3");
+		for (int i = 0; i < 4; i++)
 			WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
 
 		/* WINK END */
