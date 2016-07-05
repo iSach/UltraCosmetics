@@ -38,7 +38,7 @@ public class EmoteType {
     public static final EmoteType DEAL_WITH_IT = new EmoteType("ultracosmetics.emotes.dealwithit", "DealWithIt", "&7&oDo you feel like showing off? This emote is for you!", 3);
     public static final EmoteType COOL = new EmoteType("ultracosmetics.emotes.cool", "Cool", "&7&oKeep cool man!", 2);
     public static final EmoteType SURPRISED = new EmoteType("ultracosmetics.emotes.surprised", "Surprised", "&7&oOH LORD!!!", 1);
-    public static final EmoteType WINK = new EmoteType("ultracosmetics.emotes.wink", "Wink", "&7&oHaving fun? Let someone know you are in on the joke", 1);
+    public static final EmoteType WINK = new EmoteType("ultracosmetics.emotes.wink", "Wink", "&7&oHaving fun? Let someone know you are in on the joke", 2);
 
     static {
 
@@ -174,18 +174,20 @@ public class EmoteType {
 
         /* SURPRISED END */
         
-        /* WINK BEGIN */
-        
-        WINK.appendTexture("6b7f24bb6a4585de8f42303161bded5c8398ce375631be149460d6835aec44e");
-        WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
-        for (int i = 0; i < 2; i++)
-            WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
-        for (int i = 0; i < 1; i++)
-            WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
-        for (int i = 0; i < 2; i++)
-            WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
-        
-        /* WINK END */
+		/* WINK BEGIN */
+		
+		WINK.appendTexture("6b7f24bb6a4585de8f42303161bded5c8398ce375631be149460d6835aec44e");
+		WINK.appendTexture("33c760f660d447846ab6b3d5a914c4b01f10672b63d4311d468b6dc28ba0e3");
+		WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
+		for (int i = 0; i < 2; i++)
+			WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
+		for (int i = 0; i < 2; i++)
+			WINK.appendTexture("5059d59eb4e59c31eecf9ece2f9cf3934e45c0ec476fc86bfaef8ea913ea710");
+		for (int i = 0; i < 1; i++)
+			WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
+
+		/* WINK END */
+		
     }
 
     private List<ItemStack> frames;
