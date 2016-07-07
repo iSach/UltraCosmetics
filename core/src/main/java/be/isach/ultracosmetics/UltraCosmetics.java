@@ -47,6 +47,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Created by sacha on 03/08/15.
@@ -160,6 +161,7 @@ public class UltraCosmetics extends JavaPlugin {
      */
     static boolean debug = false;
 
+
     /**
      * If true, the server is using Spigot and not CraftBukkit/Bukkit.
      */
@@ -264,25 +266,20 @@ public class UltraCosmetics extends JavaPlugin {
         playerManager = new PlayerManager();
         currentVersion = getDescription().getVersion();
 
-        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-        log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded... (server: " + serverVersion.getName() + ")");
+        debug("UltraCosmetics v" + getDescription().getVersion() + " is being loaded... (server: " + serverVersion.getName() + ")");
+        debug("Thanks for having downloaded it!");
+        debug("Plugin by iSach.");
+        debug("Link: http://bit.ly/UltraCosmetics");
 
-        log("");
-        log("Thanks for having downloaded it!");
-        log("");
-        log("Plugin by iSach.");
-        log("Link: http://bit.ly/UltraCosmetics");
-
-        log("");
-        log("Loading configuration...");
+        debug("Loading configuration...");
 
         file = new File(getDataFolder(), "config.yml");
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             FileUtils.copy(getResource("config.yml"), file);
-            log("Config file doesn't exist yet.");
-            log("Creating Config File and loading it.");
+            debug("Config file doesn't exist yet.");
+            debug("Creating Config File and loading it.");
         }
 
         config = CustomConfiguration.loadConfiguration(file);
@@ -340,61 +337,51 @@ public class UltraCosmetics extends JavaPlugin {
 
         closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
-        log("Configuration loaded.");
-        log("");
+        debug("Configuration loaded.");
+        debug("");
 
         core = this;
 
-        log("Initializing module " + serverVersion);
+        debug("Initializing module " + serverVersion);
         versionManager = new VersionManager(serverVersion);
         try {
             versionManager.load();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
-            log("No module found for " + serverVersion + " disabling");
+            debug("No module found for " + serverVersion + " disabling");
         }
         versionManager.getModule().enable();
-        log("Module initialized");
-        log("");
+        debug("Module initialized");
 
-        log("");
-        log("Preparing Metrics data.");
+        debug("Preparing Metrics data.");
         try {
             MetricsLite metrics = new MetricsLite(this);
             metrics.start();
-            log("Data sent to Metrics successfully.");
+            debug("Data sent to Metrics successfully.");
         } catch (IOException e) {
-            System.out.println("Couldn't send data to Metrics :(");
+            debug("Couldn't send data to Metrics :(");
         }
         log("");
 
         if (getDescription().getVersion().startsWith("Pre")) {
-            log("");
             log("THIS IS AN UNSTABLE VERSION, NO SUPPORT FOR IT!");
-            log("");
-            debug = true;
         }
 
         if (Bukkit.getPluginManager().getPlugin("NoteBlockAPI") != null) {
-            log("");
-            log("NoteBlockAPI loaded and hooked.");
-            log("");
+            debug("NoteBlockAPI loaded and hooked.");
             noteBlockAPIEnabled = true;
         }
 
-
-        log("");
-        log("Registering Messages...");
+        debug("Registering Messages...");
         new MessageManager();
-        log("Messages registered.");
-        log("");
+        debug("Messages registered.");
 
         registerListener(new PlayerListener());
         if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0)
             registerListener(new PlayerSwapItemListener());
 
-        log("");
-        log("Registering commands...");
+        debug("");
+        debug("Registering commands...");
         // Register the command
 
         commandManager = new CommandManager(this);
@@ -406,10 +393,9 @@ public class UltraCosmetics extends JavaPlugin {
         commandManager.registerCommand(new SubCommandClear());
         commandManager.registerCommand(new SubCommandTreasure());
 
-        log("Registered command: '/ultracosmetics'.");
-        log("Registered command: '/uc'.");
-        log("Registered commands.");
-        log("");
+        debug("Registered command: '/ultracosmetics'.");
+        debug("Registered command: '/uc'.");
+        debug("Registered commands.");
 
         String s = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System");
         fileStorage = s.equalsIgnoreCase("file");
@@ -466,11 +452,8 @@ public class UltraCosmetics extends JavaPlugin {
         log("Cosmetics Registered.");
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            log("");
             log("Morphs require Lib's Disguises!");
-            log("");
             log("Morphs are disabling..");
-            log("");
         }
 
         petRenameMoney = SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled");
@@ -478,15 +461,13 @@ public class UltraCosmetics extends JavaPlugin {
                 || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled"))
                 && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))) {
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                log("");
                 log("Vault not found!");
                 if (petRenameMoney) {
-                    log("  Pet renaming will not require Money.");
+                    log("Pet renaming will not require Money.");
                 }
                 if (ammoEnabled) {
-                    log("  Ammo Disabled.");
+                    log("Ammo Disabled.");
                 }
-                log("");
                 petRenameMoney = false;
                 ammoEnabled = false;
             }
@@ -542,7 +523,8 @@ public class UltraCosmetics extends JavaPlugin {
         log("Listeners registered.");
         log("");
         log("");
-        log("UltraCosmetics successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
+        log("");
+        log("Successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
 
         log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
     }
@@ -553,7 +535,8 @@ public class UltraCosmetics extends JavaPlugin {
      * @param object The message to log.
      */
     public static void log(String object) {
-        System.out.println("UltraCosmetics -> " + object.toString());
+        //System.out.println("UltraCosmetics -> " + object.toString());
+		getInstance().getLogger().info(object.toString());
     }
 
     /**
@@ -597,9 +580,15 @@ public class UltraCosmetics extends JavaPlugin {
      * @return if debug is turned on or off.
      */
     public static boolean debug(Object message) {
-        if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
-        return debug;
-    }
+        //if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
+        //return debug;
+		
+		if (debug) {
+			getInstance().getLogger().log(Level.FINE, message.toString());
+		}
+		return debug;
+	}
+
 
     /**
      * Gets the UltraCosmetics Plugin Object.
@@ -815,7 +804,7 @@ public class UltraCosmetics extends JavaPlugin {
                             statement.executeUpdate();
                         }
 
-                        log("initial SQLLoader to reduce lag when table is large");
+                        log("Initial SQLLoader to reduce lag when table is large");
                         sqlloader = new SQLLoaderManager();
                     } catch (Exception e) {
 
