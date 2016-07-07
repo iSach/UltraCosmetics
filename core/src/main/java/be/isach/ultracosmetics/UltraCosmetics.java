@@ -237,6 +237,8 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        core = this;
+
         if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9") && !getServer().getVersion().contains("1.10")) {
             log("UltraCosmetics requires Spigot 1.8.8 or 1.9 or 1.10 to work!");
             getServer().getPluginManager().disablePlugin(this);
@@ -348,9 +350,7 @@ public class UltraCosmetics extends JavaPlugin {
         closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
         debug("Configuration loaded.");
-
-        core = this;
-
+        
         debug("Initializing module " + serverVersion);
         versionManager = new VersionManager(serverVersion);
         try {
