@@ -239,7 +239,7 @@ public class UltraCosmetics extends JavaPlugin {
     @Override
     public void onEnable() {
         if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9") && !getServer().getVersion().contains("1.10")) {
-            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or 1.9 or 1.10 to work!\n\n----------------------------");
+            log("UltraCosmetics requires Spigot 1.8.8 or 1.9 or 1.10 to work!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -259,6 +259,17 @@ public class UltraCosmetics extends JavaPlugin {
                 Bukkit.getPluginManager().disablePlugin(this);
             }
         } else serverVersion = ServerVersion.v1_8_R3;
+
+
+        if (getConfig().getBoolean("Debug")) {
+            debug = true;
+        }
+
+        if (getDescription().getVersion().startsWith("Pre")) {
+            log("THIS IS AN UNSTABLE VERSION, NO SUPPORT FOR IT!");
+            debug = true;
+        }
+
 
         if (getServer().getVersion().contains("Spigot"))
             usingSpigot = true;
@@ -338,7 +349,6 @@ public class UltraCosmetics extends JavaPlugin {
         closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
         debug("Configuration loaded.");
-        debug("");
 
         core = this;
 
@@ -361,11 +371,6 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (IOException e) {
             debug("Couldn't send data to Metrics :(");
         }
-        log("");
-
-        if (getDescription().getVersion().startsWith("Pre")) {
-            log("THIS IS AN UNSTABLE VERSION, NO SUPPORT FOR IT!");
-        }
 
         if (Bukkit.getPluginManager().getPlugin("NoteBlockAPI") != null) {
             debug("NoteBlockAPI loaded and hooked.");
@@ -380,7 +385,6 @@ public class UltraCosmetics extends JavaPlugin {
         if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0)
             registerListener(new PlayerSwapItemListener());
 
-        debug("");
         debug("Registering commands...");
         // Register the command
 
@@ -432,7 +436,7 @@ public class UltraCosmetics extends JavaPlugin {
             }
         }.run();
 
-        log("Registering Cosmetics...");
+        debug("Registering Cosmetics...");
         setupCosmeticsConfigs();
 
         enabledCategories.clear();
@@ -449,7 +453,7 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        log("Cosmetics Registered.");
+        debug("Cosmetics Registered.");
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             log("Morphs require Lib's Disguises!");
@@ -479,11 +483,9 @@ public class UltraCosmetics extends JavaPlugin {
             setupEconomy();
 
         if (!fileStorage) {
-            log("");
-            log("Connecting to MySQL database...");
+            debug("Connecting to MySQL database...");
             startMySQL();
-            log("Connected to MySQL database.");
-            log("");
+            debug("Connected to MySQL database.");
         }
         initPlayers();
 
@@ -497,8 +499,7 @@ public class UltraCosmetics extends JavaPlugin {
             saveResource("songs/NyanCat.nbs", true);
         }
 
-        log("");
-        log("Registering listeners...");
+        debug("Registering listeners...");
         mainMenuListener = new MainMenuManager();
         registerListener(mainMenuListener);
         registerListener(new GadgetManager());
@@ -520,13 +521,8 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        log("Listeners registered.");
-        log("");
-        log("");
-        log("");
-        log("Successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
-
-        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+        debug("Listeners registered.");
+        debug("Successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
     }
 
     /**
@@ -536,7 +532,7 @@ public class UltraCosmetics extends JavaPlugin {
      */
     public static void log(String object) {
         //System.out.println("UltraCosmetics -> " + object.toString());
-		getInstance().getLogger().info(object.toString());
+        getInstance().getLogger().info(object.toString());
     }
 
     /**
@@ -582,12 +578,12 @@ public class UltraCosmetics extends JavaPlugin {
     public static boolean debug(Object message) {
         //if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
         //return debug;
-		
-		if (debug) {
-			getInstance().getLogger().log(Level.FINE, message.toString());
-		}
-		return debug;
-	}
+
+        if (debug) {
+            getInstance().getLogger().log(Level.FINE, message.toString());
+        }
+        return debug;
+    }
 
 
     /**
@@ -826,7 +822,7 @@ public class UltraCosmetics extends JavaPlugin {
      * Setup default Cosmetics config.
      */
     private void setupCosmeticsConfigs() {
-        for(Category category : Category.values()) {
+        for (Category category : Category.values()) {
             config.addDefault("Categories-Enabled." + category.getConfigPath(), true);
             config.addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
         }

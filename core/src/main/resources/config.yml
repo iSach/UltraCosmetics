@@ -1,6 +1,9 @@
 # If set to true, will check for updates
 Check-For-Updates: true
 
+# If set to true, will print debugging info
+Debug: false
+
 # List of the enabled categories.
 Categories-Enabled:
   Gadgets: true
