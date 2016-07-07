@@ -597,6 +597,10 @@ public class UltraCosmetics extends JavaPlugin {
         getInstance().getLogger().log(Level.SEVERE, s);
     }
 
+    public static void error(Throwable t, String s) {
+        getInstance().getLogger().log(Level.SEVERE, s, t);
+    }
+
 
     /**
      * Gets the UltraCosmetics Plugin Object.
