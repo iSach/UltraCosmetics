@@ -30,7 +30,6 @@ import be.isach.ultracosmetics.version.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -357,7 +356,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             versionManager.load();
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "", e);
             debug("No module found for " + serverVersion + " disabling");
         }
         versionManager.getModule().enable();
@@ -418,7 +417,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "", e);
         }
 
         checkTreasureChests();
@@ -451,7 +450,8 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+
+            getLogger().log(Level.SEVERE, "", e);
         }
         debug("Cosmetics Registered.");
 
@@ -519,7 +519,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "", e);
         }
         debug("Listeners registered.");
         debug("Successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
@@ -650,7 +650,7 @@ public class UltraCosmetics extends JavaPlugin {
                 return version;
             }
         } catch (Exception ex) {
-            System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
+            log("Failed to check for an update on spigot.");
         }
         return null;
     }
@@ -685,7 +685,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "", e);
         }
     }
 
@@ -770,13 +770,8 @@ public class UltraCosmetics extends JavaPlugin {
                         sql = new MySQLConnection(hostname, portNumber, database, username, password);
                         co = sql.getConnection();
 
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics >>> Successfully connected to MySQL server! :)");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
+                        log("Successfully connected to MySQL server!");
+
                         PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
                                 "id INTEGER not NULL AUTO_INCREMENT," +
                                 " uuid VARCHAR(255)," +
@@ -800,18 +795,11 @@ public class UltraCosmetics extends JavaPlugin {
                             statement.executeUpdate();
                         }
 
-                        log("Initial SQLLoader to reduce lag when table is large");
+                        debug("Initial SQLLoader to reduce lag when table is large");
                         sqlloader = new SQLLoaderManager();
                     } catch (Exception e) {
-
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§c§lUltra Cosmetics >>> Could not connect to MySQL server!");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§c§lError:");
-                        e.printStackTrace();
-
+                        log("Could not connect to MySQL server!");
+                        getLogger().log(Level.SEVERE, "", e);
                     }
                 }
             }, 0, 24000);
@@ -894,7 +882,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "", e);
         }
         for (GadgetType gadgetType : GadgetType.values())
             if (gadgetType.isEnabled())
@@ -932,15 +920,9 @@ public class UltraCosmetics extends JavaPlugin {
             treasureChests = true;
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests' Money Loot requires Vault!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lMoney Loot is turned off!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+
+                log("Treasure Chests' Money Loot requires Vault!");
+                log("Money Loot is turned off!");
                 moneyTreasureLoot = false;
             }
         }
