@@ -117,7 +117,7 @@ public class CustomPlayer {
             try {
                 UltraCosmetics.getSQLLoader().addPreloadPlayer(uuid);
             } catch (Exception e) {
-                System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
+                UltraCosmetics.error("SQLLoader Fails to preload UUID: " + uuid);
             }
         } else {
             isLoaded = true;

@@ -356,7 +356,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             versionManager.load();
         } catch (ReflectiveOperationException e) {
-            getLogger().log(Level.SEVERE, "", e);
+            error(e);
             debug("No module found for " + serverVersion + " disabling");
         }
         versionManager.getModule().enable();
@@ -417,7 +417,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            getLogger().log(Level.SEVERE, "", e);
+            error(e);
         }
 
         checkTreasureChests();
@@ -451,7 +451,7 @@ public class UltraCosmetics extends JavaPlugin {
             config.save(file);
         } catch (IOException e) {
 
-            getLogger().log(Level.SEVERE, "", e);
+            error(e);
         }
         debug("Cosmetics Registered.");
 
@@ -519,7 +519,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "", e);
+            error(e);
         }
         debug("Listeners registered.");
         debug("Successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
@@ -583,6 +583,14 @@ public class UltraCosmetics extends JavaPlugin {
             getInstance().getLogger().log(Level.FINE, message.toString());
         }
         return debug;
+    }
+
+    public static void error(Throwable t) {
+        getInstance().getLogger().log(Level.SEVERE, "", t);
+    }
+
+    public static void error(String s) {
+        getInstance().getLogger().log(Level.SEVERE, s);
     }
 
 
@@ -685,7 +693,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "", e);
+            error(e);
         }
     }
 
@@ -799,7 +807,7 @@ public class UltraCosmetics extends JavaPlugin {
                         sqlloader = new SQLLoaderManager();
                     } catch (Exception e) {
                         log("Could not connect to MySQL server!");
-                        getLogger().log(Level.SEVERE, "", e);
+                        error(e);
                     }
                 }
             }, 0, 24000);
@@ -882,7 +890,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "", e);
+            error(e);
         }
         for (GadgetType gadgetType : GadgetType.values())
             if (gadgetType.isEnabled())
