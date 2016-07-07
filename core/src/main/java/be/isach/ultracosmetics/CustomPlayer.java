@@ -286,7 +286,7 @@ public class CustomPlayer {
             if (UltraCosmetics.getInstance().isVaultLoaded() && UltraCosmetics.economy != null)
                 return UltraCosmetics.economy.getBalance(getPlayer());
         } catch (Exception exc) {
-            UltraCosmetics.log("Error happened while getting a player's balance.");
+            UltraCosmetics.error("Error happened while getting a player's balance.");
             return 0;
         }
         return 0;
