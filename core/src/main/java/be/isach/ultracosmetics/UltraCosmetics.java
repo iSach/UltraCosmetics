@@ -271,6 +271,10 @@ public class UltraCosmetics extends JavaPlugin {
             debug = true;
         }
 
+        if (debug) {
+            getLogger().setLevel(Level.FINE);
+        }
+
 
         if (getServer().getVersion().contains("Spigot"))
             usingSpigot = true;
@@ -350,7 +354,7 @@ public class UltraCosmetics extends JavaPlugin {
         closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
         debug("Configuration loaded.");
-        
+
         debug("Initializing module " + serverVersion);
         versionManager = new VersionManager(serverVersion);
         try {
