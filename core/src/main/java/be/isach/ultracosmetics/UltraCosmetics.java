@@ -30,7 +30,6 @@ import be.isach.ultracosmetics.version.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -47,6 +46,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Created by sacha on 03/08/15.
@@ -160,6 +160,7 @@ public class UltraCosmetics extends JavaPlugin {
      */
     static boolean debug = false;
 
+
     /**
      * If true, the server is using Spigot and not CraftBukkit/Bukkit.
      */
@@ -236,8 +237,10 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        core = this;
+
         if (!getServer().getVersion().contains("1.8.8") && !getServer().getVersion().contains("1.9") && !getServer().getVersion().contains("1.10")) {
-            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or 1.9 to work!\n\n----------------------------");
+            log("UltraCosmetics requires Spigot 1.8.8 or 1.9 or 1.10 to work!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -258,31 +261,41 @@ public class UltraCosmetics extends JavaPlugin {
             }
         } else serverVersion = ServerVersion.v1_8_R3;
 
+
+        if (getConfig().getBoolean("Debug")) {
+            debug = true;
+        }
+
+        if (getDescription().getVersion().startsWith("Pre")) {
+            log("THIS IS AN UNSTABLE VERSION, NO SUPPORT FOR IT!");
+            debug = true;
+        }
+
+        if (debug) {
+            getLogger().setLevel(Level.FINE);
+        }
+
+
         if (getServer().getVersion().contains("Spigot"))
             usingSpigot = true;
 
         playerManager = new PlayerManager();
         currentVersion = getDescription().getVersion();
 
-        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-        log("UltraCosmetics v" + getDescription().getVersion() + " is being loaded... (server: " + serverVersion.getName() + ")");
+        debug("UltraCosmetics v" + getDescription().getVersion() + " is being loaded... (server: " + serverVersion.getName() + ")");
+        debug("Thanks for having downloaded it!");
+        debug("Plugin by iSach.");
+        debug("Link: http://bit.ly/UltraCosmetics");
 
-        log("");
-        log("Thanks for having downloaded it!");
-        log("");
-        log("Plugin by iSach.");
-        log("Link: http://bit.ly/UltraCosmetics");
-
-        log("");
-        log("Loading configuration...");
+        debug("Loading configuration...");
 
         file = new File(getDataFolder(), "config.yml");
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             FileUtils.copy(getResource("config.yml"), file);
-            log("Config file doesn't exist yet.");
-            log("Creating Config File and loading it.");
+            debug("Config file doesn't exist yet.");
+            debug("Creating Config File and loading it.");
         }
 
         config = CustomConfiguration.loadConfiguration(file);
@@ -340,61 +353,42 @@ public class UltraCosmetics extends JavaPlugin {
 
         closeAfterSelect = config.getBoolean("Categories.Close-GUI-After-Select");
 
-        log("Configuration loaded.");
-        log("");
+        debug("Configuration loaded.");
 
-        core = this;
-
-        log("Initializing module " + serverVersion);
+        debug("Initializing module " + serverVersion);
         versionManager = new VersionManager(serverVersion);
         try {
             versionManager.load();
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-            log("No module found for " + serverVersion + " disabling");
+            error(e);
+            debug("No module found for " + serverVersion + " disabling");
         }
         versionManager.getModule().enable();
-        log("Module initialized");
-        log("");
+        debug("Module initialized");
 
-        log("");
-        log("Preparing Metrics data.");
+        debug("Preparing Metrics data.");
         try {
             MetricsLite metrics = new MetricsLite(this);
             metrics.start();
-            log("Data sent to Metrics successfully.");
+            debug("Data sent to Metrics successfully.");
         } catch (IOException e) {
-            System.out.println("Couldn't send data to Metrics :(");
-        }
-        log("");
-
-        if (getDescription().getVersion().startsWith("Pre")) {
-            log("");
-            log("THIS IS AN UNSTABLE VERSION, NO SUPPORT FOR IT!");
-            log("");
-            debug = true;
+            debug("Couldn't send data to Metrics :(");
         }
 
         if (Bukkit.getPluginManager().getPlugin("NoteBlockAPI") != null) {
-            log("");
-            log("NoteBlockAPI loaded and hooked.");
-            log("");
+            debug("NoteBlockAPI loaded and hooked.");
             noteBlockAPIEnabled = true;
         }
 
-
-        log("");
-        log("Registering Messages...");
+        debug("Registering Messages...");
         new MessageManager();
-        log("Messages registered.");
-        log("");
+        debug("Messages registered.");
 
         registerListener(new PlayerListener());
         if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0)
             registerListener(new PlayerSwapItemListener());
 
-        log("");
-        log("Registering commands...");
+        debug("Registering commands...");
         // Register the command
 
         commandManager = new CommandManager(this);
@@ -406,10 +400,9 @@ public class UltraCosmetics extends JavaPlugin {
         commandManager.registerCommand(new SubCommandClear());
         commandManager.registerCommand(new SubCommandTreasure());
 
-        log("Registered command: '/ultracosmetics'.");
-        log("Registered command: '/uc'.");
-        log("Registered commands.");
-        log("");
+        debug("Registered command: '/ultracosmetics'.");
+        debug("Registered command: '/uc'.");
+        debug("Registered commands.");
 
         String s = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System");
         fileStorage = s.equalsIgnoreCase("file");
@@ -428,7 +421,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            error(e);
         }
 
         checkTreasureChests();
@@ -446,7 +439,7 @@ public class UltraCosmetics extends JavaPlugin {
             }
         }.run();
 
-        log("Registering Cosmetics...");
+        debug("Registering Cosmetics...");
         setupCosmeticsConfigs();
 
         enabledCategories.clear();
@@ -461,16 +454,14 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+
+            error(e);
         }
-        log("Cosmetics Registered.");
+        debug("Cosmetics Registered.");
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            log("");
             log("Morphs require Lib's Disguises!");
-            log("");
             log("Morphs are disabling..");
-            log("");
         }
 
         petRenameMoney = SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled");
@@ -478,15 +469,13 @@ public class UltraCosmetics extends JavaPlugin {
                 || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled"))
                 && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))) {
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-                log("");
                 log("Vault not found!");
                 if (petRenameMoney) {
-                    log("  Pet renaming will not require Money.");
+                    log("Pet renaming will not require Money.");
                 }
                 if (ammoEnabled) {
-                    log("  Ammo Disabled.");
+                    log("Ammo Disabled.");
                 }
-                log("");
                 petRenameMoney = false;
                 ammoEnabled = false;
             }
@@ -498,11 +487,9 @@ public class UltraCosmetics extends JavaPlugin {
             setupEconomy();
 
         if (!fileStorage) {
-            log("");
-            log("Connecting to MySQL database...");
+            debug("Connecting to MySQL database...");
             startMySQL();
-            log("Connected to MySQL database.");
-            log("");
+            debug("Connected to MySQL database.");
         }
         initPlayers();
 
@@ -516,8 +503,7 @@ public class UltraCosmetics extends JavaPlugin {
             saveResource("songs/NyanCat.nbs", true);
         }
 
-        log("");
-        log("Registering listeners...");
+        debug("Registering listeners...");
         mainMenuListener = new MainMenuManager();
         registerListener(mainMenuListener);
         registerListener(new GadgetManager());
@@ -537,14 +523,10 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            error(e);
         }
-        log("Listeners registered.");
-        log("");
-        log("");
-        log("UltraCosmetics successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
-
-        log("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+        debug("Listeners registered.");
+        debug("Successfully finished loading and is now enabled! (server: " + serverVersion.getName() + ")");
     }
 
     /**
@@ -553,7 +535,8 @@ public class UltraCosmetics extends JavaPlugin {
      * @param object The message to log.
      */
     public static void log(String object) {
-        System.out.println("UltraCosmetics -> " + object.toString());
+        //System.out.println("UltraCosmetics -> " + object.toString());
+        getInstance().getLogger().info(object.toString());
     }
 
     /**
@@ -597,9 +580,27 @@ public class UltraCosmetics extends JavaPlugin {
      * @return if debug is turned on or off.
      */
     public static boolean debug(Object message) {
-        if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
+        //if (debug) Bukkit.broadcastMessage("§c§lUC-DEBUG> §f" + message.toString());
+        //return debug;
+
+        if (debug) {
+            getInstance().getLogger().log(Level.FINE, message.toString());
+        }
         return debug;
     }
+
+    public static void error(Throwable t) {
+        getInstance().getLogger().log(Level.SEVERE, "", t);
+    }
+
+    public static void error(String s) {
+        getInstance().getLogger().log(Level.SEVERE, s);
+    }
+
+    public static void error(Throwable t, String s) {
+        getInstance().getLogger().log(Level.SEVERE, s, t);
+    }
+
 
     /**
      * Gets the UltraCosmetics Plugin Object.
@@ -665,7 +666,7 @@ public class UltraCosmetics extends JavaPlugin {
                 return version;
             }
         } catch (Exception ex) {
-            System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
+            log("Failed to check for an update on spigot.");
         }
         return null;
     }
@@ -700,7 +701,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            error(e);
         }
     }
 
@@ -785,13 +786,8 @@ public class UltraCosmetics extends JavaPlugin {
                         sql = new MySQLConnection(hostname, portNumber, database, username, password);
                         co = sql.getConnection();
 
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics >>> Successfully connected to MySQL server! :)");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
+                        log("Successfully connected to MySQL server!");
+
                         PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
                                 "id INTEGER not NULL AUTO_INCREMENT," +
                                 " uuid VARCHAR(255)," +
@@ -815,18 +811,11 @@ public class UltraCosmetics extends JavaPlugin {
                             statement.executeUpdate();
                         }
 
-                        log("initial SQLLoader to reduce lag when table is large");
+                        debug("Initial SQLLoader to reduce lag when table is large");
                         sqlloader = new SQLLoaderManager();
                     } catch (Exception e) {
-
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§c§lUltra Cosmetics >>> Could not connect to MySQL server!");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§c§lError:");
-                        e.printStackTrace();
-
+                        log("Could not connect to MySQL server!");
+                        error(e);
                     }
                 }
             }, 0, 24000);
@@ -837,7 +826,7 @@ public class UltraCosmetics extends JavaPlugin {
      * Setup default Cosmetics config.
      */
     private void setupCosmeticsConfigs() {
-        for(Category category : Category.values()) {
+        for (Category category : Category.values()) {
             config.addDefault("Categories-Enabled." + category.getConfigPath(), true);
             config.addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
         }
@@ -909,7 +898,7 @@ public class UltraCosmetics extends JavaPlugin {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            error(e);
         }
         for (GadgetType gadgetType : GadgetType.values())
             if (gadgetType.isEnabled())
@@ -947,15 +936,9 @@ public class UltraCosmetics extends JavaPlugin {
             treasureChests = true;
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests' Money Loot requires Vault!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lMoney Loot is turned off!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+
+                log("Treasure Chests' Money Loot requires Vault!");
+                log("Money Loot is turned off!");
                 moneyTreasureLoot = false;
             }
         }

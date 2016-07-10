@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.util;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -162,7 +163,7 @@ public class CustomConfiguration extends YamlConfiguration {
             config.load(file);
         } catch (FileNotFoundException ignored) {
         } catch (IOException | InvalidConfigurationException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
+            UltraCosmetics.error(ex, "Cannot load " + file);
         }
         return config;
     }
