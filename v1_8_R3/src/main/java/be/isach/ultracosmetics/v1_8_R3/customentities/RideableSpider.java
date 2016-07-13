@@ -17,9 +17,10 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity {
 
     public RideableSpider(World world) {
         super(world);
+    }
 
-        if (!CustomEntities.customEntities.contains(this)) return;
-
+    @Override
+    public void removeAi() {
         removeSelectors();
     }
 
@@ -45,6 +46,10 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity {
      */
     @Override
     public void g(float sideMot, float forMot) {
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         if (this.passenger != null && this.passenger instanceof EntityHuman
                 && CustomEntities.customEntities.contains(this)) {
             this.lastYaw = this.yaw = this.passenger.yaw;

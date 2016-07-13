@@ -135,6 +135,11 @@ public class GadgetPortalGun extends Gadget {
         if (locBlue != null) {
             Location portalCenter = locBlue.clone();
             if (locRed != null && !teleported) {
+                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                    locRed = null;
+                    locBlue = null;
+                    return;
+                }
                 Location toDistance;
                 if (blueBlockFace == BlockFace.DOWN) {
                     toDistance = getPlayer().getEyeLocation().clone();
@@ -195,6 +200,11 @@ public class GadgetPortalGun extends Gadget {
         }
         if (locRed != null) {
             if (locBlue != null && !teleported) {
+                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                    locRed = null;
+                    locBlue = null;
+                    return;
+                }
                 Location toDistance;
                 if (redBlockFace == BlockFace.DOWN) {
                     toDistance = getPlayer().getEyeLocation().clone();

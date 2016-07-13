@@ -17,8 +17,9 @@ public class FlyingSquid extends EntitySquid implements IMountCustomEntity {
 
     public FlyingSquid(World world) {
         super(world);
+    }
 
-        if(!CustomEntities.customEntities.contains(this)) return;
+    private void removeSelectors() {
         try {
             Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
             bField.setAccessible(true);
@@ -34,7 +35,16 @@ public class FlyingSquid extends EntitySquid implements IMountCustomEntity {
     }
 
     @Override
+    public void removeAi() {
+        removeSelectors();
+    }
+
+    @Override
     public void g(float sideMot, float forMot) {
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         if (this.passenger != null && this.passenger instanceof EntityHuman
                 && CustomEntities.customEntities.contains(this)) {
             this.lastYaw = this.yaw = this.passenger.yaw;

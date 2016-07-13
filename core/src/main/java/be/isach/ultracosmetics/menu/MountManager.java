@@ -1,7 +1,7 @@
-package be.isach.ultracosmetics.manager;
+package be.isach.ultracosmetics.menu;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -32,6 +32,7 @@ public class MountManager implements Listener {
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+
     static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
@@ -79,7 +80,7 @@ public class MountManager implements Listener {
                     if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore"))
                         lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Lore-Message-" + ((p.hasPermission(mountType.getPermission()) ? "Yes" : "No")))));
                     String toggle = MessageManager.getMessage("Menu.Spawn");
-                    CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
+                    UltraPlayer cp = UltraCosmetics.getCustomPlayer(p);
                     if (cp.currentMount != null && cp.currentMount.getType() == mountType)
                         toggle = MessageManager.getMessage("Menu.Despawn");
                     ItemStack is = ItemFactory.create(mountType.getMaterial(), mountType.getData(), toggle + " " + mountType.getMenuName());

@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
@@ -78,7 +78,7 @@ public class BlockUtils {
      * @return {@code true} if the block is part of a rocket, otherwise {@code false}.
      */
     public static boolean isRocketBlock(Block b) {
-        for (CustomPlayer cp : UltraCosmetics.getCustomPlayers()) {
+        for (UltraPlayer cp : UltraCosmetics.getCustomPlayers()) {
             if (cp.currentGadget != null
                     && cp.currentGadget.getType() == GadgetType.ROCKET) {
                 GadgetRocket rocket = (GadgetRocket) cp.currentGadget;

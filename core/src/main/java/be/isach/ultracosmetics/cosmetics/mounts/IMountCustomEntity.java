@@ -9,4 +9,6 @@ public interface IMountCustomEntity {
 
     Entity getEntity();
 
+    void removeAi();
+
 }

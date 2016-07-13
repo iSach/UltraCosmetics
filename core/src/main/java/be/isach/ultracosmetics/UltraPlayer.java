@@ -33,7 +33,7 @@ import java.util.UUID;
 /**
  * Created by sacha on 03/08/15.
  */
-public class CustomPlayer {
+public class UltraPlayer {
 
     /**
      * Player UUID.
@@ -83,7 +83,7 @@ public class CustomPlayer {
      *
      * @param uuid The player UUID.
      */
-    public CustomPlayer(UUID uuid) {
+    public UltraPlayer(UUID uuid) {
         try {
             this.uuid = uuid;
 
@@ -152,9 +152,9 @@ public class CustomPlayer {
     }
 
     /**
-     * Get the player owning the CustomPlayer.
+     * Get the player owning the UltraPlayer.
      *
-     * @return The player owning the CustomPlayer.
+     * @return The player owning the UltraPlayer.
      */
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);

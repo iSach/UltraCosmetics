@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public class SubCommandSelfView extends SubCommand {
 
     @Override
     protected void onExePlayer(Player sender, String... args) {
-        CustomPlayer customPlayer = UltraCosmetics.getPlayerManager().getCustomPlayer(sender);
+        UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getCustomPlayer(sender);
         customPlayer.setSeeSelfMorph(!customPlayer.canSeeSelfMorph());
     }
 

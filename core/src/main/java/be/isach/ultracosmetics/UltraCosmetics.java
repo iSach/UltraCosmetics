@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.command.subcommands.*;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetDiscoBall;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetExplosiveSheep;
@@ -20,7 +21,10 @@ import be.isach.ultracosmetics.cosmetics.suits.SuitType;
 import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
-import be.isach.ultracosmetics.manager.*;
+import be.isach.ultracosmetics.manager.PlayerManager;
+import be.isach.ultracosmetics.manager.SQLLoaderManager;
+import be.isach.ultracosmetics.manager.TreasureChestManager;
+import be.isach.ultracosmetics.menu.*;
 import be.isach.ultracosmetics.mysql.MySQLConnection;
 import be.isach.ultracosmetics.mysql.Table;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -30,7 +34,6 @@ import be.isach.ultracosmetics.version.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -561,7 +564,7 @@ public class UltraCosmetics extends JavaPlugin {
      *
      * @return
      */
-    public static Collection<CustomPlayer> getCustomPlayers() {
+    public static Collection<UltraPlayer> getCustomPlayers() {
         return playerManager.getPlayers();
     }
 
@@ -623,9 +626,9 @@ public class UltraCosmetics extends JavaPlugin {
      * Gets the custom player of a player.
      *
      * @param player The player.
-     * @return The CustomPlayer of player.
+     * @return The UltraPlayer of player.
      */
-    public static CustomPlayer getCustomPlayer(Player player) {
+    public static UltraPlayer getCustomPlayer(Player player) {
         return playerManager.getCustomPlayer(player);
     }
 
@@ -768,6 +771,8 @@ public class UltraCosmetics extends JavaPlugin {
         return vaultLoaded;
     }
 
+    private int i = 0;
+
     /**
      * Starts MySQL loop.
      */
@@ -784,14 +789,10 @@ public class UltraCosmetics extends JavaPlugin {
                         String password = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.password"));
                         sql = new MySQLConnection(hostname, portNumber, database, username, password);
                         co = sql.getConnection();
-
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics >>> Successfully connected to MySQL server! :)");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
-                        Bukkit.getLogger().info("");
+                        if (i == 0) {
+                            Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics -> Successfully connected to MySQL server! :)");
+                            i++;
+                        }
                         PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
                                 "id INTEGER not NULL AUTO_INCREMENT," +
                                 " uuid VARCHAR(255)," +
@@ -837,7 +838,7 @@ public class UltraCosmetics extends JavaPlugin {
      * Setup default Cosmetics config.
      */
     private void setupCosmeticsConfigs() {
-        for(Category category : Category.values()) {
+        for (Category category : Category.values()) {
             config.addDefault("Categories-Enabled." + category.getConfigPath(), true);
             config.addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
         }
@@ -845,6 +846,17 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("TreasureChests.Loots.Emotes.Chance", 5);
         config.addDefault("TreasureChests.Loots.Emotes.Message.enabled", true);
         config.addDefault("TreasureChests.Loots.Emotes.Message.message", "%prefix% &6&l%name% found rare %emote%");
+
+        // CALL STATIC BLOCK.
+        // Gadget
+        // Mount
+        // Effect
+        // Pet
+        // Morph
+        // Hat
+        // Suit
+        SuitType.ASTRONAUT.getConfigName();
+        // Emote
 
         for (GadgetType gadgetType : GadgetType.values()) {
             config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
@@ -895,7 +907,8 @@ public class UltraCosmetics extends JavaPlugin {
             config.addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
             config.addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
-        for (be.isach.ultracosmetics.cosmetics.suits.SuitType suit : be.isach.ultracosmetics.cosmetics.suits.SuitType.values()) {
+        for (CosmeticType cosmeticType : SuitType.values()) {
+            SuitType suit = ((SuitType) cosmeticType);
             config.addDefault("Suits." + suit.getConfigName() + ".Enabled", true, "if true, the suit will be enabled.");
             config.addDefault("Suits." + suit.getConfigName() + ".Show-Description", true, "if true, the description of this suit will be showed.");
             config.addDefault("Suits." + suit.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
@@ -906,6 +919,7 @@ public class UltraCosmetics extends JavaPlugin {
             config.addDefault("Emotes." + emoteType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
             config.addDefault("Emotes." + emoteType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
+
         try {
             config.save(file);
         } catch (IOException e) {
@@ -930,9 +944,7 @@ public class UltraCosmetics extends JavaPlugin {
         for (Hat hat : Hat.values())
             if (hat.isEnabled())
                 Hat.enabled.add(hat);
-        for (SuitType suit : SuitType.values())
-            if (suit.isEnabled())
-                SuitType.enabled.add(suit);
+        SuitType.checkEnabled();
         for (EmoteType emoteType : EmoteType.values())
             if (emoteType.isEnabled())
                 EmoteType.ENABLED.add(emoteType);

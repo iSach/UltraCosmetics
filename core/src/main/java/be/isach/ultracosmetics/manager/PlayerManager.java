@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.manager;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
 import org.bukkit.entity.Player;
 
@@ -15,21 +15,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PlayerManager {
 
-    private Map<UUID, CustomPlayer> playerCache;
+    private Map<UUID, UltraPlayer> playerCache;
 
     public PlayerManager() {
         this.playerCache = new ConcurrentHashMap<>();
     }
 
-    public CustomPlayer getCustomPlayer(Player player) {
-        CustomPlayer p = playerCache.get(player.getUniqueId());
+    public UltraPlayer getCustomPlayer(Player player) {
+        UltraPlayer p = playerCache.get(player.getUniqueId());
         if (p == null)
             return create(player);
         return p;
     }
 
-    public CustomPlayer create(Player player) {
-        CustomPlayer customPlayer = new CustomPlayer(player.getUniqueId());
+    public UltraPlayer create(Player player) {
+        UltraPlayer customPlayer = new UltraPlayer(player.getUniqueId());
         playerCache.put(player.getUniqueId(), customPlayer);
         return customPlayer;
     }
@@ -38,7 +38,7 @@ public class PlayerManager {
         return playerCache.remove(player.getUniqueId()) != null;
     }
 
-    public Collection<CustomPlayer> getPlayers() {
+    public Collection<UltraPlayer> getPlayers() {
         return playerCache.values();
     }
 
@@ -50,8 +50,8 @@ public class PlayerManager {
     }
 
     public void dispose() {
-        Collection<CustomPlayer> set = playerCache.values();
-        for (CustomPlayer cp : set) {
+        Collection<UltraPlayer> set = playerCache.values();
+        for (UltraPlayer cp : set) {
             if (cp.currentTreasureChest != null)
                 cp.currentTreasureChest.forceOpen(0);
             cp.clear();

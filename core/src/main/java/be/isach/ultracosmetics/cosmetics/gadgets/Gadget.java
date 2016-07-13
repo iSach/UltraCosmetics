@@ -1,10 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.manager.GadgetManager;
+import be.isach.ultracosmetics.menu.GadgetManager;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -397,7 +397,7 @@ public abstract class Gadget implements Listener {
         protected void onPlayerInteract(final PlayerInteractEvent EVENT) {
             Player player = EVENT.getPlayer();
             UUID uuid = player.getUniqueId();
-            CustomPlayer cp = UltraCosmetics.getCustomPlayer(getPlayer());
+            UltraPlayer cp = UltraCosmetics.getCustomPlayer(getPlayer());
             if (!uuid.equals(gadget.owner)) return;
             ItemStack itemStack = player.getItemInHand();
             if (itemStack.getType() != gadget.getMaterial()) return;

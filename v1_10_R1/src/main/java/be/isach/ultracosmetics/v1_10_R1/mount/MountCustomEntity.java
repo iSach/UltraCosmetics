@@ -51,6 +51,7 @@ public abstract class MountCustomEntity extends Mount {
         EntitySpawningManager.setBypass(false);
         UltraCosmetics.getInstance().getEntityUtil().setPassenger(getEntity(), getPlayer());
         CustomEntities.customEntities.add(getCustomEntity());
+        customEntity.removeAi();
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {

@@ -17,11 +17,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
 
     public CustomSlime(World world) {
         super(world);
-
-        if (!CustomEntities.customEntities.contains(this))
-            return;
-
-        removeSelectors();
     }
 
     private void removeSelectors() {
@@ -39,6 +34,11 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
         }
     }
 
+    @Override
+    public void removeAi() {
+        removeSelectors();
+    }
+
     /**
      * WASD Control.
      * @param sideMot
@@ -46,6 +46,10 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
      */
     @Override
     public void g(float sideMot, float forMot) {
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         if (getSize() != 3)
             setSize(3);
         if (this.passenger != null && this.passenger instanceof EntityHuman

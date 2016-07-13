@@ -13,6 +13,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -141,7 +142,7 @@ public class GadgetSmashDown extends Gadget {
         }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockChangeState(EntityChangeBlockEvent event) {
         if (fallingBlocks.contains(event.getEntity())) {
             event.setCancelled(true);

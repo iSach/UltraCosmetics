@@ -17,8 +17,6 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     public Pumpling(World world) {
         super(world);
-
-        final Pumpling instance = this;
     }
 
     public org.bukkit.entity.Entity getEntity() {

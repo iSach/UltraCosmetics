@@ -6,12 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import be.isach.ultracosmetics.UltraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
 
 public class SQLLoaderManager {
 
@@ -27,7 +27,7 @@ public class SQLLoaderManager {
 				}
 				Iterator<String> iter = loadList.iterator();
 				while(iter.hasNext()){
-					CustomPlayer current  = null;
+					UltraPlayer current  = null;
 					try{
 						Player p = Bukkit.getPlayer(UUID.fromString(iter.next()));
 						if(p == null || !p.isOnline()){

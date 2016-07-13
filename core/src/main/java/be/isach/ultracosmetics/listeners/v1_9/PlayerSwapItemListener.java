@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.listeners.v1_9;
 
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
@@ -18,7 +18,7 @@ public class PlayerSwapItemListener implements Listener {
     @EventHandler
     public void cancelOffHandMove(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        CustomPlayer customPlayer = UltraCosmetics.getCustomPlayer(player);
+        UltraPlayer customPlayer = UltraCosmetics.getCustomPlayer(player);
         if(customPlayer.currentGadget != null) {
             Gadget gadget = customPlayer.currentGadget;
             ItemStack itemStack = gadget.getItemStack();

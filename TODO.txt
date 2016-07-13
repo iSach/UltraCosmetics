@@ -1,2 +1,33 @@
 Disable collision between HumanEntity and Pets.
-Test Pet Renaming.
+Test Pet Renaming DONE
+
+SUGGESTIONS:
+  Pets:
+    Iron Golem
+    Snow Golem
+    Slime
+    Squid
+    Villager
+    Bat
+    Horse
+    Enderman
+    Zombie Pigman
+    Spider
+    Blaze
+    Cave Spider
+    Creeper
+    Ghast
+    Magma Cube
+    Silverfish
+    Skeleton
+    Spider Jockey
+    Zombie
+    Zombie Villager
+    Wither Skeleton
+    Witch
+    Endermite
+    Guardian
+    Elder Guardian
+    Killer Rabbit
+    Pigman Jockey
+    Baby Zombie

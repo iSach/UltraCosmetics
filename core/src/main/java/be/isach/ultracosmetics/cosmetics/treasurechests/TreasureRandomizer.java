@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
@@ -136,25 +137,33 @@ public class TreasureRandomizer {
                         && !player.hasPermission(hat.getPermission()))
                     hatList.add(hat);
         if (helmetList.isEmpty())
-            for (SuitType suit : SuitType.enabled())
+            for (CosmeticType cosmeticType : SuitType.enabled()) {
+                SuitType suit = (SuitType)cosmeticType;
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.HELMET)))
                     helmetList.add(suit);
+            }
         if (chestplateList.isEmpty())
-            for (SuitType suit : SuitType.enabled())
+            for (CosmeticType cosmeticType : SuitType.enabled()) {
+                SuitType suit = (SuitType)cosmeticType;
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.CHESTPLATE)))
                     chestplateList.add(suit);
+            }
         if (leggingList.isEmpty())
-            for (SuitType suit : SuitType.enabled())
+            for (CosmeticType cosmeticType : SuitType.enabled()) {
+                SuitType suit = (SuitType)cosmeticType;
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.LEGGINGS)))
                     leggingList.add(suit);
+            }
         if (bootList.isEmpty())
-            for (SuitType suit : SuitType.enabled())
+            for (CosmeticType cosmeticType : SuitType.enabled()) {
+                SuitType suit = (SuitType)cosmeticType;
                 if (suit.canBeFound()
                         && !player.hasPermission(suit.getPermission(ArmorSlot.BOOTS)))
                     bootList.add(suit);
+            }
         if (emoteList.isEmpty())
             for (EmoteType emoteType : EmoteType.enabled())
                 if (emoteType.canBeFound()
@@ -363,7 +372,7 @@ public class TreasureRandomizer {
     }
 
     public void giveNothing() {
-        if(UltraCosmetics.getInstance().isVaultLoaded()) {
+        if (UltraCosmetics.getInstance().isVaultLoaded()) {
             try {
                 giveMoney();
             } catch (Exception e) {

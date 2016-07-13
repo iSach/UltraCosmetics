@@ -1,10 +1,11 @@
-package be.isach.ultracosmetics.manager;
+package be.isach.ultracosmetics.menu;
 
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.suits.SuitType;
@@ -56,7 +57,7 @@ public class SuitManager implements Listener {
                 for (int h = from; h <= to; h++) {
                     if (h > SuitType.enabled().size())
                         break;
-                    SuitType suit = SuitType.enabled().get(h - 1);
+                    SuitType suit = (SuitType) SuitType.enabled().get(h - 1);
                     if (!suit.isEnabled()) continue;
                     boolean shouldIncrement = false;
                     for (int d = 0; d < ArmorSlot.values().length; d++) {
@@ -82,7 +83,7 @@ public class SuitManager implements Listener {
                             lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig()
                                     .get("No-Permission.Lore-Message-" + ((p.hasPermission(suit.getPermission(armorSlot)) ? "Yes" : "No")))));
                         String toggle = MessageManager.getMessage("Menu.Equip");
-                        CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
+                        UltraPlayer cp = UltraCosmetics.getCustomPlayer(p);
                         Suit current = null;
                         switch (armorSlot) {
                             case HELMET:
@@ -209,9 +210,11 @@ public class SuitManager implements Listener {
     }
 
     public static SuitType getSuitType(String name, ArmorSlot armorSlot) {
-        for (SuitType suitType : SuitType.enabled())
+        for (CosmeticType cosmeticType : SuitType.enabled()) {
+            SuitType suitType = ((SuitType) cosmeticType);
             if (suitType.getName(armorSlot).replace(" ", "").equals(name.replace(" ", "")))
                 return suitType;
+        }
         return null;
     }
 

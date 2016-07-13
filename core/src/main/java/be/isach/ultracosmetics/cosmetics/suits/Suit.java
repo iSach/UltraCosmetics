@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -130,11 +130,11 @@ public class Suit {
     }
 
     /**
-     * Gets the CustomPlayer of the Owner.
+     * Gets the UltraPlayer of the Owner.
      *
-     * @return The CustomPlayer of the Owner.
+     * @return The UltraPlayer of the Owner.
      */
-    public CustomPlayer getCustomPlayer() {
+    public UltraPlayer getCustomPlayer() {
         return UltraCosmetics.getPlayerManager().getCustomPlayer(getPlayer());
     }
 

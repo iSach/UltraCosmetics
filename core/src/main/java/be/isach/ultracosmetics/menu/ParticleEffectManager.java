@@ -1,7 +1,7 @@
-package be.isach.ultracosmetics.manager;
+package be.isach.ultracosmetics.menu;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -80,7 +80,7 @@ public class ParticleEffectManager implements Listener {
                         lore = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig()
                                 .get("No-Permission.Lore-Message-" + ((p.hasPermission(particleEffectType.getPermission()) ? "Yes" : "No")))));
                     String toggle = MessageManager.getMessage("Menu.Summon");
-                    CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
+                    UltraPlayer cp = UltraCosmetics.getCustomPlayer(p);
                     if (cp.currentParticleEffect != null && cp.currentParticleEffect.getType() == particleEffectType)
                         toggle = MessageManager.getMessage("Menu.Unsummon");
                     ItemStack is = ItemFactory.create(particleEffectType.getMaterial(), particleEffectType.getData(), toggle + " " + particleEffectType.getName());

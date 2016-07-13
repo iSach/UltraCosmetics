@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -428,7 +428,7 @@ public class MathUtils {
         if (ent.hasMetadata("NPC"))
             return;
         if (ent instanceof Player) {
-            CustomPlayer customPlayer = UltraCosmetics.getCustomPlayer((Player) ent);
+            UltraPlayer customPlayer = UltraCosmetics.getCustomPlayer((Player) ent);
             if (!customPlayer.hasGadgetsEnabled())
                 return;
         }
@@ -446,7 +446,7 @@ public class MathUtils {
             return;
         if (!ignoreGadgetsEnabled) {
             if (ent instanceof Player) {
-                CustomPlayer customPlayer = UltraCosmetics.getCustomPlayer((Player) ent);
+                UltraPlayer customPlayer = UltraCosmetics.getCustomPlayer((Player) ent);
                 if (!customPlayer.hasGadgetsEnabled())
                     return;
             }

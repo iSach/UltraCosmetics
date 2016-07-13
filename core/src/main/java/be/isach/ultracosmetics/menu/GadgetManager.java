@@ -1,7 +1,7 @@
-package be.isach.ultracosmetics.manager;
+package be.isach.ultracosmetics.menu;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -34,6 +34,7 @@ public class GadgetManager implements Listener {
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
+
     static List<Player> playerList = new ArrayList<>();
 
     public static void openMenu(final Player p, int page) {
@@ -75,7 +76,7 @@ public class GadgetManager implements Listener {
             }
 
             String toggle = MessageManager.getMessage("Menu.Activate");
-            CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
+            UltraPlayer cp = UltraCosmetics.getCustomPlayer(p);
             if (cp.currentGadget != null && cp.currentGadget.getType() == g)
                 toggle = MessageManager.getMessage("Menu.Deactivate");
             ItemStack is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName());
@@ -224,7 +225,7 @@ public class GadgetManager implements Listener {
                 int currentPage = getCurrentPage((Player) event.getWhoClicked());
                 if (UltraCosmetics.closeAfterSelect)
                     event.getWhoClicked().closeInventory();
-                CustomPlayer cp = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked());
+                UltraPlayer cp = UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked());
                 if (UltraCosmetics.getInstance().isAmmoEnabled() && event.getAction() == InventoryAction.PICKUP_HALF) {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 1; i < event.getCurrentItem().getItemMeta().getDisplayName().split(" ").length; i++) {

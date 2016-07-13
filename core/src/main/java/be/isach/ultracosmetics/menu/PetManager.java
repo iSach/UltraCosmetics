@@ -1,6 +1,6 @@
-package be.isach.ultracosmetics.manager;
+package be.isach.ultracosmetics.menu;
 
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -90,7 +90,7 @@ public class PetManager implements Listener {
                                 .get("No-Permission.Lore-Message-" + ((p.hasPermission(pet.getPermission()) ? "Yes" : "No")))));
                     }
                     String toggle = MessageManager.getMessage("Menu.Spawn");
-                    CustomPlayer cp = UltraCosmetics.getCustomPlayer(p);
+                    UltraPlayer cp = UltraCosmetics.getCustomPlayer(p);
                     if (cp.currentPet != null && cp.currentPet.getType() == pet)
                         toggle = MessageManager.getMessage("Menu.Despawn");
                     String customName = "";
