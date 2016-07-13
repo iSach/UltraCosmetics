@@ -327,6 +327,7 @@ public class MessageManager {
         addMessage("Emotes.DealWithIt.Name", "&7&lDeal With it");
         addMessage("Emotes.Cool.Name", "&9&lCool");
         addMessage("Emotes.Surprised.Name", "&6&lSurprised");
+        addMessage("Emotes.Wink.Name", "&a&lWink");
         addMessage("Emotes.Must-Remove-Helmet", "%prefix% &c&lYou must remove your helmet to equip an emote!");
 
         //MENU

@@ -38,6 +38,7 @@ public class EmoteType {
     public static final EmoteType DEAL_WITH_IT = new EmoteType("ultracosmetics.emotes.dealwithit", "DealWithIt", "&7&oDo you feel like showing off? This emote is for you!", 3);
     public static final EmoteType COOL = new EmoteType("ultracosmetics.emotes.cool", "Cool", "&7&oKeep cool man!", 2);
     public static final EmoteType SURPRISED = new EmoteType("ultracosmetics.emotes.surprised", "Surprised", "&7&oOH LORD!!!", 1);
+    public static final EmoteType WINK = new EmoteType("ultracosmetics.emotes.wink", "Wink", "&7&oHaving fun? Let someone know you are in on the joke", 2);
 
     static {
 
@@ -172,6 +173,18 @@ public class EmoteType {
             SURPRISED.appendTexture("4c3b089e446f065dd9059519c85c45aebb53891be3c3a7ed5b5eb61a96747");
 
         /* SURPRISED END */
+        
+		/* WINK BEGIN */
+		
+		WINK.appendTexture("ef66c7485ccb853a6538122e45c8a4821fbe097f96a6060feb981f7a2bba890");
+		WINK.appendTexture("a5d43eb0ec5f6de1d469b69680978a6dd7117772ee0d82ffdf08749e84df7ed");
+		for (int i = 0; i < 2; i++)
+			WINK.appendTexture("473e72cc371de25f3305665769dd7e9ff1161695252e799612580deeedd3");
+		for (int i = 0; i < 4; i++)
+			WINK.appendTexture("f4ea2d6f939fefeff5d122e63dd26fa8a427df90b2928bc1fa89a8252a7e");
+
+		/* WINK END */
+		
     }
 
     private List<ItemStack> frames;
