@@ -3,7 +3,7 @@ version: @VERSION@
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
-softdepend: [LibsDisguises, NoteBlockAPI, Vault]
+softdepend: [LibsDisguises, Vault]
 commands:
   ultracosmetics:
     aliases: [uc, cosmetics]

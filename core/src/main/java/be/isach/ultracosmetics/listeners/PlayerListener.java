@@ -88,9 +88,10 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(player.getWorld().getName())) {
+        if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
 
-            if ((event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+            if ((event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
+                    && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
                 event.setCancelled(true);
                 player.updateInventory();
                 return;
@@ -150,7 +151,7 @@ public class PlayerListener implements Listener {
         UltraCosmetics.getPlayerManager().remove(event.getPlayer());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onDeath(PlayerDeathEvent event) {
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (event.getEntity().getInventory().getItem(slot) != null
@@ -172,6 +173,8 @@ public class PlayerListener implements Listener {
             event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentLeggings.getItemStack());
         if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots != null)
             event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots.getItemStack());
+        if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentEmote != null)
+            event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentEmote.getItemStack());
         UltraCosmetics.getCustomPlayer(event.getEntity()).clear();
     }
 

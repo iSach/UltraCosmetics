@@ -81,7 +81,7 @@ public class GadgetType extends CosmeticType<Gadget> {
     private boolean affectPlayers;
 
     GadgetType(Material material, byte data, double defaultCountdown, String permission, String configName, String defaultDesc, Class<? extends Gadget> clazz) {
-        super(Category.SUITS, configName, permission, defaultDesc, clazz);
+        super(Category.GADGETS, configName, permission, defaultDesc, clazz);
         this.material = material;
         this.data = data;
         this.affectPlayers = SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Affect-Players");

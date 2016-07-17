@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics;
 
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import org.bukkit.entity.Player;
@@ -50,7 +51,7 @@ public abstract class CosmeticType<T> {
     }
 
     public String getName() {
-        return SettingsManager.getConfig().getString(category.getConfigPath() + "." + configName + ".name");
+        return MessageManager.getMessage(category.getConfigPath() + "." + configName + ".name");
     }
 
     public String getConfigName() {

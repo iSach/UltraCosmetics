@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class MorphWitherSkeleton extends Morph {
         UltraCosmetics.getInstance().registerListener(this);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onSneak(PlayerToggleSneakEvent event) {
         if (event.getPlayer() == getPlayer()
                 && !inCooldown) {

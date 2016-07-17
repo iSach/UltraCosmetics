@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -26,6 +27,8 @@ public class Emote {
     private EmoteAnimation animation;
 
     private boolean equipped;
+
+    private ItemStack itemStack;
 
     public Emote(final UUID owner, final EmoteType emoteType) {
         this.emoteType = emoteType;
@@ -63,6 +66,12 @@ public class Emote {
      */
     public EmoteType getEmoteType() {
         return emoteType;
+    }
+
+    public ItemStack getItemStack() { return itemStack; }
+
+    protected void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 
     /**
