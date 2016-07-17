@@ -822,6 +822,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         // CALL STATIC BLOCK.
         // Gadget
+        GadgetType.ANTIGRAVITY.getConfigName();
         // Mount
         // Effect
         // Pet
@@ -880,8 +881,7 @@ public class UltraCosmetics extends JavaPlugin {
             config.addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
             config.addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
-        for (CosmeticType cosmeticType : SuitType.values()) {
-            SuitType suit = ((SuitType) cosmeticType);
+        for (SuitType suit : SuitType.values()) {
             config.addDefault("Suits." + suit.getConfigName() + ".Enabled", true, "if true, the suit will be enabled.");
             config.addDefault("Suits." + suit.getConfigName() + ".Show-Description", true, "if true, the description of this suit will be showed.");
             config.addDefault("Suits." + suit.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
