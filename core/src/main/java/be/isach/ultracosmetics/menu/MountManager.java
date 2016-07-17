@@ -26,6 +26,12 @@ import java.util.List;
  */
 public class MountManager implements Listener {
 
+    private UltraCosmetics ultraCosmetics;
+
+    public MountManager(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
+    }
+
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 11, 12, 13, 14, 15, 16,
@@ -148,15 +154,15 @@ public class MountManager implements Listener {
         return 0;
     }
 
-    public static void equipMount(final MountType TYPE, final Player PLAYER) {
-        if (!PLAYER.hasPermission(TYPE.getPermission())) {
-            if (!playerList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(PLAYER);
+    public static void equipMount(final MountType TYPE, final Player player, final UltraCosmetics ultraCosmetics) {
+        if (!player.hasPermission(TYPE.getPermission())) {
+            if (!playerList.contains(player)) {
+                player.sendMessage(MessageManager.getMessage("No-Permission"));
+                playerList.add(player);
                 Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
-                        playerList.remove(PLAYER);
+                        playerList.remove(player);
                     }
                 }, 1);
             }
@@ -165,7 +171,7 @@ public class MountManager implements Listener {
         new Thread() {
             @Override
             public void run() {
-                TYPE.equip(PLAYER);
+                TYPE.equip(player, ultraCosmetics);
             }
         }.run();
     }
@@ -237,7 +243,7 @@ public class MountManager implements Listener {
 
                         }
                     }
-                    equipMount(getMountType(sb.toString()), (Player) event.getWhoClicked());
+                    equipMount(getMountType(sb.toString()), (Player) event.getWhoClicked(), ultraCosmetics);
                     if (!UltraCosmetics.closeAfterSelect)
                         openMenu((Player) event.getWhoClicked(), currentPage);
                 }

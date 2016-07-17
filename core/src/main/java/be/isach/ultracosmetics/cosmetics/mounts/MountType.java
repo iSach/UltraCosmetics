@@ -117,10 +117,10 @@ public enum MountType {
         return MessageManager.getMessage("Mounts." + getConfigName() + ".entity-displayname").replace("%playername%", player.getName());
     }
 
-    public Mount equip(Player player) {
+    public Mount equip(Player player, UltraCosmetics ultraCosmetics) {
         Mount mount = null;
         try {
-            mount = clazz.getDeclaredConstructor(UUID.class).newInstance(player == null ? null : player.getUniqueId());
+            mount = clazz.getDeclaredConstructor(UUID.class, UltraCosmetics.class).newInstance(player == null ? null : player.getUniqueId(), ultraCosmetics);
             mount.equip();
         } catch (InstantiationException e) {
             e.printStackTrace();

@@ -174,11 +174,6 @@ public class UltraCosmetics extends JavaPlugin {
     customCommandBackArrow;
 
     /**
-     * {@code true} if NoteBlockAPI can be used, {@code false} otherwise.
-     */
-    private static boolean noteBlockAPIEnabled;
-
-    /**
      * Determines if Ammo Use is enabled.
      */
     private static boolean ammoEnabled,
@@ -378,14 +373,6 @@ public class UltraCosmetics extends JavaPlugin {
             debug = true;
         }
 
-        if (Bukkit.getPluginManager().getPlugin("NoteBlockAPI") != null) {
-            log("");
-            log("NoteBlockAPI loaded and hooked.");
-            log("");
-            noteBlockAPIEnabled = true;
-        }
-
-
         log("");
         log("Registering Messages...");
         new MessageManager();
@@ -405,7 +392,7 @@ public class UltraCosmetics extends JavaPlugin {
         commandManager.registerCommand(new SubCommandSelfView());
         commandManager.registerCommand(new SubCommandMenu());
         commandManager.registerCommand(new SubCommandGive());
-        commandManager.registerCommand(new SubCommandToggle());
+        commandManager.registerCommand(new SubCommandToggle(this));
         commandManager.registerCommand(new SubCommandClear());
         commandManager.registerCommand(new SubCommandTreasure());
 
@@ -512,20 +499,13 @@ public class UltraCosmetics extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new FallDamageManager(), 0, 1);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new InvalidWorldManager(), 0, 5);
 
-        if (noteBlockAPIEnabled) {
-            File folder = new File(getDataFolder().getPath() + "/songs/");
-            if ((!folder.exists()) || (folder.listFiles().length <= 0))
-                saveResource("songs/GetLucky.nbs", true);
-            saveResource("songs/NyanCat.nbs", true);
-        }
-
         log("");
         log("Registering listeners...");
         mainMenuListener = new MainMenuManager();
         registerListener(mainMenuListener);
         registerListener(new GadgetManager());
         registerListener(new PetManager());
-        registerListener(new MountManager());
+        registerListener(new MountManager(this));
         registerListener(new ParticleEffectManager());
         registerListener(new PetManager());
         registerListener(new HatManager());
@@ -573,13 +553,6 @@ public class UltraCosmetics extends JavaPlugin {
      */
     public boolean isAmmoEnabled() {
         return ammoEnabled;
-    }
-
-    /**
-     * @return if NoteBlockAPI is loaded.
-     */
-    public boolean isNoteBlockAPIEnabled() {
-        return noteBlockAPIEnabled;
     }
 
     /**
@@ -925,9 +898,7 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (GadgetType gadgetType : GadgetType.values())
-            if (gadgetType.isEnabled())
-                GadgetType.gadgetTypes.add(gadgetType);
+        GadgetType.checkEnabled();
         for (MountType mountType : MountType.values())
             if (mountType.isEnabled())
                 MountType.mountTypes.add(mountType);

@@ -1,46 +1,24 @@
 package be.isach.ultracosmetics.cosmetics;
 
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import org.bukkit.entity.Player;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by sachalewin on 5/07/16.
  */
-public abstract class CosmeticType {
-
-    private final static List<CosmeticType> ENABLED = new ArrayList<>();
-    private final static List<CosmeticType> VALUES = new ArrayList<>();
-
-    public static List<? extends CosmeticType> enabled() {
-        return ENABLED;
-    }
-
-    public static List<? extends CosmeticType> values() {
-        return VALUES;
-    }
-
-    public static CosmeticType valueOf(String s) {
-        for(CosmeticType cosmeticType : VALUES) {
-            if(cosmeticType.getConfigName().equalsIgnoreCase(s)) return cosmeticType;
-        }
-        return null;
-    }
-
-    public static void checkEnabled() {
-        for(CosmeticType cosmeticType : values()) {
-            if(cosmeticType.isEnabled()) {
-                ENABLED.add(cosmeticType);
-            }
-        }
-    }
+public abstract class CosmeticType<T> {
 
     private String configName;
     private String permission;
     private String descriptionAsString;
-    private Class clazz;
+    private Class<? extends T> clazz;
     private Category category;
 
     public CosmeticType(Category category, String configName, String permissionSuffix, String description, Class clazz) {
@@ -50,13 +28,21 @@ public abstract class CosmeticType {
         this.clazz = clazz;
         this.category = category;
 
-        VALUES.add(this);
-
         if (SettingsManager.getConfig().get(getCategory().getConfigPath() + "." + configName + ".Description") == null) {
             setDescriptionAsString(description);
             SettingsManager.getConfig().set(getCategory().getConfigPath() + "." + configName + ".Description", getDescriptionColored(), "Description of this cosmetic.");
         } else
-            setDescriptionAsString(fromList((List<String>) SettingsManager.getConfig().get(category.getConfigPath() + "." + configName + ".Description")));
+            setDescriptionAsString(fromList(SettingsManager.getConfig().getStringList(category.getConfigPath() + "." + configName + ".Description")));
+    }
+
+    public T equip(Player player) {
+        T cosmetic = null;
+        try {
+            cosmetic = getClazz().getDeclaredConstructor(UUID.class).newInstance(player == null ? null : player.getUniqueId());
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return cosmetic;
     }
 
     public boolean isEnabled() {
@@ -79,7 +65,7 @@ public abstract class CosmeticType {
         return descriptionAsString;
     }
 
-    public Class getClazz() {
+    public Class<? extends T> getClazz() {
         return clazz;
     }
 

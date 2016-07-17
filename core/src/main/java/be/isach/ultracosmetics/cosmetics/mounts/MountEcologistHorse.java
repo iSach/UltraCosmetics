@@ -22,7 +22,7 @@ import java.util.UUID;
 public class MountEcologistHorse extends Mount {
 
     public MountEcologistHorse(UUID owner) {
-        super(owner, MountType.ECOLOGISTHORSE);
+        super(owner, MountType.ECOLOGISTHORSE, UltraCosmetics.getInstance());
     }
 
     @Override

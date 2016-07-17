@@ -436,7 +436,7 @@ public class TreasureChest implements Listener {
     }
 
     private void spawnHologram(Location location, String s) {
-        if(UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
+        if(UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) > 0) {
             location.setY(location.getY() - 1);
         }
         ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);

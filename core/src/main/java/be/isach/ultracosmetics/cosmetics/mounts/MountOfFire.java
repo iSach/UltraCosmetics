@@ -21,8 +21,8 @@ import java.util.UUID;
  */
 public class MountOfFire extends Mount {
 
-    public MountOfFire(UUID owner) {
-        super(owner, MountType.MOUNTOFFIRE);
+    public MountOfFire(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.MOUNTOFFIRE, ultraCosmetics);
     }
 
     @Override

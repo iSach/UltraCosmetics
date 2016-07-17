@@ -23,8 +23,8 @@ public class MountSnake extends Mount {
     private int color = 1;
 
 
-    public MountSnake(UUID owner) {
-        super(owner, MountType.SNAKE);
+    public MountSnake(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.SNAKE, ultraCosmetics);
     }
 
     @Override

@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.3.4-RELEASE'
+    version = '2.3.5-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -42,7 +42,6 @@ dependencies{
 
 subprojects {
     repositories {
-        mavenLocal()
         mavenCentral()
         ivy {
             url 'http://www.tcpr.ca/files/'
@@ -70,6 +69,9 @@ subprojects {
         }
         maven {
             url 'http://repo.sinndev.com/content/repositories/releases/'
+        }
+        maven {
+            url 'https://jitpack.io'
         }
     }
 }

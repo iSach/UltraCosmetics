@@ -2,20 +2,14 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.UtilParticles;
-import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
-import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.Song;
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,35 +20,14 @@ import java.util.UUID;
  */
 public class MountNyanSheep extends Mount {
 
-    public MountNyanSheep(UUID owner) {
-        super(owner, MountType.NYANSHEEP);
+    public MountNyanSheep(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.NYANSHEEP, ultraCosmetics);
     }
 
     @Override
     protected void onEquip() {
         ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
         UltraCosmetics.getInstance().getEntityUtil().clearPathfinders(entity);
-        if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
-            Song s = NBSDecoder.parse(new File(UltraCosmetics.getInstance().getDataFolder(), "/songs/NyanCat.nbs"));
-            final PositionSongPlayer positionSongPlayer = new PositionSongPlayer(s);
-            positionSongPlayer.setTargetLocation(((LivingEntity) entity).getEyeLocation());
-            positionSongPlayer.setPlaying(true);
-            for (Player p : Bukkit.getOnlinePlayers())
-                positionSongPlayer.addPlayer(p);
-            positionSongPlayer.setAutoDestroy(true);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (entity.isValid() && entity.getPassenger() == getPlayer()) {
-                        if (UltraCosmetics.getInstance().isNoteBlockAPIEnabled())
-                            positionSongPlayer.setTargetLocation(((LivingEntity) entity).getEyeLocation());
-                    } else {
-                        positionSongPlayer.setPlaying(false);
-                        cancel();
-                    }
-                }
-            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
-        }
     }
 
     @Override
@@ -96,7 +69,7 @@ public class MountNyanSheep extends Mount {
         }
     }
 
-    class RGBColor {
+    private class RGBColor {
 
         int red;
         int green;

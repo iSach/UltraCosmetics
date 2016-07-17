@@ -58,9 +58,12 @@ public abstract class Mount implements Listener {
      */
     protected Listener listener;
 
-    public Mount(final UUID owner, final MountType type) {
+    private UltraCosmetics ultraCosmetics;
+
+    public Mount(final UUID owner, final MountType type, UltraCosmetics ultraCosmetics) {
         this.type = type;
         this.owner = owner;
+        this.ultraCosmetics = ultraCosmetics;
         if (owner != null) {
             if (!getPlayer().hasPermission(type.getPermission())) {
                 getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
@@ -199,6 +202,10 @@ public abstract class Mount implements Listener {
      */
     protected Player getPlayer() {
         return Bukkit.getPlayer(owner);
+    }
+
+    protected UltraCosmetics getUltraCosmetics() {
+        return ultraCosmetics;
     }
 
     /**

@@ -3,6 +3,8 @@ package be.isach.ultracosmetics.menu;
 import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.CosmeticType;
 
+import java.util.List;
+
 import static be.isach.ultracosmetics.cosmetics.CosmeticType.*;
 
 /**
@@ -11,7 +13,7 @@ import static be.isach.ultracosmetics.cosmetics.CosmeticType.*;
  * Date: 5/07/16
  * Project: UltraCosmetics
  */
-public class Menu {
+public abstract class Menu {
 
     private final static int[] COSMETICS_SLOTS =
             {
@@ -37,4 +39,6 @@ public class Menu {
         }
         return null;
     }
+
+    abstract List<CosmeticType> enabled();
 }

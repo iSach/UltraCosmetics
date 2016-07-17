@@ -3,7 +3,6 @@ dependencies {
     compile ('LibsDisguises:LibsDisguises:9.0.7') {
         exclude group: 'org.spigotmc'
     }
-    compile 'com.xxmicloxx:NoteBlockAPI:1.8.7'
     compile('net.milkbowl.vault:VaultAPI:1.5') {
         exclude group: 'org.bukkit'
     }

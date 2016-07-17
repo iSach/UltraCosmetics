@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -27,7 +26,7 @@ public class MountFlyingShip extends Mount {
     //ArmorStand nameTag = null;
 
     public MountFlyingShip(UUID owner) {
-        super(owner, MountType.FLYINGSHIP);
+        super(owner, MountType.FLYINGSHIP, UltraCosmetics.getInstance());
         if (owner != null)
             UltraCosmetics.getInstance().registerListener(this);
         //  spawnNameTag();

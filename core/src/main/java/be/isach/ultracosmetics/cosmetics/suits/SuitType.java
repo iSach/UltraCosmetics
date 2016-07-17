@@ -16,7 +16,33 @@ import java.util.UUID;
 /**
  * Created by Sacha on 20/12/15.
  */
-public class SuitType extends CosmeticType {
+public class SuitType extends CosmeticType<Suit> {
+
+    private final static List<SuitType> ENABLED = new ArrayList<>();
+    private final static List<SuitType> VALUES = new ArrayList<>();
+
+    public static List<SuitType> enabled() {
+        return ENABLED;
+    }
+
+    public static List<SuitType> values() {
+        return VALUES;
+    }
+
+    public static SuitType valueOf(String s) {
+        for (SuitType suitType : VALUES) {
+            if (suitType.getConfigName().equalsIgnoreCase(s)) return suitType;
+        }
+        return null;
+    }
+
+    public static void checkEnabled() {
+        for (SuitType suitType : values()) {
+            if (suitType.isEnabled()) {
+                ENABLED.add(suitType);
+            }
+        }
+    }
 
     public final static SuitType RAVE = new SuitType("Rave", "rave", "&7&oSuch amazing colors!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitRave.class);
     public final static SuitType ASTRONAUT = new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS, SuitAstronaut.class);
@@ -27,11 +53,6 @@ public class SuitType extends CosmeticType {
      * The parts materials.
      */
     private Material helmet, chestplate, leggings, boots;
-
-    /**
-     * List of all the enabled Suits.
-     */
-    public static List<SuitType> enabled = new ArrayList<>();
 
     /**
      * @param configName       The config path name.
@@ -50,6 +71,8 @@ public class SuitType extends CosmeticType {
         this.helmet = h;
         this.chestplate = c;
         this.leggings = l;
+
+        VALUES.add(this);
     }
 
     /**
@@ -62,8 +85,7 @@ public class SuitType extends CosmeticType {
     public Suit equip(Player player, ArmorSlot armorSlot) {
         Suit effect = null;
         try {
-            effect = ((Class<? extends Suit>)getClazz()).getDeclaredConstructor(UUID.class, ArmorSlot.class)
-                    .newInstance(player == null ? null : player.getUniqueId(), armorSlot);
+            effect = getClazz().getDeclaredConstructor(UUID.class, ArmorSlot.class).newInstance(player == null ? null : player.getUniqueId(), armorSlot);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }

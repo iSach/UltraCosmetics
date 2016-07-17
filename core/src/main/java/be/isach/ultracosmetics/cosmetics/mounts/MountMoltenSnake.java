@@ -26,8 +26,8 @@ public class MountMoltenSnake extends Mount {
     private float lastYaw;
     private float lastPitch;
 
-    public MountMoltenSnake(UUID owner) {
-        super(owner, MountType.MOLTENSNAKE);
+    public MountMoltenSnake(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.MOLTENSNAKE, ultraCosmetics);
     }
 
     @Override

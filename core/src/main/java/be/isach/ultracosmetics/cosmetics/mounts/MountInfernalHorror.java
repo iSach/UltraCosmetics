@@ -12,8 +12,8 @@ import java.util.UUID;
  */
 public class MountInfernalHorror extends Mount {
 
-    public MountInfernalHorror(UUID owner) {
-        super(owner, MountType.INFERNALHORROR);
+    public MountInfernalHorror(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.INFERNALHORROR, ultraCosmetics);
     }
 
     @Override

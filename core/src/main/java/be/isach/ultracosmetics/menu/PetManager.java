@@ -38,8 +38,10 @@ public class PetManager implements Listener {
                     19, 20, 21, 22, 23, 24, 25,
                     28, 29, 30, 31, 32, 33, 34
             };
-    static List<HumanEntity> noSpam = new ArrayList<>();
-    static List<Player> noSpamList = new ArrayList<>();
+
+    private static List<HumanEntity> noSpam = new ArrayList<>();
+    private static List<Player> noSpamList = new ArrayList<>();
+
     private static Map<Player, String> renamePetList = new HashMap<>();
 
     public static void openMenu(final Player p, int page) {

@@ -12,8 +12,8 @@ import java.util.UUID;
  */
 public class MountWalkingDead extends Mount {
 
-    public MountWalkingDead(UUID owner) {
-        super(owner, MountType.WALKINGDEAD);
+    public MountWalkingDead(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.WALKINGDEAD, ultraCosmetics);
     }
 
     @Override

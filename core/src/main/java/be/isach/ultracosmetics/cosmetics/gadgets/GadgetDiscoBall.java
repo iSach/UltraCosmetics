@@ -2,9 +2,6 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.*;
-import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
-import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.Song;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,7 +30,6 @@ public class GadgetDiscoBall extends Gadget {
     double i2 = 0;
     ArmorStand armorStand;
     boolean running = false;
-    PositionSongPlayer positionSongPlayer;
 
     public GadgetDiscoBall(UUID owner) {
         super(owner, GadgetType.DISCOBALL);
@@ -50,8 +46,6 @@ public class GadgetDiscoBall extends Gadget {
             i = 0;
             i2 = 0;
             UltraCosmetics.getInstance().discoBalls.remove(this);
-            if (UltraCosmetics.getInstance().isNoteBlockAPIEnabled())
-                positionSongPlayer.setPlaying(false);
         } catch (Exception exc) {
         }
         HandlerList.unregisterAll(this);
@@ -66,32 +60,6 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte)3, " "));
         running = true;
         UltraCosmetics.getInstance().discoBalls.add(this);
-        if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
-            File[] files = new File(UltraCosmetics.getInstance().getDataFolder().getPath() + "/songs/").listFiles();
-            List<File> songs = new ArrayList<>();
-            for (File f : files)
-                if (f.getName().contains(".nbs")) songs.add(f);
-            File song = songs.get(new Random().nextInt(songs.size()));
-            Song s = NBSDecoder.parse(song);
-            positionSongPlayer = new PositionSongPlayer(s);
-
-            positionSongPlayer.setTargetLocation(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d));
-
-            positionSongPlayer.setPlaying(true);
-
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                positionSongPlayer.addPlayer(p);
-            }
-
-            positionSongPlayer.setVolume((byte) 100);
-            positionSongPlayer.setFadeStart((byte) 25);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new BukkitRunnable() {
-                @Override
-                public void run() {
-                    positionSongPlayer.setPlaying(false);
-                }
-            }, 20 * 20);
-        }
         Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new BukkitRunnable() {
             @Override
             public void run() {
@@ -104,7 +72,7 @@ public class GadgetDiscoBall extends Gadget {
     void onUpdate() {
         if (running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
-            if (UltraCosmetics.getServerVersion() != ServerVersion.v1_9_R1)
+            if (UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0)
                 armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
             UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
             UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);

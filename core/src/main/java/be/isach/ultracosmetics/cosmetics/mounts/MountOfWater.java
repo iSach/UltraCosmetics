@@ -21,8 +21,8 @@ import java.util.UUID;
  */
 public class MountOfWater extends Mount {
 
-    public MountOfWater(UUID owner) {
-        super(owner, MountType.MOUNTOFWATER);
+    public MountOfWater(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.MOUNTOFWATER, ultraCosmetics);
     }
 
     @Override

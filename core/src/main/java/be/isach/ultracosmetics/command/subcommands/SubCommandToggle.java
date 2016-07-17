@@ -23,8 +23,11 @@ import org.bukkit.entity.Player;
  */
 public class SubCommandToggle extends SubCommand {
 
-    public SubCommandToggle() {
+    private UltraCosmetics ultraCosmetics;
+
+    public SubCommandToggle(UltraCosmetics ultraCosmetics) {
         super("Toggles a cosmetic.", "ultracosmetics.command.toggle", "/uc toggle <type> <cosmetic> [player]", "toggle");
+        this.ultraCosmetics = ultraCosmetics;
     }
 
     @Override
@@ -159,7 +162,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            MountManager.equipMount(mountType, receiver);
+            MountManager.equipMount(mountType, receiver, ultraCosmetics);
         } else if (type.startsWith("e")) {
             EmoteType emoteType = null;
             boolean stopNow = false;
@@ -435,7 +438,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            MountManager.equipMount(mountType, receiver);
+            MountManager.equipMount(mountType, receiver, ultraCosmetics);
         } else if (type.startsWith("mor")) {
             MorphType morphType;
             try {

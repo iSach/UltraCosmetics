@@ -30,7 +30,7 @@ public abstract class MountCustomEntity extends Mount {
     public IMountCustomEntity customEntity;
 
     public MountCustomEntity(UUID owner, MountType type) {
-        super(owner, type);
+        super(owner, type, UltraCosmetics.getInstance());
     }
 
     @Override

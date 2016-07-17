@@ -88,7 +88,7 @@ public abstract class Gadget implements Listener {
     private UUID owner;
 
     public Gadget(final UUID owner, final GadgetType type) {
-        this.permission = type.permission;
+        this.permission = type.getPermission();
         this.type = type;
         this.affectPlayers = type.affectPlayers();
         if (!type.isEnabled())

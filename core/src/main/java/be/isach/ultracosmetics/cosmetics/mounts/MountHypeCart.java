@@ -7,10 +7,8 @@ import java.util.UUID;
 
 public class MountHypeCart extends Mount {
 
-    public MountHypeCart(UUID owner) {
-        super(
-                owner, MountType.HYPECART
-        );
+    public MountHypeCart(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.HYPECART, ultraCosmetics);
     }
 
     @Override

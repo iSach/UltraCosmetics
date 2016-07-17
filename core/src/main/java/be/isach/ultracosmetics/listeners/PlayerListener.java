@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class PlayerListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
         });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onWorldChange(final PlayerChangedWorldEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
             @Override
@@ -66,7 +66,7 @@ public class PlayerListener implements Listener {
         });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event) {
         if (event.getItemDrop().getItemStack().hasItemMeta()
                 && event.getItemDrop().getItemStack().getItemMeta().hasDisplayName()
@@ -85,7 +85,7 @@ public class PlayerListener implements Listener {
      *
      * @param event
      */
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(player.getWorld().getName())) {
@@ -112,7 +112,7 @@ public class PlayerListener implements Listener {
      *
      * @param event
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryDragEvent event) {
         for (ItemStack item : event.getNewItems().values()) {
             if (item != null
@@ -126,7 +126,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
         if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
             int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
@@ -141,7 +141,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent event) {
         if (UltraCosmetics.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
             UltraCosmetics.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
@@ -150,39 +150,39 @@ public class PlayerListener implements Listener {
         UltraCosmetics.getPlayerManager().remove(event.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent event) {
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (event.getEntity().getInventory().getItem(slot) != null
                 && event.getEntity().getInventory().getItem(slot).hasItemMeta()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().hasDisplayName()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
-            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentGadget != null)
-                event.getDrops().remove(event.getEntity().getInventory().getItem((Integer) SettingsManager.getConfig().get("Gadget-Slot")));
-            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentHat != null)
-                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentHat.getItemStack());
-            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentHelmet != null)
-                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentHelmet.getItemStack());
-            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentChestplate != null)
-                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentChestplate.getItemStack());
-            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentLeggings != null)
-                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentLeggings.getItemStack());
-            if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots != null)
-                event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots.getItemStack());
-            UltraCosmetics.getCustomPlayer(event.getEntity()).clear();
             event.getDrops().remove(event.getEntity().getInventory().getItem(slot));
             event.getEntity().getInventory().setItem(slot, null);
         }
+        if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentGadget != null)
+            event.getDrops().remove(event.getEntity().getInventory().getItem((Integer) SettingsManager.getConfig().get("Gadget-Slot")));
+        if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentHat != null)
+            event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentHat.getItemStack());
+        if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentHelmet != null)
+            event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentHelmet.getItemStack());
+        if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentChestplate != null)
+            event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentChestplate.getItemStack());
+        if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentLeggings != null)
+            event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentLeggings.getItemStack());
+        if (UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots != null)
+            event.getDrops().remove(UltraCosmetics.getCustomPlayer(event.getEntity()).currentBoots.getItemStack());
+        UltraCosmetics.getCustomPlayer(event.getEntity()).clear();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL
                 && FallDamageManager.shouldBeProtected(event.getEntity()))
             event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerPickUpItem(PlayerPickupItemEvent event) {
         if (event.getItem().getItemStack() != null
                 && event.getItem().getItemStack().hasItemMeta()
@@ -194,7 +194,7 @@ public class PlayerListener implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteractGhost(PlayerInteractAtEntityEvent event) {
         if (event.getRightClicked() != null
                 && event.getRightClicked().hasMetadata("C_AD_ArmorStand"))

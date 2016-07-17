@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class GadgetPaintballGun extends Gadget implements Listener {
 
-    Map<UUID, ArrayList<Projectile>> projectiles = new HashMap();
+    Map<UUID, ArrayList<Projectile>> projectiles = new HashMap<>();
 
     int radius = 2;
 
@@ -34,7 +34,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
         super(owner, GadgetType.PAINTBALLGUN);
         if (owner != null) {
             UltraCosmetics.getInstance().registerListener(this);
-            radius = SettingsManager.getConfig().getInt("Gadgets." + getType().configName + ".Radius");
+            radius = SettingsManager.getConfig().getInt("Gadgets." + getType().getConfigName() + ".Radius");
         }
         displayCooldownMessage = false;
     }
@@ -101,10 +101,10 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             byte b = (byte) r.nextInt(15);
             Location center = event.getEntity().getLocation().add(event.getEntity().getVelocity());
             for (Block block : BlockUtils.getBlocksInRadius(center.getBlock().getLocation(), radius, false)) {
-                BlockUtils.setToRestore(block, Material.getMaterial((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Block-Type")), b, 20 * 3);
+                BlockUtils.setToRestore(block, Material.getMaterial((String) SettingsManager.getConfig().get("Gadgets." + getType().getConfigName() + ".Block-Type")), b, 20 * 3);
             }
-            if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().configName + ".Particle.Enabled")) {
-                Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
+            if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().getConfigName() + ".Particle.Enabled")) {
+                Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().getConfigName() + ".Particle.Effect")).replace("_", ""));
                 UtilParticles.display(effect, 2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
             }
             event.getEntity().remove();
