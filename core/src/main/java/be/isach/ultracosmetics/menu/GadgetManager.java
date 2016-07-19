@@ -88,8 +88,13 @@ public class GadgetManager implements Listener {
                 if (itemMeta.hasLore())
                     loreList = itemMeta.getLore();
                 loreList.add("");
-                loreList.add(MessageManager.getMessage("Ammo").replace("%ammo%", "" + UltraCosmetics.getCustomPlayer(p).getAmmo(g.toString().toLowerCase())));
+                int ammo = UltraCosmetics.getCustomPlayer(p).getAmmo(g.toString().toLowerCase());
+                loreList.add(MessageManager.getMessage("Ammo").replace("%ammo%", "" + ammo));
                 loreList.add(MessageManager.getMessage("Right-Click-Buy-Ammo"));
+
+                if (SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount")
+                        && !(cp.currentGadget != null && cp.currentGadget.getType() == g && ammo == 0))
+                    is.setAmount(Math.max(0, Math.min(64, ammo)));
             }
             if (g.showsDescription()) {
                 loreList.add("");
@@ -197,7 +202,7 @@ public class GadgetManager implements Listener {
                     return;
                 }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu"))) {
-                    UltraCosmetics.openMainMenuFromOther((Player)event.getWhoClicked());
+                    UltraCosmetics.openMainMenuFromOther((Player) event.getWhoClicked());
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Gadget"))) {
                     if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).currentGadget != null) {

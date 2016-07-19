@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
+import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetDiscoBall;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetExplosiveSheep;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
@@ -522,6 +523,7 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         log("Listeners registered.");
         log("");
         log("");
@@ -819,6 +821,7 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("TreasureChests.Loots.Emotes.Chance", 5);
         config.addDefault("TreasureChests.Loots.Emotes.Message.enabled", true);
         config.addDefault("TreasureChests.Loots.Emotes.Message.message", "%prefix% &6&l%name% found rare %emote%");
+        config.addDefault("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount", true, "Do you want that in the gadgets menu", "each gadget item has an amount", "corresponding to your ammo.");
 
         // CALL STATIC BLOCK.
         // Gadget

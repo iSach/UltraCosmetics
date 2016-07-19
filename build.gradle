@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.3.6-RELEASE'
+    version = '2.3.7-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -28,7 +28,7 @@ allprojects {
     }
 }
 
-boolean local = false
+boolean local = true
 
 if (local) libsDirName = '/Users/sachalewin/Desktop/LOCAL/plugins'
 

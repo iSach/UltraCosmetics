@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class MySQLConnection {
+
     private final String hostname;
 
     private final String portNumber;

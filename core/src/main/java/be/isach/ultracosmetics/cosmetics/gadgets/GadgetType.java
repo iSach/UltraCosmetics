@@ -124,4 +124,9 @@ public class GadgetType extends CosmeticType<Gadget> {
             return super.isEnabled();
         }
     }
+
+    @Override
+    public String toString() {
+        return getConfigName().toUpperCase();
+    }
 }
