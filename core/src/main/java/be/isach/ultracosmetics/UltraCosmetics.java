@@ -793,6 +793,9 @@ public class UltraCosmetics extends JavaPlugin {
 
                         log("initial SQLLoader to reduce lag when table is large");
                         sqlloader = new SQLLoaderManager();
+
+                        UltraPlayer.INDEXS.putAll(sqlUtils.getIds());
+
                     } catch (Exception e) {
 
                         Bukkit.getLogger().info("");

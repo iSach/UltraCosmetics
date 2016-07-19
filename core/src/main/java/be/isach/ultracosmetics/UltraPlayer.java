@@ -28,12 +28,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
  * Created by sacha on 03/08/15.
  */
 public class UltraPlayer {
+
+    public static final Map<UUID, Integer> INDEXS = new HashMap<>();
 
     /**
      * Player UUID.
@@ -75,6 +78,7 @@ public class UltraPlayer {
     private short cache_hasGadgetsEnable = -1;
     private short cache_canSeeSelfMorph = -1;
 
+    public int mySqlIndex = -1;
 
     /**
      * Allows to store custom data for each player easily.
@@ -94,7 +98,7 @@ public class UltraPlayer {
 
             if (UltraCosmetics.getInstance().isAmmoEnabled()) {
                 if (!UltraCosmetics.getInstance().usingFileStorage())
-                    UltraCosmetics.sqlUtils.initStats(getPlayer());
+                    UltraCosmetics.sqlUtils.initStats(this);
                 else
                     for (GadgetType type : GadgetType.values())
                         if (type.isEnabled())
@@ -222,7 +226,7 @@ public class UltraPlayer {
         if (UltraCosmetics.getInstance().usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() + 1);
         else
-            UltraCosmetics.sqlUtils.addKey(getPlayer().getUniqueId());
+            UltraCosmetics.sqlUtils.addKey(getMySqlIndex());
     }
 
     /**
@@ -232,14 +236,14 @@ public class UltraPlayer {
         if (UltraCosmetics.getInstance().usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Keys", getKeys() - 1);
         else
-            UltraCosmetics.sqlUtils.removeKey(getPlayer().getUniqueId());
+            UltraCosmetics.sqlUtils.removeKey(getMySqlIndex());
     }
 
     /**
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        return UltraCosmetics.getInstance().usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : UltraCosmetics.sqlUtils.getKeys(getPlayer().getUniqueId());
+        return UltraCosmetics.getInstance().usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : UltraCosmetics.sqlUtils.getKeys(getMySqlIndex());
     }
 
     /**
@@ -447,7 +451,7 @@ public class UltraPlayer {
     public void setPetName(String petName, String name) {
         if (UltraCosmetics.getInstance().usingFileStorage())
             SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
-        else UltraCosmetics.sqlUtils.setName(getPlayer(), petName, name);
+        else UltraCosmetics.sqlUtils.setName(getMySqlIndex(), petName, name);
     }
 
     /**
@@ -461,9 +465,9 @@ public class UltraPlayer {
             if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Pet-Names." + petName);
             } else {
-                if (UltraCosmetics.sqlUtils.getPetName(getPlayer(), petName).equalsIgnoreCase("Unknown"))
+                if (UltraCosmetics.sqlUtils.getPetName(getMySqlIndex(), petName).equalsIgnoreCase("Unknown"))
                     return null;
-                return UltraCosmetics.sqlUtils.getPetName(getPlayer(), petName);
+                return UltraCosmetics.sqlUtils.getPetName(getMySqlIndex(), petName);
             }
         } catch (NullPointerException e) {
             return null;
@@ -481,7 +485,7 @@ public class UltraPlayer {
             if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + amount);
             else
-                UltraCosmetics.sqlUtils.addAmmo(getPlayer().getUniqueId(), name, amount);
+                UltraCosmetics.sqlUtils.addAmmo(getMySqlIndex(), name, amount);
         if (currentGadget != null)
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                     ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(),
@@ -499,7 +503,7 @@ public class UltraPlayer {
             if (UltraCosmetics.getInstance().usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).set("Gadgets-Enabled", enabled);
             } else {
-                UltraCosmetics.sqlUtils.setGadgetsEnabled(getPlayer(), enabled);
+                UltraCosmetics.sqlUtils.setGadgetsEnabled(getMySqlIndex(), enabled);
             }
             if (enabled) {
                 getPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
@@ -526,7 +530,7 @@ public class UltraPlayer {
             if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
             } else {
-                if (UltraCosmetics.sqlUtils.hasGadgetsEnabled(getPlayer())) {
+                if (UltraCosmetics.sqlUtils.hasGadgetsEnabled(getMySqlIndex())) {
                     cache_hasGadgetsEnable = 1;
                     return true;
                 } else {
@@ -548,7 +552,7 @@ public class UltraPlayer {
         if (UltraCosmetics.getInstance().usingFileStorage()) {
             SettingsManager.getData(getPlayer()).set("Third-Person-Morph-View", enabled);
         } else {
-            UltraCosmetics.sqlUtils.setSeeSelfMorph(getPlayer(), enabled);
+            UltraCosmetics.sqlUtils.setSeeSelfMorph(getMySqlIndex(), enabled);
         }
         if (enabled) {
             getPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
@@ -572,7 +576,7 @@ public class UltraPlayer {
             if (UltraCosmetics.getInstance().usingFileStorage()) {
                 return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
             } else {
-                if (UltraCosmetics.sqlUtils.canSeeSelfMorph(getPlayer())) {
+                if (UltraCosmetics.sqlUtils.canSeeSelfMorph(getMySqlIndex())) {
                     cache_canSeeSelfMorph = 1;
                     return true;
                 } else {
@@ -597,7 +601,7 @@ public class UltraPlayer {
             if (UltraCosmetics.getInstance().usingFileStorage())
                 return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name);
             else
-                return UltraCosmetics.sqlUtils.getAmmo(getPlayer().getUniqueId(), name);
+                return UltraCosmetics.sqlUtils.getAmmo(getMySqlIndex(), name);
         return 0;
     }
 
@@ -620,7 +624,7 @@ public class UltraPlayer {
             if (UltraCosmetics.getInstance().usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) - 1);
             } else {
-                UltraCosmetics.sqlUtils.removeAmmo(getPlayer().getUniqueId(), name);
+                UltraCosmetics.sqlUtils.removeAmmo(getMySqlIndex(), name);
             }
         }
     }
@@ -674,5 +678,9 @@ public class UltraPlayer {
      */
     public UUID getUuid() {
         return uuid;
+    }
+
+    public int getMySqlIndex() {
+        return INDEXS.get(uuid) == null ? -1 : INDEXS.get(uuid);
     }
 }

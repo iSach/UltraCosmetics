@@ -42,13 +42,6 @@ public class PlayerManager {
         return playerCache.values();
     }
 
-    public boolean hasNeverCome(UUID uuid) {
-        if (UltraCosmetics.getInstance().usingFileStorage())
-            return !SettingsManager.hasData(uuid);
-        else
-            return !UltraCosmetics.sqlUtils.exists(uuid);
-    }
-
     public void dispose() {
         Collection<UltraPlayer> set = playerCache.values();
         for (UltraPlayer cp : set) {

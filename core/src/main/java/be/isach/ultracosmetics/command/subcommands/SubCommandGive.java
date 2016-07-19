@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -233,7 +234,7 @@ public class SubCommandGive extends SubCommand {
             if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(offlinePlayer.getUniqueId()).set("Keys", getKeys(offlinePlayer.getUniqueId()) + 1);
             else
-                UltraCosmetics.sqlUtils.addKey(offlinePlayer.getUniqueId());
+                UltraCosmetics.sqlUtils.addKey(UltraPlayer.INDEXS.get(offlinePlayer.getUniqueId()));
         }
     }
 
@@ -247,11 +248,11 @@ public class SubCommandGive extends SubCommand {
                 SettingsManager.getData(receiver.getUniqueId()).set("Ammo." + gadgetType.toString().toLowerCase(),
                         ((int) SettingsManager.getData(receiver.getUniqueId()).get("Ammo." + gadgetType.toString().toLowerCase())) + ammo);
             else
-                UltraCosmetics.sqlUtils.addAmmo(receiver.getUniqueId(), gadgetType.toString().toLowerCase(), ammo);
+                UltraCosmetics.sqlUtils.addAmmo(UltraPlayer.INDEXS.get(receiver.getUniqueId()), gadgetType.toString().toLowerCase(), ammo);
         }
     }
 
     private int getKeys(UUID uuid) {
-        return UltraCosmetics.getInstance().usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : UltraCosmetics.sqlUtils.getKeys(uuid);
+        return UltraCosmetics.getInstance().usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : UltraCosmetics.sqlUtils.getKeys(UltraPlayer.INDEXS.get(uuid));
     }
 }

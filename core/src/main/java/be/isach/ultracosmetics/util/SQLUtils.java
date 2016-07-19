@@ -1,12 +1,16 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -20,10 +24,11 @@ public class SQLUtils {
         this.core = core;
     }
 
-    public void initStats(Player p) {
+    public void initStats(UltraPlayer up) {
+
+        Player p = up.getPlayer();
 
         try {
-
             if (!core.table.select().where("uuid", p.getUniqueId().toString()).execute().next()) {
                 core.table.insert().insert("uuid").value(p.getUniqueId().toString()).execute();
                 core.table.update().set("username", p.getName()).where("uuid", p.getUniqueId().toString()).execute();
@@ -42,15 +47,19 @@ public class SQLUtils {
                 }
             }
 
+            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            res.first();
+            UltraPlayer.INDEXS.put(p.getUniqueId(), res.getInt("id"));
+
         } catch (Exception e) {
             //e.printStackTrace();
         	//exception catch when player triggered join event but offline when trigger this.
         }
     }
 
-    public int getAmmo(UUID uuid, String name) {
+    public int getAmmo(int index, String name) {
         try {
-            ResultSet res = core.table.select().where("uuid", uuid.toString()).execute();
+            ResultSet res = core.table.select().where("id", index).execute();
             res.first();
             return res.getInt(name.replace("_", ""));
         } catch (SQLException e) {
@@ -58,10 +67,10 @@ public class SQLUtils {
         }
     }
 
-    public String getPetName(Player p, String pet) {
+    public String getPetName(int index, String pet) {
 
         try {
-            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            ResultSet res = core.table.select().where("id", index).execute();
             res.first();
             return res.getString("name" + pet);
 
@@ -70,9 +79,9 @@ public class SQLUtils {
         }
     }
 
-    public boolean exists(UUID uuid) {
+    public boolean exists(int index) {
         try {
-            ResultSet resultSet = core.table.select().where("uuid", uuid.toString()).execute();
+            ResultSet resultSet = core.table.select().where("id", index).execute();
             resultSet.first();
             return resultSet.next();
         } catch (SQLException e) {
@@ -80,7 +89,7 @@ public class SQLUtils {
         }
     }
 
-    public void setName(Player p, String pet, String name) {
+    public void setName(int index, String pet, String name) {
         DatabaseMetaData md = null;
         try {
             md = core.co.getMetaData();
@@ -89,15 +98,15 @@ public class SQLUtils {
                 PreparedStatement statement = core.co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD name" + pet + " varchar(255)");
                 statement.executeUpdate();
             }
-            core.table.update().set("name" + pet, name).where("uuid", p.getUniqueId().toString()).execute();
+            core.table.update().set("name" + pet, name).where("id", index).execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public int getKeys(UUID uuid) {
+    public int getKeys(int index) {
         try {
-            ResultSet res = core.table.select().where("uuid", uuid.toString()).execute();
+            ResultSet res = core.table.select().where("id", index).execute();
             res.first();
             return res.getInt("treasureKeys");
         } catch (SQLException e) {
@@ -105,23 +114,23 @@ public class SQLUtils {
         }
     }
 
-    public void removeKey(UUID uuid) {
-        core.table.update().set("treasureKeys", getKeys(uuid) - 1).where("uuid", uuid.toString()).execute();
+    public void removeKey(int index) {
+        core.table.update().set("treasureKeys", getKeys(index) - 1).where("id", index).execute();
     }
 
-    public void addKey(UUID uuid) {
-        core.table.update().set("treasureKeys", getKeys(uuid) + 1).where("uuid", uuid.toString()).execute();
+    public void addKey(int index) {
+        core.table.update().set("treasureKeys", getKeys(index) + 1).where("id", index).execute();
     }
 
-    public void removeAmmo(UUID uuid, String name) {
-        core.table.update().set(name.replace("_", ""), getAmmo(uuid, name) - 1).where("uuid", uuid.toString()).execute();
+    public void removeAmmo(int index, String name) {
+        core.table.update().set(name.replace("_", ""), getAmmo(index, name) - 1).where("id", index).execute();
     }
 
-    public void addAmmo(UUID uuid, String name, int i) {
-        core.table.update().set(name.replace("_", ""), getAmmo(uuid, name) + i).where("uuid", uuid.toString()).execute();
+    public void addAmmo(int index, String name, int i) {
+        core.table.update().set(name.replace("_", ""), getAmmo(index, name) + i).where("id", index).execute();
     }
 
-    public void setGadgetsEnabled(Player p, boolean enabled) {
+    public void setGadgetsEnabled(int index, boolean enabled) {
         DatabaseMetaData md = null;
         try {
             md = core.co.getMetaData();
@@ -129,16 +138,16 @@ public class SQLUtils {
             if (!rs.next()) {
                 PreparedStatement statement = core.co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD gadgetsEnabled INT NOT NULL DEFAULT 1");
                 statement.executeUpdate();
-                core.table.update().set("gadgetsEnabled", 1).where("uuid", p.getUniqueId().toString()).execute();
+                core.table.update().set("gadgetsEnabled", 1).where("id", index).execute();
                 return;
             }
-            core.table.update().set("gadgetsEnabled", enabled ? 1 : 0).where("uuid", p.getUniqueId().toString()).execute();
+            core.table.update().set("gadgetsEnabled", enabled ? 1 : 0).where("id", index).execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean hasGadgetsEnabled(Player p) {
+    public boolean hasGadgetsEnabled(int index) {
         try {
             DatabaseMetaData md;
             md = core.co.getMetaData();
@@ -146,10 +155,10 @@ public class SQLUtils {
             if (!rs.next()) {
                 PreparedStatement statement = core.co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD gadgetsEnabled INT NOT NULL DEFAULT 1");
                 statement.executeUpdate();
-                setGadgetsEnabled(p, true);
+                setGadgetsEnabled(index, true);
                 return true;
             }
-            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            ResultSet res = core.table.select().where("id", index).execute();
             res.first();
             return res.getBoolean("gadgetsEnabled");
         } catch (SQLException e) {
@@ -157,7 +166,7 @@ public class SQLUtils {
         }
     }
 
-    public void setSeeSelfMorph(Player p, boolean enabled) {
+    public void setSeeSelfMorph(int index, boolean enabled) {
         DatabaseMetaData md = null;
         try {
             md = core.co.getMetaData();
@@ -165,16 +174,16 @@ public class SQLUtils {
             if (!rs.next()) {
                 PreparedStatement statement = core.co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD selfmorphview INT NOT NULL DEFAULT 1");
                 statement.executeUpdate();
-                core.table.update().set("selfmorphview", 1).where("uuid", p.getUniqueId().toString()).execute();
+                core.table.update().set("selfmorphview", 1).where("id", index).execute();
                 return;
             }
-            core.table.update().set("selfmorphview", enabled ? 1 : 0).where("uuid", p.getUniqueId().toString()).execute();
+            core.table.update().set("selfmorphview", enabled ? 1 : 0).where("id", index).execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean canSeeSelfMorph(Player p) {
+    public boolean canSeeSelfMorph(int index) {
         try {
             DatabaseMetaData md;
             md = core.co.getMetaData();
@@ -182,14 +191,29 @@ public class SQLUtils {
             if (!rs.next()) {
                 PreparedStatement statement = core.co.prepareStatement("ALTER TABLE UltraCosmeticsData ADD selfmorphview INT NOT NULL DEFAULT 1");
                 statement.executeUpdate();
-                setGadgetsEnabled(p, true);
+                setGadgetsEnabled(index, true);
                 return true;
             }
-            ResultSet res = core.table.select().where("uuid", p.getUniqueId().toString()).execute();
+            ResultSet res = core.table.select().where("id", index).execute();
             res.first();
             return res.getBoolean("selfmorphview");
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    public Map<UUID, Integer> getIds() {
+        Map<UUID, Integer> map = new HashMap<>();
+        ResultSet rs = core.table.select("*").execute();
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String uuid = rs.getString("uuid");
+                map.put(UUID.fromString(uuid), id);
+            }
+        } catch (SQLException ignored) {
+
+        }
+        return map;
     }
 }
