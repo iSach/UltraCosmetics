@@ -562,7 +562,8 @@ public abstract class Gadget implements Listener {
         public void cancelMove(InventoryClickEvent event) {
             Player player = (Player) event.getWhoClicked();
             if (player == getPlayer()
-                    && (event.getCurrentItem().equals(gadget.getItemStack()) || event.getCursor().equals(gadget.getItemStack()))) {
+                    && ((event.getCurrentItem() != null && event.getCurrentItem().equals(gadget.getItemStack())))
+                    || ((event.getCursor() != null && event.getCursor().equals(gadget.getItemStack())))) {
                 if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT
                         || event.getClick() == ClickType.NUMBER_KEY || event.getClick() == ClickType.UNKNOWN) {
                     event.setCancelled(true);

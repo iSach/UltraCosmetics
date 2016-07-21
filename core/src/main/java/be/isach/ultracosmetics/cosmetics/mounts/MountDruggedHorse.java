@@ -16,8 +16,8 @@ import java.util.UUID;
  */
 public class MountDruggedHorse extends Mount {
 
-    public MountDruggedHorse(UUID owner) {
-        super(owner, MountType.DRUGGEDHORSE, UltraCosmetics.getInstance());
+    public MountDruggedHorse(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.DRUGGEDHORSE, ultraCosmetics);
     }
 
     @Override

@@ -99,12 +99,14 @@ public class GadgetRocket extends Gadget {
                             armorStand.remove();
                             armorStand = null;
 
+
                             for (Block block : blocks) {
                                 block.setType(Material.AIR);
                             }
+
                             blocks.clear();
 
-                            FallingBlock top = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 3, 0), Material.QUARTZ_BLOCK, (byte) 0);
+                            final FallingBlock top = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 3, 0), Material.QUARTZ_BLOCK, (byte) 0);
                             FallingBlock base = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 2, 0), Material.QUARTZ_BLOCK, (byte) 0);
                             for (int i = 0; i < 2; i++) {
                                 FallingBlock fence1 = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, 1), Material.FENCE, (byte) 0);
@@ -116,6 +118,7 @@ public class GadgetRocket extends Gadget {
                                 fallingBlocks.add(fence3);
                                 fallingBlocks.add(fence4);
                             }
+
                             fallingBlocks.add(top);
                             fallingBlocks.add(base);
                             if (fallingBlocks.get(8).getPassenger() == null)
@@ -170,8 +173,8 @@ public class GadgetRocket extends Gadget {
             }
             UtilParticles.display(Particles.FLAME, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
             UtilParticles.display(Particles.LAVA, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
-            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.BAT_LOOP, 1.5f, 1.0f);
-            SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.FIZZ, 0.025f, 1.0f);
+            SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.BAT_LOOP, 1.5f, 1.0f);
+            SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.FIZZ, 0.025f, 1.0f);
         }
     }
 

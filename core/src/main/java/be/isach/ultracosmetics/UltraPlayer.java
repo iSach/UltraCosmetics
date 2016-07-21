@@ -23,6 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -63,6 +64,7 @@ public class UltraPlayer {
      * boolean to identify if player is loaded correctly
      */
     public boolean isLoaded = false;
+
     /**
      * Cooldown map storing all the current cooldowns for gadgets.
      */

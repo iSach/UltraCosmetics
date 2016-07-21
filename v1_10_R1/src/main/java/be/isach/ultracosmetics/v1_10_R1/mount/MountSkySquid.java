@@ -14,8 +14,8 @@ import java.util.UUID;
  */
 public class MountSkySquid extends MountCustomEntity {
 
-    public MountSkySquid(UUID owner) {
-        super(owner, MountType.SKYSQUID);
+    public MountSkySquid(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.SKYSQUID, ultraCosmetics);
 
     }
 

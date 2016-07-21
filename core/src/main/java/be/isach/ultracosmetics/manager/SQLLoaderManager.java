@@ -39,11 +39,11 @@ public class SQLLoaderManager {
                         current.hasGadgetsEnabled();
                         current.canSeeSelfMorph();
                         current.isLoaded = true;
+                        iter.remove();
                     } catch (Exception e) {
+                        iter.remove();
                         // exception or not, just remove it.
                         continue;
-                    } finally {
-                        iter.remove();
                     }
                 }
             }

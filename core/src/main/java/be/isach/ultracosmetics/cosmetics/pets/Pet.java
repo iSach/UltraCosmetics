@@ -100,6 +100,7 @@ public abstract class Pet implements Listener {
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(UltraCosmetics.getInstance(), "C_AD_ArmorStand"));
+        armorStand.setRemoveWhenFarAway(true);
         PET_NAMES.add(armorStand);
         if (UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()) != null)
             armorStand.setCustomName(UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()));
@@ -167,6 +168,7 @@ public abstract class Pet implements Listener {
             else ((Ageable) entity).setAdult();
             ((Ageable) entity).setAgeLock(true);
         }
+        ((LivingEntity)entity).setRemoveWhenFarAway(false);
         UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(entity);
 
 

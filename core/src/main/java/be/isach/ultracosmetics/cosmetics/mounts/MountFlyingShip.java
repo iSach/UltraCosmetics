@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -25,8 +27,8 @@ public class MountFlyingShip extends Mount {
     Entity currentboom = null;
     //ArmorStand nameTag = null;
 
-    public MountFlyingShip(UUID owner) {
-        super(owner, MountType.FLYINGSHIP, UltraCosmetics.getInstance());
+    public MountFlyingShip(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.FLYINGSHIP, ultraCosmetics);
         if (owner != null)
             UltraCosmetics.getInstance().registerListener(this);
         //  spawnNameTag();
@@ -56,9 +58,10 @@ public class MountFlyingShip extends Mount {
                 currentboom = null;
                 return;
             }
-            SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.0f, 1.0f);
+            SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS);
             if (currentboom.isOnGround()) {
                 Location l = currentboom.getLocation().clone();
+
                 for (Entity i : currentboom.getNearbyEntities(3, 3, 3)) {
                     double dX = i.getLocation().getX() - currentboom.getLocation().getX();
                     double dY = i.getLocation().getY() - currentboom.getLocation().getY();

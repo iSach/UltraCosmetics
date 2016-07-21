@@ -17,10 +17,8 @@ import java.util.UUID;
  * Created by sacha on 10/08/15.
  */
 public class MountGlacialSteed extends Mount {
-    public MountGlacialSteed(UUID owner) {
-        super(
-                owner, MountType.GLACIALSTEED,
-                UltraCosmetics.getInstance());
+    public MountGlacialSteed(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.GLACIALSTEED, ultraCosmetics);
         if (entity instanceof Horse) {
             UltraCosmetics.getInstance().registerListener(this);
             Horse horse = (Horse) entity;

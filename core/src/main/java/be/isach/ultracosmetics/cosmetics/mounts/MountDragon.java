@@ -16,8 +16,8 @@ import java.util.UUID;
  */
 public class MountDragon extends Mount {
 
-    public MountDragon(UUID owner) {
-        super(owner, MountType.DRAGON, UltraCosmetics.getInstance());
+    public MountDragon(UUID owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.DRAGON, ultraCosmetics);
         if (owner != null)
             UltraCosmetics.getInstance().registerListener(this);
     }

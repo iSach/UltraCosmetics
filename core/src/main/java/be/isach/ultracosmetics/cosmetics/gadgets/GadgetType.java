@@ -117,15 +117,6 @@ public class GadgetType extends CosmeticType<Gadget> {
     }
 
     @Override
-    public boolean isEnabled() {
-        if (this == ROCKET && UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
-            return false;
-        } else {
-            return super.isEnabled();
-        }
-    }
-
-    @Override
     public String toString() {
         return getConfigName().toUpperCase();
     }
