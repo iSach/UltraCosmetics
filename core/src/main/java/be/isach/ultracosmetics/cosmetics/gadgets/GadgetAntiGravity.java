@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -26,8 +27,8 @@ public class GadgetAntiGravity extends Gadget {
     boolean running;
 
 
-    public GadgetAntiGravity(UUID owner) {
-        super(owner, GadgetType.ANTIGRAVITY);
+    public GadgetAntiGravity(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.ANTIGRAVITY, ultraCosmetics);
         UltraCosmetics.getInstance().registerListener(this);
     }
 

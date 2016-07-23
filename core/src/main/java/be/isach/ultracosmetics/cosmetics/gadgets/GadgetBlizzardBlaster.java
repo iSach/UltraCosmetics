@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,8 +20,8 @@ public class GadgetBlizzardBlaster extends Gadget {
     GadgetBlizzardBlaster instance;
     Random r = new Random();
 
-    public GadgetBlizzardBlaster(UUID owner) {
-        super(owner, GadgetType.BLIZZARDBLASTER);
+    public GadgetBlizzardBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.BLIZZARDBLASTER, ultraCosmetics);
         instance = this;
     }
 

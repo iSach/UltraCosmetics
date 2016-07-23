@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,8 +34,8 @@ public class GadgetSmashDown extends Gadget {
     List<FallingBlock> fallingBlocks = new ArrayList<>();
     GadgetSmashDown instance;
 
-    public GadgetSmashDown(UUID owner) {
-        super(owner, GadgetType.SMASHDOWN);
+    public GadgetSmashDown(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.SMASHDOWN, ultraCosmetics);
         UltraCosmetics.getInstance().registerListener(this);
         instance = this;
     }

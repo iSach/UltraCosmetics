@@ -130,7 +130,7 @@ public class TreasureChest implements Listener {
                                             blockState.update();
 
                                             chests.add(b);
-//                                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()),
+//                                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()),
 //                                                    0f, 0f, 0f, 0f, 1, getChestLocation(i, getPlayer().getLocation()), 128);
                                             i--;
                                         } catch (Exception exc) {
@@ -154,7 +154,7 @@ public class TreasureChest implements Listener {
                         blocksToRestore.add(lampBlock);
                         lampBlock.setType(design.getCenter().getItemType());
                         lampBlock.setData(design.getCenter().getData());
-//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(lampBlock.getType(), lampBlock.getData()), 0f, 0f, 0f, 1f, 50, lampBlock.getLocation());
+//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(lampBlock.getGadgetType(), lampBlock.getData()), 0f, 0f, 0f, 1f, 50, lampBlock.getLocation());
                     } else if (this.i == 4) {
                         for (Block b : getSurroundingBlocks(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
@@ -163,7 +163,7 @@ public class TreasureChest implements Listener {
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBlocks2().getItemType());
                             b.setData(design.getBlocks2().getData());
-//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 3) {
                         for (Block b : getSurroundingSurrounding(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
@@ -173,7 +173,7 @@ public class TreasureChest implements Listener {
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBlocks3().getItemType());
                             b.setData(design.getBlocks3().getData());
-//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 2) {
                         for (Block b : getBlock3(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
@@ -184,7 +184,7 @@ public class TreasureChest implements Listener {
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBelowChests().getItemType());
                             b.setData(design.getBelowChests().getData());
-//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 1) {
                         for (Block b : getSurroundingSurrounding(center.getBlock())) {
@@ -194,7 +194,7 @@ public class TreasureChest implements Listener {
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBarriers().getItemType());
                             b.setData(design.getBarriers().getData());
-//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     }
                     this.i -= 1;
@@ -264,7 +264,7 @@ public class TreasureChest implements Listener {
 
     public void clear() {
         for (Block b : this.blocksToRestore) {
-//            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
             b.setType(this.oldMaterials.get(b.getLocation()));
             b.setData(this.oldDatas.get(b.getLocation()).byteValue());
             BlockUtils.treasureBlocks.remove(b);
@@ -275,11 +275,11 @@ public class TreasureChest implements Listener {
                             for (Entity hologram : holograms)
                                 hologram.remove();
                             for (Block b : chestsToRemove) {
-//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                                 b.setType(Material.AIR);
                             }
                             for (Block b : chests) {
-//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                        Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                                 b.setType(Material.AIR);
                             }
                             if (items != null)
@@ -311,11 +311,11 @@ public class TreasureChest implements Listener {
             for (Entity hologram : this.holograms)
                 hologram.remove();
             for (Block b : this.chestsToRemove) {
-//                Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                 b.setType(Material.AIR);
             }
             for (Block b : this.chests) {
-//                Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
+//                Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                 b.setType(Material.AIR);
             }
             for (Entity ent : this.items)

@@ -86,7 +86,7 @@ public class MountFlyingShip extends Mount {
              nameTag = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
              nameTag.setVisible(false);
              nameTag.setSmall(true);
-             nameTag.setCustomName(getType().getName(getPlayer()));
+             nameTag.setCustomName(getGadgetType().getName(getPlayer()));
              nameTag.setCustomNameVisible(true);
              //hide name of ent
              ent.setCustomNameVisible(false);

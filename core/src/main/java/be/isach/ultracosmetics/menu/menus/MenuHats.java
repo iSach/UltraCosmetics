@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraPlayer;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by Sacha on 11/11/15.
  */
-public class HatManager implements Listener {
+public class MenuHats implements Listener {
 
     private final static int[] COSMETICS_SLOTS =
             {

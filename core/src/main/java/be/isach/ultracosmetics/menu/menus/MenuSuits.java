@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
@@ -32,13 +32,20 @@ import java.util.List;
 /**
  * Created by Sacha on 20/12/15.
  */
-public class SuitManager implements Listener {
+public class MenuSuits implements Listener {
 
     private final static int[] COSMETICS_SLOTS =
             {
                     10, 12, 14, 16
             };
+
     static List<Player> noSpamList = new ArrayList<>();
+
+    private UltraCosmetics ultraCosmetics;
+
+    public MenuSuits(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
+    }
 
     public static void openMenu(final Player p, final int PAGE) {
         Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
@@ -187,7 +194,7 @@ public class SuitManager implements Listener {
         return 0;
     }
 
-    public static void equipSuit(final SuitType type, final Player player, final ArmorSlot armorSlot) {
+    public static void equipSuit(final SuitType type, final Player player, final ArmorSlot armorSlot, final UltraCosmetics ultraCosmetics) {
         if (!player.hasPermission(type.getPermission(armorSlot))) {
             if (!noSpamList.contains(player)) {
                 player.sendMessage(MessageManager.getMessage("No-Permission"));
@@ -204,7 +211,7 @@ public class SuitManager implements Listener {
         new Thread() {
             @Override
             public void run() {
-                type.equip(player, armorSlot);
+                type.equip(player, ultraCosmetics, armorSlot);
             }
         }.run();
     }
@@ -276,7 +283,7 @@ public class SuitManager implements Listener {
 
                         }
                     }
-                    equipSuit(getSuitType(sb.toString(), armorSlot), (Player) event.getWhoClicked(), armorSlot);
+                    equipSuit(getSuitType(sb.toString(), armorSlot), (Player) event.getWhoClicked(), armorSlot, ultraCosmetics);
 
 
                     if (!UltraCosmetics.closeAfterSelect)

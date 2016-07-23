@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraPlayer;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by Sacha on 11/11/15.
  */
-public class GadgetManager implements Listener {
+public class MenuGadgets_old implements Listener {
 
     private final static int[] COSMETICS_SLOTS =
             {
@@ -36,6 +36,12 @@ public class GadgetManager implements Listener {
             };
 
     static List<Player> playerList = new ArrayList<>();
+
+    private UltraCosmetics ultraCosmetics;
+
+    public MenuGadgets_old(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
+    }
 
     public static void openMenu(final Player p, int page) {
         page = Math.max(1, Math.min(page, getMaxPagesAmount()));
@@ -77,10 +83,10 @@ public class GadgetManager implements Listener {
 
             String toggle = MessageManager.getMessage("Menu.Activate");
             UltraPlayer cp = UltraCosmetics.getCustomPlayer(p);
-            if (cp.currentGadget != null && cp.currentGadget.getType() == g)
+            if (cp.currentGadget != null && cp.currentGadget.getGadgetType() == g)
                 toggle = MessageManager.getMessage("Menu.Deactivate");
             ItemStack is = ItemFactory.create(g.getMaterial(), g.getData(), toggle + " " + g.getName());
-            if (cp.currentGadget != null && cp.currentGadget.getType() == g)
+            if (cp.currentGadget != null && cp.currentGadget.getGadgetType() == g)
                 is = ItemFactory.addGlow(is);
             ItemMeta itemMeta = is.getItemMeta();
             List<String> loreList = new ArrayList<>();
@@ -93,7 +99,7 @@ public class GadgetManager implements Listener {
                 loreList.add(MessageManager.getMessage("Right-Click-Buy-Ammo"));
 
                 if (SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount")
-                        && !(cp.currentGadget != null && cp.currentGadget.getType() == g && ammo == 0))
+                        && !(cp.currentGadget != null && cp.currentGadget.getGadgetType() == g && ammo == 0))
                     is.setAmount(Math.max(0, Math.min(64, ammo)));
             }
             if (g.showsDescription()) {
@@ -168,15 +174,15 @@ public class GadgetManager implements Listener {
         return null;
     }
 
-    public static void equipGadget(final GadgetType type, final Player PLAYER) {
-        if (!PLAYER.hasPermission(type.getPermission())) {
-            if (!playerList.contains(PLAYER)) {
-                PLAYER.sendMessage(MessageManager.getMessage("No-Permission"));
-                playerList.add(PLAYER);
+    public static void equipGadget(final GadgetType type, final Player player, final UltraCosmetics ultraCosmetics) {
+        if (!player.hasPermission(type.getPermission())) {
+            if (!playerList.contains(player)) {
+                player.sendMessage(MessageManager.getMessage("No-Permission"));
+                playerList.add(player);
                 Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
                     @Override
                     public void run() {
-                        playerList.remove(PLAYER);
+                        playerList.remove(player);
                     }
                 }, 1);
             }
@@ -185,9 +191,9 @@ public class GadgetManager implements Listener {
         new Thread() {
             @Override
             public void run() {
-                type.equip(PLAYER);
+                type.equip(player, ultraCosmetics);
             }
-        }.run();
+        }.start();
     }
 
     @EventHandler
@@ -245,8 +251,8 @@ public class GadgetManager implements Listener {
                     }
                     if (cp.currentGadget == null)
                         cp.removeGadget();
-                    equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
-                    if (cp.currentGadget.getType().requiresAmmo()) {
+                    equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked(), ultraCosmetics);
+                    if (cp.currentGadget.getGadgetType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
                         cp.currentGadget.openAmmoPurchaseMenu();
                         cp.currentGadget.openGadgetsInvAfterAmmo = true;
@@ -275,8 +281,8 @@ public class GadgetManager implements Listener {
 
                         }
                     }
-                    equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked());
-                    if (cp.currentGadget != null && UltraCosmetics.getInstance().isAmmoEnabled() && cp.getAmmo(cp.currentGadget.getType().toString().toLowerCase()) < 1 && cp.currentGadget.getType().requiresAmmo()) {
+                    equipGadget(getGadgetByName(sb.toString()), (Player) event.getWhoClicked(), ultraCosmetics);
+                    if (cp.currentGadget != null && UltraCosmetics.getInstance().isAmmoEnabled() && cp.getAmmo(cp.currentGadget.getGadgetType().toString().toLowerCase()) < 1 && cp.currentGadget.getGadgetType().requiresAmmo()) {
                         cp.currentGadget.lastPage = currentPage;
                         cp.currentGadget.openAmmoPurchaseMenu();
                     } else {

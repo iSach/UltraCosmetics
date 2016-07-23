@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -25,8 +26,8 @@ public class GadgetThorHammer extends Gadget implements Listener {
     ArrayList<Item> hammer = new ArrayList<>();
     Vector v;
 
-    public GadgetThorHammer(UUID owner) {
-        super(owner, GadgetType.THORHAMMER);
+    public GadgetThorHammer(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.THORHAMMER, ultraCosmetics);
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
     }
@@ -49,7 +50,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
                     public void run() {
                         if (i.isValid()) {
                             if (UltraCosmetics.getInstance().isAmmoEnabled()) {
-                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
+                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getGadgetType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                             } else {
                                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), MessageManager.getMessage("Gadgets.Lore")));
                             }
@@ -68,7 +69,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
             if (event.getPlayer() == getPlayer()) {
                 if (event.getItem().getTicksLived() > 5) {
                     if (UltraCosmetics.getInstance().isAmmoEnabled()) {
-                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
+                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getGadgetType().toString().toLowerCase()) + " " + getName(), "§9Gadget"));
                     } else {
                         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getMaterial(), getData(), getName(), MessageManager.getMessage("Gadgets.Lore")));
                     }

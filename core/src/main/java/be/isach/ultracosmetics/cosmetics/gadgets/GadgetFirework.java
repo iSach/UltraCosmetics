@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.EntityType;
@@ -17,8 +18,8 @@ public class GadgetFirework extends Gadget {
 
     private static Random random = new Random();
 
-    public GadgetFirework(UUID owner) {
-        super(owner, GadgetType.FIREWORK);
+    public GadgetFirework(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.FIREWORK, ultraCosmetics);
         UltraCosmetics.getInstance().registerListener(this);
     }
 

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -23,8 +24,8 @@ public class GadgetTsunami extends Gadget {
 
     List<Entity> cooldownJump = new ArrayList<>();
 
-    public GadgetTsunami(UUID owner) {
-        super(owner, GadgetType.TSUNAMI);
+    public GadgetTsunami(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.TSUNAMI, ultraCosmetics);
     }
 
     @Override

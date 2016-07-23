@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.menu.MainMenuManager;
+import be.isach.ultracosmetics.menu.menus.MenuMain;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
@@ -113,7 +113,7 @@ public class TreasureChestManager implements Listener {
                     UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).addKey();
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
                     event.getWhoClicked().closeInventory();
-                    MainMenuManager.openMenu((Player) event.getWhoClicked());
+                    MenuMain.openMenu((Player) event.getWhoClicked());
                 } else {
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Not-Enough-Money"));
                     event.getWhoClicked().closeInventory();
@@ -121,7 +121,7 @@ public class TreasureChestManager implements Listener {
                 }
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
                 event.getWhoClicked().closeInventory();
-                MainMenuManager.openMenu((Player) event.getWhoClicked());
+                MenuMain.openMenu((Player) event.getWhoClicked());
             }
         }
     }

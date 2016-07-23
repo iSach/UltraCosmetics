@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,8 +24,8 @@ public class GadgetBatBlaster extends Gadget {
     private HashMap<Player, Location> playerVelocity = new HashMap();
     private HashMap<Player, ArrayList<Bat>> bats = new HashMap();
 
-    public GadgetBatBlaster(UUID owner) {
-        super(owner, GadgetType.BATBLASTER);
+    public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.BATBLASTER, ultraCosmetics);
     }
 
     @Override

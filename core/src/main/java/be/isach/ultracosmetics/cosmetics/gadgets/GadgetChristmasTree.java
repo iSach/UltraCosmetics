@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -18,10 +19,12 @@ public class GadgetChristmasTree extends Gadget {
     private boolean active = false;
     private Location lastLocation;
 
-    int[] logColor = {101, 67, 33};
+    int[] logColor = {
+            101, 67, 33
+    };
 
-    public GadgetChristmasTree(UUID owner) {
-        super(owner, GadgetType.CHRISTMASTREE);
+    public GadgetChristmasTree(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.CHRISTMASTREE, ultraCosmetics);
     }
 
     @Override

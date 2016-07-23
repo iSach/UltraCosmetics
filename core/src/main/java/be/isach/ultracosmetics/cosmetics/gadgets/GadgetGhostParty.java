@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
@@ -27,8 +28,8 @@ public class GadgetGhostParty extends Gadget {
 
     Map<Bat, ArmorStand> bats = new HashMap<>();
 
-    public GadgetGhostParty(UUID owner) {
-        super(owner, GadgetType.GHOSTPARTY);
+    public GadgetGhostParty(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.GHOSTPARTY, ultraCosmetics);
 
         if (owner != null)
             UltraCosmetics.getInstance().registerListener(this);

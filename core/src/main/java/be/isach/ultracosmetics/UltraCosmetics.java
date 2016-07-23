@@ -5,9 +5,7 @@ import be.isach.ultracosmetics.command.subcommands.*;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetDiscoBall;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetExplosiveSheep;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
@@ -25,7 +23,7 @@ import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.manager.PlayerManager;
 import be.isach.ultracosmetics.manager.SQLLoaderManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
-import be.isach.ultracosmetics.menu.*;
+import be.isach.ultracosmetics.menu.menus.*;
 import be.isach.ultracosmetics.mysql.MySQLConnection;
 import be.isach.ultracosmetics.mysql.Table;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -502,20 +500,20 @@ public class UltraCosmetics extends JavaPlugin {
 
         log("");
         log("Registering listeners...");
-        mainMenuListener = new MainMenuManager();
+        mainMenuListener = new MenuMain();
         registerListener(mainMenuListener);
-        registerListener(new GadgetManager());
-        registerListener(new PetManager());
-        registerListener(new MountManager(this));
-        registerListener(new ParticleEffectManager());
-        registerListener(new PetManager());
-        registerListener(new HatManager());
-        registerListener(new SuitManager());
-        registerListener(new EmoteManager());
+        registerListener(new MenuGadgets_old(this));
+        registerListener(new MenuPets());
+        registerListener(new MenuMounts(this));
+        registerListener(new MenuParticleEffects());
+        registerListener(new MenuPets());
+        registerListener(new MenuHats());
+        registerListener(new MenuSuits(this));
+        registerListener(new MenuEmotes());
         registerListener(new TreasureChestManager());
         registerListener(new MainListener());
         if (Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            morphMenuListener = new MorphManager();
+            morphMenuListener = new MenuMorphs();
             registerListener(morphMenuListener);
         }
         try {
@@ -980,7 +978,7 @@ public class UltraCosmetics extends JavaPlugin {
         Pet.purgeNames();
 
         if (morphMenuListener != null)
-            ((MorphManager) morphMenuListener).dispose();
+            ((MenuMorphs) morphMenuListener).dispose();
 
         if (playerManager != null)
             playerManager.dispose();
@@ -1022,6 +1020,6 @@ public class UltraCosmetics extends JavaPlugin {
         if (customCommandBackArrow)
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), customBackMenuCommand.replace("{player}", whoClicked.getName()));
         else
-            MainMenuManager.openMenu(whoClicked);
+            MenuMain.openMenu(whoClicked);
     }
 }

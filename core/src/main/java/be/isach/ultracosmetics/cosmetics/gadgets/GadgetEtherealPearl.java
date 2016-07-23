@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import org.bukkit.*;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
@@ -31,8 +32,8 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     HashMap<Player, BukkitRunnable> runnableHashMap = new HashMap<>();
     ArrayList<EnderPearl> pearls = new ArrayList<>();
 
-    public GadgetEtherealPearl(UUID owner) {
-        super(owner, GadgetType.ETHEREALPEARL);
+    public GadgetEtherealPearl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.ETHEREALPEARL, ultraCosmetics);
         if (owner != null)
             UltraCosmetics.getInstance().registerListener(this);
     }

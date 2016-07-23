@@ -3,6 +3,8 @@ package be.isach.ultracosmetics.cosmetics.suits;
 import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,12 +16,7 @@ import java.util.UUID;
 /**
  * Created by Sacha on 20/12/15.
  */
-public class Suit {
-
-    /**
-     * Suit Owner.
-     */
-    private UUID owner;
+public abstract class Suit extends Cosmetic {
 
     /**
      * Armor Slot of the Suit.
@@ -36,12 +33,11 @@ public class Suit {
      */
     protected ItemStack itemStack;
 
-    public Suit(final UUID owner, ArmorSlot armorSlot, SuitType suitType) {
-        this.owner = owner;
+    public Suit(final UltraPlayer ultraPlayer, ArmorSlot armorSlot, SuitType suitType, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, Category.SUITS, ultraPlayer);
+
         this.armorSlot = armorSlot;
         this.suitType = suitType;
-
-        if (owner == null) return;
 
         if (getCustomPlayer().currentHat != null
                 && armorSlot == ArmorSlot.HELMET)
@@ -112,24 +108,6 @@ public class Suit {
     }
 
     /**
-     * Gets the owner as a UUID.
-     *
-     * @return The owner as a UUID.
-     */
-    public UUID getOwner() {
-        return owner;
-    }
-
-    /**
-     * Gets the owner as a Player.
-     *
-     * @return The owner as a player.
-     */
-    public Player getPlayer() {
-        return Bukkit.getPlayer(owner);
-    }
-
-    /**
      * Gets the UltraPlayer of the Owner.
      *
      * @return The UltraPlayer of the Owner.
@@ -165,7 +143,6 @@ public class Suit {
         if (getPlayer() != null)
             getPlayer().sendMessage(MessageManager.getMessage("Suits.Unequip").replace("%suitname%", (UltraCosmetics.getInstance().placeholdersHaveColor())
                     ? getType().getName(getArmorSlot()) : UltraCosmetics.filterColor(getType().getName(getArmorSlot()))));
-        owner = null;
         armorSlot = null;
         suitType = null;
         itemStack = null;

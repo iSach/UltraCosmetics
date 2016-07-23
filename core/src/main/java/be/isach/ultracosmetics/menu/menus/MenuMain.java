@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
@@ -24,7 +24,7 @@ import java.util.UUID;
 /**
  * Created by sacha on 03/08/15.
  */
-public class MainMenuManager implements Listener {
+public class MenuMain implements Listener {
 
     @EventHandler
     public void onInteract(final PlayerInteractEvent event) {
@@ -67,28 +67,28 @@ public class MainMenuManager implements Listener {
                 if (!chests && UltraCosmetics.enabledCategories.size() == 1) {
                     switch (UltraCosmetics.enabledCategories.get(0)) {
                         case GADGETS:
-                            GadgetManager.openMenu(player, 1);
+                            MenuGadgets_old.openMenu(player, 1);
                             break;
                         case MORPHS:
-                            MorphManager.openMenu(player, 1);
+                            MenuMorphs.openMenu(player, 1);
                             break;
                         case HATS:
-                            HatManager.openMenu(player, 1);
+                            MenuHats.openMenu(player, 1);
                             break;
                         case PETS:
-                            PetManager.openMenu(player, 1);
+                            MenuPets.openMenu(player, 1);
                             break;
                         case EFFECTS:
-                            ParticleEffectManager.openMenu(player, 1);
+                            MenuParticleEffects.openMenu(player, 1);
                             break;
                         case MOUNTS:
-                            MountManager.openMenu(player, 1);
+                            MenuMounts.openMenu(player, 1);
                             break;
                         case SUITS:
-                            SuitManager.openMenu(player, 1);
+                            MenuSuits.openMenu(player, 1);
                             break;
                         case EMOTES:
-                            EmoteManager.openMenu(player, 1);
+                            MenuEmotes.openMenu(player, 1);
                             break;
                     }
                     return;
@@ -174,25 +174,25 @@ public class MainMenuManager implements Listener {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Main-Menu")))
                     return;
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Gadgets"))) {
-                    GadgetManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuGadgets_old.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Mounts"))) {
-                    MountManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuMounts.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Pets"))) {
-                    PetManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuPets.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Particle-Effects"))) {
-                    ParticleEffectManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuParticleEffects.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Morphs"))) {
-                    MorphManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuMorphs.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Suits"))) {
-                    SuitManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuSuits.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Emotes"))) {
-                    EmoteManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuEmotes.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Clear-Cosmetics"))) {
                     new BukkitRunnable() {
@@ -203,7 +203,7 @@ public class MainMenuManager implements Listener {
                     event.getWhoClicked().closeInventory();
                     return;
                 } else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(MessageManager.getMessage("Menu.Hats"))) {
-                    HatManager.openMenu((Player) event.getWhoClicked(), 1);
+                    MenuHats.openMenu((Player) event.getWhoClicked(), 1);
                     return;
                 }
             }

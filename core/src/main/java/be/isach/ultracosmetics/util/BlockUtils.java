@@ -80,7 +80,7 @@ public class BlockUtils {
     public static boolean isRocketBlock(Block b) {
         for (UltraPlayer cp : UltraCosmetics.getCustomPlayers()) {
             if (cp.currentGadget != null
-                    && cp.currentGadget.getType() == GadgetType.ROCKET) {
+                    && cp.currentGadget.getGadgetType() == GadgetType.ROCKET) {
                 GadgetRocket rocket = (GadgetRocket) cp.currentGadget;
                 if (rocket.blocks.contains(b))
                     return true;

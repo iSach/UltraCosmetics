@@ -13,7 +13,7 @@ import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffectType;
 import be.isach.ultracosmetics.cosmetics.pets.PetType;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.SuitType;
-import be.isach.ultracosmetics.menu.*;
+import be.isach.ultracosmetics.menu.menus.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -79,12 +79,12 @@ public class SubCommandToggle extends SubCommand {
 
             UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentGadget != null &&
-                    cp.currentGadget.getType() == gadgetType) {
+                    cp.currentGadget.getGadgetType() == gadgetType) {
                 cp.removeGadget();
                 return;
             }
 
-            GadgetManager.equipGadget(gadgetType, receiver);
+            MenuGadgets_old.equipGadget(gadgetType, receiver, ultraCosmetics);
         } else if (type.startsWith("pe")) {
             PetType petType;
             try {
@@ -110,7 +110,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            PetManager.equipPet(petType, receiver);
+            MenuPets.equipPet(petType, receiver);
         } else if (type.startsWith("pa")) {
             ParticleEffectType effectType;
             try {
@@ -136,7 +136,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            ParticleEffectManager.equipEffect(effectType, receiver);
+            MenuParticleEffects.equipEffect(effectType, receiver);
         } else if (type.startsWith("mou")) {
             MountType mountType;
             try {
@@ -162,7 +162,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            MountManager.equipMount(mountType, receiver, ultraCosmetics);
+            MenuMounts.equipMount(mountType, receiver, ultraCosmetics);
         } else if (type.startsWith("e")) {
             EmoteType emoteType = null;
             boolean stopNow = false;
@@ -193,7 +193,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            EmoteManager.equipEmote(emoteType, receiver);
+            MenuEmotes.equipEmote(emoteType, receiver);
         } else if (type.startsWith("mor")) {
             MorphType morphType;
             try {
@@ -219,7 +219,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            MorphManager.equipMorph(morphType, receiver);
+            MenuMorphs.equipMorph(morphType, receiver);
         } else if (type.startsWith("h")) {
             Hat hat;
             try {
@@ -245,7 +245,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            HatManager.equipHat(hat, receiver);
+            MenuHats.equipHat(hat, receiver);
         } else if (type.startsWith("s")) {
             String a;
             if (args.length < 4) {
@@ -304,7 +304,7 @@ public class SubCommandToggle extends SubCommand {
                 customPlayer.removeSuit(armorSlot);
                 return;
             }
-            SuitManager.equipSuit(suitType, receiver, armorSlot);
+            MenuSuits.equipSuit(suitType, receiver, armorSlot);
         }
     }
 
@@ -355,12 +355,12 @@ public class SubCommandToggle extends SubCommand {
 
             UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
             if (cp.currentGadget != null &&
-                    cp.currentGadget.getType() == gadgetType) {
+                    cp.currentGadget.getGadgetType() == gadgetType) {
                 cp.removeGadget();
                 return;
             }
 
-            GadgetManager.equipGadget(gadgetType, receiver);
+            MenuGadgets_old.equipGadget(gadgetType, receiver, ultraCosmetics);
         } else if (type.startsWith("pe")) {
             PetType petType;
             try {
@@ -386,7 +386,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            PetManager.equipPet(petType, receiver);
+            MenuPets.equipPet(petType, receiver);
         } else if (type.startsWith("pa")) {
             ParticleEffectType effectType;
             try {
@@ -412,7 +412,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            ParticleEffectManager.equipEffect(effectType, receiver);
+            MenuParticleEffects.equipEffect(effectType, receiver);
         } else if (type.startsWith("mou")) {
             MountType mountType;
             try {
@@ -438,7 +438,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            MountManager.equipMount(mountType, receiver, ultraCosmetics);
+            MenuMounts.equipMount(mountType, receiver, ultraCosmetics);
         } else if (type.startsWith("mor")) {
             MorphType morphType;
             try {
@@ -464,7 +464,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            MorphManager.equipMorph(morphType, receiver);
+            MenuMorphs.equipMorph(morphType, receiver);
         } else if (type.startsWith("h")) {
             Hat hat;
             try {
@@ -490,7 +490,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            HatManager.equipHat(hat, receiver);
+            MenuHats.equipHat(hat, receiver);
         } else if (type.startsWith("s")) {
             String a;
             if (args.length < 4) {
@@ -549,7 +549,7 @@ public class SubCommandToggle extends SubCommand {
                 customPlayer.removeSuit(armorSlot);
                 return;
             }
-            SuitManager.equipSuit(suitType, receiver, armorSlot);
+            MenuSuits.equipSuit(suitType, receiver, armorSlot, ultraCosmetics);
         }
     }
 }

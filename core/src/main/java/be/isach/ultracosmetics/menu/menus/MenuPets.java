@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Created by Sacha on 11/11/15.
  */
-public class PetManager implements Listener {
+public class MenuPets implements Listener {
 
     private final static int[] COSMETICS_SLOTS =
             {

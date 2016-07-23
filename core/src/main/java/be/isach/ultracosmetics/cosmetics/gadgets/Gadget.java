@@ -4,7 +4,9 @@ import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.menu.GadgetManager;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.menu.menus.MenuGadgets_old;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -33,70 +35,81 @@ import java.util.UUID;
 /**
  * Created by sacha on 03/08/15.
  */
-public abstract class Gadget implements Listener {
+public abstract class Gadget extends Cosmetic implements Listener {
 
     /**
      * If true, it will differentiate left and right click.
      */
     public boolean useTwoInteractMethods;
+
     /**
      * If it should open Gadget Menu after purchase.
      */
     public boolean openGadgetsInvAfterAmmo;
+
     /**
      * If true, will display cooldown left when fail on use
      * because cooldown active.
      */
     public boolean displayCooldownMessage = true;
 
-    public int lastPage = 1;
     /**
      * Last Clicked Block by the player.
      */
     protected Block lastClickedBlock;
+
     /**
      * Gadget ItemStack.
      */
     protected ItemStack itemStack;
+
     /**
      * If Gadget interaction should run asynchronously.
      */
-    protected boolean asyncAction = false;
+    protected boolean asynchronous = false;
+
     /**
      * If true, it will affect players (velocity).
      */
     boolean affectPlayers;
+
     /**
      * The Ammo Purchase inventory.
      */
-    private Inventory inv;
+    private Inventory ammoInventory;
+
     /**
      * Event listener.
      */
     private Listener listener;
+
     /**
      * Type of the Gadget.
      */
-    private GadgetType type;
+    private GadgetType gadgetType;
+
     /**
      * Required permission.
      */
     private String permission;
-    /**
-     * Owner's UUID.
-     */
-    private UUID owner;
 
-    public Gadget(final UUID owner, final GadgetType type) {
+    /**
+     * Page the user was on when trying to buy ammo.
+     * Is used when player buys ammo from Gadget Menu.
+     */
+    public int lastPage = 1;
+
+    public Gadget(final UltraPlayer owner, final GadgetType type, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, Category.GADGETS, owner);
+
         this.permission = type.getPermission();
-        this.type = type;
+        this.gadgetType = type;
         this.affectPlayers = type.affectPlayers();
         if (!type.isEnabled())
             return;
 
         this.useTwoInteractMethods = false;
         if (owner != null) {
-            this.owner = owner;
             if (UltraCosmetics.getCustomPlayer(getPlayer()).currentGadget != null)
                 UltraCosmetics.getCustomPlayer(getPlayer()).removeGadget();
             if (!getPlayer().hasPermission(permission)) {
@@ -112,16 +125,15 @@ public abstract class Gadget implements Listener {
                 @Override
                 public void run() {
                     try {
-                        if (Bukkit.getPlayer(owner) != null
-                                && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget != null
-                                && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentGadget.getType() == type) {
+                        if (owner.getCurrentGadget() != null &&
+                                owner.getCurrentGadget().getGadgetType() == type) {
                             onUpdate();
                             if (UltraCosmetics.cooldownInBar) {
                                 if (getPlayer().getItemInHand() != null
                                         && itemStack != null
                                         && getPlayer().getItemInHand().hasItemMeta()
                                         && getPlayer().getItemInHand().getItemMeta().hasDisplayName()
-                                        && getPlayer().getItemInHand().getItemMeta().getDisplayName().contains(getType().getName())
+                                        && getPlayer().getItemInHand().getItemMeta().getDisplayName().contains(getGadgetType().getName())
                                         && UltraCosmetics.getCustomPlayer(getPlayer()).canUse(type) != -1)
                                     sendCooldownBar();
                                 double left = UltraCosmetics.getCustomPlayer(getPlayer()).canUse(type);
@@ -158,7 +170,7 @@ public abstract class Gadget implements Listener {
                 getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")));
                 getPlayer().getInventory().remove((int) SettingsManager.getConfig().get("Gadget-Slot"));
             }
-            String d = UltraCosmetics.getInstance().isAmmoEnabled() && getType().requiresAmmo() ?
+            String d = UltraCosmetics.getInstance().isAmmoEnabled() && getGadgetType().requiresAmmo() ?
                     "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " "
                     : "";
             itemStack = ItemFactory.create(type.getMaterial(), type.getData(), d + getName(), MessageManager.getMessage("Gadgets.Lore"));
@@ -183,8 +195,8 @@ public abstract class Gadget implements Listener {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        double currentCooldown = UltraCosmetics.getCustomPlayer(getPlayer()).canUse(type);
-        double maxCooldown = type.getCountdown();
+        double currentCooldown = UltraCosmetics.getCustomPlayer(getPlayer()).canUse(gadgetType);
+        double maxCooldown = gadgetType.getCountdown();
 
         int res = (int) (currentCooldown / maxCooldown * 10);
         ChatColor color;
@@ -208,19 +220,19 @@ public abstract class Gadget implements Listener {
     }
 
     public String getName() {
-        return type.getName();
+        return gadgetType.getName();
     }
 
     public Material getMaterial() {
-        return type.getMaterial();
+        return gadgetType.getMaterial();
     }
 
-    public GadgetType getType() {
-        return type;
+    public GadgetType getGadgetType() {
+        return gadgetType;
     }
 
     public Byte getData() {
-        return type.getData();
+        return gadgetType.getData();
     }
 
     /**
@@ -260,24 +272,6 @@ public abstract class Gadget implements Listener {
     }
 
     /**
-     * Gets the owner as a UUID.
-     *
-     * @return the owner as a UUID.
-     */
-    protected UUID getOwner() {
-        return owner;
-    }
-
-    /**
-     * Gets the owner as a player.
-     *
-     * @return the owner as a player.
-     */
-    protected Player getPlayer() {
-        return Bukkit.getPlayer(owner);
-    }
-
-    /**
      * Removes the item.
      */
     public void removeItem() {
@@ -291,7 +285,7 @@ public abstract class Gadget implements Listener {
      * @return the price for each ammo purchase.
      */
     public int getPrice() {
-        return (int) SettingsManager.getConfig().get("Gadgets." + type.getConfigName() + ".Ammo.Price");
+        return (int) SettingsManager.getConfig().get("Gadgets." + gadgetType.getConfigName() + ".Ammo.Price");
     }
 
     /**
@@ -300,7 +294,7 @@ public abstract class Gadget implements Listener {
      * @return the ammo it should give after a purchase.
      */
     public int getResultAmmoAmount() {
-        return (int) SettingsManager.getConfig().get("Gadgets." + type.getConfigName() + ".Ammo.Result-Amount");
+        return (int) SettingsManager.getConfig().get("Gadgets." + gadgetType.getConfigName() + ".Ammo.Result-Amount");
     }
 
     /**
@@ -319,7 +313,7 @@ public abstract class Gadget implements Listener {
 
         Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Buy-Ammo"));
 
-        inventory.setItem(13, ItemFactory.create(type.getMaterial(), type.getData(), MessageManager.getMessage("Buy-Ammo-Description").replace("%amount%", "" + getResultAmmoAmount()).replace("%price%", "" + getPrice()).replaceAll("%gadgetname%", getName())));
+        inventory.setItem(13, ItemFactory.create(gadgetType.getMaterial(), gadgetType.getData(), MessageManager.getMessage("Buy-Ammo-Description").replace("%amount%", "" + getResultAmmoAmount()).replace("%price%", "" + getPrice()).replaceAll("%gadgetname%", getName())));
 
         for (int i = 27; i < 30; i++) {
             inventory.setItem(i, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
@@ -334,7 +328,7 @@ public abstract class Gadget implements Listener {
 
         getPlayer().openInventory(inventory);
 
-        this.inv = inventory;
+        this.ammoInventory = inventory;
     }
 
     /**
@@ -349,8 +343,8 @@ public abstract class Gadget implements Listener {
 
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent event) {
-            if (event.getPlayer() == getPlayer() && inv != null && isSameInventory(event.getInventory(), inv)) {
-                inv = null;
+            if (event.getPlayer() == getPlayer() && ammoInventory != null && isSameInventory(event.getInventory(), ammoInventory)) {
+                ammoInventory = null;
                 openGadgetsInvAfterAmmo = false;
                 return;
             }
@@ -358,7 +352,7 @@ public abstract class Gadget implements Listener {
 
         @EventHandler
         public void onInventoryClickAmmo(final InventoryClickEvent event) {
-            if (event.getWhoClicked() == getPlayer() && inv != null && isSameInventory(event.getWhoClicked().getOpenInventory().getTopInventory(), inv)) {
+            if (event.getWhoClicked() == getPlayer() && ammoInventory != null && isSameInventory(event.getWhoClicked().getOpenInventory().getTopInventory(), ammoInventory)) {
                 event.setCancelled(true);
                 if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasDisplayName()) {
                     String displayName = event.getCurrentItem().getItemMeta().getDisplayName();
@@ -367,13 +361,13 @@ public abstract class Gadget implements Listener {
                     if (displayName.equals(purchase)) {
                         if (UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).getBalance() >= getPrice()) {
                             UltraCosmetics.economy.withdrawPlayer((Player) event.getWhoClicked(), getPrice());
-                            UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).addAmmo(type.toString().toLowerCase(), getResultAmmoAmount());
+                            UltraCosmetics.getCustomPlayer((Player) event.getWhoClicked()).addAmmo(gadgetType.toString().toLowerCase(), getResultAmmoAmount());
                             event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
                             if (openGadgetsInvAfterAmmo)
                                 Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                                     @Override
                                     public void run() {
-                                        GadgetManager.openMenu((Player) event.getWhoClicked(), lastPage);
+                                        MenuGadgets_old.openMenu((Player) event.getWhoClicked(), lastPage);
                                         openGadgetsInvAfterAmmo = false;
                                         lastPage = 1;
                                     }
@@ -398,7 +392,7 @@ public abstract class Gadget implements Listener {
             Player player = EVENT.getPlayer();
             UUID uuid = player.getUniqueId();
             UltraPlayer cp = UltraCosmetics.getCustomPlayer(getPlayer());
-            if (!uuid.equals(gadget.owner)) return;
+            if (!uuid.equals(gadget.getOwnerUniqueId())) return;
             ItemStack itemStack = player.getItemInHand();
             if (itemStack.getType() != gadget.getMaterial()) return;
             if (itemStack.getData().getData() != gadget.getData()) return;
@@ -414,19 +408,19 @@ public abstract class Gadget implements Listener {
             if (UltraCosmetics.getCustomPlayer(getPlayer()).currentTreasureChest != null)
                 return;
 
-            if (UltraCosmetics.getInstance().isAmmoEnabled() && getType().requiresAmmo()) {
-                if (UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getType().toString().toLowerCase()) < 1) {
+            if (UltraCosmetics.getInstance().isAmmoEnabled() && getGadgetType().requiresAmmo()) {
+                if (UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(getGadgetType().toString().toLowerCase()) < 1) {
                     openAmmoPurchaseMenu();
                     return;
                 }
             }
-            if (type == GadgetType.PORTALGUN) {
+            if (gadgetType == GadgetType.PORTALGUN) {
                 if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
                     return;
                 }
             }
-            if (type == GadgetType.ROCKET) {
+            if (gadgetType == GadgetType.ROCKET) {
                 boolean pathClear = true;
                 Cuboid c = new Cuboid(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
                 if (!c.isEmpty()) {
@@ -438,7 +432,7 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.DISCOBALL) {
+            if (gadgetType == GadgetType.DISCOBALL) {
                 if (UltraCosmetics.getInstance().discoBalls.size() > 0) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.DiscoBall.Already-Active"));
                     return;
@@ -448,14 +442,14 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.CHRISTMASTREE) {
+            if (gadgetType == GadgetType.CHRISTMASTREE) {
                 if (EVENT.getClickedBlock() == null
                         || EVENT.getClickedBlock().getType() == Material.AIR) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
                     return;
                 }
             }
-            if (type == GadgetType.TRAMPOLINE) {
+            if (gadgetType == GadgetType.TRAMPOLINE) {
                 // Check blocks above.
                 Location loc1 = getPlayer().getLocation().add(2, 15, 2);
                 Location loc2 = getPlayer().getLocation().clone().add(-2, 0, -2);
@@ -471,7 +465,7 @@ public abstract class Gadget implements Listener {
                 }
             }
             // Check for the parachute if there is space 30-40 blocks above the player to avoid problems.
-            if (type == GadgetType.PARACHUTE) {
+            if (gadgetType == GadgetType.PARACHUTE) {
                 // Check blocks above.
                 Location loc1 = getPlayer().getLocation().add(2, 28, 2);
                 Location loc2 = getPlayer().getLocation().clone().add(-2, 40, -2);
@@ -482,29 +476,29 @@ public abstract class Gadget implements Listener {
                     return;
                 }
             }
-            if (type == GadgetType.EXPLOSIVESHEEP) {
+            if (gadgetType == GadgetType.EXPLOSIVESHEEP) {
                 if (UltraCosmetics.getInstance().explosiveSheep.size() > 0) {
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ExplosiveSheep.Already-Active"));
                     return;
                 }
             }
-            double coolDown = cp.canUse(getType());
+            double coolDown = cp.canUse(getGadgetType());
             if (coolDown != -1) {
                 String timeLeft = new DecimalFormat("#.#").format(coolDown);
-                if (type.getCountdown() > 1)
+                if (gadgetType.getCountdown() > 1)
                     getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", (UltraCosmetics.getInstance().placeholdersHaveColor()) ? getName() : UltraCosmetics.filterColor(getName())).replace("%time%", timeLeft));
                 return;
             } else
-                cp.setCoolDown(getType(), type.getCountdown());
-            if (UltraCosmetics.getInstance().isAmmoEnabled() && getType().requiresAmmo()) {
-                UltraCosmetics.getCustomPlayer(getPlayer()).removeAmmo(getType().toString().toLowerCase());
-                itemStack = ItemFactory.create(type.getMaterial(), type.getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " " + getName(), MessageManager.getMessage("Gadgets.Lore"));
+                cp.setCoolDown(getGadgetType(), gadgetType.getCountdown());
+            if (UltraCosmetics.getInstance().isAmmoEnabled() && getGadgetType().requiresAmmo()) {
+                UltraCosmetics.getCustomPlayer(getPlayer()).removeAmmo(getGadgetType().toString().toLowerCase());
+                itemStack = ItemFactory.create(gadgetType.getMaterial(), gadgetType.getData(), "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(gadgetType.toString().toLowerCase()) + " " + getName(), MessageManager.getMessage("Gadgets.Lore"));
                 getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
             }
             if (EVENT.getClickedBlock() != null
                     && EVENT.getClickedBlock().getType() != Material.AIR)
                 lastClickedBlock = EVENT.getClickedBlock();
-            if (asyncAction) {
+            if (asynchronous) {
                 Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -537,8 +531,8 @@ public abstract class Gadget implements Listener {
 
         @EventHandler
         protected void onItemDrop(PlayerDropItemEvent event) {
-            if (event.getItemDrop().getItemStack().getType() == type.getMaterial()) {
-                if (event.getItemDrop().getItemStack().getData().getData() == type.getData()) {
+            if (event.getItemDrop().getItemStack().getType() == gadgetType.getMaterial()) {
+                if (event.getItemDrop().getItemStack().getData().getData() == gadgetType.getData()) {
                     if (event.getItemDrop().getItemStack().getItemMeta().hasDisplayName()) {
                         if (event.getItemDrop().getItemStack().getItemMeta().getDisplayName().endsWith(getName())) {
                             if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -25,8 +26,8 @@ public class GadgetFunGun extends Gadget {
 
     private List<Projectile> projectiles = new ArrayList<>();
 
-    public GadgetFunGun(UUID owner) {
-        super(owner, GadgetType.FUNGUN);
+    public GadgetFunGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.FUNGUN, ultraCosmetics);
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());

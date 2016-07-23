@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -25,8 +26,8 @@ public class GadgetColorBomb extends Gadget {
     Random random = new Random();
     private boolean running = false;
 
-    public GadgetColorBomb(UUID owner) {
-        super(owner, GadgetType.COLORBOMB);
+    public GadgetColorBomb(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.COLORBOMB, ultraCosmetics);
 
     }
 

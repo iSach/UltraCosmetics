@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
@@ -25,25 +26,25 @@ public class GadgetChickenator extends Gadget {
     static Random r = new Random();
     ArrayList<Item> items = new ArrayList<>();
 
-    public GadgetChickenator(UUID owner) {
-        super(owner, GadgetType.CHICKENATOR);
+    public GadgetChickenator(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.CHICKENATOR, ultraCosmetics);
     }
 
     @Override
     void onRightClick() {
-        final Chicken CHICKEN = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getEyeLocation(), EntityType.CHICKEN);
-        CHICKEN.setNoDamageTicks(500);
-        CHICKEN.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
+        final Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getEyeLocation(), EntityType.CHICKEN);
+        chicken.setNoDamageTicks(500);
+        chicken.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
         SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_IDLE, 1.4f, 1.5f);
         SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 0.3f, 1.5f);
         Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
             @Override
             public void run() {
-                spawnRandomFirework(CHICKEN.getLocation());
+                spawnRandomFirework(chicken.getLocation());
                 SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_HURT, 1.4f, 1.5f);
-                CHICKEN.remove();
+                chicken.remove();
                 for (int i = 0; i < 30; i++) {
-                    final Item ITEM = CHICKEN.getWorld().dropItem(CHICKEN.getLocation(), ItemFactory.create(Material.COOKED_CHICKEN, (byte) 0, UUID.randomUUID().toString()));
+                    final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(Material.COOKED_CHICKEN, (byte) 0, UUID.randomUUID().toString()));
                     ITEM.setPickupDelay(30000);
                     ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0, r.nextDouble() - 0.5));
                     items.add(ITEM);

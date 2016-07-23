@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
@@ -32,8 +33,8 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     ArrayList<Item> melons = new ArrayList<>();
     ArrayList<Item> melonBlocks = new ArrayList<>();
 
-    public GadgetMelonThrower(UUID owner) {
-        super(owner, GadgetType.MELONTHROWER);
+    public GadgetMelonThrower(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.MELONTHROWER,ultraCosmetics);
         UltraCosmetics.getInstance().registerListener(this);
     }
 

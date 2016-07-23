@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
@@ -14,7 +15,7 @@ import java.util.UUID;
 /**
  * Created by sachalewin on 5/07/16.
  */
-public abstract class CosmeticType<T> {
+public abstract class CosmeticType<T extends Cosmetic> {
 
     private String configName;
     private String permission;
@@ -36,10 +37,10 @@ public abstract class CosmeticType<T> {
             setDescriptionAsString(fromList(SettingsManager.getConfig().getStringList(category.getConfigPath() + "." + configName + ".Description")));
     }
 
-    public T equip(Player player) {
+    public T equip(Player player, UltraCosmetics ultraCosmetics) {
         T cosmetic = null;
         try {
-            cosmetic = getClazz().getDeclaredConstructor(UUID.class).newInstance(player == null ? null : player.getUniqueId());
+            cosmetic = getClazz().getDeclaredConstructor(UUID.class, UltraCosmetics.class).newInstance(player == null ? null : player.getUniqueId(), ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }

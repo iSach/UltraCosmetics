@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraPlayer;
@@ -27,14 +27,14 @@ import java.util.concurrent.Executors;
 /**
  * Created by Sacha on 11/11/15.
  */
-public class MorphManager implements Listener {
+public class MenuMorphs implements Listener {
 
     /**
      * Runs the task for pets following players
      */
     private ExecutorService asyncMenuSelectionService;
 
-    public MorphManager() {
+    public MenuMorphs() {
         asyncMenuSelectionService = Executors.newSingleThreadExecutor();
     }
 

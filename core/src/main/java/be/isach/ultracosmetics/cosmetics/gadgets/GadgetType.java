@@ -23,11 +23,11 @@ public class GadgetType extends CosmeticType<Gadget> {
     private final static List<GadgetType> ENABLED = new ArrayList<>();
     private final static List<GadgetType> VALUES = new ArrayList<>();
 
-    public static List<? extends GadgetType> enabled() {
+    public static List<GadgetType> enabled() {
         return ENABLED;
     }
 
-    public static List<? extends GadgetType> values() {
+    public static List<GadgetType> values() {
         return VALUES;
     }
 

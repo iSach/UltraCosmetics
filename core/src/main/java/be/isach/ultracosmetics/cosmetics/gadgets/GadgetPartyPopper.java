@@ -1,11 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -15,10 +16,10 @@ import java.util.UUID;
  */
 public class GadgetPartyPopper extends Gadget {
 
-    public GadgetPartyPopper(UUID owner) {
-        super(owner, GadgetType.PARTYPOPPER);
+    public GadgetPartyPopper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.PARTYPOPPER, ultraCosmetics);
 
-        asyncAction = true;
+        asynchronous = true;
     }
 
     @Override

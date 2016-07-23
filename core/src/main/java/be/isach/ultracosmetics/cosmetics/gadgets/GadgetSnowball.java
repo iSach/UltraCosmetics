@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,8 +18,8 @@ public class GadgetSnowball extends Gadget {
 
     private List<Snowball> snowballs;
 
-    public GadgetSnowball(UUID owner) {
-        super(owner, GadgetType.SNOWBALL);
+    public GadgetSnowball(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.SNOWBALL, ultraCosmetics);
 
         if (owner != null)
             snowballs = new ArrayList<>();

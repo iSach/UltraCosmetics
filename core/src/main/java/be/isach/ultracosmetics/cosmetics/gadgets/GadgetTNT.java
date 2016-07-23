@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
@@ -26,8 +27,8 @@ public class GadgetTNT extends Gadget {
 
     List<Entity> entities = new ArrayList<>();
 
-    public GadgetTNT(UUID owner) {
-        super(owner, GadgetType.TNT);
+    public GadgetTNT(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.TNT, ultraCosmetics);
         UltraCosmetics.getInstance().registerListener(this);
     }
 

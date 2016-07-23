@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -31,8 +32,8 @@ public class GadgetTrampoline extends Gadget {
     private Location initialCenter;
     private boolean running;
 
-    public GadgetTrampoline(UUID owner) {
-        super(owner, GadgetType.TRAMPOLINE);
+    public GadgetTrampoline(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.TRAMPOLINE, ultraCosmetics);
 
         if (owner == null) return;
 

@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -82,10 +83,10 @@ public class SuitType extends CosmeticType<Suit> {
      * @param armorSlot The Armor Slot.
      * @return The suit Object equipped to the player.
      */
-    public Suit equip(Player player, ArmorSlot armorSlot) {
+    public Suit equip(Player player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
         Suit effect = null;
         try {
-            effect = getClazz().getDeclaredConstructor(UUID.class, ArmorSlot.class).newInstance(player == null ? null : player.getUniqueId(), armorSlot);
+            effect = getClazz().getDeclaredConstructor(UUID.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player.getUniqueId(), armorSlot, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }

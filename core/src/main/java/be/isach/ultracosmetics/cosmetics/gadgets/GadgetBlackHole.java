@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -25,8 +26,8 @@ public class GadgetBlackHole extends Gadget {
 
     Item i;
 
-    public GadgetBlackHole(UUID owner) {
-        super(owner, GadgetType.BLACKHOLE);
+    public GadgetBlackHole(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.BLACKHOLE, ultraCosmetics);
     }
 
     @Override

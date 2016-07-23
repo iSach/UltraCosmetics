@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -26,8 +27,8 @@ public class GadgetParachute extends Gadget {
     List<Chicken> chickens = new ArrayList<>();
     boolean active;
 
-    public GadgetParachute(UUID owner) {
-        super(owner, GadgetType.PARACHUTE);
+    public GadgetParachute(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.PARACHUTE, ultraCosmetics);
 
         if (owner != null)
             Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());

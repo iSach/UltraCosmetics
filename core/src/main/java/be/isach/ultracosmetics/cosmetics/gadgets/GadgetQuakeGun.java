@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -17,8 +18,8 @@ public class GadgetQuakeGun extends Gadget {
 
     List<Firework> fireworkList = new ArrayList<>();
 
-    public GadgetQuakeGun(UUID owner) {
-        super(owner, GadgetType.QUAKEGUN);
+    public GadgetQuakeGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.QUAKEGUN, ultraCosmetics);
         UltraCosmetics.getInstance().registerListener(this);
     }
 

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.Particles;
@@ -32,8 +33,8 @@ public class GadgetRocket extends Gadget {
     ArmorStand armorStand;
     List<FallingBlock> fallingBlocks = new ArrayList<>();
 
-    public GadgetRocket(UUID owner) {
-        super(owner, GadgetType.ROCKET);
+    public GadgetRocket(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.ROCKET, ultraCosmetics);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -25,8 +26,8 @@ public class GadgetFreezeCannon extends Gadget {
     private List<Item> items;
     private List<Item> queue;
 
-    public GadgetFreezeCannon(UUID owner) {
-        super(owner, GadgetType.FREEZECANNON);
+    public GadgetFreezeCannon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.FREEZECANNON, ultraCosmetics);
         if (owner == null) return;
         items = new ArrayList<>();
         queue = new ArrayList<>();

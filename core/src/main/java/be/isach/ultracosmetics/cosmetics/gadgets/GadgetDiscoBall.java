@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,8 +32,8 @@ public class GadgetDiscoBall extends Gadget {
     ArmorStand armorStand;
     boolean running = false;
 
-    public GadgetDiscoBall(UUID owner) {
-        super(owner, GadgetType.DISCOBALL);
+    public GadgetDiscoBall(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.DISCOBALL, ultraCosmetics);
     }
 
     @Override

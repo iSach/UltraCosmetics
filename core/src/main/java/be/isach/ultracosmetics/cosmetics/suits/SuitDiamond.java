@@ -1,5 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
+
 import java.util.UUID;
 
 /**
@@ -7,8 +10,8 @@ import java.util.UUID;
  */
 public class SuitDiamond extends Suit {
 
-    public SuitDiamond(UUID owner, ArmorSlot armorSlot) {
-        super(owner, armorSlot, SuitType.DIAMOND);
+    public SuitDiamond(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
+        super(owner, armorSlot, SuitType.DIAMOND, ultraCosmetics);
     }
 
 }

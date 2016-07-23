@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
-import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
@@ -23,7 +22,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -491,7 +489,7 @@ public class UltraPlayer {
         if (currentGadget != null)
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                     ItemFactory.create(currentGadget.getMaterial(), currentGadget.getData(),
-                            "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getType().toString()
+                            "§f§l" + UltraCosmetics.getCustomPlayer(getPlayer()).getAmmo(currentGadget.getGadgetType().toString()
                                     .toLowerCase()) + " " + currentGadget.getName(), MessageManager.getMessage("Gadgets.Lore")));
     }
 
@@ -684,5 +682,77 @@ public class UltraPlayer {
 
     public int getMySqlIndex() {
         return INDEXS.get(uuid) == null ? -1 : INDEXS.get(uuid);
+    }
+
+    public Emote getCurrentEmote() {
+        return currentEmote;
+    }
+
+    public Gadget getCurrentGadget() {
+        return currentGadget;
+    }
+
+    public HashMap<GadgetType, Long> getGadgetCooldowns() {
+        return gadgetCooldowns;
+    }
+
+    public Hat getCurrentHat() {
+        return currentHat;
+    }
+
+    public Morph getCurrentMorph() {
+        return currentMorph;
+    }
+
+    public Mount getCurrentMount() {
+        return currentMount;
+    }
+
+    public ParticleEffect getCurrentParticleEffect() {
+        return currentParticleEffect;
+    }
+
+    public Pet getCurrentPet() {
+        return currentPet;
+    }
+
+    public short getCache_canSeeSelfMorph() {
+        return cache_canSeeSelfMorph;
+    }
+
+    public short getCache_hasGadgetsEnable() {
+        return cache_hasGadgetsEnable;
+    }
+
+    public Suit getCurrentBoots() {
+        return currentBoots;
+    }
+
+    public Suit getCurrentChestplate() {
+        return currentChestplate;
+    }
+
+    public Suit getCurrentHelmet() {
+        return currentHelmet;
+    }
+
+    public Suit getCurrentLeggings() {
+        return currentLeggings;
+    }
+
+    public TreasureChest getCurrentTreasureChest() {
+        return currentTreasureChest;
+    }
+
+    public void setCache_hasGadgetsEnable(short cache_hasGadgetsEnable) {
+        this.cache_hasGadgetsEnable = cache_hasGadgetsEnable;
+    }
+
+    public void setCurrentGadget(Gadget currentGadget) {
+        this.currentGadget = currentGadget;
+    }
+
+    public void setGadgetCooldowns(HashMap<GadgetType, Long> gadgetCooldowns) {
+        this.gadgetCooldowns = gadgetCooldowns;
     }
 }

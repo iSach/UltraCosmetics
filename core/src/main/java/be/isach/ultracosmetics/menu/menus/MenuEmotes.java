@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.menu;
+package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraPlayer;
@@ -31,7 +31,7 @@ import java.util.List;
  * Created on: 21th June, 2016
  * at 01:00
  */
-public class EmoteManager implements Listener {
+public class MenuEmotes implements Listener {
 
     private final static int[] COSMETICS_SLOTS =
             {

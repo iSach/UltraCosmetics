@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.command.subcommands;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.menu.*;
+import be.isach.ultracosmetics.menu.menus.*;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -31,23 +31,23 @@ public class    SubCommandMenu extends SubCommand {
 
         String s = args[1].toLowerCase();
         if (s.startsWith("g"))
-            GadgetManager.openMenu(sender, page);
+            MenuGadgets_old.openMenu(sender, page);
         else if (s.startsWith("pa"))
-            ParticleEffectManager.openMenu(sender, page);
+            MenuParticleEffects.openMenu(sender, page);
         else if (s.startsWith("pe"))
-            PetManager.openMenu(sender, page);
+            MenuPets.openMenu(sender, page);
         else if (s.startsWith("h"))
-            HatManager.openMenu(sender, page);
+            MenuHats.openMenu(sender, page);
         else if (s.startsWith("s"))
-            SuitManager.openMenu(sender, page);
+            MenuSuits.openMenu(sender, page);
         else if (s.startsWith("mor"))
-            MorphManager.openMenu(sender, page);
+            MenuMorphs.openMenu(sender, page);
         else if (s.startsWith("mou"))
-            MountManager.openMenu(sender, page);
+            MenuMounts.openMenu(sender, page);
         else if (s.startsWith("ma"))
-            MainMenuManager.openMenu(sender);
+            MenuMain.openMenu(sender);
         else if (s.startsWith("e"))
-            EmoteManager.openMenu(sender, page);
+            MenuEmotes.openMenu(sender, page);
         else if (s.startsWith("b")) {
             sender.closeInventory();
             UltraCosmetics.getCustomPlayer(sender).openKeyPurchaseMenu();

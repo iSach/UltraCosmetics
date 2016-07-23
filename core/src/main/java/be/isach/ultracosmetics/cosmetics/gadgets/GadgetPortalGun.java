@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,8 +31,8 @@ public class GadgetPortalGun extends Gadget {
     Location locRed;
     BlockFace redBlockFace;
 
-    public GadgetPortalGun(UUID owner) {
-        super(owner, GadgetType.PORTALGUN);
+    public GadgetPortalGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.PORTALGUN, ultraCosmetics);
         displayCooldownMessage = false;
         useTwoInteractMethods = true;
     }

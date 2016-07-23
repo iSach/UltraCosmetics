@@ -13,7 +13,7 @@ import static be.isach.ultracosmetics.cosmetics.CosmeticType.*;
  * Date: 5/07/16
  * Project: UltraCosmetics
  */
-public abstract class Menu {
+public abstract class Menu<T extends CosmeticType> {
 
     private final static int[] COSMETICS_SLOTS =
             {
@@ -22,23 +22,17 @@ public abstract class Menu {
                     28, 29, 30, 31, 32, 33, 34
             };
 
-    private CosmeticType cosmeticType;
-
-    public Menu(CosmeticType cosmeticType) {
-        this.cosmeticType = cosmeticType;
-    }
-
     public void open(UltraPlayer player, int page) {
 
     }
 
-    public CosmeticType getCosmeticType(String name) {
-        for (CosmeticType effectType : enabled()) {
+    public T getCosmeticType(String name) {
+        for (T effectType : enabled()) {
             if (effectType.getConfigName().replace(" ", "").equals(name.replace(" ", "")))
                 return effectType;
         }
         return null;
     }
 
-    abstract List<CosmeticType> enabled();
+    public abstract List<T> enabled();
 }
