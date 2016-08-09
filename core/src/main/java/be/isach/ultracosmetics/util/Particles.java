@@ -197,7 +197,7 @@ public enum Particles {
      */
     SPELL_WITCH("witchMagic", 17, -1),
     /**
-     * A particle effect which is displayed by blocks beneath a water source:
+     * A particle effect which is displayed by BLOCKS beneath a water source:
      * <ul>
      * <li>It looks like a blue drip
      * <li>The speed value has no influence on this particle effect
@@ -205,7 +205,7 @@ public enum Particles {
      */
     DRIP_WATER("dripWater", 18, -1),
     /**
-     * A particle effect which is displayed by blocks beneath a lava source:
+     * A particle effect which is displayed by BLOCKS beneath a lava source:
      * <ul>
      * <li>It looks like an orange drip
      * <li>The speed value has no influence on this particle effect
@@ -237,7 +237,7 @@ public enum Particles {
      */
     TOWN_AURA("townaura", 22, -1, ParticleProperty.DIRECTIONAL),
     /**
-     * A particle effect which is displayed by note blocks:
+     * A particle effect which is displayed by note BLOCKS:
      * <ul>
      * <li>It looks like a colored note
      * <li>The speed value causes the particle to be colored green when set to 0
@@ -348,7 +348,7 @@ public enum Particles {
      */
     ITEM_CRACK("iconcrack", 36, -1, ParticleProperty.DIRECTIONAL, ParticleProperty.REQUIRES_DATA),
     /**
-     * A particle effect which is displayed when breaking blocks or sprinting:
+     * A particle effect which is displayed when breaking BLOCKS or sprinting:
      * <ul>
      * <li>It looks like a little piece with a block texture
      * <li>The speed value has no influence on this particle effect

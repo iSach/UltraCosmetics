@@ -1,11 +1,12 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -229,7 +230,7 @@ public class SubCommandGive extends SubCommand {
         if (offlinePlayer == null || offlinePlayer.getUniqueId() == null)
             return;
         if (offlinePlayer instanceof Player)
-            UltraCosmetics.getPlayerManager().getCustomPlayer((Player) offlinePlayer).addKey();
+            UltraCosmetics.getPlayerManager().getUltraPlayer((Player) offlinePlayer).addKey();
         else {
             if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(offlinePlayer.getUniqueId()).set("Keys", getKeys(offlinePlayer.getUniqueId()) + 1);
@@ -242,13 +243,13 @@ public class SubCommandGive extends SubCommand {
         if (receiver == null || receiver.getUniqueId() == null)
             return;
         if (receiver instanceof Player)
-            UltraCosmetics.getPlayerManager().getCustomPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
+            UltraCosmetics.getPlayerManager().getUltraPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
         else {
             if (UltraCosmetics.getInstance().usingFileStorage())
                 SettingsManager.getData(receiver.getUniqueId()).set("Ammo." + gadgetType.toString().toLowerCase(),
                         ((int) SettingsManager.getData(receiver.getUniqueId()).get("Ammo." + gadgetType.toString().toLowerCase())) + ammo);
             else
-                UltraCosmetics.sqlUtils.addAmmo(UltraPlayer.INDEXS.get(receiver.getUniqueId()), gadgetType.toString().toLowerCase(), ammo);
+                UltraCosmetics.sqlUtils.addAmmo(MySqlConnectionManager.INDEXS.get(receiver.getUniqueId()), gadgetType.toString().toLowerCase(), ammo);
         }
     }
 

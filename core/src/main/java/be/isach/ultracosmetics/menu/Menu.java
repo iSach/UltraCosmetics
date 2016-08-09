@@ -1,11 +1,18 @@
 package be.isach.ultracosmetics.menu;
 
-import be.isach.ultracosmetics.UltraPlayer;
-import be.isach.ultracosmetics.cosmetics.CosmeticType;
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
-
-import static be.isach.ultracosmetics.cosmetics.CosmeticType.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Package: be.isach.ultracosmetics.menu
@@ -13,26 +20,52 @@ import static be.isach.ultracosmetics.cosmetics.CosmeticType.*;
  * Date: 5/07/16
  * Project: UltraCosmetics
  */
-public abstract class Menu<T extends CosmeticType> {
+public abstract class Menu implements Listener {
 
-    private final static int[] COSMETICS_SLOTS =
-            {
-                    10, 11, 12, 13, 14, 15, 16,
-                    19, 20, 21, 22, 23, 24, 25,
-                    28, 29, 30, 31, 32, 33, 34
-            };
+    private UltraCosmetics ultraCosmetics;
+    private Map<ItemStack, ClickRunnable> clickRunnableMap = new HashMap<>();
 
-    public void open(UltraPlayer player, int page) {
-
+    public Menu(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
     }
 
-    public T getCosmeticType(String name) {
-        for (T effectType : enabled()) {
-            if (effectType.getConfigName().replace(" ", "").equals(name.replace(" ", "")))
-                return effectType;
-        }
-        return null;
+    public void open(UltraPlayer player) {
+        Inventory inventory = Bukkit.createInventory(null, getSize(), getName());
+
+        putItems(inventory, player);
+
+        player.getPlayer().openInventory(inventory);
     }
 
-    public abstract List<T> enabled();
+    protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {
+        Validate.notNull(itemStack);
+        Validate.notNull(clickRunnable);
+
+        inventory.setItem(slot, itemStack);
+        clickRunnableMap.put(itemStack, clickRunnable);
+    }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent event) {
+        if (event.getInventory() == null) return;
+        if (event.getCurrentItem() == null) return;
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!event.getInventory().getName().contains(getName())) return;
+        if (!clickRunnableMap.keySet().contains(event.getCurrentItem())) return;
+        ClickRunnable clickRunnable = clickRunnableMap.get(event.getCurrentItem());
+        Player player = (Player) event.getWhoClicked();
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(player);
+        clickRunnable.run(new ClickData(event.getInventory(), ultraPlayer, event.getAction(), event.getCurrentItem(), event.getSlot()));
+        event.setCancelled(true);
+    }
+
+    public UltraCosmetics getUltraCosmetics() {
+        return ultraCosmetics;
+    }
+
+    protected abstract void putItems(Inventory inventory, UltraPlayer player);
+
+    abstract int getSize();
+
+    abstract String getName();
 }

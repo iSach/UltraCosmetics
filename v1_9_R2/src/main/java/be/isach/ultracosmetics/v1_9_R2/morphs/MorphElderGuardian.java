@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.v1_9_R2.customentities.CustomEntityFirework;
 import be.isach.ultracosmetics.v1_9_R2.customentities.CustomGuardian;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -78,7 +78,7 @@ public class MorphElderGuardian extends Morph {
                 }
                 if (customGuardian == null
                         || !customGuardian.isAlive()) {
-                    UltraCosmetics.getPlayerManager().getCustomPlayer(getPlayer()).removeMorph();
+                    UltraCosmetics.getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
                     cancel();
                     return;
                 }

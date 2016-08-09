@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.listeners;
 
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
                     Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
                         @Override
                         public void run() {
-                            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(event.getPlayer());
+                            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
                             if (cp != null && event.getPlayer() != null)
                                 cp.giveMenuItem();
                         }
@@ -147,7 +147,7 @@ public class PlayerListener implements Listener {
         if (UltraCosmetics.getCustomPlayer(event.getPlayer()).currentTreasureChest != null)
             UltraCosmetics.getCustomPlayer(event.getPlayer()).currentTreasureChest.forceOpen(0);
         UltraCosmetics.getCustomPlayer(event.getPlayer()).clear();
-        UltraCosmetics.getPlayerManager().getCustomPlayer(event.getPlayer()).removeMenuItem();
+        UltraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).removeMenuItem();
         UltraCosmetics.getPlayerManager().remove(event.getPlayer());
     }
 

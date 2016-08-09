@@ -1,12 +1,8 @@
 package be.isach.ultracosmetics.v1_8_R3.mount;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.mounts.MountType;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Effect;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
 
-import java.util.Random;
 import java.util.UUID;
 
 /**

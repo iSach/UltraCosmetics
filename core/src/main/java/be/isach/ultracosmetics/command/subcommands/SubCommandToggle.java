@@ -1,18 +1,18 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
-import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.EmoteType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
-import be.isach.ultracosmetics.cosmetics.mounts.MountType;
-import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffectType;
-import be.isach.ultracosmetics.cosmetics.pets.PetType;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.suits.SuitType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.menus.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
@@ -77,7 +77,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentGadget != null &&
                     cp.currentGadget.getGadgetType() == gadgetType) {
                 cp.removeGadget();
@@ -103,7 +103,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentPet != null &&
                     cp.currentPet.getType() == petType) {
                 cp.removePet();
@@ -129,7 +129,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentParticleEffect != null &&
                     cp.currentParticleEffect.getType() == effectType) {
                 cp.removeParticleEffect();
@@ -155,7 +155,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentMount != null &&
                     cp.currentMount.getType() == mountType) {
                 cp.removeMount();
@@ -186,7 +186,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentEmote != null &&
                     cp.currentEmote.getEmoteType() == emoteType) {
                 cp.removePet();
@@ -212,7 +212,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentMorph != null &&
                     cp.currentMorph.getType() == morphType) {
                 cp.removeMorph();
@@ -238,7 +238,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentHat != null &&
                     cp.currentHat == hat) {
                 cp.removeHat();
@@ -298,13 +298,13 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (customPlayer.getSuit(armorSlot) != null
                     && customPlayer.getSuit(armorSlot).getType() == suitType) {
                 customPlayer.removeSuit(armorSlot);
                 return;
             }
-            MenuSuits.equipSuit(suitType, receiver, armorSlot);
+            MenuSuits.equipSuit(suitType, receiver, armorSlot, ultraCosmetics);
         }
     }
 
@@ -353,7 +353,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentGadget != null &&
                     cp.currentGadget.getGadgetType() == gadgetType) {
                 cp.removeGadget();
@@ -379,7 +379,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentPet != null &&
                     cp.currentPet.getType() == petType) {
                 cp.removePet();
@@ -405,7 +405,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentParticleEffect != null &&
                     cp.currentParticleEffect.getType() == effectType) {
                 cp.removeParticleEffect();
@@ -431,7 +431,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentMount != null &&
                     cp.currentMount.getType() == mountType) {
                 cp.removeMount();
@@ -457,7 +457,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentMorph != null &&
                     cp.currentMorph.getType() == morphType) {
                 cp.removeMorph();
@@ -483,7 +483,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (cp.currentHat != null &&
                     cp.currentHat == hat) {
                 cp.removeHat();
@@ -528,7 +528,7 @@ public class SubCommandToggle extends SubCommand {
 
             SuitType suitType;
             try {
-                suitType = (SuitType) SuitType.valueOf(args[2].toUpperCase());
+                suitType =  SuitType.valueOf(args[2].toUpperCase());
             } catch (IllegalArgumentException exc) {
                 sender.sendMessage(MessageManager.getMessage("Invalid-Suit"));
                 StringBuilder sb = new StringBuilder();
@@ -543,7 +543,7 @@ public class SubCommandToggle extends SubCommand {
                 return;
             }
 
-            UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+            UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
             if (customPlayer.getSuit(armorSlot) != null
                     && customPlayer.getSuit(armorSlot).getType() == suitType) {
                 customPlayer.removeSuit(armorSlot);

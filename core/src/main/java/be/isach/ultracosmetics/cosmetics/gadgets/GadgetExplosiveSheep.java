@@ -1,12 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -16,15 +16,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by sacha on 08/08/15.
  */
 public class GadgetExplosiveSheep extends Gadget {
 
-    ArrayList<Sheep> sheepArrayList = new ArrayList<>();
+    public static final List<GadgetExplosiveSheep> EXPLOSIVE_SHEEP = new ArrayList<>();
+
+    private ArrayList<Sheep> sheepArrayList = new ArrayList<>();
 
     public GadgetExplosiveSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.EXPLOSIVESHEEP, ultraCosmetics);
@@ -42,7 +44,7 @@ public class GadgetExplosiveSheep extends Gadget {
 
         UltraCosmetics.getInstance().getEntityUtil().clearPathfinders(s);
 
-        UltraCosmetics.getInstance().explosiveSheep.add(this);
+        EXPLOSIVE_SHEEP.add(this);
 
         new SheepColorRunnable(7, true, s, this);
     }
@@ -71,7 +73,7 @@ public class GadgetExplosiveSheep extends Gadget {
 
     @Override
     public void onClear() {
-        UltraCosmetics.getInstance().explosiveSheep.remove(this);
+        EXPLOSIVE_SHEEP.remove(this);
         HandlerList.unregisterAll(this);
     }
 
@@ -119,7 +121,7 @@ public class GadgetExplosiveSheep extends Gadget {
                         public void run() {
                             UtilParticles.display(Particles.LAVA, sheep.getLocation(), 5);
                             sheep.remove();
-                            UltraCosmetics.getInstance().explosiveSheep.remove(gadgetExplosiveSheep);
+                            EXPLOSIVE_SHEEP.remove(gadgetExplosiveSheep);
                         }
                     }, 110);
                 }

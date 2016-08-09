@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import org.bukkit.entity.Wither;
 
 import java.util.UUID;

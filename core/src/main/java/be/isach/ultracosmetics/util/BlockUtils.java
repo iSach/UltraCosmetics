@@ -1,10 +1,11 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
-import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class BlockUtils {
 
     /**
-     * List of all the blocks to restore.
+     * List of all the BLOCKS to restore.
      */
     public static Map<Location, String> blocksToRestore = new HashMap<>();
 
@@ -34,12 +35,12 @@ public class BlockUtils {
     public static List<Block> treasureBlocks = new ArrayList<>();
 
     /**
-     * Gets blocks in radius.
+     * Gets BLOCKS in radius.
      *
      * @param location The center.
      * @param radius   The radius.
-     * @param hollow   if the sphere of blocks should be hollow.
-     * @return The list of all the blocks in the given radius.
+     * @param hollow   if the sphere of BLOCKS should be hollow.
+     * @return The list of all the BLOCKS in the given radius.
      */
     public static List<Block> getBlocksInRadius(Location location, int radius, boolean hollow) {
         List<Block> blocks = new ArrayList<>();
@@ -78,50 +79,39 @@ public class BlockUtils {
      * @return {@code true} if the block is part of a rocket, otherwise {@code false}.
      */
     public static boolean isRocketBlock(Block b) {
-        for (UltraPlayer cp : UltraCosmetics.getCustomPlayers()) {
-            if (cp.currentGadget != null
-                    && cp.currentGadget.getGadgetType() == GadgetType.ROCKET) {
-                GadgetRocket rocket = (GadgetRocket) cp.currentGadget;
-                if (rocket.blocks.contains(b))
-                    return true;
-            }
-        }
-        return false;
+        return GadgetRocket.BLOCKS.contains(b);
     }
 
     /**
-     * Force-restores the blocks.
+     * Force-restores the BLOCKS.
      */
     public static void forceRestore() {
         for (Location loc : blocksToRestore.keySet()) {
-            Block b = loc.getBlock();
-            String s = blocksToRestore.get(loc);
-            Material m = Material.valueOf(s.split(",")[0]);
-            byte d = Byte.valueOf(s.split(",")[1]);
-            b.setType(m);
-            b.setData(d);
+            try {
+                Block b = loc.getBlock();
+                String s = blocksToRestore.get(loc);
+                Material m = Material.valueOf(s.split(",")[0]);
+                byte d = Byte.valueOf(s.split(",")[1]);
+                b.setType(m);
+                b.setData(d);
+            } catch (Exception ignored) {
+            }
         }
     }
 
     /**
      * Restores the block at the location "loc".
      *
-     * @param LOCATION The location of the block to restore.
+     * @param location The location of the block to restore.
      */
-    public static void restoreBlockAt(final Location LOCATION) {
-        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (!blocksToRestore.containsKey(LOCATION)) return;
-                Block b = LOCATION.getBlock();
-                String s = blocksToRestore.get(LOCATION);
-                Material m = Material.valueOf(s.split(",")[0]);
-                byte d = Byte.valueOf(s.split(",")[1]);
-                for (Player player : b.getLocation().getWorld().getPlayers())
-                    player.sendBlockChange(LOCATION, m, d);
-                blocksToRestore.remove(LOCATION);
-            }
-        });
+    public static void restoreBlockAt(final Location location) {
+        if (!blocksToRestore.containsKey(location)) return;
+        Block b = location.getBlock();
+        String s = blocksToRestore.get(location);
+        Material m = Material.valueOf(s.split(",")[0]);
+        byte d = Byte.valueOf(s.split(",")[1]);
+        b.getLocation().getWorld().getPlayers().forEach(player -> player.sendBlockChange(location, m, d));
+        blocksToRestore.remove(location);
     }
 
     /**
@@ -133,22 +123,13 @@ public class BlockUtils {
      * @param TICK_DELAY The delay after which the block is restored.
      */
     public static void setToRestoreIgnoring(final Block BLOCK, final Material NEW_TYPE, final byte NEW_DATA, final int TICK_DELAY) {
-        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (blocksToRestore.containsKey(BLOCK.getLocation())) return;
-                if (!blocksToRestore.containsKey(BLOCK.getLocation())) {
-                    blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
-                    for (Player player : BLOCK.getLocation().getWorld().getPlayers())
-                        player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            restoreBlockAt(BLOCK.getLocation());
-
-                        }
-                    }, TICK_DELAY);
-                }
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
+            if (blocksToRestore.containsKey(BLOCK.getLocation())) return;
+            if (!blocksToRestore.containsKey(BLOCK.getLocation())) {
+                blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
+                for (Player player : BLOCK.getLocation().getWorld().getPlayers())
+                    player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
+                Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> restoreBlockAt(BLOCK.getLocation()), TICK_DELAY);
             }
         });
     }
@@ -156,73 +137,64 @@ public class BlockUtils {
     /**
      * Replaces a block with a new material and data, and after delay, restore it.
      *
-     * @param BLOCK      The block.
-     * @param NEW_TYPE   The new material.
-     * @param NEW_DATA   The new data.
-     * @param TICK_DELAY The delay after which the block is restored.
+     * @param block     The block.
+     * @param newType   The new material.
+     * @param newData   The new data.
+     * @param tickDelay The delay after which the block is restored.
      */
-    public static void setToRestore(final Block BLOCK, final Material NEW_TYPE, final byte NEW_DATA, final int TICK_DELAY) {
-        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (blocksToRestore.containsKey(BLOCK.getLocation())) return;
-                Block bUp = BLOCK.getRelative(BlockFace.UP);
-                if (BLOCK.getType() != Material.AIR
-                        && BLOCK.getType() != Material.SIGN_POST
-                        && BLOCK.getType() != Material.CHEST
-                        && BLOCK.getType() != Material.STONE_PLATE
-                        && BLOCK.getType() != Material.WOOD_PLATE
-                        && BLOCK.getType() != Material.WALL_SIGN
-                        && BLOCK.getType() != Material.WALL_BANNER
-                        && BLOCK.getType() != Material.STANDING_BANNER
-                        && BLOCK.getType() != Material.CROPS
-                        && BLOCK.getType() != Material.LONG_GRASS
-                        && BLOCK.getType() != Material.SAPLING
-                        && BLOCK.getType() != Material.DEAD_BUSH
-                        && BLOCK.getType() != Material.RED_ROSE
-                        && BLOCK.getType() != Material.RED_MUSHROOM
-                        && BLOCK.getType() != Material.BROWN_MUSHROOM
-                        && BLOCK.getType() != Material.TORCH
-                        && BLOCK.getType() != Material.LADDER
-                        && BLOCK.getType() != Material.VINE
-                        && BLOCK.getType() != Material.DOUBLE_PLANT
-                        && BLOCK.getType() != Material.PORTAL
-                        && BLOCK.getType() != Material.CACTUS
-                        && BLOCK.getType() != Material.WATER
-                        && BLOCK.getType() != Material.STATIONARY_WATER
-                        && BLOCK.getType() != Material.LAVA
-                        && BLOCK.getType() != Material.STATIONARY_LAVA
-                        && BLOCK.getType() != Material.PORTAL
-                        && BLOCK.getType() != Material.ENDER_PORTAL
-                        && BLOCK.getType() != Material.SOIL
-                        && BLOCK.getType() != Material.BARRIER
-                        && BLOCK.getType() != Material.COMMAND
-                        && BLOCK.getType() != Material.DROPPER
-                        && BLOCK.getType() != Material.DISPENSER
-                        && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(BLOCK.getType().toString().toUpperCase())
-                        && !BLOCK.getType().toString().toLowerCase().contains("door")
-                        && BLOCK.getType() != Material.BED
-                        && BLOCK.getType() != Material.BED_BLOCK
-                        && !isPortalBlock(BLOCK)
-                        && !isRocketBlock(BLOCK)
-                        && !isTreasureChestBlock(BLOCK)
-                        && !blocksToRestore.containsKey(BLOCK.getLocation())
-                        && BLOCK.getType().isSolid()
-                        && a(bUp)
-                        && BLOCK.getType().getId() != 43
-                        && BLOCK.getType().getId() != 44) {
-                    blocksToRestore.put(BLOCK.getLocation(), BLOCK.getType().toString() + "," + BLOCK.getData());
-                    for (Player player : BLOCK.getLocation().getWorld().getPlayers())
-                        player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            restoreBlockAt(BLOCK.getLocation());
-                        }
-                    }, TICK_DELAY);
-                }
+    public static void setToRestore(final Block block, final Material newType, final byte newData, final int tickDelay) {
+        Bukkit.getScheduler().runTaskAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
+            if (blocksToRestore.containsKey(block.getLocation())) return;
+            Block bUp = block.getRelative(BlockFace.UP);
+            if (!(block.getType() != Material.AIR
+                    && block.getType() != Material.SIGN_POST
+                    && block.getType() != Material.CHEST
+                    && block.getType() != Material.STONE_PLATE
+                    && block.getType() != Material.WOOD_PLATE
+                    && block.getType() != Material.WALL_SIGN
+                    && block.getType() != Material.WALL_BANNER
+                    && block.getType() != Material.STANDING_BANNER
+                    && block.getType() != Material.CROPS
+                    && block.getType() != Material.LONG_GRASS
+                    && block.getType() != Material.SAPLING
+                    && block.getType() != Material.DEAD_BUSH
+                    && block.getType() != Material.RED_ROSE
+                    && block.getType() != Material.RED_MUSHROOM
+                    && block.getType() != Material.BROWN_MUSHROOM
+                    && block.getType() != Material.TORCH
+                    && block.getType() != Material.LADDER
+                    && block.getType() != Material.VINE
+                    && block.getType() != Material.DOUBLE_PLANT
+                    && block.getType() != Material.PORTAL
+                    && block.getType() != Material.CACTUS
+                    && block.getType() != Material.WATER
+                    && block.getType() != Material.STATIONARY_WATER
+                    && block.getType() != Material.LAVA
+                    && block.getType() != Material.STATIONARY_LAVA
+                    && block.getType() != Material.PORTAL
+                    && block.getType() != Material.ENDER_PORTAL
+                    && block.getType() != Material.SOIL
+                    && block.getType() != Material.BARRIER
+                    && block.getType() != Material.COMMAND
+                    && block.getType() != Material.DROPPER
+                    && block.getType() != Material.DISPENSER
+                    && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(block.getType().toString().toUpperCase())
+                    && !block.getType().toString().toLowerCase().contains("door")
+                    && block.getType() != Material.BED
+                    && block.getType() != Material.BED_BLOCK
+                    && !isPortalBlock(block)
+                    && !isRocketBlock(block)
+                    && !isTreasureChestBlock(block)
+                    && !blocksToRestore.containsKey(block.getLocation())
+                    && block.getType().isSolid()
+                    && a(bUp)
+                    && block.getType().getId() != 43
+                    && block.getType().getId() != 44)) return;
 
-            }
+            blocksToRestore.put(block.getLocation(), block.getType().toString() + "," + block.getData());
+            for (Player player : block.getLocation().getWorld().getPlayers())
+                player.sendBlockChange(block.getLocation(), newType, newData);
+            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> restoreBlockAt(block.getLocation()), tickDelay);
         });
     }
 

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.util.PlayerUtils;
 
 import java.util.UUID;

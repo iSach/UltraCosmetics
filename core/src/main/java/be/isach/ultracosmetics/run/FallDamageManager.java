@@ -4,6 +4,7 @@ package be.isach.ultracosmetics.run;
 //import org.bukkit.Bukkit;
 //import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.scheduler.BukkitRunnable;
 //import org.bukkit.entity.Player;
 
 //import java.lang.reflect.Field;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by Sacha on 15/12/15.
  */
-public class FallDamageManager implements Runnable {
+public class FallDamageManager extends BukkitRunnable {
 
     public static List<Entity> noFallDamage = Collections.synchronizedList(new ArrayList<Entity>());
     public static List<Entity> queue = Collections.synchronizedList(new ArrayList<Entity>());

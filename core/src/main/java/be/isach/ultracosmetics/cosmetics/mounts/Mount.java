@@ -1,7 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,12 +33,8 @@ import java.util.UUID;
  * - SubObjects:
  * - HorseMount
  */
-public abstract class Mount implements Listener {
+public abstract class Mount extends Cosmetic<MountType> implements Updatable {
 
-    /**
-     * The Mount Owner's UUID.
-     */
-    public UUID owner;
     /**
      * If the mount is a horse, its variant.
      */
@@ -45,47 +47,22 @@ public abstract class Mount implements Listener {
      * The Entity, if it isn't a Custom Entity.
      */
     public Entity entity;
-    /**
-     * The delay between each mount ticking.
-     */
-    public int repeatDelay = 2;
-    /**
-     * The Type of the Mount.
-     */
-    private MountType type;
-    /**
-     * The Event Listener.
-     */
-    protected Listener listener;
 
-    private UltraCosmetics ultraCosmetics;
+    public Mount(UltraCosmetics ultraCosmetics, UltraPlayer ultraPlayer, MountType type) {
+        super(ultraCosmetics, Category.MOUNTS, ultraPlayer, type);
 
-    public Mount(final UUID owner, final MountType type, UltraCosmetics ultraCosmetics) {
-        this.type = type;
-        this.owner = owner;
-        this.ultraCosmetics = ultraCosmetics;
-        if (owner != null) {
-            if (!getPlayer().hasPermission(type.getPermission())) {
-                getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
-                return;
-            }
+        if (ultraPlayer.getCurrentMount() != null) {
+            ultraPlayer.removeMount();
         }
-        if (type == MountType.NYANSHEEP || type == MountType.DRAGON
-                || type == MountType.HYPECART
-                || type == MountType.MOLTENSNAKE)
-            repeatDelay = 1;
-        if (type == MountType.SKYSQUID)
-            repeatDelay = 4;
-        if (UltraCosmetics.getCustomPlayer(getPlayer()).currentMount != null)
-            UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
     }
 
     /**
      * Equips the pet.
      */
-    public void equip() {
+    @Override
+    public void onEquip() {
         EntitySpawningManager.setBypass(true);
-        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), type.getEntityType());
+        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getCosmeticType().getEntityType());
         EntitySpawningManager.setBypass(false);
         if (entity instanceof Ageable) {
             ((Ageable) entity).setAdult();
@@ -95,7 +72,7 @@ public abstract class Mount implements Listener {
             }
         }
         entity.setCustomNameVisible(true);
-        entity.setCustomName(getType().getName(getPlayer()));
+        entity.setCustomName(getCosmeticType().getName(getPlayer()));
         entity.setPassenger(getPlayer());
         if (entity instanceof Horse) {
             ((Horse) entity).setDomestication(1);
@@ -114,10 +91,10 @@ public abstract class Mount implements Listener {
                         cancel();
                         return;
                     }
-                    if (owner != null
-                            && Bukkit.getPlayer(owner) != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount.getType() == type) {
+                    if (getOwner() != null
+                            && Bukkit.getPlayer(getOwnerUniqueId()) != null
+                            && getOwner().getCurrentMount() != null
+                            && getOwner().getCurrentMount().getCosmeticType() == getCosmeticType()) {
                         onUpdate();
                     } else {
                         cancel();
@@ -129,53 +106,11 @@ public abstract class Mount implements Listener {
                 }
             }
         };
-        runnable.runTaskTimerAsynchronously(UltraCosmetics.getInstance(), 0, repeatDelay);
-        entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmetics.getInstance(), "UltraCosmetics"));
-        listener = new MountListener(this);
+        runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getCosmeticType().getRepeatDelay());
+        entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
 
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (UltraCosmetics.getInstance().placeHolderColor) ? getType().getMenuName() : UltraCosmetics.filterColor(getType().getMenuName())));
-        UltraCosmetics.getCustomPlayer(getPlayer()).currentMount = this;
-
-        onEquip();
-    }
-
-    protected void onEquip() {}
-
-    /**
-     * Gets the Mount Type.
-     *
-     * @return The Mount Type.
-     */
-    public MountType getType() {
-        return this.type;
-    }
-
-    /**
-     * Called with an interval of {repeatDelay} ticks.
-     */
-    protected abstract void onUpdate();
-
-    /**
-     * Clears the Mount.
-     */
-    public void clear() {
-        if (getPlayer() != null && UltraCosmetics.getCustomPlayer(getPlayer()) != null) {
-            UltraCosmetics.getCustomPlayer(getPlayer()).currentMount = null;
-            getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
-        }
-        removeEntity();
-        if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Mounts.Despawn").replace("%mountname%", (UltraCosmetics.getInstance().placeHolderColor) ? type.getMenuName() : UltraCosmetics.filterColor(type.getMenuName())));
-        owner = null;
-        HandlerList.unregisterAll(this);
-        HandlerList.unregisterAll(listener);
-        onClear();
-    }
-
-    /**
-     * Called when mount is cleared.
-     */
-    public void onClear() {
+//        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (UltraCosmetics.getInstance().placeHolderColor) ? getCosmeticType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
+        getOwner().setCurrentMount(this);
     }
 
     protected void removeEntity() {
@@ -186,90 +121,58 @@ public abstract class Mount implements Listener {
         return entity;
     }
 
-    /**
-     * Gets the Owner as a UUID.
-     *
-     * @return The Owner as a UUID.
-     */
-    protected UUID getOwner() {
-        return owner;
-    }
-
-    /**
-     * Gets the owner as a player.
-     *
-     * @return the owner as a player.
-     */
-    protected Player getPlayer() {
-        return Bukkit.getPlayer(owner);
-    }
-
-    protected UltraCosmetics getUltraCosmetics() {
-        return ultraCosmetics;
-    }
-
-    /**
-     * The Event Listener.
-     */
-    public class MountListener implements Listener {
-        private Mount mount;
-
-        public MountListener(Mount mount) {
-            this.mount = mount;
-            UltraCosmetics.getInstance().registerListener(this);
+    @EventHandler
+    public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
+        if (event.getVehicle().getType() == EntityType.BOAT
+                || event.getVehicle().getType().toString().contains("MINECART"))
+            return;
+        String name = null;
+        try {
+            name = getCosmeticType().getName(getPlayer());
+        } catch (Exception e) {
         }
 
-        @EventHandler
-        public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
-            if (event.getVehicle().getType() == EntityType.BOAT
-                    || event.getVehicle().getType().toString().contains("MINECART"))
-                return;
-            String name = null;
-            try {
-                name = type.getName(getPlayer());
-            } catch (Exception e) {
-            }
-
-            if (name != null
-                    && owner != null
-                    && getPlayer() != null
-                    && UltraCosmetics.getCustomPlayer(getPlayer()) != null
-                    && event.getVehicle() != null
-                    && event.getExited() != null
-                    && event.getVehicle().getCustomName().equals(name)
-                    && event.getExited() == getPlayer()) {
-                UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
-            }
-        }
-
-        @EventHandler
-        public void onEntityDamage(EntityDamageEvent event) {
-            if (event.getEntity() == mount.getEntity())
-                event.setCancelled(true);
-            if (event.getEntity() == getPlayer()
-                    && UltraCosmetics.getCustomPlayer(getPlayer()).currentMount != null
-                    && UltraCosmetics.getCustomPlayer(getPlayer()).currentMount.getType() == getType()) {
-                event.setCancelled(true);
-            }
-        }
-
-        @EventHandler
-        public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-            if (event.getEntity() == mount.getEntity())
-                event.setCancelled(true);
-        }
-
-        @EventHandler
-        public void teleportEvent(PlayerTeleportEvent event) {
-            if (owner != null && getPlayer() != null && UltraCosmetics.getCustomPlayer(getPlayer()).currentMount == mount && event.getPlayer() == getPlayer()) {
-                if ((event.getFrom().getBlockX() != event.getTo().getBlockX()
-                        || event.getFrom().getBlockY() != event.getTo().getBlockY()
-                        || event.getFrom().getBlockZ() != event.getTo().getBlockZ()
-                        || !event.getFrom().getWorld().getName().equalsIgnoreCase(event.getTo().getWorld().getName()))) {
-                    clear();
-                }
-            }
+        if (name != null
+                && getOwner() != null
+                && getPlayer() != null
+                && getOwner() != null
+                && event.getVehicle() != null
+                && event.getExited() != null
+                && event.getVehicle().getCustomName().equals(name)
+                && event.getExited() == getPlayer()) {
+            getOwner().removeMount();
         }
     }
 
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() == getEntity())
+            event.setCancelled(true);
+        if (event.getEntity() == getPlayer()
+                && getOwner().getCurrentMount() != null
+                && getOwner().getCurrentMount().getCosmeticType() == getCosmeticType()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() == getEntity())
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void teleportEvent(PlayerTeleportEvent event) {
+        if (getOwner() != null
+                && getPlayer() != null
+                && getOwner().getCurrentMount() == this
+                && event.getPlayer() == getPlayer()) {
+            if ((event.getFrom().getBlockX() != event.getTo().getBlockX()
+                    || event.getFrom().getBlockY() != event.getTo().getBlockY()
+                    || event.getFrom().getBlockZ() != event.getTo().getBlockZ()
+                    || !event.getFrom().getWorld().getName().equalsIgnoreCase(event.getTo().getWorld().getName()))) {
+                clear();
+            }
+        }
+    }
 }

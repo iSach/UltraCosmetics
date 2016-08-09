@@ -1,8 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
@@ -15,7 +19,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,9 +26,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by sacha on 03/08/15.
  */
-public abstract class Pet implements Listener {
-
-    public static final List<ArmorStand> PET_NAMES = new ArrayList<>();
+public abstract class Pet extends Cosmetic<PetType> {
 
     /**
      * List of items popping out from Pet.
@@ -33,19 +34,9 @@ public abstract class Pet implements Listener {
     public ArrayList<Item> items = new ArrayList<>();
 
     /**
-     * Pet Type of the pet.
-     */
-    private PetType type;
-
-    /**
      * Armor stand which is the name of the pet.
      */
     public ArmorStand armorStand;
-
-    /**
-     * Current owner of this pet.
-     */
-    protected UUID owner;
 
     /**
      * Event listener.
@@ -68,24 +59,14 @@ public abstract class Pet implements Listener {
      */
     public Entity entity;
 
-    public Pet(final UUID owner, final PetType type) {
-        this.type = type;
+    public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
+        super(ultraCosmetics, Category.PETS, owner, petType);
 
-        if (owner == null) return;
-
-        this.owner = owner;
-
-        if (!getPlayer().hasPermission(getType().getPermission())) {
-            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
-            return;
-        }
         this.pathUpdater = Executors.newSingleThreadExecutor();
     }
 
-    /**
-     * Equips the pet.
-     */
-    public void equip() {
+    @Override
+    protected void onEquip() {
         this.followTask = UltraCosmetics.getInstance().newPlayerFollower(this, getPlayer());
         if (UltraCosmetics.getCustomPlayer(getPlayer()).currentPet != null)
             UltraCosmetics.getCustomPlayer(getPlayer()).removePet();
@@ -187,45 +168,34 @@ public abstract class Pet implements Listener {
                 ? getType().getMenuName() : UltraCosmetics.filterColor(getType().getMenuName())));
     }
 
-    /**
-     * Get the pet type.
-     *
-     * @return The pet type.
-     */
+    @Override
+    protected void onClear() throws Exception {
 
-    public PetType getType() {
-        return type;
-    }
-
-    /**
-     * Called each tick.
-     */
-    protected abstract void onUpdate();
-
-    /**
-     * Called when a player gets his pet cleared.
-     */
-    public void clear() {
-        if (armorStand != null)
+        // Remove Armor Stand.
+        if (armorStand != null) {
             armorStand.remove();
+        }
+
+        // Remove Pet Entity.
         removeEntity();
-        if (getPlayer() != null && UltraCosmetics.getCustomPlayer(getPlayer()) != null)
+
+        // Empty current Pet.
+        if (getPlayer() != null && UltraCosmetics.getCustomPlayer(getPlayer()) != null) {
             UltraCosmetics.getCustomPlayer(getPlayer()).currentPet = null;
-        for (Item i : items)
-            i.remove();
+        }
+
+        // Remove items.
+        items.stream().filter(Entity::isValid).forEach(Entity::remove);
+
+        // Clear items.
         items.clear();
+
+        // Shutdown path updater.
         pathUpdater.shutdown();
-        try {
-            HandlerList.unregisterAll(this);
-            HandlerList.unregisterAll(listener);
-        } catch (Exception exc) {
-        }
+
         if (getPlayer() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Pets.Despawn").replace("%petname%", (UltraCosmetics.getInstance().placeholdersHaveColor())
-                    ? getType().getMenuName() : UltraCosmetics.filterColor(getType().getMenuName())));
             UltraCosmetics.getCustomPlayer(getPlayer()).currentPet = null;
         }
-        owner = null;
     }
 
     public boolean isCustomEntity() {
@@ -280,17 +250,6 @@ public abstract class Pet implements Listener {
         public void onPlayerTeleport(PlayerTeleportEvent event) {
             if (event.getPlayer() == getPlayer())
                 pet.getEntity().teleport(getPlayer());
-        }
-    }
-
-    public static void purgeNames() {
-        synchronized (PET_NAMES) {
-            for(ArmorStand armorStand : PET_NAMES) {
-                if(armorStand.isValid()) {
-                    armorStand.remove();
-                }
-            }
-            PET_NAMES.clear();
         }
     }
 

@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class SubCommandGadgets extends SubCommand {
 
     @Override
     protected void onExePlayer(Player sender, String... args) {
-        UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getCustomPlayer(sender);
+        UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getUltraPlayer(sender);
         customPlayer.setGadgetsEnabled(!customPlayer.hasGadgetsEnabled());
     }
 

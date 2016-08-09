@@ -22,7 +22,7 @@ public class TreasureChestDesign {
         this.path = path;
         String center = g(path + ".center-block"),
                 blocks2 = g(path + ".around-center"),
-                blocks3 = g(path + ".third-blocks"),
+                blocks3 = g(path + ".third-BLOCKS"),
                 belowChest = g(path + ".below-chests"),
                 barriers = g(path + ".barriers"),
                 chestType = g(path + ".chest-type"),

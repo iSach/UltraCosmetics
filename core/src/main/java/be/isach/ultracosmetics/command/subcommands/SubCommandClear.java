@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -42,11 +42,11 @@ public class SubCommandClear extends SubCommand {
             return;
         }
         if (args.length < 3) {
-            UltraCosmetics.getPlayerManager().getCustomPlayer(receiver).clear();
+            UltraCosmetics.getPlayerManager().getUltraPlayer(receiver).clear();
             return;
         }
 
-        UltraPlayer cp = UltraCosmetics.getPlayerManager().getCustomPlayer(receiver);
+        UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
         String s = args[2].toLowerCase();
 
         if (s.startsWith("g")) cp.removeGadget();

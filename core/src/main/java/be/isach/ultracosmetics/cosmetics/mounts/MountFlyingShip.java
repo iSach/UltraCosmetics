@@ -1,11 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -90,7 +89,7 @@ public class MountFlyingShip extends Mount {
              nameTag.setCustomNameVisible(true);
              //hide name of ent
              ent.setCustomNameVisible(false);
-             nameTag.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getInstance(),"C_AD_ArmorStand"));
+             nameTag.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.get(),"C_AD_ArmorStand"));
              //getPlayer().setPassenger(nameTag);
         }
         */

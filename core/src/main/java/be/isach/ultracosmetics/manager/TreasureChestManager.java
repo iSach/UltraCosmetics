@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.menu.menus.MenuMain;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;

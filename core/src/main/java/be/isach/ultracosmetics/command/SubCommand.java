@@ -10,9 +10,6 @@ import java.util.Arrays;
 /**
  * Created by Sacha on 20/12/15.
  * <p/>
- * TODO Commands
- * Clear Command
- * Treasure Chests (at X, Y, Z, World)
  */
 public abstract class SubCommand {
 

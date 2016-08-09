@@ -25,7 +25,7 @@ public class Module implements IModule {
                 rabbit.getBukkitEntity().setPassenger(pl);
             }
         };
-//        runnable.runTaskLater(UltraCosmetics.getInstance(), 100);
+//        runnable.runTaskLater(UltraCosmetics.get(), 100);
     }
 
     @Override

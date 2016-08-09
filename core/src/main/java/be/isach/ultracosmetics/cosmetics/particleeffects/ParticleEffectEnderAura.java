@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import org.bukkit.Effect;
 
 import java.util.UUID;

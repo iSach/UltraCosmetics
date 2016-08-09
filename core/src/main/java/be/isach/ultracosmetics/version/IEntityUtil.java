@@ -48,4 +48,6 @@ public interface IEntityUtil {
     void chickenFall(Player player);
 
     void sendTeleportPacket(Player player, Entity entity);
+
+    boolean isMoving(Entity entity);
 }

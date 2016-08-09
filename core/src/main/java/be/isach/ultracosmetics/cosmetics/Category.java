@@ -1,12 +1,17 @@
 package be.isach.ultracosmetics.cosmetics;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.util.ItemFactory;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
+
+import java.util.Arrays;
 
 /**
  * Project: UltraCosmetics
@@ -71,6 +76,10 @@ public enum Category {
      * @return {@code true} if enabled, otherwise {@code false}.
      */
     public boolean isEnabled() {
+        if (this == MORPHS && !Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+            return false;
+        }
+
         return SettingsManager.getConfig().getBoolean("Categories-Enabled." + configPath);
     }
 
@@ -80,8 +89,8 @@ public enum Category {
      * @return {@code true} if has arrow, otherwise {@code false}
      */
     public boolean hasGoBackArrow() {
-        if (!UltraCosmetics.getInstance().areTreasureChestsEnabled()
-                && UltraCosmetics.enabledCategories.size() == 1)
+        if (!UltraCosmeticsData.get().areTreasureChestsEnabled()
+                && enabledSize() == 1)
             return false;
         return (boolean) (SettingsManager.getConfig().get("Categories." + configPath + ".Go-Back-Arrow"));
     }
@@ -103,5 +112,19 @@ public enum Category {
      */
     public String getConfigPath() {
         return configPath;
+    }
+
+    public String getEquipMessage(CosmeticType cosmeticType) {
+        return "";
+    }
+
+    public String getUnequipMessage() {
+        return "";
+    }
+
+    public static int enabledSize() {
+        final int[] i = {0};
+        Arrays.stream(values()).filter(Category::isEnabled).forEach(category -> i[0]++);
+        return i[0];
     }
 }

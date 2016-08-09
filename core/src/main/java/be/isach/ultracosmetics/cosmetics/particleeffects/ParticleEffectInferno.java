@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 

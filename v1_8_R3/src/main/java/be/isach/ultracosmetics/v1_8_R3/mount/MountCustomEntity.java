@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
-import be.isach.ultracosmetics.cosmetics.mounts.MountType;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomSlime;

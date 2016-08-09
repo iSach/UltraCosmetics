@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.v1_10_R1;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.v1_10_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.treasurechests.ChestType;
@@ -72,27 +73,19 @@ public class EntityUtil implements IEntityUtil {
             PacketSender.send(players, new PacketPlayOutEntityEquipment(as.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         }
         UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                for (Player pl : player.getWorld().getPlayers())
-                    PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
-                fakeArmorStands.remove(as);
-            }
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
+            for (Player pl : player.getWorld().getPlayers())
+                PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
+            fakeArmorStands.remove(as);
         }, 20);
         if (affectPlayers)
-            for (final org.bukkit.entity.Entity ent : as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
-                if (!cooldownJump.contains(ent) && ent != player) {
-                    MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
-                    cooldownJump.add(ent);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            cooldownJump.remove(ent);
-                        }
-                    }, 20);
-                }
-            }
+            as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(ent -> !cooldownJump.contains(ent) && ent != player).forEachOrdered(ent -> {
+                MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
+                cooldownJump.add(ent);
+                Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
+                    cooldownJump.remove(ent);
+                }, 20);
+            });
     }
 
     @Override
@@ -247,5 +240,11 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void sendTeleportPacket(Player player, org.bukkit.entity.Entity entity) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(((CraftEntity) entity).getHandle()));
+    }
+
+    @Override
+    public boolean isMoving(org.bukkit.entity.Entity entity) {
+        Entity ent = ((CraftEntity) entity).getHandle();
+        return ent.motX != 0 || ent.motY != 0 || ent.motZ != 0;
     }
 }

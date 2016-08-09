@@ -1,10 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;

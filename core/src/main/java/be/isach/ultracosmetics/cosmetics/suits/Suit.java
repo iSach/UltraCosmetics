@@ -1,22 +1,24 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
-import be.isach.ultracosmetics.UltraPlayer;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.util.ItemFactory;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 20/12/15.
+ * Package: be.isach.ultracosmetics.cosmetics.suits
+ * Created by: Sacha
+ * Date: 20/12/15
+ * Project: UltraCosmetics
  */
-public abstract class Suit extends Cosmetic {
+public abstract class Suit extends Cosmetic<SuitType> {
 
     /**
      * Armor Slot of the Suit.
@@ -33,32 +35,32 @@ public abstract class Suit extends Cosmetic {
      */
     protected ItemStack itemStack;
 
-    public Suit(final UltraPlayer ultraPlayer, ArmorSlot armorSlot, SuitType suitType, UltraCosmetics ultraCosmetics) {
-        super(ultraCosmetics, Category.SUITS, ultraPlayer);
+    public Suit(UltraPlayer ultraPlayer, ArmorSlot armorSlot, SuitType suitType, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, Category.SUITS, ultraPlayer, suitType);
 
         this.armorSlot = armorSlot;
         this.suitType = suitType;
 
-        if (getCustomPlayer().currentHat != null
+        if (getOwner().getCurrentHat() != null
                 && armorSlot == ArmorSlot.HELMET)
-            getCustomPlayer().removeHat();
+            getOwner().removeHat();
 
-        getCustomPlayer().removeSuit(getArmorSlot());
+        getOwner().removeSuit(getArmorSlot());
 
         switch (getArmorSlot()) {
             case HELMET:
-                if (getCustomPlayer().currentHat != null)
-                    getCustomPlayer().removeHat();
-                if(getCustomPlayer().currentEmote != null)
-                    getCustomPlayer().removeEmote();
+                if (getOwner().getCurrentHat() != null)
+                    getOwner().removeHat();
+                if (getOwner().getCurrentEmote() != null)
+                    getOwner().removeEmote();
                 if (getPlayer().getInventory().getHelmet() != null) {
                     ItemStack itemStack = getPlayer().getInventory().getHelmet();
                     drop(itemStack);
                     getPlayer().getInventory().setHelmet(null);
                 }
-                getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setHelmet(ItemFactory.create(getCosmeticType().getHelmet(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getHelmet();
-                getCustomPlayer().currentHelmet = this;
+                getOwner().setCurrentHelmet(this);
                 break;
             case CHESTPLATE:
                 if (getPlayer().getInventory().getChestplate() != null) {
@@ -66,9 +68,9 @@ public abstract class Suit extends Cosmetic {
                     drop(itemStack);
                     getPlayer().getInventory().setChestplate(null);
                 }
-                getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setChestplate(ItemFactory.create(getCosmeticType().getChestplate(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getChestplate();
-                getCustomPlayer().currentChestplate = this;
+                getOwner().setCurrentChestplate(this);
                 break;
             case LEGGINGS:
                 if (getPlayer().getInventory().getLeggings() != null) {
@@ -76,9 +78,9 @@ public abstract class Suit extends Cosmetic {
                     drop(itemStack);
                     getPlayer().getInventory().setLeggings(null);
                 }
-                getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setLeggings(ItemFactory.create(getCosmeticType().getLeggings(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getLeggings();
-                getCustomPlayer().currentLeggings = this;
+                getOwner().setCurrentLeggings(this);
                 break;
             case BOOTS:
                 if (getPlayer().getInventory().getBoots() != null) {
@@ -86,9 +88,9 @@ public abstract class Suit extends Cosmetic {
                     drop(itemStack);
                     getPlayer().getInventory().setBoots(null);
                 }
-                getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setBoots(ItemFactory.create(getCosmeticType().getBoots(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getBoots();
-                getCustomPlayer().currentBoots = this;
+                getOwner().setCurrentBoots(this);
                 break;
         }
         new BukkitRunnable() {
@@ -101,48 +103,39 @@ public abstract class Suit extends Cosmetic {
                 }
                 onUpdate();
             }
-        }.runTaskTimerAsynchronously(UltraCosmetics.getInstance(), 0, 1);
+        }.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, 1);
 
-        getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", (UltraCosmetics.getInstance().placeholdersHaveColor())
-                ? getType().getName(getArmorSlot()) : UltraCosmetics.filterColor(getType().getName(getArmorSlot()))));
-    }
-
-    /**
-     * Gets the UltraPlayer of the Owner.
-     *
-     * @return The UltraPlayer of the Owner.
-     */
-    public UltraPlayer getCustomPlayer() {
-        return UltraCosmetics.getPlayerManager().getCustomPlayer(getPlayer());
+        getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(getArmorSlot()), ultraCosmetics)));
     }
 
     /**
      * Clears the Suit.
      */
-    public void clear() {
+    public void onClear() {
         switch (getArmorSlot()) {
             case HELMET:
-                if (getCustomPlayer().currentHat != null)
-                    getCustomPlayer().removeHat();
+                if (getOwner().getCurrentHat() != null) {
+                    getOwner().removeHat();
+                }
+                if (getOwner().getCurrentEmote() != null) {
+                    getOwner().removeEmote();
+                }
                 getPlayer().getInventory().setHelmet(null);
-                getCustomPlayer().currentHelmet = null;
+                getOwner().setCurrentHelmet(null);
                 break;
             case CHESTPLATE:
                 getPlayer().getInventory().setChestplate(null);
-                getCustomPlayer().currentChestplate = null;
+                getOwner().setCurrentChestplate(null);
                 break;
             case LEGGINGS:
                 getPlayer().getInventory().setLeggings(null);
-                getCustomPlayer().currentLeggings = null;
+                getOwner().setCurrentLeggings(null);
                 break;
             case BOOTS:
                 getPlayer().getInventory().setBoots(null);
-                getCustomPlayer().currentBoots = null;
+                getOwner().setCurrentBoots(null);
                 break;
         }
-        if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Suits.Unequip").replace("%suitname%", (UltraCosmetics.getInstance().placeholdersHaveColor())
-                    ? getType().getName(getArmorSlot()) : UltraCosmetics.filterColor(getType().getName(getArmorSlot()))));
         armorSlot = null;
         suitType = null;
         itemStack = null;
@@ -170,15 +163,6 @@ public abstract class Suit extends Cosmetic {
      */
     public ArmorSlot getArmorSlot() {
         return armorSlot;
-    }
-
-    /**
-     * Get Suit Type.
-     *
-     * @return Suit Type.
-     */
-    public SuitType getType() {
-        return suitType;
     }
 
     /**

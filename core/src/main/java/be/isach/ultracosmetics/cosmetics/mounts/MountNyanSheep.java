@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;

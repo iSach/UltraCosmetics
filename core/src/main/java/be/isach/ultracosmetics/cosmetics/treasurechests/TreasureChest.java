@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.util.SoundUtil;
@@ -67,6 +68,10 @@ public class TreasureChest implements Listener {
             UltraCosmetics.getCustomPlayer(getPlayer()).setSeeSelfMorph(false);
 
         this.randomGenerator = new TreasureRandomizer(getPlayer(), getPlayer().getLocation());
+
+        for(BlockFace blockFace : new BlockFace[] {}) {
+
+        }
 
         BukkitRunnable runnable = new BukkitRunnable() {
             int i = 5;
@@ -488,11 +493,7 @@ public class TreasureChest implements Listener {
                 this.chests.remove(event.getClickedBlock());
                 this.chestsToRemove.add(event.getClickedBlock());
                 if (this.chestsLeft == 0)
-                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-                        public void run() {
-                            clear();
-                        }
-                    }, 50L);
+                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::clear, 50L);
             }
         }
     }

@@ -109,7 +109,7 @@ public class MessageManager {
         addMessage("Gadgets.ColorBomb.name", "&d&lColor Bomb");
         addMessage("Gadgets.Chickenator.name", "&f&lChickenator");
         addMessage("Gadgets.PortalGun.name", "&c&lPortal &9&lGun");
-        addMessage("Gadgets.PortalGun.No-Block-Range", "%prefix% &c&lNo blocks in range!");
+        addMessage("Gadgets.PortalGun.No-Block-Range", "%prefix% &c&lNo BLOCKS in range!");
         addMessage("Gadgets.BlizzardBlaster.name", "&b&lBlizzard Blaster");
         addMessage("Gadgets.ThorHammer.name", "&f&lThor's Hammer");
         addMessage("Gadgets.SmashDown.name", "&c&lSmashDown");
