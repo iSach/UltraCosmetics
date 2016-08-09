@@ -48,7 +48,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
      */
     public Entity entity;
 
-    public Mount(UltraCosmetics ultraCosmetics, UltraPlayer ultraPlayer, MountType type) {
+    public Mount(UltraPlayer ultraPlayer, MountType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MOUNTS, ultraPlayer, type);
 
         if (ultraPlayer.getCurrentMount() != null) {
@@ -109,7 +109,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
         runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getCosmeticType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
 
-//        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (UltraCosmetics.getInstance().placeHolderColor) ? getCosmeticType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
+//        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (getUCInstance().placeHolderColor) ? getCosmeticType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
         getOwner().setCurrentMount(this);
     }
 

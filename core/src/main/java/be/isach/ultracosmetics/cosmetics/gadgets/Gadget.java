@@ -97,8 +97,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         this.affectPlayers = type.affectPlayers();
         this.useTwoInteractMethods = false;
 
-        if (getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentGadget() != null) {
-            getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
+        if (getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentGadget() != null) {
+            getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
         }
 
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
@@ -119,9 +119,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                                     && getPlayer().getItemInHand().hasItemMeta()
                                     && getPlayer().getItemInHand().getItemMeta().hasDisplayName()
                                     && getPlayer().getItemInHand().getItemMeta().getDisplayName().contains(getCosmeticType().getName())
-                                    && getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).canUse(type) != -1)
+                                    && getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).canUse(type) != -1)
                                 sendCooldownBar();
-                            double left = getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).canUse(type);
+                            double left = getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).canUse(type);
                             if (left > -0.1) {
                                 String leftRounded = decimalFormat.format(left);
                                 double decimalRoundedValue = Double.parseDouble(leftRounded);
@@ -141,12 +141,12 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                     removeItem();
                     onClear();
                     removeListener();
-                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUcInstance())));
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())));
                     cancel();
                 }
             }
         };
-        runnable.runTaskTimerAsynchronously(getUcInstance(), 0, 1);
+        runnable.runTaskTimerAsynchronously(getUCInstance(), 0, 1);
 
         if (getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")) != null) {
             getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem((int) SettingsManager.getConfig().get("Gadget-Slot")));
@@ -154,13 +154,13 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
 
         String d = UltraCosmeticsData.get().isAmmoEnabled() && getCosmeticType().requiresAmmo() ?
-                "§f§l" + getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " "
+                "§f§l" + getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).getAmmo(type.toString().toLowerCase()) + " "
                 : "";
         itemStack = ItemFactory.create(type.getMaterial(), type.getData(), d + getCosmeticType().getName(), MessageManager.getMessage("Gadgets.Lore"));
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
-        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUcInstance())));
+        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Equip").replace("%gadgetname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())));
 
-        getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentGadget(this);
+        getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentGadget(this);
     }
 
     /**
@@ -178,7 +178,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        double currentCooldown = getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getCosmeticType());
+        double currentCooldown = getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getCosmeticType());
         double maxCooldown = getCosmeticType().getCountdown();
 
         int res = (int) (currentCooldown / maxCooldown * 10);
@@ -221,6 +221,11 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
      * Called when gadget is cleared.
      */
     public abstract void onClear();
+
+    @Override
+    protected void onEquip() {
+
+    }
 
     /**
      * unregister listeners.
@@ -309,12 +314,12 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 String purchase = MessageManager.getMessage("Purchase");
                 String cancel = MessageManager.getMessage("Cancel");
                 if (displayName.equals(purchase)) {
-                    if (getUcInstance().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getBalance() >= getPrice()) {
-                        getUcInstance().getEconomy().withdrawPlayer((Player) event.getWhoClicked(), getPrice());
-                        getUcInstance().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).addAmmo(getCosmeticType().toString().toLowerCase(), getResultAmmoAmount());
+                    if (getUCInstance().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getBalance() >= getPrice()) {
+                        getUCInstance().getEconomy().withdrawPlayer((Player) event.getWhoClicked(), getPrice());
+                        getUCInstance().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).addAmmo(getCosmeticType().toString().toLowerCase(), getResultAmmoAmount());
                         event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
                         if (openGadgetsInvAfterAmmo)
-                            Bukkit.getScheduler().runTaskLater(getUcInstance(), () -> {
+                            Bukkit.getScheduler().runTaskLater(getUCInstance(), () -> {
 //                                MenuGadgets_old.openMenu((Player) event.getWhoClicked(), lastPage);
                                 // TODO Open Gadgets Menu at lastpage.
                                 openGadgetsInvAfterAmmo = false;
@@ -339,7 +344,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     protected void onPlayerInteract(final PlayerInteractEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        UltraPlayer ultraPlayer = getUcInstance().getPlayerManager().getUltraPlayer(event.getPlayer());
+        UltraPlayer ultraPlayer = getUCInstance().getPlayerManager().getUltraPlayer(event.getPlayer());
         if (!uuid.equals(getOwnerUniqueId())) return;
         ItemStack itemStack = player.getItemInHand();
         if (itemStack.getType() != getCosmeticType().getMaterial()) return;
@@ -433,7 +438,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         if (coolDown != -1) {
             String timeLeft = new DecimalFormat("#.#").format(coolDown);
             if (getCosmeticType().getCountdown() > 1)
-                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUcInstance())).replace("%time%", timeLeft));
+                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())).replace("%time%", timeLeft));
             return;
         } else
             ultraPlayer.setCoolDown(getCosmeticType(), getCosmeticType().getCountdown());
@@ -446,7 +451,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 && event.getClickedBlock().getType() != Material.AIR)
             lastClickedBlock = event.getClickedBlock();
         if (asynchronous) {
-            Bukkit.getScheduler().runTaskAsynchronously(getUcInstance(), new BukkitRunnable() {
+            Bukkit.getScheduler().runTaskAsynchronously(getUCInstance(), new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (useTwoInteractMethods) {
@@ -483,7 +488,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 && event.getItemDrop().getItemStack().getItemMeta().hasDisplayName()
                 && event.getItemDrop().getItemStack().getItemMeta().getDisplayName().endsWith(getCosmeticType().getName())
                 && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
-            getUcInstance().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
+            getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
             event.getItemDrop().remove();
         }
     }

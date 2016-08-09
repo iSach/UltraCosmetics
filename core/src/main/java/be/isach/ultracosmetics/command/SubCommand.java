@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.command;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -15,12 +16,14 @@ public abstract class SubCommand {
 
     String[] aliases;
     String description, permission, usage;
+    private UltraCosmetics ultraCosmetics;
 
-    public SubCommand(String description, String permission, String usage, String... aliases) {
+    public SubCommand(String description, String permission, String usage, UltraCosmetics ultraCosmetics, String... aliases) {
         this.aliases = aliases;
         this.description = description;
         this.permission = permission;
         this.usage = usage;
+        this.ultraCosmetics = ultraCosmetics;
     }
 
     /**
@@ -85,4 +88,7 @@ public abstract class SubCommand {
         commandSender.sendMessage(MessageManager.getMessage("Not-Allowed-From-Console"));
     }
 
+    public UltraCosmetics getUltraCosmetics() {
+        return ultraCosmetics;
+    }
 }

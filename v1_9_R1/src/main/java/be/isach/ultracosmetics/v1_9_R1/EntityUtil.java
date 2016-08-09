@@ -1,9 +1,10 @@
 package be.isach.ultracosmetics.v1_9_R1;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.v1_9_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.treasurechests.ChestType;
-import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
+import be.isach.ultracosmetics.treasurechests.ChestType;
+import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
@@ -72,7 +73,7 @@ public class EntityUtil implements IEntityUtil {
             PacketSender.send(players, new PacketPlayOutEntityEquipment(as.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         }
         UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
             @Override
             public void run() {
                 for (Player pl : player.getWorld().getPlayers())
@@ -85,7 +86,7 @@ public class EntityUtil implements IEntityUtil {
                 if (!cooldownJump.contains(ent) && ent != player) {
                     MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
                     cooldownJump.add(ent);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
                         @Override
                         public void run() {
                             cooldownJump.remove(ent);
@@ -247,5 +248,12 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void sendTeleportPacket(Player player, org.bukkit.entity.Entity entity) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(((CraftEntity) entity).getHandle()));
+    }
+
+
+    @Override
+    public boolean isMoving(org.bukkit.entity.Entity entity) {
+        Entity ent = ((CraftEntity) entity).getHandle();
+        return ent.motX != 0 || ent.motY != 0 || ent.motZ != 0;
     }
 }

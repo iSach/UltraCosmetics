@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
@@ -15,14 +17,17 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
 
     double i = 0;
 
-    public ParticleEffectBloodHelix(UUID owner) {
-        super(owner,
-                ParticleEffectType.BLOODHELIX
-        );
+    public ParticleEffectBloodHelix(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.BLOODHELIX);
     }
 
     @Override
-    void onUpdate() {
+    protected void onEquip() {
+
+    }
+
+    @Override
+    public void onUpdate() {
         Location location = getPlayer().getLocation();
         Location location2 = location.clone();
         double radius = 1.1d;

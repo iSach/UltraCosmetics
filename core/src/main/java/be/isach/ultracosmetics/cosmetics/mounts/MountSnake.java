@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -13,7 +15,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * Created by sacha on 10/08/15.
@@ -24,23 +25,22 @@ public class MountSnake extends Mount {
     private int color = 1;
 
 
-    public MountSnake(UUID owner, UltraCosmetics ultraCosmetics) {
+    public MountSnake(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.SNAKE, ultraCosmetics);
     }
 
     @Override
-    protected void onEquip() {
+    public void onEquip() {
         color = MathUtils.randomRangeInt(0, 14);
         ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
         ((Sheep) entity).setColor(DyeColor.values()[color]);
         tailMap.put(getPlayer(), new ArrayList());
         ((ArrayList) tailMap.get(getPlayer())).add(entity);
         addSheepToTail(4);
-        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         for (Player p : tailMap.keySet())
             for (Entity ent : tailMap.get(p))
                 ent.remove();
@@ -49,9 +49,9 @@ public class MountSnake extends Mount {
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         if (getPlayer() != null)
-            Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
                 @Override
                 public void run() {
                     if (getPlayer() != null) {
@@ -74,7 +74,7 @@ public class MountSnake extends Mount {
                                 tail.teleport(tp);
                             }
 
-                            UltraCosmetics.getInstance().getEntityUtil().move(tail, loc);
+                            UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(tail, loc);
 
                             before = tail;
 

@@ -31,7 +31,7 @@ public class GadgetParachute extends Gadget {
         super(owner, GadgetType.PARACHUTE, ultraCosmetics);
 
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
+            Bukkit.getPluginManager().registerEvents(this, getUCInstance());
     }
 
 
@@ -49,7 +49,7 @@ public class GadgetParachute extends Gadget {
             chickens.add(chicken);
             chicken.setLeashHolder(getPlayer());
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 active = true;
@@ -79,7 +79,7 @@ public class GadgetParachute extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (active) {
             if (!getPlayer().isOnGround() && getPlayer().getVelocity().getY() < -0.3)
                 MathUtils.applyVelocity(getPlayer(), getPlayer().getVelocity().add(new Vector(0, 0.1, 0)), true);

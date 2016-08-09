@@ -34,8 +34,6 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     public GadgetEtherealPearl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.ETHEREALPEARL, ultraCosmetics);
-        if (owner != null)
-            UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -47,8 +45,8 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     void onRightClick() {
-        if (UltraCosmetics.getCustomPlayer(getPlayer()).currentMount != null)
-            UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
+        if (getOwner().getCurrentMount() != null)
+            getOwner().removeMount();
         if (getPlayer().getVehicle() instanceof EnderPearl) {
             getPlayer().getVehicle().remove();
         }
@@ -88,7 +86,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             }
         };
         runnableHashMap.put(getPlayer(), runnable);
-        runnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 10);
+        runnable.runTaskTimer(getUCInstance(), 0, 10);
     }
 
     @EventHandler
@@ -127,7 +125,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)
@@ -156,7 +154,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (runnableHashMap.containsKey(getPlayer())) {
             if (getPlayer().isOnGround()) {
                 //getPlayer().getVehicle().remove();

@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
@@ -14,17 +16,17 @@ public class ParticleEffectFlameRings extends ParticleEffect {
 
     float step = 0;
 
-    public ParticleEffectFlameRings(UUID owner) {
-        super(owner,
-                ParticleEffectType.FLAMERINGS
-        );
-        if (owner != null) {
-
-        }
+    public ParticleEffectFlameRings(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.FLAMERINGS);
     }
 
     @Override
-    void onUpdate() {
+    protected void onEquip() {
+
+    }
+
+    @Override
+    public void onUpdate() {
         for (int i = 0; i < 2; i++) {
             double inc = (2 * Math.PI) / 100;
             double toAdd = 0;
@@ -39,7 +41,7 @@ public class ParticleEffectFlameRings extends ParticleEffect {
             } else {
                 MathUtils.rotateAroundAxisZ(v, 90);
             }
-            UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
+            UtilParticles.display(getCosmeticType().getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
         }
         step += 3;
     }

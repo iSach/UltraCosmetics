@@ -29,7 +29,7 @@ public class GadgetFunGun extends Gadget {
         super(owner, GadgetType.FUNGUN, ultraCosmetics);
 
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
+            Bukkit.getPluginManager().registerEvents(this, getUCInstance());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class GadgetFunGun extends Gadget {
     }
 
     @Override
-    void onUpdate() {}
+    public void onUpdate() {}
 
     @Override
     public void onClear() {

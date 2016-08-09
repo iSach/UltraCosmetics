@@ -16,13 +16,26 @@ import java.util.Map;
 
 /**
  * Package: be.isach.ultracosmetics.menu
- * Created by: sachalewin
+ * Created by: iSach
  * Date: 5/07/16
  * Project: UltraCosmetics
+ *
+ * Description : Represents a Menu. A menu can have multiple pages in case of cosmetics.
+ * Each item in the menu will - when clicked by a player - executes a ClickRunnable.
  */
 public abstract class Menu implements Listener {
 
+    /**
+     * UltraCosmetcs Instance.
+     */
     private UltraCosmetics ultraCosmetics;
+
+    /**
+     * Click Runnables maps.
+     *
+     * Key: Item
+     * Value: ClickRunnable to call when item is clicked.
+     */
     private Map<ItemStack, ClickRunnable> clickRunnableMap = new HashMap<>();
 
     public Menu(UltraCosmetics ultraCosmetics) {

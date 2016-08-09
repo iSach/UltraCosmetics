@@ -33,7 +33,7 @@ public class GadgetTsunami extends Gadget {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
-        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 if (loc.getBlock().getType() != Material.AIR
@@ -56,7 +56,7 @@ public class GadgetTsunami extends Gadget {
                                 ent != getPlayer() && !(ent instanceof ArmorStand)) {
                             MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v.clone().multiply(2)));
                             cooldownJump.add(ent);
-                            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+                            Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
                                 @Override
                                 public void run() {
                                     cooldownJump.remove(ent);
@@ -69,7 +69,7 @@ public class GadgetTsunami extends Gadget {
             }
         }, 0, 1).getTaskId();
 
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.getScheduler().cancelTask(i);
@@ -84,7 +84,7 @@ public class GadgetTsunami extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
 
     }
 

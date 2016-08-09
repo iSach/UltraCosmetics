@@ -38,7 +38,7 @@ public class GadgetChickenator extends Gadget {
         chicken.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
         SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_IDLE, 1.4f, 1.5f);
         SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 0.3f, 1.5f);
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 spawnRandomFirework(chicken.getLocation());
@@ -50,7 +50,7 @@ public class GadgetChickenator extends Gadget {
                     ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0, r.nextDouble() - 0.5));
                     items.add(ITEM);
                 }
-                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
                     @Override
                     public void run() {
                         for (Item i : items)
@@ -63,7 +63,7 @@ public class GadgetChickenator extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
     }
 
     @Override
@@ -89,7 +89,7 @@ public class GadgetChickenator extends Gadget {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)

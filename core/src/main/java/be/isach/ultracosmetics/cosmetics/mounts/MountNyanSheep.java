@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -21,18 +23,23 @@ import java.util.UUID;
  */
 public class MountNyanSheep extends Mount {
 
-    public MountNyanSheep(UUID owner, UltraCosmetics ultraCosmetics) {
+    public MountNyanSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.NYANSHEEP, ultraCosmetics);
     }
 
     @Override
-    protected void onEquip() {
+    public void onEquip() {
         ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
-        UltraCosmetics.getInstance().getEntityUtil().clearPathfinders(entity);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onClear() {
+
+    }
+
+    @Override
+    public void onUpdate() {
         move();
 
         ((Sheep) entity).setColor(DyeColor.values()[new Random().nextInt(15)]);
@@ -64,9 +71,9 @@ public class MountNyanSheep extends Mount {
             Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
             Location loc = player.getLocation().add(vel);
 
-            UltraCosmetics.getInstance().getEntityUtil().move((Creature) entity, loc);
+            UltraCosmeticsData.get().getVersionManager().getEntityUtil().move((Creature) entity, loc);
         } catch (Exception exc) {
-            UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
+            getOwner().removeMount();
         }
     }
 

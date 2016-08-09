@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
@@ -17,14 +19,12 @@ import java.util.UUID;
  */
 public class MountDragon extends Mount {
 
-    public MountDragon(UUID owner, UltraCosmetics ultraCosmetics) {
+    public MountDragon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.DRAGON, ultraCosmetics);
-        if (owner != null)
-            UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         if (entity.getPassenger() == null)
             clear();
 
@@ -40,7 +40,7 @@ public class MountDragon extends Mount {
         vector.setX(-h * Math.sin(Math.toRadians(rotX)));
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
-        UltraCosmetics.getInstance().getEntityUtil().moveDragon(getPlayer(), vector, entity);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveDragon(getPlayer(), vector, entity);
     }
 
     @EventHandler
@@ -63,5 +63,10 @@ public class MountDragon extends Mount {
             event.setCancelled(true);
 
         }
+    }
+
+    @Override
+    protected void onClear() {
+
     }
 }

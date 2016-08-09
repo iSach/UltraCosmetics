@@ -41,7 +41,7 @@ public class GadgetBlackHole extends Gadget {
         item.setPickupDelay(Integer.MAX_VALUE);
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
         i = item;
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 if (i != null) {
@@ -53,7 +53,7 @@ public class GadgetBlackHole extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
 
         if (i != null && i.isOnGround()) {
             int strands = 6;
@@ -75,14 +75,14 @@ public class GadgetBlackHole extends Gadget {
                 }
             }
             if (affectPlayers)
-                for (final Entity ENT : i.getNearbyEntities(5, 3, 5)) {
-                    Vector vector = i.getLocation().toVector().subtract(ENT.getLocation().toVector());
-                    MathUtils.applyVelocity(ENT, vector);
-                    Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
+                for (final Entity entity : i.getNearbyEntities(5, 3, 5)) {
+                    Vector vector = i.getLocation().toVector().subtract(entity.getLocation().toVector());
+                    MathUtils.applyVelocity(entity, vector);
+                    Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
                         @Override
                         public void run() {
-                            if (ENT instanceof Player)
-                                ((Player) ENT).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
+                            if (entity instanceof Player)
+                                ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
                         }
                     });
                 }

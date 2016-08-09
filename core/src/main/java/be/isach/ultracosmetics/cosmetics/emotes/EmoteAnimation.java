@@ -36,7 +36,7 @@ class EmoteAnimation extends BukkitRunnable {
 
     void start() {
         this.running = true;
-        runTaskTimer(emote.getUcInstance(), 0, ticksPerFrame);
+        runTaskTimer(emote.getUCInstance(), 0, ticksPerFrame);
     }
 
     void stop() {

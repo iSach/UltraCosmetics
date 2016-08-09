@@ -23,8 +23,6 @@ public class UltraCosmeticsData {
         return instance;
     }
 
-
-
     /**
      * If true, the server is using Spigot and not CraftBukkit/Bukkit.
      */
@@ -92,15 +90,8 @@ public class UltraCosmeticsData {
 
     private UltraCosmetics ultraCosmetics;
 
-    private UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
+    public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        this.fileStorage = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System").equalsIgnoreCase("file");
-        this.placeHolderColor = SettingsManager.getConfig().getBoolean("Chat-Cosmetic-PlaceHolder-Color");
-        this.ammoEnabled = SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Enabled");
-        this.cooldownInBar = SettingsManager.getConfig().getBoolean("Categories.Gadgets.Cooldown-In-ActionBar");
-        this.customCommandBackArrow = ultraCosmetics.getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled");
-        this.customBackMenuCommand = ultraCosmetics.getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
-        this.closeAfterSelect = ultraCosmetics.getConfig().getBoolean("Categories.Close-GUI-After-Select");
         this.usingSpigot = ultraCosmetics.getServer().getVersion().contains("Spigot");
     }
 
@@ -176,6 +167,16 @@ public class UltraCosmeticsData {
         return true;
     }
 
+    public void initConfigFields() {
+        this.fileStorage = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System").equalsIgnoreCase("file");
+        this.placeHolderColor = SettingsManager.getConfig().getBoolean("Chat-Cosmetic-PlaceHolder-Color");
+        this.ammoEnabled = SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Enabled");
+        this.cooldownInBar = SettingsManager.getConfig().getBoolean("Categories.Gadgets.Cooldown-In-ActionBar");
+        this.customCommandBackArrow = ultraCosmetics.getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled");
+        this.customBackMenuCommand = ultraCosmetics.getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
+        this.closeAfterSelect = ultraCosmetics.getConfig().getBoolean("Categories.Close-GUI-After-Select");
+    }
+
     public boolean isAmmoEnabled() {
         return ammoEnabled;
     }
@@ -196,7 +197,7 @@ public class UltraCosmeticsData {
         return fileStorage;
     }
 
-    public boolean isMoneyTreasureLoot() {
+    public boolean useMoneyTreasureLoot() {
         return moneyTreasureLoot;
     }
 
@@ -232,7 +233,7 @@ public class UltraCosmeticsData {
      * Should be only used for running Bukkit Runnables.
      * @return UltraCosmetics instance. (As Plugin)
      */
-    public Plugin getPlugin() {
+    public UltraCosmetics getPlugin() {
         return ultraCosmetics;
     }
 

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.*;
@@ -59,7 +60,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte)3, " "));
         running = true;
         DISCO_BALLS.add(this);
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new BukkitRunnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new BukkitRunnable() {
             @Override
             public void run() {
                 onClear();
@@ -68,10 +69,10 @@ public class GadgetDiscoBall extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
-            if (UltraCosmetics.getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0)
+            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0)
                 armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
             UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
             UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
@@ -81,7 +82,7 @@ public class GadgetDiscoBall extends Gadget {
             angle = 2 * Math.PI * i / 100;
             x = Math.cos(angle) * 4;
             z = Math.sin(angle) * 4;
-            if (UltraCosmetics.usingSpigot())
+            if (UltraCosmeticsData.get().isUsingSpigot())
                 drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), false, 20);
             i += 6;
             angle2 = 2 * Math.PI * i2 / 100;

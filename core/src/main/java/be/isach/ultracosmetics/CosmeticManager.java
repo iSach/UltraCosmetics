@@ -42,9 +42,11 @@ public class CosmeticManager {
         MountType.DRAGON.getConfigName();
         ParticleEffectType.ANGELWINGS.getConfigName();
         PetType.CHICK.getConfigName();
-        MorphType.BAT.getConfigName();
         SuitType.ASTRONAUT.getConfigName();
         EmoteType.ANGRY.getConfigName();
+        if(Category.MORPHS.isEnabled()) {
+            MorphType.BAT.getConfigName();
+        }
 
         for (GadgetType gadgetType : GadgetType.values()) {
             ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
@@ -60,7 +62,7 @@ public class CosmeticManager {
                 blackListedBlocks.add("REDSTONE_BLOCK");
                 ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".BlackList", blackListedBlocks, "A list of the BLOCKS that", "can't be painted.");
             }
-            if (ultraCosmetics.getData().isAmmoEnabled()) {
+            if (UltraCosmeticsData.get().isAmmoEnabled()) {
                 ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Enabled", true, "You want this gadget to need ammo?");
                 ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Price", 500, "What price for the ammo?");
                 ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Result-Amount", 20, "And how much ammo is given", "when bought?");

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -63,7 +64,7 @@ public class UtilParticles {
                 radius += 1 / 50f;
             }
         };
-        runnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
+        runnable.runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, 1);
     }
 
     public static void display(Particles effect, Location location, int amount, float speed) {

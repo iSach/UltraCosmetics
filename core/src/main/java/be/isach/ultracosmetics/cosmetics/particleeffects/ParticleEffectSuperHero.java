@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
@@ -9,16 +11,17 @@ import org.bukkit.util.Vector;
 import java.util.UUID;
 
 /**
- * Created by Sacha on 11/11/15.
+ * Package: be.isach.ultracosmetics.cosmetics.particleeffects
+ * Created by: Sacha
+ * Date: 11/11/15
+ * Project: UltraCosmetics
  */
 public class ParticleEffectSuperHero extends ParticleEffect {
 
     boolean x = true;
 
-    public ParticleEffectSuperHero(UUID owner) {
-        super(
-                owner, ParticleEffectType.SUPERHERO
-        );
+    public ParticleEffectSuperHero(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.SUPERHERO);
         this.ignoreMove = true;
     }
 
@@ -34,7 +37,7 @@ public class ParticleEffectSuperHero extends ParticleEffect {
     };
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         drawParticles(getPlayer().getLocation());
         UtilParticles.display(Particles.CLOUD, 0.15F, 0.1f, 0.15f, getPlayer().getLocation(), 4);
     }
@@ -65,8 +68,9 @@ public class ParticleEffectSuperHero extends ParticleEffect {
 
                     loc.add(v);
                     loc.add(v2);
-                    if (moving)
+                    if (isMoving()) {
                         loc.setY(defY);
+                    }
 
                     for (int k = 0; k < 3; k++)
                         UtilParticles.display(255, 0, 0, loc);
@@ -108,9 +112,13 @@ public class ParticleEffectSuperHero extends ParticleEffect {
     }
 
     public static Vector getBackVector(Location loc) {
-        final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 90 * 1))));
-        final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90 * 1))));
+        final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 90))));
+        final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90))));
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
     }
 
+    @Override
+    protected void onEquip() {
+
+    }
 }

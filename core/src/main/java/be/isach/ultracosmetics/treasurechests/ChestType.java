@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.cosmetics.treasurechests;
+package be.isach.ultracosmetics.treasurechests;
 
 import org.bukkit.Material;
 

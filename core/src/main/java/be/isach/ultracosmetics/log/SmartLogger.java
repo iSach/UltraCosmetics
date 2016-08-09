@@ -20,7 +20,7 @@ public class SmartLogger {
         ERROR
     }
 
-    private static final DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
+    private static final DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
     public String format(String logRecord, LogLevel logLevel) {
         StringBuilder builder = new StringBuilder(1000);

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import org.bukkit.Bukkit;
@@ -30,10 +31,10 @@ public class GadgetBlizzardBlaster extends Gadget {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
-        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(UltraCosmetics.getInstance(), new BukkitRunnable() {
+        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(getUCInstance(), new BukkitRunnable() {
             @Override
             public void run() {
-                if (UltraCosmetics.getCustomPlayer(getPlayer()).currentGadget != instance) {
+                if (getOwner().getCurrentGadget() != instance) {
                     cancel();
                     return;
                 }
@@ -46,13 +47,13 @@ public class GadgetBlizzardBlaster extends Gadget {
                         loc.add(0, -1, 0);
                 }
                 for (int i = 0; i < 3; i++) {
-                    UltraCosmetics.getInstance().getEntityUtil().sendBlizzard(getPlayer(), loc, affectPlayers, v);
+                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendBlizzard(getPlayer(), loc, affectPlayers, v);
                 }
                 loc.add(v);
             }
         }, 0, 1).getTaskId();
 
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.getScheduler().cancelTask(i);
@@ -67,13 +68,13 @@ public class GadgetBlizzardBlaster extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
 
     }
 
     @Override
     public void onClear() {
-        UltraCosmetics.getInstance().getEntityUtil().clearBlizzard(getPlayer());
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearBlizzard(getPlayer());
         HandlerList.unregisterAll(this);
     }
 }

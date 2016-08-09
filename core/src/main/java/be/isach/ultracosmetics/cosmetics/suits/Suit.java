@@ -108,6 +108,11 @@ public abstract class Suit extends Cosmetic<SuitType> {
         getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(getArmorSlot()), ultraCosmetics)));
     }
 
+    @Override
+    protected void onEquip() {
+        //...
+    }
+
     /**
      * Clears the Suit.
      */

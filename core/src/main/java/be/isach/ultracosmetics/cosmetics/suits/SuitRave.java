@@ -55,4 +55,9 @@ public class SuitRave extends Suit {
                 break;
         }
     }
+
+    @Override
+    protected void onEquip() {
+
+    }
 }

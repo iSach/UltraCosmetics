@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -15,10 +16,8 @@ import java.util.UUID;
 public class MorphSnowman extends Morph {
 
 	private long coolDown = 0;
-    public MorphSnowman(UUID owner) {
-        super(owner, MorphType.SNOWNMAN);
-        if (owner != null)
-            UltraCosmetics.getInstance().registerListener(this);
+    public MorphSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.SNOWNMAN, ultraCosmetics);
     }
 
     @EventHandler
@@ -30,5 +29,10 @@ public class MorphSnowman extends Morph {
             event.getPlayer().launchProjectile(Snowball.class);
             coolDown = System.currentTimeMillis() + 500;
         }
+    }
+
+    @Override
+    protected void onEquip() {
+
     }
 }

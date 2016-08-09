@@ -72,8 +72,8 @@ public class GadgetTrampoline extends Gadget {
     }
 
     @Override
-    void onUpdate() {
-        Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
+    public void onUpdate() {
+        Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Entity entity : EntityUtils.getEntitiesInRadius(initialCenter, 4d)) {
@@ -129,7 +129,7 @@ public class GadgetTrampoline extends Gadget {
         genLadder(get(-3, 1, 0));
         genLadder(get(-3, 0, 0));
 
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 clearBlocks();

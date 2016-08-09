@@ -35,7 +35,6 @@ public class GadgetSmashDown extends Gadget {
 
     public GadgetSmashDown(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.SMASHDOWN, ultraCosmetics);
-        UltraCosmetics.getInstance().registerListener(this);
         instance = this;
     }
 
@@ -43,13 +42,13 @@ public class GadgetSmashDown extends Gadget {
     void onRightClick() {
         SoundUtil.playSound(getPlayer().getLocation(), Sounds.FIREWORK_LAUNCH, 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
-        final int taskId = Bukkit.getScheduler().runTaskTimer(UltraCosmetics.getInstance(), new Runnable() {
+        final int taskId = Bukkit.getScheduler().runTaskTimer(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
             }
         }, 0, 1).getTaskId();
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.getScheduler().cancelTask(taskId);
@@ -70,7 +69,7 @@ public class GadgetSmashDown extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (activePlayers.contains(getPlayer()) && getPlayer().isOnGround()) {
             activePlayers.remove(getPlayer());
             playBoomEffect();
@@ -88,7 +87,7 @@ public class GadgetSmashDown extends Gadget {
                 if (i == 5) {
                     cancel();
                 }
-                if (UltraCosmetics.getCustomPlayer(getPlayer()).currentGadget != instance) {
+                if (getOwner().getCurrentGadget() != instance) {
                     cancel();
                     return;
                 }
@@ -139,7 +138,7 @@ public class GadgetSmashDown extends Gadget {
                 }
                 i++;
             }
-        }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
+        }.runTaskTimer(getUCInstance(), 0, 1);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

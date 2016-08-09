@@ -14,14 +14,8 @@ import be.isach.ultracosmetics.util.TextUtil;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.UUID;
 
 /**
  * Created by sacha on 03/08/15.
@@ -89,7 +83,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
         getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), ultraCosmetics)));
     }
 
-    private boolean isMoving() {
+    protected boolean isMoving() {
         return UltraCosmeticsData.get().getVersionManager().getEntityUtil().isMoving(getPlayer());
     }
 
@@ -103,7 +97,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
         } catch (Exception ignored) {
         }
         if (getPlayer() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUcInstance())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())));
         }
     }
 }

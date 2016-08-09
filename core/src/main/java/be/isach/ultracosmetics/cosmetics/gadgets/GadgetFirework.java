@@ -20,7 +20,6 @@ public class GadgetFirework extends Gadget {
 
     public GadgetFirework(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.FIREWORK, ultraCosmetics);
-        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class GadgetFirework extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
     }
 
     @Override

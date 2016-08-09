@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.v1_8_R3.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import net.minecraft.server.v1_8_R3.Entity;
@@ -29,7 +30,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
     public void follow(Player player) {
         if (player == null)
             return;
-        if (UltraCosmetics.getCustomPlayer(player).currentTreasureChest != null)
+        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).getCurrentTreasureChest() != null)
             return;
 
         Entity petEntity;
@@ -46,7 +47,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             }
             if (path != null && distance > 3.3) {
                 double speed = 1.05d;
-                if (pet.getType().getEntityType() == EntityType.ZOMBIE)
+                if (pet.getCosmeticType().getEntityType() == EntityType.ZOMBIE)
                     speed *= 1.5;
                 ((EntityInsentient) petEntity).getNavigation().a(path, speed);
                 ((EntityInsentient) petEntity).getNavigation().a(speed);

@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
  */
 public class SubCommandSelfView extends SubCommand {
 
-    public SubCommandSelfView() {
-        super("Toggle Morph Self View", "ultracosmetics.command.selfview", "/uc selfview", "selfview");
+    public SubCommandSelfView(UltraCosmetics ultraCosmetics) {
+        super("Toggle Morph Self View", "ultracosmetics.command.selfview", "/uc selfview", ultraCosmetics, "selfview");
     }
 
     @Override
     protected void onExePlayer(Player sender, String... args) {
-        UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getUltraPlayer(sender);
+        UltraPlayer customPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(sender);
         customPlayer.setSeeSelfMorph(!customPlayer.canSeeSelfMorph());
     }
 

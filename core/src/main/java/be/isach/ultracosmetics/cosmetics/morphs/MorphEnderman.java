@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
@@ -13,7 +14,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Created by sacha on 26/08/15.
@@ -22,10 +22,9 @@ public class MorphEnderman extends Morph {
 
     private boolean cooldown;
 
-    public MorphEnderman(UUID owner) {
-        super(owner, MorphType.ENDERMAN);
+    public MorphEnderman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.ENDERMAN, ultraCosmetics);
         if (owner != null) {
-            UltraCosmetics.getInstance().registerListener(this);
             getPlayer().setAllowFlight(true);
         }
     }
@@ -41,7 +40,7 @@ public class MorphEnderman extends Morph {
                 return;
             }
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
@@ -75,7 +74,7 @@ public class MorphEnderman extends Morph {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)
@@ -92,10 +91,15 @@ public class MorphEnderman extends Morph {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         if (getPlayer().getGameMode() != GameMode.CREATIVE)
             getPlayer().setAllowFlight(false);
         super.clear();
+    }
+
+    @Override
+    protected void onEquip() {
+
     }
 
 }

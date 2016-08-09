@@ -71,7 +71,7 @@ public class UpdateManager extends Thread {
      *
      * @return last version published on Spigot.
      */
-    public String getLastVersion() {
+    public synchronized String getLastVersion() {
         try {
             HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
             con.setDoOutput(true);
@@ -89,4 +89,11 @@ public class UpdateManager extends Thread {
         return null;
     }
 
+    public synchronized boolean isOutdated() {
+        return outdated;
+    }
+
+    public synchronized String getCurrentVersion() {
+        return currentVersion;
+    }
 }

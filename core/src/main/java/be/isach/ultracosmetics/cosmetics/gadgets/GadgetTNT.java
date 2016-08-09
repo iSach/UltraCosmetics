@@ -28,7 +28,6 @@ public class GadgetTNT extends Gadget {
 
     public GadgetTNT(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.TNT, ultraCosmetics);
-        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -100,7 +99,7 @@ public class GadgetTNT extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
 
     }
 

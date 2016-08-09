@@ -40,12 +40,12 @@ public class GadgetColorBomb extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (bomb != null && bomb.isValid() && !running && bomb.isOnGround()) {
 
             running = true;
             bomb.setVelocity(new Vector(0, 0, 0));
-            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
                 @Override
                 public void run() {
                     onClear();
@@ -76,7 +76,7 @@ public class GadgetColorBomb extends Gadget {
                         items.remove(item);
                     }
                 }
-                Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
+                Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
                     @Override
                     public void run() {
                         if (bomb == null)

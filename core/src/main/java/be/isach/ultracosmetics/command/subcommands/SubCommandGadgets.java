@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 public class SubCommandGadgets extends SubCommand {
 
 
-    public SubCommandGadgets() {
-        super("Toggle Gadgets", "ultracosmetics.command.gadgets", "/uc gadgets", "gadgets");
+    public SubCommandGadgets(UltraCosmetics ultraCosmetics) {
+        super("Toggle Gadgets", "ultracosmetics.command.gadgets", "/uc gadgets", ultraCosmetics, "gadgets");
     }
 
     @Override
     protected void onExePlayer(Player sender, String... args) {
-        UltraPlayer customPlayer = UltraCosmetics.getPlayerManager().getUltraPlayer(sender);
+        UltraPlayer customPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(sender);
         customPlayer.setGadgetsEnabled(!customPlayer.hasGadgetsEnabled());
     }
 

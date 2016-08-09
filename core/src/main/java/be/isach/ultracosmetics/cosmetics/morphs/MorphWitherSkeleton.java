@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
@@ -27,9 +28,8 @@ public class MorphWitherSkeleton extends Morph {
 
     boolean inCooldown;
 
-    public MorphWitherSkeleton(UUID owner) {
-        super(owner, MorphType.WITHERSKELETON);
-        UltraCosmetics.getInstance().registerListener(this);
+    public MorphWitherSkeleton(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.WITHERSKELETON, ultraCosmetics);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -37,7 +37,7 @@ public class MorphWitherSkeleton extends Morph {
         if (event.getPlayer() == getPlayer()
                 && !inCooldown) {
             inCooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
                 @Override
                 public void run() {
                     inCooldown = false;
@@ -53,7 +53,7 @@ public class MorphWitherSkeleton extends Morph {
                 bone.setVelocity(MathUtils.getRandomVector());
                 items.add(bone);
             }
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
                 @Override
                 public void run() {
                     for (Entity bone : items)
@@ -63,5 +63,10 @@ public class MorphWitherSkeleton extends Morph {
             }, 50);
             SoundUtil.playSound(getPlayer(), Sounds.SKELETON_HURT, 0.4f, (float) Math.random() + 1f);
         }
+    }
+
+    @Override
+    protected void onEquip() {
+
     }
 }

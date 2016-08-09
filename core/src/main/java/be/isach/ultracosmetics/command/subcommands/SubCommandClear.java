@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
  */
 public class SubCommandClear extends SubCommand {
 
-    public SubCommandClear() {
-        super("Clears a Cosmetic.", "ultracosmetics.command.clear", "/uc clear <player> [type]", "clear");
+    public SubCommandClear(UltraCosmetics ultraCosmetics) {
+        super("Clears a Cosmetic.", "ultracosmetics.command.clear", "/uc clear <player> [type]", ultraCosmetics, "clear");
     }
 
     @Override
@@ -42,21 +42,21 @@ public class SubCommandClear extends SubCommand {
             return;
         }
         if (args.length < 3) {
-            UltraCosmetics.getPlayerManager().getUltraPlayer(receiver).clear();
+            getUltraCosmetics().getPlayerManager().getUltraPlayer(receiver).clear();
             return;
         }
 
-        UltraPlayer cp = UltraCosmetics.getPlayerManager().getUltraPlayer(receiver);
+        UltraPlayer up = getUltraCosmetics().getPlayerManager().getUltraPlayer(receiver);
         String s = args[2].toLowerCase();
 
-        if (s.startsWith("g")) cp.removeGadget();
-        else if (s.startsWith("pa")) cp.removeParticleEffect();
-        else if (s.startsWith("pe")) cp.removePet();
-        else if (s.startsWith("h")) cp.removeHat();
-        else if (s.startsWith("s")) cp.removeSuit();
-        else if (s.startsWith("mor")) cp.removeMorph();
-        else if (s.startsWith("mou")) cp.removeMount();
-        else if (s.startsWith("e")) cp.removeEmote();
+        if (s.startsWith("g")) up.removeGadget();
+        else if (s.startsWith("pa")) up.removeParticleEffect();
+        else if (s.startsWith("pe")) up.removePet();
+        else if (s.startsWith("h")) up.removeHat();
+        else if (s.startsWith("s")) up.removeSuit();
+        else if (s.startsWith("mor")) up.removeMorph();
+        else if (s.startsWith("mou")) up.removeMount();
+        else if (s.startsWith("e")) up.removeEmote();
         else {
             sender.sendMessage("§c§l/uc menu <menu>\n§c§lInvalid Type.\n§c§lAvailable types: gadgets, particleeffects, pets, mounts, suits, hats, morphs");
         }

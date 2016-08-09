@@ -2,9 +2,8 @@ package be.isach.ultracosmetics.v1_10_R1;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.v1_10_R1.pathfinders.CustomPathFinderGoalPanic;
-import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.treasurechests.ChestType;
-import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
+import be.isach.ultracosmetics.treasurechests.ChestType;
+import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;

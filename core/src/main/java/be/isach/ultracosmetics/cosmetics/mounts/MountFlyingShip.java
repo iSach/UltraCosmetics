@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -26,15 +28,12 @@ public class MountFlyingShip extends Mount {
     Entity currentboom = null;
     //ArmorStand nameTag = null;
 
-    public MountFlyingShip(UUID owner, UltraCosmetics ultraCosmetics) {
+    public MountFlyingShip(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.FLYINGSHIP, ultraCosmetics);
-        if (owner != null)
-            UltraCosmetics.getInstance().registerListener(this);
-        //  spawnNameTag();
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         if (entity.getPassenger() == null)
             clear();
 
@@ -50,7 +49,7 @@ public class MountFlyingShip extends Mount {
         vector.setX(-h * Math.sin(Math.toRadians(rotX)));
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
-        UltraCosmetics.getInstance().getEntityUtil().moveShip(getPlayer(), entity, vector);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveShip(getPlayer(), entity, vector);
 
         if (currentboom != null) {
             if (currentboom.isDead()) {

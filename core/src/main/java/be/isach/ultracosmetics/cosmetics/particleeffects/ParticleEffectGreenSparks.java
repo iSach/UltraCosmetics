@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 
@@ -15,13 +17,12 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
     float height;
     int step;
 
-    public ParticleEffectGreenSparks(UUID owner) {
-        super(owner, ParticleEffectType.GREENSPARKS
-        );
+    public ParticleEffectGreenSparks(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.GREENSPARKS);
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (up) {
             if (height < 2)
                 height += 0.05;
@@ -38,7 +39,12 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
         Vector v = new Vector();
         v.setX(Math.cos(angle) * 1.1);
         v.setZ(Math.sin(angle) * 1.1);
-        UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
+        UtilParticles.display(getCosmeticType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
         step += 4;
+    }
+
+    @Override
+    protected void onEquip() {
+
     }
 }

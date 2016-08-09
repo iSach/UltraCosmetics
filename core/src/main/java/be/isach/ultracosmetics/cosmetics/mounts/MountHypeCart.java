@@ -1,22 +1,24 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.PlayerUtils;
 
 import java.util.UUID;
 
 public class MountHypeCart extends Mount {
 
-    public MountHypeCart(UUID owner, UltraCosmetics ultraCosmetics) {
+    public MountHypeCart(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.HYPECART, ultraCosmetics);
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         if (entity.isOnGround())
             entity.setVelocity(PlayerUtils.getHorizontalDirection(getPlayer(), 7.6));
-        UltraCosmetics.getInstance().getEntityUtil().setClimb(entity);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setClimb(entity);
     }
 
     @Override

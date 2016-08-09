@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
+import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -69,11 +70,23 @@ public class UltraCosmetics extends JavaPlugin {
     private MySqlConnectionManager mySqlConnectionManager;
 
     /**
+     * Update Manager.
+     */
+    private UpdateManager updateChecker;
+
+    /**
+     * Treasure Chests Manager;
+     */
+    private TreasureChestManager treasureChestManager;
+
+    /**
      * Called when plugin is enabled.
      */
     @Override
     public void onEnable() {
         this.smartLogger = new SmartLogger();
+
+        UltraCosmeticsData.init(this);
 
         if (!UltraCosmeticsData.get().checkServerVersion()) {
             return;
@@ -83,7 +96,7 @@ public class UltraCosmetics extends JavaPlugin {
         this.playerManager = new UltraPlayerManager(this);
 
         // Beginning of boot log. basic informations.
-        getSmartLogger().write("[------------------------------------------]");
+        getSmartLogger().write("-------------------------------------------------------------------");
         getSmartLogger().write("UltraCosmetics v" + getDescription().getVersion() + " is loading... (server: " + UltraCosmeticsData.get().getServerVersion().getName() + ")");
         getSmartLogger().write("Thanks for having downloaded it!");
         getSmartLogger().write("Plugin by iSach.");
@@ -108,13 +121,12 @@ public class UltraCosmetics extends JavaPlugin {
 
         // Register Listeners.
         registerListeners();
-
-        getSmartLogger().write("");
-        getSmartLogger().write("Registering commands...");
         // Register the command
 
         commandManager = new CommandManager(this);
-        commandManager.registerCommands();
+        commandManager.registerCommands(this);
+
+        UltraCosmeticsData.get().initConfigFields();
 
         // Set up Cosmetics config.
         new CosmeticManager(this).setupCosmeticsConfigs();
@@ -158,14 +170,14 @@ public class UltraCosmetics extends JavaPlugin {
         }
 
         if (SettingsManager.getConfig().getBoolean("Check-For-Updates")) {
-            UpdateManager updateChecker = new UpdateManager(this);
+            this.updateChecker = new UpdateManager(this);
             updateChecker.start();
             updateChecker.checkForUpdate();
         }
 
         // Ended well :v
         getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
-        getSmartLogger().write("[------------------------------------------]");
+        getSmartLogger().write("-------------------------------------------------------------------");
     }
 
     /**
@@ -191,11 +203,14 @@ public class UltraCosmetics extends JavaPlugin {
     private void registerListeners() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
-        pluginManager.registerEvents(new PlayerListener(), this);
+        pluginManager.registerEvents(new PlayerListener(this), this);
 
         if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
-            pluginManager.registerEvents(new PlayerSwapItemListener(), this);
+            pluginManager.registerEvents(new PlayerSwapItemListener(this), this);
         }
+
+        this.treasureChestManager = new TreasureChestManager(this);
+        pluginManager.registerEvents(treasureChestManager, this);
     }
 
     /**
@@ -325,6 +340,14 @@ public class UltraCosmetics extends JavaPlugin {
      */
     public Economy getEconomy() {
         return economy;
+    }
+
+    public UpdateManager getUpdateChecker() {
+        return updateChecker;
+    }
+
+    public TreasureChestManager getTreasureChestManager() {
+        return treasureChestManager;
     }
 
     /**

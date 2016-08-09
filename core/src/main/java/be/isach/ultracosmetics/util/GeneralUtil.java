@@ -28,10 +28,10 @@ public class GeneralUtil {
     /**
      * Print permissions in a permissions.txt file.
      */
-    public static void printPermissions() {
+    public static void printPermissions(UltraCosmetics ultraCosmetics) {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(new File(UltraCosmetics.getInstance().getDataFolder(), "permissions.yml"), "UTF-8");
+            writer = new PrintWriter(new File(ultraCosmetics.getDataFolder(), "permissions.yml"), "UTF-8");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -42,7 +42,7 @@ public class GeneralUtil {
         Date date = new Date();
 
         writer.println();
-        writer.println("UltraCosmetics v" + UltraCosmetics.currentVersion + " permissions.");
+        writer.println("UltraCosmetics v" + ultraCosmetics.getUpdateChecker().getCurrentVersion() + " permissions.");
         writer.println("Generated automatically on " + dateFormat.format(date));
         writer.println();
         writer.println();
@@ -53,7 +53,7 @@ public class GeneralUtil {
         writer.println("");
         writer.println("Commands:");
         writer.println("  - ultracosmetics.command.*");
-        for (SubCommand subCommand : UltraCosmetics.getInstance().getCommandManager().commands)
+        for (SubCommand subCommand : ultraCosmetics.getCommandManager().getCommands())
             writer.println("  - " + subCommand.getPermission());
         writer.println("");
         writer.println("Gadgets:");

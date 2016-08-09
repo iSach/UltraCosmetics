@@ -37,7 +37,7 @@ public class GadgetBatBlaster extends Gadget {
         for (int i = 0; i < 16; i++) {
             ((ArrayList) this.bats.get(getPlayer())).add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 onClear();
@@ -58,7 +58,7 @@ public class GadgetBatBlaster extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         Location loc = this.playerVelocity.get(getPlayer());
         if (this.isActive.containsKey(getPlayer())) {
             for (Bat bat : this.bats.get(getPlayer())) {
@@ -67,7 +67,7 @@ public class GadgetBatBlaster extends Gadget {
                     bat.setVelocity(loc.getDirection().clone().multiply(0.5D).add(rand));
 
                     for (Player other : getPlayer().getWorld().getPlayers())
-                        if (!other.equals(getPlayer()) && UltraCosmetics.getCustomPlayer(other).hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)) {
+                        if (!other.equals(getPlayer()) && getOwner().hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)) {
 
                             Vector v = bat.getLocation().getDirection();
                             v.normalize();

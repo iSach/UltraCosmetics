@@ -62,7 +62,7 @@ public abstract class Cosmetic<T extends CosmeticType> implements Listener {
         return owner;
     }
 
-    public final UltraCosmetics getUcInstance() {
+    public final UltraCosmetics getUCInstance() {
         return ultraCosmetics;
     }
 

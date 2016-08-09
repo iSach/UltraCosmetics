@@ -1,8 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
@@ -13,8 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
  * Created by sacha on 27/08/15.
  */
@@ -22,8 +22,8 @@ public class MorphCreeper extends Morph {
 
     private int charge = 0;
 
-    public MorphCreeper(UUID owner) {
-        super(owner, MorphType.CREEPER);
+    public MorphCreeper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.CREEPER, ultraCosmetics);
 
         if (owner != null) {
             CreeperWatcher creeperWatcher = (CreeperWatcher) disguise.getWatcher();
@@ -33,7 +33,7 @@ public class MorphCreeper extends Morph {
                 @Override
                 public void run() {
                     if (getPlayer() == null
-                            || UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != creeper) {
+                            || getOwner().getCurrentMorph() != creeper) {
                         cancel();
                         return;
                     }
@@ -45,10 +45,10 @@ public class MorphCreeper extends Morph {
                         SoundUtil.playSound(getPlayer(), Sounds.CREEPER_HISS, 1.4f, 1.5f);
                     } else {
                         if (creeperWatcher.isIgnited()) {
-                            disguise = new MobDisguise(getType().getDisguiseType());
+                            disguise = new MobDisguise(getCosmeticType().getDisguiseType());
                             DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 //                            disguise.setShowName(true);
-                            if (!UltraCosmetics.getCustomPlayer(getPlayer()).canSeeSelfMorph())
+                            if (!getOwner().canSeeSelfMorph())
                                 disguise.setViewSelfDisguise(false);
                         }
                         if (charge == 100) {
@@ -70,7 +70,7 @@ public class MorphCreeper extends Morph {
                                     MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
                                 }
                             }
-                            UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), "");
+                            UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), "");
                             charge = 0;
                             return;
                         }
@@ -79,15 +79,20 @@ public class MorphCreeper extends Morph {
                     }
                     if (charge > 0 && charge < 100) {
                         if (charge < 5) {
-                            UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), "");
+                            UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), "");
                         } else
-                            UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
+                            UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
                     } else if (charge == 100)
-                        UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
+                        UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
 
 
                 }
-            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
+            }.runTaskTimer(getUCInstance(), 0, 1);
         }
+    }
+
+    @Override
+    protected void onEquip() {
+
     }
 }

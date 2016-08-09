@@ -1,5 +1,8 @@
 package be.isach.ultracosmetics.v1_10_R1.mount;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.TextUtil;
 import be.isach.ultracosmetics.v1_10_R1.customentities.CustomSlime;
 import be.isach.ultracosmetics.v1_10_R1.customentities.FlyingSquid;
 import be.isach.ultracosmetics.v1_10_R1.customentities.RideableSpider;
@@ -17,8 +20,6 @@ import org.bukkit.craftbukkit.v1_10_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
-
 /**
  * Created by Sacha on 15/03/16.
  */
@@ -29,17 +30,17 @@ public abstract class MountCustomEntity extends Mount {
      */
     public IMountCustomEntity customEntity;
 
-    public MountCustomEntity(UUID owner, MountType type, UltraCosmetics ultraCosmetics) {
+    public MountCustomEntity(UltraPlayer owner, MountType type, UltraCosmetics ultraCosmetics) {
         super(owner, type, ultraCosmetics);
     }
 
     @Override
-    public void equip() {
-        if (getType() == MountType.SKYSQUID)
+    public void onEquip() {
+        if (getCosmeticType() == MountType.SKYSQUID)
             customEntity = new FlyingSquid(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        else if (getType() == MountType.SLIME)
+        else if (getCosmeticType() == MountType.SLIME)
             customEntity = new CustomSlime(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        else if (getType() == MountType.SPIDER)
+        else if (getCosmeticType() == MountType.SPIDER)
             customEntity = new RideableSpider(((CraftWorld) getPlayer().getWorld()).getHandle());
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
@@ -49,7 +50,7 @@ public abstract class MountCustomEntity extends Mount {
         EntitySpawningManager.setBypass(true);
         ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         EntitySpawningManager.setBypass(false);
-        UltraCosmetics.getInstance().getEntityUtil().setPassenger(getEntity(), getPlayer());
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setPassenger(getEntity(), getPlayer());
         CustomEntities.customEntities.add(getCustomEntity());
         customEntity.removeAi();
         BukkitRunnable runnable = new BukkitRunnable() {
@@ -65,10 +66,10 @@ public abstract class MountCustomEntity extends Mount {
                         cancel();
                         return;
                     }
-                    if (owner != null
-                            && Bukkit.getPlayer(owner) != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(owner)).currentMount.getType() == getType()) {
+                    if (getOwner() != null
+                            && Bukkit.getPlayer(getOwnerUniqueId()) != null
+                            && getOwner().getCurrentMount() != null
+                            && getOwner().getCurrentMount().getCosmeticType() == getCosmeticType()) {
                         onUpdate();
                     } else {
                         cancel();
@@ -80,11 +81,10 @@ public abstract class MountCustomEntity extends Mount {
                 }
             }
         };
-        runnable.runTaskTimerAsynchronously(UltraCosmetics.getInstance(), 0, repeatDelay);
-        listener = new MountListener(this);
+        runnable.runTaskTimerAsynchronously(getUCInstance(), 0, getCosmeticType().getRepeatDelay());
 
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (UltraCosmetics.getInstance().placeHolderColor) ? getType().getMenuName() : UltraCosmetics.filterColor(getType().getMenuName())));
-        UltraCosmetics.getCustomPlayer(getPlayer()).currentMount = this;
+        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", TextUtil.filterPlaceHolder(getCosmeticType().getMenuName(), getUCInstance())));
+        getOwner().setCurrentMount(this);
     }
 
     @Override

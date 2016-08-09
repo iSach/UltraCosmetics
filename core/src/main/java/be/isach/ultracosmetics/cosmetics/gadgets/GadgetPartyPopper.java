@@ -40,7 +40,7 @@ public class GadgetPartyPopper extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
 
     }
 

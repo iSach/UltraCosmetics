@@ -27,7 +27,6 @@ public class GadgetFleshHook extends Gadget implements Listener {
 
     public GadgetFleshHook(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.FLESHHOOK, ultraCosmetics);
-        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @org.bukkit.event.EventHandler
@@ -70,7 +69,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         Iterator it = items.iterator();
         while (it.hasNext()) {
             Object pair = it.next();

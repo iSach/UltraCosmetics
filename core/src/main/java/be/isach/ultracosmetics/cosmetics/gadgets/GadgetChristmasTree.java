@@ -30,7 +30,7 @@ public class GadgetChristmasTree extends Gadget {
     void onRightClick() {
         lastLocation = lastClickedBlock.getLocation().add(0.5d, 1.05d, 0.5d);
         active = true;
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 active = false;
@@ -39,7 +39,7 @@ public class GadgetChristmasTree extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (active) {
             drawLog();
             drawLeavesAndBalls();

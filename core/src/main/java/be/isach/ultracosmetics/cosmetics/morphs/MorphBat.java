@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
@@ -16,11 +17,12 @@ import java.util.UUID;
  * Created by sacha on 26/08/15.
  */
 public class MorphBat extends Morph {
-    public MorphBat(UUID owner) {
-        super(owner, MorphType.BAT);
-        UltraCosmetics.getInstance().registerListener(this);
-        if (owner != null)
+
+    public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.BAT, ultraCosmetics);
+        if (owner != null) {
             getPlayer().setAllowFlight(true);
+        }
     }
 
     @EventHandler
@@ -38,9 +40,14 @@ public class MorphBat extends Morph {
     }
 
     @Override
-    public void clear() {
+    public void onClear() {
         if (getPlayer().getGameMode() != GameMode.CREATIVE)
             getPlayer().setAllowFlight(false);
         super.clear();
+    }
+
+    @Override
+    protected void onEquip() {
+
     }
 }

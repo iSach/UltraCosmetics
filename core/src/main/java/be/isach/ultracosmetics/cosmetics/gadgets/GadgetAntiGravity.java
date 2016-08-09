@@ -28,7 +28,6 @@ public class GadgetAntiGravity extends Gadget {
 
     public GadgetAntiGravity(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.ANTIGRAVITY, ultraCosmetics);
-        UltraCosmetics.getInstance().registerListener(this);
     }
 
     @Override
@@ -39,12 +38,12 @@ public class GadgetAntiGravity extends Gadget {
         running = true;
         as.setVisible(false);
         as.setHelmet(new ItemStack(Material.SEA_LANTERN));
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
             @Override
             public void run() {
                 as.remove();
                 as = null;
-                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
                     @Override
                     public void run() {
                         running = false;
@@ -60,7 +59,7 @@ public class GadgetAntiGravity extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (as != null && as.isValid()) {
             as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
             UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);

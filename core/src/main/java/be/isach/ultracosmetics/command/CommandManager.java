@@ -107,14 +107,18 @@ public class CommandManager implements CommandExecutor {
         return true;
     }
 
-    public void registerCommands() {
-        registerCommand(new SubCommandGadgets());
-        registerCommand(new SubCommandSelfView());
-        registerCommand(new SubCommandMenu());
-        registerCommand(new SubCommandGive());
+    public List<SubCommand> getCommands() {
+        return commands;
+    }
+
+    public void registerCommands(UltraCosmetics ultraCosmetics) {
+        registerCommand(new SubCommandGadgets(ultraCosmetics));
+        registerCommand(new SubCommandSelfView(ultraCosmetics));
+        registerCommand(new SubCommandMenu(ultraCosmetics));
+        registerCommand(new SubCommandGive(ultraCosmetics));
         registerCommand(new SubCommandToggle(ultraCosmetics));
-        registerCommand(new SubCommandClear());
-        registerCommand(new SubCommandTreasure());
+        registerCommand(new SubCommandClear(ultraCosmetics));
+        registerCommand(new SubCommandTreasure(ultraCosmetics));
     }
 }
 
