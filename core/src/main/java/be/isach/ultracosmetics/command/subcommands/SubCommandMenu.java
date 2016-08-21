@@ -15,11 +15,13 @@ public class SubCommandMenu extends SubCommand {
 
     public SubCommandMenu(UltraCosmetics ultraCosmetics) {
         super("Opens Specified Menu", "ultracosmetics.command.menu", "/uc menu <menu> [page]", ultraCosmetics, "menu");
+        this.menuGadgets = new MenuGadgets(getUltraCosmetics());
     }
+
+    private MenuGadgets menuGadgets;
 
     @Override
     protected void onExePlayer(Player sender, String... args) {
-        MenuGadgets menuGadgets = new MenuGadgets(getUltraCosmetics());
         menuGadgets.open(getUltraCosmetics().getPlayerManager().getUltraPlayer(sender), 1);
 //        if (args.length < 2) {
 //            sender.sendMessage("§c§l/uc menu <menu>\n§c§lAvailable Menus: main, gadgets, particleeffects, pets, mounts, suits, hats, morphs");

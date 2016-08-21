@@ -222,7 +222,7 @@ public class EmoteType extends CosmeticType<Emote> {
                 return null;
             }
         }
-        return super.equip(ultraPlayer.getPlayer(), ultraCosmetics);
+        return super.equip(ultraPlayer, ultraCosmetics);
     }
 
     public void appendTexture(String texture) {

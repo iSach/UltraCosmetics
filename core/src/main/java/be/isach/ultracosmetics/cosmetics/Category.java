@@ -1,10 +1,8 @@
 package be.isach.ultracosmetics.cosmetics;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -22,32 +20,58 @@ import java.util.Arrays;
  */
 public enum Category {
 
-    PETS("Pets"),
-    GADGETS("Gadgets"),
-    EFFECTS("Particle-Effects"),
-    MOUNTS("Mounts"),
-    MORPHS("Morphs"),
-    HATS("Hats"),
-    SUITS("Suits"),
-    EMOTES("Emotes");
+    PETS("Pets", "Spawn", "Despawn", "Clear-Pet"),
+    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget"),
+    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect"),
+    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount"),
+    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph"),
+    HATS("Hats", "Equip", "Unequip", "Clear-Hat"),
+    SUITS("Suits", "Equip", "Unequip", "Clear-Suit"),
+    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote");
+
+    public static int enabledSize() {
+        final int[] i = {0};
+        Arrays.stream(values()).filter(Category::isEnabled).forEach(category -> i[0]++);
+        return i[0];
+    }
 
     /**
      * The config path name.
      */
-    String configPath;
+    private String configPath;
 
     /**
      * The ItemStack in Main Menu.
      */
-    ItemStack is;
+    private ItemStack is;
+
+    /**
+     * Message on menu to activate a cosmetic of this category.
+     */
+    private String activateMenu;
+
+    /**
+     * Message on menu to deactivate a cosmetic of this category.
+     */
+    private String deactivateMenu;
+
+    /**
+     * Path of the clear message.
+     */
+    private String clearConfigPath;
 
     /**
      * Category of Cosmetic.
-     *
-     * @param configPath The config path name.
+     *  @param configPath The config path name.
+     * @param activateMenu Message on menu to activate a cosmetic of this category.
+     * @param deactivateMenu Message on menu to deactivate a cosmetic of this category.
+     * @param clearConfigPath
      */
-    Category(String configPath) {
+    Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath) {
         this.configPath = configPath;
+        this.activateMenu = activateMenu;
+        this.deactivateMenu = deactivateMenu;
+        this.clearConfigPath = clearConfigPath;
         if (SettingsManager.getConfig().contains("Categories." + configPath + ".Main-Menu-Item")) {
             this.is = initMaterialData((String) (SettingsManager.getConfig().get("Categories." + configPath + ".Main-Menu-Item"))).toItemStack(1);
         } else {
@@ -76,11 +100,8 @@ public enum Category {
      * @return {@code true} if enabled, otherwise {@code false}.
      */
     public boolean isEnabled() {
-        if (this == MORPHS && !Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            return false;
-        }
-
-        return SettingsManager.getConfig().getBoolean("Categories-Enabled." + configPath);
+        return !(this == MORPHS && !Bukkit.getPluginManager().isPluginEnabled("LibsDisguises"))
+                && SettingsManager.getConfig().getBoolean("Categories-Enabled." + configPath);
     }
 
     /**
@@ -89,10 +110,9 @@ public enum Category {
      * @return {@code true} if has arrow, otherwise {@code false}
      */
     public boolean hasGoBackArrow() {
-        if (!UltraCosmeticsData.get().areTreasureChestsEnabled()
+        return !(!UltraCosmeticsData.get().areTreasureChestsEnabled()
                 && enabledSize() == 1)
-            return false;
-        return (boolean) (SettingsManager.getConfig().get("Categories." + configPath + ".Go-Back-Arrow"));
+                && (boolean) (SettingsManager.getConfig().get("Categories." + configPath + ".Go-Back-Arrow"));
     }
 
     /**
@@ -114,17 +134,15 @@ public enum Category {
         return configPath;
     }
 
-    public String getEquipMessage(CosmeticType cosmeticType) {
-        return "";
+    public String getActivateMenu() {
+        return MessageManager.getMessage("Menu." + activateMenu);
     }
 
-    public String getUnequipMessage() {
-        return "";
+    public String getClearConfigPath() {
+        return clearConfigPath;
     }
 
-    public static int enabledSize() {
-        final int[] i = {0};
-        Arrays.stream(values()).filter(Category::isEnabled).forEach(category -> i[0]++);
-        return i[0];
+    public String getDeactivateMenu() {
+        return MessageManager.getMessage("Menu." + deactivateMenu);
     }
 }

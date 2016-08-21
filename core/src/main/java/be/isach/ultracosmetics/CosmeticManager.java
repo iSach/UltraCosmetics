@@ -27,10 +27,12 @@ public class CosmeticManager {
      * Setup default Cosmetics ultraCosmetics.getConfig().
      */
     public void setupCosmeticsConfigs() {
+
         for (Category category : Category.values()) {
             ultraCosmetics.getConfig().addDefault("Categories-Enabled." + category.getConfigPath(), true);
             ultraCosmetics.getConfig().addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
         }
+
         ultraCosmetics.getConfig().addDefault("TreasureChests.Loots.Emotes.Enabled", true);
         ultraCosmetics.getConfig().addDefault("TreasureChests.Loots.Emotes.Chance", 5);
         ultraCosmetics.getConfig().addDefault("TreasureChests.Loots.Emotes.Message.enabled", true);
@@ -44,7 +46,7 @@ public class CosmeticManager {
         PetType.CHICK.getConfigName();
         SuitType.ASTRONAUT.getConfigName();
         EmoteType.ANGRY.getConfigName();
-        if(Category.MORPHS.isEnabled()) {
+        if (Category.MORPHS.isEnabled()) {
             MorphType.BAT.getConfigName();
         }
 

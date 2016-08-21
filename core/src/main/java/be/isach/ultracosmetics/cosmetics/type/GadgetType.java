@@ -35,6 +35,13 @@ public class GadgetType extends CosmeticMatType<Gadget> {
         return null;
     }
 
+    public static GadgetType getByName(String s) {
+        for (GadgetType gadgetType : VALUES) {
+            if (gadgetType.getName().equalsIgnoreCase(s)) return gadgetType;
+        }
+        return null;
+    }
+
     public static void checkEnabled() {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }

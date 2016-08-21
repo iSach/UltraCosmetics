@@ -1,5 +1,7 @@
 package be.isach.ultracosmetics.treasurechests.reward;
 
+import be.isach.ultracosmetics.player.UltraPlayer;
+
 /**
  * Package: be.isach.ultracosmetics.treasurechests.reward
  * Created by: sachalewin
@@ -7,4 +9,11 @@ package be.isach.ultracosmetics.treasurechests.reward;
  * Project: UltraCosmetics
  */
 public abstract class Reward {
+
+    public Reward() {
+
+    }
+
+    abstract void giveTo(UltraPlayer ultraPlayer);
+
 }

@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -40,10 +41,10 @@ public abstract class CosmeticType<T extends Cosmetic> {
             setDescriptionAsString(fromList(SettingsManager.getConfig().getStringList(category.getConfigPath() + "." + configName + ".Description")));
     }
 
-    public T equip(Player player, UltraCosmetics ultraCosmetics) {
+    public T equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
         T cosmetic = null;
         try {
-            cosmetic = getClazz().getDeclaredConstructor(UUID.class, UltraCosmetics.class).newInstance(player == null ? null : player.getUniqueId(), ultraCosmetics);
+            cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, UltraCosmetics.class).newInstance(player == null ? null : player, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
