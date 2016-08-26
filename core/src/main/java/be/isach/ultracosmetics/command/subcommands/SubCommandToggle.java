@@ -1,24 +1,15 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.cosmetics.type.EmoteType;
-import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
-import be.isach.ultracosmetics.cosmetics.type.MorphType;
-import be.isach.ultracosmetics.cosmetics.type.MountType;
-import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
-import be.isach.ultracosmetics.cosmetics.type.PetType;
-import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.type.SuitType;
-import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Sacha on 21/12/15.
+ * Package: be.isach.ultracosmetics.command.subcommands
+ * Created by: Sacha
+ * Date: 21/12/15
+ * Project: UltraCosmetics
  */
 public class SubCommandToggle extends SubCommand {
 
@@ -78,7 +69,7 @@ public class SubCommandToggle extends SubCommand {
 //
 //            UltraPlayer cp = getUltraCosmetics().getPlayerManager().getUltraPlayer(receiver);
 //            if (cp.getCurrentGadget() != null &&
-//                    cp.getCurrentGadget().getCosmeticType() == gadgetType) {
+//                    cp.getCurrentGadget().getType() == gadgetType) {
 //                cp.removeGadget();
 //                return;
 //            }
@@ -220,14 +211,14 @@ public class SubCommandToggle extends SubCommand {
 //
 //            MenuMorphs.equipMorph(morphType, receiver);
 //        } else if (type.startsWith("h")) {
-//            Hat hat;
+//            HatType hat;
 //            try {
-//                hat = Hat.valueOf(args[2].toUpperCase());
+//                hat = HatType.valueOf(args[2].toUpperCase());
 //            } catch (IllegalArgumentException exc) {
-//                sender.sendMessage(MessageManager.getMessage("Invalid-Hat"));
+//                sender.sendMessage(MessageManager.getMessage("Invalid-HatType"));
 //                StringBuilder sb = new StringBuilder();
-//                for (int i = 0; i < Hat.enabled().size(); i++)
-//                    sb.append(Hat.enabled().get(i).toString().toLowerCase() + ((i != Hat.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                for (int i = 0; i < HatType.enabled().size(); i++)
+//                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "§f§l, §c" : ""));
 //                sender.sendMessage("§c§lMorph Types: §c" + sb.toString());
 //                return;
 //            }
@@ -465,14 +456,14 @@ public class SubCommandToggle extends SubCommand {
 //
 //            MenuMorphs.equipMorph(morphType, receiver);
 //        } else if (type.startsWith("h")) {
-//            Hat hat;
+//            HatType hat;
 //            try {
-//                hat = Hat.valueOf(args[2].toUpperCase());
+//                hat = HatType.valueOf(args[2].toUpperCase());
 //            } catch (IllegalArgumentException exc) {
-//                sender.sendMessage(MessageManager.getMessage("Invalid-Hat"));
+//                sender.sendMessage(MessageManager.getMessage("Invalid-HatType"));
 //                StringBuilder sb = new StringBuilder();
-//                for (int i = 0; i < Hat.enabled().size(); i++)
-//                    sb.append(Hat.enabled().get(i).toString().toLowerCase() + ((i != Hat.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                for (int i = 0; i < HatType.enabled().size(); i++)
+//                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "§f§l, §c" : ""));
 //                sender.sendMessage("§c§lMorph Types: §c" + sb.toString());
 //                return;
 //            }

@@ -34,6 +34,14 @@ public class MorphType extends CosmeticMatType<Morph> {
         return null;
     }
 
+    public static MorphType getByName(String s) {
+        try {
+            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
+        } catch (Exception exc) {
+            return null;
+        }
+    }
+
     public static void checkEnabled() {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
@@ -57,6 +65,8 @@ public class MorphType extends CosmeticMatType<Morph> {
     private MorphType(String permission, String configName, Material material, byte data, DisguiseType disguiseType, String defaultDesc, Class<? extends Morph> clazz) {
         super(Category.MORPHS, configName, permission, defaultDesc, material, data, clazz);
         this.disguiseType = disguiseType;
+
+        VALUES.add(this);
     }
 
     /**

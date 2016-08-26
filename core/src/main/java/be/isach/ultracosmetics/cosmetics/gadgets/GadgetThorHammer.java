@@ -51,9 +51,9 @@ public class GadgetThorHammer extends Gadget implements Listener {
                     public void run() {
                         if (i.isValid()) {
                             if (UltraCosmeticsData.get().isAmmoEnabled()) {
-                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getCosmeticType().getMaterial(), getCosmeticType().getData(), "§f§l" + getOwner().getAmmo(getCosmeticType().toString().toLowerCase()) + " " + getCosmeticType().getName(), "§9Gadget"));
+                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getType().getMaterial(), getType().getData(), "§f§l" + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), "§9Gadget"));
                             } else {
-                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getCosmeticType().getMaterial(), getCosmeticType().getData(), getCosmeticType().getName(), MessageManager.getMessage("Gadgets.Lore")));
+                                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getType().getMaterial(), getType().getData(), getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
                             }
                             i.remove();
                         }
@@ -70,9 +70,9 @@ public class GadgetThorHammer extends Gadget implements Listener {
             if (event.getPlayer() == getPlayer()) {
                 if (event.getItem().getTicksLived() > 5) {
                     if (UltraCosmeticsData.get().isAmmoEnabled()) {
-                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getCosmeticType().getMaterial(), getCosmeticType().getData(), "§f§l" + getOwner().getAmmo(getCosmeticType().toString().toLowerCase()) + " " + getCosmeticType().getName(), "§9Gadget"));
+                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getType().getMaterial(), getType().getData(), "§f§l" + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), "§9Gadget"));
                     } else {
-                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getCosmeticType().getMaterial(), getCosmeticType().getData(), getCosmeticType().getName(), MessageManager.getMessage("Gadgets.Lore")));
+                        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), ItemFactory.create(getType().getMaterial(), getType().getData(), getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
                     }
                     hammer.remove(event.getItem());
                     event.getItem().remove();

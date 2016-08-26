@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Sacha on 20/12/15.
  */
-public class SuitType extends CosmeticType<Suit> {
+public class SuitType extends CosmeticMatType<Suit> {
 
     private final static List<SuitType> ENABLED = new ArrayList<>();
     private final static List<SuitType> VALUES = new ArrayList<>();
@@ -34,6 +34,14 @@ public class SuitType extends CosmeticType<Suit> {
             if (suitType.getConfigName().equalsIgnoreCase(s)) return suitType;
         }
         return null;
+    }
+
+    public static SuitType getByName(String s) {
+        try {
+            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
+        } catch (Exception exc) {
+            return null;
+        }
     }
 
     public static void checkEnabled() {
@@ -62,7 +70,7 @@ public class SuitType extends CosmeticType<Suit> {
      */
     SuitType(String configName, String permissionSuffix, String defaultDesc,
              Material h, Material c, Material l, Material b, Class<? extends Suit> clazz) {
-        super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, clazz);
+        super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, (byte) 0, clazz);
         this.boots = b;
         this.helmet = h;
         this.chestplate = c;

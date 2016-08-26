@@ -7,8 +7,8 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
-import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
@@ -196,7 +196,7 @@ public class UltraPlayer {
             if (getPlayer() != null)
                 getPlayer().sendMessage(MessageManager.getMessage("Emotes.Unequip")
                         .replace("%emotename%", TextUtil.filterPlaceHolder(currentEmote.
-                                getCosmeticType().getName(), ultraCosmetics)));
+                                getType().getName(), ultraCosmetics)));
             currentEmote.clear();
             currentEmote = null;
         }
@@ -263,7 +263,7 @@ public class UltraPlayer {
         getPlayer().getInventory().setHelmet(null);
 
         getPlayer().sendMessage(MessageManager.getMessage("Hats.Unequip")
-                .replace("%hatname%", TextUtil.filterPlaceHolder(currentHat.getName(), ultraCosmetics)));
+                .replace("%hatname%", TextUtil.filterPlaceHolder(currentHat.getType().getName(), ultraCosmetics)));
         currentHat = null;
     }
 
@@ -344,14 +344,14 @@ public class UltraPlayer {
         removeHat();
 
         if (getPlayer().getInventory().getHelmet() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-Hat"));
+            getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-HatType"));
             return;
         }
 
         getPlayer().getInventory().setHelmet(hat.getItemStack());
 
         getPlayer().sendMessage(MessageManager.getMessage("Hats.Equip")
-                .replace("%hatname%", TextUtil.filterPlaceHolder(hat.getName(), ultraCosmetics)));
+                .replace("%hatname%", TextUtil.filterPlaceHolder(hat.getType().getName(), ultraCosmetics)));
         currentHat = hat;
     }
 
@@ -362,7 +362,7 @@ public class UltraPlayer {
      */
     public void setEmote(Emote emote) {
         getPlayer().sendMessage(MessageManager.getMessage("Emotes.Equip")
-                .replace("%emotename%", TextUtil.filterPlaceHolder(emote.getCosmeticType().getName(), ultraCosmetics)));
+                .replace("%emotename%", TextUtil.filterPlaceHolder(emote.getType().getName(), ultraCosmetics)));
         currentEmote = emote;
     }
 
@@ -433,7 +433,7 @@ public class UltraPlayer {
      */
     public void removeParticleEffect() {
         if (currentParticleEffect != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(currentParticleEffect.getCosmeticType().getName(), ultraCosmetics)));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(currentParticleEffect.getType().getName(), ultraCosmetics)));
             currentParticleEffect = null;
         }
     }
@@ -495,9 +495,9 @@ public class UltraPlayer {
                 ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(getMySqlIndex(), name, amount);
         if (currentGadget != null)
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
-                    ItemFactory.create(currentGadget.getCosmeticType().getMaterial(), currentGadget.getCosmeticType().getData(),
-                            "§f§l" + getAmmo(currentGadget.getCosmeticType().toString()
-                                    .toLowerCase()) + " " + currentGadget.getCosmeticType().getName(), MessageManager.getMessage("Gadgets.Lore")));
+                    ItemFactory.create(currentGadget.getType().getMaterial(), currentGadget.getType().getData(),
+                            "§f§l" + getAmmo(currentGadget.getType().toString()
+                                    .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
     }
 
     /**
@@ -727,14 +727,6 @@ public class UltraPlayer {
         return currentPet;
     }
 
-    public CacheValue getMorphSelfViewCache() {
-        return morphSelfViewCache;
-    }
-
-    public CacheValue getGadgetsEnabledCache() {
-        return gadgetsEnabledCache;
-    }
-
     public Suit getCurrentBoots() {
         return currentBoots;
     }
@@ -753,10 +745,6 @@ public class UltraPlayer {
 
     public TreasureChest getCurrentTreasureChest() {
         return currentTreasureChest;
-    }
-
-    public void setGadgetsEnabledCache(CacheValue gadgetsEnabledCache) {
-        this.gadgetsEnabledCache = gadgetsEnabledCache;
     }
 
     public void setCurrentGadget(Gadget currentGadget) {

@@ -42,18 +42,18 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                 try {
                     if (Bukkit.getPlayer(getOwnerUniqueId()) != null
                             && getOwner().getCurrentParticleEffect() != null
-                            && getOwner().getCurrentParticleEffect().getCosmeticType() == type) {
-                        if (getCosmeticType() != ParticleEffectType.FROZENWALK
-                                && getCosmeticType() != ParticleEffectType.ENCHANTED
-                                && getCosmeticType() != ParticleEffectType.MUSIC
-                                && getCosmeticType() != ParticleEffectType.SANTAHAT
-                                && getCosmeticType() != ParticleEffectType.FLAMEFAIRY
-                                && getCosmeticType() != ParticleEffectType.ENDERAURA) {
+                            && getOwner().getCurrentParticleEffect().getType() == type) {
+                        if (getType() != ParticleEffectType.FROZENWALK
+                                && getType() != ParticleEffectType.ENCHANTED
+                                && getType() != ParticleEffectType.MUSIC
+                                && getType() != ParticleEffectType.SANTAHAT
+                                && getType() != ParticleEffectType.FLAMEFAIRY
+                                && getType() != ParticleEffectType.ENDERAURA) {
                             if (!isMoving() || ignoreMove)
                                 onUpdate();
                             if (isMoving()) {
                                 boolean c = type == ParticleEffectType.ANGELWINGS;
-                                if (getCosmeticType().getEffect() == Particles.REDSTONE) {
+                                if (getType().getEffect() == Particles.REDSTONE) {
                                     if (!ignoreMove) {
                                         for (int i = 0; i < 15; i++) {
                                             if (!c) {
@@ -63,7 +63,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                                             }
                                         }
                                     }
-                                } else if (getCosmeticType().getEffect() == Particles.ITEM_CRACK) {
+                                } else if (getType().getEffect() == Particles.ITEM_CRACK) {
                                     for (int i = 0; i < 15; i++)
                                         Particles.ITEM_CRACK.display(new Particles.ItemData(Material.INK_SACK, ParticleEffectCrushedCandyCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
                                 } else
@@ -80,7 +80,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
             }
         };
         runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, type.getRepeatDelay());
-        getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), ultraCosmetics)));
+        getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", TextUtil.filterPlaceHolder(getType().getName(), ultraCosmetics)));
     }
 
     protected boolean isMoving() {
@@ -97,7 +97,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
         } catch (Exception ignored) {
         }
         if (getPlayer() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(getType().getName(), getUCInstance())));
         }
     }
 }

@@ -58,7 +58,7 @@ public abstract class Suit extends Cosmetic<SuitType> {
                     drop(itemStack);
                     getPlayer().getInventory().setHelmet(null);
                 }
-                getPlayer().getInventory().setHelmet(ItemFactory.create(getCosmeticType().getHelmet(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getHelmet();
                 getOwner().setCurrentHelmet(this);
                 break;
@@ -68,7 +68,7 @@ public abstract class Suit extends Cosmetic<SuitType> {
                     drop(itemStack);
                     getPlayer().getInventory().setChestplate(null);
                 }
-                getPlayer().getInventory().setChestplate(ItemFactory.create(getCosmeticType().getChestplate(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getChestplate();
                 getOwner().setCurrentChestplate(this);
                 break;
@@ -78,7 +78,7 @@ public abstract class Suit extends Cosmetic<SuitType> {
                     drop(itemStack);
                     getPlayer().getInventory().setLeggings(null);
                 }
-                getPlayer().getInventory().setLeggings(ItemFactory.create(getCosmeticType().getLeggings(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getLeggings();
                 getOwner().setCurrentLeggings(this);
                 break;
@@ -88,7 +88,7 @@ public abstract class Suit extends Cosmetic<SuitType> {
                     drop(itemStack);
                     getPlayer().getInventory().setBoots(null);
                 }
-                getPlayer().getInventory().setBoots(ItemFactory.create(getCosmeticType().getBoots(), (byte) 0, getCosmeticType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+                getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getBoots();
                 getOwner().setCurrentBoots(this);
                 break;
@@ -105,7 +105,7 @@ public abstract class Suit extends Cosmetic<SuitType> {
             }
         }.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, 1);
 
-        getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(getArmorSlot()), ultraCosmetics)));
+        getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", TextUtil.filterPlaceHolder(getType().getName(getArmorSlot()), ultraCosmetics)));
     }
 
     @Override

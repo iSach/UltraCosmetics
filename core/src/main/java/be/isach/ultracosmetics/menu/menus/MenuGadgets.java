@@ -5,21 +5,16 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.type.CosmeticMatType;
-import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +33,26 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer player, int page) {
+        putToggleGadgetsItems(inventory, player);
+    }
 
+    private void putToggleGadgetsItems(Inventory inventory, UltraPlayer player) {
+        int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 5 : 6);
+        MaterialData materialData;
+        boolean toggle;
+        if (player.hasGadgetsEnabled()) {
+            materialData = ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Enabled");
+            toggle = false;
+        } else {
+            materialData = ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Disabled");
+            toggle = true;
+        }
+        String msg = MessageManager.getMessage((toggle ? "Enable" : "Disable") + "-Gadgets");
+        ClickRunnable run = data -> {
+            player.setGadgetsEnabled(!player.hasGadgetsEnabled());
+            putToggleGadgetsItems(inventory, player);
+        };
+        putItem(inventory, slot, ItemFactory.create(materialData.getItemType(), materialData.getData(), msg), run);
     }
 
     @Override
@@ -57,10 +71,12 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
 
             if (SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount")
                     && !(player.getCurrentGadget() != null
-                    && player.getCurrentGadget().getCosmeticType() == gadgetType)) {
+                    && player.getCurrentGadget().getType() == gadgetType)) {
                 itemStack.setAmount(Math.max(0, Math.min(64, ammo)));
             }
+            itemMeta.setLore(loreList);
         }
+        itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
 
@@ -77,5 +93,10 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
     @Override
     protected void toggleOff(UltraPlayer ultraPlayer) {
         ultraPlayer.removeGadget();
+    }
+
+    @Override
+    protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
+        return ultraPlayer.getCurrentGadget();
     }
 }

@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Package: be.isach.ultracosmetics.cosmetics.type

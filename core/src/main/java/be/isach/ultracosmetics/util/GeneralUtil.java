@@ -2,10 +2,10 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
@@ -78,7 +78,7 @@ public class GeneralUtil {
         writer.println("");
         writer.println("Hats:");
         writer.println("  - ultracosmetics.hats.*");
-        for (Hat hat : Hat.values())
+        for (HatType hat : HatType.values())
             writer.println("  - " + hat.getPermission());
         writer.println("");
         writer.println("Particle Effects:");

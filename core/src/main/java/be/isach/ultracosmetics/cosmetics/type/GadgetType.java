@@ -36,10 +36,11 @@ public class GadgetType extends CosmeticMatType<Gadget> {
     }
 
     public static GadgetType getByName(String s) {
-        for (GadgetType gadgetType : VALUES) {
-            if (gadgetType.getName().equalsIgnoreCase(s)) return gadgetType;
+        try {
+            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
+        } catch (Exception exc) {
+            return null;
         }
-        return null;
     }
 
     public static void checkEnabled() {

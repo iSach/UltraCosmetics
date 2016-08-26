@@ -73,12 +73,12 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         armorStand.setVisible(false);
         armorStand.setSmall(true);
         armorStand.setGravity(false);
-        armorStand.setCustomName(getCosmeticType().getEntityName(getPlayer()));
+        armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUCInstance(), "C_AD_ArmorStand"));
         armorStand.setRemoveWhenFarAway(true);
-        if (getOwner().getPetName(getCosmeticType().getConfigName()) != null)
-            armorStand.setCustomName(getOwner().getPetName(getCosmeticType().getConfigName()));
+        if (getOwner().getPetName(getType().getConfigName()) != null)
+            armorStand.setCustomName(getOwner().getPetName(getType().getConfigName()));
 
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
@@ -101,7 +101,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                     }
                     if (Bukkit.getPlayer(getOwnerUniqueId()) != null
                             && getOwner().getCurrentPet() != null
-                            && getOwner().getCurrentPet().getCosmeticType() == getCosmeticType()) {
+                            && getOwner().getCurrentPet().getType() == getType()) {
                         if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
                             onUpdate();
                         pathUpdater.submit(followTask.getTask());
@@ -114,7 +114,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                         clear();
                         return;
                     }
-                    if (armorStand != null && getCosmeticType() != PetType.WITHER) {
+                    if (armorStand != null && getType() != PetType.WITHER) {
                         armorStand.teleport(getEntity().getLocation().add(0, -0.7, 0));
                     }
                 } catch (NullPointerException exc) {
@@ -131,7 +131,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         runnable.runTaskTimer(getUCInstance(), 0, 3);
 
         EntitySpawningManager.setBypass(true);
-        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getCosmeticType().getEntityType());
+        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
         EntitySpawningManager.setBypass(false);
         if (entity instanceof Ageable) {
             if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) ((Ageable) entity).setBaby();
@@ -143,17 +143,17 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
 
 //        this.entity.setPassenger(armorStand);
-        if (getCosmeticType() == PetType.WITHER) {
-            this.entity.setCustomName(getCosmeticType().getEntityName(getPlayer()));
+        if (getType() == PetType.WITHER) {
+            this.entity.setCustomName(getType().getEntityName(getPlayer()));
             this.entity.setCustomNameVisible(true);
 
-            if (getOwner().getPetName(getCosmeticType().getConfigName()) != null)
-                this.entity.setCustomName(getOwner().getPetName(getCosmeticType().getConfigName()));
+            if (getOwner().getPetName(getType().getConfigName()) != null)
+                this.entity.setCustomName(getOwner().getPetName(getType().getConfigName()));
             armorStand.remove();
         }
         this.entity.setMetadata("Pet", new FixedMetadataValue(getUCInstance(), "UltraCosmetics"));
 
-        getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())));
+        getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", TextUtil.filterPlaceHolder(getType().getName(), getUCInstance())));
     }
 
     @Override

@@ -1,8 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,6 +16,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityUnleashEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -72,10 +75,23 @@ public class GadgetParachute extends Gadget {
 
     @EventHandler
     public void onLeashBreak(EntityUnleashEvent event) {
-        if (chickens.contains(event.getEntity()))
-            for (Entity ent : event.getEntity().getNearbyEntities(1, 1, 1))
-                if (ent instanceof Item && ((Item) ent).getItemStack().getType() == Material.LEASH)
-                    ent.remove();
+        if (chickens.contains(event.getEntity())) {
+            event.getEntity().getNearbyEntities(1, 1, 1).stream().filter(ent -> ent instanceof Item
+                    && ((Item) ent).getItemStack().getType() == Material.LEASH).forEachOrdered(Entity::remove);
+        }
+    }
+
+    @Override
+    protected boolean checkRequirements(PlayerInteractEvent event) {
+        Location loc1 = getPlayer().getLocation().add(2, 28, 2);
+        Location loc2 = getPlayer().getLocation().clone().add(-2, 40, -2);
+        Cuboid checkCuboid = new Cuboid(loc1, loc2);
+
+        if (!checkCuboid.isEmpty()) {
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
+            return false;
+        }
+        return true;
     }
 
     @Override

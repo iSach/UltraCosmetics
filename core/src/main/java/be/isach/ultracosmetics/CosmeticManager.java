@@ -1,8 +1,7 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
+import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.cosmetics.type.*;
 
 import java.io.IOException;
@@ -94,7 +93,7 @@ public class CosmeticManager {
                 ultraCosmetics.getConfig().addDefault("Morphs." + morphType.getConfigName() + ".Show-Description", true, "if true, the description of this morph will be showed.");
                 ultraCosmetics.getConfig().addDefault("Morphs." + morphType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
             }
-        for (Hat hat : Hat.values()) {
+        for (HatType hat : HatType.values()) {
             ultraCosmetics.getConfig().addDefault("Hats." + hat.getConfigName() + ".Enabled", true, "if true, the hat will be enabled.");
             ultraCosmetics.getConfig().addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
             ultraCosmetics.getConfig().addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
@@ -121,7 +120,7 @@ public class CosmeticManager {
         MountType.checkEnabled();
         ParticleEffectType.checkEnabled();
         PetType.checkEnabled();
-        Hat.checkEnabled();
+        HatType.checkEnabled();
         SuitType.checkEnabled();
         EmoteType.checkEnabled();
         if (Category.MORPHS.isEnabled()) {

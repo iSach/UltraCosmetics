@@ -6,10 +6,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.run.FallDamageManager;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +15,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -138,6 +136,20 @@ public class GadgetRocket extends Gadget {
             };
             runnable.runTaskTimer(getUCInstance(), 0, 20);
         }, 12);
+    }
+
+    @Override
+    protected boolean checkRequirements(PlayerInteractEvent event) {
+        Cuboid c = new Cuboid(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
+        if (!c.isEmpty()) {
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
+            return false;
+        }
+        if (!getPlayer().isOnGround()) {
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
+            return false;
+        }
+        return true;
     }
 
     private boolean isStillCurrentGadget() {

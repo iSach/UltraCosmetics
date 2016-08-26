@@ -47,11 +47,11 @@ class EmoteAnimation extends BukkitRunnable {
     private void updateTexture() {
         if (!running) return;
 
-        emote.getPlayer().getInventory().setHelmet(emote.getCosmeticType().getFrames().get(currentFrame));
-        emote.setItemStack(emote.getCosmeticType().getFrames().get(currentFrame));
+        emote.getPlayer().getInventory().setHelmet(emote.getType().getFrames().get(currentFrame));
+        emote.setItemStack(emote.getType().getFrames().get(currentFrame));
 
         if (up) {
-            if (currentFrame >= emote.getCosmeticType().getMaxFrames() - 1) {
+            if (currentFrame >= emote.getType().getMaxFrames() - 1) {
                 up = false;
             } else {
                 currentFrame++;

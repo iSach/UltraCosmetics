@@ -5,10 +5,10 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
@@ -20,7 +20,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.TextUtil;
-import com.sun.javafx.text.TextRun;
 import org.bukkit.*;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.ItemStack;
@@ -54,7 +53,7 @@ public class TreasureRandomizer {
     private static List<MountType> mountList = new ArrayList<>();
     private static List<PetType> petList = new ArrayList<>();
     private static List<MorphType> morphList = new ArrayList<>();
-    private static List<Hat> hatList = new ArrayList<>();
+    private static List<HatType> hatList = new ArrayList<>();
     private static List<SuitType> helmetList = new ArrayList<>();
     private static List<SuitType> chestplateList = new ArrayList<>();
     private static List<SuitType> leggingList = new ArrayList<>();
@@ -142,7 +141,7 @@ public class TreasureRandomizer {
                         && type.canBeFound())
                     mountList.add(type);
         if (hatList.isEmpty())
-            for (Hat hat : Hat.enabled())
+            for (HatType hat : HatType.enabled())
                 if (hat.canBeFound()
                         && !player.hasPermission(hat.getPermission()))
                     hatList.add(hat);
@@ -468,8 +467,8 @@ public class TreasureRandomizer {
 
     public void giveRandomHat() {
         int i = random.nextInt(hatList.size());
-        Hat hat = hatList.get(i);
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Hat").replace("%hat%", hat.getName());
+        HatType hat = hatList.get(i);
+        name = MessageManager.getMessage("Treasure-Chests-Loot.HatType").replace("%hat%", hat.getName());
         hatList.remove(i);
         givePermission(hat.getPermission());
         itemStack = hat.getItemStack().clone();

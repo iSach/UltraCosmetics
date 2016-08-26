@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -8,6 +9,8 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 /**
@@ -54,6 +57,16 @@ public class GadgetChristmasTree extends Gadget {
         lastLocation.subtract(0, 3, 0);
     }
 
+    @Override
+    protected boolean checkRequirements(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null
+                || event.getClickedBlock().getType() == Material.AIR) {
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
+            return true;
+        }
+        return false;
+    }
+
     private void drawLog() {
         Location current = lastLocation.clone();
         Location to = lastLocation.clone().add(0, 2.5, 0);
@@ -78,8 +91,8 @@ public class GadgetChristmasTree extends Gadget {
                 if (e == 1) {
                     double inc = (2 * Math.PI) / d;
                     float angle = (float) (g * inc);
-                    float x = MathUtils.cos(angle) * (radius+0.05f);
-                    float z = MathUtils.sin(angle) * (radius+0.05f);
+                    float x = MathUtils.cos(angle) * (radius + 0.05f);
+                    float z = MathUtils.sin(angle) * (radius + 0.05f);
                     lastLocation.add(x, f, z);
                     UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), lastLocation);
                     lastLocation.subtract(x, f, z);

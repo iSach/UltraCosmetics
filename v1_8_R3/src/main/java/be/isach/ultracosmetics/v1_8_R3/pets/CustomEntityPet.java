@@ -20,8 +20,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
-
 /**
  * Created by Sacha on 7/03/16.
  */
@@ -67,7 +65,7 @@ public class CustomEntityPet extends Pet {
                     }
                     if (Bukkit.getPlayer(getOwnerUniqueId()) != null
                             && getOwner().getCurrentPet() != null
-                            && getOwner().getCurrentPet().getCosmeticType() == getCosmeticType()) {
+                            && getOwner().getCurrentPet().getType() == getType()) {
                         if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
                             onUpdate();
                         pathUpdater.submit(followTask.getTask());
@@ -103,11 +101,11 @@ public class CustomEntityPet extends Pet {
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
-        armorStand.setCustomName(getCosmeticType().getEntityName(getPlayer()));
+        armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUCInstance(), "C_AD_ArmorStand"));
-        if (getOwner().getPetName(getCosmeticType().getConfigName()) != null)
-            armorStand.setCustomName(getOwner().getPetName(getCosmeticType().getConfigName()));
+        if (getOwner().getPetName(getType().getConfigName()) != null)
+            armorStand.setCustomName(getOwner().getPetName(getType().getConfigName()));
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);

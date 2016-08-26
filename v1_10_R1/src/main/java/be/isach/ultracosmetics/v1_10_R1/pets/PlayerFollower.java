@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.v1_10_R1.pets;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.*;
 import net.minecraft.server.v1_10_R1.Entity;
@@ -46,7 +45,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             }
             if (path != null && distance > 3.3) {
                 double speed = 1.05d;
-                if (pet.getCosmeticType().getEntityType() == EntityType.ZOMBIE)
+                if (pet.getType().getEntityType() == EntityType.ZOMBIE)
                     speed *= 1.5;
                 ((EntityInsentient) petEntity).getNavigation().a(path, speed);
                 ((EntityInsentient) petEntity).getNavigation().a(speed);

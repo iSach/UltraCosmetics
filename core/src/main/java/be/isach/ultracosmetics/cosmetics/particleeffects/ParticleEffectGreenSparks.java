@@ -6,8 +6,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
  * Created by sacha on 13/08/15.
  */
@@ -39,7 +37,7 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
         Vector v = new Vector();
         v.setX(Math.cos(angle) * 1.1);
         v.setZ(Math.sin(angle) * 1.1);
-        UtilParticles.display(getCosmeticType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
+        UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
         step += 4;
     }
 

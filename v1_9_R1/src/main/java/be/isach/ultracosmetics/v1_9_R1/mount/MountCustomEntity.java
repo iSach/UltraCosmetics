@@ -36,11 +36,11 @@ public abstract class MountCustomEntity extends Mount {
 
     @Override
     public void onEquip() {
-        if (getCosmeticType() == MountType.SKYSQUID)
+        if (getType() == MountType.SKYSQUID)
             customEntity = new FlyingSquid(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        else if (getCosmeticType() == MountType.SLIME)
+        else if (getType() == MountType.SLIME)
             customEntity = new CustomSlime(((CraftPlayer) getPlayer()).getHandle().getWorld());
-        else if (getCosmeticType() == MountType.SPIDER)
+        else if (getType() == MountType.SPIDER)
             customEntity = new RideableSpider(((CraftWorld) getPlayer().getWorld()).getHandle());
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
@@ -69,7 +69,7 @@ public abstract class MountCustomEntity extends Mount {
                     if (getOwner() != null
                             && Bukkit.getPlayer(getOwnerUniqueId()) != null
                             && getOwner().getCurrentMount() != null
-                            && getOwner().getCurrentMount().getCosmeticType() == getCosmeticType()) {
+                            && getOwner().getCurrentMount().getType() == getType()) {
                         onUpdate();
                     } else {
                         cancel();
@@ -81,9 +81,9 @@ public abstract class MountCustomEntity extends Mount {
                 }
             }
         };
-        runnable.runTaskTimerAsynchronously(getUCInstance(), 0, getCosmeticType().getRepeatDelay());
+        runnable.runTaskTimerAsynchronously(getUCInstance(), 0, getType().getRepeatDelay());
 
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", TextUtil.filterPlaceHolder(getCosmeticType().getMenuName(), getUCInstance())));
+        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", TextUtil.filterPlaceHolder(getType().getMenuName(), getUCInstance())));
         getOwner().setCurrentMount(this);
     }
 

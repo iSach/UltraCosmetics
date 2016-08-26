@@ -52,7 +52,7 @@ public abstract class Menu implements Listener {
         player.getPlayer().openInventory(inventory);
     }
 
-    void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {
+    protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {
         Validate.notNull(itemStack);
         Validate.notNull(clickRunnable);
 
@@ -106,7 +106,7 @@ public abstract class Menu implements Listener {
 
     protected abstract void putItems(Inventory inventory, UltraPlayer player);
 
-    abstract int getSize();
+    protected abstract int getSize();
 
-    abstract String getName();
+    protected abstract String getName();
 }

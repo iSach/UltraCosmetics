@@ -7,8 +7,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
  * Created by sacha on 12/08/15.
  */
@@ -41,7 +39,7 @@ public class ParticleEffectFlameRings extends ParticleEffect {
             } else {
                 MathUtils.rotateAroundAxisZ(v, 90);
             }
-            UtilParticles.display(getCosmeticType().getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
+            UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
         }
         step += 3;
     }

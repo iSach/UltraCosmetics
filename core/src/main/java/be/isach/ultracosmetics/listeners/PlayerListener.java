@@ -22,7 +22,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 /**
- * Created by sacha on 03/08/15.
+ * Package: be.isach.ultracosmetics.listeners
+ * Created by: sacha
+ * Date: 03/08/15
+ * Project: UltraCosmetics
  */
 public class PlayerListener implements Listener {
 
@@ -34,41 +37,27 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(final PlayerJoinEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, new Runnable() {
-            @Override
-            public void run() {
-                ultraCosmetics.getPlayerManager().create(event.getPlayer());
+        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
+            ultraCosmetics.getPlayerManager().create(event.getPlayer());
 
-                if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
-                    Bukkit.getScheduler().runTaskLater(ultraCosmetics, new Runnable() {
-                        @Override
-                        public void run() {
-                            UltraPlayer cp = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-                            if (cp != null && event.getPlayer() != null)
-                                cp.giveMenuItem();
-                        }
-                    }, 5);
-                }
-                if (ultraCosmetics.getUpdateChecker().isOutdated())
-                    if (event.getPlayer().isOp())
-                        event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
+            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+                Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
+                    UltraPlayer cp = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+                    if (cp != null && event.getPlayer() != null)
+                        cp.giveMenuItem();
+                }, 5);
             }
+            if (ultraCosmetics.getUpdateChecker().isOutdated())
+                if (event.getPlayer().isOp())
+                    event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
         });
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWorldChange(final PlayerChangedWorldEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, new Runnable() {
-            @Override
-            public void run() {
-                if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
-                    Bukkit.getScheduler().runTaskLater(ultraCosmetics, new Runnable() {
-                        @Override
-                        public void run() {
-                            ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem();
-                        }
-                    }, 5);
-                }
+        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
+            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+                Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem(), 5);
             }
         });
     }
@@ -86,6 +75,23 @@ public class PlayerListener implements Listener {
             event.getPlayer().updateInventory();
         }
     }
+
+    @EventHandler
+    public void onInteract(final PlayerInteractEvent event) {
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        if (ultraPlayer.getCurrentTreasureChest() != null) {
+            event.setCancelled(true);
+            return;
+        }
+        if (event.getItem() != null
+                && event.getItem().hasItemMeta()
+                && event.getItem().getItemMeta().hasDisplayName()
+                && event.getItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+            event.setCancelled(true);
+            Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> ultraCosmetics.getMenus().getMainMenu().open(ultraPlayer));
+        }
+    }
+
 
     /**
      * Cancel players from removing, picking the item in their inventory.
@@ -110,7 +116,6 @@ public class PlayerListener implements Listener {
                     && event.getCurrentItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
                 event.setCancelled(true);
                 player.updateInventory();
-                return;
             }
         }
     }

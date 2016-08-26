@@ -23,7 +23,7 @@ public class Emote extends Cosmetic<EmoteType> {
     public Emote(UltraPlayer owner, final EmoteType emoteType, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.EMOTES, owner, emoteType);
 
-        this.animation = new EmoteAnimation(getCosmeticType().getTicksPerFrame(), this);
+        this.animation = new EmoteAnimation(getType().getTicksPerFrame(), this);
 
         owner.setEmote(this);
     }

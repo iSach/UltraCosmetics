@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
@@ -13,18 +12,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.UUID;
 
 /**
  * Created by sacha on 03/08/15.
@@ -62,7 +56,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
     @Override
     public void onEquip() {
         EntitySpawningManager.setBypass(true);
-        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getCosmeticType().getEntityType());
+        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
         EntitySpawningManager.setBypass(false);
         if (entity instanceof Ageable) {
             ((Ageable) entity).setAdult();
@@ -72,7 +66,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
             }
         }
         entity.setCustomNameVisible(true);
-        entity.setCustomName(getCosmeticType().getName(getPlayer()));
+        entity.setCustomName(getType().getName(getPlayer()));
         entity.setPassenger(getPlayer());
         if (entity instanceof Horse) {
             ((Horse) entity).setDomestication(1);
@@ -94,7 +88,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
                     if (getOwner() != null
                             && Bukkit.getPlayer(getOwnerUniqueId()) != null
                             && getOwner().getCurrentMount() != null
-                            && getOwner().getCurrentMount().getCosmeticType() == getCosmeticType()) {
+                            && getOwner().getCurrentMount().getType() == getType()) {
                         onUpdate();
                     } else {
                         cancel();
@@ -106,10 +100,10 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
                 }
             }
         };
-        runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getCosmeticType().getRepeatDelay());
+        runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
 
-//        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (getUCInstance().placeHolderColor) ? getCosmeticType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
+//        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (getUCInstance().placeHolderColor) ? getType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
         getOwner().setCurrentMount(this);
     }
 
@@ -128,7 +122,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
             return;
         String name = null;
         try {
-            name = getCosmeticType().getName(getPlayer());
+            name = getType().getName(getPlayer());
         } catch (Exception e) {
         }
 
@@ -150,7 +144,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
             event.setCancelled(true);
         if (event.getEntity() == getPlayer()
                 && getOwner().getCurrentMount() != null
-                && getOwner().getCurrentMount().getCosmeticType() == getCosmeticType()) {
+                && getOwner().getCurrentMount().getType() == getType()) {
             event.setCancelled(true);
         }
     }

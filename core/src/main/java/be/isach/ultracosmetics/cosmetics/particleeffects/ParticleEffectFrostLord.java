@@ -9,8 +9,6 @@ import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
  * Created by sacha on 12/08/15.
  */
@@ -38,7 +36,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * radius);
             v.setZ(Math.sin(angle) * radius);
-            UtilParticles.display(getCosmeticType().getEffect(), location.add(v).add(0, stepY, 0));
+            UtilParticles.display(getType().getEffect(), location.add(v).add(0, stepY, 0));
             location.subtract(v).subtract(0, stepY, 0);
             if (stepY < 3) {
                 radius -= 0.022;
@@ -48,7 +46,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                 step = 0;
                 radius = 1.5f;
                 SoundUtil.playSound(getPlayer(), Sounds.DIG_SNOW, .5f, 1.5f);
-                UtilParticles.display(getCosmeticType().getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
+                UtilParticles.display(getType().getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
             }
         }
     }

@@ -40,6 +40,14 @@ public final class PetType extends CosmeticMatType<Pet> {
         return null;
     }
 
+    public static PetType getByName(String s) {
+        try {
+            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
+        } catch (Exception exc) {
+            return null;
+        }
+    }
+
     public static void checkEnabled() {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }

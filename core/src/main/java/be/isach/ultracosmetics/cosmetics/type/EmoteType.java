@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.util.TexturedSkullFactory;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  * Created on: 17th June, 2016
  * at 02:45
  */
-public class EmoteType extends CosmeticType<Emote> {
+public class EmoteType extends CosmeticMatType<Emote> {
 
     private final static List<EmoteType> ENABLED = new ArrayList<>();
     private final static List<EmoteType> VALUES = new ArrayList<>();
@@ -37,6 +38,14 @@ public class EmoteType extends CosmeticType<Emote> {
             if (emoteType.getConfigName().equalsIgnoreCase(s)) return emoteType;
         }
         return null;
+    }
+
+    public static EmoteType getByName(String s) {
+        try {
+            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
+        } catch (Exception exc) {
+            return null;
+        }
     }
 
     public static void checkEnabled() {
@@ -204,7 +213,7 @@ public class EmoteType extends CosmeticType<Emote> {
     private int ticksPerFrame;
 
     public EmoteType(String permission, String configName, String defaultDesc, int ticksPerFrame) {
-        super(Category.EMOTES, configName, permission, defaultDesc, Emote.class);
+        super(Category.EMOTES, configName, permission, defaultDesc, Material.SKULL_ITEM, (byte) 3, Emote.class);
         this.ticksPerFrame = ticksPerFrame;
         this.frames = new ArrayList<>();
 

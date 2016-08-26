@@ -37,10 +37,10 @@ public abstract class Morph extends Cosmetic<MorphType> {
             owner.removeMorph();
         }
 
-        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())));
+        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", TextUtil.filterPlaceHolder(getType().getName(), getUCInstance())));
         owner.setCurrentMorph(this);
 
-        disguise = new MobDisguise(getCosmeticType().getDisguiseType());
+        disguise = new MobDisguise(getType().getDisguiseType());
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 
         if (!owner.canSeeSelfMorph()) {
@@ -56,7 +56,7 @@ public abstract class Morph extends Cosmetic<MorphType> {
         DisguiseAPI.undisguiseToAll(getPlayer());
         getOwner().setCurrentMorph(null);
         if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", TextUtil.filterPlaceHolder(getCosmeticType().getName(), getUCInstance())));
+            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", TextUtil.filterPlaceHolder(getType().getName(), getUCInstance())));
         owner = null;
         try {
             HandlerList.unregisterAll(this);

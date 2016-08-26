@@ -35,6 +35,14 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
         return null;
     }
 
+    public static ParticleEffectType getByName(String s) {
+        try {
+            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
+        } catch (Exception exc) {
+            return null;
+        }
+    }
+
     public static void checkEnabled() {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
@@ -64,6 +72,8 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
         super(Category.EFFECTS, configName, permission, defaultDesc, material, data, clazz);
         this.repeatDelay = repeatDelay;
         this.effect = effect;
+
+        VALUES.add(this);
     }
 
     public Particles getEffect() {

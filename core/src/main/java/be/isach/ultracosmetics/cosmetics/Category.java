@@ -1,8 +1,10 @@
 package be.isach.ultracosmetics.cosmetics;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -10,6 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Project: UltraCosmetics
@@ -20,19 +24,60 @@ import java.util.Arrays;
  */
 public enum Category {
 
-    PETS("Pets", "Spawn", "Despawn", "Clear-Pet"),
-    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget"),
-    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect"),
-    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount"),
-    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph"),
-    HATS("Hats", "Equip", "Unequip", "Clear-Hat"),
-    SUITS("Suits", "Equip", "Unequip", "Clear-Suit"),
-    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote");
+    PETS("Pets", "Spawn", "Despawn", "Clear-Pet") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getPetsMenu();
+        }
+    },
+    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getGadgetsMenu();
+        }
+    },
+    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getEffectsMenu();
+        }
+    },
+    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getMountsMenu();
+        }
+    },
+    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getMorphsMenu();
+        }
+    },
+    HATS("Hats", "Equip", "Unequip", "Clear-HatType") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getHatsMenu();
+        }
+    },
+    SUITS("Suits", "Equip", "Unequip", "Clear-Suit") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getSuitsMenu();
+        }
+    },
+    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote") {
+        @Override
+        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
+            return ultraCosmetics.getMenus().getEmotesMenu();
+        }
+    };
 
     public static int enabledSize() {
-        final int[] i = {0};
-        Arrays.stream(values()).filter(Category::isEnabled).forEach(category -> i[0]++);
-        return i[0];
+        return enabled().size();
+    }
+    public static List<Category> enabled() {
+        return Arrays.stream(values()).filter(Category::isEnabled).collect(Collectors.toList());
     }
 
     /**
@@ -145,4 +190,6 @@ public enum Category {
     public String getDeactivateMenu() {
         return MessageManager.getMessage("Menu." + deactivateMenu);
     }
+
+    public abstract CosmeticMenu getMenu(UltraCosmetics ultraCosmetics);
 }

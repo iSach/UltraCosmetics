@@ -6,8 +6,10 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.UUID;
 
@@ -82,7 +84,7 @@ public abstract class Cosmetic<T extends CosmeticType> implements Listener {
         return owner.getUuid();
     }
 
-    public T getCosmeticType() {
+    public T getType() {
         return cosmeticType;
     }
 }

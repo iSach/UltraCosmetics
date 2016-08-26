@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
+import be.isach.ultracosmetics.menu.Menus;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
  * Created by: sacha
  * Date: 03/08/15
  * Project: UltraCosmetics
- *
+ * <p>
  * Description: Main Class of the plugin.
  */
 public class UltraCosmetics extends JavaPlugin {
@@ -78,6 +79,11 @@ public class UltraCosmetics extends JavaPlugin {
      * Treasure Chests Manager;
      */
     private TreasureChestManager treasureChestManager;
+
+    /**
+     * Menus.
+     */
+    private Menus menus;
 
     /**
      * Called when plugin is enabled.
@@ -161,8 +167,8 @@ public class UltraCosmetics extends JavaPlugin {
         new FallDamageManager().runTaskTimerAsynchronously(this, 0, 1);
         new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
 
+        this.menus = new Menus(this);
 
-        // TODO Register Menus.
         try {
             config.save(file);
         } catch (IOException e) {
@@ -229,8 +235,6 @@ public class UltraCosmetics extends JavaPlugin {
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null)
             economy = economyProvider.getProvider();
-
-//        vaultLoaded = economy != null;
     }
 
     private void setUpConfig() {
@@ -342,12 +346,25 @@ public class UltraCosmetics extends JavaPlugin {
         return economy;
     }
 
+    /**
+     * @return The Update Checker.
+     */
     public UpdateManager getUpdateChecker() {
         return updateChecker;
     }
 
+    /**
+     * @return The Treasure Chest Manager.
+     */
     public TreasureChestManager getTreasureChestManager() {
         return treasureChestManager;
+    }
+
+    /**
+     * @return The menus.
+     */
+    public Menus getMenus() {
+        return menus;
     }
 
     /**

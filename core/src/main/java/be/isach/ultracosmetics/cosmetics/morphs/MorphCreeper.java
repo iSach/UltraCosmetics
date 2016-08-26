@@ -45,7 +45,7 @@ public class MorphCreeper extends Morph {
                         SoundUtil.playSound(getPlayer(), Sounds.CREEPER_HISS, 1.4f, 1.5f);
                     } else {
                         if (creeperWatcher.isIgnited()) {
-                            disguise = new MobDisguise(getCosmeticType().getDisguiseType());
+                            disguise = new MobDisguise(getType().getDisguiseType());
                             DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 //                            disguise.setShowName(true);
                             if (!getOwner().canSeeSelfMorph())
