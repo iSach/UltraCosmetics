@@ -170,7 +170,7 @@ public class GadgetPortalGun extends Gadget {
                         loc.setYaw(getYaw(redBlockFace));
                         teleport(getPlayer(), loc);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                         @Override
                         public void run() {
                             teleported = false;
@@ -228,7 +228,7 @@ public class GadgetPortalGun extends Gadget {
                         loc.setYaw(getYaw(blueBlockFace));
                         teleport(getPlayer(), loc);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                         @Override
                         public void run() {
                             teleported = false;
@@ -289,7 +289,7 @@ public class GadgetPortalGun extends Gadget {
     }
 
     private void teleport(final Entity entity, final Location location) {
-        Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 entity.teleport(location);

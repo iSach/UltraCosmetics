@@ -55,7 +55,7 @@ public class MountRudolph extends Mount {
         else
             armorStand.setRightArmPose(new EulerAngle(MathUtils.PI, Math.PI / 4 + -(Math.PI / 2), MathUtils.PI / 4));
         armorStand.setItemInHand(new ItemStack(Material.DEAD_BUSH));
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUCInstance(), getPlayer().getUniqueId().toString()));
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), getPlayer().getUniqueId().toString()));
         return armorStand;
     }
 

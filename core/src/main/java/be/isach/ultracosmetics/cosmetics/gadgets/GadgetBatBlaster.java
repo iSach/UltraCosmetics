@@ -37,7 +37,7 @@ public class GadgetBatBlaster extends Gadget {
         for (int i = 0; i < 16; i++) {
             ((ArrayList) this.bats.get(getPlayer())).add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 onClear();

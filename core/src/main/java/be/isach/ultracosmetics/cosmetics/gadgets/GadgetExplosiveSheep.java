@@ -132,7 +132,7 @@ public class GadgetExplosiveSheep extends Gadget {
                     sheep.setNoDamageTicks(120);
                     UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
                     UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
-                    Bukkit.getScheduler().runTaskLater(getUCInstance(), () -> {
+                    Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                         UtilParticles.display(Particles.LAVA, sheep.getLocation(), 5);
                         sheep.remove();
                         EXPLOSIVE_SHEEP.remove(gadgetExplosiveSheep);

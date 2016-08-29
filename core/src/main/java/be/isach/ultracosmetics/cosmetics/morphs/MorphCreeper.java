@@ -87,7 +87,7 @@ public class MorphCreeper extends Morph {
 
 
                 }
-            }.runTaskTimer(getUCInstance(), 0, 1);
+            }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
     }
 

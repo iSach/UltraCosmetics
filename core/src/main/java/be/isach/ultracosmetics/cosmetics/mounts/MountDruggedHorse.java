@@ -33,7 +33,7 @@ public class MountDruggedHorse extends Mount {
             UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 1.1d);
             horse.setJumpStrength(1.3);
         }
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 try {
@@ -56,6 +56,6 @@ public class MountDruggedHorse extends Mount {
 
     @Override
     protected void onClear() {
-
+        getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
     }
 }

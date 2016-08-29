@@ -63,7 +63,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     @Override
     public void onUpdate() {
         try {
-            Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     Iterator<Item> melonBlockIterator = melonBlocks.iterator();
@@ -75,7 +75,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
                                 final Item melon = getPlayer().getWorld().dropItem(item.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UUID.randomUUID().toString()));
                                 melon.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
                                 melons.add(melon);
-                                Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new BukkitRunnable() {
+                                Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
                                     @Override
                                     public void run() {
                                         if (melon.isValid()) {

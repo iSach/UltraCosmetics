@@ -4,12 +4,12 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ import java.util.UUID;
  * Date: 21/07/16
  * Project: UltraCosmetics
  */
-public abstract class Cosmetic<T extends CosmeticType> implements Listener {
+public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable implements Listener {
 
     private UltraPlayer owner;
     private Category category;
@@ -45,16 +45,31 @@ public abstract class Cosmetic<T extends CosmeticType> implements Listener {
         ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
     }
 
-    public final void clear() {
+    public void equip() {
+        this.equipped = true;
+
+        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+        getPlayer().sendMessage(mess);
+
+        onEquip();
+    }
+
+    public void clear() {
 
         // Send unequip Message.
-        // getPlayer().sendMessage();
+        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+        getPlayer().sendMessage(mess);
 
         // unregister listener.
         HandlerList.unregisterAll(this);
 
         onClear();
     }
+
+    @Override
+    public void run() {}
 
     protected abstract void onEquip();
 
@@ -64,7 +79,7 @@ public abstract class Cosmetic<T extends CosmeticType> implements Listener {
         return owner;
     }
 
-    public final UltraCosmetics getUCInstance() {
+    public final UltraCosmetics getUltraCosmetics() {
         return ultraCosmetics;
     }
 

@@ -24,49 +24,49 @@ import java.util.stream.Collectors;
  */
 public enum Category {
 
-    PETS("Pets", "Spawn", "Despawn", "Clear-Pet") {
+    PETS("Pets", "Spawn", "Despawn", "Clear-Pet", "%petname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getPetsMenu();
         }
     },
-    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget") {
+    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget", "%gadgetname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getGadgetsMenu();
         }
     },
-    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect") {
+    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect", "%effectname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getEffectsMenu();
         }
     },
-    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount") {
+    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount", "%mountname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getMountsMenu();
         }
     },
-    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph") {
+    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph", "%morphname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getMorphsMenu();
         }
     },
-    HATS("Hats", "Equip", "Unequip", "Clear-HatType") {
+    HATS("Hats", "Equip", "Unequip", "Clear-HatType", "%hatname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getHatsMenu();
         }
     },
-    SUITS("Suits", "Equip", "Unequip", "Clear-Suit") {
+    SUITS("Suits", "Equip", "Unequip", "Clear-Suit", "%suitname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getSuitsMenu();
         }
     },
-    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote") {
+    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote", "%emotename%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getEmotesMenu();
@@ -105,18 +105,30 @@ public enum Category {
      */
     private String clearConfigPath;
 
+    private String chatPlaceholder;
+
+    private String activateConfig;
+
+    private String deactivateConfig;
+
     /**
      * Category of Cosmetic.
-     *  @param configPath The config path name.
+     * @param configPath The config path name.
      * @param activateMenu Message on menu to activate a cosmetic of this category.
      * @param deactivateMenu Message on menu to deactivate a cosmetic of this category.
      * @param clearConfigPath
+     * @param chatPlaceholder
+     * @param activateConfig
+     * @param deactivateConfig
      */
-    Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath) {
+    Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath, String chatPlaceholder, String activateConfig, String deactivateConfig) {
         this.configPath = configPath;
         this.activateMenu = activateMenu;
         this.deactivateMenu = deactivateMenu;
         this.clearConfigPath = clearConfigPath;
+        this.chatPlaceholder = chatPlaceholder;
+        this.activateConfig = activateConfig;
+        this.deactivateConfig = deactivateConfig;
         if (SettingsManager.getConfig().contains("Categories." + configPath + ".Main-Menu-Item")) {
             this.is = initMaterialData((String) (SettingsManager.getConfig().get("Categories." + configPath + ".Main-Menu-Item"))).toItemStack(1);
         } else {
@@ -189,6 +201,18 @@ public enum Category {
 
     public String getDeactivateMenu() {
         return MessageManager.getMessage("Menu." + deactivateMenu);
+    }
+
+    public String getChatPlaceholder() {
+        return chatPlaceholder;
+    }
+
+    public String getActivateConfig() {
+        return activateConfig;
+    }
+
+    public String getDeactivateConfig() {
+        return deactivateConfig;
     }
 
     public abstract CosmeticMenu getMenu(UltraCosmetics ultraCosmetics);

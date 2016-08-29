@@ -25,7 +25,7 @@ public class Emote extends Cosmetic<EmoteType> {
 
         this.animation = new EmoteAnimation(getType().getTicksPerFrame(), this);
 
-        owner.setEmote(this);
+        owner.setCurrentEmote(this);
     }
 
     @Override

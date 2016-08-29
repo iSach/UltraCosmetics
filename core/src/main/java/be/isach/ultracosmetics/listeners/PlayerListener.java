@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.listeners;
 
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -19,6 +20,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -179,14 +181,11 @@ public class PlayerListener implements Listener {
             event.getDrops().remove(event.getEntity().getInventory().getItem((Integer) SettingsManager.getConfig().get("Gadget-Slot")));
         if (ultraPlayer.getCurrentHat() != null)
             event.getDrops().remove(ultraPlayer.getCurrentHat().getItemStack());
-        if (ultraPlayer.getCurrentHelmet() != null)
-            event.getDrops().remove(ultraPlayer.getCurrentHelmet().getItemStack());
-        if (ultraPlayer.getCurrentChestplate() != null)
-            event.getDrops().remove(ultraPlayer.getCurrentChestplate().getItemStack());
-        if (ultraPlayer.getCurrentLeggings() != null)
-            event.getDrops().remove(ultraPlayer.getCurrentLeggings().getItemStack());
-        if (ultraPlayer.getCurrentBoots() != null)
-            event.getDrops().remove(ultraPlayer.getCurrentBoots().getItemStack());
+        Arrays.asList(ArmorSlot.values()).forEach(armorSlot -> {
+            if (ultraPlayer.getSuit(armorSlot) != null) {
+                event.getDrops().remove(ultraPlayer.getSuit(armorSlot).getItemStack());
+            }
+        });
         if (ultraPlayer.getCurrentEmote() != null)
             event.getDrops().remove(ultraPlayer.getCurrentEmote().getItemStack());
         ultraPlayer.clear();

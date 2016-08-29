@@ -37,7 +37,7 @@ public class MorphWitherSkeleton extends Morph {
         if (event.getPlayer() == getPlayer()
                 && !inCooldown) {
             inCooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     inCooldown = false;
@@ -53,7 +53,7 @@ public class MorphWitherSkeleton extends Morph {
                 bone.setVelocity(MathUtils.getRandomVector());
                 items.add(bone);
             }
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     for (Entity bone : items)

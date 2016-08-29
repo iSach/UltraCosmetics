@@ -97,7 +97,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
         } catch (Exception ignored) {
         }
         if (getPlayer() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(getType().getName(), getUCInstance())));
+            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())));
         }
     }
 }

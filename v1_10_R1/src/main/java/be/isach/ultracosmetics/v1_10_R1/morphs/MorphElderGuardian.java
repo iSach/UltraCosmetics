@@ -28,7 +28,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Sacha on 19/12/15.
@@ -78,12 +77,12 @@ public class MorphElderGuardian extends Morph {
                 }
                 if (customGuardian == null
                         || !customGuardian.isAlive()) {
-                    getUCInstance().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
+                    getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
                     cancel();
                     return;
                 }
             }
-        }.runTaskTimerAsynchronously(getUCInstance(), 0, 1);
+        }.runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
 
     }
 
@@ -94,7 +93,7 @@ public class MorphElderGuardian extends Morph {
                 && event.getPlayer() == getPlayer()) {
             shootLaser();
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
@@ -126,7 +125,7 @@ public class MorphElderGuardian extends Morph {
 
         customGuardian.target(armorStand);
 
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 FireworkEffect.Builder builder = FireworkEffect.builder();

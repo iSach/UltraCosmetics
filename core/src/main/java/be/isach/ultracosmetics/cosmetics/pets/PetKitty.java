@@ -22,7 +22,7 @@ public class PetKitty extends Pet {
 
     public PetKitty(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.KITTY);
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 if (getOwner() != null && getEntity() != null) {
@@ -41,7 +41,7 @@ public class PetKitty extends Pet {
         item.setPickupDelay(30000);
         item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
         items.add(item);
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 item.remove();

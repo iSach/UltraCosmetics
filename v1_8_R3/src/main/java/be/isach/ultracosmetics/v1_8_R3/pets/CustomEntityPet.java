@@ -87,7 +87,7 @@ public class CustomEntityPet extends Pet {
                 }
             }
         };
-        runnable.runTaskTimer(getUCInstance(), 0, 6);
+        runnable.runTaskTimer(getUltraCosmetics(), 0, 6);
 
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
@@ -103,9 +103,9 @@ public class CustomEntityPet extends Pet {
         armorStand.setSmall(true);
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUCInstance(), "C_AD_ArmorStand"));
-        if (getOwner().getPetName(getType().getConfigName()) != null)
-            armorStand.setCustomName(getOwner().getPetName(getType().getConfigName()));
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand"));
+        if (getOwner().getPetName(getType()) != null)
+            armorStand.setCustomName(getOwner().getPetName(getType()));
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);

@@ -31,7 +31,7 @@ public class GadgetBlizzardBlaster extends Gadget {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
-        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(getUCInstance(), new BukkitRunnable() {
+        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
             @Override
             public void run() {
                 if (getOwner().getCurrentGadget() != instance) {
@@ -53,7 +53,7 @@ public class GadgetBlizzardBlaster extends Gadget {
             }
         }, 0, 1).getTaskId();
 
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.getScheduler().cancelTask(i);

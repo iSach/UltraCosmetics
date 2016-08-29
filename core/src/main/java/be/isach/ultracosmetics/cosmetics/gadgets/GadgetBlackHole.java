@@ -41,7 +41,7 @@ public class GadgetBlackHole extends Gadget {
         item.setPickupDelay(Integer.MAX_VALUE);
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
         i = item;
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 if (i != null) {
@@ -78,7 +78,7 @@ public class GadgetBlackHole extends Gadget {
                 for (final Entity entity : i.getNearbyEntities(5, 3, 5)) {
                     Vector vector = i.getLocation().toVector().subtract(entity.getLocation().toVector());
                     MathUtils.applyVelocity(entity, vector);
-                    Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
                         @Override
                         public void run() {
                             if (entity instanceof Player)

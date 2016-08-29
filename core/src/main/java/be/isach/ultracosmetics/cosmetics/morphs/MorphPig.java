@@ -41,7 +41,7 @@ public class MorphPig extends Morph {
                                     && ent != disguise.getEntity()
                                     && !cooldown) {
                                 cooldown = true;
-                                Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+                                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                                     @Override
                                     public void run() {
                                         cooldown = false;
@@ -58,7 +58,7 @@ public class MorphPig extends Morph {
                         }
                     }
                 }
-            }.runTaskTimer(getUCInstance(), 0, 1);
+            }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
     }
 

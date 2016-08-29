@@ -40,7 +40,7 @@ public class MorphEnderman extends Morph {
                 return;
             }
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
@@ -74,7 +74,7 @@ public class MorphEnderman extends Morph {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)

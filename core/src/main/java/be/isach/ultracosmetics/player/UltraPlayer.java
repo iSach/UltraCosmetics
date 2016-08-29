@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
@@ -15,6 +16,7 @@ import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.CacheValue;
@@ -32,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -59,10 +62,7 @@ public class UltraPlayer {
     private TreasureChest currentTreasureChest;
     private Morph currentMorph;
     private Hat currentHat;
-    private Suit currentHelmet;
-    private Suit currentChestplate;
-    private Suit currentLeggings;
-    private Suit currentBoots;
+    private Map<ArmorSlot, Suit> suitMap = new HashMap<>();
     private Emote currentEmote;
 
     /**
@@ -176,30 +176,23 @@ public class UltraPlayer {
      * Removes the current gadget.
      */
     public void removeGadget() {
-        if (currentGadget != null) {
-            if (getPlayer() != null) {
-//                getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Unequip").replace("%gadgetname%", (UltraCosmeticsData.get().placeholdersHaveColor()) ? currentGadget.getName() : UltraCosmetics.filterColor(currentGadget.getName())));
-            }
-            currentGadget.removeItem();
-            currentGadget.onClear();
-            currentGadget.removeListener();
-            currentGadget.unregisterListeners();
-            currentGadget = null;
+        if (currentGadget == null) {
+            return;
         }
+
+        currentGadget.clear();
+        currentGadget = null;
     }
 
     /**
      * Removes the current emote.
      */
     public void removeEmote() {
-        if (currentEmote != null) {
-            if (getPlayer() != null)
-                getPlayer().sendMessage(MessageManager.getMessage("Emotes.Unequip")
-                        .replace("%emotename%", TextUtil.filterPlaceHolder(currentEmote.
-                                getType().getName(), ultraCosmetics)));
-            currentEmote.clear();
-            currentEmote = null;
+        if (currentEmote == null) {
+            return;
         }
+        currentEmote.clear();
+        currentEmote = null;
     }
 
 
@@ -207,24 +200,22 @@ public class UltraPlayer {
      * Removes the current Mount.
      */
     public void removeMount() {
-        if (currentMount != null) {
-            currentMount.clear();
-            currentMount = null;
-            getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
+        if (currentMount == null) {
+            return;
         }
+        currentMount.clear();
+        currentMount = null;
     }
 
     /**
      * Removes the current Pet.
      */
     public void removePet() {
-        if (currentPet != null) {
-            if (currentPet.armorStand != null)
-                currentPet.armorStand.remove();
-            currentPet.items.forEach(Entity::remove);
-            currentPet.clear();
-            currentPet = null;
+        if (currentPet == null) {
+            return;
         }
+        currentPet.clear();
+        currentPet = null;
     }
 
     /**
@@ -259,12 +250,16 @@ public class UltraPlayer {
      * Removes the current hat.
      */
     public void removeHat() {
-        if (currentHat == null) return;
-        getPlayer().getInventory().setHelmet(null);
+        if (currentHat == null) {
+            return;
+        }
 
-        getPlayer().sendMessage(MessageManager.getMessage("Hats.Unequip")
-                .replace("%hatname%", TextUtil.filterPlaceHolder(currentHat.getType().getName(), ultraCosmetics)));
+        currentHat.clear();
         currentHat = null;
+    }
+
+    public void setSuit(ArmorSlot armorSlot, Suit suit) {
+        suitMap.put(armorSlot, suit);
     }
 
     /**
@@ -273,30 +268,24 @@ public class UltraPlayer {
      * @param armorSlot The ArmorSlot to remove.
      */
     public void removeSuit(ArmorSlot armorSlot) {
-        switch (armorSlot) {
-            case HELMET:
-                if (currentHelmet != null)
-                    currentHelmet.clear();
-                break;
-            case CHESTPLATE:
-                if (currentChestplate != null)
-                    currentChestplate.clear();
-                break;
-            case LEGGINGS:
-                if (currentLeggings != null)
-                    currentLeggings.clear();
-                break;
-            case BOOTS:
-                if (currentBoots != null)
-                    currentBoots.clear();
-                break;
+        if (!suitMap.containsKey(armorSlot)) {
+            suitMap.put(armorSlot, null);
+            return;
         }
+
+        if (suitMap.get(armorSlot) == null) {
+            return;
+        }
+
+        suitMap.get(armorSlot).clear();
+        suitMap.put(armorSlot, null);
     }
 
     public double getBalance() {
         try {
-            if (ultraCosmetics.getEconomy() != null)
+            if (ultraCosmetics.getEconomy() != null) {
                 return ultraCosmetics.getEconomy().getBalance(getPlayer());
+            }
         } catch (Exception exc) {
             ultraCosmetics.getSmartLogger().write("Error happened while getting a player's balance.");
             return 0;
@@ -313,57 +302,20 @@ public class UltraPlayer {
      * @return The Suit from the armor slot.
      */
     public Suit getSuit(ArmorSlot armorSlot) {
-        switch (armorSlot) {
-            case HELMET:
-                return currentHelmet;
-            case CHESTPLATE:
-                return currentChestplate;
-            case LEGGINGS:
-                return currentLeggings;
-            case BOOTS:
-                return currentBoots;
+        if (!suitMap.containsKey(armorSlot)) {
+            suitMap.put(armorSlot, null);
         }
-        return null;
+
+        return suitMap.get(armorSlot);
     }
 
     /**
      * Removes entire suit.
      */
     public void removeSuit() {
-        for (ArmorSlot armorSlot : ArmorSlot.values())
+        for (ArmorSlot armorSlot : ArmorSlot.values()) {
             removeSuit(armorSlot);
-    }
-
-    /**
-     * Sets current hat.
-     *
-     * @param hat The new hat.
-     */
-    public void setHat(Hat hat) {
-
-        removeHat();
-
-        if (getPlayer().getInventory().getHelmet() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-HatType"));
-            return;
         }
-
-        getPlayer().getInventory().setHelmet(hat.getItemStack());
-
-        getPlayer().sendMessage(MessageManager.getMessage("Hats.Equip")
-                .replace("%hatname%", TextUtil.filterPlaceHolder(hat.getType().getName(), ultraCosmetics)));
-        currentHat = hat;
-    }
-
-    /**
-     * Sets Emote.
-     *
-     * @param emote new Emote.
-     */
-    public void setEmote(Emote emote) {
-        getPlayer().sendMessage(MessageManager.getMessage("Emotes.Equip")
-                .replace("%emotename%", TextUtil.filterPlaceHolder(emote.getType().getName(), ultraCosmetics)));
-        currentEmote = emote;
     }
 
     /**
@@ -381,7 +333,7 @@ public class UltraPlayer {
             removeMorph();
             try {
                 DisguiseAPI.undisguiseToAll(getPlayer());
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         removeGadget();
@@ -391,8 +343,7 @@ public class UltraPlayer {
         removeTreasureChest();
         removeHat();
         removeEmote();
-        for (ArmorSlot armorSlot : ArmorSlot.values())
-            removeSuit(armorSlot);
+        removeSuit();
         return toReturn;
     }
 
@@ -404,49 +355,31 @@ public class UltraPlayer {
             return;
         }
 
-        try {
-            final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
-
-            for (int i = 27; i < 30; i++) {
-                inventory.setItem(i, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
-                inventory.setItem(i + 9, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
-                inventory.setItem(i + 18, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
-                inventory.setItem(i + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
-                inventory.setItem(i + 9 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
-                inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
-            }
-            ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"))));
-            inventory.setItem(13, itemStack);
-
-            ItemFactory.fillInventory(inventory);
-
-            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
-                getPlayer().openInventory(inventory);
-            }, 3);
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
+        // TODO
     }
 
     /**
      * Removes current Particle Effect.
      */
     public void removeParticleEffect() {
-        if (currentParticleEffect != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(currentParticleEffect.getType().getName(), ultraCosmetics)));
-            currentParticleEffect = null;
+        if (currentParticleEffect == null) {
+            return;
         }
+
+        currentParticleEffect.clear();
+        currentParticleEffect = null;
     }
 
     /**
      * Removes current Morph.
      */
     public void removeMorph() {
-        if (currentMorph != null) {
-            DisguiseAPI.undisguiseToAll(getPlayer());
-            currentMorph.clear();
-            currentMorph = null;
+        if (currentMorph == null) {
+            return;
         }
+
+        currentMorph.clear();
+        currentMorph = null;
     }
 
     /**
@@ -456,25 +389,29 @@ public class UltraPlayer {
      * @param name    The new name.
      */
     public void setPetName(String petName, String name) {
-        if (UltraCosmeticsData.get().usingFileStorage())
+        if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
-        else ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petName, name);
+        } else {
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petName, name);
+        }
     }
 
     /**
      * Gets the name of a pet.
      *
-     * @param petName The pet.
+     * @param petType The pet type.
      * @return The pet name.
      */
-    public String getPetName(String petName) {
+    public String getPetName(PetType petType) {
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getPlayer()).get("Pet-Names." + petName);
+                return SettingsManager.getData(getPlayer()).get("Pet-Names." + petType.getConfigName());
             } else {
-                if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petName).equalsIgnoreCase("Unknown"))
+                if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;
-                return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petName);
+                }
+
+                return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName());
             }
         } catch (NullPointerException e) {
             return null;
@@ -488,16 +425,20 @@ public class UltraPlayer {
      * @param amount The ammo amount to give.
      */
     public void addAmmo(String name, int amount) {
-        if (UltraCosmeticsData.get().isAmmoEnabled())
-            if (UltraCosmeticsData.get().usingFileStorage())
+        if (UltraCosmeticsData.get().isAmmoEnabled()) {
+            if (UltraCosmeticsData.get().usingFileStorage()) {
                 SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + amount);
-            else
+            } else {
                 ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(getMySqlIndex(), name, amount);
-        if (currentGadget != null)
-            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
-                    ItemFactory.create(currentGadget.getType().getMaterial(), currentGadget.getType().getData(),
-                            "§f§l" + getAmmo(currentGadget.getType().toString()
-                                    .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
+            }
+
+            if (currentGadget != null) {
+                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
+                        ItemFactory.create(currentGadget.getType().getMaterial(), currentGadget.getType().getData(),
+                                "§f§l" + getAmmo(currentGadget.getType().toString()
+                                        .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
+            }
+        }
     }
 
     /**
@@ -512,6 +453,7 @@ public class UltraPlayer {
             } else {
                 ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setGadgetsEnabled(getMySqlIndex(), enabled);
             }
+
             if (enabled) {
                 getPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
                 this.gadgetsEnabledCache = CacheValue.ENABLED;
@@ -527,11 +469,13 @@ public class UltraPlayer {
      * @return if the player has gadgets enabled or not.
      */
     public boolean hasGadgetsEnabled() {
-        if (this.gadgetsEnabledCache != CacheValue.UNLOADED)
+        if (this.gadgetsEnabledCache != CacheValue.UNLOADED) {
             return gadgetsEnabledCache != CacheValue.DISABLED;
-        // Make sure it won't be affected before load finished, especially for SQL
-        if (!isLoaded)
+        }
+
+        if (!isLoaded) {
             return false;
+        }
 
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
@@ -727,22 +671,6 @@ public class UltraPlayer {
         return currentPet;
     }
 
-    public Suit getCurrentBoots() {
-        return currentBoots;
-    }
-
-    public Suit getCurrentChestplate() {
-        return currentChestplate;
-    }
-
-    public Suit getCurrentHelmet() {
-        return currentHelmet;
-    }
-
-    public Suit getCurrentLeggings() {
-        return currentLeggings;
-    }
-
     public TreasureChest getCurrentTreasureChest() {
         return currentTreasureChest;
     }
@@ -755,28 +683,12 @@ public class UltraPlayer {
         this.gadgetCooldowns = gadgetCooldowns;
     }
 
-    public void setCurrentBoots(Suit currentBoots) {
-        this.currentBoots = currentBoots;
-    }
-
-    public void setCurrentChestplate(Suit currentChestplate) {
-        this.currentChestplate = currentChestplate;
-    }
-
     public void setCurrentEmote(Emote currentEmote) {
         this.currentEmote = currentEmote;
     }
 
     public void setCurrentHat(Hat currentHat) {
         this.currentHat = currentHat;
-    }
-
-    public void setCurrentHelmet(Suit currentHelmet) {
-        this.currentHelmet = currentHelmet;
-    }
-
-    public void setCurrentLeggings(Suit currentLeggings) {
-        this.currentLeggings = currentLeggings;
     }
 
     public void setCurrentMorph(Morph currentMorph) {

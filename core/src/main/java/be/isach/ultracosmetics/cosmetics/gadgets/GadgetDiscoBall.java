@@ -62,7 +62,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte)3, " "));
         running = true;
         DISCO_BALLS.add(this);
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new BukkitRunnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new BukkitRunnable() {
             @Override
             public void run() {
                 onClear();

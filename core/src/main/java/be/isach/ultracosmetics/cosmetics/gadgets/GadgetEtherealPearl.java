@@ -86,7 +86,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             }
         };
         runnableHashMap.put(getPlayer(), runnable);
-        runnable.runTaskTimer(getUCInstance(), 0, 10);
+        runnable.runTaskTimer(getUltraCosmetics(), 0, 10);
     }
 
     @EventHandler
@@ -125,7 +125,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 for (Firework f : fireworks)

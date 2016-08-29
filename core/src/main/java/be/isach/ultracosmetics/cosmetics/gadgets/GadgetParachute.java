@@ -34,7 +34,7 @@ public class GadgetParachute extends Gadget {
         super(owner, GadgetType.PARACHUTE, ultraCosmetics);
 
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, getUCInstance());
+            Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
     }
 
 
@@ -52,7 +52,7 @@ public class GadgetParachute extends Gadget {
             chickens.add(chicken);
             chicken.setLeashHolder(getPlayer());
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 active = true;

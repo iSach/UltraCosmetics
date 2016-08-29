@@ -38,12 +38,12 @@ public class GadgetAntiGravity extends Gadget {
         running = true;
         as.setVisible(false);
         as.setHelmet(new ItemStack(Material.SEA_LANTERN));
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 as.remove();
                 as = null;
-                Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                     @Override
                     public void run() {
                         running = false;

@@ -51,7 +51,7 @@ public class MountSnake extends Mount {
     @Override
     public void onUpdate() {
         if (getPlayer() != null)
-            Bukkit.getScheduler().runTask(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     if (getPlayer() != null) {

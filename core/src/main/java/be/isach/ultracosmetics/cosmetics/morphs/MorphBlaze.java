@@ -39,7 +39,7 @@ public class MorphBlaze extends Morph {
                         getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
                     }
                 }
-            }.runTaskTimer(getUCInstance(), 0, 1);
+            }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
     }
 

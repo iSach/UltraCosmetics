@@ -48,6 +48,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
+        cosmetic.equip();
         return cosmetic;
     }
 

@@ -29,7 +29,7 @@ public class GadgetSnowball extends Gadget {
     void onRightClick() {
         Snowball snowball = getPlayer().launchProjectile(Snowball.class);
         snowball.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.85d));
-        snowball.setMetadata("NO_DAMAGE", new FixedMetadataValue(getUCInstance(), ""));
+        snowball.setMetadata("NO_DAMAGE", new FixedMetadataValue(getUltraCosmetics(), ""));
     }
 
     @Override

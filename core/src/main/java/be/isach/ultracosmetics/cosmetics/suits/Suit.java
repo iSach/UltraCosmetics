@@ -60,7 +60,6 @@ public abstract class Suit extends Cosmetic<SuitType> {
                 }
                 getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getHelmet();
-                getOwner().setCurrentHelmet(this);
                 break;
             case CHESTPLATE:
                 if (getPlayer().getInventory().getChestplate() != null) {
@@ -70,7 +69,6 @@ public abstract class Suit extends Cosmetic<SuitType> {
                 }
                 getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getChestplate();
-                getOwner().setCurrentChestplate(this);
                 break;
             case LEGGINGS:
                 if (getPlayer().getInventory().getLeggings() != null) {
@@ -80,7 +78,6 @@ public abstract class Suit extends Cosmetic<SuitType> {
                 }
                 getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getLeggings();
-                getOwner().setCurrentLeggings(this);
                 break;
             case BOOTS:
                 if (getPlayer().getInventory().getBoots() != null) {
@@ -90,27 +87,24 @@ public abstract class Suit extends Cosmetic<SuitType> {
                 }
                 getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getBoots();
-                getOwner().setCurrentBoots(this);
                 break;
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (getOwner() == null
-                        || getPlayer() == null) {
-                    cancel();
-                    return;
-                }
-                onUpdate();
-            }
-        }.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, 1);
 
-        getPlayer().sendMessage(MessageManager.getMessage("Suits.Equip").replace("%suitname%", TextUtil.filterPlaceHolder(getType().getName(getArmorSlot()), ultraCosmetics)));
+        getOwner().setSuit(armorSlot, this);
     }
 
     @Override
     protected void onEquip() {
-        //...
+        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, 1);
+    }
+
+    @Override
+    public void run() {
+        if (getOwner() == null || getPlayer() == null) {
+            cancel();
+            return;
+        }
+        onUpdate();
     }
 
     /**
@@ -122,25 +116,26 @@ public abstract class Suit extends Cosmetic<SuitType> {
                 if (getOwner().getCurrentHat() != null) {
                     getOwner().removeHat();
                 }
+
                 if (getOwner().getCurrentEmote() != null) {
                     getOwner().removeEmote();
                 }
+
                 getPlayer().getInventory().setHelmet(null);
-                getOwner().setCurrentHelmet(null);
                 break;
             case CHESTPLATE:
                 getPlayer().getInventory().setChestplate(null);
-                getOwner().setCurrentChestplate(null);
                 break;
             case LEGGINGS:
                 getPlayer().getInventory().setLeggings(null);
-                getOwner().setCurrentLeggings(null);
                 break;
             case BOOTS:
                 getPlayer().getInventory().setBoots(null);
-                getOwner().setCurrentBoots(null);
                 break;
         }
+
+        getOwner().setSuit(getArmorSlot(), null);
+
         armorSlot = null;
         suitType = null;
         itemStack = null;

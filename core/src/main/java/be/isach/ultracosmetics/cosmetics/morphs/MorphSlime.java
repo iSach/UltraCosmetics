@@ -38,7 +38,7 @@ public class MorphSlime extends Morph {
         if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
             MathUtils.applyVelocity(getPlayer(), new Vector(0, 2.3, 0));
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;

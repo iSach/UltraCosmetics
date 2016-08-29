@@ -81,9 +81,9 @@ public abstract class MountCustomEntity extends Mount {
                 }
             }
         };
-        runnable.runTaskTimerAsynchronously(getUCInstance(), 0, getType().getRepeatDelay());
+        runnable.runTaskTimerAsynchronously(getUltraCosmetics(), 0, getType().getRepeatDelay());
 
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", TextUtil.filterPlaceHolder(getType().getMenuName(), getUCInstance())));
+        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", TextUtil.filterPlaceHolder(getType().getMenuName(), getUltraCosmetics())));
         getOwner().setCurrentMount(this);
     }
 

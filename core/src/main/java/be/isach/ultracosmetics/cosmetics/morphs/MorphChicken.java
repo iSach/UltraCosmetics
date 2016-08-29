@@ -45,7 +45,7 @@ public class MorphChicken extends Morph {
                     UltraCosmeticsData.get().getVersionManager().getEntityUtil().chickenFall(getPlayer());
 
                 }
-            }.runTaskTimer(getUCInstance(), 0, 1);
+            }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
     }
 
@@ -61,7 +61,7 @@ public class MorphChicken extends Morph {
                 i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5));
                 SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, .5f, 1.5f);
             }
-            Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                 BukkitRunnable followRunnable;
 
                 @Override
@@ -89,8 +89,8 @@ public class MorphChicken extends Morph {
                             }
                         }
                     };
-                    followRunnable.runTaskTimer(getUCInstance(), 0, 1);
-                    Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+                    followRunnable.runTaskTimer(getUltraCosmetics(), 0, 1);
+                    Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                         @Override
                         public void run() {
                             for (Chicken chicken : chickens) {
@@ -104,7 +104,7 @@ public class MorphChicken extends Morph {
                 }
             }, 50);
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUCInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;

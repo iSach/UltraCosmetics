@@ -25,7 +25,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by sacha on 03/08/15.
+ * Package: ${PACKAGE_NAME}
+ * Created by: sacha
+ * Date: 03/08/15
+ * Project: UltraCosmetics
  */
 public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
@@ -75,10 +78,10 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         armorStand.setGravity(false);
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUCInstance(), "C_AD_ArmorStand"));
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand"));
         armorStand.setRemoveWhenFarAway(true);
-        if (getOwner().getPetName(getType().getConfigName()) != null)
-            armorStand.setCustomName(getOwner().getPetName(getType().getConfigName()));
+        if (getOwner().getPetName(getType()) != null)
+            armorStand.setCustomName(getOwner().getPetName(getType()));
 
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
@@ -94,7 +97,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                         items.clear();
                         try {
                             HandlerList.unregisterAll(pet);
-                        } catch (Exception exc) {
+                        } catch (Exception ignored) {
                         }
                         cancel();
                         return;
@@ -128,7 +131,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 }
             }
         };
-        runnable.runTaskTimer(getUCInstance(), 0, 3);
+        runnable.runTaskTimer(getUltraCosmetics(), 0, 3);
 
         EntitySpawningManager.setBypass(true);
         this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
@@ -147,13 +150,14 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             this.entity.setCustomName(getType().getEntityName(getPlayer()));
             this.entity.setCustomNameVisible(true);
 
-            if (getOwner().getPetName(getType().getConfigName()) != null)
-                this.entity.setCustomName(getOwner().getPetName(getType().getConfigName()));
+            if (getOwner().getPetName(getType()) != null) {
+                this.entity.setCustomName(getOwner().getPetName(getType()));
+            }
             armorStand.remove();
         }
-        this.entity.setMetadata("Pet", new FixedMetadataValue(getUCInstance(), "UltraCosmetics"));
+        this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
 
-        getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", TextUtil.filterPlaceHolder(getType().getName(), getUCInstance())));
+        getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())));
     }
 
     @Override

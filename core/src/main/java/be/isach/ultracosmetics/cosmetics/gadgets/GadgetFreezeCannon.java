@@ -31,7 +31,7 @@ public class GadgetFreezeCannon extends Gadget {
         if (owner == null) return;
         items = new ArrayList<>();
         queue = new ArrayList<>();
-        Bukkit.getPluginManager().registerEvents(this, getUCInstance());
+        Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
     }
 
     @Override

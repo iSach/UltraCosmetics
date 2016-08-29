@@ -74,7 +74,7 @@ public class MountMoltenSnake extends Mount {
             armorStand.setVisible(false);
             armorStand.setGravity(false);
             armorStand.setHelmet(new ItemStack(Material.NETHERRACK));
-            armorStand.setMetadata("NO_INTER", new FixedMetadataValue(getUCInstance(), ""));
+            armorStand.setMetadata("NO_INTER", new FixedMetadataValue(getUltraCosmetics(), ""));
         }
     }
 

@@ -30,7 +30,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
     public GadgetThorHammer(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.THORHAMMER, ultraCosmetics);
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, getUCInstance());
+            Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
     }
 
     @Override
@@ -41,12 +41,12 @@ public class GadgetThorHammer extends Gadget implements Listener {
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
         hammer.add(i);
         v = getPlayer().getEyeLocation().getDirection().multiply(1.4).add(new Vector(0, 1, 0));
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 i.setVelocity(getPlayer().getEyeLocation().toVector().subtract(i.getLocation().toVector()).multiply(0.2).add(new Vector(0, 0, 0)));
                 v = null;
-                Bukkit.getScheduler().runTaskLater(getUCInstance(), new Runnable() {
+                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                     @Override
                     public void run() {
                         if (i.isValid()) {

@@ -3,6 +3,8 @@ package be.isach.ultracosmetics.menu.menus;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
+import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
@@ -45,6 +47,6 @@ public class MenuSuits extends CosmeticMenu<SuitType> {
 
     @Override
     protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getCurrentHelmet();
+        return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE);
     }
 }

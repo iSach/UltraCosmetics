@@ -18,5 +18,4 @@ public class SuitSanta extends Suit {
         itemMeta.setColor(Color.fromRGB(255, 0, 0));
         itemStack.setItemMeta(itemMeta);
     }
-
 }

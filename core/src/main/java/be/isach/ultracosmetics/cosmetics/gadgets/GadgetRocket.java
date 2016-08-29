@@ -44,7 +44,7 @@ public class GadgetRocket extends Gadget {
         loc.setX(loc.getBlockX() + 0.5);
         loc.setY(loc.getBlockY());
         loc.setZ(loc.getBlockZ() + 0.5);
-        Bukkit.getScheduler().runTaskLater(getUCInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             for (int i = 0; i < 2; i++) {
                 Block b1 = loc.clone().add(1, i, 0).getBlock();
                 Block b2 = loc.clone().add(-1, i, 0).getBlock();
@@ -118,7 +118,7 @@ public class GadgetRocket extends Gadget {
                             fallingBlocks.get(8).setPassenger(getPlayer());
                         top.setPassenger(getPlayer());
                         launching = true;
-                        Bukkit.getScheduler().runTaskLater(getUCInstance(), () -> {
+                        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                             if (!isStillCurrentGadget()) {
                                 cancel();
                                 return;
@@ -134,7 +134,7 @@ public class GadgetRocket extends Gadget {
                     }
                 }
             };
-            runnable.runTaskTimer(getUCInstance(), 0, 20);
+            runnable.runTaskTimer(getUltraCosmetics(), 0, 20);
         }, 12);
     }
 

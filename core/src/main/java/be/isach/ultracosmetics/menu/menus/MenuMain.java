@@ -26,26 +26,32 @@ public class MenuMain extends Menu {
                 layout = new int[]{1, 3, 5, 7, 19, 21, 23, 25};
                 break;
             case 7:
-                 layout = new int[]{1, 4, 7, 19, 21, 23, 25};
+                layout = new int[]{10, 13, 16, 28, 30, 32, 34};
                 break;
             case 6:
-                layout = new int[]{1, 4, 7, 19, 22, 25};
+                layout = new int[]{10, 13, 16, 28, 31, 34};
                 break;
             case 5:
-                layout = new int[]{1, 7, 13, 20, 24};
+                layout = new int[]{10, 16, 22, 29, 33};
                 break;
             case 4:
-                layout = new int[]{10, 12, 14, 16};
+                layout = new int[]{19, 21, 23, 25};
                 break;
             case 3:
-                layout = new int[]{11, 13, 15};
+                layout = new int[]{20, 22, 24};
                 break;
             case 2:
-                layout = new int[]{12, 14};
+                layout = new int[]{21, 23};
                 break;
             case 1:
-                layout = new int[]{13};
+                layout = new int[]{22};
                 break;
+        }
+
+        if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
+            for (int i = 0; i < layout.length; i++) {
+                layout[i] += 9;
+            }
         }
     }
 
@@ -61,7 +67,7 @@ public class MenuMain extends Menu {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer player) {
-        for(int i = 0; i < Category.enabledSize(); i++) {
+        for (int i = 0; i < Category.enabledSize(); i++) {
             int slot = layout[i];
             Category category = Category.enabled().get(i);
             putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
@@ -75,6 +81,6 @@ public class MenuMain extends Menu {
 
     @Override
     protected int getSize() {
-        return 54;
+        return UltraCosmeticsData.get().areTreasureChestsEnabled() ? 54 : 45;
     }
 }
