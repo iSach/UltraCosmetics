@@ -17,6 +17,7 @@ import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.CacheValue;
@@ -32,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -439,6 +441,14 @@ public class UltraPlayer {
                                         .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
             }
         }
+    }
+
+    public void applyVelocity(Vector vector) {
+        getPlayer().setVelocity(vector);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
+            FallDamageManager.addNoFall(getPlayer());
+            sendMessage("test");
+        }, 2);
     }
 
     /**

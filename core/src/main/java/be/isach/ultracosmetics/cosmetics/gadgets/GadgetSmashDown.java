@@ -42,19 +42,11 @@ public class GadgetSmashDown extends Gadget {
     void onRightClick() {
         SoundUtil.playSound(getPlayer().getLocation(), Sounds.FIREWORK_LAUNCH, 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
-        final int taskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
-            }
-        }, 0, 1).getTaskId();
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.getScheduler().cancelTask(taskId);
-                getPlayer().setVelocity(new Vector(0, -3, 0));
-                activePlayers.add(getPlayer());
-            }
+        final int taskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () ->
+                UtilParticles.display(Particles.CLOUD, getPlayer().getLocation()), 0, 1).getTaskId();
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            Bukkit.getScheduler().cancelTask(taskId);
+            getOwner().applyVelocity(new Vector(0, -3, 0));
         }, 25);
     }
 
@@ -64,8 +56,9 @@ public class GadgetSmashDown extends Gadget {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (activePlayers.contains(event.getEntity()))
+        if (activePlayers.contains(event.getEntity())) {
             event.setCancelled(true);
+        }
     }
 
     @Override
@@ -128,11 +121,7 @@ public class GadgetSmashDown extends Gadget {
                             fb.setVelocity(new Vector(0, 0.3f, 0));
                             fb.setDropItem(false);
                             fallingBlocks.add(fb);
-                            for (Entity ent : fb.getNearbyEntities(1, 1, 1)) {
-                                if (ent != getPlayer() && ent.getType() != EntityType.FALLING_BLOCK)
-                                    if (affectPlayers)
-                                        MathUtils.applyVelocity(ent, new Vector(0, 0.5, 0));
-                            }
+                            fb.getNearbyEntities(1, 1, 1).stream().filter(ent -> ent != getPlayer() && ent.getType() != EntityType.FALLING_BLOCK).filter(ent -> affectPlayers).forEach(ent -> MathUtils.applyVelocity(ent, new Vector(0, 0.5, 0)));
                         }
                     }
                 }

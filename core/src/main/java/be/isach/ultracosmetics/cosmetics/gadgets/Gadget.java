@@ -53,6 +53,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     }
 
 
+
     /**
      * If true, it will differentiate left and right click.
      */
@@ -140,11 +141,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 if (UltraCosmeticsData.get().displaysCooldownInBar()) {
                     if (getPlayer().getItemInHand() != null
                             && itemStack != null
-                            && getPlayer().getItemInHand().hasItemMeta()
-                            && getPlayer().getItemInHand().getItemMeta().hasDisplayName()
-                            && getPlayer().getItemInHand().getItemMeta().getDisplayName().contains(getType().getName())
-                            && getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType()) != -1)
+                            && itemStack.equals(getPlayer().getItemInHand())
+                            && getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType()) != -1) {
                         sendCooldownBar();
+                    }
                     double left = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
                     if (left > -0.1) {
                         String leftRounded = DECIMAL_FORMAT.format(left);
@@ -198,8 +198,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         ChatColor color;
         for (int i = 0; i < 10; i++) {
             color = ChatColor.RED;
-            if (i < 10 - res)
+            if (i < 10 - res) {
                 color = ChatColor.GREEN;
+            }
             stringBuilder.append(color + "█");
         }
 
@@ -301,7 +302,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        if (event.getPlayer() == getPlayer() && ammoInventory != null && isSameInventory(event.getInventory(), ammoInventory)) {
+        if (event.getPlayer() == getPlayer() && ammoInventory != null && InventoryUtils.areSame(event.getInventory(), ammoInventory)) {
             ammoInventory = null;
             openGadgetsInvAfterAmmo = false;
         }
@@ -309,7 +310,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     @EventHandler
     public void onInventoryClickAmmo(final InventoryClickEvent event) {
-        if (event.getWhoClicked() == getPlayer() && ammoInventory != null && isSameInventory(event.getWhoClicked().getOpenInventory().getTopInventory(), ammoInventory)) {
+        if (event.getWhoClicked() == getPlayer() && ammoInventory != null && InventoryUtils.areSame(event.getWhoClicked().getOpenInventory().getTopInventory(), ammoInventory)) {
             event.setCancelled(true);
             if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 String displayName = event.getCurrentItem().getItemMeta().getDisplayName();
@@ -337,10 +338,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
     }
 
-    public boolean isSameInventory(Inventory first, Inventory second) {
-        return InventoryUtils.areSame(first, second);
-    }
-
     @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -359,8 +356,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets-Enabled-Needed"));
             return;
         }
-        if (ultraPlayer.getCurrentTreasureChest() != null)
+        if (ultraPlayer.getCurrentTreasureChest() != null) {
             return;
+        }
 
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             if (ultraPlayer.getAmmo(getType().toString().toLowerCase()) < 1) {
@@ -377,8 +375,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             if (getType().getCountdown() > 1)
                 getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message").replace("%gadgetname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())).replace("%time%", timeLeft));
             return;
-        } else
+        } else {
             ultraPlayer.setCoolDown(getType(), getType().getCountdown());
+        }
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             ultraPlayer.removeAmmo(getType().toString().toLowerCase());
             itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(), "§f§l" + ultraPlayer.getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
@@ -392,11 +391,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 @Override
                 public void run() {
                     if (useTwoInteractMethods) {
-                        if (event.getAction() == Action.RIGHT_CLICK_AIR
-                                || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
                             onRightClick();
-                        else if (event.getAction() == Action.LEFT_CLICK_BLOCK
-                                || event.getAction() == Action.LEFT_CLICK_AIR)
+                        else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR)
                             onLeftClick();
                     } else {
                         onRightClick();
@@ -405,11 +402,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             });
         } else {
             if (useTwoInteractMethods) {
-                if (event.getAction() == Action.RIGHT_CLICK_AIR
-                        || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
                     onRightClick();
-                else if (event.getAction() == Action.LEFT_CLICK_BLOCK
-                        || event.getAction() == Action.LEFT_CLICK_AIR)
+                else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR)
                     onLeftClick();
             } else {
                 onRightClick();

@@ -193,9 +193,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
+        Bukkit.broadcastMessage(FallDamageManager.shouldBeProtected(event.getEntity()) + "");
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL
-                && FallDamageManager.shouldBeProtected(event.getEntity()))
+                && FallDamageManager.shouldBeProtected(event.getEntity())) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
