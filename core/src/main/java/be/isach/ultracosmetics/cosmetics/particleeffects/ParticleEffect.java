@@ -10,11 +10,9 @@ import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.TextUtil;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -34,8 +32,12 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
-        if (getOwner().getCurrentParticleEffect() != null)
+
+        if (getOwner().getCurrentParticleEffect() != null) {
             getOwner().removeParticleEffect();
+        }
+
+        // TODO
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -80,24 +82,16 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
             }
         };
         runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, type.getRepeatDelay());
-        getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Summon").replace("%effectname%", TextUtil.filterPlaceHolder(getType().getName(), ultraCosmetics)));
+
+        getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentParticleEffect(this);
     }
 
     protected boolean isMoving() {
         return UltraCosmeticsData.get().getVersionManager().getEntityUtil().isMoving(getPlayer());
     }
 
-    /**
-     * Clears the effect.
-     */
-    public void onClear() {
-        getOwner().setCurrentParticleEffect(null);
-        try {
-            HandlerList.unregisterAll(this);
-        } catch (Exception ignored) {
-        }
-        if (getPlayer() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Particle-Effects.Unsummon").replace("%effectname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())));
-        }
+    @Override
+    protected void onClear() {
+
     }
 }

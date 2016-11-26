@@ -1,12 +1,11 @@
 package be.isach.ultracosmetics.listeners;
 
-import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
-import net.minecraft.server.v1_10_R1.PlayerList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -193,7 +192,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
-        Bukkit.broadcastMessage(FallDamageManager.shouldBeProtected(event.getEntity()) + "");
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL
                 && FallDamageManager.shouldBeProtected(event.getEntity())) {
             event.setCancelled(true);

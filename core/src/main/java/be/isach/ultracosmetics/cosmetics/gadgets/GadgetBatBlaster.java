@@ -1,12 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
@@ -32,10 +33,10 @@ public class GadgetBatBlaster extends Gadget {
         this.playerVelocity.put(getPlayer(), getPlayer().getEyeLocation());
         this.isActive.put(getPlayer(), Long.valueOf(System.currentTimeMillis()));
 
-        this.bats.put(getPlayer(), new ArrayList());
+        this.bats.put(getPlayer(), new ArrayList<>());
 
         for (int i = 0; i < 16; i++) {
-            ((ArrayList) this.bats.get(getPlayer())).add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
+            this.bats.get(getPlayer()).add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
         }
         Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
             @Override
@@ -61,39 +62,36 @@ public class GadgetBatBlaster extends Gadget {
     public void onUpdate() {
         Location loc = this.playerVelocity.get(getPlayer());
         if (this.isActive.containsKey(getPlayer())) {
-            for (Bat bat : this.bats.get(getPlayer())) {
-                if (bat.isValid()) {
-                    Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D);
-                    bat.setVelocity(loc.getDirection().clone().multiply(0.5D).add(rand));
+            this.bats.get(getPlayer()).stream().filter(Entity::isValid).forEachOrdered(bat -> {
+                Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D);
+                bat.setVelocity(loc.getDirection().clone().multiply(0.5D).add(rand));
 
-                    for (Player other : getPlayer().getWorld().getPlayers())
-                        if (!other.equals(getPlayer()) && getOwner().hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)) {
+                getPlayer().getWorld().getPlayers().stream().filter(other -> !other.equals(getPlayer())
+                        && getOwner().hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)).forEachOrdered(other -> {
 
-                            Vector v = bat.getLocation().getDirection();
-                            v.normalize();
-                            v.multiply(.4d);
-                            v.setY(v.getY() + 0.2d);
+                    Vector v = bat.getLocation().getDirection();
+                    v.normalize();
+                    v.multiply(.4d);
+                    v.setY(v.getY() + 0.2d);
 
-                            if (v.getY() > 7.5)
-                                v.setY(7.5);
+                    if (v.getY() > 7.5)
+                        v.setY(7.5);
 
-                            if (other.isOnGround())
-                                v.setY(v.getY() + 0.4d);
+                    if (other.isOnGround())
+                        v.setY(v.getY() + 0.4d);
 
-                            other.setFallDistance(0);
+                    other.setFallDistance(0);
 
-                            if (affectPlayers)
-                                MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
+                    if (affectPlayers)
+                        MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
 
 
-                            SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
-                            UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
+                    SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
+                    UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
 
-                            bat.remove();
-                        }
-                }
-
-            }
+                    bat.remove();
+                });
+            });
         }
     }
 

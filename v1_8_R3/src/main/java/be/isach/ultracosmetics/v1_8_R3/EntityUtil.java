@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.v1_8_R3;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.treasurechests.ChestType;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.PacketSender;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_8_R3.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import net.minecraft.server.v1_8_R3.*;
@@ -250,7 +252,7 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public boolean isMoving(org.bukkit.entity.Entity entity) {
         net.minecraft.server.v1_8_R3.Entity ent = ((CraftEntity) entity).getHandle();
-        return ent.motX != 0 || ent.motY != 0 || ent.motZ != 0;
+        return ent.motX != 0 || (ent.motY != 0 && !ent.onGround) || ent.motZ != 0;
     }
 
 }

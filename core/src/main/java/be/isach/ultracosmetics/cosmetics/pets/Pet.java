@@ -2,15 +2,13 @@ package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.Updatable;
-import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -80,8 +78,9 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         armorStand.setCustomNameVisible(true);
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand"));
         armorStand.setRemoveWhenFarAway(true);
-        if (getOwner().getPetName(getType()) != null)
+        if (getOwner().getPetName(getType()) != null) {
             armorStand.setCustomName(getOwner().getPetName(getType()));
+        }
 
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
@@ -156,8 +155,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             armorStand.remove();
         }
         this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
-
-        getPlayer().sendMessage(MessageManager.getMessage("Pets.Spawn").replace("%petname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())));
     }
 
     @Override

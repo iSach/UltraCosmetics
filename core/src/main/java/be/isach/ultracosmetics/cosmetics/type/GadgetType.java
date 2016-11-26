@@ -1,12 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.*;
-import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,8 +83,9 @@ public class GadgetType extends CosmeticMatType<Gadget> {
 
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
             this.countdown = defaultCountdown;
+        } else {
+            this.countdown = Double.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown")));
         }
-        this.countdown = Double.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown")));
 
         VALUES.add(this);
     }

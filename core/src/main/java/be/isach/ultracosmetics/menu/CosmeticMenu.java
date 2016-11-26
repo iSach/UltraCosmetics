@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticMatType;
-import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
@@ -95,14 +94,14 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
             String toggle = category.getActivateMenu();
 
-            if (player.getCurrentGadget() != null && player.getCurrentGadget().getType() == cosmeticMatType) {
+            if (getCosmetic(player) != null && getCosmetic(player).getType() == cosmeticMatType) {
                 toggle = category.getDeactivateMenu();
             }
 
-            String typeName = getTypeName((T)cosmeticMatType, player);
+            String typeName = getTypeName(cosmeticMatType, player);
 
             ItemStack is = ItemFactory.create(cosmeticMatType.getMaterial(), cosmeticMatType.getData(), toggle + " " + typeName);
-            if (player.getCurrentGadget() != null && player.getCurrentGadget().getType() == cosmeticMatType) {
+            if (getCosmetic(player) != null && getCosmetic(player).getType() == cosmeticMatType) {
                 is = ItemFactory.addGlow(is);
             }
 
@@ -123,7 +122,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
             itemMeta.setLore(loreList);
             is.setItemMeta(itemMeta);
-            is = filterItem(is, (T) cosmeticMatType, player);
+            is = filterItem(is, cosmeticMatType, player);
             putItem(inventory, COSMETICS_SLOTS[i], is, (data) -> {
                 UltraPlayer ultraPlayer = data.getClicker();
                 ItemStack clicked = data.getClicked();
@@ -145,11 +144,13 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                         toggleOff(ultraPlayer);
                     }
                     toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics());
-                    ultraPlayer.sendMessage(data.getClicked().getType());
-                    if (ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
-                        ultraPlayer.getCurrentGadget().lastPage = currentPage;
-                        ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
-                        ultraPlayer.getCurrentGadget().openGadgetsInvAfterAmmo = true;
+
+                    if (getCategory() == Category.GADGETS) {
+                        if (ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
+                            ultraPlayer.getCurrentGadget().lastPage = currentPage;
+                            ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
+                            ultraPlayer.getCurrentGadget().openGadgetsInvAfterAmmo = true;
+                        }
                     }
                     return;
                 }
@@ -214,7 +215,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
         });
 
         // Go Back to Main Menu Arrow.
-        if (Category.GADGETS.hasGoBackArrow()) {
+        if (getCategory().hasGoBackArrow()) {
             MaterialData backData = ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item");
             ItemStack item = ItemFactory.create(backData.getItemType(), backData.getData(),
                     MessageManager.getMessage("Menu.Main-Menu"));

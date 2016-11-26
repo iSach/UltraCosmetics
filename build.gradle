@@ -30,7 +30,7 @@ allprojects {
 
 boolean local = true
 
-if (local) libsDirName = 'C:\\Users\\sacha\\Development\\Java\\Spigot Server\\plugins'
+if (local) libsDirName = 'C:\\Users\\sacha\\Development\\Java\\MinecraftServers\\Spigot_1_10\\plugins'
 
 dependencies{
     subprojects.each{ p ->

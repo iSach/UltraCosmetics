@@ -9,7 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,20 +74,22 @@ public class CommandManager implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] arguments) {
 
-        if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender))
+        if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender)) {
             return false;
+        }
 
         if (arguments == null
                 || arguments.length == 0) {
             showHelp(sender, 1);
             return true;
         }
+
         if (arguments.length == 1 && MathUtils.isInteger(arguments[0])) {
             showHelp(sender, Math.max(1, Math.min(Integer.parseInt(arguments[0]), getMaxPages())));
             return true;
         }
 
-        for (SubCommand meCommand : commands)
+        for (SubCommand meCommand : commands) {
             if (meCommand.is(arguments[0])) {
 
                 if (!sender.hasPermission(meCommand.getPermission())) {
@@ -96,12 +97,14 @@ public class CommandManager implements CommandExecutor {
                     return true;
                 }
 
-                if (sender instanceof Player)
+                if (sender instanceof Player) {
                     meCommand.onExePlayer((Player) sender, arguments);
-                else
+                } else {
                     meCommand.onExeConsole((ConsoleCommandSender) sender, arguments);
+                }
                 return true;
             }
+        }
         showHelp(sender, 1);
 
         return true;

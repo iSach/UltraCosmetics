@@ -16,7 +16,6 @@ public class Module implements IModule {
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                System.out.println("a");
                 Player pl = Bukkit.getPlayer("iSach");
                 RideableSpider rabbit = new RideableSpider(((CraftWorld)pl.getWorld()).getHandle());
                 Location l = pl.getLocation();

@@ -378,7 +378,7 @@ public class MessageManager {
      * @return a message from a config path.
      */
     public static String getMessage(String path) {
-        return ((String) settingsManager.get(path)).replace("%prefix%", ((String) settingsManager.get("Prefix"))).replace("&", "§");
+        return ((String) settingsManager.get(path)).replace("%prefix%", settingsManager.get("Prefix")).replace("&", "§");
     }
 
 }

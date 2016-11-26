@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 public enum Category {
 
-    PETS("Pets", "Spawn", "Despawn", "Clear-Pet", "%petname%", "Equip", "Unequip") {
+    PETS("Pets", "Spawn", "Despawn", "Clear-Pet", "%petname%", "Spawn", "Despawn") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getPetsMenu();
@@ -36,7 +36,7 @@ public enum Category {
             return ultraCosmetics.getMenus().getGadgetsMenu();
         }
     },
-    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect", "%effectname%", "Equip", "Unequip") {
+    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect", "%effectname%", "Summon", "Unsummon") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getEffectsMenu();

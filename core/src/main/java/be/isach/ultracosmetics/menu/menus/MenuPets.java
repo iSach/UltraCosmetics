@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.menu.menus;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
-import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -35,12 +34,12 @@ public class MenuPets extends CosmeticMenu<PetType> {
 
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-
+        PetType.getByName(name).equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override
     protected void toggleOff(UltraPlayer ultraPlayer) {
-
+        ultraPlayer.removePet();
     }
 
     @Override

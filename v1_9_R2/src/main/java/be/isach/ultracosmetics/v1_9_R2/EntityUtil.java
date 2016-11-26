@@ -1,15 +1,16 @@
 package be.isach.ultracosmetics.v1_9_R2;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.v1_9_R2.pathfinders.CustomPathFinderGoalPanic;
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.treasurechests.ChestType;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.PacketSender;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.v1_9_R2.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_9_R2.*;
-import net.minecraft.server.v1_9_R2.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -17,7 +18,10 @@ import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R2.entity.*;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Wither;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
@@ -246,6 +250,6 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public boolean isMoving(org.bukkit.entity.Entity entity) {
         Entity ent = ((CraftEntity) entity).getHandle();
-        return ent.motX != 0 || ent.motY != 0 || ent.motZ != 0;
+        return ent.motX != 0 || (ent.motY != 0 && !ent.onGround) || ent.motZ != 0;
     }
 }
