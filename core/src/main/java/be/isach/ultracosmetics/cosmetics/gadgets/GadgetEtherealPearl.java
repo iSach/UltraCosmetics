@@ -157,7 +157,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     public void onUpdate() {
         if (runnableHashMap.containsKey(getPlayer())) {
             if (getPlayer().isOnGround()) {
-                //getPlayer().getVehicle().remove();
+                //getBukkitPlayer().getVehicle().remove();
                 getPlayer().eject();
             }
         }

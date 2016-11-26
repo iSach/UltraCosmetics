@@ -49,5 +49,5 @@ public interface IEntityUtil {
 
     void sendTeleportPacket(Player player, Entity entity);
 
-    boolean isMoving(Entity entity);
+    boolean isMoving(Player entity);
 }

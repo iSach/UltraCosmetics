@@ -401,12 +401,12 @@ public class TreasureRandomizer {
         }
         int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max"));
         name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
-        ultraCosmetics.getEconomy().depositPlayer(player.getPlayer(), money);
+        ultraCosmetics.getEconomy().depositPlayer(player.getBukkitPlayer(), money);
         itemStack = new ItemStack(Material.DOUBLE_PLANT);
         if (money > 3 * (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max") / 4)
             spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Message.enabled"))
-            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Money.Message.message")).replace("%name%", player.getPlayer().getName()).replace("%money%", money + ""));
+            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Money.Message.message")).replace("%name%", player.getBukkitPlayer().getName()).replace("%money%", money + ""));
     }
 
     public void giveAmmo() {
@@ -421,7 +421,7 @@ public class TreasureRandomizer {
             spawnRandomFirework(loc);
         }
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Message.enabled"))
-            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%name%", player.getPlayer().getName()).replace("%ammo%", ammo + "").replace("%gadget%", TextUtil.filterPlaceHolder(g.getName(), ultraCosmetics)));
+            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%name%", player.getBukkitPlayer().getName()).replace("%ammo%", ammo + "").replace("%gadget%", TextUtil.filterPlaceHolder(g.getName(), ultraCosmetics)));
 
     }
 
@@ -511,7 +511,7 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Mounts.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Mounts.Message.message"))
-                    .replace("%name%", player.getPlayer().getName()).replace("%mount%", TextUtil.filterPlaceHolder(mount.getName(), ultraCosmetics)));
+                    .replace("%name%", player.getBukkitPlayer().getName()).replace("%mount%", TextUtil.filterPlaceHolder(mount.getName(), ultraCosmetics)));
     }
 
     public void giveRandomEffect() {
@@ -523,7 +523,7 @@ public class TreasureRandomizer {
         givePermission(particleEffect.getPermission());
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Effects.Message.enabled"))
-            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Effects.Message.message")).replace("%name%", player.getPlayer().getName()).replace("%effect%", TextUtil.filterPlaceHolder(particleEffect.getName(), ultraCosmetics)));
+            Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Effects.Message.message")).replace("%name%", player.getBukkitPlayer().getName()).replace("%effect%", TextUtil.filterPlaceHolder(particleEffect.getName(), ultraCosmetics)));
     }
 
     public void giveRandomMorph() {
@@ -536,7 +536,7 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Morphs.Message.enabled"))
             Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Morphs.Message.message"))
-                    .replace("%name%", player.getPlayer().getName()).replace("%morph%", TextUtil.filterPlaceHolder(morph.getName(), ultraCosmetics)));
+                    .replace("%name%", player.getBukkitPlayer().getName()).replace("%morph%", TextUtil.filterPlaceHolder(morph.getName(), ultraCosmetics)));
     }
 
 
@@ -548,14 +548,14 @@ public class TreasureRandomizer {
     }
 
     public void givePermission(String permission) {
-        String command = (getMessage("TreasureChests.Permission-Add-Command")).replace("%name%", player.getPlayer().getName()).replace("%permission%", permission);
+        String command = (getMessage("TreasureChests.Permission-Add-Command")).replace("%name%", player.getBukkitPlayer().getName()).replace("%permission%", permission);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 
     public void spawnRandomFirework(Location location) {
         final ArrayList<Firework> fireworks = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            final Firework f = player.getPlayer().getWorld().spawn(location.clone().add(0.5, 0, 0.5), Firework.class);
+            final Firework f = player.getBukkitPlayer().getWorld().spawn(location.clone().add(0.5, 0, 0.5), Firework.class);
 
             FireworkMeta fm = f.getFireworkMeta();
             fm.addEffect(getRandomFireworkEffect());

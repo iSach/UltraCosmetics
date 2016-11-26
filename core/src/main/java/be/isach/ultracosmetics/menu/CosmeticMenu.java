@@ -128,7 +128,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                 ItemStack clicked = data.getClicked();
                 int currentPage = getCurrentPage(ultraPlayer);
                 if (UltraCosmeticsData.get().shouldCloseAfterSelect()) {
-                    ultraPlayer.getPlayer().closeInventory();
+                    ultraPlayer.getBukkitPlayer().closeInventory();
                 }
                 if (UltraCosmeticsData.get().isAmmoEnabled() && data.getAction() == InventoryAction.PICKUP_HALF) {
                     StringBuilder sb = new StringBuilder();
@@ -226,7 +226,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
         putItems(inventory, player, page);
 
-        player.getPlayer().openInventory(inventory);
+        player.getBukkitPlayer().openInventory(inventory);
     }
 
     public T getCosmeticType(String name) {
@@ -243,7 +243,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
      * @return The current page of the menu opened by ultraPlayer.
      */
     private int getCurrentPage(UltraPlayer ultraPlayer) {
-        Player player = ultraPlayer.getPlayer();
+        Player player = ultraPlayer.getBukkitPlayer();
         String title = player.getOpenInventory().getTopInventory().getTitle();
         if (player.getOpenInventory() != null
                 && title.startsWith(getName())

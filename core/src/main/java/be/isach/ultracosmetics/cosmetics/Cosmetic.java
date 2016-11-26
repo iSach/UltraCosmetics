@@ -37,7 +37,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
             throw new IllegalArgumentException("Invalid UltraPlayer.");
         }
 
-        if (!owner.getPlayer().hasPermission(type.getPermission())) {
+        if (!owner.getBukkitPlayer().hasPermission(type.getPermission())) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             clear();
         }
@@ -88,7 +88,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     public final Player getPlayer() {
-        return owner.getPlayer();
+        return owner.getBukkitPlayer();
     }
 
     public boolean isEquipped() {

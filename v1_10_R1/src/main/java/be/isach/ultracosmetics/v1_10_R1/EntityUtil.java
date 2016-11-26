@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.v1_10_R1.nms.WrapperEntityLiving;
 import be.isach.ultracosmetics.v1_10_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
@@ -247,8 +248,7 @@ public class EntityUtil implements IEntityUtil {
     }
 
     @Override
-    public boolean isMoving(org.bukkit.entity.Entity entity) {
-        Entity ent = ((CraftEntity) entity).getHandle();
-        return ent.motX != 0 || (ent.motY != 0 && !ent.onGround) || ent.motZ != 0;
+    public boolean isMoving(org.bukkit.entity.Player entity) {
+        return false;
     }
 }

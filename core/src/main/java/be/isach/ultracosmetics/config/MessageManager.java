@@ -374,11 +374,11 @@ public class MessageManager {
     /**
      * Gets a message.
      *
-     * @param path The path of the message in the config.
+     * @param messagePath The path of the message in the config.
      * @return a message from a config path.
      */
-    public static String getMessage(String path) {
-        return ((String) settingsManager.get(path)).replace("%prefix%", settingsManager.get("Prefix")).replace("&", "§");
+    public static String getMessage(String messagePath) {
+        return ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")).replace("&", "§");
     }
 
 }

@@ -221,7 +221,7 @@ public class EmoteType extends CosmeticMatType<Emote> {
     }
 
     public Emote equip(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
-        if (ultraPlayer.getPlayer().getInventory().getHelmet() != null) {
+        if (ultraPlayer.getBukkitPlayer().getInventory().getHelmet() != null) {
             if (ultraPlayer.getCurrentHat() != null) {
                 ultraPlayer.removeHat();
             } else if (ultraPlayer.getCurrentEmote() != null) {

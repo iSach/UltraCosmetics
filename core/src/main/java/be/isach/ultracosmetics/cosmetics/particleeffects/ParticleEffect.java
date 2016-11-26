@@ -15,6 +15,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
+
 /**
  * Created by sacha on 03/08/15.
  */
@@ -87,7 +89,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
     }
 
     protected boolean isMoving() {
-        return UltraCosmeticsData.get().getVersionManager().getEntityUtil().isMoving(getPlayer());
+        return getOwner().isMoving();
     }
 
     @Override

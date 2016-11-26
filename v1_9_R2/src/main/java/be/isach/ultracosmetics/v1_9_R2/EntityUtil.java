@@ -248,8 +248,14 @@ public class EntityUtil implements IEntityUtil {
     }
 
     @Override
-    public boolean isMoving(org.bukkit.entity.Entity entity) {
-        Entity ent = ((CraftEntity) entity).getHandle();
-        return ent.motX != 0 || (ent.motY != 0 && !ent.onGround) || ent.motZ != 0;
+    public boolean isMoving(org.bukkit.entity.Player entity) {
+        EntityPlayer ent = ((CraftPlayer) entity).getHandle();
+        long time = System.currentTimeMillis() - ent.I();
+        if(time > 0.001) {
+            Bukkit.broadcastMessage("MOVING");
+            return true;
+        }
+        Bukkit.broadcastMessage("NOT MOVING");
+        return false;
     }
 }

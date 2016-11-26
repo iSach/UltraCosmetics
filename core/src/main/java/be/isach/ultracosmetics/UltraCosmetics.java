@@ -12,6 +12,7 @@ import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
+import be.isach.ultracosmetics.run.MovingChecker;
 import be.isach.ultracosmetics.util.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -166,6 +167,7 @@ public class UltraCosmetics extends JavaPlugin {
         // Start the Fall Damage and Invalid World Check Runnables.
         new FallDamageManager().runTaskTimerAsynchronously(this, 0, 1);
         new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
+        new MovingChecker(this).runTaskTimerAsynchronously(this, 0, 1);
 
         this.menus = new Menus(this);
 

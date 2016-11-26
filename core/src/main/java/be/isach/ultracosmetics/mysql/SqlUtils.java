@@ -27,7 +27,7 @@ public class SqlUtils {
 
     public void initStats(UltraPlayer up) {
 
-        Player p = up.getPlayer();
+        Player p = up.getBukkitPlayer();
 
         try {
             if (!MySqlConnectionManager.getTable().select().where("uuid", p.getUniqueId().toString()).execute().next()) {

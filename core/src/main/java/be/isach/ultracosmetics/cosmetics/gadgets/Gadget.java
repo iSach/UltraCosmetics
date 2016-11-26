@@ -1,16 +1,18 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -150,9 +152,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                         String leftRounded = DECIMAL_FORMAT.format(left);
                         double decimalRoundedValue = Double.parseDouble(leftRounded);
                         if (decimalRoundedValue == 0) {
-                            PlayerUtils.sendInActionBar(getPlayer(),
-                                    MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar").
-                                            replace("%gadgetname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())));
+                            String message = MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar");
+                            message = message.replace("%gadgetname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+                            PlayerUtils.sendInActionBar(getPlayer(), message);
                             SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
                         }
                     }

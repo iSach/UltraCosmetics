@@ -32,7 +32,7 @@ public class SubCommandToggle extends SubCommand {
 //        if (type.startsWith("s")) {
 //            if (args.length > 4
 //                    && sender.hasPermission(getPermission() + ".others")) {
-//                receiver = Bukkit.getPlayer(args[4]);
+//                receiver = Bukkit.getBukkitPlayer(args[4]);
 //                if (receiver == null) {
 //                    sender.sendMessage("  §c§lPlayer " + args[4] + " not found!");
 //                    return;
@@ -41,7 +41,7 @@ public class SubCommandToggle extends SubCommand {
 //        } else {
 //            if (args.length > 3
 //                    && sender.hasPermission(getPermission() + ".others")) {
-//                receiver = Bukkit.getPlayer(args[3]);
+//                receiver = Bukkit.getBukkitPlayer(args[3]);
 //                if (receiver == null) {
 //                    sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
 //                    return;
@@ -312,13 +312,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage("  §c§lIncorrect Usage. /uc toggle suit <suit> <part> <player>");
 //                return;
 //            }
-//            receiver = Bukkit.getPlayer(args[4]);
+//            receiver = Bukkit.getBukkitPlayer(args[4]);
 //            if (receiver == null) {
 //                sender.sendMessage("  §c§lPlayer " + args[4] + " not found!");
 //                return;
 //            }
 //        } else {
-//            receiver = Bukkit.getPlayer(args[3]);
+//            receiver = Bukkit.getBukkitPlayer(args[3]);
 //            if (receiver == null) {
 //                sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
 //                return;

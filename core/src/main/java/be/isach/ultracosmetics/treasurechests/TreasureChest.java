@@ -134,7 +134,7 @@ public class TreasureChest implements Listener {
 
                                             chests.add(b);
 //                                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getGadgetType(), b.getData()),
-//                                                    0f, 0f, 0f, 0f, 1, getChestLocation(i, getPlayer().getLocation()), 128);
+//                                                    0f, 0f, 0f, 0f, 1, getChestLocation(i, getBukkitPlayer().getLocation()), 128);
                                             i--;
                                         } catch (Exception exc) {
                                             clear();
@@ -256,7 +256,7 @@ public class TreasureChest implements Listener {
     }
 
     public Player getPlayer() {
-        return player.getPlayer();
+        return player.getBukkitPlayer();
     }
 
     public void clear() {

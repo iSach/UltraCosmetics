@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
@@ -22,17 +21,12 @@ import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -90,6 +84,9 @@ public class UltraPlayer {
 
     private UltraCosmetics ultraCosmetics;
 
+    private volatile boolean moving;
+    private volatile Location lastPos;
+
     /**
      * Allows to store custom data for each player easily.
      * <p/>
@@ -104,18 +101,18 @@ public class UltraPlayer {
             gadgetCooldowns = new HashMap<>();
 
             if (UltraCosmeticsData.get().usingFileStorage())
-                SettingsManager.getData(getPlayer()).addDefault("Keys", 0);
+                SettingsManager.getData(getBukkitPlayer()).addDefault("Keys", 0);
 
             if (UltraCosmeticsData.get().isAmmoEnabled()) {
                 if (!UltraCosmeticsData.get().usingFileStorage())
                     ultraCosmetics.getMySqlConnectionManager().getSqlUtils().initStats(this);
                 else {
-                    GadgetType.values().stream().filter(GadgetType::isEnabled).forEachOrdered(type -> SettingsManager.getData(getPlayer()).addDefault("Ammo." + type.toString().toLowerCase(), 0));
+                    GadgetType.values().stream().filter(GadgetType::isEnabled).forEachOrdered(type -> SettingsManager.getData(getBukkitPlayer()).addDefault("Ammo." + type.toString().toLowerCase(), 0));
                 }
             }
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getPlayer()).addDefault("Gadgets-Enabled", true);
-                SettingsManager.getData(getPlayer()).addDefault("Third-Person-Morph-View", true);
+                SettingsManager.getData(getBukkitPlayer()).addDefault("Gadgets-Enabled", true);
+                SettingsManager.getData(getBukkitPlayer()).addDefault("Third-Person-Morph-View", true);
             }
 
 
@@ -170,7 +167,7 @@ public class UltraPlayer {
      *
      * @return The player owning the UltraPlayer.
      */
-    public Player getPlayer() {
+    public Player getBukkitPlayer() {
         return Bukkit.getPlayer(uuid);
     }
 
@@ -225,7 +222,7 @@ public class UltraPlayer {
      */
     public void addKey() {
         if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getPlayer()).set("Keys", getKeys() + 1);
+            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + 1);
         } else {
             ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(getMySqlIndex());
         }
@@ -236,7 +233,7 @@ public class UltraPlayer {
      */
     public void removeKey() {
         if (UltraCosmeticsData.get().usingFileStorage())
-            SettingsManager.getData(getPlayer()).set("Keys", getKeys() - 1);
+            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() - 1);
         else
             ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeKey(getMySqlIndex());
     }
@@ -245,7 +242,7 @@ public class UltraPlayer {
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getPlayer()).get("Keys") : ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getKeys(getMySqlIndex());
+        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getBukkitPlayer()).get("Keys") : ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getKeys(getMySqlIndex());
     }
 
     /**
@@ -286,7 +283,7 @@ public class UltraPlayer {
     public double getBalance() {
         try {
             if (ultraCosmetics.getEconomy() != null) {
-                return ultraCosmetics.getEconomy().getBalance(getPlayer());
+                return ultraCosmetics.getEconomy().getBalance(getBukkitPlayer());
             }
         } catch (Exception exc) {
             ultraCosmetics.getSmartLogger().write("Error happened while getting a player's balance.");
@@ -296,7 +293,7 @@ public class UltraPlayer {
     }
 
     public boolean hasPermission(String permission) {
-        return getPlayer().hasPermission(permission);
+        return getBukkitPlayer().hasPermission(permission);
     }
 
     /**
@@ -334,7 +331,7 @@ public class UltraPlayer {
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             removeMorph();
             try {
-                DisguiseAPI.undisguiseToAll(getPlayer());
+                DisguiseAPI.undisguiseToAll(getBukkitPlayer());
             } catch (Exception ignored) {
             }
         }
@@ -392,7 +389,7 @@ public class UltraPlayer {
      */
     public void setPetName(String petName, String name) {
         if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getPlayer()).set("Pet-Names." + petName, name);
+            SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petName, name);
         } else {
             ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petName, name);
         }
@@ -407,7 +404,7 @@ public class UltraPlayer {
     public String getPetName(PetType petType) {
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getPlayer()).get("Pet-Names." + petType.getConfigName());
+                return SettingsManager.getData(getBukkitPlayer()).get("Pet-Names." + petType.getConfigName());
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;
@@ -429,13 +426,13 @@ public class UltraPlayer {
     public void addAmmo(String name, int amount) {
         if (UltraCosmeticsData.get().isAmmoEnabled()) {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) + amount);
+                SettingsManager.getData(getBukkitPlayer()).set("Ammo." + name, getAmmo(name) + amount);
             } else {
                 ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(getMySqlIndex(), name, amount);
             }
 
             if (currentGadget != null) {
-                getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
+                getBukkitPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                         ItemFactory.create(currentGadget.getType().getMaterial(), currentGadget.getType().getData(),
                                 "§f§l" + getAmmo(currentGadget.getType().toString()
                                         .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
@@ -444,9 +441,9 @@ public class UltraPlayer {
     }
 
     public void applyVelocity(Vector vector) {
-        getPlayer().setVelocity(vector);
+        getBukkitPlayer().setVelocity(vector);
         Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
-            FallDamageManager.addNoFall(getPlayer());
+            FallDamageManager.addNoFall(getBukkitPlayer());
             sendMessage("test");
         }, 2);
     }
@@ -459,16 +456,16 @@ public class UltraPlayer {
     public void setGadgetsEnabled(Boolean enabled) {
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getPlayer()).set("Gadgets-Enabled", enabled);
+                SettingsManager.getData(getBukkitPlayer()).set("Gadgets-Enabled", enabled);
             } else {
                 ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setGadgetsEnabled(getMySqlIndex(), enabled);
             }
 
             if (enabled) {
-                getPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
+                getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
                 this.gadgetsEnabledCache = CacheValue.ENABLED;
             } else {
-                getPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
+                getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
                 this.gadgetsEnabledCache = CacheValue.DISABLED;
             }
         } catch (NullPointerException e) {
@@ -489,7 +486,7 @@ public class UltraPlayer {
 
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getPlayer()).get("Gadgets-Enabled");
+                return SettingsManager.getData(getBukkitPlayer()).get("Gadgets-Enabled");
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex())) {
                     gadgetsEnabledCache = CacheValue.ENABLED;
@@ -511,15 +508,15 @@ public class UltraPlayer {
      */
     public void setSeeSelfMorph(Boolean enabled) {
         if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getPlayer()).set("Third-Person-Morph-View", enabled);
+            SettingsManager.getData(getBukkitPlayer()).set("Third-Person-Morph-View", enabled);
         } else {
             ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setSeeSelfMorph(getMySqlIndex(), enabled);
         }
         if (enabled) {
-            getPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
+            getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
             this.morphSelfViewCache = CacheValue.ENABLED;
         } else {
-            getPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
+            getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
             this.morphSelfViewCache = CacheValue.DISABLED;
         }
     }
@@ -535,7 +532,7 @@ public class UltraPlayer {
             return false;
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getPlayer()).get("Third-Person-Morph-View");
+                return SettingsManager.getData(getBukkitPlayer()).get("Third-Person-Morph-View");
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex())) {
                     morphSelfViewCache = CacheValue.ENABLED;
@@ -560,7 +557,7 @@ public class UltraPlayer {
     public int getAmmo(String name) {
         if (UltraCosmeticsData.get().isAmmoEnabled())
             if (UltraCosmeticsData.get().usingFileStorage())
-                return (int) SettingsManager.getData(getPlayer()).get("Ammo." + name);
+                return (int) SettingsManager.getData(getBukkitPlayer()).get("Ammo." + name);
             else
                 return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getAmmo(getMySqlIndex(), name);
         return 0;
@@ -583,7 +580,7 @@ public class UltraPlayer {
     public void removeAmmo(String name) {
         if (UltraCosmeticsData.get().isAmmoEnabled()) {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getPlayer()).set("Ammo." + name, getAmmo(name) - 1);
+                SettingsManager.getData(getBukkitPlayer()).set("Ammo." + name, getAmmo(name) - 1);
             } else {
                 ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeAmmo(getMySqlIndex(), name);
             }
@@ -594,46 +591,46 @@ public class UltraPlayer {
      * Gives the Menu Item.
      */
     public void giveMenuItem() {
-        if (getPlayer() == null)
+        if (getBukkitPlayer() == null)
             return;
         try {
             removeMenuItem();
         } catch (Exception e) {
         }
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-        if (getPlayer().getInventory().getItem(slot) != null) {
-            if (getPlayer().getInventory().getItem(slot).hasItemMeta()
-                    && getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                    && getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
-                getPlayer().getInventory().remove(slot);
-                getPlayer().getInventory().setItem(slot, null);
+        if (getBukkitPlayer().getInventory().getItem(slot) != null) {
+            if (getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
+                    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
+                    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
+                getBukkitPlayer().getInventory().remove(slot);
+                getBukkitPlayer().getInventory().setItem(slot, null);
             }
-            getPlayer().getWorld().dropItemNaturally(getPlayer().getLocation(), getPlayer().getInventory().getItem(slot));
-            getPlayer().getInventory().remove(slot);
+            getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), getBukkitPlayer().getInventory().getItem(slot));
+            getBukkitPlayer().getInventory().remove(slot);
         }
         String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
         Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
         byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
-        getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
+        getBukkitPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
     }
 
     /**
      * Removes the menu Item.
      */
     public void removeMenuItem() {
-        if (getPlayer() == null)
+        if (getBukkitPlayer() == null)
             return;
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-        if (getPlayer().getInventory().getItem(slot) != null
-                && getPlayer().getInventory().getItem(slot).hasItemMeta()
-                && getPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                && getPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
+        if (getBukkitPlayer().getInventory().getItem(slot) != null
+                && getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
+                && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
+                && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
                 .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§")))
-            getPlayer().getInventory().setItem(slot, null);
+            getBukkitPlayer().getInventory().setItem(slot, null);
     }
 
     public void sendMessage(Object message) {
-        getPlayer().sendMessage(message.toString());
+        getBukkitPlayer().sendMessage(message.toString());
     }
 
     /**
@@ -719,5 +716,21 @@ public class UltraPlayer {
 
     public void setCurrentTreasureChest(TreasureChest currentTreasureChest) {
         this.currentTreasureChest = currentTreasureChest;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public Location getLastPos() {
+        return lastPos;
+    }
+
+    public void setLastPos(Location lastPos) {
+        this.lastPos = lastPos;
     }
 }

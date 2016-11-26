@@ -49,7 +49,7 @@ public abstract class Menu implements Listener {
 
         putItems(inventory, player);
 
-        player.getPlayer().openInventory(inventory);
+        player.getBukkitPlayer().openInventory(inventory);
     }
 
     protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {

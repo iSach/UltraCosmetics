@@ -103,7 +103,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
         runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
 
-//        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (getUltraCosmetics().placeHolderColor) ? getType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
+//        getBukkitPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (getUltraCosmetics().placeHolderColor) ? getType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
         getOwner().setCurrentMount(this);
     }
 
