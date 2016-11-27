@@ -31,6 +31,7 @@ public class MountSnake extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
         color = MathUtils.randomRangeInt(0, 14);
         ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
         ((Sheep) entity).setColor(DyeColor.values()[color]);
@@ -41,11 +42,11 @@ public class MountSnake extends Mount {
 
     @Override
     public void onClear() {
+        super.onClear();
         for (Player p : tailMap.keySet())
             for (Entity ent : tailMap.get(p))
                 ent.remove();
         tailMap.clear();
-        super.clear();
     }
 
     @Override

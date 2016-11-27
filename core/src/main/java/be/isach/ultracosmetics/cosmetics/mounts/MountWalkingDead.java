@@ -21,16 +21,12 @@ public class MountWalkingDead extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
         Horse horse = (Horse) entity;
         horse.setVariant(Horse.Variant.UNDEAD_HORSE);
         variant = Horse.Variant.UNDEAD_HORSE;
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
-    }
-
-    @Override
-    protected void onClear() {
-
     }
 
     @Override

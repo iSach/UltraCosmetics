@@ -33,9 +33,4 @@ public class MountSkySquid extends MountCustomEntity {
                         getCustomEntity().getBukkitEntity().getLocation().add(MathUtils.randomDouble(-2, 2),
                                 MathUtils.randomDouble(-1, 1.3), MathUtils.randomDouble(-2, 2)));
     }
-
-    @Override
-    protected void onClear() {
-
-    }
 }

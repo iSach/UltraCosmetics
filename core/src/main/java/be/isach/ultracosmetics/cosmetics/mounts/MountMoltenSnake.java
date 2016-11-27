@@ -33,6 +33,7 @@ public class MountMoltenSnake extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
         MagmaCube magmaCube = (MagmaCube) entity;
         magmaCube.setSize(2);
         entities.add(magmaCube);
@@ -80,7 +81,7 @@ public class MountMoltenSnake extends Mount {
 
     @Override
     public void onClear() {
-        super.clear();
+        super.onClear();
         for (Entity entity : entities)
             entity.remove();
         entities.clear();

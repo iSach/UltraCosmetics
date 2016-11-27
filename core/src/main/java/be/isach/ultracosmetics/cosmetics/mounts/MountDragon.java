@@ -64,9 +64,4 @@ public class MountDragon extends Mount {
 
         }
     }
-
-    @Override
-    protected void onClear() {
-
-    }
 }

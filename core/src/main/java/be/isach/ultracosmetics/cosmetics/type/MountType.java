@@ -90,7 +90,7 @@ public class MountType extends CosmeticEntType<Mount> {
 
     @Override
     public String getName() {
-        return super.getName();
+        return getMenuName();
     }
 
     public String getName(Player player) {

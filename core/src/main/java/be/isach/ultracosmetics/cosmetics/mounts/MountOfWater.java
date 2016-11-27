@@ -30,6 +30,8 @@ public class MountOfWater extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
+
         Horse horse = (Horse) entity;
         horse.setColor(Horse.Color.BLACK);
         horse.setVariant(Horse.Variant.HORSE);
@@ -37,11 +39,6 @@ public class MountOfWater extends Mount {
         variant = Horse.Variant.HORSE;
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
-
-    }
-
-    @Override
-    protected void onClear() {
 
     }
 

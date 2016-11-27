@@ -20,9 +20,4 @@ public class MountSlime extends MountCustomEntity {
     public void onUpdate() {
         ((Slime)getEntity()).setSize(3);
     }
-
-    @Override
-    protected void onClear() {
-
-    }
 }

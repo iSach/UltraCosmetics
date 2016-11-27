@@ -27,7 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * - SubObjects:
  * - HorseMount
  */
-public abstract class Mount extends Cosmetic<MountType> implements Updatable {
+public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
 
     /**
      * If the mount is a horse, its variant.
@@ -40,14 +40,12 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
     /**
      * The Entity, if it isn't a Custom Entity.
      */
-    public Entity entity;
+    public E entity;
+
+    private boolean beingRemoved = false;
 
     public Mount(UltraPlayer ultraPlayer, MountType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MOUNTS, ultraPlayer, type);
-
-        if (ultraPlayer.getCurrentMount() != null) {
-            ultraPlayer.removeMount();
-        }
     }
 
     /**
@@ -55,8 +53,12 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
      */
     @Override
     public void onEquip() {
+        if (getOwner().getCurrentMount() != null) {
+            getOwner().removeMount();
+        }
+
         EntitySpawningManager.setBypass(true);
-        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
+        this.entity = (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
         EntitySpawningManager.setBypass(false);
         if (entity instanceof Ageable) {
             ((Ageable) entity).setAdult();
@@ -76,7 +78,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
             @Override
             public void run() {
                 try {
-                    if (entity.getPassenger() != getPlayer() && entity.getTicksLived() > 10) {
+                    if (entity.getPassenger() != getPlayer() && entity.getTicksLived() > 10 && !beingRemoved) {
                         clear();
                         cancel();
                         return;
@@ -95,6 +97,7 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
                     }
 
                 } catch (NullPointerException exc) {
+                    exc.printStackTrace();
                     clear();
                     cancel();
                 }
@@ -102,24 +105,31 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
         };
         runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
-
-//        getBukkitPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", (getUltraCosmetics().placeHolderColor) ? getType().get() : UltraCosmetics.filterColor(getType().getMenuName())));
         getOwner().setCurrentMount(this);
+    }
+
+    @Override
+    protected void onClear() {
+        if(entity != null) {
+            entity.remove();
+        }
+        getOwner().setCurrentMount(null);
     }
 
     protected void removeEntity() {
         entity.remove();
     }
 
-    public Entity getEntity() {
+    public E getEntity() {
         return entity;
     }
 
     @EventHandler
     public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
         if (event.getVehicle().getType() == EntityType.BOAT
-                || event.getVehicle().getType().toString().contains("MINECART"))
+                || event.getVehicle().getType().toString().contains("MINECART")) {
             return;
+        }
         String name = null;
         try {
             name = getType().getName(getPlayer());
@@ -133,8 +143,10 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
                 && event.getVehicle() != null
                 && event.getExited() != null
                 && event.getVehicle().getCustomName().equals(name)
-                && event.getExited() == getPlayer()) {
-            getOwner().removeMount();
+                && event.getExited() == getPlayer()
+                && !beingRemoved) {
+            beingRemoved = true;
+            clear();
         }
     }
 
@@ -165,8 +177,12 @@ public abstract class Mount extends Cosmetic<MountType> implements Updatable {
                     || event.getFrom().getBlockY() != event.getTo().getBlockY()
                     || event.getFrom().getBlockZ() != event.getTo().getBlockZ()
                     || !event.getFrom().getWorld().getName().equalsIgnoreCase(event.getTo().getWorld().getName()))) {
-                clear();
+                //clear();
             }
         }
+    }
+
+    public void setBeingRemoved(boolean beingRemoved) {
+        this.beingRemoved = beingRemoved;
     }
 }

@@ -21,6 +21,7 @@ public class MountInfernalHorror extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
         if (entity instanceof Horse) {
             Horse horse = (Horse) entity;
             horse.setVariant(Horse.Variant.SKELETON_HORSE);
@@ -34,10 +35,5 @@ public class MountInfernalHorror extends Mount {
     @Override
     public void onUpdate() {
         UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
-    }
-
-    @Override
-    protected void onClear() {
-
     }
 }

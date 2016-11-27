@@ -16,9 +16,4 @@ public class MountSpider extends MountCustomEntity {
 
     @Override
     public void onUpdate() {}
-
-    @Override
-    protected void onClear() {
-
-    }
 }

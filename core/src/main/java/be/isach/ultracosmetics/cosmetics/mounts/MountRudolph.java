@@ -32,6 +32,7 @@ public class MountRudolph extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
         horse = (Horse) entity;
         horse.setColor(Horse.Color.DARK_BROWN);
         horse.setVariant(Horse.Variant.MULE);
@@ -98,6 +99,8 @@ public class MountRudolph extends Mount {
 
     @Override
     public void onClear() {
+        super.onClear();
+
         if (left != null)
             left.remove();
         if (right != null)

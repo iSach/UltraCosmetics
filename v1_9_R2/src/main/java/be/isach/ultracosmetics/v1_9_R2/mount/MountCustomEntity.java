@@ -23,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Created by Sacha on 15/03/16.
  */
-public abstract class MountCustomEntity extends Mount {
+public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> extends Mount<E> {
 
     /**
      * Custom Entity.
@@ -52,6 +52,10 @@ public abstract class MountCustomEntity extends Mount {
         EntitySpawningManager.setBypass(false);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setPassenger(getEntity(), getPlayer());
         CustomEntities.customEntities.add(getCustomEntity());
+        customEntity.removeAi();
+
+        this.entity = (E) customEntity.getEntity();
+
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -80,9 +84,8 @@ public abstract class MountCustomEntity extends Mount {
                 }
             }
         };
-        runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
+        runnable.runTaskTimerAsynchronously(getUltraCosmetics(), 0, getType().getRepeatDelay());
 
-        getPlayer().sendMessage(MessageManager.getMessage("Mounts.Spawn").replace("%mountname%", TextUtil.filterPlaceHolder(getType().getMenuName(), getUltraCosmetics())));
         getOwner().setCurrentMount(this);
     }
 
@@ -92,13 +95,13 @@ public abstract class MountCustomEntity extends Mount {
         CustomEntities.customEntities.remove(customEntity);
     }
 
-
     @Override
-    public org.bukkit.entity.Entity getEntity() {
-        return customEntity.getEntity();
+    public E getEntity() {
+        return (E)customEntity.getEntity();
     }
 
     public Entity getCustomEntity() {
         return ((CraftEntity) customEntity.getEntity()).getHandle();
     }
 }
+

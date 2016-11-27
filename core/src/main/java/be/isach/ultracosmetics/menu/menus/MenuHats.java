@@ -47,12 +47,12 @@ public class MenuHats extends CosmeticMenu<HatType> {
 
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-
+        HatType.getByName(name).equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override
     protected void toggleOff(UltraPlayer ultraPlayer) {
-
+        ultraPlayer.removeHat();
     }
 
     @Override

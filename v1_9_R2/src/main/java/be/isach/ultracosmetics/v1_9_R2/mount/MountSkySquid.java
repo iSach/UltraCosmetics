@@ -35,9 +35,4 @@ public class MountSkySquid extends MountCustomEntity {
                                 MathUtils.randomDouble(-1, 1.3), MathUtils.randomDouble(-2, 2)));
             }
     }
-
-    @Override
-    protected void onClear() {
-
-    }
 }

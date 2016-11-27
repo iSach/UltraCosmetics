@@ -47,12 +47,12 @@ public class MenuEmotes extends CosmeticMenu<EmoteType> {
 
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-
+        EmoteType.getByName(name).equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override
     protected void toggleOff(UltraPlayer ultraPlayer) {
-
+        ultraPlayer.removeEmote();
     }
 
     @Override

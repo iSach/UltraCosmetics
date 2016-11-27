@@ -29,13 +29,9 @@ public class MountNyanSheep extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
         ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
-    }
-
-    @Override
-    protected void onClear() {
-
     }
 
     @Override

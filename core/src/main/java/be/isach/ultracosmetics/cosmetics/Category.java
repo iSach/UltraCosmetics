@@ -42,13 +42,13 @@ public enum Category {
             return ultraCosmetics.getMenus().getEffectsMenu();
         }
     },
-    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount", "%mountname%", "Equip", "Unequip") {
+    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount", "%mountname%", "Spawn", "Despawn") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getMountsMenu();
         }
     },
-    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph", "%morphname%", "Equip", "Unequip") {
+    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph", "%morphname%", "Morph", "Unmorph") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getMorphsMenu();

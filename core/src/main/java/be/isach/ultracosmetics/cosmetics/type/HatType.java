@@ -1,12 +1,15 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,10 +101,22 @@ public class HatType extends CosmeticMatType<Hat> {
     private ItemStack itemStack;
 
     HatType(String str, String configName, String defaultDesc) {
-        super(Category.HATS, configName, "ultracosmetics.emotes." + configName.toLowerCase(), defaultDesc, Material.SKULL_ITEM, (byte) 3, HatType.class);
+        super(Category.HATS, configName, "ultracosmetics.emotes." + configName.toLowerCase(), defaultDesc, Material.SKULL_ITEM, (byte) 3, Hat.class);
         this.itemStack = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" + str, "§8§oHat");
 
         VALUES.add(this);
+    }
+
+    @Override
+    public Hat equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
+        Hat cosmetic = null;
+        try {
+            cosmetic = getClazz().getDeclaredConstructor(UltraCosmetics.class, UltraPlayer.class, HatType.class).newInstance(ultraCosmetics, player, this);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        cosmetic.equip();
+        return cosmetic;
     }
 
     /**

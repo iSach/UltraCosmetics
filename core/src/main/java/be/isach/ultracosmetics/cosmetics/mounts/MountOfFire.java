@@ -30,6 +30,7 @@ public class MountOfFire extends Mount {
 
     @Override
     public void onEquip() {
+        super.onEquip();
         Horse horse = (Horse) entity;
         horse.setColor(Horse.Color.CREAMY);
         horse.setVariant(Horse.Variant.HORSE);
@@ -37,11 +38,6 @@ public class MountOfFire extends Mount {
         variant = Horse.Variant.HORSE;
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
-    }
-
-    @Override
-    protected void onClear() {
-
     }
 
     @EventHandler

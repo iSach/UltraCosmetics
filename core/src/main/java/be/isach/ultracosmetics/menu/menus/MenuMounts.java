@@ -36,12 +36,16 @@ public class MenuMounts extends CosmeticMenu<MountType> {
 
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-
+        MountType.getByName(name).equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override
     protected void toggleOff(UltraPlayer ultraPlayer) {
-
+        if(ultraPlayer.getCurrentMount() == null) {
+            return;
+        }
+        ultraPlayer.getCurrentMount().setBeingRemoved(true);
+        ultraPlayer.removeMount();
     }
 
     @Override

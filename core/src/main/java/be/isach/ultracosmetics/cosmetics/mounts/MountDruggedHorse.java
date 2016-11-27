@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountDruggedHorse extends Mount {
+public class MountDruggedHorse extends Mount<Horse> {
 
     public MountDruggedHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.DRUGGEDHORSE, ultraCosmetics);
@@ -23,25 +23,19 @@ public class MountDruggedHorse extends Mount {
 
     @Override
     public void onEquip() {
-        if (entity instanceof Horse) {
-            Horse horse = (Horse) entity;
+        super.onEquip();
 
-            horse.setColor(Horse.Color.CHESTNUT);
-            color = Horse.Color.CHESTNUT;
-            variant = Horse.Variant.HORSE;
-            horse.setVariant(Horse.Variant.HORSE);
-            UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 1.1d);
-            horse.setJumpStrength(1.3);
-        }
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));
-                } catch (Exception exc) {
+        getEntity().setColor(Horse.Color.CHESTNUT);
+        color = Horse.Color.CHESTNUT;
+        variant = Horse.Variant.HORSE;
+        getEntity().setVariant(Horse.Variant.HORSE);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(getEntity(), 1.1d);
+        getEntity().setJumpStrength(1.3);
 
-                }
-            }
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            try {
+                getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));
+            } catch (Exception ignored) {}
         }, 1);
     }
 
@@ -56,6 +50,7 @@ public class MountDruggedHorse extends Mount {
 
     @Override
     protected void onClear() {
+        super.onClear();
         getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
     }
 }
