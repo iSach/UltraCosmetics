@@ -210,8 +210,10 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
         MaterialData materialData = ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item");
         ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(),
                 MessageManager.getMessage(category.getClearConfigPath()));
+        int finalPage1 = page;
         putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
             toggleOff(player);
+            open(player, finalPage1);
         });
 
         // Go Back to Main Menu Arrow.

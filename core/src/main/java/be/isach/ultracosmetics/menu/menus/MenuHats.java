@@ -36,8 +36,8 @@ public class MenuHats extends CosmeticMenu<HatType> {
 
     @Override
     protected ItemStack filterItem(ItemStack itemStack, HatType cosmeticType, UltraPlayer player) {
-        ItemMeta itemMeta = itemStack.getItemMeta().clone();
-        itemStack = cosmeticType.getItemStack();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemStack = cosmeticType.getItemStack().clone();
         ItemMeta other = itemStack.getItemMeta().clone();
         other.setDisplayName(itemMeta.getDisplayName());
         other.setLore(itemMeta.getLore());

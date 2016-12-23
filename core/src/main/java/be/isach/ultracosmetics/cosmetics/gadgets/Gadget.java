@@ -171,6 +171,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     public void clear() {
         super.clear();
 
+        // TODO Move in onClear
         removeItem();
         cancel();
     }
