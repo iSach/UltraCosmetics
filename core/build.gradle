@@ -1,7 +1,8 @@
 dependencies {
-    compile 'spigot:spigot:latest'
+    compile name: 'spigot-1.11'
     compile ('LibsDisguises:LibsDisguises:9.0.7') {
         exclude group: 'org.spigotmc'
+        exclude group: 'com.comphenix.protocol'
     }
     compile('net.milkbowl.vault:VaultAPI:1.6') {
         exclude group: 'org.bukkit'

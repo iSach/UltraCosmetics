@@ -16,7 +16,15 @@ Disable collision between HumanEntity and Pets.
 FIX Command Treasure Chests "dupe"
 
 SUGGESTIONS:
-  Pets:
+Companions
+Banners
+Gestures
+Settings Tab
+Baloon
+Music
+Vehicles
+Skins (?)
+Pets:
     Iron Golem
     Snow Golem
     Slime

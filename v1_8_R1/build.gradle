@@ -1,5 +1,5 @@
 dependencies {
-    compile 'spigot:spigot:1.8-R0.1-SNAPSHOT-latest'
+    compile name: 'spigot-1.8'
     shaded (project(':core')){
         transitive false
     }

@@ -145,6 +145,11 @@ public class SuitType extends CosmeticMatType<Suit> {
         }
     }
 
+    @Override
+    public String getName() {
+        return getName(ArmorSlot.CHESTPLATE);
+    }
+
     /**
      * Get the SuitType's name in menu.
      *

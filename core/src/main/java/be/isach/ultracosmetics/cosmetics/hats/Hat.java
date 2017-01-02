@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftInventoryPlayer;
 import org.bukkit.inventory.ItemStack;
 
 /**

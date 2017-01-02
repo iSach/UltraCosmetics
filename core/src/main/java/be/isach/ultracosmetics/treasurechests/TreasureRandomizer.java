@@ -468,7 +468,7 @@ public class TreasureRandomizer {
     public void giveRandomHat() {
         int i = random.nextInt(hatList.size());
         HatType hat = hatList.get(i);
-        name = MessageManager.getMessage("Treasure-Chests-Loot.HatType").replace("%hat%", hat.getName());
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Hat").replace("%hat%", hat.getName());
         hatList.remove(i);
         givePermission(hat.getPermission());
         itemStack = hat.getItemStack().clone();

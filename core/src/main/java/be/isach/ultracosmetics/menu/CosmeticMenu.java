@@ -208,8 +208,8 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
         // Clear cosmetic item.
         MaterialData materialData = ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item");
-        ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(),
-                MessageManager.getMessage(category.getClearConfigPath()));
+        String message = MessageManager.getMessage(category.getClearConfigPath());
+        ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(), message);
         int finalPage1 = page;
         putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
             toggleOff(player);
@@ -244,7 +244,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
      * @param ultraPlayer The menu owner.
      * @return The current page of the menu opened by ultraPlayer.
      */
-    private int getCurrentPage(UltraPlayer ultraPlayer) {
+    protected int getCurrentPage(UltraPlayer ultraPlayer) {
         Player player = ultraPlayer.getBukkitPlayer();
         String title = player.getOpenInventory().getTopInventory().getTitle();
         if (player.getOpenInventory() != null
@@ -263,11 +263,11 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
      *
      * @return the maximum amount of pages.
      */
-    private int getMaxPages() {
-        int max = 21;
+    protected int getMaxPages() {
+        int max = getItemsPerPage();
         int i = enabled().size();
         if (i % max == 0) return i / max;
-        double j = i / 21;
+        double j = i / getItemsPerPage();
         int h = (int) Math.floor(j * 100) / 100;
         return h + 1;
     }
@@ -330,6 +330,10 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
     public Category getCategory() {
         return category;
+    }
+
+    protected int getItemsPerPage() {
+        return 12;
     }
 
     /**

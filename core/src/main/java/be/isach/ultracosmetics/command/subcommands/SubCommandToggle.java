@@ -215,7 +215,7 @@ public class SubCommandToggle extends SubCommand {
 //            try {
 //                hat = HatType.valueOf(args[2].toUpperCase());
 //            } catch (IllegalArgumentException exc) {
-//                sender.sendMessage(MessageManager.getMessage("Invalid-HatType"));
+//                sender.sendMessage(MessageManager.getMessage("Invalid-Hat"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < HatType.enabled().size(); i++)
 //                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "§f§l, §c" : ""));
@@ -460,7 +460,7 @@ public class SubCommandToggle extends SubCommand {
 //            try {
 //                hat = HatType.valueOf(args[2].toUpperCase());
 //            } catch (IllegalArgumentException exc) {
-//                sender.sendMessage(MessageManager.getMessage("Invalid-HatType"));
+//                sender.sendMessage(MessageManager.getMessage("Invalid-Hat"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < HatType.enabled().size(); i++)
 //                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "§f§l, §c" : ""));
