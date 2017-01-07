@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Package: be.isach.ultracosmetics.util
@@ -138,7 +137,7 @@ public class UltraCosmeticsData {
 
     boolean checkServerVersion() {
         String bukkVersion = Bukkit.getVersion();
-        if (!bukkVersion.contains("1.8.8") && !bukkVersion.contains("1.9") && !bukkVersion.contains("1.10")) {
+        if (!bukkVersion.contains("1.8.8") && !bukkVersion.contains("1.9") && !bukkVersion.contains("1.10") || !bukkVersion.contains("1.11")) {
             System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or higher to work!\n\n----------------------------");
             Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
             return false;
