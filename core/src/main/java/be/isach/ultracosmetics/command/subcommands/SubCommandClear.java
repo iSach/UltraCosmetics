@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ public class SubCommandClear extends SubCommand {
     private void common(CommandSender sender, String... args) {
         Player receiver;
         if (args.length < 2) {
-            sender.sendMessage("§c§l  Incorrect Usage. " + getUsage());
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "  Incorrect Usage. " + getUsage());
             return;
         }
 
@@ -38,7 +39,7 @@ public class SubCommandClear extends SubCommand {
         receiver = Bukkit.getPlayer(args[1]);
 
         if (receiver == null) {
-            sender.sendMessage("  §c§lPlayer " + args[1] + " not found!");
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "  Player " + args[1] + " not found!");
             return;
         }
         if (args.length < 3) {
@@ -58,7 +59,7 @@ public class SubCommandClear extends SubCommand {
         else if (s.startsWith("mou")) up.removeMount();
         else if (s.startsWith("e")) up.removeEmote();
         else {
-            sender.sendMessage("§c§l/uc menu <menu>\n§c§lInvalid Type.\n§c§lAvailable types: gadgets, particleeffects, pets, mounts, suits, hats, morphs");
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c&l/uc menu <menu>\n&c&lInvalid Type.\n&c&lAvailable types: gadgets, particleeffects, pets, mounts, suits, hats, morphs"));
         }
     }
 }

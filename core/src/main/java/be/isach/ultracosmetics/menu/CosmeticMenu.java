@@ -83,7 +83,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                     && !player.hasPermission(cosmeticMatType.getPermission())) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", cosmeticMatType.getName()).replace("&", "§");
+                String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", cosmeticMatType.getName()));
                 List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
                 String[] array = new String[npLore.size()];
                 npLore.toArray(array);
@@ -249,7 +249,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                 && title.startsWith(getName())
                 && !title.equals(getName())) {
             String s = player.getOpenInventory().getTopInventory().getTitle()
-                    .replace(getName() + " §7§o(", "")
+                    .replace(getName() + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(", "")
                     .replace("/" + getMaxPages() + ")", "");
             return Integer.parseInt(s);
         }
@@ -294,7 +294,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
      * @return The name of the menu with page detailed.
      */
     protected String getName(int page) {
-        return MessageManager.getMessage("Menus." + category.getConfigPath()) + " §7§o(" + page + "/" + getMaxPages() + ")";
+        return MessageManager.getMessage("Menus." + category.getConfigPath()) + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(" + page + "/" + getMaxPages() + ")";
     }
 
     @Override

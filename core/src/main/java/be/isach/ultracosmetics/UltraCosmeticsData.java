@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -108,15 +109,15 @@ public class UltraCosmeticsData {
             treasureChests = true;
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests' Money Loot requires Vault!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lMoney Loot is turned off!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD);
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD);
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Treasure Chests' Money Loot requires Vault!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD);
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Money Loot is turned off!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD);
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD);
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
                 moneyTreasureLoot = false;
             }
         }
