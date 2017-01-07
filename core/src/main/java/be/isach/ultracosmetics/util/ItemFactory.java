@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import com.mojang.authlib.GameProfile;

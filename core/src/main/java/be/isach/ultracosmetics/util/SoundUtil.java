@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.util;
 
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 /**

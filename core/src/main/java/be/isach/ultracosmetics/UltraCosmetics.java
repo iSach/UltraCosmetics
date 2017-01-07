@@ -105,7 +105,7 @@ public class UltraCosmetics extends JavaPlugin {
         // Beginning of boot log. basic informations.
         getSmartLogger().write("-------------------------------------------------------------------");
         getSmartLogger().write("UltraCosmetics v" + getDescription().getVersion() + " is loading... (server: " + UltraCosmeticsData.get().getServerVersion().getName() + ")");
-        getSmartLogger().write("Thanks for having downloaded it!");
+        getSmartLogger().write("Thanks for downloading it!");
         getSmartLogger().write("Plugin by iSach.");
         getSmartLogger().write("Link: http://bit.ly/UltraCosmetics");
 
