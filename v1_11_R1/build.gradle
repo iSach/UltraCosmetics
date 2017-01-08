@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 dependencies {
     compile 'org.spigotmc:spigot:1.11'
     shaded (project(':core')){
         transitive false
     }
+=======
+dependencies {
+    compile name: 'spigot-1.11.2'
+    shaded(project(':core')) {
+        transitive false
+    }
+>>>>>>> refs/remotes/origin/master
 }
