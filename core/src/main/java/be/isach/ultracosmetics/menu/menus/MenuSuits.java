@@ -149,7 +149,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                             } catch (Exception ignored) {
                             }
                         }
-                        toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics());
+                        toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics(), armorSlot);
                         if (ultraPlayer.getCurrentGadget() != null && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
                             ultraPlayer.getCurrentGadget().lastPage = currentPage;
                             ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
@@ -224,9 +224,17 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
         return SuitType.enabled();
     }
 
+    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
+        SuitType.getByName(name).equip(ultraPlayer, ultraCosmetics, armorSlot);
+    }
+
+    protected void toggleOff(UltraPlayer ultraPlayer, ArmorSlot armorSlot) {
+        ultraPlayer.removeSuit(armorSlot);
+    }
+
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        //
+
     }
 
     @Override

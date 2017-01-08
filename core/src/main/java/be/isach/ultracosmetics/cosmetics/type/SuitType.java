@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.*;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -86,10 +87,10 @@ public class SuitType extends CosmeticMatType<Suit> {
      * @param armorSlot The Armor Slot.
      * @return The suit Object equipped to the player.
      */
-    public Suit equip(Player player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
+    public Suit equip(UltraPlayer player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
         Suit effect = null;
         try {
-            effect = getClazz().getDeclaredConstructor(UUID.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player.getUniqueId(), armorSlot, ultraCosmetics);
+            effect = getClazz().getDeclaredConstructor(UltraPlayer.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player, armorSlot, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
