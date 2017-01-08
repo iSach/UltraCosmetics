@@ -4,6 +4,74 @@ Finish new Menus.
 Remake entirely Treasure Chest system to be cleaner, more optimized.
 Possibility of custom rewards and placing chests like Mineplex.
 
+Treasure Chests --------------------------
+
+Structure:
+chestpos.json (/yaml?)
+designs.yml
+config.yml
+rewards.yml
+
+
+--------- chestpos.json ---------
+{
+    "chests": [
+        {
+            "world": "hub",
+            "x": 12.3,
+            "y": 45.6,
+            "z": 78.9,
+        }
+        {
+            "world": "hub",
+            "x": 22.3,
+            "y": 45.6,
+            "z": 78.9,
+        }
+        {
+            "world": "hub",
+            "x": 32.3,
+            "y": 45.6,
+            "z": 78.9,
+        }
+    ]
+}
+
+
+--------- designs.yml ---------
+same as current design. (?)
+
+--------- config.yml ---------
+
+enabled: true
+allow-static-chests: false
+allow-chests-anywhere-from-gui: true
+allow-buy-key-from-gui: true
+key-price: 1000
+
+--------- rewards.yml ---------
+reward-name:
+  name: "..."
+  chance-rate: 30
+  disable-if-permission:
+    enabled: false
+    permission: ranks.legend
+  reward-commands:
+    - "pex user {player-uuid} set rank titan"
+  sound:
+    enabled: true
+    sound-effect: EXPLODE
+  chat-message:
+    enabled: true
+    sound-effect: "{player-name} found rare"
+  firework-effect:
+    enabled: true
+    color: BLUE
+
+------------------------------------------
+
+
+
 new Cosmetics
 
 API
