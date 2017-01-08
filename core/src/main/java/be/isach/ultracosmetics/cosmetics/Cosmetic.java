@@ -48,6 +48,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     public void equip() {
         this.equipped = true;
 
+        // Send equip message.
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
         mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
         getPlayer().sendMessage(mess);
@@ -56,8 +57,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     public void clear() {
-
-        // Send unequip Message.
+        // Send unequip message.
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
         mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
         getPlayer().sendMessage(mess);

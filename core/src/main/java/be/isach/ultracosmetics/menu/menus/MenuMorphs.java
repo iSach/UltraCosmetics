@@ -3,10 +3,12 @@ package be.isach.ultracosmetics.menu.menus;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
-import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 
 import java.util.List;
@@ -35,12 +37,12 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
 
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-
+    	MorphType.getByName(name.trim()).equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override
     protected void toggleOff(UltraPlayer ultraPlayer) {
-
+    	ultraPlayer.removeMorph();
     }
 
     @Override

@@ -83,7 +83,6 @@ public class MorphElderGuardian extends Morph {
                 }
             }
         }.runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
-
     }
 
     @EventHandler
@@ -154,7 +153,6 @@ public class MorphElderGuardian extends Morph {
 
     @Override
     public void onClear() {
-        super.clear();
         if (customGuardian != null)
             customGuardian.dead = true;
         customEntities.remove(customGuardian);
