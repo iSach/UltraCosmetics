@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Finish new Menus.
 
 Remake entirely Treasure Chest system to be cleaner, more optimized.
@@ -52,4 +53,60 @@ Pets:
     Elder Guardian
     Killer Rabbit
     Pigman Jockey
+=======
+Finish new Menus.
+
+Remake entirely Treasure Chest system to be cleaner, more optimized.
+Possibility of custom rewards and placing chests like Mineplex.
+
+new Cosmetics
+
+API
+
+http://prntscr.com/c3b2tw
+
+See as I have an item there?
+If I could select a gadget it would remove it and name it &dGadget &7(&f%Gadget%&7) after you remove it it goes back.
+
+Disable collision between HumanEntity and Pets.
+FIX Command Treasure Chests "dupe"
+
+SUGGESTIONS:
+Companions
+Banners
+Gestures
+Settings Tab
+Baloon
+Music
+Vehicles
+Skins (?)
+Pets:
+    Iron Golem
+    Snow Golem
+    Slime
+    Squid
+    Villager
+    Bat
+    Horse
+    Enderman
+    Zombie Pigman
+    Spider
+    Blaze
+    Cave Spider
+    Creeper
+    Ghast
+    Magma Cube
+    Silverfish
+    Skeleton
+    Spider Jockey
+    Zombie
+    Zombie Villager
+    Wither Skeleton
+    Witch
+    Endermite
+    Guardian
+    Elder Guardian
+    Killer Rabbit
+    Pigman Jockey
+>>>>>>> refs/remotes/origin/master
     Baby Zombie

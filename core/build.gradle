@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 dependencies {
     compile name: 'spigot-1.11'
     compile ('LibsDisguises:LibsDisguises:9.0.7') {
@@ -15,4 +16,23 @@ processResources {
 	filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
 	    'VERSION': project.version.split('-')[0]
     ]
+=======
+dependencies {
+    compile name: 'spigot-1.11.2'
+    compile ('LibsDisguises:LibsDisguises:9.2.4') {
+        exclude group: 'org.spigotmc'
+        exclude group: 'com.comphenix.protocol'
+    }
+    compile('net.milkbowl.vault:VaultAPI:1.6') {
+        exclude group: 'org.bukkit'
+    }
+}
+
+processResources {
+	inputs.property("version", project.version)
+	
+	filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+	    'VERSION': project.version.split('-')[0]
+    ]
+>>>>>>> refs/remotes/origin/master
 }
