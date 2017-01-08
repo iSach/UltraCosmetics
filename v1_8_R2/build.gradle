@@ -1,5 +1,5 @@
 dependencies {
-    compile name: 'spigot-1.8.4'
+    compile 'org.spigotmc:spigot:1.8.4'
     shaded (project(':core')){
         transitive false
     }
