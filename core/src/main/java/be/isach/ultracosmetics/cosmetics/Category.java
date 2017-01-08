@@ -55,7 +55,7 @@ public enum Category {
             return ultraCosmetics.getMenus().getMorphsMenu();
         }
     },
-    HATS("Hats", "Equip", "Unequip", "Clear-HatType", "%hatname%", "Equip", "Unequip") {
+    HATS("Hats", "Equip", "Unequip", "Clear-Hat", "%hatname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getHatsMenu();

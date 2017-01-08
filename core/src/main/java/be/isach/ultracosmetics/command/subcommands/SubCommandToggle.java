@@ -23,7 +23,7 @@ public class SubCommandToggle extends SubCommand {
     @Override
     protected void onExePlayer(Player sender, String... args) {
 //        if (args.length < 3) {
-//            sender.sendMessage("  Â§cÂ§lIncorrect Usage. " + getUsage());
+//            sender.sendMessage("  §c§lIncorrect Usage. " + getUsage());
 //            return;
 //        }
 //        String type = args[1].toLowerCase();
@@ -34,7 +34,7 @@ public class SubCommandToggle extends SubCommand {
 //                    && sender.hasPermission(getPermission() + ".others")) {
 //                receiver = Bukkit.getBukkitPlayer(args[4]);
 //                if (receiver == null) {
-//                    sender.sendMessage("  Â§cÂ§lPlayer " + args[4] + " not found!");
+//                    sender.sendMessage("  §c§lPlayer " + args[4] + " not found!");
 //                    return;
 //                }
 //            }
@@ -43,7 +43,7 @@ public class SubCommandToggle extends SubCommand {
 //                    && sender.hasPermission(getPermission() + ".others")) {
 //                receiver = Bukkit.getBukkitPlayer(args[3]);
 //                if (receiver == null) {
-//                    sender.sendMessage("  Â§cÂ§lPlayer " + args[3] + " not found!");
+//                    sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
 //                    return;
 //                }
 //            }
@@ -57,13 +57,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Gadget"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < GadgetType.enabled().size(); i++)
-//                    sb.append(GadgetType.enabled().get(i).toString().toLowerCase() + ((i != GadgetType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lGadget Types: Â§c" + sb.toString());
+//                    sb.append(GadgetType.enabled().get(i).toString().toLowerCase() + ((i != GadgetType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lGadget Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!gadgetType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis gadget isn't enabled!");
+//                sender.sendMessage("  §c§lThis gadget isn't enabled!");
 //                return;
 //            }
 //
@@ -83,13 +83,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Pet"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < PetType.enabled().size(); i++)
-//                    sb.append(PetType.enabled().get(i).toString().toLowerCase() + ((i != PetType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lPet Types: Â§c" + sb.toString());
+//                    sb.append(PetType.enabled().get(i).toString().toLowerCase() + ((i != PetType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lPet Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!petType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis pet isn't enabled!");
+//                sender.sendMessage("  §c§lThis pet isn't enabled!");
 //                return;
 //            }
 //
@@ -109,13 +109,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Effect"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < ParticleEffectType.enabled().size(); i++)
-//                    sb.append(ParticleEffectType.enabled().get(i).toString().toLowerCase() + ((i != ParticleEffectType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lEffect Types: Â§c" + sb.toString());
+//                    sb.append(ParticleEffectType.enabled().get(i).toString().toLowerCase() + ((i != ParticleEffectType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lEffect Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!effectType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis effect isn't enabled!");
+//                sender.sendMessage("  §c§lThis effect isn't enabled!");
 //                return;
 //            }
 //
@@ -135,13 +135,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Mount"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < MountType.enabled().size(); i++)
-//                    sb.append(MountType.enabled().get(i).toString().toLowerCase() + ((i != MountType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lMount Types: Â§c" + sb.toString());
+//                    sb.append(MountType.enabled().get(i).toString().toLowerCase() + ((i != MountType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lMount Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!mountType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis mount isn't enabled!");
+//                sender.sendMessage("  §c§lThis mount isn't enabled!");
 //                return;
 //            }
 //
@@ -166,13 +166,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Emote"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < EmoteType.enabled().size(); i++)
-//                    sb.append(EmoteType.enabled().get(i).toString().toLowerCase() + ((i != EmoteType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lEmote Types: Â§c" + sb.toString());
+//                    sb.append(EmoteType.enabled().get(i).toString().toLowerCase() + ((i != EmoteType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lEmote Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!emoteType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis emote isn't enabled!");
+//                sender.sendMessage("  §c§lThis emote isn't enabled!");
 //                return;
 //            }
 //
@@ -192,13 +192,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Mount"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < MorphType.enabled().size(); i++)
-//                    sb.append(MorphType.enabled().get(i).toString().toLowerCase() + ((i != MorphType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lMorph Types: Â§c" + sb.toString());
+//                    sb.append(MorphType.enabled().get(i).toString().toLowerCase() + ((i != MorphType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lMorph Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!morphType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis morph isn't enabled!");
+//                sender.sendMessage("  §c§lThis morph isn't enabled!");
 //                return;
 //            }
 //
@@ -215,16 +215,16 @@ public class SubCommandToggle extends SubCommand {
 //            try {
 //                hat = HatType.valueOf(args[2].toUpperCase());
 //            } catch (IllegalArgumentException exc) {
-//                sender.sendMessage(MessageManager.getMessage("Invalid-HatType"));
+//                sender.sendMessage(MessageManager.getMessage("Invalid-Hat"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < HatType.enabled().size(); i++)
-//                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lMorph Types: Â§c" + sb.toString());
+//                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lMorph Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!hat.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis hat isn't enabled!");
+//                sender.sendMessage("  §c§lThis hat isn't enabled!");
 //                return;
 //            }
 //
@@ -239,7 +239,7 @@ public class SubCommandToggle extends SubCommand {
 //        } else if (type.startsWith("s")) {
 //            String a;
 //            if (args.length < 4) {
-//                sender.sendMessage("Â§cÂ§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
+//                sender.sendMessage("§c§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
 //                return;
 //            } else {
 //                a = args[3];
@@ -247,7 +247,7 @@ public class SubCommandToggle extends SubCommand {
 //                        && !a.startsWith("c")
 //                        && !a.startsWith("l")
 //                        && !a.startsWith("b")) {
-//                    sender.sendMessage("Â§cÂ§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
+//                    sender.sendMessage("§c§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
 //                    return;
 //                }
 //            }
@@ -278,13 +278,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Suit"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < SuitType.enabled().size(); i++)
-//                    sb.append(SuitType.enabled().get(i).toString().toLowerCase() + ((i != SuitType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lSuit Types: Â§c" + sb.toString());
+//                    sb.append(SuitType.enabled().get(i).toString().toLowerCase() + ((i != SuitType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lSuit Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!suitType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis suit isn't enabled!");
+//                sender.sendMessage("  §c§lThis suit isn't enabled!");
 //                return;
 //            }
 //
@@ -301,7 +301,7 @@ public class SubCommandToggle extends SubCommand {
     @Override
     protected void onExeConsole(ConsoleCommandSender sender, String... args) {
 //        if (args.length < 4) {
-//            sender.sendMessage("  Â§cÂ§lIncorrect Usage. /uc toggle <type> <cosmetic> <player>");
+//            sender.sendMessage("  §c§lIncorrect Usage. /uc toggle <type> <cosmetic> <player>");
 //            return;
 //        }
 //        String type = args[1].toLowerCase();
@@ -309,18 +309,18 @@ public class SubCommandToggle extends SubCommand {
 //
 //        if (type.startsWith("s")) {
 //            if (args.length < 5) {
-//                sender.sendMessage("  Â§cÂ§lIncorrect Usage. /uc toggle suit <suit> <part> <player>");
+//                sender.sendMessage("  §c§lIncorrect Usage. /uc toggle suit <suit> <part> <player>");
 //                return;
 //            }
 //            receiver = Bukkit.getBukkitPlayer(args[4]);
 //            if (receiver == null) {
-//                sender.sendMessage("  Â§cÂ§lPlayer " + args[4] + " not found!");
+//                sender.sendMessage("  §c§lPlayer " + args[4] + " not found!");
 //                return;
 //            }
 //        } else {
 //            receiver = Bukkit.getBukkitPlayer(args[3]);
 //            if (receiver == null) {
-//                sender.sendMessage("  Â§cÂ§lPlayer " + args[3] + " not found!");
+//                sender.sendMessage("  §c§lPlayer " + args[3] + " not found!");
 //                return;
 //            }
 //        }
@@ -333,13 +333,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Gadget"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < GadgetType.enabled().size(); i++)
-//                    sb.append(GadgetType.enabled().get(i).toString().toLowerCase() + ((i != GadgetType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lGadget Types: Â§c" + sb.toString());
+//                    sb.append(GadgetType.enabled().get(i).toString().toLowerCase() + ((i != GadgetType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lGadget Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!gadgetType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis gadget isn't enabled!");
+//                sender.sendMessage("  §c§lThis gadget isn't enabled!");
 //                return;
 //            }
 //
@@ -359,13 +359,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Pet"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < PetType.enabled().size(); i++)
-//                    sb.append(PetType.enabled().get(i).toString().toLowerCase() + ((i != PetType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lPet Types: Â§c" + sb.toString());
+//                    sb.append(PetType.enabled().get(i).toString().toLowerCase() + ((i != PetType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lPet Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!petType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis pet isn't enabled!");
+//                sender.sendMessage("  §c§lThis pet isn't enabled!");
 //                return;
 //            }
 //
@@ -385,13 +385,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Effect"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < ParticleEffectType.enabled().size(); i++)
-//                    sb.append(ParticleEffectType.enabled().get(i).toString().toLowerCase() + ((i != ParticleEffectType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lEffect Types: Â§c" + sb.toString());
+//                    sb.append(ParticleEffectType.enabled().get(i).toString().toLowerCase() + ((i != ParticleEffectType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lEffect Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!effectType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis effect isn't enabled!");
+//                sender.sendMessage("  §c§lThis effect isn't enabled!");
 //                return;
 //            }
 //
@@ -411,13 +411,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Mount"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < MountType.enabled().size(); i++)
-//                    sb.append(MountType.enabled().get(i).toString().toLowerCase() + ((i != MountType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lMount Types: Â§c" + sb.toString());
+//                    sb.append(MountType.enabled().get(i).toString().toLowerCase() + ((i != MountType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lMount Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!mountType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis mount isn't enabled!");
+//                sender.sendMessage("  §c§lThis mount isn't enabled!");
 //                return;
 //            }
 //
@@ -437,13 +437,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Mount"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < MorphType.enabled().size(); i++)
-//                    sb.append(MorphType.enabled().get(i).toString().toLowerCase() + ((i != MorphType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lMorph Types: Â§c" + sb.toString());
+//                    sb.append(MorphType.enabled().get(i).toString().toLowerCase() + ((i != MorphType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lMorph Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!morphType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis morph isn't enabled!");
+//                sender.sendMessage("  §c§lThis morph isn't enabled!");
 //                return;
 //            }
 //
@@ -460,16 +460,16 @@ public class SubCommandToggle extends SubCommand {
 //            try {
 //                hat = HatType.valueOf(args[2].toUpperCase());
 //            } catch (IllegalArgumentException exc) {
-//                sender.sendMessage(MessageManager.getMessage("Invalid-HatType"));
+//                sender.sendMessage(MessageManager.getMessage("Invalid-Hat"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < HatType.enabled().size(); i++)
-//                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lMorph Types: Â§c" + sb.toString());
+//                    sb.append(HatType.enabled().get(i).toString().toLowerCase() + ((i != HatType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lMorph Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!hat.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis hat isn't enabled!");
+//                sender.sendMessage("  §c§lThis hat isn't enabled!");
 //                return;
 //            }
 //
@@ -484,7 +484,7 @@ public class SubCommandToggle extends SubCommand {
 //        } else if (type.startsWith("s")) {
 //            String a;
 //            if (args.length < 4) {
-//                sender.sendMessage("Â§cÂ§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
+//                sender.sendMessage("§c§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
 //                return;
 //            } else {
 //                a = args[3];
@@ -492,7 +492,7 @@ public class SubCommandToggle extends SubCommand {
 //                        && !a.startsWith("c")
 //                        && !a.startsWith("l")
 //                        && !a.startsWith("b")) {
-//                    sender.sendMessage("Â§cÂ§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
+//                    sender.sendMessage("§c§lIncorrect usage. /uc toggle suit <suit> helmet/chestplate/leggings/boots");
 //                    return;
 //                }
 //            }
@@ -523,13 +523,13 @@ public class SubCommandToggle extends SubCommand {
 //                sender.sendMessage(MessageManager.getMessage("Invalid-Suit"));
 //                StringBuilder sb = new StringBuilder();
 //                for (int i = 0; i < SuitType.enabled().size(); i++)
-//                    sb.append(SuitType.enabled().get(i).toString().toLowerCase() + ((i != SuitType.enabled().size() - 1) ? "Â§fÂ§l, Â§c" : ""));
-//                sender.sendMessage("Â§cÂ§lSuit Types: Â§c" + sb.toString());
+//                    sb.append(SuitType.enabled().get(i).toString().toLowerCase() + ((i != SuitType.enabled().size() - 1) ? "§f§l, §c" : ""));
+//                sender.sendMessage("§c§lSuit Types: §c" + sb.toString());
 //                return;
 //            }
 //
 //            if (!suitType.isEnabled()) {
-//                sender.sendMessage("  Â§cÂ§lThis suit isn't enabled!");
+//                sender.sendMessage("  §c§lThis suit isn't enabled!");
 //                return;
 //            }
 //
