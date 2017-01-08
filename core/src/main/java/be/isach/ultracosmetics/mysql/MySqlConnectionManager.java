@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.manager.SqlLoader;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
@@ -73,7 +74,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
             String password = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.password"));
             sql = new MySqlConnection(hostname, portNumber, database, username, password);
             co = sql.getConnection();
-            Bukkit.getConsoleSender().sendMessage("§b§lUltraCosmetics -> Successfully connected to MySQL server! :)");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "UltraCosmetics -> Successfully connected to MySQL server! :)");
             PreparedStatement sql = co.prepareStatement("CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" +
                     "id INTEGER not NULL AUTO_INCREMENT," +
                     " uuid VARCHAR(255)," +
@@ -103,9 +104,9 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
         } catch (Exception e) {
             Bukkit.getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("§c§lUltra Cosmetics >>> Could not connect to MySQL server!");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Ultra Cosmetics >>> Could not connect to MySQL server!");
             Bukkit.getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("§c§lError:");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Error:");
             e.printStackTrace();
         }
     }

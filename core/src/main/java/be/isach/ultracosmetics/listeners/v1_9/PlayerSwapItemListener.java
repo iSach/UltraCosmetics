@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,14 +55,14 @@ public class PlayerSwapItemListener implements Listener {
                 && event.getMainHandItem().hasItemMeta()
                 && event.getMainHandItem().getItemMeta().hasDisplayName()
                 && event.getMainHandItem().getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
         }
         if (event.getOffHandItem() != null
                 && event.getOffHandItem().hasItemMeta()
                 && event.getOffHandItem().getItemMeta().hasDisplayName()
                 && event.getOffHandItem().getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
         }
     }

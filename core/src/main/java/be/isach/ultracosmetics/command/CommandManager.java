@@ -124,4 +124,3 @@ public class CommandManager implements CommandExecutor {
         registerCommand(new SubCommandTreasure(ultraCosmetics));
     }
 }
-

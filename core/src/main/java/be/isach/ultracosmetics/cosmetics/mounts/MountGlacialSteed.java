@@ -14,12 +14,10 @@ import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.UUID;
-
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountGlacialSteed extends Mount {
+public class MountGlacialSteed extends Mount<Horse> {
 
     public MountGlacialSteed(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.GLACIALSTEED, ultraCosmetics);
@@ -31,9 +29,9 @@ public class MountGlacialSteed extends Mount {
         Horse horse = (Horse) entity;
 
         horse.setColor(Horse.Color.WHITE);
-        horse.setVariant(Horse.Variant.HORSE);
+        // horse.setVariant(Horse.Variant.HORSE);
         color = Horse.Color.WHITE;
-        variant = Horse.Variant.HORSE;
+        // variant = Horse.Variant.HORSE;
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
     }

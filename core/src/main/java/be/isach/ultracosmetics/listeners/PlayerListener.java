@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +51,7 @@ public class PlayerListener implements Listener {
             }
             if (ultraCosmetics.getUpdateChecker().isOutdated())
                 if (event.getPlayer().isOp())
-                    event.getPlayer().sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
+                    event.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics > " + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
         });
     }
 
@@ -67,7 +68,7 @@ public class PlayerListener implements Listener {
     public void onDrop(PlayerDropItemEvent event) {
         if (event.getItemDrop().getItemStack().hasItemMeta()
                 && event.getItemDrop().getItemStack().getItemMeta().hasDisplayName()
-                && event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                && event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
             event.getItemDrop().remove();
             ItemStack chest = event.getPlayer().getItemInHand().clone();
@@ -87,7 +88,7 @@ public class PlayerListener implements Listener {
         if (event.getItem() != null
                 && event.getItem().hasItemMeta()
                 && event.getItem().getItemMeta().hasDisplayName()
-                && event.getItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                && event.getItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
             Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> ultraCosmetics.getMenus().getMainMenu().open(ultraPlayer));
         }
@@ -114,7 +115,7 @@ public class PlayerListener implements Listener {
             if (event.getCurrentItem() != null
                     && event.getCurrentItem().hasItemMeta()
                     && event.getCurrentItem().getItemMeta().hasDisplayName()
-                    && event.getCurrentItem().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                    && event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
                 event.setCancelled(true);
                 player.updateInventory();
             }
@@ -132,7 +133,7 @@ public class PlayerListener implements Listener {
             if (item != null
                     && item.hasItemMeta()
                     && item.getItemMeta().hasDisplayName()
-                    && item.getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                    && item.getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
                 event.setCancelled(true);
                 ((Player) event.getWhoClicked()).updateInventory();
                 return;
@@ -148,7 +149,7 @@ public class PlayerListener implements Listener {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
                 event.getPlayer().getInventory().remove(slot);
             }
-            String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
+            String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
             Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
             byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
             event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
@@ -171,7 +172,7 @@ public class PlayerListener implements Listener {
         if (event.getEntity().getInventory().getItem(slot) != null
                 && event.getEntity().getInventory().getItem(slot).hasItemMeta()
                 && event.getEntity().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.getDrops().remove(event.getEntity().getInventory().getItem(slot));
             event.getEntity().getInventory().setItem(slot, null);
         }
@@ -203,7 +204,7 @@ public class PlayerListener implements Listener {
         if (event.getItem().getItemStack() != null
                 && event.getItem().getItemStack().hasItemMeta()
                 && event.getItem().getItemStack().getItemMeta().hasDisplayName()
-                && event.getItem().getItemStack().getItemMeta().getDisplayName().equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                && event.getItem().getItemStack().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
             event.getItem().remove();
         }

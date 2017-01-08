@@ -15,8 +15,6 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -73,7 +71,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 continue;
             }
 
-            slotLoop:
+            //slotLoop:
             for (int l = 0; l < 4; l++) {
 
                 ArmorSlot armorSlot = ArmorSlot.values()[l];
@@ -149,7 +147,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                             } catch (Exception ignored) {
                             }
                         }
-                        toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics(), armorSlot);
+                        toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics());
                         if (ultraPlayer.getCurrentGadget() != null && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
                             ultraPlayer.getCurrentGadget().lastPage = currentPage;
                             ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
@@ -224,27 +222,19 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
         return SuitType.enabled();
     }
 
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
-        SuitType.getByName(name).equip(ultraPlayer, ultraCosmetics, armorSlot);
-    }
-
-    protected void toggleOff(UltraPlayer ultraPlayer, ArmorSlot armorSlot) {
-        ultraPlayer.removeSuit(armorSlot);
-    }
-
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-
+        SuitType.getByName(name).equip(ultraPlayer, ultraCosmetics, ArmorSlot.getByName(name.split(" ")[1])).equip();
     }
 
     @Override
     protected void toggleOff(UltraPlayer ultraPlayer) {
-        //
+        ultraPlayer.removeSuit();
     }
 
     @Override
     protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
-        return null;
+        return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE);
     }
 
     @Override

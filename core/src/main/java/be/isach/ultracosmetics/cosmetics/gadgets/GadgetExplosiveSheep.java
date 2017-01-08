@@ -150,5 +150,3 @@ public class GadgetExplosiveSheep extends Gadget {
     }
 
 }
-
-

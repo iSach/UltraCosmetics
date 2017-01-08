@@ -260,7 +260,7 @@ public class TreasureRandomizer {
         try {
             return ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getConfig().get(s)).replace("%prefix%", MessageManager.getMessage("Prefix")));
         } catch (Exception exc) {
-            return "§c§lError";
+            return ChatColor.RED + "" + ChatColor.BOLD + "Error";
         }
     }
 

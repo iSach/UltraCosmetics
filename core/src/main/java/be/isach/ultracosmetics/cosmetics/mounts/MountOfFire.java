@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -17,12 +16,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountOfFire extends Mount {
+public class MountOfFire extends Mount<Horse> {
 
     public MountOfFire(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.MOUNTOFFIRE, ultraCosmetics);
@@ -33,9 +31,9 @@ public class MountOfFire extends Mount {
         super.onEquip();
         Horse horse = (Horse) entity;
         horse.setColor(Horse.Color.CREAMY);
-        horse.setVariant(Horse.Variant.HORSE);
-        color = Horse.Color.CREAMY;
-        variant = Horse.Variant.HORSE;
+        // horse.setVariant(Horse.Variant.HORSE);
+        // color = Horse.Color.CREAMY;
+        // variant = Horse.Variant.HORSE;
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
     }

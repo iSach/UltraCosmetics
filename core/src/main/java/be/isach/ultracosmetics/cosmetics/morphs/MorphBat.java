@@ -6,12 +6,13 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
+import me.libraryaddict.disguise.DisguiseAPI;
+
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
-
-import java.util.UUID;
 
 /**
  * Created by sacha on 26/08/15.
@@ -43,7 +44,14 @@ public class MorphBat extends Morph {
     public void onClear() {
         if (getPlayer().getGameMode() != GameMode.CREATIVE)
             getPlayer().setAllowFlight(false);
-        super.clear();
+        DisguiseAPI.undisguiseToAll(getPlayer());
+        getOwner().setCurrentMorph(null);
+        owner = null;
+        
+        try {
+            HandlerList.unregisterAll(this);
+        } catch (Exception exc) {
+        }
     }
 
     @Override

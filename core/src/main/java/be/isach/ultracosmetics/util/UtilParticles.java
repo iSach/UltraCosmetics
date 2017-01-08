@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -125,7 +125,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
         String ammo = "";
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
-            ammo = "§f§l" + getOwner().getAmmo(getType().toString().toLowerCase()) + " ";
+            ammo = ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " ";
         }
 
         itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(), ammo + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
@@ -171,7 +171,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     public void clear() {
         super.clear();
 
-        // TODO Move in onClear
         removeItem();
         cancel();
     }
@@ -215,7 +214,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         String timeLeft = decimalFormat.format(currentCooldown) + "s";
 
         PlayerUtils.sendInActionBar(getPlayer(),
-                getType().getName() + " §f" + stringBuilder.toString() + " §f" + timeLeft);
+                getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " " + timeLeft);
 
     }
 
@@ -383,7 +382,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             ultraPlayer.removeAmmo(getType().toString().toLowerCase());
-            itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(), "§f§l" + ultraPlayer.getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
+            itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(), ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), getItemStack());
         }
         if (event.getClickedBlock() != null
