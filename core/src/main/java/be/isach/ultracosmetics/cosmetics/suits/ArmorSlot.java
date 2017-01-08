@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-package be.isach.ultracosmetics.cosmetics.suits;
-
-/**
- * Created by Sacha on 20/12/15.
- */
-public enum ArmorSlot {
-
-    HELMET,
-    CHESTPLATE,
-    LEGGINGS,
-    BOOTS
-
-}
-=======
 package be.isach.ultracosmetics.cosmetics.suits;
 
 import org.bukkit.ChatColor;
@@ -34,4 +19,3 @@ public enum ArmorSlot {
        return null;
     }
 }
->>>>>>> refs/remotes/origin/master

@@ -23,7 +23,7 @@ public class MenuMain extends Menu {
 
         switch (Category.enabledSize()) {
             case 8:
-                layout = new int[]{1, 3, 5, 7, 19, 21, 23, 25};
+                layout = new int[]{10, 12, 14, 16, 28, 30, 32, 34};
                 break;
             case 7:
                 layout = new int[]{10, 13, 16, 28, 30, 32, 34};
