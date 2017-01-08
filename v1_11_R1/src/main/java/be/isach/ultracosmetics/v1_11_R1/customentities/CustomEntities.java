@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author RadBuilder
@@ -85,16 +86,17 @@ public enum CustomEntities {
     public static void unregisterEntities() {
         for (CustomEntities entity : values()) {
             try {
-                ((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
+            	((Set) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
+                //((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            try {
-                ((Map) getPrivateStatic(EntityTypes.class, "f")).remove(entity.getCustomClass());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            
+            //try {
+            //    ((Map) getPrivateStatic(EntityTypes.class, "f")).remove(entity.getCustomClass());
+            //} catch (Exception e) {
+            //    e.printStackTrace();
+            //}
         }
 
         for (CustomEntities entity : values())
@@ -133,16 +135,14 @@ public enum CustomEntities {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static void a(Class paramClass, String paramString, int paramInt) {
+    private static void a(Class c, String name, int id) {
+    	MinecraftKey key = new MinecraftKey(name);
         try {
-            ((Map) getPrivateStatic(EntityTypes.class, "c")).put(paramString, paramClass);
-            ((Map) getPrivateStatic(EntityTypes.class, "d")).put(paramClass, paramString);
-            ((Map) getPrivateStatic(EntityTypes.class, "e")).put(paramInt,
-                    paramClass);
-            ((Map) getPrivateStatic(EntityTypes.class, "f")).put(paramClass,
-                    paramInt);
-            ((Map) getPrivateStatic(EntityTypes.class, "g")).put(paramString,
-                    paramInt);
-        } catch (Exception ignored) {}
+            ((RegistryMaterials) getPrivateStatic(EntityTypes.class, "b")).a(id, key, c);
+            ((Set) getPrivateStatic(EntityTypes.class, "d")).add(key);
+            ((List) getPrivateStatic(EntityTypes.class, "g")).set(id, name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

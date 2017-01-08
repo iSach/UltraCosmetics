@@ -8,12 +8,10 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.entity.Horse;
 
-import java.util.UUID;
-
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountInfernalHorror extends Mount {
+public class MountInfernalHorror extends Mount<Horse> {
 
     public MountInfernalHorror(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.INFERNALHORROR, ultraCosmetics);
@@ -24,9 +22,9 @@ public class MountInfernalHorror extends Mount {
         super.onEquip();
         if (entity instanceof Horse) {
             Horse horse = (Horse) entity;
-            horse.setVariant(Horse.Variant.SKELETON_HORSE);
-            variant = Horse.Variant.SKELETON_HORSE;
-            horse.setVariant(Horse.Variant.SKELETON_HORSE);
+            // horse.setVariant(Horse.Variant.SKELETON_HORSE);
+            // variant = Horse.Variant.SKELETON_HORSE;
+            // horse.setVariant(Horse.Variant.SKELETON_HORSE);
             horse.setJumpStrength(0.7);
             UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
         }

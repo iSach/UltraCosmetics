@@ -27,8 +27,8 @@ public class WrapperEntityLiving extends WrapperEntity {
     public float getMoveForward() { return handle.bf; }
     public void setMoveForward(float moveForward) { handle.bf = moveForward; }
 
-    public boolean isJumping() { return getField("be", EntityLiving.class, Boolean.class); }
-    public void setJumping(boolean jumping) { setField("be", EntityLiving.class, jumping); }
+    public boolean isJumping() { return getField("bd", EntityLiving.class, Boolean.class); }
+    public void setJumping(boolean jumping) { setField("bd", EntityLiving.class, jumping); }
 
     public float getJumpMovementFactor() { return handle.aQ; }
     public void setJumpMovementFactor(float jumpMovementFactor) { handle.aQ = jumpMovementFactor; }

@@ -27,8 +27,8 @@ public class MountDruggedHorse extends Mount<Horse> {
 
         getEntity().setColor(Horse.Color.CHESTNUT);
         color = Horse.Color.CHESTNUT;
-        variant = Horse.Variant.HORSE;
-        getEntity().setVariant(Horse.Variant.HORSE);
+        // variant = Horse.Variant.HORSE;
+        // getEntity().setVariant(Horse.Variant.HORSE);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(getEntity(), 1.1d);
         getEntity().setJumpStrength(1.3);
 

@@ -29,10 +29,10 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
 
-    /**
-     * If the mount is a horse, its variant.
-     */
-    public Horse.Variant variant;
+//    /**
+//     * If the mount is a horse, its variant.
+//     */
+//    public Horse.Variant variant;
     /**
      * If the mount is a horse, its color.
      */

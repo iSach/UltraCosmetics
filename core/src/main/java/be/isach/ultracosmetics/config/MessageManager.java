@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.config;
 
+import org.bukkit.ChatColor;
 
 /**
  * Created by sacha on 03/08/15.
@@ -378,7 +379,7 @@ public class MessageManager {
      * @return a message from a config path.
      */
     public static String getMessage(String messagePath) {
-        return ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")).replace("&", "§");
+        return ChatColor.translateAlternateColorCodes('&', ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")));
     }
 
 }

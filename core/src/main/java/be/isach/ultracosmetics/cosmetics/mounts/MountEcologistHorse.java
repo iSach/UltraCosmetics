@@ -17,12 +17,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountEcologistHorse extends Mount {
+public class MountEcologistHorse extends Mount<Horse> {
 
     public MountEcologistHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.ECOLOGISTHORSE, ultraCosmetics);
@@ -34,8 +33,8 @@ public class MountEcologistHorse extends Mount {
         Horse horse = (Horse) entity;
         horse.setColor(Horse.Color.CHESTNUT);
         color = Horse.Color.CHESTNUT;
-        variant = Horse.Variant.HORSE;
-        horse.setVariant(Horse.Variant.HORSE);
+        // variant = Horse.Variant.HORSE;
+        // horse.setVariant(Horse.Variant.HORSE);
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
     }

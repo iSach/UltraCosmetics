@@ -8,12 +8,10 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.entity.Horse;
 
-import java.util.UUID;
-
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountWalkingDead extends Mount {
+public class MountWalkingDead extends Mount<Horse> {
 
     public MountWalkingDead(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.WALKINGDEAD, ultraCosmetics);
@@ -23,8 +21,8 @@ public class MountWalkingDead extends Mount {
     public void onEquip() {
         super.onEquip();
         Horse horse = (Horse) entity;
-        horse.setVariant(Horse.Variant.UNDEAD_HORSE);
-        variant = Horse.Variant.UNDEAD_HORSE;
+        // horse.setVariant(Horse.Variant.UNDEAD_HORSE);
+        // variant = Horse.Variant.UNDEAD_HORSE;
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
     }

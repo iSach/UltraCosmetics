@@ -20,7 +20,7 @@ import org.bukkit.util.Vector;
 /**
  * Created by Sacha on 29/11/15.
  */
-public class MountRudolph extends Mount {
+public class MountRudolph extends Mount<Horse> {
 
     ArmorStand left;
     ArmorStand right;
@@ -35,9 +35,9 @@ public class MountRudolph extends Mount {
         super.onEquip();
         horse = (Horse) entity;
         horse.setColor(Horse.Color.DARK_BROWN);
-        horse.setVariant(Horse.Variant.MULE);
-        color = Horse.Color.DARK_BROWN;
-        variant = Horse.Variant.MULE;
+        // horse.setVariant(Horse.Variant.MULE);
+        // color = Horse.Color.DARK_BROWN;
+        // variant = Horse.Variant.MULE;
         horse.setJumpStrength(0.7);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
         left = spawnArmorStand(false);
