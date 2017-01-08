@@ -4,13 +4,12 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.*;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import be.isach.ultracosmetics.player.UltraPlayer;
 
+import org.bukkit.Material;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +36,14 @@ public class SuitType extends CosmeticMatType<Suit> {
     }
 
     public static SuitType getByName(String s) {
+    	if (s.contains(" ")) {
+    		ArmorSlot slot = ArmorSlot.getByName(s.split(" ")[1]);
+    		try {
+                return VALUES.stream().filter(value -> value.getName(slot).equalsIgnoreCase(s)).findFirst().get();
+            } catch (Exception exc) {
+                return null;
+            }
+    	}
         try {
             return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
         } catch (Exception exc) {
@@ -86,10 +93,10 @@ public class SuitType extends CosmeticMatType<Suit> {
      * @param armorSlot The Armor Slot.
      * @return The suit Object equipped to the player.
      */
-    public Suit equip(Player player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
+    public Suit equip(UltraPlayer player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
         Suit effect = null;
         try {
-            effect = getClazz().getDeclaredConstructor(UUID.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player.getUniqueId(), armorSlot, ultraCosmetics);
+            effect = getClazz().getDeclaredConstructor(UltraPlayer.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player, armorSlot, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
