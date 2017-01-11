@@ -83,7 +83,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                     Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                     Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                     String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name"));
-                    name = name.replace("{cosmetic-name}", suitType.getName()).replace("&", "§");
+                    name = ChatColor.translateAlternateColorCodes('&', name.replace("{cosmetic-name}", suitType.getName()));
                     List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
                     String[] array = new String[npLore.size()];
                     npLore.toArray(array);
