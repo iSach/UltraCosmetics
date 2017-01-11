@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.ChatColor;
 
 /**
  * Package: be.isach.ultracosmetics.util
@@ -108,15 +108,15 @@ public class UltraCosmeticsData {
             treasureChests = true;
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests' Money Loot requires Vault!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lMoney Loot is turned off!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Treasure Chests' Money Loot requires Vault!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Money Loot is turned off!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
                 moneyTreasureLoot = false;
             }
         }
@@ -137,13 +137,13 @@ public class UltraCosmeticsData {
 
     boolean checkServerVersion() {
         String bukkVersion = Bukkit.getVersion();
-        if (!bukkVersion.contains("1.8.8") && !bukkVersion.contains("1.9") && !bukkVersion.contains("1.10")) {
-            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or higher to work!\n\n----------------------------");
+        if (!bukkVersion.contains("1.8") && !bukkVersion.contains("1.9") && !bukkVersion.contains("1.10")) {
+            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8 or higher to work!\n\n----------------------------");
             Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
             return false;
         }
 
-        String mcVersion = "1.8.8";
+        String mcVersion = "1.8.0";
 
         try {
             mcVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -160,7 +160,7 @@ public class UltraCosmeticsData {
                 Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
                 return true;
             }
-        } else serverVersion = ServerVersion.v1_8_R3;
+        } else serverVersion = ServerVersion.v1_8_R1;
 
         UltraCosmeticsData.get().setServerVersion(serverVersion);
 
