@@ -35,13 +35,12 @@ import java.util.Locale;
 import java.util.UUID;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.gadgets
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
- * <p>
  * Represents an instance of a Gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
+@SuppressWarnings("deprecation")
 public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     private static final DecimalFormatSymbols OTHER_SYMBOLS = new DecimalFormatSymbols(Locale.US);
@@ -53,7 +52,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         OTHER_SYMBOLS.setPatternSeparator('.');
         DECIMAL_FORMAT = new DecimalFormat("0.0", OTHER_SYMBOLS);
     }
-
 
     /**
      * If true, it will differentiate left and right click.
@@ -108,8 +106,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         this.affectPlayers = type.affectPlayers();
         this.useTwoInteractMethods = false;
     }
-
-    @Override
+    
+	@Override
     protected void onEquip() {
         if (getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentGadget() != null) {
             getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
@@ -175,7 +173,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     }
 
     /**
-     * unregister listeners.
+     * Unregister listeners.
      */
     public void unregisterListeners() {
         try {
@@ -291,9 +289,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
         ItemFactory.fillInventory(inventory);
 
-
         getPlayer().openInventory(inventory);
-
         this.ammoInventory = inventory;
     }
 

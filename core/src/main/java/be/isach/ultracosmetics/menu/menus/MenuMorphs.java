@@ -7,17 +7,15 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
+ * Morph {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public class MenuMorphs extends CosmeticMenu<MorphType> {
 
@@ -27,7 +25,6 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
-
     }
 
     @Override

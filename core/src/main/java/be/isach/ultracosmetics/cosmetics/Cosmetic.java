@@ -14,10 +14,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics
- * Created by: sachalewin
- * Date: 21/07/16
- * Project: UltraCosmetics
+ * A cosmetic instance summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	07-21-2016
  */
 public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable implements Listener {
 
@@ -69,7 +69,8 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     @Override
-    public void run() {}
+    public void run() {
+    }
 
     protected abstract void onEquip();
 

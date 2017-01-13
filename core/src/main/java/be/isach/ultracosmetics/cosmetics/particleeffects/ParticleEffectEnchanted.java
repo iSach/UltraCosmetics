@@ -7,10 +7,11 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 12/10/15.
+ * Represents an instance of enchanted particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-12-2015
  */
 public class ParticleEffectEnchanted extends ParticleEffect {
 
@@ -25,6 +26,5 @@ public class ParticleEffectEnchanted extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 }

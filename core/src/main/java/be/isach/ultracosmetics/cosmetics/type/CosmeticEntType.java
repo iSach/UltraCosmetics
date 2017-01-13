@@ -6,12 +6,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.type
- * Created by: sachalewin
- * Date: 4/08/16
- * Project: UltraCosmetics
- *
  * Represents a Cosmetic Type with a Material, a Data, and an Entity Type.
+ * 
+ * @author 	iSach
+ * @since 	08-04-2016
  */
 public class CosmeticEntType<T extends Cosmetic> extends CosmeticMatType<T> {
 

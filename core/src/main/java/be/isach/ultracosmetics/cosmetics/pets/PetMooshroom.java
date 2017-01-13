@@ -14,7 +14,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by ataranlen on 6/26/2016.
+ * Represents an instance of a mooshroom pet summoned by a player.
+ * 
+ * @author 	ataranlen
+ * @since 	06-26-2015
  */
 public class PetMooshroom extends Pet {
     Random r = new Random();

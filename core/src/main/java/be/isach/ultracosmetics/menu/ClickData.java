@@ -6,10 +6,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 9/08/16
- * Project: UltraCosmetics
+ * Inventory click data.
+ * 
+ * @author 	iSach
+ * @since 	08-09-2016
  */
 public class ClickData {
 

@@ -5,7 +5,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
 /**
- * Created by Sacha on 25/12/15.
+ * Main listener
+ * 
+ * @author 	iSach
+ * @since 	12-25-2015
  */
 public class MainListener implements Listener {
 
@@ -14,5 +17,4 @@ public class MainListener implements Listener {
         if(event.getRightClicked().hasMetadata("NO_INTER"))
             event.setCancelled(true);
     }
-
 }

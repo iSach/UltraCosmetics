@@ -19,7 +19,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Sacha on 15/12/15.
+ * 
+ * 
+ * @author 	iSach
+ * @since 	12-15-2015
  */
 public class GadgetFreezeCannon extends Gadget {
 
@@ -80,5 +83,4 @@ public class GadgetFreezeCannon extends Gadget {
     @Override
     void onLeftClick() {
     }
-
 }

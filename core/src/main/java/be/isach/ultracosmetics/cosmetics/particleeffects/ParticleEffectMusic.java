@@ -7,10 +7,12 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 
 import java.util.Random;
-import java.util.UUID;
 
 /**
- * Created by Sacha on 12/10/15.
+ * Represents an instance of music particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-12-2015
  */
 public class ParticleEffectMusic extends ParticleEffect {
 
@@ -31,6 +33,5 @@ public class ParticleEffectMusic extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 }

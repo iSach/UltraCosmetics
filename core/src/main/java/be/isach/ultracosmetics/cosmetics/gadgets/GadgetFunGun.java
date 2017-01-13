@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sacha on 12/10/15.
+* Represents an instance of a fungun gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-12-2015
  */
 public class GadgetFunGun extends Gadget {
 
@@ -59,7 +62,8 @@ public class GadgetFunGun extends Gadget {
     }
 
     @Override
-    public void onUpdate() {}
+    public void onUpdate() {
+    }
 
     @Override
     public void onClear() {

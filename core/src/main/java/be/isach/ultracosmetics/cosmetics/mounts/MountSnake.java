@@ -17,11 +17,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of a snake mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
-public class MountSnake extends Mount {
+public class MountSnake extends Mount<Sheep> {
 
-    private HashMap<Player, ArrayList<Entity>> tailMap = new HashMap();
+    private HashMap<Player, ArrayList<Entity>> tailMap = new HashMap<Player, ArrayList<Entity>>();
     private int color = 1;
 
 
@@ -117,7 +120,7 @@ public class MountSnake extends Mount {
             tail.setColor(DyeColor.values()[color]);
             /*if (tail != ent)
                 tail.setPassenger(tail.getWorld().spawnEntity(tail.getLocation(), EntityType.MINECART));
-        */
+            */
         }
     }
 
@@ -129,5 +132,4 @@ public class MountSnake extends Mount {
         } catch (Exception exc) {
         }
     }
-
 }

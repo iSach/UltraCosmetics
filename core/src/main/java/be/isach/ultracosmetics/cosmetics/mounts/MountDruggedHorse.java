@@ -31,7 +31,8 @@ public class MountDruggedHorse extends MountHorse<Horse> {
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             try {
                 getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }, 1);
     }
 

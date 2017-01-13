@@ -1,19 +1,68 @@
-<<<<<<< HEAD
-Finish new Menus.
+########    #####    ########      #####  
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##       #####    #########     #####  
 
-Remake entirely Treasure Chest system to be cleaner, more optimized.
-Possibility of custom rewards and placing chests like Mineplex.
 
-Treasure Chests --------------------------
+------------------ TODO ------------------
+- Finish new menus
+- New cosmetics
+- API
+- Something like http://prntscr.com/c3b2tw
+- Disable collision between HumanEntity and Pets
+- Fix Treasure Chests command "dupe"
+- Remake entirely Treasure Chest system to be cleaner, more optimized.
+- Possibility of custom rewards and placing chests like Mineplex.
 
-Structure:
+--------------- SUGGESTIONS --------------
+- Companions
+- Banners
+- Gestures
+- Settings Tab
+- Balloon
+- Music
+- Vehicles
+- Skins (?)
+- Pets:
+    - Iron Golem
+    - Snow Golem
+    - Slime
+    - Squid
+    - Villager
+    - Bat
+    - Horse
+    - Enderman
+    - Zombie Pigman
+    - Spider
+    - Blaze
+    - Cave Spider
+    - Creeper
+    - Ghast
+    - Magma Cube
+    - Silverfish
+    - Skeleton
+    - Spider Jockey
+    - Zombie
+    - Zombie Villager
+    - Wither Skeleton
+    - Witch
+    - Endermite
+    - Guardian
+    - Elder Guardian
+    - Killer Rabbit
+    - Pigman Jockey
+
+-------- Treasure Chest Structure --------
+Treasure Chest Structure:
 chestpos.json (/yaml?)
 designs.yml
 config.yml
 rewards.yml
 
-
---------- chestpos.json ---------
+-------------- chestpos.json -------------
 {
     "chests": [
         {
@@ -38,18 +87,18 @@ rewards.yml
 }
 
 
---------- designs.yml ---------
-same as current design. (?)
+--------------- designs.yml --------------
+Same as current design (?)
 
---------- config.yml ---------
 
+--------------- config.yml ---------------
 enabled: true
 allow-static-chests: false
 allow-chests-anywhere-from-gui: true
 allow-buy-key-from-gui: true
 key-price: 1000
 
---------- rewards.yml ---------
+--------------  rewards.yml --------------
 reward-name:
   name: "..."
   chance-rate: 30
@@ -67,114 +116,3 @@ reward-name:
   firework-effect:
     enabled: true
     color: BLUE
-
-------------------------------------------
-
-
-
-new Cosmetics
-
-API
-
-http://prntscr.com/c3b2tw
-
-See as I have an item there?
-If I could select a gadget it would remove it and name it &dGadget &7(&f%Gadget%&7) after you remove it it goes back.
-
-Disable collision between HumanEntity and Pets.
-FIX Command Treasure Chests "dupe"
-
-SUGGESTIONS:
-Companions
-Banners
-Gestures
-Settings Tab
-Baloon
-Music
-Vehicles
-Skins (?)
-Pets:
-    Iron Golem
-    Snow Golem
-    Slime
-    Squid
-    Villager
-    Bat
-    Horse
-    Enderman
-    Zombie Pigman
-    Spider
-    Blaze
-    Cave Spider
-    Creeper
-    Ghast
-    Magma Cube
-    Silverfish
-    Skeleton
-    Spider Jockey
-    Zombie
-    Zombie Villager
-    Wither Skeleton
-    Witch
-    Endermite
-    Guardian
-    Elder Guardian
-    Killer Rabbit
-    Pigman Jockey
-=======
-Finish new Menus.
-
-Remake entirely Treasure Chest system to be cleaner, more optimized.
-Possibility of custom rewards and placing chests like Mineplex.
-
-new Cosmetics
-
-API
-
-http://prntscr.com/c3b2tw
-
-See as I have an item there?
-If I could select a gadget it would remove it and name it &dGadget &7(&f%Gadget%&7) after you remove it it goes back.
-
-Disable collision between HumanEntity and Pets.
-FIX Command Treasure Chests "dupe"
-
-SUGGESTIONS:
-Companions
-Banners
-Gestures
-Settings Tab
-Baloon
-Music
-Vehicles
-Skins (?)
-Pets:
-    Iron Golem
-    Snow Golem
-    Slime
-    Squid
-    Villager
-    Bat
-    Horse
-    Enderman
-    Zombie Pigman
-    Spider
-    Blaze
-    Cave Spider
-    Creeper
-    Ghast
-    Magma Cube
-    Silverfish
-    Skeleton
-    Spider Jockey
-    Zombie
-    Zombie Villager
-    Wither Skeleton
-    Witch
-    Endermite
-    Guardian
-    Elder Guardian
-    Killer Rabbit
-    Pigman Jockey
->>>>>>> refs/remotes/origin/master
-    Baby Zombie

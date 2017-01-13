@@ -2,14 +2,15 @@ package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.menu.menus.MenuGadgets;
-import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Sacha on 21/12/15.
+ * Menu {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
+ * 
+ * @author 	iSach
+ * @since 	12-21-2015
  */
 public class SubCommandMenu extends SubCommand {
 

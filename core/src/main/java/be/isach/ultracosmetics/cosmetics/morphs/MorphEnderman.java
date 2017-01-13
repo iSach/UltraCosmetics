@@ -12,11 +12,13 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Set;
 
 /**
- * Created by sacha on 26/08/15.
+* Represents an instance of an enderman morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-26-2015
  */
 public class MorphEnderman extends Morph {
 
@@ -59,7 +61,6 @@ public class MorphEnderman extends Morph {
 
     public static FireworkEffect getRandomFireworkEffect() {
         FireworkEffect.Builder builder = FireworkEffect.builder();
-        Random r = new Random();
         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(0, 0, 0)).withFade(Color.fromRGB(0, 0, 0)).build();
         return effect;
     }
@@ -94,12 +95,10 @@ public class MorphEnderman extends Morph {
     public void onClear() {
         if (getPlayer().getGameMode() != GameMode.CREATIVE)
             getPlayer().setAllowFlight(false);
-        super.clear();
+        // super.clear();
     }
 
     @Override
     protected void onEquip() {
-
     }
-
 }

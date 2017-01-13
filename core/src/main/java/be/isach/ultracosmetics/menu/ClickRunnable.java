@@ -1,14 +1,13 @@
 package be.isach.ultracosmetics.menu;
 
 /**
- * Package: be.isach.ultracosmetics.menu
- * Created by: sachalewin
- * Date: 9/08/16
- * Project: UltraCosmetics
+ * Inventory click runnable.
+ * 
+ * @author 	iSach
+ * @since 	08-09-2016
  */
 @FunctionalInterface
 public interface ClickRunnable {
 
     void run(ClickData data);
-
 }

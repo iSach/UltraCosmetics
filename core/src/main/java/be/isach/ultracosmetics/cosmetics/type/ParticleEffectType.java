@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.type
- * Created by: Sacha
- * Date: 18/12/15
- * Project: UltraCosmetics
+ * Particle effect types.
+ * 
+ * @author 	iSach
+ * @since 	12-18-2015
  */
 public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
 
@@ -83,5 +83,4 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
     public int getRepeatDelay() {
         return repeatDelay;
     }
-
 }

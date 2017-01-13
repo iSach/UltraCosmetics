@@ -7,7 +7,10 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Selfview {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public class SubCommandSelfView extends SubCommand {
 
@@ -26,4 +29,3 @@ public class SubCommandSelfView extends SubCommand {
         notAllowed(sender);
     }
 }
-

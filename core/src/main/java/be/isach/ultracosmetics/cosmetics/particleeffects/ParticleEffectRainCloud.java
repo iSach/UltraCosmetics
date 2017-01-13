@@ -7,8 +7,10 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 
 /**
- * z
- * Created by sacha on 12/08/15.
+ * Represents an instance of rain cloud particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class ParticleEffectRainCloud extends ParticleEffect {
 
@@ -25,6 +27,5 @@ public class ParticleEffectRainCloud extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 }

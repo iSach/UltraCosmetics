@@ -7,10 +7,11 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 11/11/15.
+ * Represents an instance of angel wing particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-11-2015
  */
 public class ParticleEffectAngelWings extends ParticleEffect {
 
@@ -35,7 +36,6 @@ public class ParticleEffectAngelWings extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 
     @Override
@@ -92,5 +92,4 @@ public class ParticleEffectAngelWings extends ParticleEffect {
         final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90 * 1))));
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
     }
-
 }

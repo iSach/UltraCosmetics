@@ -23,7 +23,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a discoball gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetDiscoBall extends Gadget {
 
@@ -53,7 +56,8 @@ public class GadgetDiscoBall extends Gadget {
         HandlerList.unregisterAll(this);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     void onRightClick() {
         armorStand = (ArmorStand) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(0, 3, 0), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
@@ -153,7 +157,7 @@ public class GadgetDiscoBall extends Gadget {
                 UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
                 continue;
             }
-//            location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
+            // location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
         }
     }
 

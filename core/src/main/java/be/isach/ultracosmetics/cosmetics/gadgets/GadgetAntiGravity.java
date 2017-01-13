@@ -18,13 +18,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of an antigravity gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
 public class GadgetAntiGravity extends Gadget {
 
     ArmorStand as;
     boolean running;
-
 
     public GadgetAntiGravity(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.ANTIGRAVITY, ultraCosmetics);

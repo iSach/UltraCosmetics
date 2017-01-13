@@ -1,8 +1,12 @@
 package be.isach.ultracosmetics.config;
 
+import org.bukkit.ChatColor;
 
 /**
- * Created by sacha on 03/08/15.
+ * Message manager.
+ * 
+ * @author 	iSach
+ * @since 	03-08-2015
  */
 public class MessageManager {
     private static SettingsManager settingsManager;
@@ -39,30 +43,30 @@ public class MessageManager {
         addMessage("Not-Enough-Money", "%prefix% &c&lYou don't have enough money!");
         addMessage("Successful-Purchase", "%prefix% &a&lSuccessful purchase!");
         addMessage("Buy-Treasure-Key", "&lBuy a Treasure Key");
-        addMessage("Treasure-Keys", "§7§lTreasure Keys");
-        addMessage("Treasure-Chests", "§6§lTreasure Chests");
-        addMessage("Dont-Have-Key", "§4§lYou need a key!");
-        addMessage("Click-Open-Chest", "§aClick to open a chest");
-        addMessage("Click-Buy-Key", "§aClick to buy a key");
-        addMessage("Your-Keys", "§7§oYour keys: §f§l%keys%");
+        addMessage("Treasure-Keys", "&7&lTreasure Keys");
+        addMessage("Treasure-Chests", "&6&lTreasure Chests");
+        addMessage("Dont-Have-Key", "&4&lYou need a key!");
+        addMessage("Click-Open-Chest", "&aClick to open a chest");
+        addMessage("Click-Buy-Key", "&aClick to buy a key");
+        addMessage("Your-Keys", "&7&oYour keys: &f&l%keys%");
         addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor %price%$");
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("Chest-Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
         addMessage("Too-Close-To-Other-Chest", "%prefix% &c&lYou are too close to another treasure chest!");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
-        addMessage("Clear-Cosmetics", "§c§lClear cosmetics");
-        addMessage("Clear-Gadget", "§c§lClear current gadget");
-        addMessage("Clear-Pet", "§c§lClear current pet");
-        addMessage("Clear-Mount", "§c§lClear current mount");
-        addMessage("Clear-Effect", "§c§lClear current effect");
-        addMessage("Clear-Morph", "§c§lClear current morph");
-        addMessage("Clear-Hat", "§c§lClear current hat");
-        addMessage("Clear-Suit", "§c§lClear current suit");
-        addMessage("Clear-Emote", "§c§lClear current emote");
-        addMessage("Rename-Pet-Purchase", "§c§lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
+        addMessage("Clear-Cosmetics", "&c&lClear cosmetics");
+        addMessage("Clear-Gadget", "&c&lClear current gadget");
+        addMessage("Clear-Pet", "&c&lClear current pet");
+        addMessage("Clear-Mount", "&c&lClear current mount");
+        addMessage("Clear-Effect", "&c&lClear current effect");
+        addMessage("Clear-Morph", "&c&lClear current morph");
+        addMessage("Clear-Hat", "&c&lClear current hat");
+        addMessage("Clear-Suit", "&c&lClear current suit");
+        addMessage("Clear-Emote", "&c&lClear current emote");
+        addMessage("Rename-Pet-Purchase", "&c&lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
 
-        addMessage("Active-Pet-Needed", "§c§lYou need to spawn a pet to rename it");
-        addMessage("Rename-Pet", "§c§lClick to rename: %petname%");
+        addMessage("Active-Pet-Needed", "&c&lYou need to spawn a pet to rename it");
+        addMessage("Rename-Pet", "&c&lClick to rename: %petname%");
 
         addMessage("Treasure-Chests-Loot.Ammo", "%ammo% %name% ammo");
         addMessage("Treasure-Chests-Loot.Pet", "%pet% pet");
@@ -125,7 +129,7 @@ public class MessageManager {
         addMessage("Gadgets.TNT.name", "&4&lT&f&lN&4&lT");
         addMessage("Gadgets.FunGun.name", "&6&lFun Gun");
         addMessage("Gadgets.Parachute.name", "&f&lParachute");
-        addMessage("Gadgets.QuakeGun.name", "&5§lQuake &d&lGun");
+        addMessage("Gadgets.QuakeGun.name", "&5&lQuake &d&lGun");
         addMessage("Gadgets.GhostParty.name", "&f&lGhost Party");
         addMessage("Gadgets.Firework.name", "&c&lFirework");
         addMessage("Gadgets.ChristmasTree.name", "&2&lChristmas Tree");
@@ -134,7 +138,7 @@ public class MessageManager {
         addMessage("Gadgets.Snowball.name", "&f&lSnowball");
         addMessage("Gadgets.PartyPopper.name", "&e&lParty Popper");
         addMessage("Gadgets.Trampoline.name", "&9&lTrampoline");
-        addMessage("Gadgets.Gadget-Ready-ActionBar", "%gadgetname% §f§lis ready!");
+        addMessage("Gadgets.Gadget-Ready-ActionBar", "%gadgetname% &f&lis ready!");
         addMessage("Gadgets.Lore", "&9Gadget");
 
         // MOUNTS
@@ -227,29 +231,29 @@ public class MessageManager {
 
         //MORPHS
         addMessage("Morphs.Blaze.name", "&6&lBlaze");
-        addMessage("Morphs.Blaze.skill", "&eCrouch§7 to: &aFly");
+        addMessage("Morphs.Blaze.skill", "&eCrouch&7 to: &aFly");
         addMessage("Morphs.Chicken.name", "&f&lChicken");
-        addMessage("Morphs.Chicken.skill", "&eCrouch§7 to: &aLay eggs");
+        addMessage("Morphs.Chicken.skill", "&eCrouch&7 to: &aLay eggs");
         addMessage("Morphs.Slime.name", "&a&lSlime");
-        addMessage("Morphs.Slime.skill", "&eCrouch§7 to: &aBounce");
+        addMessage("Morphs.Slime.skill", "&eCrouch&7 to: &aBounce");
         addMessage("Morphs.Pig.name", "&d&lPig");
-        addMessage("Morphs.Pig.skill", "&eCollide§7 to: &aBounce Players");
+        addMessage("Morphs.Pig.skill", "&eCollide&7 to: &aBounce Players");
         addMessage("Morphs.Enderman.name", "&5&lEnderman");
-        addMessage("Morphs.Enderman.skill", "&eDouble Jump§7 to: &aTeleport");
+        addMessage("Morphs.Enderman.skill", "&eDouble Jump&7 to: &aTeleport");
         addMessage("Morphs.Bat.name", "&8&lBat");
-        addMessage("Morphs.Bat.skill", "&eDouble Jump§7 to: &aFlap");
+        addMessage("Morphs.Bat.skill", "&eDouble Jump&7 to: &aFlap");
         addMessage("Morphs.Creeper.name", "&a&lCreeper");
-        addMessage("Morphs.Creeper.skill", "&eCrouch§7 to: &aDetonate");
+        addMessage("Morphs.Creeper.skill", "&eCrouch&7 to: &aDetonate");
         addMessage("Morphs.Creeper.charging", "&a&lCharging: %chargelevel%/100");
         addMessage("Morphs.Creeper.release-to-explode", "&f&lRelease to explode!");
         addMessage("Morphs.Snowman.name", "&f&lSnowman");
-        addMessage("Morphs.Snowman.skill", "&eLeft Click§7 to: &aThrow Snowball");
+        addMessage("Morphs.Snowman.skill", "&eLeft Click&7 to: &aThrow Snowball");
         addMessage("Morphs.Morph", "%prefix% &9You morphed into %morphname%");
         addMessage("Morphs.Unmorph", "%prefix% &9You unmorphed from %morphname%");
         addMessage("Morphs.WitherSkeleton.name", "&8&lWither Skeleton");
-        addMessage("Morphs.WitherSkeleton.skill", "&eSneak§7 to: &aBone Bomb");
+        addMessage("Morphs.WitherSkeleton.skill", "&eSneak&7 to: &aBone Bomb");
         addMessage("Morphs.ElderGuardian.name", "&8&lElder Guardian");
-        addMessage("Morphs.ElderGuardian.skill", "&eLeft-Click§7 to: &aLaser");
+        addMessage("Morphs.ElderGuardian.skill", "&eLeft-Click&7 to: &aLaser");
 
         //HATS
         addMessage("Hats.Equip", "%prefix% &9You equipped %hatname% &9hat!");
@@ -378,7 +382,6 @@ public class MessageManager {
      * @return a message from a config path.
      */
     public static String getMessage(String messagePath) {
-        return ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")).replace("&", "§");
+        return ChatColor.translateAlternateColorCodes('&', ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")));
     }
-
 }

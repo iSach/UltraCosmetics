@@ -6,18 +6,18 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Package: be.isach.ultracosmetics.command.subcommands
- * Created by: Sacha
- * Date: 21/12/15
- * Project: UltraCosmetics
+ * Clear {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
+ * 
+ * @author 	iSach
+ * @since 	12-21-2015
  */
 public class SubCommandToggle extends SubCommand {
 
-    private UltraCosmetics ultraCosmetics;
+    // private UltraCosmetics ultraCosmetics;
 
     public SubCommandToggle(UltraCosmetics ultraCosmetics) {
         super("Toggles a cosmetic.", "ultracosmetics.command.toggle", "/uc toggle <type> <cosmetic> [player]", ultraCosmetics, "toggle");
-        this.ultraCosmetics = ultraCosmetics;
+        // this.ultraCosmetics = ultraCosmetics;
     }
 
     @Override

@@ -24,10 +24,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Package: ${PACKAGE_NAME}
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
+ * Represents an instance of a pet summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	03-08-2015
  */
 public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
@@ -113,7 +113,8 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(entity);
-
+        // this.entity.setPassenger(armorStand);
+		
         if (getType() == PetType.WITHER) {
             this.entity.setCustomName(getType().getEntityName(getPlayer()));
             this.entity.setCustomNameVisible(true);
@@ -196,7 +197,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
     @Override
     protected void onClear() {
-
         // Remove Armor Stand.
         if (armorStand != null) {
             armorStand.remove();
@@ -247,5 +247,4 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         if (event.getPlayer() == getPlayer())
             getEntity().teleport(getPlayer());
     }
-
 }

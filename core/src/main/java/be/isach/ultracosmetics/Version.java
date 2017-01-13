@@ -1,7 +1,10 @@
 package be.isach.ultracosmetics;
 
 /**
- * Created by sacha on 16/08/15.
+ * Version.
+ * 
+ * @author 	iSach
+ * @since 	08-16-2015
  */
 public class Version implements Comparable<Version> {
 
@@ -41,5 +44,4 @@ public class Version implements Comparable<Version> {
     public boolean equals(Object that) {
         return this == that || that != null && this.getClass() == that.getClass() && this.compareTo((Version) that) == 0;
     }
-
 }

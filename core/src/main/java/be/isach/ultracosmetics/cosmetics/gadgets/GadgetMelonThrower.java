@@ -24,7 +24,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a melon thrower gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetMelonThrower extends Gadget implements Listener {
 
@@ -64,7 +67,8 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     public void onUpdate() {
         try {
             Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
-                @Override
+                @SuppressWarnings("deprecation")
+				@Override
                 public void run() {
                     Iterator<Item> melonBlockIterator = melonBlocks.iterator();
                     while (melonBlockIterator.hasNext()) {
@@ -102,7 +106,6 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 
         for (Item melonBlock : melonBlocks)
             melonBlock.remove();
-
     }
 
     @Override

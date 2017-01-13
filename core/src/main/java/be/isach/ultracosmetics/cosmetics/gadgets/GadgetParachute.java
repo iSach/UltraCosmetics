@@ -23,7 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sacha on 12/10/15.
+* Represents an instance of a parachute gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-12-2015
  */
 public class GadgetParachute extends Gadget {
 
@@ -40,11 +43,9 @@ public class GadgetParachute extends Gadget {
 
     @Override
     void onRightClick() {
-
         Location loc = getPlayer().getLocation();
 
         getPlayer().teleport(loc.clone().add(0, 35, 0));
-
         getPlayer().setVelocity(new Vector(0, 0, 0));
 
         for (int i = 0; i < 20; i++) {
@@ -89,14 +90,14 @@ public class GadgetParachute extends Gadget {
         return true;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onUpdate() {
         if (active) {
             if (!getPlayer().isOnGround() && getPlayer().getVelocity().getY() < -0.3)
                 MathUtils.applyVelocity(getPlayer(), getPlayer().getVelocity().add(new Vector(0, 0.1, 0)), true);
             if (getPlayer().isOnGround())
                 killParachute();
-
         }
     }
 

@@ -10,7 +10,10 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.SkeletonHorse;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of a infernal horror mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
 public class MountInfernalHorror extends MountHorse<SkeletonHorse> {
 

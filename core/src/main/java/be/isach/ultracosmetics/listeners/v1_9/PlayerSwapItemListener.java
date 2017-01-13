@@ -13,7 +13,10 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by Sacha on 16/05/16.
+ * 1.9 offhand listeners.
+ * 
+ * @author 	iSach
+ * @since 	05-16-2016
  */
 public class PlayerSwapItemListener implements Listener {
 
@@ -47,8 +50,6 @@ public class PlayerSwapItemListener implements Listener {
         }
     }
 
-
-
     @EventHandler
     public void onPlayerSwapoffHand(PlayerSwapHandItemsEvent event) {
         if (event.getMainHandItem() != null
@@ -66,5 +67,4 @@ public class PlayerSwapItemListener implements Listener {
             event.setCancelled(true);
         }
     }
-
 }

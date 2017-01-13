@@ -9,8 +9,10 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 /**
- * Created by Sacha on 20/12/15.
- * <p/>
+ * A subcommand.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public abstract class SubCommand {
 

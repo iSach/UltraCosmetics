@@ -4,16 +4,13 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.ChatColor;
 
 /**
- * Package: be.isach.ultracosmetics.util
- * Created by: sachalewin
- * Date: 5/08/16
- * Project: UltraCosmetics
- *
- * Description: This class is only about cleaning a bit main class.
- * here is stored almost all global data.
+ * This class is only for cleaning main class a bit.
+ * 
+ * @author 	iSach
+ * @since 	08-05-2016
  */
 public class UltraCosmeticsData {
     
@@ -108,15 +105,15 @@ public class UltraCosmeticsData {
             treasureChests = true;
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests' Money Loot requires Vault!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lMoney Loot is turned off!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Treasure Chests' Money Loot requires Vault!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Money Loot is turned off!");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
                 moneyTreasureLoot = false;
             }
         }
@@ -146,7 +143,7 @@ public class UltraCosmeticsData {
             return false;
         }
 
-        String mcVersion = "1.8.8";
+        String mcVersion = "1.8.0";
 
         try {
             mcVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -163,7 +160,7 @@ public class UltraCosmeticsData {
                 Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
                 return true;
             }
-        } else serverVersion = ServerVersion.v1_8_R3;
+        } else serverVersion = ServerVersion.v1_8_R1;
 
         UltraCosmeticsData.get().setServerVersion(serverVersion);
 

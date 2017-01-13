@@ -21,7 +21,10 @@ import org.bukkit.util.Vector;
 import java.util.UUID;
 
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a blackhole gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
 public class GadgetBlackHole extends Gadget {
 
@@ -54,7 +57,6 @@ public class GadgetBlackHole extends Gadget {
 
     @Override
     public void onUpdate() {
-
         if (i != null && i.isOnGround()) {
             int strands = 6;
             int particles = 25;

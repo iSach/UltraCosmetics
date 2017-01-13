@@ -21,7 +21,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 27/08/15.
+* Represents an instance of a chicken morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-27-2015
  */
 public class MorphChicken extends Morph {
 
@@ -31,7 +34,6 @@ public class MorphChicken extends Morph {
         super(owner, MorphType.CHICKEN, ultraCosmetics);
 
         if (owner != null) {
-
             final MorphChicken chicken = this;
             new BukkitRunnable() {
                 @Override
@@ -41,14 +43,11 @@ public class MorphChicken extends Morph {
                         cancel();
                         return;
                     }
-
                     UltraCosmeticsData.get().getVersionManager().getEntityUtil().chickenFall(getPlayer());
-
                 }
             }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
     }
-
 
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
@@ -115,6 +114,5 @@ public class MorphChicken extends Morph {
 
     @Override
     protected void onEquip() {
-
     }
 }

@@ -8,16 +8,14 @@ import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Project: UltraCosmetics
- * Package: be.isach.ultracosmetics.cosmetics.emotes
- * Created by: Sacha
- * Created on: 17th June, 2016
- * at 02:44
+ * Represents an instance of an emote summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	06-17-2016
  */
 public class Emote extends Cosmetic<EmoteType> {
 
     private EmoteAnimation animation;
-
     private ItemStack itemStack;
 
     public Emote(UltraPlayer owner, final EmoteType emoteType, UltraCosmetics ultraCosmetics) {

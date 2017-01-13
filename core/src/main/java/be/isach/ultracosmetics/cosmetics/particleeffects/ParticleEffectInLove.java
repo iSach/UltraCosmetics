@@ -6,7 +6,10 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
 
 /**
- * Created by sacha on 13/08/15.
+ * Represents an instance of in love particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-13-2015
  */
 public class ParticleEffectInLove extends ParticleEffect {
 
@@ -21,6 +24,5 @@ public class ParticleEffectInLove extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 }

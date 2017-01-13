@@ -28,12 +28,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Package: be.isach.ultracosmetics
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
- * <p>
- * Description: Main Class of the plugin.
+ * Main class of the plugin.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class UltraCosmetics extends JavaPlugin {
 
