@@ -22,9 +22,8 @@ import org.bukkit.util.Vector;
  */
 public class GadgetAntiGravity extends Gadget {
 
-    ArmorStand as;
-    boolean running;
-
+    private ArmorStand as;
+    private boolean running;
 
     public GadgetAntiGravity(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.ANTIGRAVITY, ultraCosmetics);
@@ -65,8 +64,9 @@ public class GadgetAntiGravity extends Gadget {
             UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
             UtilParticles.display(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
             for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
-                if (ent instanceof LivingEntity && !(ent instanceof ArmorStand))
+                if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
                     MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
+                }
             }
         }
     }
@@ -92,8 +92,8 @@ public class GadgetAntiGravity extends Gadget {
 
     @Override
     public void onClear() {
-        if (as != null)
+        if (as != null) {
             as.remove();
-        HandlerList.unregisterAll(this);
+        }
     }
 }

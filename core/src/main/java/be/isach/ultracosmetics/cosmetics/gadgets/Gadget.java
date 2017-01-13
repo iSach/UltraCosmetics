@@ -56,9 +56,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
 
     /**
-     * If true, it will differentiate left and right click.
+     * Page the user was on when trying to buy ammo.
+     * Is used when player buys ammo from Gadget Menu.
      */
-    boolean useTwoInteractMethods;
+    public int lastPage = 1;
 
     /**
      * If it should open Gadget Menu after purchase.
@@ -66,15 +67,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     public boolean openGadgetsInvAfterAmmo;
 
     /**
-     * If true, will display cooldown left when fail on use
-     * because cooldown active.
+     * If true, it will differentiate left and right click.
      */
-    boolean displayCooldownMessage = true;
-
-    /**
-     * Last Clicked Block by the player.
-     */
-    Block lastClickedBlock;
+    protected boolean useTwoInteractMethods;
 
     /**
      * Gadget ItemStack.
@@ -82,25 +77,30 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     protected ItemStack itemStack;
 
     /**
+     * If true, will display cooldown left when fail on use
+     * because cooldown active.
+     */
+    protected boolean displayCooldownMessage = true;
+
+    /**
+     * Last Clicked Block by the player.
+     */
+    protected Block lastClickedBlock;
+
+    /**
      * If Gadget interaction should tick asynchronously.
      */
-    boolean asynchronous = false;
+    private boolean asynchronous = false;
 
     /**
      * If true, it will affect players (velocity).
      */
-    boolean affectPlayers;
+    private boolean affectPlayers;
 
     /**
      * The Ammo Purchase inventory.
      */
     private Inventory ammoInventory;
-
-    /**
-     * Page the user was on when trying to buy ammo.
-     * Is used when player buys ammo from Gadget Menu.
-     */
-    public int lastPage = 1;
 
     public Gadget(UltraPlayer owner, GadgetType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.GADGETS, owner, type);
@@ -171,17 +171,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         super.clear();
 
         removeItem();
-        cancel();
-    }
-
-    /**
-     * unregister listeners.
-     */
-    public void unregisterListeners() {
-        try {
-            HandlerList.unregisterAll(this);
-        } catch (Exception exc) {
-        }
     }
 
     /**
@@ -216,27 +205,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " " + timeLeft);
 
     }
-
-    /**
-     * If useTwoInteractMethods is true,
-     * called when only a right click is called.
-     * <p/>
-     * Otherwise, called when a right or left click
-     * is performed.
-     */
-    abstract void onRightClick();
-
-    /**
-     * Called when a left click is done with gadget,
-     * only called if useTwoInteractMethods is true.
-     */
-    abstract void onLeftClick();
-
-    /**
-     * Called when gadget is cleared.
-     */
-    public abstract void onClear();
-
     /**
      * Removes the item.
      */
@@ -290,7 +258,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
         }
         ItemFactory.fillInventory(inventory);
-
 
         getPlayer().openInventory(inventory);
 
@@ -470,4 +437,25 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             }
         }
     }
+
+    /**
+     * If useTwoInteractMethods is true,
+     * called when only a right click is called.
+     * <p/>
+     * Otherwise, called when a right or left click
+     * is performed.
+     */
+    abstract void onRightClick();
+
+    /**
+     * Called when a left click is done with gadget,
+     * only called if useTwoInteractMethods is true.
+     */
+    abstract void onLeftClick();
+
+    /**
+     * Called when gadget is cleared.
+     */
+    public abstract void onClear();
+
 }

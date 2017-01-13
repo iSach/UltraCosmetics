@@ -92,9 +92,9 @@ public class MorphEnderman extends Morph {
 
     @Override
     public void onClear() {
-        if (getPlayer().getGameMode() != GameMode.CREATIVE)
+        if (getPlayer().getGameMode() != GameMode.CREATIVE) {
             getPlayer().setAllowFlight(false);
-        super.clear();
+    }
     }
 
     @Override
