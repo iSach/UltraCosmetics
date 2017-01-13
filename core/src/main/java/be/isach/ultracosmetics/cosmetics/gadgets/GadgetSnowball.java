@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sacha on 15/12/15.
+* Represents an instance of a snowball gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-15-2015
  */
 public class GadgetSnowball extends Gadget {
 
@@ -38,7 +41,6 @@ public class GadgetSnowball extends Gadget {
 
     @Override
     public void onUpdate() {
-
     }
 
     @Override
@@ -54,5 +56,4 @@ public class GadgetSnowball extends Gadget {
         if (event.getDamager().hasMetadata("NO_DAMAGE"))
             event.setCancelled(true);
     }
-
 }

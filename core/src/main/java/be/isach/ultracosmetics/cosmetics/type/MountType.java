@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -16,7 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 18/12/15.
+ * A cosmetic type.
+ * 
+ * @author 	iSach
+ * @since 	12-18-2015
  */
 public class MountType extends CosmeticEntType<Mount> {
 

@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -18,15 +17,19 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * Created by Sacha on 21/12/15.
+ * Give {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
+ * 
+ * @author 	iSach
+ * @since 	12-21-2015
  */
+@SuppressWarnings("deprecation")
 public class SubCommandGive extends SubCommand {
 
     public SubCommandGive(UltraCosmetics ultraCosmetics) {
         super("Gives Ammo/Key.", "ultracosmetics.command.give", "/uc give <key|ammo> <amount> [player]", ultraCosmetics, "give");
     }
 
-    @Override
+	@Override
     protected void onExePlayer(Player sender, String... args) {
         if (args.length < 3) {
             if (args.length == 2) {

@@ -3,13 +3,12 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.type
- * Created by: sachalewin
- * Date: 4/08/16
- * Project: UltraCosmetics
+ * A cosmetic material type.
+ * 
+ * @author 	iSach
+ * @since 	08-04-2016
  */
 public class CosmeticMatType<T extends Cosmetic> extends CosmeticType<T> {
 

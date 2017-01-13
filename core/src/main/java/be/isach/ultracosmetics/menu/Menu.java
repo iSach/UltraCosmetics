@@ -15,13 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Package: be.isach.ultracosmetics.menu
- * Created by: iSach
- * Date: 5/07/16
- * Project: UltraCosmetics
- * <p>
- * Description : Represents a Menu. A menu can have multiple pages in case of cosmetics.
- * Each item in the menu will - when clicked by a player - executes a ClickRunnable.
+ * Represents a Menu. A menu can have multiple pages in case of cosmetics.
+ * Each item in the menu will, when clicked by a player, execute a ClickRunnable.
+ * 
+ * @author 	iSach
+ * @since 	07-05-2016
  */
 public abstract class Menu implements Listener {
 

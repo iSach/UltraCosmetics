@@ -14,7 +14,10 @@ import java.util.List;
 import org.bukkit.ChatColor;
 
 /**
- * Created by sachalewin on 5/07/16.
+ * A cosmetic type.
+ * 
+ * @author 	iSach
+ * @since 	07-05-2016
  */
 public abstract class CosmeticType<T extends Cosmetic> {
 

@@ -17,11 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Project: UltraCosmetics
- * Package: be.isach.ultracosmetics.cosmetics
- * Created by: Sacha
- * Created on: 20th June, 2016
- * at 22:35
+ * Cosmetic category enum.
+ * 
+ * @author 	iSach
+ * @since 	06-20-2016
  */
 public enum Category {
 

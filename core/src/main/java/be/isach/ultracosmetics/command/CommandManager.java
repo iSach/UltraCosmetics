@@ -17,7 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Command manager.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public class CommandManager implements CommandExecutor {
 
@@ -30,9 +33,9 @@ public class CommandManager implements CommandExecutor {
 
     public CommandManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setExecutor(this);
+        this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setExecutor(this);
         String[] aliases = {"uc", "cosmetics"};
-        ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
+        this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
     }
 
     /**
@@ -108,7 +111,6 @@ public class CommandManager implements CommandExecutor {
             }
         }
         showHelp(sender, 1);
-
         return true;
     }
 

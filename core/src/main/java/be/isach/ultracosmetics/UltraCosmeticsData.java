@@ -7,13 +7,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 /**
- * Package: be.isach.ultracosmetics.util
- * Created by: sachalewin
- * Date: 5/08/16
- * Project: UltraCosmetics
- *
- * Description: This class is only about cleaning a bit main class.
- * here is stored almost all global data.
+ * This class is only for cleaning main class a bit.
+ * 
+ * @author 	iSach
+ * @since 	08-05-2016
  */
 public class UltraCosmeticsData {
     

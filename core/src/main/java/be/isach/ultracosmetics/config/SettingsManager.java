@@ -1,21 +1,20 @@
 package be.isach.ultracosmetics.config;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.CustomConfiguration;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.UUID;
 
 /**
- * Created by sacha on 21/07/15.
+ * Settings manager.
+ * 
+ * @author 	iSach
+ * @since 	07-21-2015
  */
 public class SettingsManager {
 
@@ -23,7 +22,6 @@ public class SettingsManager {
     // Translation config file.
     private static SettingsManager messages = new SettingsManager("messages");
 
-    private static SettingsManager conf;
     public FileConfiguration fileConfiguration;
     private File file;
 
@@ -186,7 +184,6 @@ public class SettingsManager {
         return cs;
     }
 
-
     @SuppressWarnings("unchecked")
     public <T> T get(String path) {
         return (T) fileConfiguration.get(path);
@@ -199,5 +196,4 @@ public class SettingsManager {
     public boolean contains(String path) {
         return fileConfiguration.contains(path);
     }
-
 }

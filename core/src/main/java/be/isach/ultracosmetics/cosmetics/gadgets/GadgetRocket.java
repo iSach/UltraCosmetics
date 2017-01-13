@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a rocket gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
 public class GadgetRocket extends Gadget {
 
@@ -177,11 +180,6 @@ public class GadgetRocket extends Gadget {
             SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.BAT_LOOP, 1.5f, 1.0f);
             SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.FIZZ, 0.025f, 1.0f);
         }
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 
     @Override

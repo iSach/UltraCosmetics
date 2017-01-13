@@ -35,12 +35,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Package: be.isach.ultracosmetics
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
- * <p>
- * Description: Represents a player on the server.
+ * Represents a player on the server.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class UltraPlayer {
 

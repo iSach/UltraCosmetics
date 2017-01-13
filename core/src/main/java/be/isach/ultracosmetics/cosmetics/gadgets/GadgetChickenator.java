@@ -20,7 +20,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a chickenator gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetChickenator extends Gadget {
 

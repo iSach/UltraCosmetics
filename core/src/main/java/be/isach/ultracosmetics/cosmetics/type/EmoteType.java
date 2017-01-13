@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -16,11 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Project: UltraCosmetics
- * Package: be.isach.ultracosmetics.cosmetics.emotes
- * Created by: Sacha
- * Created on: 17th June, 2016
- * at 02:45
+ * Emote types.
+ * 
+ * @author 	iSach
+ * @since 	07-17-2016
  */
 public class EmoteType extends CosmeticMatType<Emote> {
 

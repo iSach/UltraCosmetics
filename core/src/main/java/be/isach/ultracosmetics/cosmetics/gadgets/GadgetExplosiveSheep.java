@@ -23,7 +23,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by sacha on 08/08/15.
+* Represents an instance of a explosive sheep gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-08-2015
  */
 public class GadgetExplosiveSheep extends Gadget {
 
@@ -53,7 +56,6 @@ public class GadgetExplosiveSheep extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
@@ -79,12 +81,6 @@ public class GadgetExplosiveSheep extends Gadget {
 
     @Override
     public void onUpdate() {
-
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 
     @Override
@@ -106,7 +102,6 @@ public class GadgetExplosiveSheep extends Gadget {
             this.runTaskLater(UltraCosmeticsData.get().getPlugin(), (int) time);
             this.gadgetExplosiveSheep = gadgetExplosiveSheep;
         }
-
 
         @Override
         public void run() {
@@ -146,7 +141,5 @@ public class GadgetExplosiveSheep extends Gadget {
                 new SheepColorRunnable(time, red, s, gadgetExplosiveSheep);
             }
         }
-
     }
-
 }

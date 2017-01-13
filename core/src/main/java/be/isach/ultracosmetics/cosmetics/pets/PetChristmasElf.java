@@ -22,7 +22,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by Sacha on 29/11/15.
+ * Represents an instance of a Christmas Elf pet summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-29-2015
  */
 public class PetChristmasElf extends Pet {
 

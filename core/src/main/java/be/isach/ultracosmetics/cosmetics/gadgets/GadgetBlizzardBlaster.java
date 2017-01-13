@@ -14,7 +14,10 @@ import org.bukkit.util.Vector;
 import java.util.Random;
 
 /**
- * Created by sacha on 08/08/15.
+* Represents an instance of a blizzard blaster gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-08-2015
  */
 public class GadgetBlizzardBlaster extends Gadget {
 
@@ -26,7 +29,8 @@ public class GadgetBlizzardBlaster extends Gadget {
         instance = this;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     void onRightClick() {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
@@ -64,12 +68,10 @@ public class GadgetBlizzardBlaster extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
     public void onUpdate() {
-
     }
 
     @Override

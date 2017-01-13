@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
+ * Suit {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public final class MenuSuits extends CosmeticMenu<SuitType> {
 

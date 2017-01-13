@@ -22,7 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Sacha on 18/10/15.
+* Represents an instance of a ghost party gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-18-2015
  */
 public class GadgetGhostParty extends Gadget {
 
@@ -72,7 +75,6 @@ public class GadgetGhostParty extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
@@ -84,11 +86,6 @@ public class GadgetGhostParty extends Gadget {
             }
         } catch (Exception exc) {
         }
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 
     @Override

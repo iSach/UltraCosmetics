@@ -9,7 +9,10 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.entity.Horse;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of a infernal horror mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
 public class MountInfernalHorror extends Mount<Horse> {
 

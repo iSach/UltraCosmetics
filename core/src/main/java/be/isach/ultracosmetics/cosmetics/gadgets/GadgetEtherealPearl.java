@@ -23,7 +23,10 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a ethereal pearl gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetEtherealPearl extends Gadget implements Listener {
 
@@ -153,11 +156,12 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
         }
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onUpdate() {
         if (runnableHashMap.containsKey(getPlayer())) {
             if (getPlayer().isOnGround()) {
-                //getBukkitPlayer().getVehicle().remove();
+                // getBukkitPlayer().getVehicle().remove();
                 getPlayer().eject();
             }
         }

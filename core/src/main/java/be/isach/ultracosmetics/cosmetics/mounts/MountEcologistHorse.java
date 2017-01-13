@@ -17,12 +17,14 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
- * Created by sacha on 10/08/15.
+ * Represents an instance of an ecologist mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
-public class MountEcologistHorse extends Mount {
+public class MountEcologistHorse extends Mount<Horse> {
 
     public MountEcologistHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.ECOLOGISTHORSE, ultraCosmetics);

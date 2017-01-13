@@ -16,13 +16,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a bat blaster gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetBatBlaster extends Gadget {
 
-    private HashMap<Player, Long> isActive = new HashMap();
-    private HashMap<Player, Location> playerVelocity = new HashMap();
-    private HashMap<Player, ArrayList<Bat>> bats = new HashMap();
+    private HashMap<Player, Long> isActive = new HashMap<Player, Long>();
+    private HashMap<Player, Location> playerVelocity = new HashMap<Player, Location>();
+    private HashMap<Player, ArrayList<Bat>> bats = new HashMap<Player, ArrayList<Bat>>();
 
     public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.BATBLASTER, ultraCosmetics);

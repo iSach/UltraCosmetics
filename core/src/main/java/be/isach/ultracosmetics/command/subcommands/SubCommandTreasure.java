@@ -13,7 +13,10 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Sacha on 22/12/15.
+ * Treasure {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
+ * 
+ * @author 	iSach
+ * @since 	12-22-2015
  */
 public class SubCommandTreasure extends SubCommand {
 

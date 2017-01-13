@@ -1,10 +1,10 @@
 package be.isach.ultracosmetics.menu.menus;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
+ * TreasureChest {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public class MenuTreasureChests {
 }

@@ -14,7 +14,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 27/08/15.
+* Represents an instance of a pig morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-27-2015
  */
 public class MorphPig extends Morph {
 
@@ -23,7 +26,6 @@ public class MorphPig extends Morph {
     public MorphPig(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.PIG, ultraCosmetics);
         if (owner != null) {
-
             final MorphPig pig = this;
             new BukkitRunnable() {
                 @Override
@@ -64,6 +66,5 @@ public class MorphPig extends Morph {
 
     @Override
     protected void onEquip() {
-
     }
 }

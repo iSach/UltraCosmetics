@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/07/16
- * Project: UltraCosmetics
+ * Gadget {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	07-23-2016
  */
 public class MenuGadgets extends CosmeticMenu<GadgetType> {
 

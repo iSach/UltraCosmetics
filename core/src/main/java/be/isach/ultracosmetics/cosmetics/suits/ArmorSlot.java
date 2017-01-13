@@ -3,7 +3,10 @@ package be.isach.ultracosmetics.cosmetics.suits;
 import org.bukkit.ChatColor;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Armor slot enum.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public enum ArmorSlot {
     HELMET,

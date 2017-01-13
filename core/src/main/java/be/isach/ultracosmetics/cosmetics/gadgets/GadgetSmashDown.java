@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -25,7 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sacha on 08/08/15.
+* Represents an instance of a smashdown gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-08-2015
  */
 public class GadgetSmashDown extends Gadget {
 

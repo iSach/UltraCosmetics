@@ -24,10 +24,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.listeners
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
+ * Player listeners.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class PlayerListener implements Listener {
 
@@ -93,7 +93,6 @@ public class PlayerListener implements Listener {
             Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> ultraCosmetics.getMenus().getMainMenu().open(ultraPlayer));
         }
     }
-
 
     /**
      * Cancel players from removing, picking the item in their inventory.
@@ -210,12 +209,10 @@ public class PlayerListener implements Listener {
         }
     }
 
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteractGhost(PlayerInteractAtEntityEvent event) {
         if (event.getRightClicked() != null
                 && event.getRightClicked().hasMetadata("C_AD_ArmorStand"))
             event.setCancelled(true);
     }
-
 }

@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 15/10/15.
+ * Hat types.
+ * 
+ * @author 	iSach
+ * @since 	10-15-2015
  */
 public class HatType extends CosmeticMatType<Hat> {
 

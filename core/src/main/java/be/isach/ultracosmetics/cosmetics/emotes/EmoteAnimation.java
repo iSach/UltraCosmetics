@@ -3,11 +3,10 @@ package be.isach.ultracosmetics.cosmetics.emotes;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Project: UltraCosmetics
- * Package: be.isach.ultracosmetics.cosmetics.emotes
- * Created by: Sacha
- * Created on: 17th June, 2016
- * at 02:48
+ * Settings manager.
+ * 
+ * @author 	iSach
+ * @since 	06-17-2016
  */
 class EmoteAnimation extends BukkitRunnable {
 

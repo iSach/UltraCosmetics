@@ -3,7 +3,10 @@ package be.isach.ultracosmetics.config;
 import org.bukkit.ChatColor;
 
 /**
- * Created by sacha on 03/08/15.
+ * Message manager.
+ * 
+ * @author 	iSach
+ * @since 	03-08-2015
  */
 public class MessageManager {
     private static SettingsManager settingsManager;
@@ -381,5 +384,4 @@ public class MessageManager {
     public static String getMessage(String messagePath) {
         return ChatColor.translateAlternateColorCodes('&', ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")));
     }
-
 }

@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sacha on 08/08/15.
+* Represents an instance of a tsunami gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-08-2015
  */
 public class GadgetTsunami extends Gadget {
 
@@ -80,12 +83,10 @@ public class GadgetTsunami extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
     public void onUpdate() {
-
     }
 
     @Override

@@ -21,7 +21,10 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 
 /**
- * Created by sacha on 08/08/15.
+* Represents an instance of a thor hammer gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-08-2015
  */
 public class GadgetThorHammer extends Gadget implements Listener {
 
@@ -88,12 +91,10 @@ public class GadgetThorHammer extends Gadget implements Listener {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
     public void onUpdate() {
-
     }
 
     @Override

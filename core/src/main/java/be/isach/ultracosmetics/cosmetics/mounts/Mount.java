@@ -20,12 +20,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
+
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a mount summoned by a player.
  * <p/>
  * TODO:
  * - SubObjects:
  * - HorseMount
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
 

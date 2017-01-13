@@ -8,15 +8,13 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.suits
- * Created by: Sacha
- * Date: 20/12/15
- * Project: UltraCosmetics
+ * Represents an instance of a suit summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public abstract class Suit extends Cosmetic<SuitType> {
 

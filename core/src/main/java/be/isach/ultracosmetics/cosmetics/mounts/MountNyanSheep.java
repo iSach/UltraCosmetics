@@ -18,9 +18,12 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a nyansheep mount.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
-public class MountNyanSheep extends Mount {
+public class MountNyanSheep extends Mount<Sheep> {
 
     public MountNyanSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.NYANSHEEP, ultraCosmetics);
@@ -96,5 +99,4 @@ public class MountNyanSheep extends Mount {
             return red;
         }
     }
-
 }

@@ -19,7 +19,10 @@ import java.util.Iterator;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a fleshhook gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetFleshHook extends Gadget implements Listener {
 
@@ -70,7 +73,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
 
     @Override
     public void onUpdate() {
-        Iterator it = items.iterator();
+        Iterator<Item> it = items.iterator();
         while (it.hasNext()) {
             Object pair = it.next();
             if (((Item) pair).isOnGround()) {

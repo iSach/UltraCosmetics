@@ -7,10 +7,12 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Gadgets {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public class SubCommandGadgets extends SubCommand {
-
 
     public SubCommandGadgets(UltraCosmetics ultraCosmetics) {
         super("Toggle Gadgets", "ultracosmetics.command.gadgets", "/uc gadgets", ultraCosmetics, "gadgets");
