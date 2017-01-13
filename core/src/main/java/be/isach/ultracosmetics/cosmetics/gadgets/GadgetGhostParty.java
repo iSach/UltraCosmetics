@@ -86,11 +86,6 @@ public class GadgetGhostParty extends Gadget {
     }
 
     @Override
-    protected void onEquip() {
-
-    }
-
-    @Override
     public void onClear() {
         killBats();
         HandlerList.unregisterAll(this);

@@ -55,7 +55,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     }
 
 
-
     /**
      * If true, it will differentiate left and right click.
      */

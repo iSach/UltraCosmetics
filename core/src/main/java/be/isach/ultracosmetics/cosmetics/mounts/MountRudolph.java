@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Mule;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -20,7 +21,7 @@ import org.bukkit.util.Vector;
 /**
  * Created by Sacha on 29/11/15.
  */
-public class MountRudolph extends Mount<Horse> {
+public class MountRudolph extends MountHorse<Mule> {
 
     ArmorStand left;
     ArmorStand right;
@@ -33,13 +34,8 @@ public class MountRudolph extends Mount<Horse> {
     @Override
     public void onEquip() {
         super.onEquip();
-        horse = (Horse) entity;
-        horse.setColor(Horse.Color.DARK_BROWN);
-        // horse.setVariant(Horse.Variant.MULE);
-        // color = Horse.Color.DARK_BROWN;
-        // variant = Horse.Variant.MULE;
-        horse.setJumpStrength(0.7);
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
+        entity.setJumpStrength(0.7);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
         left = spawnArmorStand(false);
         right = spawnArmorStand(true);
         moveAntlers();
@@ -51,12 +47,14 @@ public class MountRudolph extends Mount<Horse> {
         armorStand.setGravity(false);
         armorStand.setArms(true);
         armorStand.setVisible(false);
-        if (!right)
+        if (!right) {
             armorStand.setRightArmPose(new EulerAngle(MathUtils.PI, Math.PI / 4, -(MathUtils.PI / 4)));
-        else
+        } else {
             armorStand.setRightArmPose(new EulerAngle(MathUtils.PI, Math.PI / 4 + -(Math.PI / 2), MathUtils.PI / 4));
+        }
         armorStand.setItemInHand(new ItemStack(Material.DEAD_BUSH));
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), getPlayer().getUniqueId().toString()));
+        getUltraCosmetics().getArmorStandManager().makeUcStand(armorStand);
         return armorStand;
     }
 
@@ -86,15 +84,12 @@ public class MountRudolph extends Mount<Horse> {
         location.add(location.getDirection().multiply(1.15));
         location.setY(y - 0.073);
         UtilParticles.display(255, 0, 0, location);
-        new Thread() {
-            @Override
-            public void run() {
-                for (Player player : getPlayer().getWorld().getPlayers()) {
-                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendTeleportPacket(player, right);
-                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendTeleportPacket(player, left);
-                }
+        new Thread(() -> {
+            for (Player player : getPlayer().getWorld().getPlayers()) {
+                UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendTeleportPacket(player, right);
+                UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendTeleportPacket(player, left);
             }
-        }.start();
+        }).start();
     }
 
     @Override
@@ -119,5 +114,15 @@ public class MountRudolph extends Mount<Horse> {
         final float newZ = (float) (loc.getZ() + (-1 * Math.sin(Math.toRadians(loc.getYaw() + 0))));
 
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
+    }
+
+    @Override
+    protected Horse.Variant getVariant() {
+        return Horse.Variant.MULE;
+    }
+
+    @Override
+    protected Horse.Color getColor() {
+        return Horse.Color.DARK_BROWN;
     }
 }

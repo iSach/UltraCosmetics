@@ -72,7 +72,7 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
             if (SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount")
                     && !(player.getCurrentGadget() != null
                     && player.getCurrentGadget().getType() == gadgetType)) {
-                itemStack.setAmount(Math.max(0, Math.min(64, ammo)));
+                itemStack.setAmount(Math.max(1, Math.min(64, ammo)));
             }
             itemMeta.setLore(loreList);
         }

@@ -17,7 +17,7 @@ public interface IEntityUtil {
 
     void resetWitherSize(Wither wither);
 
-    void setHorseSpeed(Horse horse, double speed);
+    void setHorseSpeed(Entity horse, double speed);
 
     void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v);
 

@@ -173,4 +173,9 @@ public abstract class Suit extends Cosmetic<SuitType> {
     private void drop(ItemStack itemStack) {
         getPlayer().getWorld().dropItem(getPlayer().getLocation(), itemStack);
     }
+
+    @Override
+    protected String getTypeName() {
+        return getType().getName(getArmorSlot());
+    }
 }

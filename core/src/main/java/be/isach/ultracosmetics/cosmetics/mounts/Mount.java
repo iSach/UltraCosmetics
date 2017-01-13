@@ -30,19 +30,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
 
     /**
-     * If the mount is a horse, its variant.
-     */
-    public Horse.Variant variant;
-    /**
-     * If the mount is a horse, its color.
-     */
-    public Horse.Color color;
-    /**
      * The Entity, if it isn't a Custom Entity.
      */
     public E entity;
 
-    private boolean beingRemoved = false;
+    protected boolean beingRemoved = false;
 
     public Mount(UltraPlayer ultraPlayer, MountType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MOUNTS, ultraPlayer, type);
@@ -74,38 +66,39 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             ((Horse) entity).setDomestication(1);
             ((Horse) entity).getInventory().setSaddle(new ItemStack(Material.SADDLE));
         }
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    if (entity.getPassenger() != getPlayer() && entity.getTicksLived() > 10 && !beingRemoved) {
-                        clear();
-                        cancel();
-                        return;
-                    }
-                    if (!entity.isValid()) {
-                        cancel();
-                        return;
-                    }
-                    if (getOwner() != null
-                            && Bukkit.getPlayer(getOwnerUniqueId()) != null
-                            && getOwner().getCurrentMount() != null
-                            && getOwner().getCurrentMount().getType() == getType()) {
-                        onUpdate();
-                    } else {
-                        cancel();
-                    }
-
-                } catch (NullPointerException exc) {
-                    exc.printStackTrace();
-                    clear();
-                    cancel();
-                }
-            }
-        };
-        runnable.runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
+        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
         getOwner().setCurrentMount(this);
+    }
+
+    @Override
+    public void run() {
+        try {
+            if (entity.getPassenger() != getPlayer()
+                    && entity.getTicksLived() > 10
+                    && !beingRemoved) {
+                clear();
+                cancel();
+                return;
+            }
+            if (!entity.isValid()) {
+                cancel();
+                return;
+            }
+            if (getOwner() != null
+                    && Bukkit.getPlayer(getOwnerUniqueId()) != null
+                    && getOwner().getCurrentMount() != null
+                    && getOwner().getCurrentMount().getType() == getType()) {
+                onUpdate();
+            } else {
+                cancel();
+            }
+
+        } catch (NullPointerException exc) {
+            exc.printStackTrace();
+            clear();
+            cancel();
+        }
     }
 
     @Override
@@ -114,6 +107,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             entity.remove();
         }
         getOwner().setCurrentMount(null);
+        cancel();
     }
 
     protected void removeEntity() {
@@ -130,6 +124,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
                 || event.getVehicle().getType().toString().contains("MINECART")) {
             return;
         }
+
         String name = null;
         try {
             name = getType().getName(getPlayer());

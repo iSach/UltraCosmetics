@@ -83,11 +83,6 @@ public class GadgetExplosiveSheep extends Gadget {
     }
 
     @Override
-    protected void onEquip() {
-
-    }
-
-    @Override
     public void onClear() {
         EXPLOSIVE_SHEEP.remove(this);
         HandlerList.unregisterAll(this);
@@ -106,7 +101,6 @@ public class GadgetExplosiveSheep extends Gadget {
             this.runTaskLater(UltraCosmeticsData.get().getPlugin(), (int) time);
             this.gadgetExplosiveSheep = gadgetExplosiveSheep;
         }
-
 
         @Override
         public void run() {

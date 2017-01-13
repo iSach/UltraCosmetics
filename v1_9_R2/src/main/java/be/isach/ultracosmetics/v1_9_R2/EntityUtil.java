@@ -44,7 +44,7 @@ public class EntityUtil implements IEntityUtil {
     }
 
     @Override
-    public void setHorseSpeed(Horse horse, double speed) {
+    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
         ((CraftHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
