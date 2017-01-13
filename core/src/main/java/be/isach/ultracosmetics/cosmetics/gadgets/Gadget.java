@@ -53,10 +53,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         DECIMAL_FORMAT = new DecimalFormat("0.0", OTHER_SYMBOLS);
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/iSach/development
     /**
      * If true, it will differentiate left and right click.
      */

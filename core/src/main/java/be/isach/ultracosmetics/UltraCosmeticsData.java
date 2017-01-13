@@ -134,16 +134,11 @@ public class UltraCosmeticsData {
 
     boolean checkServerVersion() {
         String bukkVersion = Bukkit.getVersion();
-<<<<<<< HEAD
-        if (!bukkVersion.contains("1.8") && !bukkVersion.contains("1.9") && !bukkVersion.contains("1.10")) {
-            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8 or higher to work!\n\n----------------------------");
-=======
         if (!bukkVersion.contains("1.8")
                 && !bukkVersion.contains("1.9")
                 && !bukkVersion.contains("1.10")
                 && !bukkVersion.contains("1.11")) {
             System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON 1.8 OR HIGHER\n\n----------------------------");
->>>>>>> refs/remotes/iSach/development
             Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
             return false;
         }

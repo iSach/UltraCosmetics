@@ -113,12 +113,8 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(entity);
-
-<<<<<<< HEAD
-
         // this.entity.setPassenger(armorStand);
-=======
->>>>>>> refs/remotes/iSach/development
+		
         if (getType() == PetType.WITHER) {
             this.entity.setCustomName(getType().getEntityName(getPlayer()));
             this.entity.setCustomNameVisible(true);
