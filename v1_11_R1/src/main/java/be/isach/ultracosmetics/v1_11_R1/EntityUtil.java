@@ -48,9 +48,10 @@ public class EntityUtil implements IEntityUtil {
         ((CraftWither) wither).getHandle().g(600);
     }
 
+
     @Override
-    public void setHorseSpeed(Horse horse, double speed) {
-        ((CraftHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
+    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
+        ((CraftAbstractHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
     @Override

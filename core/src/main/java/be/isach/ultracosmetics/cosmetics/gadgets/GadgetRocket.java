@@ -77,6 +77,11 @@ public class GadgetRocket extends Gadget {
 
                 @Override
                 public void run() {
+                    if(!getPlayer().isOnline()) {
+                        cancel();
+                        return;
+                    }
+
                     if (i > 0) {
                         if (!isStillCurrentGadget()) {
                             cancel();

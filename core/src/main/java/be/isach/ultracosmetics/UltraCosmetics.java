@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
+import be.isach.ultracosmetics.manager.ArmorStandManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.menu.Menus;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
@@ -85,6 +86,11 @@ public class UltraCosmetics extends JavaPlugin {
     private Menus menus;
 
     /**
+     * Manages armor stands.
+     */
+    private ArmorStandManager armorStandManager;
+
+    /**
      * Called when plugin is enabled.
      */
     @Override
@@ -99,6 +105,8 @@ public class UltraCosmetics extends JavaPlugin {
 
         // Create UltraPlayer Manager.
         this.playerManager = new UltraPlayerManager(this);
+
+        this.armorStandManager = new ArmorStandManager(this);
 
         // Beginning of boot log. basic informations.
         getSmartLogger().write("-------------------------------------------------------------------");
@@ -372,5 +380,9 @@ public class UltraCosmetics extends JavaPlugin {
      */
     public MySqlConnectionManager getMySqlConnectionManager() {
         return mySqlConnectionManager;
+    }
+
+    public ArmorStandManager getArmorStandManager() {
+        return armorStandManager;
     }
 }

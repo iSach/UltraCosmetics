@@ -126,12 +126,11 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                     }
 
                     if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getDeactivateMenu())) {
-                        toggleOff(ultraPlayer);
+                        toggleOff(ultraPlayer, armorSlot);
                         if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {
                             open(ultraPlayer, currentPage);
                         }
                     } else if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getActivateMenu())) {
-                        toggleOff(ultraPlayer);
                         StringBuilder sb = new StringBuilder();
                         String name = clicked.getItemMeta().getDisplayName().replaceFirst(CATEGORY.getActivateMenu(), "");
                         int j = name.split(" ").length;
@@ -225,6 +224,10 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
         SuitType.getByName(name).equip(ultraPlayer, ultraCosmetics, ArmorSlot.getByName(name.split(" ")[1])).equip();
+    }
+
+    protected void toggleOff(UltraPlayer ultraPlayer, ArmorSlot armorSlot) {
+        ultraPlayer.removeSuit(armorSlot);
     }
 
     @Override

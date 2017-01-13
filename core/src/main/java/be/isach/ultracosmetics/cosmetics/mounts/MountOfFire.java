@@ -23,7 +23,7 @@ import java.util.Random;
  * @author 	iSach
  * @since 	08-10-2015
  */
-public class MountOfFire extends Mount<Horse> {
+public class MountOfFire extends MountHorse<Horse> {
 
     public MountOfFire(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.MOUNTOFFIRE, ultraCosmetics);
@@ -32,13 +32,8 @@ public class MountOfFire extends Mount<Horse> {
     @Override
     public void onEquip() {
         super.onEquip();
-        Horse horse = (Horse) entity;
-        horse.setColor(Horse.Color.CREAMY);
-        // horse.setVariant(Horse.Variant.HORSE);
-        // color = Horse.Color.CREAMY;
-        // variant = Horse.Variant.HORSE;
-        horse.setJumpStrength(0.7);
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
+        entity.setJumpStrength(0.7);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
     }
 
     @EventHandler
@@ -57,5 +52,15 @@ public class MountOfFire extends Mount<Horse> {
     @Override
     public void onUpdate() {
         UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+    }
+
+    @Override
+    protected Horse.Color getColor() {
+        return Horse.Color.CREAMY;
+    }
+
+    @Override
+    protected Horse.Variant getVariant() {
+        return Horse.Variant.HORSE;
     }
 }

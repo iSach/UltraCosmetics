@@ -81,6 +81,10 @@ public class GadgetExplosiveSheep extends Gadget {
 
     @Override
     public void onUpdate() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/iSach/development
     }
 
     @Override

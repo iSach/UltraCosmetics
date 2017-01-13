@@ -24,7 +24,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     private UltraPlayer owner;
     private Category category;
     private UltraCosmetics ultraCosmetics;
-    private boolean equipped;
+    protected boolean equipped;
     private T cosmeticType;
 
     public Cosmetic(UltraCosmetics ultraCosmetics, Category category, UltraPlayer owner, T type) {
@@ -49,7 +49,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
         this.equipped = true;
 
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
         getPlayer().sendMessage(mess);
 
         onEquip();
@@ -59,7 +59,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 
         // Send unequip Message.
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
         getPlayer().sendMessage(mess);
 
         // unregister listener.
@@ -102,5 +102,9 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 
     public T getType() {
         return cosmeticType;
+    }
+
+    protected String getTypeName() {
+        return getType().getName();
     }
 }

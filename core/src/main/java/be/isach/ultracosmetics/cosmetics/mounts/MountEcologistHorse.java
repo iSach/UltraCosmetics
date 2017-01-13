@@ -24,7 +24,11 @@ import java.util.Random;
  * @author 	iSach
  * @since 	08-10-2015
  */
+<<<<<<< HEAD
 public class MountEcologistHorse extends Mount<Horse> {
+=======
+public class MountEcologistHorse extends MountHorse<Horse> {
+>>>>>>> refs/remotes/iSach/development
 
     public MountEcologistHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.ECOLOGISTHORSE, ultraCosmetics);
@@ -33,13 +37,8 @@ public class MountEcologistHorse extends Mount<Horse> {
     @Override
     public void onEquip() {
         super.onEquip();
-        Horse horse = (Horse) entity;
-        horse.setColor(Horse.Color.CHESTNUT);
-        color = Horse.Color.CHESTNUT;
-        variant = Horse.Variant.HORSE;
-        horse.setVariant(Horse.Variant.HORSE);
-        horse.setJumpStrength(0.7);
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(horse, 0.4d);
+        entity.setJumpStrength(0.7);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
     }
 
     @EventHandler
@@ -50,14 +49,26 @@ public class MountEcologistHorse extends Mount<Horse> {
             List<Byte> datas = new ArrayList<>();
             datas.add((byte) 0x5);
             datas.add((byte) 0xd);
-            for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false))
-                if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1)
+            for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
+                if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
                     BlockUtils.setToRestore(b, Material.STAINED_CLAY, datas.get(new Random().nextInt(2)), 20);
+                }
+            }
         }
     }
 
     @Override
     public void onUpdate() {
         UtilParticles.display(Particles.VILLAGER_HAPPY, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+    }
+
+    @Override
+    protected Horse.Variant getVariant() {
+        return Horse.Variant.HORSE;
+    }
+
+    @Override
+    protected Horse.Color getColor() {
+        return Horse.Color.CHESTNUT;
     }
 }
