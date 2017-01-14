@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 01/12/15.
+ * Gadget types.
+ * 
+ * @author 	iSach
+ * @since 	12-01-2015
  */
 public class GadgetType extends CosmeticMatType<Gadget> {
 

@@ -8,10 +8,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.util.Random;
-import java.util.UUID;
 
 /**
- * Created by Sacha on 18/12/15.
+ * Represents an instance of crushed candy cane particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-18-2015
  */
 public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 
@@ -25,7 +27,6 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 
     @Override
@@ -52,5 +53,4 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
         else
             return (byte) 15;
     }
-
 }

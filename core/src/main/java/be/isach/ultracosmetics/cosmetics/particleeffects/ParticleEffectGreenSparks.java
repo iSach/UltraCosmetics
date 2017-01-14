@@ -7,7 +7,10 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 13/08/15.
+ * Represents an instance of green spark particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-13-2015
  */
 public class ParticleEffectGreenSparks extends ParticleEffect {
 
@@ -43,6 +46,5 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 }

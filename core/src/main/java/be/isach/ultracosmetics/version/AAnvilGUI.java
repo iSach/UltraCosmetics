@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.version;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

@@ -12,14 +12,17 @@ import org.bukkit.event.HandlerList;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public abstract class Morph extends Cosmetic<MorphType> {
 
     /**
      * The MobDiguise
      *
-     * @see MobDisguise (from Lib's Disguises)
+     * @see me.libraryaddict.disguise.disguisetypes.MobDisguise MobDisguise from Lib's Disguises
      */
     public MobDisguise disguise;
 

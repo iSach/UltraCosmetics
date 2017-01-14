@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Suit types.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public class SuitType extends CosmeticMatType<Suit> {
 

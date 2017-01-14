@@ -6,10 +6,11 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Wither;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 12/10/15.
+ * Represents an instance of a wither pet summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class PetWither extends Pet {
 
@@ -21,5 +22,4 @@ public class PetWither extends Pet {
     public void onUpdate() {
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().resetWitherSize((Wither)getEntity());
     }
-
 }

@@ -15,7 +15,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 12/08/15.
+ * Represents an instance of an easter bunny pet summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class PetEasterBunny extends Pet {
 

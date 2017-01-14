@@ -19,7 +19,10 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 /**
- * Created by Sacha on 29/11/15.
+* Represents an instance of a rudolph mount.
+ * 
+ * @author 	iSach
+ * @since 	11-29-2015
  */
 public class MountRudolph extends MountHorse<Mule> {
 

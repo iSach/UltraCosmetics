@@ -16,7 +16,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 27/08/15.
+ * 
+ * 
+ * @author 	iSach
+ * @since 	08-26-2015
  */
 public class MorphCreeper extends Morph {
 
@@ -47,7 +50,7 @@ public class MorphCreeper extends Morph {
                         if (creeperWatcher.isIgnited()) {
                             disguise = new MobDisguise(getType().getDisguiseType());
                             DisguiseAPI.disguiseToAll(getPlayer(), disguise);
-//                            disguise.setShowName(true);
+                            //  disguise.setShowName(true);
                             if (!getOwner().canSeeSelfMorph())
                                 disguise.setViewSelfDisguise(false);
                         }
@@ -84,8 +87,6 @@ public class MorphCreeper extends Morph {
                             UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
                     } else if (charge == 100)
                         UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
-
-
                 }
             }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
@@ -93,6 +94,5 @@ public class MorphCreeper extends Morph {
 
     @Override
     protected void onEquip() {
-
     }
 }

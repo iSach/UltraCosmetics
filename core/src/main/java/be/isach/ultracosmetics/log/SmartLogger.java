@@ -5,12 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Project: ultracosmetics
- * Package: be.isach.ultracosmetics.log
- * Created by: Sacha
- * Created on: 15th May, 2016
- * <p>
- * Description: Represents a Smart Logger.
+ * Represents a smart logger.
+ * 
+ * @author 	iSach
+ * @since 	05-15-2016
  */
 public class SmartLogger {
 
@@ -42,5 +40,4 @@ public class SmartLogger {
     public void write(Object... objects) {
         write(LogLevel.INFO, objects);
     }
-
 }

@@ -23,7 +23,10 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import java.util.*;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a paintball gun gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetPaintballGun extends Gadget implements Listener {
 
@@ -124,7 +127,6 @@ public class GadgetPaintballGun extends Gadget implements Listener {
         if (projectiles.containsKey(uuid)) {
             event.setCancelled(true);
         }
-
     }
 
     @Override
@@ -149,6 +151,4 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     @Override
     void onLeftClick() {
     }
-
-
 }

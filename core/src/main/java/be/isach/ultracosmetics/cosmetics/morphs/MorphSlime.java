@@ -13,7 +13,10 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 26/08/15.
+* Represents an instance of a slime morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-26-2015
  */
 public class MorphSlime extends Morph {
 
@@ -55,6 +58,5 @@ public class MorphSlime extends Morph {
 
     @Override
     protected void onEquip() {
-
     }
 }

@@ -11,14 +11,17 @@ import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 /**
- * Created by Sacha on 16/12/15.
+* Represents an instance of a party popper gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-16-2015
  */
 public class GadgetPartyPopper extends Gadget {
 
     public GadgetPartyPopper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.PARTYPOPPER, ultraCosmetics);
 
-        asynchronous = true;
+        setAsynchronous(true);
     }
 
     @Override
@@ -36,17 +39,13 @@ public class GadgetPartyPopper extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
     public void onUpdate() {
-
     }
 
     @Override
     public void onClear() {
-
     }
-
 }

@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 19/12/15.
+ * Morph types.
+ * 
+ * @author 	iSach
+ * @since 	12-19-2015
  */
 public class MorphType extends CosmeticMatType<Morph> {
 

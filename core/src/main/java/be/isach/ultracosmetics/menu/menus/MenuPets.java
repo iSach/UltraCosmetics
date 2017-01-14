@@ -11,10 +11,10 @@ import org.bukkit.inventory.Inventory;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
+ * Pet {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public class MenuPets extends CosmeticMenu<PetType> {
 
@@ -24,7 +24,6 @@ public class MenuPets extends CosmeticMenu<PetType> {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
-
     }
 
     @Override

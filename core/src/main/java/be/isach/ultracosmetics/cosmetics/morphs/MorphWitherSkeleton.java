@@ -22,7 +22,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by Sacha on 18/10/15.
+ * 
+ * 
+ * @author 	iSach
+ * @since 	10-18-2015
  */
 public class MorphWitherSkeleton extends Morph {
 
@@ -67,6 +70,5 @@ public class MorphWitherSkeleton extends Morph {
 
     @Override
     protected void onEquip() {
-
     }
 }

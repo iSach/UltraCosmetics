@@ -20,7 +20,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by sacha on 07/08/15.
+* Represents an instance of a portal gun gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-07-2015
  */
 public class GadgetPortalGun extends Gadget {
 
@@ -58,7 +61,6 @@ public class GadgetPortalGun extends Gadget {
             locBlue.add(0.4, 1.8, 1.2);
         }
     }
-
 
     @Override
     void onLeftClick() {
@@ -261,7 +263,6 @@ public class GadgetPortalGun extends Gadget {
                 UtilParticles.display(255, 0, 0, loc.add(v));
             }
         }
-
     }
 
     @Override

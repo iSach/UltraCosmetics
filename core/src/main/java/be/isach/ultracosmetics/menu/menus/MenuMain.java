@@ -9,10 +9,10 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.inventory.Inventory;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
+ * Main {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public class MenuMain extends Menu {
 

@@ -24,6 +24,7 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -34,12 +35,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Package: be.isach.ultracosmetics
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
- * <p>
- * Description: Represents a player on the server.
+ * Represents a player on the server.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class UltraPlayer {
 
@@ -434,7 +433,7 @@ public class UltraPlayer {
             if (currentGadget != null) {
                 getBukkitPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                         ItemFactory.create(currentGadget.getType().getMaterial(), currentGadget.getType().getData(),
-                                "§f§l" + getAmmo(currentGadget.getType().toString()
+                                ChatColor.WHITE + "" + ChatColor.BOLD + getAmmo(currentGadget.getType().toString()
                                         .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
             }
         }
@@ -608,7 +607,7 @@ public class UltraPlayer {
             getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), getBukkitPlayer().getInventory().getItem(slot));
             getBukkitPlayer().getInventory().remove(slot);
         }
-        String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
+        String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
         Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
         byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
         getBukkitPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
@@ -625,7 +624,7 @@ public class UltraPlayer {
                 && getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
                 && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
                 && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§")))
+                .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")))))
             getBukkitPlayer().getInventory().setItem(slot, null);
     }
 

@@ -10,7 +10,10 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 12/08/15.
+ * Represents an instance of frost lord particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class ParticleEffectFrostLord extends ParticleEffect {
 
@@ -24,7 +27,6 @@ public class ParticleEffectFrostLord extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 
     @Override
@@ -50,5 +52,4 @@ public class ParticleEffectFrostLord extends ParticleEffect {
             }
         }
     }
-
 }

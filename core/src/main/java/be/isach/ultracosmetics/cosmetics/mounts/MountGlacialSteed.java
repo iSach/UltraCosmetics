@@ -15,7 +15,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of a glacial steed mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
 public class MountGlacialSteed extends MountHorse<Horse> {
 

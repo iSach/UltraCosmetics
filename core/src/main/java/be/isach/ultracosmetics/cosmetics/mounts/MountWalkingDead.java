@@ -11,7 +11,10 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.entity.ZombieHorse;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of a walking dead mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
 public class MountWalkingDead extends MountHorse<ZombieHorse> {
 

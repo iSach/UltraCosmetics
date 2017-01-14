@@ -9,10 +9,11 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 23/12/15.
+ * Represents an instance of flame fairy particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-23-2015
  */
 public class ParticleEffectFlameFairy extends ParticleEffect {
 
@@ -32,7 +33,6 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
 
     @Override
     protected void onEquip() {
-
     }
 
     @Override

@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of a mount of water mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
 public class MountOfWater extends MountHorse<Horse> {
 

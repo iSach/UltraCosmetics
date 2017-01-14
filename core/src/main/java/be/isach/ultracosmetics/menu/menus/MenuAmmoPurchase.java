@@ -1,10 +1,10 @@
 package be.isach.ultracosmetics.menu.menus;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 27/08/16
- * Project: UltraCosmetics
+ * Ammo purchase {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-27-2016
  */
 public class MenuAmmoPurchase {
 }

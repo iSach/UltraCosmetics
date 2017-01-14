@@ -8,10 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 29/11/15.
+* Represents an instance of a snowman morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-29-2015
  */
 public class MorphSnowman extends Morph {
 
@@ -33,6 +34,5 @@ public class MorphSnowman extends Morph {
 
     @Override
     protected void onEquip() {
-
     }
 }

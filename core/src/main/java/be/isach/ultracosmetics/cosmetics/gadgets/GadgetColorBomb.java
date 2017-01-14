@@ -17,7 +17,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a color bomb gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetColorBomb extends Gadget {
 
@@ -28,7 +31,6 @@ public class GadgetColorBomb extends Gadget {
 
     public GadgetColorBomb(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.COLORBOMB, ultraCosmetics);
-
     }
 
     @Override
@@ -42,7 +44,6 @@ public class GadgetColorBomb extends Gadget {
     @Override
     public void onUpdate() {
         if (bomb != null && bomb.isValid() && !running && bomb.isOnGround()) {
-
             running = true;
             bomb.setVelocity(new Vector(0, 0, 0));
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {

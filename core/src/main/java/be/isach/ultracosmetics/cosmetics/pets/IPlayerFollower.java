@@ -3,12 +3,14 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import org.bukkit.entity.Player;
 
 /**
- * Created by Sacha on 7/03/16.
+ * Player follower interface.
+ * 
+ * @author 	iSach
+ * @since 	03-07-2016
  */
 public interface IPlayerFollower {
 
     void follow(Player player);
-
+    
     Runnable getTask();
-
 }

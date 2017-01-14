@@ -13,7 +13,10 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Created by sacha on 26/08/15.
+* Represents an instance of a blaze morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-26-2015
  */
 public class MorphBlaze extends Morph {
 
@@ -21,7 +24,6 @@ public class MorphBlaze extends Morph {
         super(owner, MorphType.BLAZE, ultraCosmetics);
 
         if (owner != null) {
-
             final MorphBlaze blaze = this;
             new BukkitRunnable() {
                 @Override
@@ -58,6 +60,5 @@ public class MorphBlaze extends Morph {
 
     @Override
     protected void onEquip() {
-
     }
 }

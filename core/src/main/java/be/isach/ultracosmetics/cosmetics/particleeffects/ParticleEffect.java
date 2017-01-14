@@ -15,10 +15,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a particle effect summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implements Updatable {
 
@@ -94,6 +95,5 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 
     @Override
     protected void onClear() {
-
     }
 }

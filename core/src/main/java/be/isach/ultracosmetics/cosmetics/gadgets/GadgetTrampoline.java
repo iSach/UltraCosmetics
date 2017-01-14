@@ -24,7 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Sacha on 19/12/15.
+* Represents an instance of a trampoline gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-19-2015
  */
 public class GadgetTrampoline extends Gadget {
 
@@ -172,7 +175,8 @@ public class GadgetTrampoline extends Gadget {
         setToRestore(block, Material.LADDER, (byte) 4);
     }
 
-    private void setToRestore(Block block, Material material, byte data) {
+    @SuppressWarnings("deprecation")
+	private void setToRestore(Block block, Material material, byte data) {
         MaterialData materialData = new MaterialData(material, data);
         trampoline.put(block, materialData);
         block.setType(material);

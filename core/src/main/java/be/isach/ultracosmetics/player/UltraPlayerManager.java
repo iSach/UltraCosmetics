@@ -11,7 +11,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by Sacha on 16/12/15.
+ * Manager for UltraPlayers.
+ * 
+ * @author 	iSach
+ * @since 	12-16-2015
  */
 public class UltraPlayerManager {
 
@@ -68,5 +71,4 @@ public class UltraPlayerManager {
         playerCache.clear();
         playerCache = null;
     }
-
 }

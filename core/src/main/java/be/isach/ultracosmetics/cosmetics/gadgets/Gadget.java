@@ -35,12 +35,10 @@ import java.util.Locale;
 import java.util.UUID;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.gadgets
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
- * <p>
  * Represents an instance of a Gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
@@ -53,7 +51,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         OTHER_SYMBOLS.setPatternSeparator('.');
         DECIMAL_FORMAT = new DecimalFormat("0.0", OTHER_SYMBOLS);
     }
-
 
     /**
      * Page the user was on when trying to buy ammo.
@@ -88,14 +85,14 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     protected Block lastClickedBlock;
 
     /**
+     * If true, it will affect players (velocity).
+     */
+    protected boolean affectPlayers;
+
+    /**
      * If Gadget interaction should tick asynchronously.
      */
     private boolean asynchronous = false;
-
-    /**
-     * If true, it will affect players (velocity).
-     */
-    private boolean affectPlayers;
 
     /**
      * The Ammo Purchase inventory.
@@ -108,8 +105,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         this.affectPlayers = type.affectPlayers();
         this.useTwoInteractMethods = false;
     }
-
-    @Override
+    
+	@Override
     protected void onEquip() {
         if (getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentGadget() != null) {
             getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
@@ -260,7 +257,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         ItemFactory.fillInventory(inventory);
 
         getPlayer().openInventory(inventory);
-
         this.ammoInventory = inventory;
     }
 
@@ -436,6 +432,14 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 return;
             }
         }
+    }
+
+    protected void setAsynchronous(boolean asynchronous) {
+        this.asynchronous = asynchronous;
+    }
+
+    public boolean isAsynchronous() {
+        return asynchronous;
     }
 
     /**

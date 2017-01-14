@@ -12,7 +12,10 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import java.util.Random;
 
 /**
- * Created by Sacha on 11/11/15.
+* Represents an instance of a firework gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-11-2015
  */
 public class GadgetFirework extends Gadget {
 

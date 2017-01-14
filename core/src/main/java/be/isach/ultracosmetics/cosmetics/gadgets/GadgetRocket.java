@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,7 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a rocket gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
 public class GadgetRocket extends Gadget {
 
@@ -83,7 +87,7 @@ public class GadgetRocket extends Gadget {
                             cancel();
                             return;
                         }
-                        getPlayer().sendTitle("§c§l" + i, "");
+                        getPlayer().sendTitle(ChatColor.RED + "" + ChatColor.BOLD + i, "");
                         SoundUtil.playSound(getPlayer(), Sounds.NOTE_BASS_DRUM, 1.0f, 1.0f);
                         i--;
                     } else {
