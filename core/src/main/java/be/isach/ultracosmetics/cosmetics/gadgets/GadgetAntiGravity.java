@@ -40,18 +40,10 @@ public class GadgetAntiGravity extends Gadget {
         running = true;
         as.setVisible(false);
         as.setHelmet(new ItemStack(Material.SEA_LANTERN));
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                as.remove();
-                as = null;
-                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-                    @Override
-                    public void run() {
-                        running = false;
-                    }
-                }, 20);
-            }
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            as.remove();
+            as = null;
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> running = false, 20);
         }, 220);
     }
 
@@ -74,6 +66,7 @@ public class GadgetAntiGravity extends Gadget {
         }
     }
 
+    // Find a fkn alternative to this shit :^)
     @EventHandler
     public void onKick(PlayerKickEvent event) {
         try {

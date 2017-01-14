@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ public class GadgetColorBomb extends Gadget {
 
     private Item bomb;
     private ArrayList<Item> items = new ArrayList<>();
-    Random random = new Random();
     private boolean running = false;
 
     public GadgetColorBomb(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
@@ -35,7 +35,8 @@ public class GadgetColorBomb extends Gadget {
 
     @Override
     void onRightClick() {
-        Item bomb = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) random.nextInt(15), UUID.randomUUID().toString()));
+        ItemStack item = ItemFactory.create(Material.WOOL, (byte) MathUtils.random.nextInt(15), UUID.randomUUID().toString());
+        Item bomb = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), item);
         bomb.setPickupDelay(50000);
         bomb.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(0.7532));
         this.bomb = bomb;
@@ -55,7 +56,7 @@ public class GadgetColorBomb extends Gadget {
         }
         if (running) {
             Particles effect;
-            switch (random.nextInt(5)) {
+            switch (MathUtils.random.nextInt(5)) {
                 default:
                     effect = Particles.FIREWORKS_SPARK;
                     break;
@@ -77,22 +78,21 @@ public class GadgetColorBomb extends Gadget {
                         items.remove(item);
                     }
                 }
-                Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bomb == null)
-                            return;
-                        Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), ItemFactory.create(Material.WOOL, (byte) random.nextInt(15), UUID.randomUUID().toString()));
-                        i.setPickupDelay(500000);
-                        i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                        items.add(i);
-                        SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
-                        for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
-                            if (entity instanceof Player)
-                                if (entity.hasMetadata("NPC")) continue;
-                                if (affectPlayers)
-                                    MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                        }
+                Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                    if (bomb == null) {
+                        return;
+                    }
+                    ItemStack item = ItemFactory.create(Material.WOOL, (byte) MathUtils.random.nextInt(15), UUID.randomUUID().toString());
+                    Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
+                    i.setPickupDelay(500000);
+                    i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
+                    items.add(i);
+                    SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
+                    for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
+                        if (entity instanceof Player)
+                            if (entity.hasMetadata("NPC")) continue;
+                            if (affectPlayers)
+                                MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                     }
                 });
             } catch (Exception exc) {
@@ -106,14 +106,15 @@ public class GadgetColorBomb extends Gadget {
             bomb.remove();
             bomb = null;
         }
+
         if (items != null) {
             for (Item item : items) {
                 item.remove();
             }
             items.clear();
         }
+
         running = false;
-        HandlerList.unregisterAll(this);
     }
 
     @Override

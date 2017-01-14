@@ -42,20 +42,6 @@ public class GadgetDiscoBall extends Gadget {
         super(owner, GadgetType.DISCOBALL, ultraCosmetics);
     }
 
-    @Override
-    public void onClear() {
-        try {
-            running = false;
-            armorStand.remove();
-            armorStand = null;
-            i = 0;
-            i2 = 0;
-            DISCO_BALLS.remove(this);
-        } catch (Exception ignored) {
-        }
-        HandlerList.unregisterAll(this);
-    }
-
     @SuppressWarnings("deprecation")
 	@Override
     void onRightClick() {
@@ -117,6 +103,19 @@ public class GadgetDiscoBall extends Gadget {
             for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false))
                 if (b.getType() == Material.WOOL || b.getType() == Material.CARPET)
                     BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
+        }
+    }
+
+    @Override
+    public void onClear() {
+        try {
+            running = false;
+            i = 0;
+            i2 = 0;
+            DISCO_BALLS.remove(this);
+            armorStand.remove();
+            armorStand = null;
+        } catch (Exception ignored) {
         }
     }
 

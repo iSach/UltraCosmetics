@@ -9,23 +9,23 @@ import org.bukkit.Location;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 /**
-* Represents an instance of a bat blaster gadget summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-03-2015
+ * Represents an instance of a bat blaster gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class GadgetBatBlaster extends Gadget {
 
-    private HashMap<Player, Long> isActive = new HashMap<Player, Long>();
-    private HashMap<Player, Location> playerVelocity = new HashMap<Player, Location>();
-    private HashMap<Player, ArrayList<Bat>> bats = new HashMap<Player, ArrayList<Bat>>();
+    private boolean active = false;
+    private Location playerVelocity;
+    private List<Bat> bats;
+
 
     public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.BATBLASTER, ultraCosmetics);
@@ -33,41 +33,42 @@ public class GadgetBatBlaster extends Gadget {
 
     @Override
     void onRightClick() {
-        this.playerVelocity.put(getPlayer(), getPlayer().getEyeLocation());
-        this.isActive.put(getPlayer(), Long.valueOf(System.currentTimeMillis()));
-
-        this.bats.put(getPlayer(), new ArrayList<>());
+        this.active = true;
+        this.playerVelocity = getPlayer().getEyeLocation();
+        this.bats = new ArrayList<>();
 
         for (int i = 0; i < 16; i++) {
-            this.bats.get(getPlayer()).add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
+            this.bats.add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                onClear();
-            }
-        }, 60);
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), this::onClear, 60);
     }
 
-    public boolean hitPlayer(Location loc, Player player) {
-        if (loc.add(0, -loc.getY(), 0).toVector().subtract(player.getLocation().add(0, -player.getLocation().getY(), 0).toVector()).length() < 0.8D) {
+    public boolean hitPlayer(Location location, Player player) {
+        Vector locVec = location.add(0, -location.getY(), 0).toVector();
+        Vector playerVec = player.getLocation().add(0, -player.getLocation().getY(), 0).toVector();
+        double vecLength = locVec.subtract(playerVec).length();
+
+        if (vecLength < 0.8D) {
             return true;
         }
-        if (loc.add(0, -loc.getY(), 0).toVector().subtract(player.getLocation().add(0, -player.getLocation().getY(), 0).toVector()).length() < 1.2) {
-            if ((loc.getY() > player.getLocation().getY()) && (loc.getY() < player.getEyeLocation().getY())) {
+
+        if (vecLength < 1.2) {
+            if ((location.getY() > player.getLocation().getY())
+                    && (location.getY() < player.getEyeLocation().getY())) {
                 return true;
             }
         }
+
         return false;
     }
 
     @Override
     public void onUpdate() {
-        Location loc = this.playerVelocity.get(getPlayer());
-        if (this.isActive.containsKey(getPlayer())) {
-            this.bats.get(getPlayer()).stream().filter(Entity::isValid).forEachOrdered(bat -> {
+        if (active) {
+            bats.stream().filter(Entity::isValid).forEachOrdered(bat -> {
                 Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D);
-                bat.setVelocity(loc.getDirection().clone().multiply(0.5D).add(rand));
+                bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
 
                 getPlayer().getWorld().getPlayers().stream().filter(other -> !other.equals(getPlayer())
                         && getOwner().hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)).forEachOrdered(other -> {
@@ -77,17 +78,19 @@ public class GadgetBatBlaster extends Gadget {
                     v.multiply(.4d);
                     v.setY(v.getY() + 0.2d);
 
-                    if (v.getY() > 7.5)
+                    if (v.getY() > 7.5) {
                         v.setY(7.5);
+                    }
 
-                    if (other.isOnGround())
+                    if (other.isOnGround()) {
                         v.setY(v.getY() + 0.4d);
+                    }
 
                     other.setFallDistance(0);
 
-                    if (affectPlayers)
+                    if (affectPlayers) {
                         MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
-
+                    }
 
                     SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
                     UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
@@ -98,20 +101,23 @@ public class GadgetBatBlaster extends Gadget {
         }
     }
 
-    @Override
-    public void onClear() {
-        this.isActive.remove(getPlayer());
-        this.playerVelocity.remove(getPlayer());
-        if (this.bats.containsKey(getPlayer())) {
-            for (Bat bat : this.bats.get(getPlayer())) {
+    private void clean() {
+        active = false;
+        playerVelocity = null;
+        if (bats != null) {
+            for (Bat bat : bats) {
                 if (bat.isValid()) {
                     UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
                 }
                 bat.remove();
             }
-            this.bats.remove(getPlayer());
+            this.bats.clear();
         }
-        HandlerList.unregisterAll(this);
+    }
+
+    @Override
+    public void onClear() {
+        clean();
     }
 
     @Override
