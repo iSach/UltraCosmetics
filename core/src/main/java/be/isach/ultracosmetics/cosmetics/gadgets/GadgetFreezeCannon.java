@@ -77,7 +77,6 @@ public class GadgetFreezeCannon extends Gadget {
         items.clear();
         items = null;
         queue = null;
-        unregisterListeners();
     }
 
     @Override

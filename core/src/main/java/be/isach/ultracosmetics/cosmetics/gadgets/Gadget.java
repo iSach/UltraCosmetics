@@ -40,7 +40,6 @@ import java.util.UUID;
  * @author 	iSach
  * @since 	08-03-2015
  */
-@SuppressWarnings("deprecation")
 public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     private static final DecimalFormatSymbols OTHER_SYMBOLS = new DecimalFormatSymbols(Locale.US);
@@ -54,9 +53,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     }
 
     /**
-     * If true, it will differentiate left and right click.
+     * Page the user was on when trying to buy ammo.
+     * Is used when player buys ammo from Gadget Menu.
      */
-    boolean useTwoInteractMethods;
+    public int lastPage = 1;
 
     /**
      * If it should open Gadget Menu after purchase.
@@ -64,15 +64,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     public boolean openGadgetsInvAfterAmmo;
 
     /**
-     * If true, will display cooldown left when fail on use
-     * because cooldown active.
+     * If true, it will differentiate left and right click.
      */
-    boolean displayCooldownMessage = true;
-
-    /**
-     * Last Clicked Block by the player.
-     */
-    Block lastClickedBlock;
+    protected boolean useTwoInteractMethods;
 
     /**
      * Gadget ItemStack.
@@ -80,25 +74,30 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     protected ItemStack itemStack;
 
     /**
-     * If Gadget interaction should tick asynchronously.
+     * If true, will display cooldown left when fail on use
+     * because cooldown active.
      */
-    boolean asynchronous = false;
+    protected boolean displayCooldownMessage = true;
+
+    /**
+     * Last Clicked Block by the player.
+     */
+    protected Block lastClickedBlock;
 
     /**
      * If true, it will affect players (velocity).
      */
-    boolean affectPlayers;
+    protected boolean affectPlayers;
+
+    /**
+     * If Gadget interaction should tick asynchronously.
+     */
+    private boolean asynchronous = false;
 
     /**
      * The Ammo Purchase inventory.
      */
     private Inventory ammoInventory;
-
-    /**
-     * Page the user was on when trying to buy ammo.
-     * Is used when player buys ammo from Gadget Menu.
-     */
-    public int lastPage = 1;
 
     public Gadget(UltraPlayer owner, GadgetType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.GADGETS, owner, type);
@@ -169,17 +168,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         super.clear();
 
         removeItem();
-        cancel();
-    }
-
-    /**
-     * Unregister listeners.
-     */
-    public void unregisterListeners() {
-        try {
-            HandlerList.unregisterAll(this);
-        } catch (Exception exc) {
-        }
     }
 
     /**
@@ -214,27 +202,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " " + timeLeft);
 
     }
-
-    /**
-     * If useTwoInteractMethods is true,
-     * called when only a right click is called.
-     * <p/>
-     * Otherwise, called when a right or left click
-     * is performed.
-     */
-    abstract void onRightClick();
-
-    /**
-     * Called when a left click is done with gadget,
-     * only called if useTwoInteractMethods is true.
-     */
-    abstract void onLeftClick();
-
-    /**
-     * Called when gadget is cleared.
-     */
-    public abstract void onClear();
-
     /**
      * Removes the item.
      */
@@ -466,4 +433,33 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             }
         }
     }
+
+    protected void setAsynchronous(boolean asynchronous) {
+        this.asynchronous = asynchronous;
+    }
+
+    public boolean isAsynchronous() {
+        return asynchronous;
+    }
+
+    /**
+     * If useTwoInteractMethods is true,
+     * called when only a right click is called.
+     * <p/>
+     * Otherwise, called when a right or left click
+     * is performed.
+     */
+    abstract void onRightClick();
+
+    /**
+     * Called when a left click is done with gadget,
+     * only called if useTwoInteractMethods is true.
+     */
+    abstract void onLeftClick();
+
+    /**
+     * Called when gadget is cleared.
+     */
+    public abstract void onClear();
+
 }

@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,9 +25,7 @@ public class GadgetChristmasTree extends Gadget {
     private boolean active = false;
     private Location lastLocation;
 
-    int[] logColor = {
-            101, 67, 33
-    };
+    private static final Color LOG_COLOR = Color.fromRGB(101, 67, 33);
 
     public GadgetChristmasTree(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.CHRISTMASTREE, ultraCosmetics);
@@ -79,7 +78,7 @@ public class GadgetChristmasTree extends Gadget {
         float ratio = length / 10;
         Vector vector = link.multiply(ratio);
         for (int i = 0; i < 10; i++) {
-            UtilParticles.display(logColor[0], logColor[1], logColor[2], current);
+            UtilParticles.display(LOG_COLOR.getRed(), LOG_COLOR.getGreen(), LOG_COLOR.getBlue(), current);
             current.add(vector);
         }
     }

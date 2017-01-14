@@ -21,7 +21,7 @@ public class GadgetPartyPopper extends Gadget {
     public GadgetPartyPopper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.PARTYPOPPER, ultraCosmetics);
 
-        asynchronous = true;
+        setAsynchronous(true);
     }
 
     @Override

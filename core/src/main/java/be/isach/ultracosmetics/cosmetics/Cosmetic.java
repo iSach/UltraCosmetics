@@ -65,6 +65,10 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
         // unregister listener.
         HandlerList.unregisterAll(this);
 
+        // Cancel task.
+        cancel();
+
+        // Call untask finally.
         onClear();
     }
 

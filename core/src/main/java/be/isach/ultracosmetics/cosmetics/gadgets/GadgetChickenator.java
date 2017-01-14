@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.*;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -27,8 +29,7 @@ import java.util.UUID;
  */
 public class GadgetChickenator extends Gadget {
 
-    static Random r = new Random();
-    ArrayList<Item> items = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
     public GadgetChickenator(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.CHICKENATOR, ultraCosmetics);
@@ -41,26 +42,19 @@ public class GadgetChickenator extends Gadget {
         chicken.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
         SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_IDLE, 1.4f, 1.5f);
         SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 0.3f, 1.5f);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                spawnRandomFirework(chicken.getLocation());
-                SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_HURT, 1.4f, 1.5f);
-                chicken.remove();
-                for (int i = 0; i < 30; i++) {
-                    final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(Material.COOKED_CHICKEN, (byte) 0, UUID.randomUUID().toString()));
-                    ITEM.setPickupDelay(30000);
-                    ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0, r.nextDouble() - 0.5));
-                    items.add(ITEM);
-                }
-                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-                    @Override
-                    public void run() {
-                        for (Item i : items)
-                            i.remove();
-                    }
-                }, 50);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            spawnRandomFirework(chicken.getLocation());
+            SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_HURT, 1.4f, 1.5f);
+            chicken.remove();
+            for (int i = 0; i < 30; i++) {
+                final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(Material.COOKED_CHICKEN, (byte) 0, UUID.randomUUID().toString()));
+                ITEM.setPickupDelay(30000);
+                ITEM.setVelocity(new Vector(MathUtils.random.nextDouble() - 0.5, MathUtils.random.nextDouble() / 2.0, MathUtils.random.nextDouble() - 0.5));
+                items.add(ITEM);
             }
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+                items.forEach(Item::remove);
+            }, 50);
         }, 9);
         getPlayer().updateInventory();
     }
@@ -71,15 +65,14 @@ public class GadgetChickenator extends Gadget {
 
     @Override
     public void onClear() {
-        for (Item i : items)
+        for (Item i : items) {
             i.remove();
-        HandlerList.unregisterAll(this);
+        }
     }
 
     public static FireworkEffect getRandomFireworkEffect() {
         FireworkEffect.Builder builder = FireworkEffect.builder();
-        FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).withFade(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).build();
-        return effect;
+        return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.WHITE).withFade(Color.WHITE).build();
     }
 
     public void spawnRandomFirework(Location location) {
@@ -92,12 +85,9 @@ public class GadgetChickenator extends Gadget {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                for (Firework f : fireworks)
-                    f.detonate();
-            }
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            for (Firework f : fireworks)
+                f.detonate();
         }, 2);
     }
 

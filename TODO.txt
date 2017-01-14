@@ -16,6 +16,7 @@
 - Fix Treasure Chests command "dupe"
 - Remake entirely Treasure Chest system to be cleaner, more optimized.
 - Possibility of custom rewards and placing chests like Mineplex.
+- Gadget subclass for gadgets that need different things for right and left clicks and no longer a variable and shit.
 
 --------------- SUGGESTIONS --------------
 - Companions
