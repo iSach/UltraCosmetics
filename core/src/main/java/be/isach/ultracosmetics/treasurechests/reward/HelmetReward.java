@@ -35,6 +35,11 @@ public class HelmetReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		helmetList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		helmetList = new ArrayList<SuitType>();
         for (SuitType type : SuitType.values())

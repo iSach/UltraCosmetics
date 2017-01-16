@@ -34,6 +34,11 @@ public class ParticleEffectReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		particleList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		particleList = new ArrayList<ParticleEffectType>();
         for (ParticleEffectType type : ParticleEffectType.values())

@@ -13,7 +13,8 @@ public class TreasureChest implements Listener {
         Validate.notNull(design);
         Validate.notNull(ultraCosmetics);
 
-        this.treasurePlacer = new TreasurePlacer(new TreasureRandomizer(owner, owner.getBukkitPlayer().getLocation(), ultraCosmetics), owner, design, ultraCosmetics, this);        
+        this.treasurePlacer = new TreasurePlacer(new TreasureRandomizer(owner, owner.getBukkitPlayer().getLocation(), ultraCosmetics), owner, design, ultraCosmetics, this);
+        treasurePlacer.start();
     }
     
     public TreasurePlacer getTreasurePlacer() {

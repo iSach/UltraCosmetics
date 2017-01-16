@@ -34,6 +34,11 @@ public class MorphReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		morphList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		morphList = new ArrayList<MorphType>();
         for (MorphType type : MorphType.values())

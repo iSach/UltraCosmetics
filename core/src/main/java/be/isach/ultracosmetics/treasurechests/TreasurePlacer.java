@@ -71,9 +71,11 @@ public class TreasurePlacer implements Listener {
 	private UltraCosmetics ultraCosmetics;
 
 	public TreasurePlacer(TreasureRandomizer randomGenerator, UltraPlayer owner, TreasureChestDesign design2,
-			UltraCosmetics ultraCosmetics2, TreasureChest treasureChest) {
+			UltraCosmetics ultraCosmetics, TreasureChest treasureChest) {
 		this.randomGenerator = randomGenerator;
 		this.instance = treasureChest;
+		this.ultraCosmetics = ultraCosmetics;
+		this.player = owner;
 		Bukkit.getPluginManager().registerEvents(this, ultraCosmetics);
 		if (owner.getCurrentMorph() != null) {
             owner.setSeeSelfMorph(false);
@@ -83,7 +85,6 @@ public class TreasurePlacer implements Listener {
 	public void start() {
 		BukkitRunnable runnable = new BukkitRunnable() {
 			int i = 5;
-
 			public void run() {
 				if (getPlayer() == null || getOwner().getCurrentTreasureChest() != instance) {
 					cancel();
@@ -362,16 +363,15 @@ public class TreasurePlacer implements Listener {
 		if (delay == 0) {
 			this.stopping = true;
 			for (i = 0; i < this.chestsLeft; i++) {
-				this.randomGenerator.giveRandomThing();
+				this.randomGenerator.getRandomThing();
 				getPlayer().sendMessage(MessageManager.getMessage("You-Won-Treasure-Chests").replace("%name%",
 						this.randomGenerator.getName()));
 			}
 		} else {
 			for (final Block b : this.chests) {
 				UltraCosmeticsData.get().getVersionManager().getEntityUtil().playChestAnimation(b, true, design);
-				this.randomGenerator.loc = b.getLocation().clone().add(0.0D, 1.0D, 0.0D);
-				this.randomGenerator.giveRandomThing();
-				org.bukkit.inventory.ItemStack is = this.randomGenerator.getItemStack();
+				this.randomGenerator.getRandomThing();
+				org.bukkit.inventory.ItemStack is = this.randomGenerator.getReward().getItemStack();
 				ItemMeta itemMeta = is.getItemMeta();
 				itemMeta.setDisplayName(UUID.randomUUID().toString());
 				is.setItemMeta(itemMeta);
@@ -461,8 +461,7 @@ public class TreasurePlacer implements Listener {
 			if (event.getPlayer() == getPlayer()) {
 				UltraCosmeticsData.get().getVersionManager().getEntityUtil().playChestAnimation(event.getClickedBlock(),
 						true, design);
-				this.randomGenerator.loc = event.getClickedBlock().getLocation().add(0.0D, 1.0D, 0.0D);
-				this.randomGenerator.giveRandomThing();
+				this.randomGenerator.getRandomThing();
 
 				this.cooldown = true;
 				Bukkit.getScheduler().runTaskLaterAsynchronously(ultraCosmetics, new Runnable() {
@@ -471,7 +470,7 @@ public class TreasurePlacer implements Listener {
 					}
 				}, 3L);
 
-				org.bukkit.inventory.ItemStack is = this.randomGenerator.getItemStack();
+				org.bukkit.inventory.ItemStack is = this.randomGenerator.getReward().getItemStack();
 				ItemMeta itemMeta = is.getItemMeta();
 				itemMeta.setDisplayName(UUID.randomUUID().toString());
 				is.setItemMeta(itemMeta);

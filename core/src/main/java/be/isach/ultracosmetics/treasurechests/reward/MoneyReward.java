@@ -31,6 +31,10 @@ public class MoneyReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+	}
+	
+	@Override
 	public boolean canEarn() {
 		return ultraCosmetics.getEconomy() != null;
 	}

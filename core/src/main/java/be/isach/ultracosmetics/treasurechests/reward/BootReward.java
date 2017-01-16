@@ -35,6 +35,11 @@ public class BootReward extends Reward {
 	}
 
 	@Override
+	public void clear() {
+		bootList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		bootList = new ArrayList<SuitType>();
         for (SuitType type : SuitType.values())

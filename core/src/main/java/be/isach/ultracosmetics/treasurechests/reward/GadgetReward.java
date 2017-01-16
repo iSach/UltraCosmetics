@@ -32,6 +32,11 @@ public class GadgetReward extends Reward {
 		super(ultraPlayer, RewardType.GADGET, ultraCosmetics);
 		this.ultraPlayer = ultraPlayer;
 	}
+	
+	@Override
+	public void clear() {
+		gadgetList.clear();
+	}
 
 	@Override
 	public boolean canEarn() {

@@ -9,12 +9,12 @@ import be.isach.ultracosmetics.UltraCosmetics;
 public class TreasureManager {
 	private static YamlConfiguration rewardFile;
 	private static YamlConfiguration designFile;
-	private UltraCosmetics ultraCosmetics;
+	private static YamlConfiguration configFile;
 	
 	public TreasureManager(UltraCosmetics ultraCosmetics) {
-		this.ultraCosmetics = ultraCosmetics;
-		rewardFile = YamlConfiguration.loadConfiguration(new File(this.ultraCosmetics.getDataFolder(), "rewards.yml"));
-		designFile = YamlConfiguration.loadConfiguration(new File(this.ultraCosmetics.getDataFolder(), "designs.yml"));
+		rewardFile = YamlConfiguration.loadConfiguration(new File(new File(ultraCosmetics.getDataFolder(), "/treasurechests"), "rewards.yml"));
+		designFile = YamlConfiguration.loadConfiguration(new File(new File(ultraCosmetics.getDataFolder(), "/treasurechests"), "designs.yml"));
+		configFile = YamlConfiguration.loadConfiguration(new File(new File(ultraCosmetics.getDataFolder(), "/treasurechests"), "config.yml"));
 	}
 	
 	public static YamlConfiguration getRewardFile() {
@@ -24,12 +24,8 @@ public class TreasureManager {
 	public static YamlConfiguration getDesignFile() {
 		return designFile;
 	}
-		
-	public static Object getReward(String path) {
-		return rewardFile.get(path);
-	}
 	
-	public static Object getDesign(String path){
-		return designFile.get(path);
+	public static YamlConfiguration getConfigFile() {
+		return configFile;
 	}
 }

@@ -34,6 +34,11 @@ public class HatReward extends Reward {
 	}
 
 	@Override
+	public void clear() {
+		hatList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		hatList = new ArrayList<HatType>();
         for (HatType type : HatType.values())

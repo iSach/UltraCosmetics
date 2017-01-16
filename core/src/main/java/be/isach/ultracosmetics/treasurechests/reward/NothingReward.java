@@ -19,6 +19,10 @@ public class NothingReward extends Reward {
 	public NothingReward(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
 		super(ultraPlayer, RewardType.NOTHING, ultraCosmetics);
 	}
+	
+	@Override
+	public void clear() {
+	}
 
 	@Override
 	public boolean canEarn() {

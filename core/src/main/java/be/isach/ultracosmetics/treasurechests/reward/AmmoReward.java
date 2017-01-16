@@ -36,6 +36,11 @@ public class AmmoReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		ammoList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		ammoList = new ArrayList<GadgetType>();
 		 if (UltraCosmeticsData.get().isAmmoEnabled())

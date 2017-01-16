@@ -34,6 +34,11 @@ public class EmoteReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		emoteList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		emoteList = new ArrayList<EmoteType>();
         for (EmoteType type : EmoteType.values())

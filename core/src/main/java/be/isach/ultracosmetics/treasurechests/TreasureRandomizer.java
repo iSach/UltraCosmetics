@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.treasurechests.reward.*;
 import org.bukkit.*;
@@ -13,22 +14,25 @@ import java.util.List;
  * 
  * @author RadBuilder
  * @since 01-14-2017
- * 
- * Work in progress.
- * TODO Clear method(?), custom reward support, make cleaner.
  */
 public class TreasureRandomizer {
-	
-	private List<RewardType> chance = new ArrayList<RewardType>();
+	private List<Reward> chance;
+	private List<PermissionReward> customRewards;
 	private UltraPlayer owner;
 	private UltraCosmetics ultraCosmetics;
 	private List<Reward> rewards;
 	private Reward reward;
 	
 	public TreasureRandomizer(UltraPlayer owner, Location location, UltraCosmetics ultraCosmetics) {
-		calculateChances();
+		chance = new ArrayList<Reward>();
+		customRewards = new ArrayList<PermissionReward>();
+		for(String key : TreasureManager.getRewardFile().getConfigurationSection("CustomRewards").getKeys(false))
+			if(TreasureManager.getRewardFile().getBoolean("CustomRewards." + key + ".enabled"))
+				customRewards.add(new PermissionReward(key, owner, ultraCosmetics));
+		
 		this.owner = owner;
 		this.ultraCosmetics = ultraCosmetics;
+		
 		this.rewards = new ArrayList<Reward>();
 		rewards.add(new AmmoReward(owner, ultraCosmetics));
 		rewards.add(new BootReward(owner, ultraCosmetics));
@@ -43,15 +47,26 @@ public class TreasureRandomizer {
 		rewards.add(new MountReward(owner, ultraCosmetics));
 		rewards.add(new ParticleEffectReward(owner, ultraCosmetics));
 		rewards.add(new PetReward(owner, ultraCosmetics));
+		
+		calculateChances();
 	}
 	
 	private void calculateChances() {
 		for(Reward r : rewards) {
 			if(r.canEarn()) {
-				RewardType t = r.getType();
-				int c = t.getChance();
+				int c = r.getType().getChance();
 				for(int i = 0; i < c; i++) {
-					chance.add(t);
+					chance.add(r);
+				}
+			}
+		}
+		if(!customRewards.isEmpty()) {
+			for(PermissionReward r : customRewards) {
+				if(r.canEarn()) {
+					int c = r.getChance();
+					for(int i = 0; i < c; i++) {
+						chance.add(r);
+					}
 				}
 			}
 		}
@@ -60,54 +75,14 @@ public class TreasureRandomizer {
 	public Reward getRandomThing() {
 		Reward reward = null;
 		if(chance.isEmpty()) {
-			return new NothingReward(owner, ultraCosmetics);
+			if(!rewards.get(9).canEarn())
+				return new NothingReward(owner, ultraCosmetics);
+			else
+				reward = rewards.get(9);
 		} else {
-			List<RewardType> random = new ArrayList<RewardType>(chance);
+			List<Reward> random = new ArrayList<Reward>(chance);
 			Collections.shuffle(random);
-			switch(random.get(0)) {
-				case AMMO:
-					reward = rewards.get(0);
-					break;
-				case BOOTS:
-					reward = rewards.get(1);
-					break;
-				case CHESTPLATE:
-					reward = rewards.get(2);
-					break;
-				case EFFECT:
-					reward = rewards.get(3);
-					break;
-				case EMOTE:
-					reward = rewards.get(4);
-					break;
-				case GADGET:
-					reward = rewards.get(5);
-					break;
-				case HAT:
-					reward = rewards.get(6);
-					break;
-				case HELMET:
-					reward = rewards.get(7);
-					break;
-				case LEGGINGS:
-					reward = rewards.get(8);
-					break;
-				case MONEY:
-					reward = rewards.get(9);
-					break;
-				case MORPH:
-					reward = rewards.get(10);
-					break;
-				case MOUNT:
-					reward = rewards.get(11);
-					break;
-				case PET:
-					reward = rewards.get(12);
-					break;
-				case NOTHING:
-					reward = new NothingReward(owner, ultraCosmetics);
-					break;
-			}
+			reward = random.get(0);
 		}
 		this.reward = reward;
 		return reward;
@@ -115,5 +90,16 @@ public class TreasureRandomizer {
 	
 	public Reward getReward() {
 		return reward;
+	}
+
+	public void clear() {
+		for(Reward r : rewards) {
+			r.clear();
+		}
+		chance.clear();
+	}
+
+	public String getName() {
+		return reward.getName();
 	}
 }

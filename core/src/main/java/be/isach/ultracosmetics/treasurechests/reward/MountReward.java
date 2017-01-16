@@ -34,6 +34,11 @@ public class MountReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		mountList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		mountList = new ArrayList<MountType>();
         for (MountType type : MountType.values())

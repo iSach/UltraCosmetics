@@ -16,7 +16,8 @@ public enum RewardType {
 	LEGGINGS(TreasureManager.getRewardFile().getInt("UcRewards.suits.chance") / 4),
 	BOOTS(TreasureManager.getRewardFile().getInt("UcRewards.suits.chance") / 4),
 	EMOTE(TreasureManager.getRewardFile().getInt("UcRewards.emote.chance")),
-	NOTHING(0);
+	NOTHING(0),
+	PERMISSION(0);
 	
 	private int chance;
 
@@ -26,5 +27,9 @@ public enum RewardType {
 	
 	public int getChance() {
 		return chance;
+	}
+	
+	public void setChance(int chance) {
+		this.chance = chance;
 	}
 }

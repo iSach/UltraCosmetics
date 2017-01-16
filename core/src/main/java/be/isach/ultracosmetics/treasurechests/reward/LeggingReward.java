@@ -35,6 +35,11 @@ public class LeggingReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		leggingList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		leggingList = new ArrayList<SuitType>();
         for (SuitType type : SuitType.values())

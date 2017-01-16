@@ -36,6 +36,11 @@ public class ChestplateReward extends Reward {
 	}
 	
 	@Override
+	public void clear() {
+		chestplateList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		chestplateList = new ArrayList<SuitType>();
         for (SuitType type : SuitType.values())

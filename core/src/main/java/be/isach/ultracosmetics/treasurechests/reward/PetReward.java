@@ -34,6 +34,11 @@ public class PetReward extends Reward {
 	}
 
 	@Override
+	public void clear() {
+		petList.clear();
+	}
+	
+	@Override
 	public boolean canEarn() {
 		petList = new ArrayList<PetType>();
         for (PetType type : PetType.values())

@@ -26,19 +26,47 @@ public abstract class Reward {
     	this.type = type;
     }
 	
+	/**
+	 * Clears the list of possible rewards.
+	 */
+	public abstract void clear();
+	/**
+	 * @return {@code true} if the {@link be.isach.ultracosmetics.treasurechests.reward.RewardType RewardType}
+	 * can be earned, {@code false} otherwise.
+	 */
 	public abstract boolean canEarn();
+	/**
+	 * Gives the reward to the player.
+	 */
 	public abstract void give();
+    /**
+     * @return The reward name.
+     */
     public abstract String getName();
+    /**
+     * @return The reward ItemStack.
+     */
     public abstract ItemStack getItemStack();
     
+    /**
+     * @return Gets the RewardType.
+     */
     public RewardType getType() {
     	return type;
     }
     
+    /**
+     * @return Gets the player.
+     */
     public UltraPlayer getPlayer() {
     	return player;
     }
     
+	/**
+	 * Spawns a firework at the player's location.
+	 * 
+	 * @param color The color of the firework.
+	 */
 	public void firework(String color) {
 		final Firework f = player.getBukkitPlayer().getWorld().spawn(player.getBukkitPlayer().getLocation().clone().add(0.5, 0, 0.5), Firework.class);
         FireworkMeta fm = f.getFireworkMeta();
@@ -53,6 +81,11 @@ public abstract class Reward {
         }, 2L);
 	}
 	
+    /**
+     * Gives a permission to a player using the {@code Permission-Add-Command} specified in the config.
+     * 
+     * @param permission The permission to give to the player.
+     */
     public void givePermission(String permission) {
         String command = SettingsManager.getConfig().getString("TreasureChests.Permission-Add-Command").replace("%name%", player.getBukkitPlayer().getName()).replace("%permission%", permission);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
