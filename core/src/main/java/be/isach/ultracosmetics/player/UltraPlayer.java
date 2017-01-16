@@ -567,7 +567,7 @@ public class UltraPlayer {
      */
     public void removeTreasureChest() {
         if (currentTreasureChest == null) return;
-        this.currentTreasureChest.clear();
+        this.currentTreasureChest.getTreasurePlacer().clear();
         this.currentTreasureChest = null;
     }
 
