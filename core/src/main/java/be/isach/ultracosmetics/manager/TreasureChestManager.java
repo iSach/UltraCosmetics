@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.manager;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.Cuboid;
@@ -40,8 +41,8 @@ public class TreasureChestManager implements Listener {
     }
 
     private String getRandomDesign() {
-        Set<String> set = SettingsManager.getConfig().getConfigurationSection("TreasureChests.Designs").getKeys(false);
-        List<String> list = new ArrayList<>();
+        Set<String> set = TreasureManager.getDesignFile().getConfigurationSection("Designs").getKeys(false);
+        List<String> list = new ArrayList<String>();
         list.addAll(set);
         return list.get(random.nextInt(set.size()));
     }
@@ -129,5 +130,4 @@ public class TreasureChestManager implements Listener {
             }
         }
     }
-
 }

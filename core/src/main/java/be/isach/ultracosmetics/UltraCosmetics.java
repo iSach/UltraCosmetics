@@ -3,6 +3,7 @@ package be.isach.ultracosmetics;
 import be.isach.ultracosmetics.command.CommandManager;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
@@ -131,6 +132,9 @@ public class UltraCosmetics extends JavaPlugin {
 
         // Init Message manager.
         new MessageManager();
+        
+        // reward.yml & design.yml
+        new TreasureManager(this);
 
         // Register Listeners.
         registerListeners();
@@ -231,18 +235,25 @@ public class UltraCosmetics extends JavaPlugin {
      * Sets Vault up.
      */
     private void setupEconomy() {
-        if (!((UltraCosmeticsData.get().isAmmoEnabled()
-                || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")
-                && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))
-                || (UltraCosmeticsData.get().areTreasureChestsEnabled()
-                && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled")))
-                && Bukkit.getPluginManager().isPluginEnabled("Vault"))) {
-            return;
-        }
-
+    	UltraCosmeticsData.get().checkTreasureChests();
+    	if(!(UltraCosmeticsData.get().isAmmoEnabled()
+                || SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")
+                || UltraCosmeticsData.get().areTreasureChestsEnabled())) {
+    		return;
+    	}
+    	if(!(SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled")
+                || SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled"))) {
+    		return;
+    	}
+    	
+    	if(!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+    		return;
+    	}
+    
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null)
+        if (economyProvider != null) {
             economy = economyProvider.getProvider();
+        }
     }
 
     private void setUpConfig() {
