@@ -20,14 +20,14 @@ public class FlyingSquid extends EntitySquid implements IMountCustomEntity, Enti
 
     public FlyingSquid(World world) {
         super(world);
-
-        if (!CustomEntities.customEntities.contains(this)) return;
-        setAI(false);
     }
 
     @Override
     public void g(float sideMot, float forMot) {
-        if (!CustomEntities.customEntities.contains(this)) return;
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         EntityHuman passenger = null;
         if (!bx().isEmpty()) {
             passenger = (EntityHuman) bx().get(0);
@@ -116,6 +116,10 @@ public class FlyingSquid extends EntitySquid implements IMountCustomEntity, Enti
 
             entityBase.g_(sideMot, forMot);
         }
+    }
 
+    @Override
+    public void removeAi() {
+        setAI(false);
     }
 }

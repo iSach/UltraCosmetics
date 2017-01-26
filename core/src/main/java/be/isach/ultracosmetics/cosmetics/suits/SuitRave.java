@@ -1,19 +1,23 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 20/12/15.
+ * Represents an instance of a rave suit summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public class SuitRave extends Suit {
 
     private int[] colors = new int[]{255, 0, 0};
 
-    public SuitRave(UUID owner, ArmorSlot armorSlot) {
-        super(owner, armorSlot, SuitType.RAVE);
+    public SuitRave(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
+        super(owner, armorSlot, SuitType.RAVE, ultraCosmetics);
     }
 
     protected void onUpdate() {
@@ -31,7 +35,6 @@ public class SuitRave extends Suit {
             colors[2] -= 15;
 
         refresh();
-
     }
 
     private void refresh() {
@@ -53,5 +56,9 @@ public class SuitRave extends Suit {
                 getPlayer().getInventory().setBoots(itemStack);
                 break;
         }
+    }
+
+    @Override
+    protected void onEquip() {
     }
 }

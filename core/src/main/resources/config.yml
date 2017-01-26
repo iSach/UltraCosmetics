@@ -60,7 +60,7 @@ Categories:
 # Some infos:
 # center-block: The block on the center.
 # around-center: Blocks around the center
-# third-blocks: blocks "around around" the center.
+# third-BLOCKS: BLOCKS "around around" the center.
 # below-chests: Block below the chests.
 # barriers: the barrier.
 # chest-type: The chest type (NORMAL or ENDER)

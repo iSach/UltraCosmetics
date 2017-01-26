@@ -15,14 +15,8 @@ import java.lang.reflect.Field;
  */
 public class CustomSlime extends EntitySlime implements IMountCustomEntity, EntityBase {
 
-    boolean canFly = false;
-
     public CustomSlime(World world) {
         super(world);
-
-        if (!CustomEntities.customEntities.contains(this)) return;
-
-        removeSelectors();
     }
 
     private void removeSelectors() {
@@ -40,9 +34,13 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
         }
     }
 
+
     @Override
     public void g(float sideMot, float forMot) {
-        if (!CustomEntities.customEntities.contains(this)) return;
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         EntityHuman passenger = null;
         if (!bv().isEmpty()) {
             passenger = (EntityHuman) bv().iterator().next();
@@ -131,6 +129,10 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
             entityBase.g_(sideMot, forMot);
         }
+    }
 
+    @Override
+    public void removeAi() {
+        removeSelectors();
     }
 }

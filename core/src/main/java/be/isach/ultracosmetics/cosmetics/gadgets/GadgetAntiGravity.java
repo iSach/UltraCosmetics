@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -15,20 +17,19 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of an antigravity gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
 public class GadgetAntiGravity extends Gadget {
 
-    ArmorStand as;
-    boolean running;
+    private ArmorStand as;
+    private boolean running;
 
-
-    public GadgetAntiGravity(UUID owner) {
-        super(owner, GadgetType.ANTIGRAVITY);
-        UltraCosmetics.getInstance().registerListener(this);
+    public GadgetAntiGravity(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.ANTIGRAVITY, ultraCosmetics);
     }
 
     @Override
@@ -39,18 +40,10 @@ public class GadgetAntiGravity extends Gadget {
         running = true;
         as.setVisible(false);
         as.setHelmet(new ItemStack(Material.SEA_LANTERN));
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                as.remove();
-                as = null;
-                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        running = false;
-                    }
-                }, 20);
-            }
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            as.remove();
+            as = null;
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> running = false, 20);
         }, 220);
     }
 
@@ -60,18 +53,20 @@ public class GadgetAntiGravity extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (as != null && as.isValid()) {
             as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
             UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
             UtilParticles.display(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
             for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
-                if (ent instanceof LivingEntity && !(ent instanceof ArmorStand))
+                if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
                     MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
+                }
             }
         }
     }
 
+    // Find a fkn alternative to this shit :^)
     @EventHandler
     public void onKick(PlayerKickEvent event) {
         try {
@@ -93,8 +88,8 @@ public class GadgetAntiGravity extends Gadget {
 
     @Override
     public void onClear() {
-        if (as != null)
+        if (as != null) {
             as.remove();
-        HandlerList.unregisterAll(this);
+        }
     }
 }

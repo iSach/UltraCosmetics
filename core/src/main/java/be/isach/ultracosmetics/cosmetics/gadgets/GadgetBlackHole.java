@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
@@ -19,48 +21,48 @@ import org.bukkit.util.Vector;
 import java.util.UUID;
 
 /**
- * Created by sacha on 17/08/15.
+ * Represents an instance of a blackhole gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-17-2015
  */
 public class GadgetBlackHole extends Gadget {
 
-    Item i;
+    private Item item;
 
-    public GadgetBlackHole(UUID owner) {
-        super(owner, GadgetType.BLACKHOLE);
+    public GadgetBlackHole(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.BLACKHOLE, ultraCosmetics);
     }
 
     @Override
     void onRightClick() {
-        if (i != null) {
-            i.remove();
-            i = null;
+        if (item != null) {
+            item.remove();
+            item = null;
         }
-        Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.STAINED_CLAY, (byte) 0xf, UUID.randomUUID().toString()));
-        item.setPickupDelay(Integer.MAX_VALUE);
-        item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
-        i = item;
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (i != null) {
-                    i.remove();
-                    i = null;
-                }
+
+        Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.STAINED_CLAY, (byte) 0xf, UUID.randomUUID().toString()));
+        newItem.setPickupDelay(Integer.MAX_VALUE);
+        newItem.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
+        this.item = newItem;
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            if (item != null) {
+                item.remove();
+                item = null;
             }
         }, 140);
     }
 
     @Override
-    void onUpdate() {
-
-        if (i != null && i.isOnGround()) {
+    public void onUpdate() {
+        if (item != null && item.isOnGround()) {
             int strands = 6;
             int particles = 25;
             float radius = 5;
             float curve = 10;
             double rotation = Math.PI / 4;
 
-            Location location = i.getLocation();
+            Location location = item.getLocation();
             for (int i = 1; i <= strands; i++) {
                 for (int j = 1; j <= particles; j++) {
                     float ratio = (float) j / particles;
@@ -72,16 +74,14 @@ public class GadgetBlackHole extends Gadget {
                     location.subtract(x, 0, z);
                 }
             }
+
             if (affectPlayers)
-                for (final Entity ENT : i.getNearbyEntities(5, 3, 5)) {
-                    Vector vector = i.getLocation().toVector().subtract(ENT.getLocation().toVector());
-                    MathUtils.applyVelocity(ENT, vector);
-                    Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (ENT instanceof Player)
-                                ((Player) ENT).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
-                        }
+                for (final Entity entity : item.getNearbyEntities(5, 3, 5)) {
+                    Vector vector = item.getLocation().toVector().subtract(entity.getLocation().toVector());
+                    MathUtils.applyVelocity(entity, vector);
+                    Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                        if (entity instanceof Player)
+                            ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
                     });
                 }
         }
@@ -89,9 +89,9 @@ public class GadgetBlackHole extends Gadget {
 
     @Override
     public void onClear() {
-        if (i != null)
-            i.remove();
-        HandlerList.unregisterAll(this);
+        if (item != null) {
+            item.remove();
+        }
     }
 
     @Override

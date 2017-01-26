@@ -1,14 +1,16 @@
 package be.isach.ultracosmetics.v1_9_R2;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.treasurechests.ChestType;
+import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.PacketSender;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_9_R2.pathfinders.CustomPathFinderGoalPanic;
-import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.treasurechests.ChestType;
-import be.isach.ultracosmetics.cosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_9_R2.*;
-import net.minecraft.server.v1_9_R2.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -16,7 +18,10 @@ import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R2.entity.*;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Wither;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
@@ -39,7 +44,7 @@ public class EntityUtil implements IEntityUtil {
     }
 
     @Override
-    public void setHorseSpeed(Horse horse, double speed) {
+    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
         ((CraftHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
@@ -72,7 +77,7 @@ public class EntityUtil implements IEntityUtil {
             PacketSender.send(players, new PacketPlayOutEntityEquipment(as.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         }
         UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
             @Override
             public void run() {
                 for (Player pl : player.getWorld().getPlayers())
@@ -81,18 +86,11 @@ public class EntityUtil implements IEntityUtil {
             }
         }, 20);
         if (affectPlayers)
-            for (final org.bukkit.entity.Entity ent : as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
-                if (!cooldownJump.contains(ent) && ent != player) {
-                    MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
-                    cooldownJump.add(ent);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            cooldownJump.remove(ent);
-                        }
-                    }, 20);
-                }
-            }
+            as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(ent -> !cooldownJump.contains(ent) && ent != player).forEachOrdered(ent -> {
+                MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
+                cooldownJump.add(ent);
+                Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
+            });
     }
 
     @Override
@@ -247,5 +245,17 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void sendTeleportPacket(Player player, org.bukkit.entity.Entity entity) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(((CraftEntity) entity).getHandle()));
+    }
+
+    @Override
+    public boolean isMoving(org.bukkit.entity.Player entity) {
+        EntityPlayer ent = ((CraftPlayer) entity).getHandle();
+        long time = System.currentTimeMillis() - ent.I();
+        if(time > 0.001) {
+            Bukkit.broadcastMessage("MOVING");
+            return true;
+        }
+        Bukkit.broadcastMessage("NOT MOVING");
+        return false;
     }
 }

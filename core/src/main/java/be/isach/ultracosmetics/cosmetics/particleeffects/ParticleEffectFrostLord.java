@@ -1,16 +1,19 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by sacha on 12/08/15.
+ * Represents an instance of frost lord particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class ParticleEffectFrostLord extends ParticleEffect {
 
@@ -18,14 +21,16 @@ public class ParticleEffectFrostLord extends ParticleEffect {
     float stepY = 0;
     float radius = 1.5f;
 
-    public ParticleEffectFrostLord(UUID owner) {
-        super(
-                owner, ParticleEffectType.FROSTLORD
-        );
+    public ParticleEffectFrostLord(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.FROSTLORD);
     }
 
     @Override
-    void onUpdate() {
+    protected void onEquip() {
+    }
+
+    @Override
+    public void onUpdate() {
         for (int i = 0; i < 6; i++) {
             Location location = getPlayer().getLocation();
             double inc = (2 * Math.PI) / 100;
@@ -47,5 +52,4 @@ public class ParticleEffectFrostLord extends ParticleEffect {
             }
         }
     }
-
 }

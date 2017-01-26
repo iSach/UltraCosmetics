@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.v1_9_R1.customentities;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -56,7 +57,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
         if (!CustomEntities.customEntities.contains(this)) return;
         fireTicks = 0;
         UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
-        UltraCosmetics.getInstance().getPathfinderUtil().removePathFinders(getBukkitEntity());
+        UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
         setInvisible(true);
         setBaby(true);
         setSlot(EnumItemSlot.HEAD, new ItemStack(Blocks.PUMPKIN));

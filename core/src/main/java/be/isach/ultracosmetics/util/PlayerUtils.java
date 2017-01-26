@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -21,7 +21,7 @@ public class PlayerUtils {
     }
 
     public static void sendInActionBar(Player player, String message) {
-        UltraCosmetics.getInstance().getActionBarUtil().sendActionMessage(player, message);
+        UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(player, message);
     }
 
 }

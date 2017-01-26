@@ -2,7 +2,8 @@ package be.isach.ultracosmetics.v1_8_R3.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -27,7 +28,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Sacha on 19/12/15.
@@ -42,10 +42,8 @@ public class MorphElderGuardian extends Morph {
      */
     public static List<net.minecraft.server.v1_8_R3.Entity> customEntities = new ArrayList<>();
 
-    public MorphElderGuardian(UUID owner) {
-        super(owner, MorphType.ELDERGUARDIAN);
-        if (owner == null) return;
-        UltraCosmetics.getInstance().registerListener(this);
+    public MorphElderGuardian(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.ELDERGUARDIAN, ultraCosmetics);
 
         World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
 
@@ -78,12 +76,12 @@ public class MorphElderGuardian extends Morph {
                 }
                 if (customGuardian == null
                         || !customGuardian.isAlive()) {
-                    UltraCosmetics.getPlayerManager().getCustomPlayer(getPlayer()).removeMorph();
+                    getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
                     cancel();
                     return;
                 }
             }
-        }.runTaskTimerAsynchronously(UltraCosmetics.getInstance(), 0, 1);
+        }.runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
 
     }
 
@@ -94,7 +92,7 @@ public class MorphElderGuardian extends Morph {
                 && event.getPlayer() == getPlayer()) {
             shootLaser();
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
@@ -126,7 +124,7 @@ public class MorphElderGuardian extends Morph {
 
         customGuardian.target(armorStand);
 
-        Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 FireworkEffect.Builder builder = FireworkEffect.builder();
@@ -154,7 +152,12 @@ public class MorphElderGuardian extends Morph {
     }
 
     @Override
-    public void clear() {
+    protected void onEquip() {
+
+    }
+
+    @Override
+    public void onClear() {
         super.clear();
         if (customGuardian != null)
             customGuardian.dead = true;

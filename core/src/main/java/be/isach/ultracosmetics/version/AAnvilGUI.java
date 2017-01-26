@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.version;
 
-import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -126,7 +126,7 @@ public abstract class AAnvilGUI {
                         if (player.getGameMode() == GameMode.ADVENTURE
                                 || player.getGameMode() == GameMode.SURVIVAL
                                 && player.getLevel() > 0)
-                            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+                            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
                                 @Override
                                 public void run() {
                                     player.setLevel(player.getLevel());
@@ -169,7 +169,7 @@ public abstract class AAnvilGUI {
             }
         };
 
-        Bukkit.getPluginManager().registerEvents(listener, UltraCosmetics.getInstance());
+        Bukkit.getPluginManager().registerEvents(listener, UltraCosmeticsData.get().getPlugin());
     }
 
     public Player getPlayer() {

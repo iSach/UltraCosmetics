@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.CustomPlayer;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -428,12 +428,12 @@ public class MathUtils {
         if (ent.hasMetadata("NPC"))
             return;
         if (ent instanceof Player) {
-            CustomPlayer customPlayer = UltraCosmetics.getCustomPlayer((Player) ent);
+            UltraPlayer customPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player)ent);
             if (!customPlayer.hasGadgetsEnabled())
                 return;
         }
         ent.setVelocity(v);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), new Runnable() {
             @Override
             public void run() {
                 FallDamageManager.addNoFall(ent);
@@ -446,13 +446,13 @@ public class MathUtils {
             return;
         if (!ignoreGadgetsEnabled) {
             if (ent instanceof Player) {
-                CustomPlayer customPlayer = UltraCosmetics.getCustomPlayer((Player) ent);
+                UltraPlayer customPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent);
                 if (!customPlayer.hasGadgetsEnabled())
                     return;
             }
         }
         ent.setVelocity(v);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), new Runnable() {
             @Override
             public void run() {
                 FallDamageManager.addNoFall(ent);

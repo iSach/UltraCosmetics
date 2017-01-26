@@ -1,12 +1,16 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 18/10/15.
+ * Represents an instance of inferno particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-18-2015
  */
 public class ParticleEffectInferno extends ParticleEffect {
 
@@ -14,13 +18,12 @@ public class ParticleEffectInferno extends ParticleEffect {
     boolean[] up = {true, false, true, false};
     int[] steps = {0, 0, 0, 0};
 
-    public ParticleEffectInferno(UUID owner) {
-        super(owner, ParticleEffectType.INFERNO
-        );
+    public ParticleEffectInferno(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.INFERNO);
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         for (int i = 0; i < 4; i++) {
             if (up[i]) {
                 if (height[i] < 2)
@@ -39,7 +42,8 @@ public class ParticleEffectInferno extends ParticleEffect {
             v.setX(Math.cos(angle) * 1.1);
             v.setZ(Math.sin(angle) * 1.1);
             try {
-                UtilParticles.display(getType().getEffect(), 0.15f, 0.15f, 0.15f, getPlayer().getLocation().clone().add(v).add(0, height[i], 0), 4);
+                UtilParticles.display(getType().getEffect(), 0.15f, 0.15f, 0.15f,
+                        getPlayer().getLocation().clone().add(v).add(0, height[i], 0), 4);
             } catch (Exception exc) {
 
             }
@@ -48,5 +52,9 @@ public class ParticleEffectInferno extends ParticleEffect {
             else
                 steps[i] += 4;
         }
+    }
+
+    @Override
+    protected void onEquip() {
     }
 }

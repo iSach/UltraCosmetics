@@ -1,35 +1,45 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.entity.Horse;
-
-import java.util.UUID;
+import org.bukkit.entity.SkeletonHorse;
 
 /**
- * Created by sacha on 10/08/15.
+* Represents an instance of a infernal horror mount.
+ * 
+ * @author 	iSach
+ * @since 	08-10-2015
  */
-public class MountInfernalHorror extends Mount {
+public class MountInfernalHorror extends MountHorse<SkeletonHorse> {
 
-    public MountInfernalHorror(UUID owner) {
-        super(owner, MountType.INFERNALHORROR);
+    public MountInfernalHorror(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.INFERNALHORROR, ultraCosmetics);
     }
 
     @Override
-    protected void onEquip() {
-        if (entity instanceof Horse) {
-            Horse horse = (Horse) entity;
-            horse.setVariant(Horse.Variant.SKELETON_HORSE);
-            variant = Horse.Variant.SKELETON_HORSE;
-            horse.setVariant(Horse.Variant.SKELETON_HORSE);
-            horse.setJumpStrength(0.7);
-            UltraCosmetics.getInstance().getEntityUtil().setHorseSpeed(horse, 0.4d);
-        }
+    public void onEquip() {
+        super.onEquip();
+        entity.setJumpStrength(0.7);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+    }
+
+    @Override
+    protected Horse.Variant getVariant() {
+        return Horse.Variant.SKELETON_HORSE;
+    }
+
+    @Override
+    protected Horse.Color getColor() {
+        return Horse.Color.WHITE;
     }
 }

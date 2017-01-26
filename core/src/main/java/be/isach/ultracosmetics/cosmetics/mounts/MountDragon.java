@@ -1,6 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
@@ -9,21 +12,20 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a enderdragon mount.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
-public class MountDragon extends Mount {
+public class MountDragon extends Mount<EnderDragon> {
 
-    public MountDragon(UUID owner) {
-        super(owner, MountType.DRAGON);
-        if (owner != null)
-            UltraCosmetics.getInstance().registerListener(this);
+    public MountDragon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.DRAGON, ultraCosmetics);
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         if (entity.getPassenger() == null)
             clear();
 
@@ -39,7 +41,7 @@ public class MountDragon extends Mount {
         vector.setX(-h * Math.sin(Math.toRadians(rotX)));
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
-        UltraCosmetics.getInstance().getEntityUtil().moveDragon(getPlayer(), vector, entity);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveDragon(getPlayer(), vector, entity);
     }
 
     @EventHandler
@@ -49,7 +51,6 @@ public class MountDragon extends Mount {
             e = ((EnderDragonPart) e).getParent();
         if (e instanceof EnderDragon && e == entity)
             event.setCancelled(true);
-
     }
 
     @EventHandler
@@ -60,7 +61,6 @@ public class MountDragon extends Mount {
         }
         if (e instanceof EnderDragon && e == entity) {
             event.setCancelled(true);
-
         }
     }
 }

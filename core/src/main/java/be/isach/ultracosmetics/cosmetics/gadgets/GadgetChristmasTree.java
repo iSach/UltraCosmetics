@@ -1,34 +1,41 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 29/11/15.
+* Represents an instance of a Christmas Tree gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-29-2015
  */
 public class GadgetChristmasTree extends Gadget {
 
     private boolean active = false;
     private Location lastLocation;
 
-    int[] logColor = {101, 67, 33};
+    private static final Color LOG_COLOR = Color.fromRGB(101, 67, 33);
 
-    public GadgetChristmasTree(UUID owner) {
-        super(owner, GadgetType.CHRISTMASTREE);
+    public GadgetChristmasTree(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.CHRISTMASTREE, ultraCosmetics);
     }
 
     @Override
     void onRightClick() {
         lastLocation = lastClickedBlock.getLocation().add(0.5d, 1.05d, 0.5d);
         active = true;
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 active = false;
@@ -37,7 +44,7 @@ public class GadgetChristmasTree extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (active) {
             drawLog();
             drawLeavesAndBalls();
@@ -52,6 +59,16 @@ public class GadgetChristmasTree extends Gadget {
         lastLocation.subtract(0, 3, 0);
     }
 
+    @Override
+    protected boolean checkRequirements(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null
+                || event.getClickedBlock().getType() == Material.AIR) {
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
+            return true;
+        }
+        return false;
+    }
+
     private void drawLog() {
         Location current = lastLocation.clone();
         Location to = lastLocation.clone().add(0, 2.5, 0);
@@ -61,7 +78,7 @@ public class GadgetChristmasTree extends Gadget {
         float ratio = length / 10;
         Vector vector = link.multiply(ratio);
         for (int i = 0; i < 10; i++) {
-            UtilParticles.display(logColor[0], logColor[1], logColor[2], current);
+            UtilParticles.display(LOG_COLOR.getRed(), LOG_COLOR.getGreen(), LOG_COLOR.getBlue(), current);
             current.add(vector);
         }
     }
@@ -76,8 +93,8 @@ public class GadgetChristmasTree extends Gadget {
                 if (e == 1) {
                     double inc = (2 * Math.PI) / d;
                     float angle = (float) (g * inc);
-                    float x = MathUtils.cos(angle) * (radius+0.05f);
-                    float z = MathUtils.sin(angle) * (radius+0.05f);
+                    float x = MathUtils.cos(angle) * (radius + 0.05f);
+                    float z = MathUtils.sin(angle) * (radius + 0.05f);
                     lastLocation.add(x, f, z);
                     UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), lastLocation);
                     lastLocation.subtract(x, f, z);

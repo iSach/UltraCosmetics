@@ -1,75 +1,1 @@
-allprojects {
-    apply plugin: 'java'
-    apply plugin: 'eclipse'
-    apply plugin: 'idea'
-
-    group = 'be.isach'
-    version = '2.3.4-RELEASE'
-
-    compileJava.options.encoding = 'UTF-8'
-
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
-
-    configurations {
-        shaded
-        compile.extendsFrom shaded
-    }
-
-    afterEvaluate{
-        jar {
-            dependsOn configurations.shaded
-            from configurations.shaded.collect {
-                it.isDirectory() ?
-                        it :
-                        zipTree(it)
-            }
-        }
-    }
-}
-
-boolean local = true
-
-if (local) libsDirName = '/Users/sachalewin/Desktop/LOCAL/plugins'
-
-dependencies{
-    subprojects.each{ p ->
-        shaded(p) {
-            transitive false
-        }
-    }
-}
-
-subprojects {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        ivy {
-            url 'http://www.tcpr.ca/files/'
-            layout 'pattern', {
-                artifact '[module]/[module]-[revision].[ext]'
-            }
-        }
-        maven {
-            url 'https://hub.spigotmc.org/nexus/content/groups/public/'
-        }
-        maven {
-            url 'https://oss.sonatype.org/content/groups/public/'
-        }
-        maven {
-            url 'http://nexus.theyeticave.net/content/repositories/pub_releases'
-        }
-        maven {
-            url 'http://repo.md-5.net/content/repositories/releases'
-        }
-        maven {
-            url 'http://repo.howaner.de'
-        }
-        maven {
-            url 'http://repo.dmulloy2.net/content/groups/public/'
-        }
-        maven {
-            url 'http://repo.sinndev.com/content/repositories/releases/'
-        }
-    }
-}
+allprojects {    apply plugin: 'java'    apply plugin: 'eclipse'    apply plugin: 'idea'    group = 'be.isach'    version = '3.0.0-SNAPSHOT'    compileJava.options.encoding = 'UTF-8'    sourceCompatibility = 1.8    targetCompatibility = 1.8    configurations {        shaded        compile.extendsFrom shaded    }    afterEvaluate {        jar {            dependsOn configurations.shaded            from configurations.shaded.collect {                it.isDirectory() ?                        it :                        zipTree(it)            }        }    }}boolean local = falseif (local) libsDirName = '/Users/Sacha/Documents/Development/Java/UltraCosmetics/testserver/plugins'dependencies {    subprojects.each { p ->        shaded(p) {            transitive false        }    }}subprojects {    repositories {        mavenCentral()        // Vault        maven {            url 'http://nexus.hc.to/content/repositories/pub_releases'        }        // Lib's Disguises        maven {            url 'http://repo.md-5.net/content/groups/public/'        }        // Spigot        maven {            url 'https://repo.isach.be'        }        // BungeeCord        maven {            url 'https://oss.sonatype.org/content/repositories/snapshots'        }    }}

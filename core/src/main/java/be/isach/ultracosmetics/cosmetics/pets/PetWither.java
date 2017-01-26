@@ -1,22 +1,25 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Wither;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 12/10/15.
+ * Represents an instance of a wither pet summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class PetWither extends Pet {
 
-    public PetWither(UUID owner) {
-        super(owner, PetType.WITHER);
+    public PetWither(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, ultraCosmetics, PetType.WITHER);
     }
 
     @Override
-    protected void onUpdate() {
-        UltraCosmetics.getInstance().getEntityUtil().resetWitherSize((Wither)getEntity());
+    public void onUpdate() {
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().resetWitherSize((Wither)getEntity());
     }
-
 }

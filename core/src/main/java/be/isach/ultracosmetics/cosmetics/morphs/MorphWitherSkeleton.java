@@ -1,18 +1,20 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import java.util.ArrayList;
@@ -20,23 +22,25 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by Sacha on 18/10/15.
+ * 
+ * 
+ * @author 	iSach
+ * @since 	10-18-2015
  */
 public class MorphWitherSkeleton extends Morph {
 
     boolean inCooldown;
 
-    public MorphWitherSkeleton(UUID owner) {
-        super(owner, MorphType.WITHERSKELETON);
-        UltraCosmetics.getInstance().registerListener(this);
+    public MorphWitherSkeleton(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.WITHERSKELETON, ultraCosmetics);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onSneak(PlayerToggleSneakEvent event) {
         if (event.getPlayer() == getPlayer()
                 && !inCooldown) {
             inCooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     inCooldown = false;
@@ -52,7 +56,7 @@ public class MorphWitherSkeleton extends Morph {
                 bone.setVelocity(MathUtils.getRandomVector());
                 items.add(bone);
             }
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     for (Entity bone : items)
@@ -62,5 +66,9 @@ public class MorphWitherSkeleton extends Morph {
             }, 50);
             SoundUtil.playSound(getPlayer(), Sounds.SKELETON_HURT, 0.4f, (float) Math.random() + 1f);
         }
+    }
+
+    @Override
+    protected void onEquip() {
     }
 }

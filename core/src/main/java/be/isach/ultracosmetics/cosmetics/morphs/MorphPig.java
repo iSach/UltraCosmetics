@@ -1,36 +1,37 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by sacha on 27/08/15.
+* Represents an instance of a pig morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-27-2015
  */
 public class MorphPig extends Morph {
 
     private boolean cooldown = false;
 
-    public MorphPig(UUID owner) {
-        super(owner, MorphType.PIG);
+    public MorphPig(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.PIG, ultraCosmetics);
         if (owner != null) {
-
             final MorphPig pig = this;
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (getPlayer() == null
-                            || UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != pig) {
+                            || getOwner().getCurrentMorph() != pig) {
                         cancel();
                         return;
                     }
@@ -42,7 +43,7 @@ public class MorphPig extends Morph {
                                     && ent != disguise.getEntity()
                                     && !cooldown) {
                                 cooldown = true;
-                                Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+                                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                                     @Override
                                     public void run() {
                                         cooldown = false;
@@ -59,8 +60,11 @@ public class MorphPig extends Morph {
                         }
                     }
                 }
-            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
+            }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
     }
 
+    @Override
+    protected void onEquip() {
+    }
 }

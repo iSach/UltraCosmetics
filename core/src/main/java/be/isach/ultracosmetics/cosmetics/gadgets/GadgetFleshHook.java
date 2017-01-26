@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.EntityEffect;
@@ -17,15 +19,17 @@ import java.util.Iterator;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a fleshhook gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetFleshHook extends Gadget implements Listener {
 
     private ArrayList<Item> items = new ArrayList<>();
 
-    public GadgetFleshHook(UUID owner) {
-        super(owner, GadgetType.FLESHHOOK);
-        UltraCosmetics.getInstance().registerListener(this);
+    public GadgetFleshHook(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.FLESHHOOK, ultraCosmetics);
     }
 
     @org.bukkit.event.EventHandler
@@ -68,8 +72,8 @@ public class GadgetFleshHook extends Gadget implements Listener {
     }
 
     @Override
-    void onUpdate() {
-        Iterator it = items.iterator();
+    public void onUpdate() {
+        Iterator<Item> it = items.iterator();
         while (it.hasNext()) {
             Object pair = it.next();
             if (((Item) pair).isOnGround()) {

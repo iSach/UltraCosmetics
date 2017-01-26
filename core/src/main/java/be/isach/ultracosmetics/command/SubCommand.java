@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.command;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -8,22 +9,23 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 /**
- * Created by Sacha on 20/12/15.
- * <p/>
- * TODO Commands
- * Clear Command
- * Treasure Chests (at X, Y, Z, World)
+ * A subcommand.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public abstract class SubCommand {
 
     String[] aliases;
     String description, permission, usage;
+    private UltraCosmetics ultraCosmetics;
 
-    public SubCommand(String description, String permission, String usage, String... aliases) {
+    public SubCommand(String description, String permission, String usage, UltraCosmetics ultraCosmetics, String... aliases) {
         this.aliases = aliases;
         this.description = description;
         this.permission = permission;
         this.usage = usage;
+        this.ultraCosmetics = ultraCosmetics;
     }
 
     /**
@@ -88,4 +90,7 @@ public abstract class SubCommand {
         commandSender.sendMessage(MessageManager.getMessage("Not-Allowed-From-Console"));
     }
 
+    public UltraCosmetics getUltraCosmetics() {
+        return ultraCosmetics;
+    }
 }

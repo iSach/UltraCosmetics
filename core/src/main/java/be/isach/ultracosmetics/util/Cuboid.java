@@ -145,9 +145,9 @@ public class Cuboid implements Iterable<Block>, Cloneable,
     }
 
     /**
-     * Get the blocks in the Cuboid.
+     * Get the BLOCKS in the Cuboid.
      *
-     * @return The blocks in the Cuboid
+     * @return The BLOCKS in the Cuboid
      */
     public List<Block> getBlocks() {
         Iterator<Block> blockI = this.iterator();
@@ -293,7 +293,7 @@ public class Cuboid implements Iterable<Block>, Cloneable,
      * valid Cuboid.
      *
      * @param dir    - The direction in which to expand
-     * @param amount - The number of blocks by which to expand
+     * @param amount - The number of BLOCKS by which to expand
      * @return A new Cuboid expanded by the given direction and amount
      */
     public Cuboid expand(CuboidDirection dir, int amount) {
@@ -326,7 +326,7 @@ public class Cuboid implements Iterable<Block>, Cloneable,
      * Shift the Cuboid in the given direction by the given amount.
      *
      * @param dir    - The direction in which to shift
-     * @param amount - The number of blocks by which to shift
+     * @param amount - The number of BLOCKS by which to shift
      * @return A new Cuboid shifted by the given direction and amount
      */
     public Cuboid shift(CuboidDirection dir, int amount) {
@@ -338,7 +338,7 @@ public class Cuboid implements Iterable<Block>, Cloneable,
      *
      * @param dir    - The direction in which to outset (must be Horizontal,
      *               Vertical, or Both)
-     * @param amount - The number of blocks by which to outset
+     * @param amount - The number of BLOCKS by which to outset
      * @return A new Cuboid outset by the given direction and amount
      */
     public Cuboid outset(CuboidDirection dir, int amount) {
@@ -371,7 +371,7 @@ public class Cuboid implements Iterable<Block>, Cloneable,
      *
      * @param dir    - The direction in which to inset (must be Horizontal,
      *               Vertical, or Both)
-     * @param amount - The number of blocks by which to inset
+     * @param amount - The number of BLOCKS by which to inset
      * @return A new Cuboid inset by the given direction and amount
      */
     public Cuboid inset(CuboidDirection dir, int amount) {
@@ -416,15 +416,15 @@ public class Cuboid implements Iterable<Block>, Cloneable,
     /**
      * Get the volume of this Cuboid.
      *
-     * @return The Cuboid volume, in blocks
+     * @return The Cuboid volume, in BLOCKS
      */
     public int getVolume() {
         return this.getSizeX() * this.getSizeY() * this.getSizeZ();
     }
 
     /**
-     * Get the average light level of all empty (air) blocks in the Cuboid.
-     * Returns 0 if there are no empty blocks.
+     * Get the average light level of all empty (air) BLOCKS in the Cuboid.
+     * Returns 0 if there are no empty BLOCKS.
      *
      * @return The average light level of this Cuboid
      */
@@ -442,9 +442,9 @@ public class Cuboid implements Iterable<Block>, Cloneable,
 
     /**
      * Contract the Cuboid, returning a Cuboid with any air around the edges
-     * removed, just large enough to include all non-air blocks.
+     * removed, just large enough to include all non-air BLOCKS.
      *
-     * @return A new Cuboid with no external air blocks
+     * @return A new Cuboid with no external air BLOCKS
      */
     public Cuboid contract() {
         return this.contract(CuboidDirection.Down)
@@ -550,10 +550,10 @@ public class Cuboid implements Iterable<Block>, Cloneable,
     }
 
     /**
-     * Check if the Cuboid contains only blocks of the given type
+     * Check if the Cuboid contains only BLOCKS of the given type
      *
      * @param blockId - The block ID to check for
-     * @return true if this Cuboid contains only blocks of the given type
+     * @return true if this Cuboid contains only BLOCKS of the given type
      */
     @SuppressWarnings("deprecation")
     public boolean containsOnly(int blockId) {

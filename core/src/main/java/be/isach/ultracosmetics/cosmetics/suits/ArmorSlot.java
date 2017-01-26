@@ -1,13 +1,24 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
+import org.bukkit.ChatColor;
+
 /**
- * Created by Sacha on 20/12/15.
+ * Armor slot enum.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public enum ArmorSlot {
-
     HELMET,
     CHESTPLATE,
     LEGGINGS,
-    BOOTS
-
+    BOOTS;
+	
+	public static ArmorSlot getByName(String s) {
+       for (ArmorSlot a : ArmorSlot.values()){
+    	   if (a.toString().equalsIgnoreCase(ChatColor.stripColor(s)))
+    		   return a;
+       }
+       return null;
+    }
 }

@@ -1,64 +1,43 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
-import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
-import com.xxmicloxx.NoteBlockAPI.PositionSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.Song;
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a nyansheep mount.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
-public class MountNyanSheep extends Mount {
+public class MountNyanSheep extends Mount<Sheep> {
 
-    public MountNyanSheep(UUID owner) {
-        super(owner, MountType.NYANSHEEP);
+    public MountNyanSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.NYANSHEEP, ultraCosmetics);
     }
 
     @Override
-    protected void onEquip() {
+    public void onEquip() {
+        super.onEquip();
         ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
-        UltraCosmetics.getInstance().getEntityUtil().clearPathfinders(entity);
-        if (Bukkit.getPluginManager().isPluginEnabled("NoteBlockAPI")) {
-            Song s = NBSDecoder.parse(new File(UltraCosmetics.getInstance().getDataFolder(), "/songs/NyanCat.nbs"));
-            final PositionSongPlayer positionSongPlayer = new PositionSongPlayer(s);
-            positionSongPlayer.setTargetLocation(((LivingEntity) entity).getEyeLocation());
-            positionSongPlayer.setPlaying(true);
-            for (Player p : Bukkit.getOnlinePlayers())
-                positionSongPlayer.addPlayer(p);
-            positionSongPlayer.setAutoDestroy(true);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (entity.isValid() && entity.getPassenger() == getPlayer()) {
-                        if (UltraCosmetics.getInstance().isNoteBlockAPIEnabled())
-                            positionSongPlayer.setTargetLocation(((LivingEntity) entity).getEyeLocation());
-                    } else {
-                        positionSongPlayer.setPlaying(false);
-                        cancel();
-                    }
-                }
-            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
-        }
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         move();
 
         ((Sheep) entity).setColor(DyeColor.values()[new Random().nextInt(15)]);
@@ -90,13 +69,13 @@ public class MountNyanSheep extends Mount {
             Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
             Location loc = player.getLocation().add(vel);
 
-            UltraCosmetics.getInstance().getEntityUtil().move((Creature) entity, loc);
+            UltraCosmeticsData.get().getVersionManager().getEntityUtil().move((Creature) entity, loc);
         } catch (Exception exc) {
-            UltraCosmetics.getCustomPlayer(getPlayer()).removeMount();
+            getOwner().removeMount();
         }
     }
 
-    class RGBColor {
+    private class RGBColor {
 
         int red;
         int green;
@@ -120,5 +99,4 @@ public class MountNyanSheep extends Mount {
             return red;
         }
     }
-
 }

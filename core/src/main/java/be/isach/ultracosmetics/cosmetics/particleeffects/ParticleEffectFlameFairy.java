@@ -1,15 +1,19 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 23/12/15.
+ * Represents an instance of flame fairy particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-23-2015
  */
 public class ParticleEffectFlameFairy extends ParticleEffect {
 
@@ -19,8 +23,8 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
 
     public double noMoveTime = 0, movementSpeed = 0.2d;
 
-    public ParticleEffectFlameFairy(UUID owner) {
-        super(owner, ParticleEffectType.FLAMEFAIRY);
+    public ParticleEffectFlameFairy(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.FLAMEFAIRY);
 
         currentLocation = getPlayer().getLocation();
         targetLocation = generateNewTarget();
@@ -28,7 +32,11 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
     }
 
     @Override
-    void onUpdate() {
+    protected void onEquip() {
+    }
+
+    @Override
+    public void onUpdate() {
         if (getPlayer().getWorld() != currentLocation.getWorld()
                 || getPlayer().getWorld() != targetLocation.getWorld()) {
             currentLocation = getPlayer().getLocation();

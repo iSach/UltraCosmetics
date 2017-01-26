@@ -1,12 +1,13 @@
 package be.isach.ultracosmetics.v1_9_R1.pets;
 
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_9_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_9_R1.customentities.Pumpling;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
-import be.isach.ultracosmetics.cosmetics.pets.PetType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import net.minecraft.server.v1_9_R1.Entity;
 import org.bukkit.Bukkit;
@@ -20,8 +21,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
-
 /**
  * Created by Sacha on 7/03/16.
  */
@@ -32,17 +31,18 @@ public abstract class CustomEntityPet extends Pet {
      */
     public IPetCustomEntity customEntity;
 
-    public CustomEntityPet(UUID owner, PetType petType) {
-        super(owner, petType);
+    public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
+        super(owner, ultraCosmetics, petType);
+
     }
 
     @Override
-    public void equip() {
+    public void onEquip() {
         followTask = new PlayerFollower(this, getPlayer());
-        if (UltraCosmetics.getCustomPlayer(getPlayer()).currentPet != null)
-            UltraCosmetics.getCustomPlayer(getPlayer()).removePet();
+        if (getOwner().getCurrentPet() != null)
+            getOwner().removePet();
 
-        UltraCosmetics.getCustomPlayer(getPlayer()).currentPet = this;
+        getOwner().setCurrentPet(this);
 
         final Pet instance = this;
         BukkitRunnable runnable = new BukkitRunnable() {
@@ -54,21 +54,20 @@ public abstract class CustomEntityPet extends Pet {
                             armorStand.remove();
                         getCustomEntity().dead = true;
                         if (getPlayer() != null)
-                            UltraCosmetics.getCustomPlayer(getPlayer()).currentPet = null;
+                            getOwner().setCurrentPet(null);
                         for (Item i : items)
                             i.remove();
                         items.clear();
                         try {
                             HandlerList.unregisterAll(instance);
-                            HandlerList.unregisterAll(instance.listener);
                         } catch (Exception exc) {
                         }
                         cancel();
                         return;
                     }
-                    if (Bukkit.getPlayer(getOwner()) != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(getOwner())).currentPet != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(getOwner())).currentPet.getType() == getType()) {
+                    if (Bukkit.getPlayer(getOwnerUniqueId()) != null
+                            && getOwner().getCurrentPet() != null
+                            && getOwner().getCurrentPet().getType() == getType()) {
                         if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
                             onUpdate();
                         pathUpdater.submit(followTask.getTask());
@@ -89,8 +88,7 @@ public abstract class CustomEntityPet extends Pet {
                 }
             }
         };
-        runnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 3);
-        listener = new PetListener(this);
+        runnable.runTaskTimer(getUltraCosmetics(), 0, 3);
 
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
@@ -99,16 +97,16 @@ public abstract class CustomEntityPet extends Pet {
         if (this instanceof PetPumpling) {
             customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
         }
-        getCustomEntity().setLocation(x, y, z, 0, 0);
         CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
+        getCustomEntity().setLocation(x, y, z, 0, 0);
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(UltraCosmetics.getInstance(), "C_AD_ArmorStand"));
-        if (UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()) != null)
-            armorStand.setCustomName(UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()));
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand"));
+        if (getOwner().getPetName(getType()) != null)
+            armorStand.setCustomName(getOwner().getPetName(getType()));
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);
@@ -120,7 +118,7 @@ public abstract class CustomEntityPet extends Pet {
     @Override
     protected void removeEntity() {
         getCustomEntity().dead = true;
-        CustomEntities.customEntities.remove(((CraftEntity) customEntity.getEntity()).getHandle());
+        CustomEntities.customEntities.remove(customEntity);
     }
 
     @Override
@@ -136,6 +134,5 @@ public abstract class CustomEntityPet extends Pet {
     public Entity getCustomEntity() {
         return ((CraftEntity) customEntity.getEntity()).getHandle();
     }
-
 
 }

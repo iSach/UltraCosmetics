@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.v1_9_R2.mount;
 
-import be.isach.ultracosmetics.cosmetics.mounts.MountType;
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Slime;
 
 import java.util.UUID;
@@ -10,12 +12,12 @@ import java.util.UUID;
  */
 public class MountSlime extends MountCustomEntity {
 
-    public MountSlime(UUID owner) {
-        super(owner, MountType.SLIME);
+    public MountSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.SLIME, ultraCosmetics);
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         ((Slime)getEntity()).setSize(3);
     }
 }

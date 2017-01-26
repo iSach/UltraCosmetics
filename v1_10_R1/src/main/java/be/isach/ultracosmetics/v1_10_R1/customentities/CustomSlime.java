@@ -17,30 +17,14 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
     public CustomSlime(World world) {
         super(world);
-
-        if (!CustomEntities.customEntities.contains(this)) return;
-
-        setAI(false);
-    }
-
-    private void removeSelectors() {
-        try {
-            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-            bField.setAccessible(true);
-            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
-            bField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            bField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
     }
 
     @Override
     public void g(float sideMot, float forMot) {
-        if (!CustomEntities.customEntities.contains(this)) return;
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         EntityHuman passenger = null;
         if (!bx().isEmpty()) {
             passenger = (EntityHuman) bx().get(0);
@@ -130,5 +114,10 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
             entityBase.g_(sideMot, forMot);
         }
 
+    }
+
+    @Override
+    public void removeAi() {
+        setAI(false);
     }
 }

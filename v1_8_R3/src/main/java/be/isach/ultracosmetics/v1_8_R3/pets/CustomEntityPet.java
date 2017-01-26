@@ -4,7 +4,8 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
-import be.isach.ultracosmetics.cosmetics.pets.PetType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_8_R3.customentities.Pumpling;
@@ -19,8 +20,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
-
 /**
  * Created by Sacha on 7/03/16.
  */
@@ -31,16 +30,16 @@ public class CustomEntityPet extends Pet {
      */
     public IPetCustomEntity customEntity;
 
-    public CustomEntityPet(UUID owner, PetType petType) {
-        super(owner, petType);
+    public CustomEntityPet(UltraPlayer owner, PetType petType, UltraCosmetics ultraCosmetics) {
+        super(owner, ultraCosmetics, petType);
     }
 
     @Override
-    public void equip() {
+    public void onEquip() {
         followTask = new PlayerFollower(this, getPlayer());
-        if (UltraCosmetics.getCustomPlayer(getPlayer()).currentPet != null)
-            UltraCosmetics.getCustomPlayer(getPlayer()).removePet();
-        UltraCosmetics.getCustomPlayer(getPlayer()).currentPet = this;
+        if (getOwner().getCurrentPet() != null)
+            getOwner().removePet();
+        getOwner().setCurrentPet(this);
 
         final Pet instance = this;
 
@@ -53,21 +52,20 @@ public class CustomEntityPet extends Pet {
                             armorStand.remove();
                         getCustomEntity().dead = true;
                         if (getPlayer() != null)
-                            UltraCosmetics.getCustomPlayer(getPlayer()).currentPet = null;
+                            getOwner().setCurrentPet(null);
                         for (Item i : items)
                             i.remove();
                         items.clear();
                         try {
                             HandlerList.unregisterAll(instance);
-                            HandlerList.unregisterAll(instance.listener);
                         } catch (Exception exc) {
                         }
                         cancel();
                         return;
                     }
-                    if (Bukkit.getPlayer(getOwner()) != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(getOwner())).currentPet != null
-                            && UltraCosmetics.getCustomPlayer(Bukkit.getPlayer(getOwner())).currentPet.getType() == getType()) {
+                    if (Bukkit.getPlayer(getOwnerUniqueId()) != null
+                            && getOwner().getCurrentPet() != null
+                            && getOwner().getCurrentPet().getType() == getType()) {
                         if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
                             onUpdate();
                         pathUpdater.submit(followTask.getTask());
@@ -89,8 +87,7 @@ public class CustomEntityPet extends Pet {
                 }
             }
         };
-        runnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 6);
-        listener = new PetListener(this);
+        runnable.runTaskTimer(getUltraCosmetics(), 0, 6);
 
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
@@ -106,9 +103,9 @@ public class CustomEntityPet extends Pet {
         armorStand.setSmall(true);
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(UltraCosmetics.getInstance(), "C_AD_ArmorStand"));
-        if (UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()) != null)
-            armorStand.setCustomName(UltraCosmetics.getCustomPlayer(getPlayer()).getPetName(getType().getConfigName()));
+        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand"));
+        if (getOwner().getPetName(getType()) != null)
+            armorStand.setCustomName(getOwner().getPetName(getType()));
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);
@@ -124,7 +121,7 @@ public class CustomEntityPet extends Pet {
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
 
     }
 

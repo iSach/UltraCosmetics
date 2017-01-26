@@ -1,24 +1,29 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 /**
- * Created by sacha on 07/08/15.
+* Represents an instance of a portal gun gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-07-2015
  */
 public class GadgetPortalGun extends Gadget {
 
@@ -30,8 +35,8 @@ public class GadgetPortalGun extends Gadget {
     Location locRed;
     BlockFace redBlockFace;
 
-    public GadgetPortalGun(UUID owner) {
-        super(owner, GadgetType.PORTALGUN);
+    public GadgetPortalGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.PORTALGUN, ultraCosmetics);
         displayCooldownMessage = false;
         useTwoInteractMethods = true;
     }
@@ -56,7 +61,6 @@ public class GadgetPortalGun extends Gadget {
             locBlue.add(0.4, 1.8, 1.2);
         }
     }
-
 
     @Override
     void onLeftClick() {
@@ -131,10 +135,15 @@ public class GadgetPortalGun extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         if (locBlue != null) {
             Location portalCenter = locBlue.clone();
             if (locRed != null && !teleported) {
+                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                    locRed = null;
+                    locBlue = null;
+                    return;
+                }
                 Location toDistance;
                 if (blueBlockFace == BlockFace.DOWN) {
                     toDistance = getPlayer().getEyeLocation().clone();
@@ -163,7 +172,7 @@ public class GadgetPortalGun extends Gadget {
                         loc.setYaw(getYaw(redBlockFace));
                         teleport(getPlayer(), loc);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                         @Override
                         public void run() {
                             teleported = false;
@@ -195,6 +204,11 @@ public class GadgetPortalGun extends Gadget {
         }
         if (locRed != null) {
             if (locBlue != null && !teleported) {
+                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                    locRed = null;
+                    locBlue = null;
+                    return;
+                }
                 Location toDistance;
                 if (redBlockFace == BlockFace.DOWN) {
                     toDistance = getPlayer().getEyeLocation().clone();
@@ -216,7 +230,7 @@ public class GadgetPortalGun extends Gadget {
                         loc.setYaw(getYaw(blueBlockFace));
                         teleport(getPlayer(), loc);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                         @Override
                         public void run() {
                             teleported = false;
@@ -249,7 +263,15 @@ public class GadgetPortalGun extends Gadget {
                 UtilParticles.display(255, 0, 0, loc.add(v));
             }
         }
+    }
 
+    @Override
+    protected boolean checkRequirements(PlayerInteractEvent event) {
+        if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR) {
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
+            return false;
+        }
+        return true;
     }
 
     public BlockFace[] axis = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
@@ -268,7 +290,7 @@ public class GadgetPortalGun extends Gadget {
     }
 
     private void teleport(final Entity entity, final Location location) {
-        Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
             @Override
             public void run() {
                 entity.teleport(location);

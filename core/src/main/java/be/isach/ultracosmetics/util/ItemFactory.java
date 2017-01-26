@@ -1,9 +1,11 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -31,7 +33,7 @@ public class ItemFactory {
             List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList();
             for (String s : lore)
                 if (s != null)
-                    finalLore.add(s.replace("&", "§"));
+                    finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
             itemMeta.setLore(finalLore);
         }
         itemStack.setItemMeta(itemMeta);
@@ -40,10 +42,10 @@ public class ItemFactory {
 
     public static void fillInventory(Inventory inventory) {
         if (SettingsManager.getConfig().getBoolean("Fill-Blank-Slots-With-Item.Enabled")) {
-            MaterialData materialData = getMaterialData(UltraCosmetics.config.getString("Fill-Blank-Slots-With-Item.Item"));
+            MaterialData materialData = getMaterialData(SettingsManager.getConfig().getString("Fill-Blank-Slots-With-Item.Item"));
             ItemStack itemStack = materialData.toItemStack(1);
             ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName("§7");
+            itemMeta.setDisplayName(ChatColor.GRAY + "");
             itemStack.setItemMeta(itemMeta);
             for (int i = 0; i < inventory.getSize(); i++) {
                 if (inventory.getItem(i) == null
@@ -92,6 +94,6 @@ public class ItemFactory {
     }
 
     public static ItemStack addGlow(ItemStack item) {
-        return UltraCosmetics.getInstance().getItemGlower().glow(item);
+        return UltraCosmeticsData.get().getVersionManager().getItemGlower().glow(item);
     }
 }

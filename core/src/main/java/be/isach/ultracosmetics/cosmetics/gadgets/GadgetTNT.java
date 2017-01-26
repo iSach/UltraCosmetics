@@ -1,8 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.*;
-import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,25 +18,25 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a TNT gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
 public class GadgetTNT extends Gadget {
 
     List<Entity> entities = new ArrayList<>();
 
-    public GadgetTNT(UUID owner) {
-        super(owner, GadgetType.TNT);
-        UltraCosmetics.getInstance().registerListener(this);
+    public GadgetTNT(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.TNT, ultraCosmetics);
     }
 
     @Override
     void onRightClick() {
-
         TNTPrimed tnt = getPlayer().getWorld().spawn(getPlayer().getLocation().add(0, 2, 0), TNTPrimed.class);
-        // vector stuff
+        // Vector stuff
         tnt.setFuseTicks(20);
         tnt.setVelocity(getPlayer().getLocation().getDirection().multiply(0.854321));
         entities.add(tnt);
@@ -96,12 +97,10 @@ public class GadgetTNT extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
-    void onUpdate() {
-
+    public void onUpdate() {
     }
 
     @Override

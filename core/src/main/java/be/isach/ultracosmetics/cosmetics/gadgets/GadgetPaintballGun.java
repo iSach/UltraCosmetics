@@ -1,11 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EntityType;
@@ -22,19 +23,21 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import java.util.*;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a paintball gun gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetPaintballGun extends Gadget implements Listener {
 
-    Map<UUID, ArrayList<Projectile>> projectiles = new HashMap();
+    Map<UUID, ArrayList<Projectile>> projectiles = new HashMap<>();
 
     int radius = 2;
 
-    public GadgetPaintballGun(UUID owner) {
-        super(owner, GadgetType.PAINTBALLGUN);
+    public GadgetPaintballGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.PAINTBALLGUN, ultraCosmetics);
         if (owner != null) {
-            UltraCosmetics.getInstance().registerListener(this);
-            radius = SettingsManager.getConfig().getInt("Gadgets." + getType().configName + ".Radius");
+            radius = SettingsManager.getConfig().getInt("Gadgets." + getType().getConfigName() + ".Radius");
         }
         displayCooldownMessage = false;
     }
@@ -42,12 +45,12 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     @Override
     void onRightClick() {
         Projectile projectile = getPlayer().launchProjectile(EnderPearl.class, getPlayer().getLocation().getDirection().multiply(2));
-        if (projectiles.containsKey(getOwner()))
-            projectiles.get(getOwner()).add(projectile);
+        if (projectiles.containsKey(getOwnerUniqueId()))
+            projectiles.get(getOwnerUniqueId()).add(projectile);
         else {
             ArrayList<Projectile> projectilesList = new ArrayList<>();
             projectilesList.add(projectile);
-            projectiles.put(getOwner(), projectilesList);
+            projectiles.put(getOwnerUniqueId(), projectilesList);
         }
         SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, 1.5f, 1.2f);
     }
@@ -101,10 +104,10 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             byte b = (byte) r.nextInt(15);
             Location center = event.getEntity().getLocation().add(event.getEntity().getVelocity());
             for (Block block : BlockUtils.getBlocksInRadius(center.getBlock().getLocation(), radius, false)) {
-                BlockUtils.setToRestore(block, Material.getMaterial((String) SettingsManager.getConfig().get("Gadgets." + getType().configName + ".Block-Type")), b, 20 * 3);
+                BlockUtils.setToRestore(block, Material.getMaterial((String) SettingsManager.getConfig().get("Gadgets." + getType().getConfigName() + ".Block-Type")), b, 20 * 3);
             }
-            if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().configName + ".Particle.Enabled")) {
-                Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().configName + ".Particle.Effect")).replace("_", ""));
+            if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().getConfigName() + ".Particle.Enabled")) {
+                Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().getConfigName() + ".Particle.Effect")).replace("_", ""));
                 UtilParticles.display(effect, 2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
             }
             event.getEntity().remove();
@@ -124,11 +127,10 @@ public class GadgetPaintballGun extends Gadget implements Listener {
         if (projectiles.containsKey(uuid)) {
             event.setCancelled(true);
         }
-
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
     }
 
     @EventHandler
@@ -149,6 +151,4 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     @Override
     void onLeftClick() {
     }
-
-
 }

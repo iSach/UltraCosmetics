@@ -1,14 +1,19 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.util.Random;
-import java.util.UUID;
 
 /**
- * Created by Sacha on 18/12/15.
+ * Represents an instance of crushed candy cane particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	12-18-2015
  */
 public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 
@@ -16,12 +21,16 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 
     private static Random random = new Random();
 
-    public ParticleEffectCrushedCandyCane(UUID owner) {
-        super(owner, ParticleEffectType.CRUSHEDCANDYCANE);
+    public ParticleEffectCrushedCandyCane(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.CRUSHEDCANDYCANE);
     }
 
     @Override
-    void onUpdate() {
+    protected void onEquip() {
+    }
+
+    @Override
+    public void onUpdate() {
         if (step > 360)
             step = 0;
         Location center = getPlayer().getEyeLocation().add(0, 0.6, 0);
@@ -44,5 +53,4 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
         else
             return (byte) 15;
     }
-
 }

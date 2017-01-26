@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.v1_10_R1.pets;
 
-import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.*;
 import net.minecraft.server.v1_10_R1.Entity;
 import net.minecraft.server.v1_10_R1.EntityInsentient;
@@ -28,7 +28,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
     public void follow(Player player) {
         if (player == null)
             return;
-        if (UltraCosmetics.getCustomPlayer(player).currentTreasureChest != null)
+        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).getCurrentTreasureChest() != null)
             return;
 
         Entity petEntity;

@@ -18,13 +18,34 @@ public class RideableSpider extends EntitySpider implements EntityBase, IMountCu
 
     public RideableSpider(World world) {
         super(world);
-        goalSelector = new PathfinderGoalSelector(new MethodProfiler());
-        targetSelector = new PathfinderGoalSelector(new MethodProfiler());
+    }
+
+    private void removeSelectors() {
+        try {
+            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
+            bField.setAccessible(true);
+            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
+            cField.setAccessible(true);
+            bField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
+            bField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
+            cField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
+            cField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeAi() {
+        removeSelectors();
     }
 
     @Override
     public void g(float sideMot, float forMot) {
-        if (!CustomEntities.customEntities.contains(this)) return;
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         EntityHuman passenger = null;
         if (!bv().isEmpty()) {
             passenger = (EntityHuman) bv().iterator().next();

@@ -1,7 +1,10 @@
 package be.isach.ultracosmetics;
 
 /**
- * Created by sacha on 16/08/15.
+ * Version.
+ * 
+ * @author 	iSach
+ * @since 	08-16-2015
  */
 public class Version implements Comparable<Version> {
 
@@ -20,11 +23,9 @@ public class Version implements Comparable<Version> {
     }
 
     @Override
-    public int compareTo(Version that) {
-        if (that == null)
-            return 1;
+    public int compareTo(Version otherVersion) {
         String[] thisParts = this.get().split("\\.");
-        String[] thatParts = that.get().split("\\.");
+        String[] thatParts = otherVersion.get().split("\\.");
         int length = Math.max(thisParts.length, thatParts.length);
         for (int i = 0; i < length; i++) {
             int thisPart = i < thisParts.length ?
@@ -41,13 +42,6 @@ public class Version implements Comparable<Version> {
 
     @Override
     public boolean equals(Object that) {
-        if (this == that)
-            return true;
-        if (that == null)
-            return false;
-        if (this.getClass() != that.getClass())
-            return false;
-        return this.compareTo((Version) that) == 0;
+        return this == that || that != null && this.getClass() == that.getClass() && this.compareTo((Version) that) == 0;
     }
-
 }

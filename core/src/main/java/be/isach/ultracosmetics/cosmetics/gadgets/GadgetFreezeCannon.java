@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
@@ -15,22 +17,24 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 /**
- * Created by Sacha on 15/12/15.
+ * 
+ * 
+ * @author 	iSach
+ * @since 	12-15-2015
  */
 public class GadgetFreezeCannon extends Gadget {
 
     private List<Item> items;
     private List<Item> queue;
 
-    public GadgetFreezeCannon(UUID owner) {
-        super(owner, GadgetType.FREEZECANNON);
+    public GadgetFreezeCannon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.FREEZECANNON, ultraCosmetics);
         if (owner == null) return;
         items = new ArrayList<>();
         queue = new ArrayList<>();
-        Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
+        Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
     }
 
     @Override
@@ -46,7 +50,7 @@ public class GadgetFreezeCannon extends Gadget {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         for (Item item : queue)
             items.add(item);
         queue.clear();
@@ -73,11 +77,9 @@ public class GadgetFreezeCannon extends Gadget {
         items.clear();
         items = null;
         queue = null;
-        unregisterListeners();
     }
 
     @Override
     void onLeftClick() {
     }
-
 }

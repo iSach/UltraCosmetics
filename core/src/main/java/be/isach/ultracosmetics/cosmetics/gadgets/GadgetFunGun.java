@@ -1,13 +1,14 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -16,20 +17,22 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
- * Created by Sacha on 12/10/15.
+* Represents an instance of a fungun gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-12-2015
  */
 public class GadgetFunGun extends Gadget {
 
     private List<Projectile> projectiles = new ArrayList<>();
 
-    public GadgetFunGun(UUID owner) {
-        super(owner, GadgetType.FUNGUN);
+    public GadgetFunGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.FUNGUN, ultraCosmetics);
 
         if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, UltraCosmetics.getInstance());
+            Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
     }
 
     @Override
@@ -59,7 +62,8 @@ public class GadgetFunGun extends Gadget {
     }
 
     @Override
-    void onUpdate() {}
+    public void onUpdate() {
+    }
 
     @Override
     public void onClear() {

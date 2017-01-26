@@ -21,11 +21,6 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 
     public RideableSpider(World world) {
         super(world);
-
-        if (!CustomEntities.customEntities.contains(this)) return;
-
-//        removeSelectors();
-        setAI(false);
     }
 
     private void removeSelectors() {
@@ -44,8 +39,16 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
     }
 
     @Override
+    public void removeAi() {
+        setAI(false);
+    }
+
+    @Override
     public void g(float sideMot, float forMot) {
-        if (!CustomEntities.customEntities.contains(this)) return;
+        if (!CustomEntities.customEntities.contains(this)) {
+            super.g(sideMot, forMot);
+            return;
+        }
         EntityHuman passenger = null;
         if (!bv().isEmpty()) {
             passenger = (EntityHuman) bv().get(0);
@@ -134,6 +137,5 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 
             entityBase.g_(sideMot, forMot);
         }
-
     }
 }

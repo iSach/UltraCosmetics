@@ -1,20 +1,20 @@
 package be.isach.ultracosmetics.config;
 
-import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.CustomConfiguration;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.UUID;
 
 /**
- * Created by sacha on 21/07/15.
+ * Settings manager.
+ * 
+ * @author 	iSach
+ * @since 	07-21-2015
  */
 public class SettingsManager {
 
@@ -22,7 +22,6 @@ public class SettingsManager {
     // Translation config file.
     private static SettingsManager messages = new SettingsManager("messages");
 
-    private static SettingsManager conf;
     public FileConfiguration fileConfiguration;
     private File file;
 
@@ -33,15 +32,15 @@ public class SettingsManager {
      */
     private SettingsManager(String fileName) {
 
-        if (!UltraCosmetics.getInstance().getDataFolder().exists()) {
-            UltraCosmetics.getInstance().getDataFolder().mkdir();
+        if (!UltraCosmeticsData.get().getPlugin().getDataFolder().exists()) {
+            UltraCosmeticsData.get().getPlugin().getDataFolder().mkdir();
         }
 
-        File f = new File(UltraCosmetics.getInstance().getDataFolder(), "/data");
+        File f = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), "/data");
         if (!f.exists())
             f.mkdirs();
 
-        file = new File(UltraCosmetics.getInstance().getDataFolder(), fileName + ".yml");
+        file = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), fileName + ".yml");
 
         if (!file.exists()) {
             try {
@@ -56,12 +55,10 @@ public class SettingsManager {
 
     /**
      * Creates a new file and defines fileConfiguration and file.
-     *
-     * @param fileName
      */
     private SettingsManager() {
-        file = new File(UltraCosmetics.getInstance().getDataFolder(), "config.yml");
-        fileConfiguration = UltraCosmetics.config;
+        file = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), "config.yml");
+        fileConfiguration = UltraCosmeticsData.get().getPlugin().getConfig();
     }
 
     /**
@@ -79,7 +76,7 @@ public class SettingsManager {
      * @return the messages SettingsManager.
      */
     public static CustomConfiguration getConfig() {
-        return UltraCosmetics.config;
+        return UltraCosmeticsData.get().getPlugin().getConfig();
     }
 
     /**
@@ -103,7 +100,7 @@ public class SettingsManager {
     }
 
     public static boolean hasData(UUID uuid) {
-        return Arrays.asList(UltraCosmetics.getInstance().getDataFolder()
+        return Arrays.asList(UltraCosmeticsData.get().getPlugin().getDataFolder()
                 .listFiles()).contains(new File(uuid.toString() + ".yml"));
     }
 
@@ -187,7 +184,6 @@ public class SettingsManager {
         return cs;
     }
 
-
     @SuppressWarnings("unchecked")
     public <T> T get(String path) {
         return (T) fileConfiguration.get(path);
@@ -200,5 +196,4 @@ public class SettingsManager {
     public boolean contains(String path) {
         return fileConfiguration.contains(path);
     }
-
 }

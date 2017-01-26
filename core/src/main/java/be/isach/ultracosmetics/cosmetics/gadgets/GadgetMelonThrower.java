@@ -1,13 +1,14 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +24,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+* Represents an instance of a melon thrower gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
  */
 public class GadgetMelonThrower extends Gadget implements Listener {
 
@@ -32,9 +36,8 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     ArrayList<Item> melons = new ArrayList<>();
     ArrayList<Item> melonBlocks = new ArrayList<>();
 
-    public GadgetMelonThrower(UUID owner) {
-        super(owner, GadgetType.MELONTHROWER);
-        UltraCosmetics.getInstance().registerListener(this);
+    public GadgetMelonThrower(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, GadgetType.MELONTHROWER,ultraCosmetics);
     }
 
     @EventHandler
@@ -61,10 +64,11 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     }
 
     @Override
-    void onUpdate() {
+    public void onUpdate() {
         try {
-            Bukkit.getScheduler().runTask(UltraCosmetics.getInstance(), new Runnable() {
-                @Override
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
+                @SuppressWarnings("deprecation")
+				@Override
                 public void run() {
                     Iterator<Item> melonBlockIterator = melonBlocks.iterator();
                     while (melonBlockIterator.hasNext()) {
@@ -75,7 +79,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
                                 final Item melon = getPlayer().getWorld().dropItem(item.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UUID.randomUUID().toString()));
                                 melon.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
                                 melons.add(melon);
-                                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new BukkitRunnable() {
+                                Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
                                     @Override
                                     public void run() {
                                         if (melon.isValid()) {
@@ -102,7 +106,6 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 
         for (Item melonBlock : melonBlocks)
             melonBlock.remove();
-
     }
 
     @Override

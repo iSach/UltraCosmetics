@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -14,27 +16,25 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by Matthew on 23/01/16.
- * Copy from iSach's Dragon Mount
+* Represents an instance of a flying ship mount.
+ * 
+ * @author 	iSach
+ * @author 	Matthew
+ * @since 	01-23-2016
  */
-public class MountFlyingShip extends Mount {
+public class MountFlyingShip extends Mount<Boat> {
 
     long nextAllowTime = 0;
     Entity currentboom = null;
-    //ArmorStand nameTag = null;
+    // ArmorStand nameTag = null;
 
-    public MountFlyingShip(UUID owner) {
-        super(owner, MountType.FLYINGSHIP);
-        if (owner != null)
-            UltraCosmetics.getInstance().registerListener(this);
-        //  spawnNameTag();
+    public MountFlyingShip(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.FLYINGSHIP, ultraCosmetics);
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         if (entity.getPassenger() == null)
             clear();
 
@@ -50,16 +50,17 @@ public class MountFlyingShip extends Mount {
         vector.setX(-h * Math.sin(Math.toRadians(rotX)));
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
-        UltraCosmetics.getInstance().getEntityUtil().moveShip(getPlayer(), entity, vector);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveShip(getPlayer(), entity, vector);
 
         if (currentboom != null) {
             if (currentboom.isDead()) {
                 currentboom = null;
                 return;
             }
-            SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.0f, 1.0f);
+            SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS);
             if (currentboom.isOnGround()) {
                 Location l = currentboom.getLocation().clone();
+
                 for (Entity i : currentboom.getNearbyEntities(3, 3, 3)) {
                     double dX = i.getLocation().getX() - currentboom.getLocation().getX();
                     double dY = i.getLocation().getY() - currentboom.getLocation().getY();
@@ -84,20 +85,19 @@ public class MountFlyingShip extends Mount {
              nameTag = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
              nameTag.setVisible(false);
              nameTag.setSmall(true);
-             nameTag.setCustomName(getType().getName(getPlayer()));
+             nameTag.setCustomName(getGadgetType().getName(getBukkitPlayer()));
              nameTag.setCustomNameVisible(true);
              //hide name of ent
              ent.setCustomNameVisible(false);
-             nameTag.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.getInstance(),"C_AD_ArmorStand"));
-             //getPlayer().setPassenger(nameTag);
+             nameTag.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.get(),"C_AD_ArmorStand"));
+             //getBukkitPlayer().setPassenger(nameTag);
         }
-        */
+    */
     @EventHandler
     public void stopBoatDamage(EntityExplodeEvent event) {
         Entity e = event.getEntity();
         if (e == entity)
             event.setCancelled(true);
-
     }
 
     @EventHandler
@@ -129,8 +129,6 @@ public class MountFlyingShip extends Mount {
                 ((Animals) currentboom).setBreed(false);
             }
         }
-
-
     }
 
     @EventHandler
@@ -165,5 +163,4 @@ public class MountFlyingShip extends Mount {
     	}
     	*/
     }
-
 }

@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -19,40 +21,37 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 27/08/15.
+* Represents an instance of a chicken morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-27-2015
  */
 public class MorphChicken extends Morph {
 
     private boolean cooldown;
 
-    public MorphChicken(UUID owner) {
-        super(owner, MorphType.CHICKEN);
+    public MorphChicken(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.CHICKEN, ultraCosmetics);
 
         if (owner != null) {
-
-            UltraCosmetics.getInstance().registerListener(this);
-
             final MorphChicken chicken = this;
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (getPlayer() == null
-                            || UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph != chicken) {
+                            || getOwner().getCurrentMorph() != chicken) {
                         cancel();
                         return;
                     }
-
-                    UltraCosmetics.getInstance().getEntityUtil().chickenFall(getPlayer());
-
+                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().chickenFall(getPlayer());
                 }
-            }.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
+            }.runTaskTimer(getUltraCosmetics(), 0, 1);
         }
     }
 
-
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        if (event.getPlayer() == getPlayer() && UltraCosmetics.getCustomPlayer(getPlayer()).currentMorph == this && !cooldown) {
+        if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
             final List<Item> items = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
                 final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(Material.EGG, (byte) 0x0, UUID.randomUUID().toString()));
@@ -61,7 +60,7 @@ public class MorphChicken extends Morph {
                 i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5));
                 SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, .5f, 1.5f);
             }
-            Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                 BukkitRunnable followRunnable;
 
                 @Override
@@ -83,14 +82,14 @@ public class MorphChicken extends Morph {
                         public void run() {
                             try {
                                 for (Chicken chicken : chickens) {
-                                    UltraCosmetics.getInstance().getEntityUtil().follow(getPlayer(), chicken);
+                                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().follow(getPlayer(), chicken);
                                 }
                             } catch (Exception exc) {
                             }
                         }
                     };
-                    followRunnable.runTaskTimer(UltraCosmetics.getInstance(), 0, 1);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmetics.getInstance(), new Runnable() {
+                    followRunnable.runTaskTimer(getUltraCosmetics(), 0, 1);
+                    Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                         @Override
                         public void run() {
                             for (Chicken chicken : chickens) {
@@ -104,12 +103,16 @@ public class MorphChicken extends Morph {
                 }
             }, 50);
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmetics.getInstance(), new Runnable() {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
                 @Override
                 public void run() {
                     cooldown = false;
                 }
             }, 30 * 20);
         }
+    }
+
+    @Override
+    protected void onEquip() {
     }
 }

@@ -2,15 +2,16 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.cosmetics.emotes.EmoteType;
-import be.isach.ultracosmetics.cosmetics.gadgets.GadgetType;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphType;
-import be.isach.ultracosmetics.cosmetics.mounts.MountType;
-import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffectType;
-import be.isach.ultracosmetics.cosmetics.pets.PetType;
+import be.isach.ultracosmetics.cosmetics.type.HatType;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.EmoteType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.suits.SuitType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,10 +28,10 @@ public class GeneralUtil {
     /**
      * Print permissions in a permissions.txt file.
      */
-    public static void printPermissions() {
+    public static void printPermissions(UltraCosmetics ultraCosmetics) {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(new File(UltraCosmetics.getInstance().getDataFolder(), "permissions.yml"), "UTF-8");
+            writer = new PrintWriter(new File(ultraCosmetics.getDataFolder(), "permissions.yml"), "UTF-8");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -41,7 +42,7 @@ public class GeneralUtil {
         Date date = new Date();
 
         writer.println();
-        writer.println("UltraCosmetics v" + UltraCosmetics.currentVersion + " permissions.");
+        writer.println("UltraCosmetics v" + ultraCosmetics.getUpdateChecker().getCurrentVersion() + " permissions.");
         writer.println("Generated automatically on " + dateFormat.format(date));
         writer.println();
         writer.println();
@@ -52,7 +53,7 @@ public class GeneralUtil {
         writer.println("");
         writer.println("Commands:");
         writer.println("  - ultracosmetics.command.*");
-        for (SubCommand subCommand : UltraCosmetics.getInstance().getCommandManager().commands)
+        for (SubCommand subCommand : ultraCosmetics.getCommandManager().getCommands())
             writer.println("  - " + subCommand.getPermission());
         writer.println("");
         writer.println("Gadgets:");
@@ -77,7 +78,7 @@ public class GeneralUtil {
         writer.println("");
         writer.println("Hats:");
         writer.println("  - ultracosmetics.hats.*");
-        for (Hat hat : Hat.values())
+        for (HatType hat : HatType.values())
             writer.println("  - " + hat.getPermission());
         writer.println("");
         writer.println("Particle Effects:");
@@ -87,7 +88,8 @@ public class GeneralUtil {
         writer.println("");
         writer.println("Suits:");
         writer.println("  - ultracosmetics.suits.*");
-        for (SuitType suit : SuitType.values()) {
+        for (CosmeticType cosmeticType : SuitType.values()) {
+            SuitType suit = ((SuitType) cosmeticType);
             writer.println("  - ultracosmetics.suits." + suit.getConfigName().toLowerCase() + ".*");
             for (ArmorSlot armorSlot : ArmorSlot.values())
                 writer.println("  - " + suit.getPermission(armorSlot));
