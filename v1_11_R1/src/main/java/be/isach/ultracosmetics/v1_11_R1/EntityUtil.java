@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.v1_11_R1.nms.WrapperEntityLiving;
 import be.isach.ultracosmetics.v1_11_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
@@ -20,7 +19,6 @@ import org.bukkit.craftbukkit.v1_11_R1.entity.*;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
 import org.bukkit.inventory.Inventory;
@@ -98,9 +96,13 @@ public class EntityUtil implements IEntityUtil {
     public void clearBlizzard(Player player) {
         if (!fakeArmorStandsMap.containsKey(player)) return;
 
-        for (EntityArmorStand as : fakeArmorStandsMap.get(player))
-            for (Player pl : player.getWorld().getPlayers())
+        for (EntityArmorStand as : fakeArmorStandsMap.get(player)) {
+            if(as == null) {continue;}
+            for (Player pl : player.getWorld().getPlayers()) {
                 PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
+            }
+        }
+
         fakeArmorStandsMap.remove(player);
         cooldownJumpMap.remove(player);
     }

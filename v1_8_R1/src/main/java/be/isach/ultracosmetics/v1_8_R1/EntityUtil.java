@@ -79,8 +79,12 @@ public class EntityUtil implements IEntityUtil {
         Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
             @Override
             public void run() {
-                for (Player pl : player.getWorld().getPlayers())
+                for (Player pl : player.getWorld().getPlayers()) {
+                    if(as == null) {
+                        continue;
+                    }
                     PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
+                }
                 fakeArmorStands.remove(as);
             }
         }, 20);

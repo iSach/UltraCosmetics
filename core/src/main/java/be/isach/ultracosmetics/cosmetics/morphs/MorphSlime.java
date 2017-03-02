@@ -24,10 +24,6 @@ public class MorphSlime extends Morph {
 
     public MorphSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.SLIME, ultraCosmetics);
-        if(owner != null) {
-            SlimeWatcher slimeWatcher = (SlimeWatcher)disguise.getWatcher();
-            slimeWatcher.setSize(3);
-        }
     }
 
     @EventHandler
@@ -58,5 +54,12 @@ public class MorphSlime extends Morph {
 
     @Override
     protected void onEquip() {
+        SlimeWatcher slimeWatcher = (SlimeWatcher)disguise.getWatcher();
+        slimeWatcher.setSize(3);
+    }
+
+    @Override
+    public void onUpdate() {
+
     }
 }

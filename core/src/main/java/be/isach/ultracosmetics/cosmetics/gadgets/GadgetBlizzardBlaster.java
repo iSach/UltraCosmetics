@@ -46,6 +46,10 @@ public class GadgetBlizzardBlaster extends Gadget {
             return;
         }
 
+        if(location == null || vector == null) {
+            return;
+        }
+
         if (location.getBlock().getType() != Material.AIR
                 && location.getBlock().getType().isSolid()) {
             location.add(0, 1, 0);

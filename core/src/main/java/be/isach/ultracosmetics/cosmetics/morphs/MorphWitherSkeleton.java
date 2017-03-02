@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,17 +36,20 @@ public class MorphWitherSkeleton extends Morph {
         super(owner, MorphType.WITHERSKELETON, ultraCosmetics);
     }
 
+    @Override
+    protected void onEquip() {
+    }
+
+    @Override
+    public void onUpdate() {
+
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSneak(PlayerToggleSneakEvent event) {
-        if (event.getPlayer() == getPlayer()
-                && !inCooldown) {
+        if (event.getPlayer() == getPlayer() && !inCooldown) {
             inCooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                @Override
-                public void run() {
-                    inCooldown = false;
-                }
-            }, 200);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> inCooldown = false, 200);
             for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {
                 if (ent instanceof Player || ent instanceof Creature)
                     MathUtils.applyVelocity(ent, ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).setY(1));
@@ -54,21 +58,15 @@ public class MorphWitherSkeleton extends Morph {
             for (int i = 0; i < 20; i++) {
                 Item bone = getPlayer().getWorld().dropItem(getPlayer().getLocation().add(Math.random() * 5.0D - 2.5D, Math.random() * 3.0D, Math.random() * 5.0D - 2.5D), ItemFactory.create(Material.BONE, (byte) 0, UUID.randomUUID().toString()));
                 bone.setVelocity(MathUtils.getRandomVector());
+                bone.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
                 items.add(bone);
             }
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                @Override
-                public void run() {
-                    for (Entity bone : items)
-                        bone.remove();
-                    items.clear();
-                }
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> {
+                for (Entity bone : items)
+                    bone.remove();
+                items.clear();
             }, 50);
             SoundUtil.playSound(getPlayer(), Sounds.SKELETON_HURT, 0.4f, (float) Math.random() + 1f);
         }
-    }
-
-    @Override
-    protected void onEquip() {
     }
 }

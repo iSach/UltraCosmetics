@@ -26,10 +26,6 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
     }
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
         if (step > 360)
             step = 0;

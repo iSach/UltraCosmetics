@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class MorphSnowman extends Morph {
 
 	private long coolDown = 0;
+
     public MorphSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.SNOWNMAN, ultraCosmetics);
     }
@@ -34,5 +35,10 @@ public class MorphSnowman extends Morph {
 
     @Override
     protected void onEquip() {
+    }
+
+    @Override
+    public void onUpdate() {
+
     }
 }

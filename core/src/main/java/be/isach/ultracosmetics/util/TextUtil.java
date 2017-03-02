@@ -23,7 +23,7 @@ public class TextUtil {
      * @param toFilter The text to filter.
      * @return The filtered text.
      */
-    private static CharSequence filterColor(String toFilter) {
+    public static CharSequence filterColor(String toFilter) {
         return ChatColor.stripColor(toFilter);
     }
 }

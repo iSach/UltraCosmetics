@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Created by sacha on 11/01/17.
  */
-public abstract class MountHorse<E extends AbstractHorse> extends Mount<E> {
+public abstract class MountHorse extends Mount<Horse> {
 
     public MountHorse(UltraPlayer ultraPlayer, MountType type, UltraCosmetics ultraCosmetics) {
         super(ultraPlayer, type, ultraCosmetics);
@@ -32,18 +32,9 @@ public abstract class MountHorse<E extends AbstractHorse> extends Mount<E> {
         }
 
         EntityType entityType = getType().getEntityType();
-        if (getVariant() == Horse.Variant.DONKEY) {
-            entityType = EntityType.DONKEY;
-        } else if (getVariant() == Horse.Variant.SKELETON_HORSE) {
-            entityType = EntityType.SKELETON_HORSE;
-        } else if (getVariant() == Horse.Variant.MULE) {
-            entityType = EntityType.MULE;
-        } else if (getVariant() == Horse.Variant.UNDEAD_HORSE) {
-            entityType = EntityType.ZOMBIE_HORSE;
-        }
 
         EntitySpawningManager.setBypass(true);
-        this.entity = (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), entityType);
+        this.entity = (Horse) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), entityType);
         EntitySpawningManager.setBypass(false);
         if (entity instanceof Ageable) {
             entity.setAdult();

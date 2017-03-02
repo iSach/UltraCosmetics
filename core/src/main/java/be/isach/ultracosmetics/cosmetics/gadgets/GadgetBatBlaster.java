@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,7 +26,6 @@ public class GadgetBatBlaster extends Gadget {
     private boolean active = false;
     private Location playerVelocity;
     private List<Bat> bats;
-
 
     public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.BATBLASTER, ultraCosmetics);
@@ -41,7 +41,7 @@ public class GadgetBatBlaster extends Gadget {
             this.bats.add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
         }
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), this::onClear, 60);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), this::clean, 60);
     }
 
     public boolean hitPlayer(Location location, Player player) {
@@ -65,7 +65,7 @@ public class GadgetBatBlaster extends Gadget {
 
     @Override
     public void onUpdate() {
-        if (active) {
+        if (active && playerVelocity != null && bats != null) {
             bats.stream().filter(Entity::isValid).forEachOrdered(bat -> {
                 Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D);
                 bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
@@ -105,13 +105,17 @@ public class GadgetBatBlaster extends Gadget {
         active = false;
         playerVelocity = null;
         if (bats != null) {
-            for (Bat bat : bats) {
-                if (bat.isValid()) {
-                    UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+            synchronized (bats) {
+                for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
+                    Bat bat = iterator.next();
+                    if (bat.isValid()) {
+                        UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+                    }
+                    bat.remove();
+                    iterator.remove();
                 }
-                bat.remove();
             }
-            this.bats.clear();
+            bats.clear();
         }
     }
 

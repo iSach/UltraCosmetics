@@ -160,6 +160,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             }
         } catch (NullPointerException exc) {
             clear();
+            exc.printStackTrace();
         }
     }
 
@@ -274,9 +275,13 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     @EventHandler
     public void onInventoryClickAmmo(final InventoryClickEvent event) {
-        if (event.getWhoClicked() == getPlayer() && ammoInventory != null && InventoryUtils.areSame(event.getWhoClicked().getOpenInventory().getTopInventory(), ammoInventory)) {
+        if (event.getWhoClicked() == getPlayer()
+                && ammoInventory != null
+                && InventoryUtils.areSame(event.getWhoClicked().getOpenInventory().getTopInventory(), ammoInventory)) {
             event.setCancelled(true);
-            if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta() && event.getCurrentItem().getItemMeta().hasDisplayName()) {
+            if (event.getCurrentItem() != null
+                    && event.getCurrentItem().hasItemMeta()
+                    && event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 String displayName = event.getCurrentItem().getItemMeta().getDisplayName();
                 String purchase = MessageManager.getMessage("Purchase");
                 String cancel = MessageManager.getMessage("Cancel");
@@ -344,8 +349,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             ultraPlayer.removeAmmo(getType().toString().toLowerCase());
-            itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(), ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
-            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), getItemStack());
+            itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(), ChatColor.WHITE
+                    + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(),
+                    MessageManager.getMessage("Gadgets.Lore"));
+            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
         }
         if (event.getClickedBlock() != null
                 && event.getClickedBlock().getType() != Material.AIR)

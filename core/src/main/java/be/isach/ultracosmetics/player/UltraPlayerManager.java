@@ -63,7 +63,7 @@ public class UltraPlayerManager {
         Collection<UltraPlayer> set = playerCache.values();
         for (UltraPlayer cp : set) {
             if (cp.getCurrentTreasureChest() != null)
-                cp.getCurrentTreasureChest().getTreasurePlacer().forceOpen(0);
+                cp.getCurrentTreasureChest().forceOpen(0);
             cp.clear();
             cp.removeMenuItem();
         }

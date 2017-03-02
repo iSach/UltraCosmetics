@@ -6,13 +6,21 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import static be.isach.ultracosmetics.manager.TreasureChestManager.tryOpenChest;
 
 /**
  * Main {@link be.isach.ultracosmetics.menu.Menu Menu}.
- * 
- * @author 	iSach
- * @since 	08-23-2016
+ *
+ * @author iSach
+ * @since 08-23-2016
  */
 public class MenuMain extends Menu {
 
@@ -71,6 +79,41 @@ public class MenuMain extends Menu {
             int slot = layout[i];
             Category category = Category.enabled().get(i);
             putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
+        }
+
+
+        if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
+            ItemStack chest;
+
+            String msgChests = MessageManager.getMessage("Treasure-Chests");
+            if (player.getKeys() == 0) {
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), getUltraCosmetics().isVaultLoaded() ?
+                        "" : null, getUltraCosmetics().isVaultLoaded() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().isVaultLoaded() ? "" : null);
+            }else {
+                chest = ItemFactory.create(Material.CHEST, (byte) 0x0, msgChests, "", MessageManager.getMessage("Click-Open-Chest"), "");
+            }
+            ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "",
+                    MessageManager.getMessage("Your-Keys").replace("%keys%", player.getKeys() + ""), getUltraCosmetics().isVaultLoaded() ?
+                            "" : null, getUltraCosmetics().isVaultLoaded() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().isVaultLoaded() ? "" : null);
+            
+            putItem(inventory, 5, keys, (data) -> {
+                if (!getUltraCosmetics().isVaultLoaded() && player.getKeys() == 0) {
+                    SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
+                    return;
+                }
+                player.getBukkitPlayer().closeInventory();
+                player.openKeyPurchaseMenu();
+            });
+
+            putItem(inventory, 3, chest, (data) -> {
+                if (!getUltraCosmetics().isVaultLoaded()
+                        && player.getKeys() == 0) {
+                    SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
+                    return;
+                }
+                tryOpenChest(player.getBukkitPlayer());
+            });
+
         }
     }
 

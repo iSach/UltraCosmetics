@@ -114,8 +114,4 @@ public class ParticleEffectSuperHero extends ParticleEffect {
         final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90))));
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
     }
-
-    @Override
-    protected void onEquip() {
-    }
 }

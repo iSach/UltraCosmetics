@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -26,9 +27,11 @@ public class MorphEnderman extends Morph {
 
     public MorphEnderman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.ENDERMAN, ultraCosmetics);
-        if (owner != null) {
-            getPlayer().setAllowFlight(true);
-        }
+    }
+
+    @Override
+    protected void onEquip() {
+        getPlayer().setAllowFlight(true);
     }
 
     @EventHandler
@@ -59,6 +62,19 @@ public class MorphEnderman extends Morph {
         }
     }
 
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(event.getEntity() == getPlayer()
+                && getOwner().getCurrentMorph() == this) {
+            event.setCancelled(true);
+        }
+    }
+
+    @Override
+    public void onUpdate() {
+
+    }
+
     public static FireworkEffect getRandomFireworkEffect() {
         FireworkEffect.Builder builder = FireworkEffect.builder();
         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(0, 0, 0)).withFade(Color.fromRGB(0, 0, 0)).build();
@@ -75,20 +91,10 @@ public class MorphEnderman extends Morph {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                for (Firework f : fireworks)
-                    f.detonate();
-            }
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            for (Firework f : fireworks)
+                f.detonate();
         }, 2);
-    }
-
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION
-                && event.getEntity() == getPlayer())
-            event.setCancelled(true);
     }
 
     @Override
@@ -96,9 +102,5 @@ public class MorphEnderman extends Morph {
         if (getPlayer().getGameMode() != GameMode.CREATIVE) {
             getPlayer().setAllowFlight(false);
         }
-    }
-
-    @Override
-    protected void onEquip() {
     }
 }

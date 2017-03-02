@@ -24,7 +24,7 @@ import java.util.Random;
  * @author 	iSach
  * @since 	08-10-2015
  */
-public class MountOfWater extends MountHorse<Horse> {
+public class MountOfWater extends MountHorse {
 
     public MountOfWater(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.MOUNTOFWATER, ultraCosmetics);

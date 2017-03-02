@@ -105,15 +105,10 @@ public class UltraCosmeticsData {
             treasureChests = true;
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Treasure Chests' Money Loot requires Vault!");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Money Loot is turned off!");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "");
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "-------------------------");
+                ultraCosmetics.getSmartLogger().write("-------------------------");
+                ultraCosmetics.getSmartLogger().write("Treasure Chests' Money Loot requires Vault!");
+                ultraCosmetics.getSmartLogger().write("Money Loot is turned off!");
+                ultraCosmetics.getSmartLogger().write("-------------------------");
                 moneyTreasureLoot = false;
             }
         }

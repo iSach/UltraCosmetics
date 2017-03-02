@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
@@ -17,7 +18,7 @@ import java.util.UUID;
  * @author 	iSach
  * @since 	08-03-2015
  */
-public abstract class Morph extends Cosmetic<MorphType> {
+public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
 
     /**
      * The MobDiguise
@@ -33,19 +34,33 @@ public abstract class Morph extends Cosmetic<MorphType> {
 
     public Morph(UltraPlayer owner, MorphType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MORPHS, owner, type);
+    }
 
-        if (owner.getCurrentMorph() != null) {
-            owner.removeMorph();
+    @Override
+    protected void onEquip() {
+        if (getOwner().getCurrentMorph() != null) {
+            getOwner().removeMorph();
         }
 
-        owner.setCurrentMorph(this);
+        getOwner().setCurrentMorph(this);
 
         disguise = new MobDisguise(getType().getDisguiseType());
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 
-        if (!owner.canSeeSelfMorph()) {
+        if (!getOwner().canSeeSelfMorph()) {
             disguise.setViewSelfDisguise(false);
         }
+
+        runTaskTimer(getUltraCosmetics(), 0, 1);
+    }
+
+    @Override
+    public void run() {
+        if (getPlayer() == null || getOwner().getCurrentMorph() != this) {
+            return;
+        }
+
+        onUpdate();
     }
 
     /**
@@ -55,12 +70,6 @@ public abstract class Morph extends Cosmetic<MorphType> {
     protected void onClear() {
         DisguiseAPI.undisguiseToAll(getPlayer());
         getOwner().setCurrentMorph(null);
-        owner = null;
-        
-        try {
-            HandlerList.unregisterAll(this);
-        } catch (Exception exc) {
-        }
     }
 
     /**

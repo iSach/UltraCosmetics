@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.treasurechests;
 
-import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.config.TreasureManager;
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.material.MaterialData;
 
@@ -17,8 +17,10 @@ public class TreasureChestDesign {
     private MaterialData barriers;
     private ChestType chestType;
     private Particles effect;
+    private String path;
 
     public TreasureChestDesign(String path) {
+        this.path = path;
         String center = g(path + ".center-block"),
                 blocks2 = g(path + ".around-center"),
                 blocks3 = g(path + ".third-blocks"),
@@ -49,7 +51,7 @@ public class TreasureChestDesign {
     }
 
     private String g(String s) {
-        return TreasureManager.getDesignFile().getString("Designs." + s);
+        return UltraCosmeticsData.get().getPlugin().getConfig().getString("TreasureChests.Designs." + s);
     }
 
     public ChestType getChestType() {

@@ -15,18 +15,25 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
 /**
-* Represents an instance of a bat morph summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-26-2015
+ * Represents an instance of a bat morph summoned by a player.
+ *
+ * @author iSach
+ * @since 08-26-2015
  */
 public class MorphBat extends Morph {
 
     public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.BAT, ultraCosmetics);
-        if (owner != null) {
-            getPlayer().setAllowFlight(true);
-        }
+    }
+
+    @Override
+    protected void onEquip() {
+        getPlayer().setAllowFlight(true);
+    }
+
+    @Override
+    public void onUpdate() {
+        //--
     }
 
     @EventHandler
@@ -45,19 +52,8 @@ public class MorphBat extends Morph {
 
     @Override
     public void onClear() {
-        if (getPlayer().getGameMode() != GameMode.CREATIVE)
+        if (getPlayer().getGameMode() != GameMode.CREATIVE) {
             getPlayer().setAllowFlight(false);
-        DisguiseAPI.undisguiseToAll(getPlayer());
-        getOwner().setCurrentMorph(null);
-        owner = null;
-        
-        try {
-            HandlerList.unregisterAll(this);
-        } catch (Exception exc) {
         }
-    }
-
-    @Override
-    protected void onEquip() {
     }
 }

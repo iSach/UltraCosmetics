@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.v1_10_R1.nms.WrapperEntityLiving;
 import be.isach.ultracosmetics.v1_10_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
@@ -77,8 +76,12 @@ public class EntityUtil implements IEntityUtil {
         }
         UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
         Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
-            for (Player pl : player.getWorld().getPlayers())
+            for (Player pl : player.getWorld().getPlayers()) {
+                if(as == null) {
+                    continue;
+                }
                 PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
+            }
             fakeArmorStands.remove(as);
         }, 20);
         if (affectPlayers)

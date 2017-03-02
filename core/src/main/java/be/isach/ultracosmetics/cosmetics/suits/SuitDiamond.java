@@ -15,4 +15,9 @@ public class SuitDiamond extends Suit {
     public SuitDiamond(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
         super(owner, armorSlot, SuitType.DIAMOND, ultraCosmetics);
     }
+
+    @Override
+    public void onUpdate() {
+
+    }
 }

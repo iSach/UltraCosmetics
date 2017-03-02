@@ -26,10 +26,6 @@ public class ParticleEffectFrostLord extends ParticleEffect {
     }
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
         for (int i = 0; i < 6; i++) {
             Location location = getPlayer().getLocation();

@@ -129,26 +129,26 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     public void onUpdate() {
-        if (pearl != null && pearl.isValid()) {
-            getPlayer().eject();
-            pearl.setPassenger(getPlayer());
-
-            if(getPlayer().isOnGround()) {
-                pearl.remove();
-                pearl = null;
-            }
-        } else {
-            pearl.remove();
-            getPlayer().eject();
-
-            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-                getPlayer().setAllowFlight(false);
-            }
-
-            pearl = null;
-            spawnRandomFirework(getPlayer().getLocation());
-            cancel();
-        }
+//        if (pearl != null && pearl.isValid()) {
+//            getPlayer().eject();
+//            pearl.setPassenger(getPlayer());
+//
+//            if(getPlayer().isOnGround()) {
+//                pearl.remove();
+//                pearl = null;
+//            }
+//        } else {
+//            pearl.remove();
+//            getPlayer().eject();
+//
+//            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+//                getPlayer().setAllowFlight(false);
+//            }
+//
+//            pearl = null;
+//            spawnRandomFirework(getPlayer().getLocation());
+//            cancel();
+//        }
     }
 
     @Override

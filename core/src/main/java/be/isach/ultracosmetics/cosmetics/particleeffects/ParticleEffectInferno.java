@@ -53,8 +53,4 @@ public class ParticleEffectInferno extends ParticleEffect {
                 steps[i] += 4;
         }
     }
-
-    @Override
-    protected void onEquip() {
-    }
 }

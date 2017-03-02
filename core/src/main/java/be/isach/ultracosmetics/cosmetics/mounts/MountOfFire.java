@@ -23,7 +23,7 @@ import java.util.Random;
  * @author 	iSach
  * @since 	08-10-2015
  */
-public class MountOfFire extends MountHorse<Horse> {
+public class MountOfFire extends MountHorse {
 
     public MountOfFire(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.MOUNTOFFIRE, ultraCosmetics);

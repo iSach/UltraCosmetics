@@ -32,10 +32,6 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
     }
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
         if (getPlayer().getWorld() != currentLocation.getWorld()
                 || getPlayer().getWorld() != targetLocation.getWorld()) {

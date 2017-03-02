@@ -1,5 +1,7 @@
 package be.isach.ultracosmetics.run;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -29,14 +31,20 @@ public class FallDamageManager extends BukkitRunnable {
 
     @Override
     public void run() {
+        List<Entity> toRemove = new ArrayList<>();
         synchronized (noFallDamage) {
             for (Iterator<Entity> iterator = noFallDamage.iterator(); iterator.hasNext(); ) {
                 Entity ent = iterator.next();
                 if (ent.isOnGround()) {
-                    iterator.remove();
+                    toRemove.add(ent);
                 }
             }
         }
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
+            for(Entity entity : toRemove) {
+                noFallDamage.remove(entity);
+            }
+        }, 5);
         noFallDamage.addAll(queue);
         queue.clear();
     }

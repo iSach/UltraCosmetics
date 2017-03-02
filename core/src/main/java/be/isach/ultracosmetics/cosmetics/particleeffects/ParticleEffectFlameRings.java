@@ -21,9 +21,6 @@ public class ParticleEffectFlameRings extends ParticleEffect {
         super(ultraCosmetics, owner, ParticleEffectType.FLAMERINGS);
     }
 
-    @Override
-    protected void onEquip() {
-    }
 
     @Override
     public void onUpdate() {

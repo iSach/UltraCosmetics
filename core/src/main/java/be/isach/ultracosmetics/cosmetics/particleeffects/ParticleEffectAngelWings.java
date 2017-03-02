@@ -35,10 +35,6 @@ public class ParticleEffectAngelWings extends ParticleEffect {
     };
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
         drawParticles(getPlayer().getLocation());
     }

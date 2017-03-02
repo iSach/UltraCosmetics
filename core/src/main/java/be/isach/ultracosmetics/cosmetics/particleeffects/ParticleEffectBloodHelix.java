@@ -23,10 +23,6 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
     }
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
         Location location = getPlayer().getLocation();
         Location location2 = location.clone();

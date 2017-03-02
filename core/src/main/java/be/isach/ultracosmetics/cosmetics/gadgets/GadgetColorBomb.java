@@ -18,10 +18,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
-* Represents an instance of a color bomb gadget summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-03-2015
+ * Represents an instance of a color bomb gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class GadgetColorBomb extends Gadget {
 
@@ -47,13 +47,9 @@ public class GadgetColorBomb extends Gadget {
         if (bomb != null && bomb.isValid() && !running && bomb.isOnGround()) {
             running = true;
             bomb.setVelocity(new Vector(0, 0, 0));
-            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-                @Override
-                public void run() {
-                    onClear();
-                }
-            }, 100);
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> onClear(), 100);
         }
+
         if (running) {
             Particles effect;
             switch (MathUtils.random.nextInt(5)) {
@@ -70,7 +66,9 @@ public class GadgetColorBomb extends Gadget {
                     effect = Particles.SPELL_WITCH;
                     break;
             }
+
             UtilParticles.display(effect, bomb.getLocation(), 1, 0.2f);
+
             try {
                 for (Item item : items) {
                     if (item.getTicksLived() > 15) {
@@ -78,21 +76,30 @@ public class GadgetColorBomb extends Gadget {
                         items.remove(item);
                     }
                 }
+
                 Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                     if (bomb == null) {
                         return;
                     }
+
                     ItemStack item = ItemFactory.create(Material.WOOL, (byte) MathUtils.random.nextInt(15), UUID.randomUUID().toString());
                     Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
                     i.setPickupDelay(500000);
                     i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                     items.add(i);
                     SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
+
                     for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
-                        if (entity instanceof Player)
-                            if (entity.hasMetadata("NPC")) continue;
-                            if (affectPlayers)
+
+                        if (entity instanceof Player) {
+                            if (entity.hasMetadata("NPC")) {
+                                continue;
+                            }
+
+                            if (affectPlayers) {
                                 MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
+                            }
+                        }
                     }
                 });
             } catch (Exception exc) {

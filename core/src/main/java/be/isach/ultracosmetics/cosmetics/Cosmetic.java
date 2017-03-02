@@ -36,16 +36,16 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
                 || Bukkit.getPlayer(owner.getUuid()) == null) {
             throw new IllegalArgumentException("Invalid UltraPlayer.");
         }
+    }
 
-        if (!owner.getBukkitPlayer().hasPermission(type.getPermission())) {
+    public void equip() {
+        if (!owner.getBukkitPlayer().hasPermission(getType().getPermission())) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
 
         ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
-    }
 
-    public void equip() {
         this.equipped = true;
 
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
@@ -58,18 +58,28 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     public void clear() {
 
         // Send unequip Message.
-        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
-        getPlayer().sendMessage(mess);
+        try {
+            String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
+            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+            getPlayer().sendMessage(mess);
+        } catch (Exception exc) {
+
+        }
 
         // unregister listener.
         HandlerList.unregisterAll(this);
 
-        // Cancel task.
-        cancel();
+        try {
+            // Cancel task.
+            cancel();
+        } catch (Exception exc) {
+            // Not Scheduled yet. Ignore.
+        }
 
         // Call untask finally.
         onClear();
+
+        owner = null;
     }
 
     @Override

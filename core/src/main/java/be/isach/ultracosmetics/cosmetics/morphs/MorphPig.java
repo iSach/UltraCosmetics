@@ -25,42 +25,29 @@ public class MorphPig extends Morph {
 
     public MorphPig(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.PIG, ultraCosmetics);
-        if (owner != null) {
-            final MorphPig pig = this;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (getPlayer() == null
-                            || getOwner().getCurrentMorph() != pig) {
-                        cancel();
-                        return;
-                    }
-                    for(Entity ent : getPlayer().getNearbyEntities(0.2, 0.2, 0.2)) {
-                        if(ent instanceof Creature || ent instanceof Player) {
-                            if(!ent.hasMetadata("Mount")
-                                    && !ent.hasMetadata("Pet")
-                                    && ent != getPlayer()
-                                    && ent != disguise.getEntity()
-                                    && !cooldown) {
-                                cooldown = true;
-                                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        cooldown = false;
-                                    }
-                                }, 20);
-                                SoundUtil.playSound(getPlayer(), Sounds.PIG_IDLE, .2f, 1.5f);
-                                Vector vEnt = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).add(new Vector(0, 0.6, 0));
-                                Vector vPig = getPlayer().getLocation().toVector().subtract(ent.getLocation().toVector()).add(new Vector(0, 0.6, 0));
-                                vEnt.setY(0.5);
-                                vPig.setY(0.5);
-                                MathUtils.applyVelocity(ent, vEnt.multiply(0.75));
-                                MathUtils.applyVelocity(getPlayer(), vPig.multiply(0.75));
-                            }
-                        }
-                    }
+    }
+
+    @Override
+    public void onUpdate() {
+        for(Entity ent : getPlayer().getNearbyEntities(0.2, 0.2, 0.2)) {
+            if(ent instanceof Creature || ent instanceof Player) {
+                if(!ent.hasMetadata("Mount")
+                        && !ent.hasMetadata("Pet")
+                        && ent != getPlayer()
+                        && ent != disguise.getEntity()
+                        && !cooldown) {
+                    cooldown = true;
+                    Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cooldown = false, 20);
+                    SoundUtil.playSound(getPlayer(), Sounds.PIG_IDLE, .2f, 1.5f);
+                    Vector v = new Vector(0, 0.6, 0);
+                    Vector vEnt = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).add(v);
+                    Vector vPig = getPlayer().getLocation().toVector().subtract(ent.getLocation().toVector()).add(v);
+                    vEnt.setY(0.5);
+                    vPig.setY(0.5);
+                    MathUtils.applyVelocity(ent, vEnt.multiply(0.75));
+                    MathUtils.applyVelocity(getPlayer(), vPig.multiply(0.75));
                 }
-            }.runTaskTimer(getUltraCosmetics(), 0, 1);
+            }
         }
     }
 

@@ -16,9 +16,19 @@ public class SuitSanta extends Suit {
 
     public SuitSanta(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
         super(owner, armorSlot, SuitType.SANTA, ultraCosmetics);
+    }
+
+    @Override
+    protected void onEquip() {
+        super.onEquip();
 
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         itemMeta.setColor(Color.fromRGB(255, 0, 0));
         itemStack.setItemMeta(itemMeta);
+    }
+
+    @Override
+    public void onUpdate() {
+
     }
 }

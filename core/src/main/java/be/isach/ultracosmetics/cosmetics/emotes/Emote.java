@@ -5,6 +5,9 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
+import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -41,5 +44,16 @@ public class Emote extends Cosmetic<EmoteType> {
 
     protected void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if(event.getCurrentItem() != null && event.getCurrentItem().equals(itemStack)) {
+            event.setCancelled(true);
+        }
+        if(event.getCursor() != null && event.getCursor().equals(itemStack)) {
+            event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
+            event.setCancelled(true);
+        }
     }
 }

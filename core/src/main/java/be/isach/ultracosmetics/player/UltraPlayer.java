@@ -5,9 +5,11 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
@@ -23,11 +25,14 @@ import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
 
+import me.libraryaddict.disguise.LibsDisguises;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -36,9 +41,9 @@ import java.util.UUID;
 
 /**
  * Represents a player on the server.
- * 
- * @author 	iSach
- * @since 	08-03-2015
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class UltraPlayer {
 
@@ -96,6 +101,7 @@ public class UltraPlayer {
     public UltraPlayer(UUID uuid, UltraCosmetics ultraCosmetics) {
         try {
             this.uuid = uuid;
+            this.ultraCosmetics = ultraCosmetics;
 
             gadgetCooldowns = new HashMap<>();
 
@@ -345,6 +351,26 @@ public class UltraPlayer {
         return toReturn;
     }
 
+    public <T extends Cosmetic> T getCosmetic(Category category) {
+        switch (category) {
+            case EFFECTS:
+                return (T) getCurrentParticleEffect();
+            case EMOTES:
+                return (T) getCurrentEmote();
+            case GADGETS:
+                return (T) getCurrentGadget();
+            case HATS:
+                return (T) getCurrentHat();
+            case MORPHS:
+                return (T) getCurrentMorph();
+            case MOUNTS:
+                return (T) getCurrentMount();
+            case PETS:
+                return (T) getCurrentPet();
+        }
+        return null;
+    }
+
     /**
      * Opens the Key Purchase Menu.
      */
@@ -353,7 +379,30 @@ public class UltraPlayer {
             return;
         }
 
-        // TODO
+        if (!ultraCosmetics.isVaultLoaded()) {
+            return;
+        }
+
+        try {
+            final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
+
+            for (int i = 27; i < 30; i++) {
+                inventory.setItem(i, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 9, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 18, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+                inventory.setItem(i + 9 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+                inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+            }
+            ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"))));
+            inventory.setItem(13, itemStack);
+
+            ItemFactory.fillInventory(inventory);
+
+            Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(inventory), 3);
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
     }
 
     /**
@@ -443,7 +492,6 @@ public class UltraPlayer {
         getBukkitPlayer().setVelocity(vector);
         Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
             FallDamageManager.addNoFall(getBukkitPlayer());
-            sendMessage("test");
         }, 2);
     }
 
@@ -514,9 +562,11 @@ public class UltraPlayer {
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
             this.morphSelfViewCache = CacheValue.ENABLED;
+            DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), true);
         } else {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
             this.morphSelfViewCache = CacheValue.DISABLED;
+            DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), false);
         }
     }
 
@@ -567,7 +617,7 @@ public class UltraPlayer {
      */
     public void removeTreasureChest() {
         if (currentTreasureChest == null) return;
-        this.currentTreasureChest.getTreasurePlacer().clear();
+        this.currentTreasureChest.clear();
         this.currentTreasureChest = null;
     }
 

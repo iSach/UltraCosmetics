@@ -53,38 +53,36 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         customEntity.removeAi();
 
         this.entity = (E) customEntity.getEntity();
-
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    if (getEntity().getPassenger() != getPlayer() && getCustomEntity().ticksLived > 10) {
-                        clear();
-                        cancel();
-                        return;
-                    }
-                    if (!getCustomEntity().valid) {
-                        cancel();
-                        return;
-                    }
-                    if (getOwner() != null
-                            && Bukkit.getPlayer(getOwnerUniqueId()) != null
-                            && getOwner().getCurrentMount() != null
-                            && getOwner().getCurrentMount().getType() == getType()) {
-                        onUpdate();
-                    } else {
-                        cancel();
-                    }
-
-                } catch (NullPointerException exc) {
-                    clear();
-                    cancel();
-                }
-            }
-        };
-        runnable.runTaskTimerAsynchronously(getUltraCosmetics(), 0, getType().getRepeatDelay());
+        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
 
         getOwner().setCurrentMount(this);
+    }
+
+    @Override
+    public void onUpdate() {
+        try {
+            if (getEntity().getPassenger() != getPlayer() && getCustomEntity().ticksLived > 10) {
+                clear();
+                cancel();
+                return;
+            }
+            if (!getCustomEntity().valid) {
+                cancel();
+                return;
+            }
+            if (getOwner() != null
+                    && Bukkit.getPlayer(getOwnerUniqueId()) != null
+                    && getOwner().getCurrentMount() != null
+                    && getOwner().getCurrentMount().getType() == getType()) {
+                onUpdate();
+            } else {
+                cancel();
+            }
+
+        } catch (NullPointerException exc) {
+            clear();
+            cancel();
+        }
     }
 
     @Override

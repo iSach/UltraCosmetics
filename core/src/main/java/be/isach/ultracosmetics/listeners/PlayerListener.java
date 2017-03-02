@@ -158,7 +158,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent event) {
         if (ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest() != null) {
-            ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest().getTreasurePlacer().forceOpen(0);
+            ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest().forceOpen(0);
         }
         ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).clear();
         ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).removeMenuItem();

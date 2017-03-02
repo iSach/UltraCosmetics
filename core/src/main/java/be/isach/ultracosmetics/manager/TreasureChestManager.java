@@ -1,11 +1,13 @@
 package be.isach.ultracosmetics.manager;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
+import be.isach.ultracosmetics.menu.menus.MenuMain;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
@@ -29,33 +31,33 @@ public class TreasureChestManager implements Listener {
 
     private static Random random = new Random();
     private UltraCosmetics ultraCosmetics;
-
+    
     public TreasureChestManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
     }
 
-    private void openTreasureChest(Player player) {
+    private static void openTreasureChest(Player player) {
         String designPath = getRandomDesign();
         player.closeInventory();
-        new TreasureChest(ultraCosmetics.getPlayerManager().getUltraPlayer(player), new TreasureChestDesign(designPath), ultraCosmetics);
+        new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath));
     }
 
-    private String getRandomDesign() {
-        Set<String> set = TreasureManager.getDesignFile().getConfigurationSection("Designs").getKeys(false);
-        List<String> list = new ArrayList<String>();
+    private static String getRandomDesign() {
+        Set<String> set = UltraCosmeticsData.get().getPlugin().getConfig().getConfigurationSection("TreasureChests.Designs").getKeys(false);
+        List<String> list = new ArrayList<>();
         list.addAll(set);
         return list.get(random.nextInt(set.size()));
     }
 
-    public void tryOpenChest(Player player) {
-        if (ultraCosmetics.getPlayerManager().getUltraPlayer(player).getKeys() > 0) {
+    public static void tryOpenChest(Player player) {
+        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).getKeys() > 0) {
             Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
             if (!c.isEmpty()) {
                 player.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
                 return;
             }
             for (Entity ent : player.getNearbyEntities(5, 5, 5)) {
-                if (ent instanceof Player && ultraCosmetics.getPlayerManager().getUltraPlayer((Player) ent).getCurrentTreasureChest() != null) {
+                if (ent instanceof Player && UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent).getCurrentTreasureChest() != null) {
                     player.closeInventory();
                     player.sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
                     return;
@@ -67,41 +69,11 @@ public class TreasureChestManager implements Listener {
                 player.sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
                 return;
             }
-            ultraCosmetics.getPlayerManager().getUltraPlayer(player).removeKey();
+            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).removeKey();
             openTreasureChest(player);
         } else {
             player.closeInventory();
-            ultraCosmetics.getPlayerManager().getUltraPlayer(player).openKeyPurchaseMenu();
-        }
-    }
-
-    @EventHandler
-    public void openChest(InventoryClickEvent event) {
-        if (event.getCurrentItem() != null
-                && event.getCurrentItem().hasItemMeta()
-                && event.getCurrentItem().getItemMeta().hasDisplayName()
-                && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Chests"))) {
-            if (ultraCosmetics.getEconomy() == null && ultraCosmetics.getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
-                return;
-            }
-            Player player = (Player) event.getWhoClicked();
-            tryOpenChest(player);
-        }
-    }
-
-    @EventHandler
-    public void buyKeyOpenInv(InventoryClickEvent event) {
-        if (event.getCurrentItem() != null
-                && event.getCurrentItem().hasItemMeta()
-                && event.getCurrentItem().getItemMeta().hasDisplayName()
-                && event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Treasure-Keys"))) {
-            if (ultraCosmetics.getEconomy() == null && ultraCosmetics.getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getKeys() == 0) {
-                SoundUtil.playSound(event.getWhoClicked().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
-                return;
-            }
-            event.getWhoClicked().closeInventory();
-            ultraCosmetics.getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).openKeyPurchaseMenu();
+            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).openKeyPurchaseMenu();
         }
     }
 
@@ -113,12 +85,12 @@ public class TreasureChestManager implements Listener {
                 && event.getCurrentItem().hasItemMeta()
                 && event.getCurrentItem().getItemMeta().hasDisplayName()) {
             if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) {
-                if (ultraCosmetics.getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getBalance() >= (int) SettingsManager.getConfig().get("TreasureChests.Key-Price")) {
-                    ultraCosmetics.getEconomy().withdrawPlayer((Player) event.getWhoClicked(), (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"));
-                    ultraCosmetics.getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).addKey();
+                if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getBalance() >= (int) SettingsManager.getConfig().get("TreasureChests.Key-Price")) {
+                    UltraCosmeticsData.get().getPlugin().getEconomy().withdrawPlayer((Player) event.getWhoClicked(), (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"));
+                    UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).addKey();
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
                     event.getWhoClicked().closeInventory();
-//                    MenuMain.openMenu((Player) event.getWhoClicked()); TODO
+                    UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()));
                 } else {
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Not-Enough-Money"));
                     event.getWhoClicked().closeInventory();
@@ -126,8 +98,9 @@ public class TreasureChestManager implements Listener {
                 }
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
                 event.getWhoClicked().closeInventory();
-//                MenuMain.openMenu((Player) event.getWhoClicked()); TODO
+                UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()));
             }
         }
     }
+
 }

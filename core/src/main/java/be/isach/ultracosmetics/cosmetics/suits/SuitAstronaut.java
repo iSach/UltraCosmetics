@@ -15,4 +15,9 @@ public class SuitAstronaut extends Suit {
     public SuitAstronaut(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
         super(owner, armorSlot, SuitType.ASTRONAUT, ultraCosmetics);
     }
+
+    @Override
+    public void onUpdate() {
+
+    }
 }

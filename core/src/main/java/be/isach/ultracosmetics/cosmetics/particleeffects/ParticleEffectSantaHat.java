@@ -53,8 +53,4 @@ public class ParticleEffectSantaHat extends ParticleEffect {
             location.subtract(x, height, z);
         }
     }
-
-    @Override
-    protected void onEquip() {
-    }
 }

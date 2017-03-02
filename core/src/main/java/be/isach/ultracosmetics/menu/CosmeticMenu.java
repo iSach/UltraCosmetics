@@ -24,9 +24,9 @@ import java.util.List;
 
 /**
  * A cosmetic menu.
- * 
- * @author 	iSach
- * @since 	08-09-2016
+ *
+ * @author iSach
+ * @since 08-09-2016
  */
 public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
@@ -212,6 +212,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
         ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(), message);
         putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
             toggleOff(player);
+            open(player, getCurrentPage(player));
         });
 
         // Go Back to Main Menu Arrow.
@@ -269,9 +270,9 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
         int h = (int) Math.floor(j * 100) / 100;
         return h + 1;
     }
-    
+
     protected int getItemsPerPage() {
-    	return 12;
+        return 12;
     }
 
     /**

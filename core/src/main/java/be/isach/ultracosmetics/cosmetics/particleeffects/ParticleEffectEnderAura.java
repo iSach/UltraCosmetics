@@ -21,8 +21,4 @@ public class ParticleEffectEnderAura extends ParticleEffect {
     public void onUpdate() {
         getPlayer().getWorld().playEffect(getPlayer().getLocation().add(0, 1, 0), Effect.ENDER_SIGNAL, 0);
     }
-
-    @Override
-    protected void onEquip() {
-    }
 }

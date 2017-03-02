@@ -218,8 +218,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         if (getPlayer() != null && getOwner() != null) {
             getOwner().setCurrentPet(null);
         }
-
-        cancel();
     }
 
     public boolean isCustomEntity() {

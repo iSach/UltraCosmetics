@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* Represents an instance of a rocket gadget summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-17-2015
+ * Represents an instance of a rocket gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-17-2015
  */
 public class GadgetRocket extends Gadget {
 
@@ -77,7 +77,12 @@ public class GadgetRocket extends Gadget {
 
                 @Override
                 public void run() {
-                    if(!getPlayer().isOnline()) {
+                    if (getPlayer() == null) {
+                        cancel();
+                        return;
+                    }
+
+                    if (!getPlayer().isOnline()) {
                         cancel();
                         return;
                     }
@@ -123,8 +128,9 @@ public class GadgetRocket extends Gadget {
 
                         fallingBlocks.add(top);
                         fallingBlocks.add(base);
-                        if (fallingBlocks.get(8).getPassenger() == null)
+                        if (fallingBlocks.get(8).getPassenger() == null) {
                             fallingBlocks.get(8).setPassenger(getPlayer());
+                        }
                         top.setPassenger(getPlayer());
                         launching = true;
                         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
@@ -189,18 +195,22 @@ public class GadgetRocket extends Gadget {
 
     @Override
     public void onClear() {
-        for (Block block : BLOCKS)
+        for (Block block : BLOCKS) {
             block.setType(Material.AIR);
-        for (FallingBlock fallingBlock : fallingBlocks)
+        }
+        for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.remove();
+        }
         BLOCKS.clear();
         fallingBlocks.clear();
-        if (armorStand != null)
+        if (armorStand != null) {
             armorStand.remove();
-
+        }
         launching = false;
-        getPlayer().sendTitle(" ", "");
-        HandlerList.unregisterAll(this);
+
+        if (getPlayer() != null) {
+            getPlayer().sendTitle(" ", "");
+        }
     }
 
     @Override

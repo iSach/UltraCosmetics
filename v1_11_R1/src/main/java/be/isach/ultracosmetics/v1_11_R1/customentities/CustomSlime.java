@@ -87,10 +87,8 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
             wEntity.setRotationYawHead(entity.yaw);
 
-            if (wEntity.canPassengerSteer()) {
-                wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
-                entityBase.g_(sideMot, forMot);
-            }
+            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
+            entityBase.g_(sideMot, forMot);
 
             wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
 

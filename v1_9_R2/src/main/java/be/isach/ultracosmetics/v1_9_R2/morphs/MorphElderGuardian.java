@@ -44,45 +44,6 @@ public class MorphElderGuardian extends Morph {
 
     public MorphElderGuardian(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.ELDERGUARDIAN, ultraCosmetics);
-        if (owner == null) return;
-
-        World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
-
-        customGuardian = new CustomGuardian(world);
-        customEntities.add(customGuardian);
-        customGuardian.check();
-
-        Location location = getPlayer().getLocation();
-        double x = location.getX();
-        double y = location.getY();
-        double z = location.getZ();
-        customGuardian.setLocation(x, y, z, 0, 0);
-
-        EntitySpawningManager.setBypass(true);
-        world.addEntity(customGuardian);
-        EntitySpawningManager.setBypass(false);
-
-        getPlayer().setPassenger(customGuardian.getBukkitEntity());
-
-        customGuardian.setInvisible(true);
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                if (getOwner() == null
-                        || getPlayer() == null) {
-                    cancel();
-                    return;
-                }
-                if (customGuardian == null
-                        || !customGuardian.isAlive()) {
-                    getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
-                    cancel();
-                    return;
-                }
-            }
-        }.runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
 
     }
 
@@ -154,7 +115,6 @@ public class MorphElderGuardian extends Morph {
 
     @Override
     public void onClear() {
-        super.clear();
         if (customGuardian != null)
             customGuardian.dead = true;
         customEntities.remove(customGuardian);
@@ -163,5 +123,40 @@ public class MorphElderGuardian extends Morph {
     @Override
     protected void onEquip() {
 
+        World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
+
+        customGuardian = new CustomGuardian(world);
+        customEntities.add(customGuardian);
+        customGuardian.check();
+
+        Location location = getPlayer().getLocation();
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+        customGuardian.setLocation(x, y, z, 0, 0);
+
+        EntitySpawningManager.setBypass(true);
+        world.addEntity(customGuardian);
+        EntitySpawningManager.setBypass(false);
+
+        getPlayer().setPassenger(customGuardian.getBukkitEntity());
+
+        customGuardian.setInvisible(true);
+
+    }
+
+    @Override
+    public void onUpdate() {
+        if (getOwner() == null
+                || getPlayer() == null) {
+            cancel();
+            return;
+        }
+        if (customGuardian == null
+                || !customGuardian.isAlive()) {
+            getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
+            cancel();
+            return;
+        }
     }
 }

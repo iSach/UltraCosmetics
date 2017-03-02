@@ -11,6 +11,8 @@ import be.isach.ultracosmetics.v1_8_R2.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_8_R2.customentities.Pumpling;
 import net.minecraft.server.v1_8_R2.Entity;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
@@ -23,15 +25,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * @author RadBuilder
  */
-public class CustomEntityPet extends Pet {
+public abstract class CustomEntityPet extends Pet {
 
     /**
      * Custom Entity.
      */
     public IPetCustomEntity customEntity;
 
-    public CustomEntityPet(UltraPlayer owner, PetType petType, UltraCosmetics ultraCosmetics) {
+    public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
         super(owner, ultraCosmetics, petType);
+
     }
 
     @Override
@@ -39,78 +42,34 @@ public class CustomEntityPet extends Pet {
         followTask = new PlayerFollower(this, getPlayer());
         if (getOwner().getCurrentPet() != null)
             getOwner().removePet();
+
         getOwner().setCurrentPet(this);
-
-        final Pet instance = this;
-
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!getCustomEntity().valid) {
-                        if (armorStand != null)
-                            armorStand.remove();
-                        getCustomEntity().dead = true;
-                        if (getPlayer() != null)
-                            getOwner().setCurrentPet(null);
-                        for (Item i : items)
-                            i.remove();
-                        items.clear();
-                        try {
-                            HandlerList.unregisterAll(instance);
-                        } catch (Exception exc) {
-                        }
-                        cancel();
-                        return;
-                    }
-                    if (Bukkit.getPlayer(getOwnerUniqueId()) != null
-                            && getOwner().getCurrentPet() != null
-                            && getOwner().getCurrentPet().getType() == getType()) {
-                        if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
-                            onUpdate();
-                        pathUpdater.submit(followTask.getTask());
-                    } else {
-                        cancel();
-                        if (armorStand != null)
-                            armorStand.remove();
-                        for (Item i : items)
-                            i.remove();
-                        items.clear();
-                        clear();
-                        return;
-                    }
-
-                    if (armorStand != null)
-                        getCustomEntity().passenger = ((org.bukkit.craftbukkit.v1_8_R2.entity.CraftArmorStand) armorStand).getHandle();
-                } catch (Exception exc) {
-
-                }
-            }
-        };
-        runnable.runTaskTimer(getUltraCosmetics(), 0, 6);
 
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();
 
         if (this instanceof PetPumpling) {
-            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld(), getPlayer());
+            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld(), getOwner().getBukkitPlayer());
         }
-        CustomEntities.customEntities.add(((org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity) customEntity.getEntity()).getHandle());
+        CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);
-        armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(customEntity.getEntity().getLocation(), EntityType.ARMOR_STAND);
+        Location spawnLoc = customEntity.getEntity().getLocation();
+        armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
         armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand"));
-        if (getOwner().getPetName(getType()) != null)
+        FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
+        armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
+
+        if (getOwner().getPetName(getType()) != null) {
             armorStand.setCustomName(getOwner().getPetName(getType()));
+        }
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);
-        ((org.bukkit.craftbukkit.v1_8_R2.CraftWorld) getPlayer().getWorld()).getHandle()
-                .addEntity(getCustomEntity());
+        ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         EntitySpawningManager.setBypass(false);
     }
 
@@ -121,8 +80,8 @@ public class CustomEntityPet extends Pet {
     }
 
     @Override
-    public void onUpdate() {
-
+    public boolean isCustomEntity() {
+        return true;
     }
 
     @Override

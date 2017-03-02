@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
@@ -8,25 +9,21 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.util.ItemFactory;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * Represents an instance of a suit summoned by a player.
- * 
- * @author 	iSach
- * @since 	12-20-2015
+ *
+ * @author iSach
+ * @since 12-20-2015
  */
-public abstract class Suit extends Cosmetic<SuitType> {
+public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     /**
      * Armor Slot of the Suit.
      */
     private ArmorSlot armorSlot;
-
-    /**
-     * Type of the Suit.
-     */
-    private SuitType suitType;
 
     /**
      * ItemStack of the Suit.
@@ -37,20 +34,25 @@ public abstract class Suit extends Cosmetic<SuitType> {
         super(ultraCosmetics, Category.SUITS, ultraPlayer, suitType);
 
         this.armorSlot = armorSlot;
-        this.suitType = suitType;
+    }
 
+    @Override
+    protected void onEquip() {
         if (getOwner().getCurrentHat() != null
-                && armorSlot == ArmorSlot.HELMET)
+                && armorSlot == ArmorSlot.HELMET) {
             getOwner().removeHat();
+        }
 
         getOwner().removeSuit(getArmorSlot());
 
         switch (getArmorSlot()) {
             case HELMET:
-                if (getOwner().getCurrentHat() != null)
+                if (getOwner().getCurrentHat() != null) {
                     getOwner().removeHat();
-                if (getOwner().getCurrentEmote() != null)
+                }
+                if (getOwner().getCurrentEmote() != null) {
                     getOwner().removeEmote();
+                }
                 if (getPlayer().getInventory().getHelmet() != null) {
                     ItemStack itemStack = getPlayer().getInventory().getHelmet();
                     drop(itemStack);
@@ -89,11 +91,7 @@ public abstract class Suit extends Cosmetic<SuitType> {
         }
 
         getOwner().setSuit(armorSlot, this);
-    }
-
-    @Override
-    protected void onEquip() {
-        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, 1);
+        runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
     }
 
     @Override
@@ -133,10 +131,6 @@ public abstract class Suit extends Cosmetic<SuitType> {
         }
 
         getOwner().setSuit(getArmorSlot(), null);
-
-        armorSlot = null;
-        suitType = null;
-        itemStack = null;
     }
 
     /**
@@ -146,12 +140,6 @@ public abstract class Suit extends Cosmetic<SuitType> {
      */
     public ItemStack getItemStack() {
         return itemStack;
-    }
-
-    /**
-     * Called each tick while suit active, async.
-     */
-    protected void onUpdate() {
     }
 
     /**

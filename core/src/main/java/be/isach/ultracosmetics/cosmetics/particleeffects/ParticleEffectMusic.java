@@ -30,8 +30,4 @@ public class ParticleEffectMusic extends ParticleEffect {
                     MathUtils.randomDouble(0, 2.5), MathUtils.randomDouble(-1.5, 1.5)), 32);
         }
     }
-
-    @Override
-    protected void onEquip() {
-    }
 }

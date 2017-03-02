@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
  * @author 	iSach
  * @since 	08-10-2015
  */
-public class MountGlacialSteed extends MountHorse<Horse> {
+public class MountGlacialSteed extends MountHorse {
 
     public MountGlacialSteed(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.GLACIALSTEED, ultraCosmetics);

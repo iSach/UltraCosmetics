@@ -97,13 +97,14 @@ public class SuitType extends CosmeticMatType<Suit> {
      * @return The suit Object equipped to the player.
      */
     public Suit equip(UltraPlayer player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
-        Suit effect = null;
+        Suit suit = null;
         try {
-            effect = getClazz().getDeclaredConstructor(UltraPlayer.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player, armorSlot, ultraCosmetics);
+            suit = getClazz().getDeclaredConstructor(UltraPlayer.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player, armorSlot, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        return effect;
+        suit.equip();
+        return suit;
     }
 
     /**

@@ -43,8 +43,4 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
         UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
         step += 4;
     }
-
-    @Override
-    protected void onEquip() {
-    }
 }

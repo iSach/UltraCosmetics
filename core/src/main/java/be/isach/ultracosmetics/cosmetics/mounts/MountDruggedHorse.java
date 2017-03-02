@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountDruggedHorse extends MountHorse<Horse> {
+public class MountDruggedHorse extends MountHorse {
 
     public MountDruggedHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.DRUGGEDHORSE, ultraCosmetics);
