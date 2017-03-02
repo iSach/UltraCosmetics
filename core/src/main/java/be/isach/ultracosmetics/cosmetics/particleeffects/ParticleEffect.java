@@ -34,12 +34,9 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 
     @Override
     protected void onEquip() {
-        Bukkit.broadcastMessage("a");
         if (getOwner().getCurrentParticleEffect() != null) {
             getOwner().removeParticleEffect();
         }
-        Bukkit.broadcastMessage("b");
-
         getOwner().setCurrentParticleEffect(this);
 
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
