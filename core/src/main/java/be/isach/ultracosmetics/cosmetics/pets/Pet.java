@@ -230,6 +230,10 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         }
     }
 
+    public IPlayerFollower getFollowTask() {
+        return followTask;
+    }
+
     public Entity getEntity() {
         return entity;
     }

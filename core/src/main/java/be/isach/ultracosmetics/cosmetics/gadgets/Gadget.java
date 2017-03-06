@@ -166,9 +166,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     @Override
     public void clear() {
-        super.clear();
-
         removeItem();
+        super.clear();
     }
 
     /**
@@ -208,7 +207,12 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
      */
     public void removeItem() {
         itemStack = null;
-        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
+
+        try {
+            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
+        } catch (Exception exc) {
+
+        }
     }
 
     /**
@@ -338,6 +342,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         if (!checkRequirements(event)) {
             return;
         }
+
         double coolDown = ultraPlayer.canUse(getType());
         if (coolDown != -1) {
             String timeLeft = new DecimalFormat("#.#").format(coolDown);

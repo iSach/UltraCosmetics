@@ -2,8 +2,11 @@ package be.isach.ultracosmetics.v1_11_R1.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
+import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.v1_11_R1.pets.CustomEntityPet;
+import be.isach.ultracosmetics.v1_11_R1.pets.PetPumpling;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.entity.Zombie;
 
@@ -12,8 +15,15 @@ import org.bukkit.entity.Zombie;
  */
 public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
+    private CustomEntityPet pet = null;
+
     public Pumpling(World world) {
         super(world);
+    }
+
+    public Pumpling(World world, CustomEntityPet pet) {
+        super(world);
+        this.pet = pet;
     }
 
     public org.bukkit.entity.Entity getEntity() {
@@ -53,6 +63,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
         fireTicks = 0;
         UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
+        pet.getFollowTask().follow(pet.getPlayer());
         setInvisible(true);
         setBaby(true);
         setSlot(EnumItemSlot.HEAD, new ItemStack(Blocks.PUMPKIN));

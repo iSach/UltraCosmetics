@@ -38,7 +38,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     public void onClear() {
-        if(pearl != null) {
+        if (pearl != null) {
             pearl.remove();
         }
     }
@@ -91,21 +91,18 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     public void spawnRandomFirework(Location location) {
         final ArrayList<Firework> fireworks = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            final Firework f = getPlayer().getWorld().spawn(location, Firework.class);
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
 
-            FireworkMeta fm = f.getFireworkMeta();
-            fm.addEffect(getRandomFireworkEffect());
-            f.setFireworkMeta(fm);
-            fireworks.add(f);
-        }
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                for (Firework f : fireworks)
-                    f.detonate();
+            for (int i = 0; i < 4; i++) {
+                final Firework f = getPlayer().getWorld().spawn(location, Firework.class);
+
+                FireworkMeta fm = f.getFireworkMeta();
+                fm.addEffect(getRandomFireworkEffect());
+                f.setFireworkMeta(fm);
+                fireworks.add(f);
             }
-        }, 2);
+        });
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> fireworks.forEach(Firework::detonate), 2);
     }
 
 
@@ -129,26 +126,24 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     public void onUpdate() {
-//        if (pearl != null && pearl.isValid()) {
-//            getPlayer().eject();
-//            pearl.setPassenger(getPlayer());
-//
-//            if(getPlayer().isOnGround()) {
-//                pearl.remove();
-//                pearl = null;
-//            }
-//        } else {
-//            pearl.remove();
-//            getPlayer().eject();
-//
-//            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-//                getPlayer().setAllowFlight(false);
-//            }
-//
-//            pearl = null;
-//            spawnRandomFirework(getPlayer().getLocation());
-//            cancel();
-//        }
+        if (pearl != null && pearl.isValid()) {
+            getPlayer().eject();
+            pearl.setPassenger(getPlayer());
+
+            if (getPlayer().isOnGround()) {
+                pearl.remove();
+                pearl = null;
+            }
+        } else {
+            getPlayer().eject();
+
+            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+                getPlayer().setAllowFlight(false);
+            }
+
+            pearl = null;
+            spawnRandomFirework(getPlayer().getLocation());
+        }
     }
 
     @Override

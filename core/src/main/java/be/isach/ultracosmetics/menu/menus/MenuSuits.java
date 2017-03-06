@@ -12,12 +12,15 @@ import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
@@ -100,6 +103,26 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 }
 
                 ItemMeta itemMeta = is.getItemMeta();
+
+                if(suitType == SuitType.SANTA
+                        || suitType == SuitType.RAVE) {
+
+                    LeatherArmorMeta laMeta = (LeatherArmorMeta) itemMeta;
+
+                    Color color = Color.RED;
+
+                    if(suitType == SuitType.RAVE) {
+                        int r = MathUtils.random(255);
+                        int g = MathUtils.random(255);
+                        int b = MathUtils.random(255);
+
+                        color = Color.fromRGB(r, g, b);
+                    }
+
+                    laMeta.setColor(color);
+
+                }
+
                 List<String> loreList = new ArrayList<>();
 
                 if (suitType.showsDescription()) {

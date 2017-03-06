@@ -32,15 +32,10 @@ public class GadgetChristmasTree extends Gadget {
     }
 
     @Override
-    void onRightClick() {
+    public void onRightClick() {
         lastLocation = lastClickedBlock.getLocation().add(0.5d, 1.05d, 0.5d);
         active = true;
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                active = false;
-            }
-        }, 200);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> active = false, 200);
     }
 
     @Override
@@ -64,9 +59,9 @@ public class GadgetChristmasTree extends Gadget {
         if (event.getClickedBlock() == null
                 || event.getClickedBlock().getType() == Material.AIR) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     private void drawLog() {
@@ -126,6 +121,6 @@ public class GadgetChristmasTree extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
+    public void onLeftClick() {
     }
 }

@@ -10,17 +10,12 @@ import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_11_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_11_R1.customentities.Pumpling;
 import net.minecraft.server.v1_11_R1.Entity;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftArmorStand;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.event.HandlerList;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class CustomEntityPet extends Pet {
 
@@ -37,6 +32,7 @@ public abstract class CustomEntityPet extends Pet {
     @Override
     public void onEquip() {
         followTask = new PlayerFollower(this, getPlayer());
+
         if (getOwner().getCurrentPet() != null)
             getOwner().removePet();
 
@@ -47,7 +43,7 @@ public abstract class CustomEntityPet extends Pet {
         double z = getPlayer().getLocation().getZ();
 
         if (this instanceof PetPumpling) {
-            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new Pumpling(((CraftPlayer) getPlayer()).getHandle().getWorld(), this);
         }
         CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
         getCustomEntity().setLocation(x, y, z, 0, 0);

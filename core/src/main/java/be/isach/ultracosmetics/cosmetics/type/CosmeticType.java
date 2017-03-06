@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.ChatColor;
 
 /**
@@ -53,6 +55,10 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     public boolean isEnabled() {
+        if(this == GadgetType.ETHEREALPEARL
+                && UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
+            return false;
+        }
         return SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled");
     }
 
