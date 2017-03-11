@@ -20,8 +20,8 @@ public class MovingChecker extends BukkitRunnable {
     public void run() {
         synchronized (ultraCosmetics.getPlayerManager().getUltraPlayers()) {
             for (UltraPlayer ultraPlayer : ultraCosmetics.getPlayerManager().getUltraPlayers()) {
-                if(ultraPlayer != null
-                        && ultraPlayer.getBukkitPlayer() != null) {
+                if(ultraPlayer == null
+                        || ultraPlayer.getBukkitPlayer() == null) {
                     continue;
                 }
 

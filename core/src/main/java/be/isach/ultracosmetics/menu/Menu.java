@@ -34,7 +34,7 @@ public abstract class Menu implements Listener {
      * Key: Item
      * Value: ClickRunnable to call when item is clicked.
      */
-    private Map<ItemStack, ClickRunnable> clickRunnableMap = new HashMap<>();
+    private Map<Inventory, Map<ItemStack, ClickRunnable>> clickRunnableMap = new HashMap<>();
 
     public Menu(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -55,7 +55,14 @@ public abstract class Menu implements Listener {
         Validate.notNull(clickRunnable);
 
         inventory.setItem(slot, itemStack);
-        clickRunnableMap.put(itemStack, clickRunnable);
+        if(clickRunnableMap.containsKey(inventory)) {
+            Map<ItemStack, ClickRunnable> map = clickRunnableMap.get(inventory);
+            map.put(itemStack, clickRunnable);
+        } else {
+            Map<ItemStack, ClickRunnable> map = new HashMap<>();
+            map.put(itemStack, clickRunnable);
+            clickRunnableMap.put(inventory, map);
+        }
     }
 
     @EventHandler
@@ -80,13 +87,18 @@ public abstract class Menu implements Listener {
             return;
         }
 
+        // Check that Inventory is valid.
+        if (!clickRunnableMap.keySet().contains(event.getInventory())) {
+            return;
+        }
+
         // Check that Item is meant to do an action.
-        if (!clickRunnableMap.keySet().contains(event.getCurrentItem())) {
+        if (!clickRunnableMap.get(event.getInventory()).keySet().contains(event.getCurrentItem())) {
             return;
         }
 
         event.setCancelled(true);
-        ClickRunnable clickRunnable = clickRunnableMap.get(event.getCurrentItem());
+        ClickRunnable clickRunnable = clickRunnableMap.get(event.getInventory()).get(event.getCurrentItem());
 
         // Check clickrunnable isn't null.
         if (clickRunnable == null) {

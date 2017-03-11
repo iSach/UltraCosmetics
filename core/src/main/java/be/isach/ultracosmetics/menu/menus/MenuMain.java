@@ -106,8 +106,7 @@ public class MenuMain extends Menu {
             });
 
             putItem(inventory, 3, chest, (data) -> {
-                if (!getUltraCosmetics().isVaultLoaded()
-                        && player.getKeys() == 0) {
+                if (!getUltraCosmetics().isVaultLoaded() && player.getKeys() == 0) {
                     SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
                     return;
                 }
