@@ -20,6 +20,11 @@ public class MovingChecker extends BukkitRunnable {
     public void run() {
         synchronized (ultraCosmetics.getPlayerManager().getUltraPlayers()) {
             for (UltraPlayer ultraPlayer : ultraCosmetics.getPlayerManager().getUltraPlayers()) {
+                if(ultraPlayer != null
+                        && ultraPlayer.getBukkitPlayer() != null) {
+                    continue;
+                }
+
                 Location currentPos = ultraPlayer.getBukkitPlayer().getLocation();
                 ultraPlayer.setMoving(!areEqual(currentPos, ultraPlayer.getLastPos()));
                 ultraPlayer.setLastPos(currentPos);

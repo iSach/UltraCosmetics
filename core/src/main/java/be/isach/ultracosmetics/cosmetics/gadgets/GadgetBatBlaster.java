@@ -68,8 +68,9 @@ public class GadgetBatBlaster extends Gadget {
         if (active && playerVelocity != null && bats != null) {
             bats.stream().filter(Entity::isValid).forEachOrdered(bat -> {
                 Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D);
-                bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
-
+                if (bat != null && playerVelocity != null) {
+                    bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
+                }
                 getPlayer().getWorld().getPlayers().stream().filter(other -> !other.equals(getPlayer())
                         && getOwner().hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)).forEachOrdered(other -> {
 

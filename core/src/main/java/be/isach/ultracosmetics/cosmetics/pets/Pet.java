@@ -25,9 +25,9 @@ import java.util.concurrent.Executors;
 
 /**
  * Represents an instance of a pet summoned by a player.
- * 
- * @author 	iSach
- * @since 	03-08-2015
+ *
+ * @author iSach
+ * @since 03-08-2015
  */
 public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
@@ -89,7 +89,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             ((Ageable) entity).setAgeLock(true);
         }
 
-        if(UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
+        if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
             getEntity().setCustomNameVisible(true);
             getEntity().setCustomName(getType().getEntityName(getPlayer()));
 
@@ -114,7 +114,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(entity);
         // this.entity.setPassenger(armorStand);
-		
+
         if (getType() == PetType.WITHER) {
             this.entity.setCustomName(getType().getEntityName(getPlayer()));
             this.entity.setCustomNameVisible(true);
@@ -123,7 +123,9 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 this.entity.setCustomName(getOwner().getPetName(getType()));
             }
 
-            armorStand.remove();
+            if (armorStand != null) {
+                armorStand.remove();
+            }
         }
 
         this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));

@@ -36,9 +36,9 @@ import java.util.UUID;
 
 /**
  * Represents an instance of a Gadget summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-03-2015
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
@@ -105,8 +105,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         this.affectPlayers = type.affectPlayers();
         this.useTwoInteractMethods = false;
     }
-    
-	@Override
+
+    @Override
     protected void onEquip() {
         if (getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentGadget() != null) {
             getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
@@ -202,6 +202,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " " + timeLeft);
 
     }
+
     /**
      * Removes the item.
      */
@@ -279,7 +280,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     @EventHandler
     public void onInventoryClickAmmo(final InventoryClickEvent event) {
-        if (event.getWhoClicked() == getPlayer()
+        if (getOwner() != null
+                && getPlayer() != null
+                && event.getWhoClicked() == getPlayer()
                 && ammoInventory != null
                 && InventoryUtils.areSame(event.getWhoClicked().getOpenInventory().getTopInventory(), ammoInventory)) {
             event.setCancelled(true);
@@ -355,7 +358,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             ultraPlayer.removeAmmo(getType().toString().toLowerCase());
             itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(), ChatColor.WHITE
-                    + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(),
+                            + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(),
                     MessageManager.getMessage("Gadgets.Lore"));
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
         }
