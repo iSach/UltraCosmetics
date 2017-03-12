@@ -146,7 +146,11 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 if (UltraCosmeticsData.get().displaysCooldownInBar()) {
                     if (getPlayer().getItemInHand() != null
                             && itemStack != null
-                            && itemStack.equals(getPlayer().getItemInHand())
+                            && getPlayer().getItemInHand().hasItemMeta()
+                            && getPlayer().getItemInHand().getType() == getItemStack().getType()
+                            && getPlayer().getItemInHand().getData().getData() == getItemStack().getData().getData()
+                            && getPlayer().getItemInHand().getItemMeta().hasDisplayName()
+                            && getPlayer().getItemInHand().getItemMeta().getDisplayName().endsWith(getType().getName())
                             && getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType()) != -1) {
                         sendCooldownBar();
                     }
@@ -180,7 +184,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     /**
      * Sends the current cooldown in action bar.
      */
+
     private void sendCooldownBar() {
+        if (getOwner() == null) return;
         if (getPlayer() == null) return;
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -188,14 +194,14 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         double currentCooldown = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
         double maxCooldown = getType().getCountdown();
 
-        int res = (int) (currentCooldown / maxCooldown * 10);
+        int res = (int) (currentCooldown / maxCooldown * 50);
         ChatColor color;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             color = ChatColor.RED;
-            if (i < 10 - res) {
+            if (i < 50 - res) {
                 color = ChatColor.GREEN;
             }
-            stringBuilder.append(color + "█");
+            stringBuilder.append(color + "┃");
         }
 
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
