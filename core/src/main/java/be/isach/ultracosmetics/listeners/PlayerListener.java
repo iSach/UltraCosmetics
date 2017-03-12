@@ -37,7 +37,7 @@ public class PlayerListener implements Listener {
         this.ultraCosmetics = ultraCosmetics;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(final PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
             ultraCosmetics.getPlayerManager().create(event.getPlayer());
@@ -155,7 +155,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onQuit(PlayerQuitEvent event) {
         if (ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest() != null) {
             ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest().forceOpen(0);
