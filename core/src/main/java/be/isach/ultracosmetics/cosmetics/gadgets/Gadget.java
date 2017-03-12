@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,6 +25,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -312,6 +315,35 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if(getOwner() == null) {
+            return;
+        }
+
+        if(getPlayer() == null) {
+            return;
+        }
+
+        if(event.getPlayer() != getPlayer()) {
+            return;
+        }
+
+        if(!(event.getRightClicked() instanceof ItemFrame)) {
+            return;
+        }
+
+        if(getItemStack() == null) {
+            return;
+        }
+
+        if(event.getPlayer().getItemInHand().equals(getItemStack())) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler
