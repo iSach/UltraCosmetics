@@ -74,6 +74,9 @@ public class GadgetBlizzardBlaster extends Gadget {
 
     @Override
     public void onClear() {
+        if(getOwner() == null || getPlayer() == null) {
+            return;
+        }
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearBlizzard(getPlayer());
     }
 

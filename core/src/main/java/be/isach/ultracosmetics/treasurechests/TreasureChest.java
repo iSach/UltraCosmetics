@@ -320,8 +320,14 @@ public class TreasureChest implements Listener {
             }
             for (Entity ent : this.items)
                 ent.remove();
-            this.RUNNABLES[0].cancel();
-            this.RUNNABLES[1].cancel();
+            if(this.RUNNABLES != null) {
+                if(this.RUNNABLES[0] != null) {
+                    this.RUNNABLES[0].cancel();
+                }
+                if(this.RUNNABLES[1] != null) {
+                    this.RUNNABLES[1].cancel();
+                }
+            }
             this.items.clear();
             this.chests.clear();
             this.holograms.clear();

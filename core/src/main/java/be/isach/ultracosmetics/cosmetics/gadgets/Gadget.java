@@ -136,6 +136,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     @Override
     public void run() {
         try {
+            if (getOwner() == null || getPlayer() == null) {
+                return;
+            }
+
             if (getOwner().getCurrentGadget() != null &&
                     getOwner().getCurrentGadget().getType() == getType()) {
                 onUpdate();
@@ -319,27 +323,16 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if(getOwner() == null) {
-            return;
-        }
-
-        if(getPlayer() == null) {
-            return;
-        }
-
-        if(event.getPlayer() != getPlayer()) {
-            return;
-        }
-
-        if(!(event.getRightClicked() instanceof ItemFrame)) {
-            return;
-        }
-
-        if(getItemStack() == null) {
-            return;
-        }
-
-        if(event.getPlayer().getItemInHand().equals(getItemStack())) {
+        if (getOwner() == null
+                || getPlayer() == null
+                || event.getPlayer() != getPlayer()
+                || !(event.getRightClicked() instanceof ItemFrame)
+                || getItemStack() == null
+                || itemStack == null
+                || !itemStack.hasItemMeta()
+                || itemStack.getType() != getItemStack().getType()
+                || itemStack.getData().getData() != getItemStack().getData().getData()
+                || !itemStack.getItemMeta().getDisplayName().endsWith(getType().getName())) {
             return;
         }
 
