@@ -37,10 +37,6 @@ public class MorphWitherSkeleton extends Morph {
     }
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
 
     }

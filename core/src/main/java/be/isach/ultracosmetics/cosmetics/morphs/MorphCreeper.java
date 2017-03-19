@@ -28,10 +28,6 @@ public class MorphCreeper extends Morph {
     }
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
         CreeperWatcher creeperWatcher = (CreeperWatcher) disguise.getWatcher();
         if (getPlayer().isSneaking()) {

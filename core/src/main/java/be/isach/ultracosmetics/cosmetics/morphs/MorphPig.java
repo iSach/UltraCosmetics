@@ -50,8 +50,4 @@ public class MorphPig extends Morph {
             }
         }
     }
-
-    @Override
-    protected void onEquip() {
-    }
 }

@@ -25,10 +25,6 @@ public class MorphBlaze extends Morph {
     }
 
     @Override
-    protected void onEquip() {
-    }
-
-    @Override
     public void onUpdate() {
         if (getPlayer().isSneaking()) {
             UtilParticles.display(Particles.FLAME, getPlayer().getLocation());

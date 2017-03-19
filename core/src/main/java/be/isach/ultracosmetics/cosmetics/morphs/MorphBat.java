@@ -28,6 +28,7 @@ public class MorphBat extends Morph {
 
     @Override
     protected void onEquip() {
+        super.onEquip();
         getPlayer().setAllowFlight(true);
     }
 
