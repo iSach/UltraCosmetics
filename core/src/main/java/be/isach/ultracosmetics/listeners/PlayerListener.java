@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
                         cp.giveMenuItem();
                 }, 5);
             }
-            if (ultraCosmetics.getUpdateChecker().isOutdated())
+            if (ultraCosmetics.getUpdateChecker() != null && ultraCosmetics.getUpdateChecker().isOutdated())
                 if (event.getPlayer().isOp())
                     event.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics > " + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
         });
