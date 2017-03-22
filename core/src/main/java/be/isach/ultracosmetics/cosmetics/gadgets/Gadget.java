@@ -142,27 +142,31 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
 			if (getOwner().getCurrentGadget() != null && getOwner().getCurrentGadget().getType() == getType()) {
 				onUpdate();
-				if (UltraCosmeticsData.get().displaysCooldownInBar()) {
-					if (getPlayer().getItemInHand() != null && itemStack != null && getPlayer().getItemInHand()
-							.hasItemMeta() && getPlayer().getItemInHand().getType() == getItemStack().getType()
-							&& getPlayer().getItemInHand().getData().getData() == getItemStack().getData().getData()
-							&& getPlayer().getItemInHand().getItemMeta().hasDisplayName() && getPlayer().getItemInHand()
-							.getItemMeta().getDisplayName().endsWith(getType().getName())
-							&& getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType())
-							!= -1) {
-						sendCooldownBar();
-					}
-					double left = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
-					if (left > -0.1) {
-						String leftRounded = DECIMAL_FORMAT.format(left);
-						double decimalRoundedValue = Double.parseDouble(leftRounded);
-						if (decimalRoundedValue == 0) {
-							String message = MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar");
-							message = message.replace("%gadgetname%",
-									TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
-							PlayerUtils.sendInActionBar(getPlayer(), message);
-							SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
+				try {
+					if (UltraCosmeticsData.get().displaysCooldownInBar()) {
+						if (getPlayer().getItemInHand() != null && itemStack != null && getPlayer().getItemInHand()
+								.hasItemMeta() && getPlayer().getItemInHand().getType() == getItemStack().getType()
+								&& getPlayer().getItemInHand().getData().getData() == getItemStack().getData().getData()
+								&& getPlayer().getItemInHand().getItemMeta().hasDisplayName() && getPlayer()
+								.getItemInHand().getItemMeta().getDisplayName().endsWith(getType().getName())
+								&& getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType())
+								!= -1) {
+							sendCooldownBar();
 						}
+					}
+				} catch (NullPointerException ignored) {
+					// Caused by rapid item switching in inventory.
+				}
+				double left = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
+				if (left > -0.1) {
+					String leftRounded = DECIMAL_FORMAT.format(left);
+					double decimalRoundedValue = Double.parseDouble(leftRounded);
+					if (decimalRoundedValue == 0) {
+						String message = MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar");
+						message = message.replace("%gadgetname%",
+								TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+						PlayerUtils.sendInActionBar(getPlayer(), message);
+						SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
 					}
 				}
 			} else {
