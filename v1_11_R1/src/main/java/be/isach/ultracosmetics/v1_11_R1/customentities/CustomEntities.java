@@ -1,148 +1,106 @@
 package be.isach.ultracosmetics.v1_11_R1.customentities;
 
-import net.minecraft.server.v1_11_R1.*;
+import net.minecraft.server.v1_11_R1.BiomeBase;
+import net.minecraft.server.v1_11_R1.Entity;
+import net.minecraft.server.v1_11_R1.EntityInsentient;
+import net.minecraft.server.v1_11_R1.EntityTypes;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author RadBuilder
  */
 public enum CustomEntities {
+	//    FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid.class, FlyingSquid.class),
+	PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling.class, Pumpling.class),
+	SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime.class, CustomSlime.class),
+	RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
+	CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
 
-//    FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid.class, FlyingSquid.class),
-    PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling.class, Pumpling.class),
-    SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime.class, CustomSlime.class),
-    RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
-    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
+	public static List<Entity> customEntities = new ArrayList<Entity>();
 
-    public static List<Entity> customEntities = new ArrayList<Entity>();
+	private String name;
+	private int id;
+	private EntityType entityType;
+	private Class<? extends EntityInsentient> nmsClass;
+	private Class<? extends EntityInsentient> customClass;
 
-    private String name;
-    private int id;
-    private EntityType entityType;
-    private Class<? extends EntityInsentient> nmsClass;
-    private Class<? extends EntityInsentient> customClass;
+	CustomEntities(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
+			Class<? extends EntityInsentient> customClass) {
+		this.name = name;
+		this.id = id;
+		this.entityType = entityType;
+		this.nmsClass = nmsClass;
+		this.customClass = customClass;
+	}
 
-    CustomEntities(String name, int id, EntityType entityType,
-                   Class<? extends EntityInsentient> nmsClass,
-                   Class<? extends EntityInsentient> customClass) {
-        this.name = name;
-        this.id = id;
-        this.entityType = entityType;
-        this.nmsClass = nmsClass;
-        this.customClass = customClass;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public int getID() {
+		return id;
+	}
 
-    public int getID() {
-        return id;
-    }
+	public EntityType getEntityType() {
+		return entityType;
+	}
 
-    public EntityType getEntityType() {
-        return entityType;
-    }
+	public Class<? extends EntityInsentient> getNMSClass() {
+		return nmsClass;
+	}
 
-    public Class<? extends EntityInsentient> getNMSClass() {
-        return nmsClass;
-    }
+	public Class<? extends EntityInsentient> getCustomClass() {
+		return customClass;
+	}
 
-    public Class<? extends EntityInsentient> getCustomClass() {
-        return customClass;
-    }
+	public static void registerEntities() {
+		for (CustomEntities entity : values())
+			CustomEntityRegistry.registerCustomEntity(entity.getID(), entity.getName(), entity.getCustomClass());
 
-    public static void registerEntities() {
-        for (CustomEntities entity : values())
-            a(entity.getCustomClass(), entity.getName(), entity.getID());
+		for (BiomeBase biomeBase : BiomeBase.i) {
+			if (biomeBase == null)
+				break;
+			for (String field : new String[] { "u", "v", "w", "x" })
+				try {
+					Field list = BiomeBase.class.getDeclaredField(field);
+					list.setAccessible(true);
+					@SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
+							.get(biomeBase);
 
-        for (BiomeBase biomeBase : BiomeBase.i) {
-            if (biomeBase == null)
-                break;
-            for (String field : new String[] { "u", "v", "w", "x" })
-                try {
-                    Field list = BiomeBase.class.getDeclaredField(field);
-                    list.setAccessible(true);
-                    @SuppressWarnings("unchecked")
-                    List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list.get(biomeBase);
+					for (BiomeBase.BiomeMeta meta : mobList)
+						for (CustomEntities entity : values())
+							if (entity.getNMSClass().equals(meta.b))
+								meta.b = entity.getCustomClass();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+	}
 
-                    for (BiomeBase.BiomeMeta meta : mobList)
-                        for (CustomEntities entity : values())
-                            if (entity.getNMSClass().equals(meta.b))
-                                meta.b = entity.getCustomClass();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-        }
-    }
+	public static void unregisterEntities() {
+		Field field = getField(EntityTypes.class, "b");
+		Field modifiersField = getField(Field.class, "modifiers");
+		try {
+			modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+			field.set(null, CustomEntityRegistry.getInstance().getWrapped());
+		} catch (Exception e) {
+		}
+	}
 
-    @SuppressWarnings("rawtypes")
-    public static void unregisterEntities() {
-        for (CustomEntities entity : values()) {
-            try {
-            	((Set) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
-                //((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
-            //try {
-            //    ((Map) getPrivateStatic(EntityTypes.class, "f")).remove(entity.getCustomClass());
-            //} catch (Exception e) {
-            //    e.printStackTrace();
-            //}
-        }
-
-        for (CustomEntities entity : values())
-            try {
-                a(entity.getNMSClass(), entity.getName(), entity.getID());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        for (BiomeBase biomeBase : BiomeBase.i) {
-            if (biomeBase == null)
-                break;
-
-            for (String field : new String[] { "u", "v", "w", "x" })
-                try {
-                    Field list = BiomeBase.class.getDeclaredField(field);
-                    list.setAccessible(true);
-                    @SuppressWarnings("unchecked")
-                    List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list.get(biomeBase);
-
-                    for (BiomeBase.BiomeMeta meta : mobList)
-                        for (CustomEntities entity : values())
-                            if (entity.getCustomClass().equals(meta.b))
-                                meta.b = entity.getNMSClass();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-        }
-    }
-
-    @SuppressWarnings("rawtypes")
-    private static Object getPrivateStatic(Class clazz, String f) throws Exception {
-        Field field = clazz.getDeclaredField(f);
-        field.setAccessible(true);
-        return field.get(null);
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static void a(Class c, String name, int id) {
-    	MinecraftKey key = new MinecraftKey(name);
-        try {
-            ((RegistryMaterials) getPrivateStatic(EntityTypes.class, "b")).a(id, key, c);
-            ((Set) getPrivateStatic(EntityTypes.class, "d")).add(key);
-            ((List) getPrivateStatic(EntityTypes.class, "g")).set(id, name);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	private static Field getField(Class<?> clazz, String field) {
+		if (clazz == null)
+			return null;
+		Field f = null;
+		try {
+			f = clazz.getDeclaredField(field);
+			f.setAccessible(true);
+		} catch (Exception e) {
+		}
+		return f;
+	}
 }
