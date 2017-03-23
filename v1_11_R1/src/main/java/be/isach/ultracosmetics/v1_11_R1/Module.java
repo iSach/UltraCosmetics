@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.v1_11_R1;
 
+import be.isach.ultracosmetics.v1_11_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.version.IModule;
 
 public class Module implements IModule {
