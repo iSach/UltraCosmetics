@@ -2,12 +2,10 @@ package be.isach.ultracosmetics.v1_11_R1.pets;
 
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import be.isach.ultracosmetics.v1_11_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_11_R1.customentities.Pumpling;
 import net.minecraft.server.v1_11_R1.Entity;
 import org.bukkit.Location;

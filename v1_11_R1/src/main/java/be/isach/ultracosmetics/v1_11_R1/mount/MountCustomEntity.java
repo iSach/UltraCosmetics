@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.v1_11_R1.mount;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.v1_11_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_11_R1.customentities.CustomSlime;
 import be.isach.ultracosmetics.v1_11_R1.customentities.FlyingSquid;
 import be.isach.ultracosmetics.v1_11_R1.customentities.RideableSpider;
@@ -16,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author RadBuilder
