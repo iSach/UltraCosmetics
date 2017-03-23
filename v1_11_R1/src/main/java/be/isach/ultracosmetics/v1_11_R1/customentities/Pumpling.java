@@ -57,6 +57,11 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     }
 
     @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Zombie.name");
+    }
+
+    @Override
     public void A_() {
         super.A_();
         if (!isCustomEntity()) return;

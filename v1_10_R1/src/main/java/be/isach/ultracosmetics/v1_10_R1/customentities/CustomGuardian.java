@@ -36,6 +36,12 @@ public class CustomGuardian extends EntityGuardian {
     }
 
     @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Guardian.name");
+    }
+
+
+    @Override
     protected SoundEffect bV() {
         if (custom) return null;
         else return super.bV();

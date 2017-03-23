@@ -103,6 +103,10 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     public final Player getPlayer() {
+        if(owner == null) {
+            return null;
+        }
+
         return owner.getBukkitPlayer();
     }
 

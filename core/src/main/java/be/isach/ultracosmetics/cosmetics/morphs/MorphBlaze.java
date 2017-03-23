@@ -41,6 +41,16 @@ public class MorphBlaze extends Morph {
         }
     }
 
+    @Override
+    protected void onEquip() {
+
+    }
+
+    @Override
+    protected void onClear() {
+
+    }
+
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getEntity() == getPlayer()

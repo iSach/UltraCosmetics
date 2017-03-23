@@ -33,6 +33,10 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
             exc.printStackTrace();
         }
     }
+    @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Slime.name");
+    }
 
 
     @Override

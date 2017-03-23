@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.v1_8_R1.customentities;
 
 import net.minecraft.server.v1_8_R1.EntityGuardian;
+import net.minecraft.server.v1_8_R1.LocaleI18n;
 import net.minecraft.server.v1_8_R1.World;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
@@ -32,6 +33,11 @@ public class CustomGuardian extends EntityGuardian {
             return null;
         else
             return super.z();
+    }
+
+    @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Guardian.name");
     }
 
     @Override

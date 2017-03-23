@@ -35,6 +35,12 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
     }
 
     @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Slime.name");
+    }
+
+
+    @Override
     public void removeAi() {
         removeSelectors();
     }

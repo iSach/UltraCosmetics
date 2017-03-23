@@ -31,7 +31,6 @@ public class MorphEnderman extends Morph {
 
     @Override
     protected void onEquip() {
-        super.onEquip();
         getPlayer().setAllowFlight(true);
     }
 

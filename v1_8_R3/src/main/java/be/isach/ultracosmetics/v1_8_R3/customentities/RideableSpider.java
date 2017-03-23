@@ -190,8 +190,11 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity {
             this.aK = 0.02F;
             super.g(sideMot, forMot);
         }
+    }
 
-
+    @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Spider.name");
     }
 
     @Override

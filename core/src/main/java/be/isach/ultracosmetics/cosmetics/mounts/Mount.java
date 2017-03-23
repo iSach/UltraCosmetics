@@ -27,9 +27,9 @@ import org.bukkit.scheduler.BukkitRunnable;
  * TODO:
  * - SubObjects:
  * - HorseMount
- * 
- * @author 	iSach
- * @since 	08-03-2015
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
 
@@ -107,7 +107,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     @Override
     protected void onClear() {
-        if(entity != null) {
+        if (entity != null) {
             entity.remove();
         }
         getOwner().setCurrentMount(null);
@@ -151,8 +151,10 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() == getEntity())
+        if (event.getEntity() == getEntity()) {
             event.setCancelled(true);
+        }
+
         if (event.getEntity() == getPlayer()
                 && getOwner().getCurrentMount() != null
                 && getOwner().getCurrentMount().getType() == getType()) {
