@@ -1,20 +1,22 @@
 package be.isach.ultracosmetics.v1_11_R1.customentities;
 
-import net.minecraft.server.v1_11_R1.*;
+import net.minecraft.server.v1_11_R1.BiomeBase;
+import net.minecraft.server.v1_11_R1.Entity;
+import net.minecraft.server.v1_11_R1.EntityInsentient;
+import net.minecraft.server.v1_11_R1.EntityTypes;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author RadBuilder
  */
 public enum CustomEntities {
 
-//    FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid.class, FlyingSquid.class),
+    //    FLYING_SQUID("FlyingSquid", EntityType.SQUID.getTypeId(), EntityType.SQUID, FlyingSquid.class, FlyingSquid.class),
     PUMPLING("Zombie", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling.class, Pumpling.class),
     SLIME("Slime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime.class, CustomSlime.class),
     RIDEABLE_SPIDER("Spider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
@@ -28,8 +30,7 @@ public enum CustomEntities {
     private Class<? extends EntityInsentient> nmsClass;
     private Class<? extends EntityInsentient> customClass;
 
-    CustomEntities(String name, int id, EntityType entityType,
-                   Class<? extends EntityInsentient> nmsClass,
+    CustomEntities(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
                    Class<? extends EntityInsentient> customClass) {
         this.name = name;
         this.id = id;
@@ -60,7 +61,7 @@ public enum CustomEntities {
 
     public static void registerEntities() {
         for (CustomEntities entity : values())
-            a(entity.getCustomClass(), entity.getName(), entity.getID());
+            CustomEntityRegistry.registerCustomEntity(entity.getID(), entity.getName(), entity.getCustomClass());
 
         for (BiomeBase biomeBase : BiomeBase.i) {
             if (biomeBase == null)
@@ -69,8 +70,8 @@ public enum CustomEntities {
                 try {
                     Field list = BiomeBase.class.getDeclaredField(field);
                     list.setAccessible(true);
-                    @SuppressWarnings("unchecked")
-                    List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list.get(biomeBase);
+                    @SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
+                            .get(biomeBase);
 
                     for (BiomeBase.BiomeMeta meta : mobList)
                         for (CustomEntities entity : values())
@@ -82,67 +83,25 @@ public enum CustomEntities {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     public static void unregisterEntities() {
-        for (CustomEntities entity : values()) {
-            try {
-            	((Set) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
-                //((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
-            //try {
-            //    ((Map) getPrivateStatic(EntityTypes.class, "f")).remove(entity.getCustomClass());
-            //} catch (Exception e) {
-            //    e.printStackTrace();
-            //}
-        }
-
-        for (CustomEntities entity : values())
-            try {
-                a(entity.getNMSClass(), entity.getName(), entity.getID());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        for (BiomeBase biomeBase : BiomeBase.i) {
-            if (biomeBase == null)
-                break;
-
-            for (String field : new String[] { "u", "v", "w", "x" })
-                try {
-                    Field list = BiomeBase.class.getDeclaredField(field);
-                    list.setAccessible(true);
-                    @SuppressWarnings("unchecked")
-                    List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list.get(biomeBase);
-
-                    for (BiomeBase.BiomeMeta meta : mobList)
-                        for (CustomEntities entity : values())
-                            if (entity.getCustomClass().equals(meta.b))
-                                meta.b = entity.getNMSClass();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-        }
-    }
-
-    @SuppressWarnings("rawtypes")
-    private static Object getPrivateStatic(Class clazz, String f) throws Exception {
-        Field field = clazz.getDeclaredField(f);
-        field.setAccessible(true);
-        return field.get(null);
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static void a(Class c, String name, int id) {
-    	MinecraftKey key = new MinecraftKey(name);
+        Field field = getField(EntityTypes.class, "b");
+        Field modifiersField = getField(Field.class, "modifiers");
         try {
-            ((RegistryMaterials) getPrivateStatic(EntityTypes.class, "b")).a(id, key, c);
-            ((Set) getPrivateStatic(EntityTypes.class, "d")).add(key);
-            ((List) getPrivateStatic(EntityTypes.class, "g")).set(id, name);
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.set(null, CustomEntityRegistry.getInstance().getWrapped());
         } catch (Exception e) {
-            e.printStackTrace();
         }
+    }
+
+    private static Field getField(Class<?> clazz, String field) {
+        if (clazz == null)
+            return null;
+        Field f = null;
+        try {
+            f = clazz.getDeclaredField(field);
+            f.setAccessible(true);
+        } catch (Exception e) {
+        }
+        return f;
     }
 }
