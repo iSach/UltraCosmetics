@@ -38,9 +38,8 @@ public class SuitType extends CosmeticMatType<Suit> {
         return null;
     }
 
-    public static SuitType getByName(String s) {
+    public static SuitType getByName(String s, ArmorSlot slot) {
         if (s.contains(" ")) {
-            ArmorSlot slot = ArmorSlot.getByName(s.split(" ")[1]);
             try {
                 return VALUES.stream().filter(value -> value.getName(slot).equalsIgnoreCase(s)).findFirst().get();
             } catch (Exception exc) {
