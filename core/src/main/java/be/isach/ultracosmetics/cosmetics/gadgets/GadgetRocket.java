@@ -77,6 +77,11 @@ public class GadgetRocket extends Gadget {
 
                 @Override
                 public void run() {
+                    if(getOwner() == null) {
+                        cancel();
+                        return;
+                    }
+
                     if (getPlayer() == null) {
                         cancel();
                         return;
