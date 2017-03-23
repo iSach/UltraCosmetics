@@ -4,12 +4,10 @@ import java.sql.Connection;
 
 public class Table {
     private final Connection connection;
-
     private final String table;
 
     public Table(Connection connection, String table) {
         this.connection = connection;
-
         this.table = table;
     }
 

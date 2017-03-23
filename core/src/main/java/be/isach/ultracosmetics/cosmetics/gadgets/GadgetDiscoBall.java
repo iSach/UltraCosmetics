@@ -108,20 +108,20 @@ public class GadgetDiscoBall extends Gadget {
                     BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
                 }
             }
-        }
+        } else {
+			i = 0;
+			i2 = 0;
+			DISCO_BALLS.remove(this);
+
+			if (armorStand != null)
+				armorStand.remove();
+
+			armorStand = null;
+		}
     }
 
     private void clean() {
         running = false;
-        i = 0;
-        i2 = 0;
-        DISCO_BALLS.remove(this);
-
-        if (armorStand != null) {
-            armorStand.remove();
-        }
-
-        armorStand = null;
     }
 
     @Override
