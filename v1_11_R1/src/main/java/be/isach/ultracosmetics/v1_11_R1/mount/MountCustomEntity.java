@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author RadBuilder

@@ -34,7 +34,17 @@ public class MorphSnowman extends Morph {
     }
 
     @Override
+    protected void onEquip() {
+
+    }
+
+    @Override
     public void onUpdate() {
+
+    }
+
+    @Override
+    protected void onClear() {
 
     }
 }

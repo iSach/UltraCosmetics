@@ -117,6 +117,9 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
             entityBase.g_(sideMot, forMot);
         }
 
+    }@Override
+    public String getName() {
+        return LocaleI18n.get("entity.Spider.name");
     }
 
     @Override

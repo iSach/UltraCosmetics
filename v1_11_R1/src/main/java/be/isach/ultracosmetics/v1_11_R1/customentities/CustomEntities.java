@@ -21,7 +21,7 @@ public enum CustomEntities {
 	RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
 	CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
 
-	public static List<Entity> customEntities = new ArrayList<Entity>();
+	public static List<Entity> customEntities = new ArrayList<>();
 
 	private String name;
 	private int id;

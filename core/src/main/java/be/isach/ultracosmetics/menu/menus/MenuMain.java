@@ -9,10 +9,12 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
 import static be.isach.ultracosmetics.manager.TreasureChestManager.tryOpenChest;
 
@@ -81,6 +83,14 @@ public class MenuMain extends Menu {
             putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
         }
 
+        // Clear cosmetics item.
+        MaterialData materialData = ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item");
+        String message = MessageManager.getMessage("Clear-Cosmetics");
+        ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(), message);
+        putItem(inventory, inventory.getSize() - 5, itemStack, data -> {
+            player.clear();
+            open(player);
+        });
 
         if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
             ItemStack chest;

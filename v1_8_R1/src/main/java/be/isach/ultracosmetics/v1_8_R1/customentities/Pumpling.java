@@ -91,6 +91,11 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
         }
     }
 
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
     private boolean isCustomEntity() {
         return CustomEntities.customEntities.contains(this);
     }

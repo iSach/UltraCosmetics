@@ -27,7 +27,11 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
             passenger = (EntityHuman) bx().get(0);
         }
         ride(sideMot, forMot, passenger, this);
+    } @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Slime.name");
     }
+
 
     @Override
     public void g_(float sideMot, float forMot) {

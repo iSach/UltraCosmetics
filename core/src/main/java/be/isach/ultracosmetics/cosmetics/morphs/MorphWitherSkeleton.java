@@ -65,4 +65,14 @@ public class MorphWitherSkeleton extends Morph {
             SoundUtil.playSound(getPlayer(), Sounds.SKELETON_HURT, 0.4f, (float) Math.random() + 1f);
         }
     }
+
+    @Override
+    protected void onEquip() {
+
+    }
+
+    @Override
+    protected void onClear() {
+
+    }
 }

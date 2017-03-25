@@ -39,8 +39,17 @@ class EmoteAnimation extends BukkitRunnable {
     }
 
     void stop() {
+        if(!running) {
+            return;
+        }
+
         this.running = false;
-        cancel();
+
+        try {
+            cancel();
+        } catch (Exception exc) {
+            // ???
+        }
     }
 
     private void updateTexture() {

@@ -7,6 +7,10 @@
 testserver/
 testserver/*
 
+rebel-remote.xml
+rebel.xml
+rebel*
+
 *.iml
 
 ## Directory-based project format:
