@@ -1,15 +1,20 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.Updatable;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -19,7 +24,6 @@ import org.bukkit.inventory.ItemStack;
  * @since 12-20-2015
  */
 public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
-
     /**
      * Armor Slot of the Suit.
      */
@@ -32,8 +36,32 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     public Suit(UltraPlayer ultraPlayer, ArmorSlot armorSlot, SuitType suitType, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.SUITS, ultraPlayer, suitType);
-
         this.armorSlot = armorSlot;
+        Bukkit.getPluginManager().registerEvents(this, ultraCosmetics);
+    }
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+        ItemStack drop = event.getItemDrop().getItemStack();
+        if (event.getPlayer().equals(getPlayer()) && drop.hasItemMeta() && drop.getItemMeta().hasDisplayName() && drop.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+            event.getItemDrop().remove();
+            if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
+                clear();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        ItemStack current = event.getCurrentItem();
+        if (player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+            event.setCancelled(true);
+            if (event.getAction().name().contains("DROP") && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
+                clear();
+            }
+            player.updateInventory();
+        }
     }
 
     @Override
@@ -129,8 +157,8 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
                 getPlayer().getInventory().setBoots(null);
                 break;
         }
-
         getOwner().setSuit(getArmorSlot(), null);
+        HandlerList.unregisterAll(this);
     }
 
     /**
