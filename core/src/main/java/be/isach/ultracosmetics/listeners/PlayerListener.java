@@ -227,9 +227,15 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (SettingsManager.getConfig().getList("Disabled-Commands").contains(event.getMessage().split(" ")[0].replace("/", "").toLowerCase()) && ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentGadget().getItemStack().equals(event.getPlayer().getItemInHand())) {
-            event.setCancelled(true);
-            event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Message"));
+        if (SettingsManager.getConfig().getList("Disabled-Commands").contains(event.getMessage().split(" ")[0].replace("/", "").toLowerCase())){
+            UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+            if (player.getCurrentEmote() != null || player.getCurrentHat() != null) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Wearing-Message"));
+            } else if (player.getCurrentGadget() != null && player.getCurrentGadget().getItemStack().equals(event.getPlayer().getItemInHand())) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Holding-Message"));
+            }
         }
     }
 }
