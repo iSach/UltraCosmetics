@@ -87,7 +87,11 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                 List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
                 String[] array = new String[npLore.size()];
                 npLore.toArray(array);
-                putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), null);
+                putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), clickData -> {
+                    Player clicker = clickData.getClicker().getBukkitPlayer();
+                    clicker.sendMessage(MessageManager.getMessage("No-Permission"));
+                    clicker.closeInventory();
+                });
                 i++;
                 continue;
             }
