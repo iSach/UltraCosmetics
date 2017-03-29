@@ -363,6 +363,7 @@ public class MessageManager {
         addMessage("Disabled-Gadgets", "%prefix% &9you disabled gadgets!");
         addMessage("Not-Allowed-From-Console", "&c&lThis can't be executed from console!");
         addMessage("World-Disabled", "%prefix% &c&lCosmetics are disabled in this world!");
+        addMessage("Disabled-Command-Message", "%prefix% &c&lYou can't use this command while holding a cosmetic!");
     }
 
     /**
