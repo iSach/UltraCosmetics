@@ -1,9 +1,11 @@
 package be.isach.ultracosmetics.cosmetics;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -40,6 +42,23 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 
     public void equip() {
         if (!owner.getBukkitPlayer().hasPermission(getType().getPermission())) {
+            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
+            return;
+        }
+
+        ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
+
+        this.equipped = true;
+
+        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+        getPlayer().sendMessage(mess);
+
+        onEquip();
+    }
+
+    public void equip(SuitType suitType, ArmorSlot slot) {
+        if (!owner.getBukkitPlayer().hasPermission(suitType.getPermission(slot))) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
