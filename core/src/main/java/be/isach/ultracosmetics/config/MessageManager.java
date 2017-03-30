@@ -114,6 +114,7 @@ public class MessageManager {
         addMessage("Gadgets.Chickenator.name", "&f&lChickenator");
         addMessage("Gadgets.PortalGun.name", "&c&lPortal &9&lGun");
         addMessage("Gadgets.PortalGun.No-Block-Range", "%prefix% &c&lNo BLOCKS in range!");
+        addMessage("Gadgets.PortalGun.Different-Worlds", "%prefix% &c&lPortals must be in the same world!");
         addMessage("Gadgets.BlizzardBlaster.name", "&b&lBlizzard Blaster");
         addMessage("Gadgets.ThorHammer.name", "&f&lThor's Hammer");
         addMessage("Gadgets.SmashDown.name", "&c&lSmashDown");
