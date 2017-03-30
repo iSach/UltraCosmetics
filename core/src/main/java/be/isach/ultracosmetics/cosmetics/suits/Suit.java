@@ -55,7 +55,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
-        if (player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+        if (getPlayer() != null && player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
             event.setCancelled(true);
             if (event.getAction().name().contains("DROP") && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
                 clear();
