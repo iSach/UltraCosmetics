@@ -70,20 +70,17 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 continue;
             }
 
-            if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")) {
-                for (ArmorSlot slot : ArmorSlot.values()) {
-                    if (!player.hasPermission(suitType.getPermission(slot))) {
-                        continue;
-                    }
-                }
-                continue;
-            }
-
             //slotLoop:
             for (int l = 0; l < 4; l++) {
                 ArmorSlot armorSlot = ArmorSlot.values()[l];
                 Suit suit = player.getSuit(armorSlot);
                 int slot = SLOTS[i] + l * 9;
+
+                if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")) {
+                    if (!player.hasPermission(suitType.getPermission(armorSlot))) {
+                        continue;
+                    }
+                }
 
                 if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
                         && !player.hasPermission(suitType.getPermission(armorSlot))) {
