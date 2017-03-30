@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -90,7 +91,11 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                     List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
                     String[] array = new String[npLore.size()];
                     npLore.toArray(array);
-                    putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), null);
+                    putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), clickData -> {
+                        Player clicker = clickData.getClicker().getBukkitPlayer();
+                        clicker.sendMessage(MessageManager.getMessage("No-Permission"));
+                        clicker.closeInventory();
+                    });
                     i++;
                     continue superLoop;
                 }
