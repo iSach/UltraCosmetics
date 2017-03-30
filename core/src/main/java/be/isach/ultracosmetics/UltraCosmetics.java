@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 /**
  * Main class of the plugin.
- * 
+ *
  * @author 	iSach
  * @since 	08-03-2015
  */
@@ -135,7 +135,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         // Init Message manager.
         new MessageManager();
-        
+
         // reward.yml & design.yml
         new TreasureManager(this);
 
@@ -245,7 +245,7 @@ public class UltraCosmetics extends JavaPlugin {
                 || UltraCosmeticsData.get().areTreasureChestsEnabled())) {
     		return;
     	}
-    	
+
     	if(!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
     		return;
     	}
@@ -269,6 +269,10 @@ public class UltraCosmetics extends JavaPlugin {
         }
 
         config = CustomConfiguration.loadConfiguration(file);
+
+        List<String> disabledCommands = new ArrayList<>();
+        disabledCommands.add("hat");
+        config.addDefault("Disabled-Commands", disabledCommands,"List of commands that won't work when holding a cosmetic, wearing an emote, or wearing a hat.", "Type commands in lowercase without slashes.");
 
         List<String> enabledWorlds = Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
         config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");

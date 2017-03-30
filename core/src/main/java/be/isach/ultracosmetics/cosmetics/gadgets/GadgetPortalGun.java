@@ -139,9 +139,10 @@ public class GadgetPortalGun extends Gadget {
         if (locBlue != null) {
             Location portalCenter = locBlue.clone();
             if (locRed != null && !teleported) {
-                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                if(!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
                     locRed = null;
                     locBlue = null;
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
                     return;
                 }
                 Location toDistance;
@@ -204,9 +205,10 @@ public class GadgetPortalGun extends Gadget {
         }
         if (locRed != null) {
             if (locBlue != null && !teleported) {
-                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                if(!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
                     locRed = null;
                     locBlue = null;
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
                     return;
                 }
                 Location toDistance;
@@ -267,7 +269,7 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
-        if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR) {
+        if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR || getPlayer().getLastTwoTargetBlocks((Set<Material>) null, 20).size() < 2) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
             return false;
         }

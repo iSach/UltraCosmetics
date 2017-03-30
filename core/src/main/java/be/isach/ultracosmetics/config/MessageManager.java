@@ -114,6 +114,7 @@ public class MessageManager {
         addMessage("Gadgets.Chickenator.name", "&f&lChickenator");
         addMessage("Gadgets.PortalGun.name", "&c&lPortal &9&lGun");
         addMessage("Gadgets.PortalGun.No-Block-Range", "%prefix% &c&lNo BLOCKS in range!");
+        addMessage("Gadgets.PortalGun.Different-Worlds", "%prefix% &c&lPortals must be in the same world!");
         addMessage("Gadgets.BlizzardBlaster.name", "&b&lBlizzard Blaster");
         addMessage("Gadgets.ThorHammer.name", "&f&lThor's Hammer");
         addMessage("Gadgets.SmashDown.name", "&c&lSmashDown");
@@ -363,6 +364,8 @@ public class MessageManager {
         addMessage("Disabled-Gadgets", "%prefix% &9you disabled gadgets!");
         addMessage("Not-Allowed-From-Console", "&c&lThis can't be executed from console!");
         addMessage("World-Disabled", "%prefix% &c&lCosmetics are disabled in this world!");
+        addMessage("Disabled-Command-Holding-Message", "%prefix% &c&lYou can't use this command while holding a cosmetic!");
+        addMessage("Disabled-Command-Wearing-Message", "%prefix% &c&lYou can't use this command while wearing a cosmetic!");
     }
 
     /**

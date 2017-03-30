@@ -10,7 +10,11 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -18,7 +22,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
 /**
@@ -141,6 +144,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
                 && getOwner() != null
                 && event.getVehicle() != null
                 && event.getExited() != null
+                && event.getVehicle().getCustomName() != null
                 && event.getVehicle().getCustomName().equals(name)
                 && event.getExited() == getPlayer()
                 && !beingRemoved) {
