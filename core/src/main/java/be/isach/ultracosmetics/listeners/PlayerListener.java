@@ -229,7 +229,7 @@ public class PlayerListener implements Listener {
     public void onCommand(PlayerCommandPreprocessEvent event) {
         if (SettingsManager.getConfig().getList("Disabled-Commands").contains(event.getMessage().split(" ")[0].replace("/", "").toLowerCase())){
             UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-            if (player.getCurrentEmote() != null || player.getCurrentHat() != null) {
+            if (player.getCurrentEmote() != null || player.getCurrentHat() != null || player.hasSuitOn()) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Wearing-Message"));
             } else if (player.getCurrentGadget() != null && player.getCurrentGadget().getItemStack().equals(event.getPlayer().getItemInHand())) {

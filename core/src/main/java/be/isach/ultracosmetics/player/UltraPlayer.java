@@ -9,23 +9,20 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
-import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
-import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
-import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
-
-import me.libraryaddict.disguise.LibsDisguises;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -311,6 +308,19 @@ public class UltraPlayer {
         }
 
         return suitMap.get(armorSlot);
+    }
+
+    /**
+     * Checks if this player has any suit piece on.
+     *
+     * @return True if this player has any suit piece on, false otherwise.
+     */
+    public boolean hasSuitOn() {
+        for (ArmorSlot armorSlot : ArmorSlot.values()) {
+            if (suitMap.get(armorSlot) != null)
+                return true;
+        }
+        return false;
     }
 
     /**
