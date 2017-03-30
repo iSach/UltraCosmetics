@@ -14,6 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 /**
@@ -34,6 +35,7 @@ public class GadgetAntiGravity extends Gadget {
     @Override
     void onRightClick() {
         as = getPlayer().getWorld().spawn(getPlayer().getLocation(), ArmorStand.class);
+        as.setMetadata("NO_INTER", new FixedMetadataValue(getUltraCosmetics(), ""));
         as.setGravity(false);
         as.setSmall(true);
         running = true;
