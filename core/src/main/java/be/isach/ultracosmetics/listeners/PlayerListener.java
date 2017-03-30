@@ -51,7 +51,7 @@ public class PlayerListener implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
             ultraCosmetics.getPlayerManager().create(event.getPlayer());
 
-            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+            if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
                 Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
                     UltraPlayer cp = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
                     if (cp != null && event.getPlayer() != null)
@@ -67,7 +67,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWorldChange(final PlayerChangedWorldEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
-            if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && ((List<String>) SettingsManager.getConfig().get("Enabled-Worlds")).contains(event.getPlayer().getWorld().getName())) {
+            if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
                 Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem(), 5);
             }
         });
@@ -99,7 +99,7 @@ public class PlayerListener implements Listener {
                 && event.getItem().getItemMeta().hasDisplayName()
                 && event.getItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
-            Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> ultraCosmetics.getMenus().getMainMenu().open(ultraPlayer));
+            ultraCosmetics.getMenus().getMainMenu().open(ultraPlayer);
         }
     }
 
@@ -229,7 +229,7 @@ public class PlayerListener implements Listener {
     public void onCommand(PlayerCommandPreprocessEvent event) {
         if (SettingsManager.getConfig().getList("Disabled-Commands").contains(event.getMessage().split(" ")[0].replace("/", "").toLowerCase())){
             UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-            if (player.getCurrentEmote() != null || player.getCurrentHat() != null) {
+            if (player.getCurrentEmote() != null || player.getCurrentHat() != null || player.hasSuitOn()) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Wearing-Message"));
             } else if (player.getCurrentGadget() != null && player.getCurrentGadget().getItemStack().equals(event.getPlayer().getItemInHand())) {

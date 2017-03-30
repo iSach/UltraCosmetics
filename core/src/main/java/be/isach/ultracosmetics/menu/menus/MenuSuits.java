@@ -70,20 +70,20 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 continue;
             }
 
-            if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")
-                    && !player.hasPermission(suitType.getPermission())) {
-                continue;
-            }
-
             //slotLoop:
             for (int l = 0; l < 4; l++) {
-
                 ArmorSlot armorSlot = ArmorSlot.values()[l];
                 Suit suit = player.getSuit(armorSlot);
                 int slot = SLOTS[i] + l * 9;
 
+                if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")) {
+                    if (!player.hasPermission(suitType.getPermission(armorSlot))) {
+                        continue;
+                    }
+                }
+
                 if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
-                        && !player.hasPermission(suitType.getPermission())) {
+                        && !player.hasPermission(suitType.getPermission(armorSlot))) {
                     Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                     Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
                     String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name"));
@@ -137,7 +137,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 }
 
                 if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore")) {
-                    String yesOrNo = player.hasPermission(suitType.getPermission()) ? "Yes" : "No";
+                    String yesOrNo = player.hasPermission(suitType.getPermission(armorSlot)) ? "Yes" : "No";
                     String s = SettingsManager.getConfig().getString("No-Permission.Lore-Message-" + yesOrNo);
                     loreList.add(ChatColor.translateAlternateColorCodes('&', s));
                 }

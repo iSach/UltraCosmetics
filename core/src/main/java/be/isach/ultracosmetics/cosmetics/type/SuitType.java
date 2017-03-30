@@ -102,7 +102,7 @@ public class SuitType extends CosmeticMatType<Suit> {
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        suit.equip();
+        suit.equip(this, armorSlot);
         return suit;
     }
 
