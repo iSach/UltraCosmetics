@@ -39,6 +39,8 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
     @Override
     public void equip() {
 
+        super.equip();
+        
         if (getOwner().getCurrentMorph() != null) {
             getOwner().removeMorph();
         }
@@ -53,7 +55,7 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
         runTaskTimer(getUltraCosmetics(), 0, 1);
 
         getOwner().setCurrentMorph(this);
-        super.equip();
+       
     }
 
     @Override
