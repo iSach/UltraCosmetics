@@ -266,7 +266,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 	 * Opens Ammo Purchase Menu.
 	 */
 	public void openAmmoPurchaseMenu() {
-
 		Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Buy-Ammo"));
 
 		inventory.setItem(13, ItemFactory.create(getType().getMaterial(), getType().getData(),
@@ -288,7 +287,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 					ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
 		}
 		ItemFactory.fillInventory(inventory);
-
 		getPlayer().openInventory(inventory);
 		this.ammoInventory = inventory;
 	}

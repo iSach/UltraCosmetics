@@ -24,6 +24,7 @@ import java.util.UUID;
  * Created by sacha on 03/08/15.
  */
 public class ItemFactory {
+    public static ItemStack fillerItem;
 
     public static ItemStack create(Material material, byte data, String displayName, String... lore) {
         ItemStack itemStack = new MaterialData(material, data).toItemStack(1);
@@ -42,15 +43,18 @@ public class ItemFactory {
 
     public static void fillInventory(Inventory inventory) {
         if (SettingsManager.getConfig().getBoolean("Fill-Blank-Slots-With-Item.Enabled")) {
-            MaterialData materialData = getMaterialData(SettingsManager.getConfig().getString("Fill-Blank-Slots-With-Item.Item"));
-            ItemStack itemStack = materialData.toItemStack(1);
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName(ChatColor.GRAY + "");
-            itemStack.setItemMeta(itemMeta);
+            if (fillerItem == null) {
+                MaterialData materialData = getMaterialData(SettingsManager.getConfig().getString("Fill-Blank-Slots-With-Item.Item"));
+                ItemStack itemStack = materialData.toItemStack(1);
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName(ChatColor.GRAY + "");
+                itemStack.setItemMeta(itemMeta);
+                fillerItem = itemStack;
+            }
             for (int i = 0; i < inventory.getSize(); i++) {
                 if (inventory.getItem(i) == null
                         || inventory.getItem(i).getType() == Material.AIR)
-                    inventory.setItem(i, itemStack);
+                    inventory.setItem(i, fillerItem);
             }
         }
     }

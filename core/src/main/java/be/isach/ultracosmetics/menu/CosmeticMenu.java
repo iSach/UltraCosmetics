@@ -230,7 +230,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
         }
 
         putItems(inventory, player, page);
-
+        ItemFactory.fillInventory(inventory);
         player.getBukkitPlayer().openInventory(inventory);
     }
 
