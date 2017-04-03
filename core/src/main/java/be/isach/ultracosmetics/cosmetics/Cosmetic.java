@@ -57,23 +57,6 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
         onEquip();
     }
 
-    public void equip(SuitType suitType, ArmorSlot slot) {
-        if (!owner.getBukkitPlayer().hasPermission(suitType.getPermission(slot))) {
-            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
-            return;
-        }
-
-        ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
-
-        this.equipped = true;
-
-        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
-        getPlayer().sendMessage(mess);
-
-        onEquip();
-    }
-
     public void clear() {
 
         // Send unequip Message.

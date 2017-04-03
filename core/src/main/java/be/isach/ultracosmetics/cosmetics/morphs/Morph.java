@@ -14,9 +14,9 @@ import java.util.UUID;
 
 /**
  * Represents an instance of a morph summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-03-2015
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
 
@@ -37,10 +37,8 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
     }
 
     @Override
-    public void equip() {
+    protected void onEquip() {
 
-        super.equip();
-        
         if (getOwner().getCurrentMorph() != null) {
             getOwner().removeMorph();
         }
@@ -55,7 +53,6 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
         runTaskTimer(getUltraCosmetics(), 0, 1);
 
         getOwner().setCurrentMorph(this);
-       
     }
 
     @Override

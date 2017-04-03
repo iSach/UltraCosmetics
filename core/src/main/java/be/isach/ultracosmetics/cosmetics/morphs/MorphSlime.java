@@ -54,6 +54,7 @@ public class MorphSlime extends Morph {
 
     @Override
     protected void onEquip() {
+        super.onEquip();
         SlimeWatcher slimeWatcher = (SlimeWatcher) disguise.getWatcher();
         slimeWatcher.setSize(3);
     }

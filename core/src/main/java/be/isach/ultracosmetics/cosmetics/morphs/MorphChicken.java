@@ -97,11 +97,6 @@ public class MorphChicken extends Morph {
     }
 
     @Override
-    protected void onEquip() {
-
-    }
-
-    @Override
     public void onUpdate() {
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().chickenFall(getPlayer());
     }

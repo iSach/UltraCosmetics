@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,8 +44,11 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
+        if(getOwner() == null || getPlayer() == null) {
+            return;
+        }
         ItemStack drop = event.getItemDrop().getItemStack();
-        if (event.getPlayer().equals(getPlayer()) && drop.hasItemMeta() && drop.getItemMeta().hasDisplayName() && drop.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+        if (getPlayer() == null && event.getPlayer().equals(getPlayer()) && drop.hasItemMeta() && drop.getItemMeta().hasDisplayName() && drop.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
             event.getItemDrop().remove();
             if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
                 clear();
@@ -63,6 +67,25 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
             }
             player.updateInventory();
         }
+    }
+
+    public void equip(ArmorSlot slot) {
+        if (!getOwner().getBukkitPlayer().hasPermission(getType().getPermission())) {
+            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
+            return;
+        }
+
+        getUltraCosmetics().getServer().getPluginManager().registerEvents(this, getUltraCosmetics());
+
+        this.equipped = true;
+
+        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+        getPlayer().sendMessage(mess);
+
+        this.armorSlot = slot;
+
+        onEquip();
     }
 
     @Override

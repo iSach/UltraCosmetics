@@ -116,6 +116,7 @@ public class MorphElderGuardian extends Morph {
 
     @Override
     protected void onEquip() {
+        super.onEquip();
         World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
 
         customGuardian = new CustomGuardian(world);

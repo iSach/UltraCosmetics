@@ -26,10 +26,6 @@ public class MorphCreeper extends Morph {
     public MorphCreeper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.CREEPER, ultraCosmetics);
     }
-    @Override
-    protected void onEquip() {
-
-    }
 
     @Override
     public void onUpdate() {
