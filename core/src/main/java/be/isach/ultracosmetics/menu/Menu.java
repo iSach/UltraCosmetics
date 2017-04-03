@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.menu;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static be.isach.ultracosmetics.util.ItemFactory.fillerItem;
 
 /**
  * Represents a Menu. A menu can have multiple pages in case of cosmetics.
@@ -44,9 +47,8 @@ public abstract class Menu implements Listener {
 
     public void open(UltraPlayer player) {
         Inventory inventory = Bukkit.createInventory(null, getSize(), getName());
-
         putItems(inventory, player);
-
+        ItemFactory.fillInventory(inventory);
         player.getBukkitPlayer().openInventory(inventory);
     }
 
@@ -84,6 +86,12 @@ public abstract class Menu implements Listener {
 
         // Check Inventory is the good one
         if (!event.getInventory().getName().contains(getName())) {
+            return;
+        }
+
+        // Check that the filler item isn't being clicked
+        if (fillerItem != null && event.getCurrentItem().equals(fillerItem)) {
+            event.setCancelled(true);
             return;
         }
 

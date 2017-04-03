@@ -216,7 +216,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
         });
 
         putItems(inventory, player, page);
-
+        ItemFactory.fillInventory(inventory);
         player.getBukkitPlayer().openInventory(inventory);
     }
 
