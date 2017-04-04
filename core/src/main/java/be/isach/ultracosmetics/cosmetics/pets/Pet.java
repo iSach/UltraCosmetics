@@ -11,13 +11,17 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -85,29 +89,31 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             } else {
                 ((Ageable) entity).setAdult();
             }
-
             ((Ageable) entity).setAgeLock(true);
         }
 
+        String customName = getOwner().getPetName(getType());
+
+        // TODO Test other versions to see if we can get rid of ArmorStands.
         if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
             getEntity().setCustomNameVisible(true);
-            getEntity().setCustomName(getType().getEntityName(getPlayer()));
+            getEntity().setCustomName(customName == null ? getType().getEntityName(getPlayer()) : customName);
 
             if (getOwner().getPetName(getType()) != null) {
-                getEntity().setCustomName(getOwner().getPetName(getType()));
+                getEntity().setCustomName(customName == null ? getOwner().getPetName(getType()) : customName);
             }
         } else {
             armorStand = (ArmorStand) this.getPlayer().getWorld().spawnEntity(this.getPlayer().getLocation(), EntityType.ARMOR_STAND);
             armorStand.setVisible(false);
             armorStand.setSmall(true);
             armorStand.setGravity(false);
-            armorStand.setCustomName(getType().getEntityName(getPlayer()));
+            armorStand.setCustomName(customName == null ? getType().getEntityName(getPlayer()) : customName);
             armorStand.setCustomNameVisible(true);
             armorStand.setRemoveWhenFarAway(true);
             getUltraCosmetics().getArmorStandManager().makeUcStand(armorStand);
 
             if (getOwner().getPetName(getType()) != null) {
-                armorStand.setCustomName(getOwner().getPetName(getType()));
+                armorStand.setCustomName(customName == null ? getOwner().getPetName(getType()) : customName);
             }
         }
 
@@ -116,11 +122,11 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         // this.entity.setPassenger(armorStand);
 
         if (getType() == PetType.WITHER) {
-            this.entity.setCustomName(getType().getEntityName(getPlayer()));
+            this.entity.setCustomName(customName == null ? getType().getEntityName(getPlayer()) : customName);
             this.entity.setCustomNameVisible(true);
 
             if (getOwner().getPetName(getType()) != null) {
-                this.entity.setCustomName(getOwner().getPetName(getType()));
+                this.entity.setCustomName(customName == null ? getOwner().getPetName(getType()) : customName);
             }
 
             if (armorStand != null) {

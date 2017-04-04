@@ -51,22 +51,22 @@ public class MenuPets extends CosmeticMenu<PetType> {
                     if (player.getCurrentPet() != null) {
                         stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
                         run = data -> {
-                            renamePet(player);
                             player.getBukkitPlayer().closeInventory();
+                            renamePet(player);
                         };
                     } else {
                         stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed"));
                         run = data -> {
-                            player.getBukkitPlayer().sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
                             player.getBukkitPlayer().closeInventory();
+                            player.getBukkitPlayer().sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
                         };
                     }
                 }
             } else if (player.getCurrentPet() != null) {
                 stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
                 run = data -> {
-                  renamePet(player);
                     player.getBukkitPlayer().closeInventory();
+                    renamePet(player);
                 };
             } else {
                 stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed"));
@@ -85,10 +85,10 @@ public class MenuPets extends CosmeticMenu<PetType> {
             if (event.getSlot() == AAnvilGUI.AnvilSlot.OUTPUT) {
                 event.setWillClose(true);
                 event.setWillDestroy(true);
-                if (event.getName() == null) {
+                if (event.getName() == null || event.getName().equals("")) {
                     return;
                 }
-                if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") && UltraCosmeticsData.get().isPetRenameMoney()) {
+                if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") && UltraCosmeticsData.get().isUsingVaultEconomy()) {
                     buyRenamePet(p, ChatColor.translateAlternateColorCodes('&', event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace(" ", "")));
                 } else {
                     if (ultraPlayer.getCurrentPet().getType() == PetType.WITHER || UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
@@ -103,7 +103,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
                 event.setWillDestroy(false);
             }
         });
-        gui.setSlot(AAnvilGUI.AnvilSlot.INPUT_LEFT, ItemFactory.create(Material.PAPER, (byte) 0x0, ""));
+        gui.setSlot(AAnvilGUI.AnvilSlot.INPUT_LEFT, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, ""));
         gui.open();
     }
 
@@ -112,6 +112,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
     }
 
     private void buyRenamePet(final Player p, final String name) {
+        // TODO Add InventoryClick Listener for this.
         p.closeInventory();
         Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Rename-Pet"));
         for (int i = 27; i < 30; i++) {
@@ -123,9 +124,9 @@ public class MenuPets extends CosmeticMenu<PetType> {
             inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
         }
         inventory.setItem(13, ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet-Purchase")
-                .replace("%price%", "" + SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")).replace("%name%", name)));
+                .replace("%price%", "" + SettingsManager.getConfig().getString("Pets-Rename.Requires-Money.Price")).replace("%name%", name)));
         ItemFactory.fillInventory(inventory);
-        p.openInventory(inventory);
+        Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> p.openInventory(inventory), 5);
     }
 
     @Override
