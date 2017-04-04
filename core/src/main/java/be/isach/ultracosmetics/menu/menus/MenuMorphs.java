@@ -90,8 +90,8 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        MorphType.getByName(name.trim()).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, MorphType morphType, UltraCosmetics ultraCosmetics) {
+        morphType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override

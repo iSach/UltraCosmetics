@@ -86,8 +86,8 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        GadgetType.getByName(name).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, GadgetType gadgetType, UltraCosmetics ultraCosmetics) {
+        gadgetType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override

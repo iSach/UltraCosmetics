@@ -38,21 +38,6 @@ public class SuitType extends CosmeticMatType<Suit> {
         return null;
     }
 
-    public static SuitType getByName(String s, ArmorSlot slot) {
-        if (s.contains(" ")) {
-            try {
-                return VALUES.stream().filter(value -> value.getName(slot).equalsIgnoreCase(s)).findFirst().get();
-            } catch (Exception exc) {
-                return null;
-            }
-        }
-        try {
-            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
-    }
-
     public static void checkEnabled() {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }

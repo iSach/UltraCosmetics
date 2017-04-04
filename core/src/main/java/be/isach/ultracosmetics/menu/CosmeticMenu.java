@@ -147,7 +147,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                     if (getCosmetic(ultraPlayer) == null) {
                         toggleOff(ultraPlayer);
                     }
-                    toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics());
+                    toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
 
                     if (getCategory() == Category.GADGETS) {
                         if (ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
@@ -180,7 +180,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                         } catch (Exception ignored) {
                         }
                     }
-                    toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics());
+                    toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
                     if (ultraPlayer.getCurrentGadget() != null && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
                         ultraPlayer.getCurrentGadget().lastPage = currentPage;
                         ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
@@ -350,7 +350,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
     abstract public List<T> enabled();
 
-    abstract protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics);
+    abstract protected void toggleOn(UltraPlayer ultraPlayer, T type, UltraCosmetics ultraCosmetics);
 
     abstract protected void toggleOff(UltraPlayer ultraPlayer);
 

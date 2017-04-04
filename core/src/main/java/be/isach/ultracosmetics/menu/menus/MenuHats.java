@@ -45,8 +45,8 @@ public class MenuHats extends CosmeticMenu<HatType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        HatType.getByName(name).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, HatType hatType, UltraCosmetics ultraCosmetics) {
+        hatType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override
