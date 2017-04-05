@@ -32,8 +32,8 @@ public class MenuParticleEffects extends CosmeticMenu<ParticleEffectType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        ParticleEffectType.getByName(name).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, ParticleEffectType particleEffectType, UltraCosmetics ultraCosmetics) {
+        particleEffectType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override

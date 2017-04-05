@@ -14,9 +14,9 @@ import java.util.List;
 
 /**
  * Emote {@link be.isach.ultracosmetics.menu.Menu Menu}.
- * 
- * @author 	iSach
- * @since 	08-23-2016
+ *
+ * @author iSach
+ * @since 08-23-2016
  */
 public class MenuEmotes extends CosmeticMenu<EmoteType> {
 
@@ -45,8 +45,8 @@ public class MenuEmotes extends CosmeticMenu<EmoteType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        EmoteType.getByName(name).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, EmoteType emoteType, UltraCosmetics ultraCosmetics) {
+        emoteType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override

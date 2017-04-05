@@ -41,6 +41,10 @@ public class ItemFactory {
         return itemStack;
     }
 
+    public static ItemStack create(Material material, String displayName, String... lore) {
+        return create(material, (byte)0x0, displayName, lore);
+    }
+
     public static void fillInventory(Inventory inventory) {
         if (SettingsManager.getConfig().getBoolean("Fill-Blank-Slots-With-Item.Enabled")) {
             if (fillerItem == null) {

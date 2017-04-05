@@ -44,14 +44,6 @@ public class MountType extends CosmeticEntType<Mount> {
         ENABLED.addAll(values().stream().filter(MountType::isEnabled).collect(Collectors.toList()));
     }
 
-    public static MountType getByName(String s) {
-        try {
-            return VALUES.stream().filter(value -> value.getMenuName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
-    }
-
     public static final MountType DRUGGEDHORSE = new MountType("ultracosmetics.mounts.druggedhorse", "DruggedHorse", Material.SUGAR, (byte) 0, EntityType.HORSE, "&7&oThat is just too much!", 2, MountDruggedHorse.class);
     public static final MountType INFERNALHORROR = new MountType("ultracosmetics.mounts.infernalhorror", "InfernalHorror", Material.BONE, (byte) 0, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorType(), "&7&oThis mount comes directly from... hell!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorClass());
     public static final MountType GLACIALSTEED = new MountType("ultracosmetics.mounts.glacialsteed", "GlacialSteed", Material.PACKED_ICE, (byte) 0, EntityType.HORSE, "&7&oThis mount comes from North Pole!", 2, MountGlacialSteed.class);
