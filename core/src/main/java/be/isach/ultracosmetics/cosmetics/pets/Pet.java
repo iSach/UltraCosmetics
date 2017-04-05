@@ -88,8 +88,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             }
             ((Ageable) entity).setAgeLock(true);
         }
-
-        // TODO Test other versions to see if we can get rid of ArmorStands.
+        
         getEntity().setCustomNameVisible(true);
         getEntity().setCustomName(getType().getEntityName(getPlayer()));
 
