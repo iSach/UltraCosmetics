@@ -92,28 +92,26 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             ((Ageable) entity).setAgeLock(true);
         }
 
-        String customName = getOwner().getPetName(getType());
-
         // TODO Test other versions to see if we can get rid of ArmorStands.
         if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
             getEntity().setCustomNameVisible(true);
-            getEntity().setCustomName(customName == null ? getType().getEntityName(getPlayer()) : customName);
+            getEntity().setCustomName(getType().getEntityName(getPlayer()));
 
             if (getOwner().getPetName(getType()) != null) {
-                getEntity().setCustomName(customName == null ? getOwner().getPetName(getType()) : customName);
+                getEntity().setCustomName(getOwner().getPetName(getType()));
             }
         } else {
             armorStand = (ArmorStand) this.getPlayer().getWorld().spawnEntity(this.getPlayer().getLocation(), EntityType.ARMOR_STAND);
             armorStand.setVisible(false);
             armorStand.setSmall(true);
             armorStand.setGravity(false);
-            armorStand.setCustomName(customName == null ? getType().getEntityName(getPlayer()) : customName);
+            armorStand.setCustomName(getType().getEntityName(getPlayer()));
             armorStand.setCustomNameVisible(true);
             armorStand.setRemoveWhenFarAway(true);
             getUltraCosmetics().getArmorStandManager().makeUcStand(armorStand);
 
             if (getOwner().getPetName(getType()) != null) {
-                armorStand.setCustomName(customName == null ? getOwner().getPetName(getType()) : customName);
+                armorStand.setCustomName(getOwner().getPetName(getType()));
             }
         }
 
@@ -122,11 +120,11 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         // this.entity.setPassenger(armorStand);
 
         if (getType() == PetType.WITHER) {
-            this.entity.setCustomName(customName == null ? getType().getEntityName(getPlayer()) : customName);
+            this.entity.setCustomName(getType().getEntityName(getPlayer()));
             this.entity.setCustomNameVisible(true);
 
             if (getOwner().getPetName(getType()) != null) {
-                this.entity.setCustomName(customName == null ? getOwner().getPetName(getType()) : customName);
+                this.entity.setCustomName(getOwner().getPetName(getType()));
             }
 
             if (armorStand != null) {
