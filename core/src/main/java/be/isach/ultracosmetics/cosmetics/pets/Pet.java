@@ -9,15 +9,17 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -30,14 +32,13 @@ import java.util.concurrent.Executors;
  * @since 03-08-2015
  */
 public abstract class Pet extends Cosmetic<PetType> implements Updatable {
-
     /**
      * List of items popping out from Pet.
      */
     public ArrayList<Item> items = new ArrayList<>();
 
     /**
-     * Armor stand which is the name of the pet.
+     * ArmorStand for nametags. Most pets don't use this.
      */
     public ArmorStand armorStand;
 
@@ -85,48 +86,18 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             } else {
                 ((Ageable) entity).setAdult();
             }
-
             ((Ageable) entity).setAgeLock(true);
         }
+        
+        getEntity().setCustomNameVisible(true);
+        getEntity().setCustomName(getType().getEntityName(getPlayer()));
 
-        if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
-            getEntity().setCustomNameVisible(true);
-            getEntity().setCustomName(getType().getEntityName(getPlayer()));
-
-            if (getOwner().getPetName(getType()) != null) {
-                getEntity().setCustomName(getOwner().getPetName(getType()));
-            }
-        } else {
-            armorStand = (ArmorStand) this.getPlayer().getWorld().spawnEntity(this.getPlayer().getLocation(), EntityType.ARMOR_STAND);
-            armorStand.setVisible(false);
-            armorStand.setSmall(true);
-            armorStand.setGravity(false);
-            armorStand.setCustomName(getType().getEntityName(getPlayer()));
-            armorStand.setCustomNameVisible(true);
-            armorStand.setRemoveWhenFarAway(true);
-            getUltraCosmetics().getArmorStandManager().makeUcStand(armorStand);
-
-            if (getOwner().getPetName(getType()) != null) {
-                armorStand.setCustomName(getOwner().getPetName(getType()));
-            }
+        if (getOwner().getPetName(getType()) != null) {
+            getEntity().setCustomName(getOwner().getPetName(getType()));
         }
 
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(entity);
-        // this.entity.setPassenger(armorStand);
-
-        if (getType() == PetType.WITHER) {
-            this.entity.setCustomName(getType().getEntityName(getPlayer()));
-            this.entity.setCustomNameVisible(true);
-
-            if (getOwner().getPetName(getType()) != null) {
-                this.entity.setCustomName(getOwner().getPetName(getType()));
-            }
-
-            if (armorStand != null) {
-                armorStand.remove();
-            }
-        }
 
         this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
     }
@@ -177,11 +148,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 items.clear();
                 clear();
                 return;
-            }
-
-            if (armorStand != null
-                    && getType() != PetType.WITHER) {
-                armorStand.teleport(getEntity().getLocation().add(0, -0.7, 0));
             }
         } catch (NullPointerException exc) {
             exc.printStackTrace();

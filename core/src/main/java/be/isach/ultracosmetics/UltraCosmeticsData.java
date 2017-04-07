@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 /**
  * This class is only for cleaning main class a bit.
@@ -56,14 +55,14 @@ public class UltraCosmeticsData {
     private boolean moneyTreasureLoot;
 
     /**
+     * If a Vault economy is being used.
+     */
+    private boolean usingVaultEconomy;
+
+    /**
      * Determines if Gadget Cooldown should be shown in action bar.
      */
     private boolean cooldownInBar;
-
-    /**
-     * Determines if Pet Renaming required Money.
-     */
-    private boolean petRenameMoney;
 
     /**
      * Should the GUI close after Cosmetic Selection?
@@ -196,10 +195,6 @@ public class UltraCosmeticsData {
         return moneyTreasureLoot;
     }
 
-    public boolean isPetRenameMoney() {
-        return petRenameMoney;
-    }
-
     public boolean arePlaceholdersColored() {
         return placeHolderColor;
     }
@@ -234,5 +229,13 @@ public class UltraCosmeticsData {
 
     public void setServerVersion(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
+    }
+
+    public void setUsingVaultEconomy(boolean usingVaultEconomy) {
+        this.usingVaultEconomy = usingVaultEconomy;
+    }
+
+    public boolean isUsingVaultEconomy() {
+        return this.usingVaultEconomy;
     }
 }

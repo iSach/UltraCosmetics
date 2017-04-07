@@ -48,7 +48,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
             return;
         }
         ItemStack drop = event.getItemDrop().getItemStack();
-        if (getPlayer() == null && event.getPlayer().equals(getPlayer()) && drop.hasItemMeta() && drop.getItemMeta().hasDisplayName() && drop.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+        if (event.getPlayer().equals(getPlayer()) && drop.hasItemMeta() && drop.getItemMeta().hasDisplayName() && drop.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
             event.getItemDrop().remove();
             if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
                 clear();

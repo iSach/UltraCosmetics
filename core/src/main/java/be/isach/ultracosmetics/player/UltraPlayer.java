@@ -22,7 +22,6 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.ServerVersion;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -446,10 +445,10 @@ public class UltraPlayer {
     public void setPetName(PetType petType, String name) {
         name = ChatColor.translateAlternateColorCodes('&', name.replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace(" ", ""));
         if (currentPet != null) {
-            if (currentPet.getType() == PetType.WITHER || UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
-                currentPet.entity.setCustomName(name);
-            } else {
+            if (currentPet.armorStand != null) {
                 currentPet.armorStand.setCustomName(name);
+            } else {
+                currentPet.getEntity().setCustomName(name);
             }
         }
         if (UltraCosmeticsData.get().usingFileStorage()) {
@@ -473,7 +472,6 @@ public class UltraPlayer {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;
                 }
-
                 return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName());
             }
         } catch (NullPointerException e) {

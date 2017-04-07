@@ -12,9 +12,7 @@ import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
-import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.AAnvilGUI;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -89,7 +87,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
                 if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") && UltraCosmeticsData.get().getPlugin().isVaultLoaded()) {
                     event.setWillClose(false);
                     event.setWillDestroy(false);
-                    buyRenamePet(ultraPlayer, ChatColor.translateAlternateColorCodes('&', event.getName().replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace(" ", "")));
+                    buyRenamePet(ultraPlayer, event.getName());
                 } else {
                     ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), event.getName());
                 }
@@ -113,9 +111,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
         PurchaseData purchaseData = new PurchaseData();
         purchaseData.setPrice(SettingsManager.getConfig().getInt("Pets-Rename.Requires-Money.Price"));
         purchaseData.setShowcaseItem(showcaseItem);
-        purchaseData.setOnPurchase(() -> {
-            ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), name);
-        });
+        purchaseData.setOnPurchase(() -> ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), name));
 
         MenuPurchase menu = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menus.Rename-Pet"), purchaseData);
         menu.open(ultraPlayer);
@@ -126,7 +122,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
         if(player.getPetName(cosmeticType) != null) {
             ItemStack item = itemStack.clone();
             ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName(itemMeta.getDisplayName() + " §r§7(" + player.getPetName(cosmeticType) + ")");
+            itemMeta.setDisplayName(itemMeta.getDisplayName() + ChatColor.GRAY + " (" + player.getPetName(cosmeticType) + ")");
             item.setItemMeta(itemMeta);
             return item;
         }
