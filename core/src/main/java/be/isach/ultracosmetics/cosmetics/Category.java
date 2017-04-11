@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
@@ -16,11 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Project: UltraCosmetics
- * Package: be.isach.ultracosmetics.cosmetics
- * Created by: Sacha
- * Created on: 20th June, 2016
- * at 22:35
+ * Cosmetic category enum.
+ * 
+ * @author 	iSach
+ * @since 	06-20-2016
  */
 public enum Category {
 
@@ -54,7 +54,7 @@ public enum Category {
             return ultraCosmetics.getMenus().getMorphsMenu();
         }
     },
-    HATS("Hats", "Equip", "Unequip", "Clear-HatType", "%hatname%", "Equip", "Unequip") {
+    HATS("Hats", "Equip", "Unequip", "Clear-Hat", "%hatname%", "Equip", "Unequip") {
         @Override
         public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
             return ultraCosmetics.getMenus().getHatsMenu();
@@ -135,7 +135,7 @@ public enum Category {
             this.is = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA" +
                     "6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTA1OWQ1OWViNGU1OWM" +
                     "zMWVlY2Y5ZWNlMmY5Y2YzOTM0ZTQ1YzBlYzQ3NmZjODZiZmFlZjhlYTkxM2VhNzE" +
-                    "wIn19fQ==", "§8§o");
+                    "wIn19fQ==", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC);
         }
         ItemMeta itemMeta = is.getItemMeta();
         itemMeta.setDisplayName(MessageManager.getMessage("Menu." + configPath));

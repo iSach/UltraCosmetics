@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.util;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.apache.commons.codec.binary.Base64;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -24,7 +25,7 @@ public class TexturedSkullFactory {
         if (url == null || url.isEmpty())
             return skull;
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        skullMeta.setDisplayName("§8§oEmote");
+        skullMeta.setDisplayName(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Emote");
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         byte[] encodedData = Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
         profile.getProperties().put("textures", new Property("textures", new String(encodedData)));

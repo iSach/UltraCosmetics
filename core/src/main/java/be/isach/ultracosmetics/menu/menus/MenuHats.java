@@ -13,10 +13,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
+ * Hat {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public class MenuHats extends CosmeticMenu<HatType> {
 
@@ -26,7 +26,6 @@ public class MenuHats extends CosmeticMenu<HatType> {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
-
     }
 
     @Override
@@ -36,8 +35,8 @@ public class MenuHats extends CosmeticMenu<HatType> {
 
     @Override
     protected ItemStack filterItem(ItemStack itemStack, HatType cosmeticType, UltraPlayer player) {
-        ItemMeta itemMeta = itemStack.getItemMeta().clone();
-        itemStack = cosmeticType.getItemStack();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemStack = cosmeticType.getItemStack().clone();
         ItemMeta other = itemStack.getItemMeta().clone();
         other.setDisplayName(itemMeta.getDisplayName());
         other.setLore(itemMeta.getLore());
@@ -46,8 +45,8 @@ public class MenuHats extends CosmeticMenu<HatType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        HatType.getByName(name).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, HatType hatType, UltraCosmetics ultraCosmetics) {
+        hatType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override

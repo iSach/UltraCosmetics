@@ -6,23 +6,35 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
+import me.libraryaddict.disguise.DisguiseAPI;
+
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by sacha on 26/08/15.
+ * Represents an instance of a bat morph summoned by a player.
+ *
+ * @author iSach
+ * @since 08-26-2015
  */
 public class MorphBat extends Morph {
 
     public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.BAT, ultraCosmetics);
-        if (owner != null) {
-            getPlayer().setAllowFlight(true);
-        }
+    }
+
+    @Override
+    protected void onEquip() {
+        super.onEquip();
+        getPlayer().setAllowFlight(true);
+    }
+
+    @Override
+    public void onUpdate() {
+        //--
     }
 
     @EventHandler
@@ -41,13 +53,8 @@ public class MorphBat extends Morph {
 
     @Override
     public void onClear() {
-        if (getPlayer().getGameMode() != GameMode.CREATIVE)
+        if (getPlayer().getGameMode() != GameMode.CREATIVE) {
             getPlayer().setAllowFlight(false);
-        super.clear();
-    }
-
-    @Override
-    protected void onEquip() {
-
+        }
     }
 }

@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Bat;
@@ -21,7 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Sacha on 18/10/15.
+* Represents an instance of a ghost party gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-18-2015
  */
 public class GadgetGhostParty extends Gadget {
 
@@ -39,7 +43,7 @@ public class GadgetGhostParty extends Gadget {
             ghost.setSmall(true);
             ghost.setGravity(false);
             ghost.setVisible(false);
-            ghost.setHelmet(ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjhkMjE4MzY0MDIxOGFiMzMwYWM1NmQyYWFiN2UyOWE5NzkwYTU0NWY2OTE2MTllMzg1NzhlYTRhNjlhZTBiNiJ9fX0", "§8§oGhost"));
+            ghost.setHelmet(ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjhkMjE4MzY0MDIxOGFiMzMwYWM1NmQyYWFiN2UyOWE5NzkwYTU0NWY2OTE2MTllMzg1NzhlYTRhNjlhZTBiNiJ9fX0", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Ghost"));
             ghost.setChestplate(ItemFactory.createColouredLeather(Material.LEATHER_CHESTPLATE, 255, 255, 255));
             ghost.setItemInHand(new ItemStack(Material.DIAMOND_HOE));
             bat.setPassenger(ghost);
@@ -71,7 +75,6 @@ public class GadgetGhostParty extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
@@ -83,11 +86,6 @@ public class GadgetGhostParty extends Gadget {
             }
         } catch (Exception exc) {
         }
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 
     @Override

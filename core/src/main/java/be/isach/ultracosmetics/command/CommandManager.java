@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.subcommands.*;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Command manager.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public class CommandManager implements CommandExecutor {
 
@@ -28,9 +33,9 @@ public class CommandManager implements CommandExecutor {
 
     public CommandManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setExecutor(this);
+        this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setExecutor(this);
         String[] aliases = {"uc", "cosmetics"};
-        ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
+        this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
     }
 
     /**
@@ -44,7 +49,7 @@ public class CommandManager implements CommandExecutor {
 
     public void showHelp(CommandSender commandSender, int page) {
         commandSender.sendMessage("");
-        commandSender.sendMessage("§f§l  UltraCosmetics Help (/uc <page>) §8§l(" + page + "/" + getMaxPages() + ")");
+        commandSender.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "UltraCosmetics Help (/uc <page>) " + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "(" + page + "/" + getMaxPages() + ")");
         int from = 1;
         if (page > 1)
             from = 8 * (page - 1) + 1;
@@ -53,7 +58,7 @@ public class CommandManager implements CommandExecutor {
             if (h > commands.size())
                 break;
             SubCommand sub = commands.get(h - 1);
-            commandSender.sendMessage("    §8|  §7" + sub.getUsage() + "§f§o " + sub.getDescription());
+            commandSender.sendMessage(ChatColor.DARK_GRAY + "|  " + ChatColor.GRAY + sub.getUsage() + ChatColor.WHITE + " " + ChatColor.ITALIC + sub.getDescription());
         }
     }
 
@@ -106,7 +111,6 @@ public class CommandManager implements CommandExecutor {
             }
         }
         showHelp(sender, 1);
-
         return true;
     }
 
@@ -124,4 +128,3 @@ public class CommandManager implements CommandExecutor {
         registerCommand(new SubCommandTreasure(ultraCosmetics));
     }
 }
-

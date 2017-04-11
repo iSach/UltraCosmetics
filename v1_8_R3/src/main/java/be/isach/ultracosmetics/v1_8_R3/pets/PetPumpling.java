@@ -21,7 +21,7 @@ public class PetPumpling extends CustomEntityPet {
     Random r = new Random();
 
     public PetPumpling(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
-        super(ultraPlayer, PetType.PUMPLING, ultraCosmetics);
+        super(ultraPlayer, ultraCosmetics, PetType.PUMPLING);
     }
 
     @Override

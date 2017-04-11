@@ -13,7 +13,10 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 26/08/15.
+* Represents an instance of a slime morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-26-2015
  */
 public class MorphSlime extends Morph {
 
@@ -21,15 +24,11 @@ public class MorphSlime extends Morph {
 
     public MorphSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.SLIME, ultraCosmetics);
-        if(owner != null) {
-            SlimeWatcher slimeWatcher = (SlimeWatcher)disguise.getWatcher();
-            slimeWatcher.setSize(3);
-        }
     }
 
     @EventHandler
     public void onKick(PlayerKickEvent event) {
-        if(event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && event.getReason().equalsIgnoreCase("Flying is not enabled on this server"))
+        if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && event.getReason().equalsIgnoreCase("Flying is not enabled on this server"))
             event.setCancelled(true);
     }
 
@@ -49,12 +48,24 @@ public class MorphSlime extends Morph {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if(event.getEntity() == getPlayer() && getOwner().getCurrentMorph() == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+        if (event.getEntity() == getPlayer() && getOwner().getCurrentMorph() == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
             event.setCancelled(true);
     }
 
     @Override
     protected void onEquip() {
+        super.onEquip();
+        SlimeWatcher slimeWatcher = (SlimeWatcher) disguise.getWatcher();
+        slimeWatcher.setSize(3);
+    }
+
+    @Override
+    public void onUpdate() {
+
+    }
+
+    @Override
+    protected void onClear() {
 
     }
 }

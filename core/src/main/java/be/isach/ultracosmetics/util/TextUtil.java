@@ -1,5 +1,7 @@
 package be.isach.ultracosmetics.util;
 
+import org.bukkit.ChatColor;
+
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 
@@ -21,11 +23,7 @@ public class TextUtil {
      * @param toFilter The text to filter.
      * @return The filtered text.
      */
-    private static CharSequence filterColor(String toFilter) {
-        Character[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'l', 'o', 'n', 'm', 'r', 'k'};
-        for (Character character : chars)
-            toFilter = toFilter.replace("§" + character, "");
-        return toFilter;
+    public static CharSequence filterColor(String toFilter) {
+        return ChatColor.stripColor(toFilter);
     }
-
 }

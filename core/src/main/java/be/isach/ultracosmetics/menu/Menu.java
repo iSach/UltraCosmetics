@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.menu;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,14 +15,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
+import static be.isach.ultracosmetics.util.ItemFactory.fillerItem;
+
 /**
- * Package: be.isach.ultracosmetics.menu
- * Created by: iSach
- * Date: 5/07/16
- * Project: UltraCosmetics
- * <p>
- * Description : Represents a Menu. A menu can have multiple pages in case of cosmetics.
- * Each item in the menu will - when clicked by a player - executes a ClickRunnable.
+ * Represents a Menu. A menu can have multiple pages in case of cosmetics.
+ * Each item in the menu will, when clicked by a player, execute a ClickRunnable.
+ * 
+ * @author 	iSach
+ * @since 	07-05-2016
  */
 public abstract class Menu implements Listener {
 
@@ -36,7 +37,7 @@ public abstract class Menu implements Listener {
      * Key: Item
      * Value: ClickRunnable to call when item is clicked.
      */
-    private Map<ItemStack, ClickRunnable> clickRunnableMap = new HashMap<>();
+    private Map<Inventory, Map<ItemStack, ClickRunnable>> clickRunnableMap = new HashMap<>();
 
     public Menu(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -46,9 +47,8 @@ public abstract class Menu implements Listener {
 
     public void open(UltraPlayer player) {
         Inventory inventory = Bukkit.createInventory(null, getSize(), getName());
-
         putItems(inventory, player);
-
+        ItemFactory.fillInventory(inventory);
         player.getBukkitPlayer().openInventory(inventory);
     }
 
@@ -57,7 +57,14 @@ public abstract class Menu implements Listener {
         Validate.notNull(clickRunnable);
 
         inventory.setItem(slot, itemStack);
-        clickRunnableMap.put(itemStack, clickRunnable);
+        if(clickRunnableMap.containsKey(inventory)) {
+            Map<ItemStack, ClickRunnable> map = clickRunnableMap.get(inventory);
+            map.put(itemStack, clickRunnable);
+        } else {
+            Map<ItemStack, ClickRunnable> map = new HashMap<>();
+            map.put(itemStack, clickRunnable);
+            clickRunnableMap.put(inventory, map);
+        }
     }
 
     @EventHandler
@@ -82,13 +89,24 @@ public abstract class Menu implements Listener {
             return;
         }
 
+        // Check that the filler item isn't being clicked
+        if (fillerItem != null && event.getCurrentItem().equals(fillerItem)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // Check that Inventory is valid.
+        if (!clickRunnableMap.keySet().contains(event.getInventory())) {
+            return;
+        }
+
         // Check that Item is meant to do an action.
-        if (!clickRunnableMap.keySet().contains(event.getCurrentItem())) {
+        if (!clickRunnableMap.get(event.getInventory()).keySet().contains(event.getCurrentItem())) {
             return;
         }
 
         event.setCancelled(true);
-        ClickRunnable clickRunnable = clickRunnableMap.get(event.getCurrentItem());
+        ClickRunnable clickRunnable = clickRunnableMap.get(event.getInventory()).get(event.getCurrentItem());
 
         // Check clickrunnable isn't null.
         if (clickRunnable == null) {

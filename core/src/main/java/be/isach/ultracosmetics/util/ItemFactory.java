@@ -1,10 +1,11 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -23,6 +24,7 @@ import java.util.UUID;
  * Created by sacha on 03/08/15.
  */
 public class ItemFactory {
+    public static ItemStack fillerItem;
 
     public static ItemStack create(Material material, byte data, String displayName, String... lore) {
         ItemStack itemStack = new MaterialData(material, data).toItemStack(1);
@@ -32,24 +34,31 @@ public class ItemFactory {
             List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList();
             for (String s : lore)
                 if (s != null)
-                    finalLore.add(s.replace("&", "§"));
+                    finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
             itemMeta.setLore(finalLore);
         }
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
 
+    public static ItemStack create(Material material, String displayName, String... lore) {
+        return create(material, (byte)0x0, displayName, lore);
+    }
+
     public static void fillInventory(Inventory inventory) {
         if (SettingsManager.getConfig().getBoolean("Fill-Blank-Slots-With-Item.Enabled")) {
-            MaterialData materialData = getMaterialData(SettingsManager.getConfig().getString("Fill-Blank-Slots-With-Item.Item"));
-            ItemStack itemStack = materialData.toItemStack(1);
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName("§7");
-            itemStack.setItemMeta(itemMeta);
+            if (fillerItem == null) {
+                MaterialData materialData = getMaterialData(SettingsManager.getConfig().getString("Fill-Blank-Slots-With-Item.Item"));
+                ItemStack itemStack = materialData.toItemStack(1);
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName(ChatColor.GRAY + "");
+                itemStack.setItemMeta(itemMeta);
+                fillerItem = itemStack;
+            }
             for (int i = 0; i < inventory.getSize(); i++) {
                 if (inventory.getItem(i) == null
                         || inventory.getItem(i).getType() == Material.AIR)
-                    inventory.setItem(i, itemStack);
+                    inventory.setItem(i, fillerItem);
             }
         }
     }

@@ -4,16 +4,12 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 /**
- * Package: be.isach.ultracosmetics.util
- * Created by: sachalewin
- * Date: 5/08/16
- * Project: UltraCosmetics
- *
- * Description: This class is only about cleaning a bit main class.
- * here is stored almost all global data.
+ * This class is only for cleaning main class a bit.
+ * 
+ * @author 	iSach
+ * @since 	08-05-2016
  */
 public class UltraCosmeticsData {
     
@@ -59,14 +55,14 @@ public class UltraCosmeticsData {
     private boolean moneyTreasureLoot;
 
     /**
+     * If a Vault economy is being used.
+     */
+    private boolean usingVaultEconomy;
+
+    /**
      * Determines if Gadget Cooldown should be shown in action bar.
      */
     private boolean cooldownInBar;
-
-    /**
-     * Determines if Pet Renaming required Money.
-     */
-    private boolean petRenameMoney;
 
     /**
      * Should the GUI close after Cosmetic Selection?
@@ -108,15 +104,10 @@ public class UltraCosmeticsData {
             treasureChests = true;
             if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
                     && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lTreasure Chests' Money Loot requires Vault!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§lMoney Loot is turned off!");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l");
-                Bukkit.getConsoleSender().sendMessage("§c§l-------------------------");
+                ultraCosmetics.getSmartLogger().write("-------------------------");
+                ultraCosmetics.getSmartLogger().write("Treasure Chests' Money Loot requires Vault!");
+                ultraCosmetics.getSmartLogger().write("Money Loot is turned off!");
+                ultraCosmetics.getSmartLogger().write("-------------------------");
                 moneyTreasureLoot = false;
             }
         }
@@ -137,13 +128,16 @@ public class UltraCosmeticsData {
 
     boolean checkServerVersion() {
         String bukkVersion = Bukkit.getVersion();
-        if (!bukkVersion.contains("1.8.8") && !bukkVersion.contains("1.9") && !bukkVersion.contains("1.10")) {
-            System.out.println("----------------------------\n\nUltraCosmetics requires Spigot 1.8.8 or higher to work!\n\n----------------------------");
+        if (!bukkVersion.contains("1.8")
+                && !bukkVersion.contains("1.9")
+                && !bukkVersion.contains("1.10")
+                && !bukkVersion.contains("1.11")) {
+            System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON 1.8 OR HIGHER\n\n----------------------------");
             Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
             return false;
         }
 
-        String mcVersion = "1.8.8";
+        String mcVersion = "1.8.0";
 
         try {
             mcVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -160,7 +154,7 @@ public class UltraCosmeticsData {
                 Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
                 return true;
             }
-        } else serverVersion = ServerVersion.v1_8_R3;
+        } else serverVersion = ServerVersion.v1_8_R1;
 
         UltraCosmeticsData.get().setServerVersion(serverVersion);
 
@@ -201,10 +195,6 @@ public class UltraCosmeticsData {
         return moneyTreasureLoot;
     }
 
-    public boolean isPetRenameMoney() {
-        return petRenameMoney;
-    }
-
     public boolean arePlaceholdersColored() {
         return placeHolderColor;
     }
@@ -239,5 +229,13 @@ public class UltraCosmeticsData {
 
     public void setServerVersion(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
+    }
+
+    public void setUsingVaultEconomy(boolean usingVaultEconomy) {
+        this.usingVaultEconomy = usingVaultEconomy;
+    }
+
+    public boolean isUsingVaultEconomy() {
+        return this.usingVaultEconomy;
     }
 }

@@ -1,47 +1,119 @@
-Finish new Menus.
+########    #####    ########      #####  
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##     ##     ##  ##      ##  ##     ## 
+   ##       #####    #########     #####  
 
-Remake entirely Treasure Chest system to be cleaner, more optimized.
-Possibility of custom rewards and placing chests like Mineplex.
 
-new Cosmetics
+------------------ TODO ------------------
+- Finish new menus
+- New cosmetics
+- API
+- Something like http://prntscr.com/c3b2tw
+- Disable collision between HumanEntity and Pets
+- Fix Treasure Chests command "dupe"
+- Remake entirely Treasure Chest system to be cleaner, more optimized.
+- Possibility of custom rewards and placing chests like Mineplex.
+- Gadget subclass for gadgets that need different things for right and left clicks and no longer a variable and shit.
 
-API
+--------------- SUGGESTIONS --------------
+- Companions
+- Banners
+- Gestures
+- Settings Tab
+- Balloon
+- Music
+- Vehicles
+- Skins (?)
+- Pets:
+    - Iron Golem
+    - Snow Golem
+    - Slime
+    - Squid
+    - Villager
+    - Bat
+    - Horse
+    - Enderman
+    - Zombie Pigman
+    - Spider
+    - Blaze
+    - Cave Spider
+    - Creeper
+    - Ghast
+    - Magma Cube
+    - Silverfish
+    - Skeleton
+    - Spider Jockey
+    - Zombie
+    - Zombie Villager
+    - Wither Skeleton
+    - Witch
+    - Endermite
+    - Guardian
+    - Elder Guardian
+    - Killer Rabbit
+    - Pigman Jockey
 
-http://prntscr.com/c3b2tw
+-------- Treasure Chest Structure --------
+Treasure Chest Structure:
+chestpos.json (/yaml?)
+designs.yml
+config.yml
+rewards.yml
 
-See as I have an item there?
-If I could select a gadget it would remove it and name it &dGadget &7(&f%Gadget%&7) after you remove it it goes back.
+-------------- chestpos.json -------------
+{
+    "chests": [
+        {
+            "world": "hub",
+            "x": 12.3,
+            "y": 45.6,
+            "z": 78.9,
+        }
+        {
+            "world": "hub",
+            "x": 22.3,
+            "y": 45.6,
+            "z": 78.9,
+        }
+        {
+            "world": "hub",
+            "x": 32.3,
+            "y": 45.6,
+            "z": 78.9,
+        }
+    ]
+}
 
-Disable collision between HumanEntity and Pets.
-FIX Command Treasure Chests "dupe"
 
-SUGGESTIONS:
-  Pets:
-    Iron Golem
-    Snow Golem
-    Slime
-    Squid
-    Villager
-    Bat
-    Horse
-    Enderman
-    Zombie Pigman
-    Spider
-    Blaze
-    Cave Spider
-    Creeper
-    Ghast
-    Magma Cube
-    Silverfish
-    Skeleton
-    Spider Jockey
-    Zombie
-    Zombie Villager
-    Wither Skeleton
-    Witch
-    Endermite
-    Guardian
-    Elder Guardian
-    Killer Rabbit
-    Pigman Jockey
-    Baby Zombie
+--------------- designs.yml --------------
+Same as current design (?)
+
+
+--------------- config.yml ---------------
+enabled: true
+allow-static-chests: false
+allow-chests-anywhere-from-gui: true
+allow-buy-key-from-gui: true
+key-price: 1000
+
+--------------  rewards.yml --------------
+reward-name:
+  name: "..."
+  chance-rate: 30
+  disable-if-permission:
+    enabled: false
+    permission: ranks.legend
+  reward-commands:
+    - "pex user {player-uuid} set rank titan"
+  sound:
+    enabled: true
+    sound-effect: EXPLODE
+  chat-message:
+    enabled: true
+    sound-effect: "{player-name} found rare"
+  firework-effect:
+    enabled: true
+    color: BLUE

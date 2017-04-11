@@ -7,11 +7,11 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.v1_10_R1.nms.WrapperEntityLiving;
 import be.isach.ultracosmetics.v1_10_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_10_R1.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -19,10 +19,7 @@ import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_10_R1.entity.*;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Wither;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
@@ -49,7 +46,7 @@ public class EntityUtil implements IEntityUtil {
     }
 
     @Override
-    public void setHorseSpeed(Horse horse, double speed) {
+    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
         ((CraftHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
@@ -79,8 +76,12 @@ public class EntityUtil implements IEntityUtil {
         }
         UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
         Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
-            for (Player pl : player.getWorld().getPlayers())
+            for (Player pl : player.getWorld().getPlayers()) {
+                if(as == null) {
+                    continue;
+                }
                 PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
+            }
             fakeArmorStands.remove(as);
         }, 20);
         if (affectPlayers)

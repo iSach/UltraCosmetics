@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 01/12/15.
+ * Gadget types.
+ * 
+ * @author 	iSach
+ * @since 	12-01-2015
  */
 public class GadgetType extends CosmeticMatType<Gadget> {
 
@@ -30,14 +33,6 @@ public class GadgetType extends CosmeticMatType<Gadget> {
             if (gadgetType.getConfigName().equalsIgnoreCase(s)) return gadgetType;
         }
         return null;
-    }
-
-    public static GadgetType getByName(String s) {
-        try {
-            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
     }
 
     public static void checkEnabled() {
@@ -83,6 +78,7 @@ public class GadgetType extends CosmeticMatType<Gadget> {
 
         if (SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown") == null) {
             this.countdown = defaultCountdown;
+            SettingsManager.getConfig().set("Gadgets." + configName + ".Cooldown", defaultCountdown);
         } else {
             this.countdown = Double.valueOf(String.valueOf(SettingsManager.getConfig().get("Gadgets." + configName + ".Cooldown")));
         }

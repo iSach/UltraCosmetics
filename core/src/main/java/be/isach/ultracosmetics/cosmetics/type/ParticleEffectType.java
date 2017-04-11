@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.type
- * Created by: Sacha
- * Date: 18/12/15
- * Project: UltraCosmetics
+ * Particle effect types.
+ * 
+ * @author 	iSach
+ * @since 	12-18-2015
  */
 public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
 
@@ -35,14 +35,6 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
         return null;
     }
 
-    public static ParticleEffectType getByName(String s) {
-        try {
-            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
-    }
-
     public static void checkEnabled() {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
@@ -60,7 +52,7 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
     public static final ParticleEffectType INFERNO = new ParticleEffectType("ultracosmetics.particleeffects.inferno", "Inferno", 1, Particles.FLAME, Material.NETHER_STALK, (byte) 0, ParticleEffectInferno.class, "&7&oEffect created by Satan himself!");
     public static final ParticleEffectType ANGELWINGS = new ParticleEffectType("ultracosmetics.particleeffects.angelwings", "AngelWings", 2, Particles.REDSTONE, Material.FEATHER, (byte) 0, ParticleEffectAngelWings.class, "&7&oBecome an angel!");
     public static final ParticleEffectType SUPERHERO = new ParticleEffectType("ultracosmetics.particleeffects.superhero", "SuperHero", 2, Particles.REDSTONE, Material.GLOWSTONE_DUST, (byte) 0, ParticleEffectSuperHero.class, "&7&oBecome Superman!");
-    public static final ParticleEffectType SANTAHAT = new ParticleEffectType("ultracosmetics.particleeffects.santahat", "SantaHat", 2, Particles.REDSTONE, Material.BEACON, (byte) 378, ParticleEffectSantaHat.class, "&7&oBecome Santa!");
+    public static final ParticleEffectType SANTAHAT = new ParticleEffectType("ultracosmetics.particleeffects.santahat", "SantaHat", 2, Particles.REDSTONE, Material.BEACON, (byte) 0, ParticleEffectSantaHat.class, "&7&oBecome Santa!");
     public static final ParticleEffectType CRUSHEDCANDYCANE = new ParticleEffectType("ultracosmetics.particleeffects.crushedcandycane", "CrushedCandyCane", 1, Particles.ITEM_CRACK, Material.INK_SACK, (byte) 1, ParticleEffectCrushedCandyCane.class,"&7&oThere's no such thing as too much\n&7&oChristmas Candy. Do not listen\n&7&oto your dentist.");
     public static final ParticleEffectType ENDERAURA = new ParticleEffectType("ultracosmetics.particleeffects.enderaura", "EnderAura", 1, Particles.PORTAL, Material.EYE_OF_ENDER, (byte) 0, ParticleEffectEnderAura.class, "&7&oThese mystic particle attach" +" to\n&7&oonly the most legendary of players!");
     public static final ParticleEffectType FLAMEFAIRY = new ParticleEffectType("ultracosmetics.particleeffects.flamefairy", "FlameFairy", 1, Particles.FLAME, Material.BLAZE_POWDER, (byte) 0, ParticleEffectFlameFairy.class, "&7&oHEY!!");
@@ -83,5 +75,4 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
     public int getRepeatDelay() {
         return repeatDelay;
     }
-
 }

@@ -24,7 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Sacha on 19/12/15.
+ * Represents an instance of a trampoline gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 12-19-2015
  */
 public class GadgetTrampoline extends Gadget {
 
@@ -37,7 +40,9 @@ public class GadgetTrampoline extends Gadget {
     public GadgetTrampoline(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.TRAMPOLINE, ultraCosmetics);
 
-        if (owner == null) return;
+        if (owner == null) {
+            return;
+        }
 
         Location loc1 = getPlayer().getLocation().add(-2, 0, -2);
         Location loc2 = getPlayer().getLocation().add(2, 15, 2);
@@ -46,8 +51,10 @@ public class GadgetTrampoline extends Gadget {
 
         this.cuboid = new Cuboid(loc1, loc2);
 
-        if (duration > GadgetType.TRAMPOLINE.getCountdown())
+        if (duration > GadgetType.TRAMPOLINE.getCountdown()) {
             duration = (int) GadgetType.TRAMPOLINE.getCountdown() / 2;
+        }
+
         durationInTicks = duration * 20;
     }
 
@@ -92,15 +99,12 @@ public class GadgetTrampoline extends Gadget {
 
     @Override
     public void onUpdate() {
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                for (Entity entity : EntityUtils.getEntitiesInRadius(initialCenter, 4d)) {
-                    Block b = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-                    if (b.getType() == Material.WOOL
-                            && cuboid.contains(b))
-                        MathUtils.applyVelocity(entity, new Vector(0, 3, 0));
-                }
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+            for (Entity entity : EntityUtils.getEntitiesInRadius(initialCenter, 4d)) {
+                Block b = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
+                if (b.getType() == Material.WOOL
+                        && cuboid.contains(b))
+                    MathUtils.applyVelocity(entity, new Vector(0, 3, 0));
             }
         });
     }
@@ -172,6 +176,7 @@ public class GadgetTrampoline extends Gadget {
         setToRestore(block, Material.LADDER, (byte) 4);
     }
 
+    @SuppressWarnings("deprecation")
     private void setToRestore(Block block, Material material, byte data) {
         MaterialData materialData = new MaterialData(material, data);
         trampoline.put(block, materialData);

@@ -5,28 +5,31 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
-import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
-import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
 import me.libraryaddict.disguise.DisguiseAPI;
-
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -34,12 +37,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Package: be.isach.ultracosmetics
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
- * <p>
- * Description: Represents a player on the server.
+ * Represents a player on the server.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class UltraPlayer {
 
@@ -97,6 +98,7 @@ public class UltraPlayer {
     public UltraPlayer(UUID uuid, UltraCosmetics ultraCosmetics) {
         try {
             this.uuid = uuid;
+            this.ultraCosmetics = ultraCosmetics;
 
             gadgetCooldowns = new HashMap<>();
 
@@ -309,6 +311,19 @@ public class UltraPlayer {
     }
 
     /**
+     * Checks if this player has any suit piece on.
+     *
+     * @return True if this player has any suit piece on, false otherwise.
+     */
+    public boolean hasSuitOn() {
+        for (ArmorSlot armorSlot : ArmorSlot.values()) {
+            if (suitMap.get(armorSlot) != null)
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Removes entire suit.
      */
     public void removeSuit() {
@@ -346,6 +361,26 @@ public class UltraPlayer {
         return toReturn;
     }
 
+    public <T extends Cosmetic> T getCosmetic(Category category) {
+        switch (category) {
+            case EFFECTS:
+                return (T) getCurrentParticleEffect();
+            case EMOTES:
+                return (T) getCurrentEmote();
+            case GADGETS:
+                return (T) getCurrentGadget();
+            case HATS:
+                return (T) getCurrentHat();
+            case MORPHS:
+                return (T) getCurrentMorph();
+            case MOUNTS:
+                return (T) getCurrentMount();
+            case PETS:
+                return (T) getCurrentPet();
+        }
+        return null;
+    }
+
     /**
      * Opens the Key Purchase Menu.
      */
@@ -354,7 +389,27 @@ public class UltraPlayer {
             return;
         }
 
-        // TODO
+        if (!ultraCosmetics.isVaultLoaded()) {
+            return;
+        }
+
+        try {
+            final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
+            for (int i = 27; i < 30; i++) {
+                inventory.setItem(i, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 9, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 18, ItemFactory.create(Material.EMERALD_BLOCK, (byte) 0x0, MessageManager.getMessage("Purchase")));
+                inventory.setItem(i + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+                inventory.setItem(i + 9 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+                inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
+            }
+            ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"))));
+            inventory.setItem(13, itemStack);
+            ItemFactory.fillInventory(inventory);
+            Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(inventory), 3);
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
     }
 
     /**
@@ -384,14 +439,22 @@ public class UltraPlayer {
     /**
      * Sets the name of a pet.
      *
-     * @param petName The pet name.
+     * @param petType The pet name.
      * @param name    The new name.
      */
-    public void setPetName(String petName, String name) {
+    public void setPetName(PetType petType, String name) {
+        name = ChatColor.translateAlternateColorCodes('&', name.replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace(" ", ""));
+        if (currentPet != null) {
+            if (currentPet.armorStand != null) {
+                currentPet.armorStand.setCustomName(name);
+            } else {
+                currentPet.getEntity().setCustomName(name);
+            }
+        }
         if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petName, name);
+            SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petType.getConfigName(), name);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petName, name);
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petType.getConfigName(), name);
         }
     }
 
@@ -409,7 +472,6 @@ public class UltraPlayer {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;
                 }
-
                 return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName());
             }
         } catch (NullPointerException e) {
@@ -434,7 +496,7 @@ public class UltraPlayer {
             if (currentGadget != null) {
                 getBukkitPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
                         ItemFactory.create(currentGadget.getType().getMaterial(), currentGadget.getType().getData(),
-                                "§f§l" + getAmmo(currentGadget.getType().toString()
+                                ChatColor.WHITE + "" + ChatColor.BOLD + getAmmo(currentGadget.getType().toString()
                                         .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
             }
         }
@@ -444,7 +506,6 @@ public class UltraPlayer {
         getBukkitPlayer().setVelocity(vector);
         Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
             FallDamageManager.addNoFall(getBukkitPlayer());
-            sendMessage("test");
         }, 2);
     }
 
@@ -515,9 +576,11 @@ public class UltraPlayer {
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
             this.morphSelfViewCache = CacheValue.ENABLED;
+            DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), true);
         } else {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
             this.morphSelfViewCache = CacheValue.DISABLED;
+            DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), false);
         }
     }
 
@@ -608,7 +671,7 @@ public class UltraPlayer {
             getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), getBukkitPlayer().getInventory().getItem(slot));
             getBukkitPlayer().getInventory().remove(slot);
         }
-        String name = String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§");
+        String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
         Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
         byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
         getBukkitPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
@@ -625,7 +688,7 @@ public class UltraPlayer {
                 && getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
                 && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
                 && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§")))
+                .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")))))
             getBukkitPlayer().getInventory().setItem(slot, null);
     }
 

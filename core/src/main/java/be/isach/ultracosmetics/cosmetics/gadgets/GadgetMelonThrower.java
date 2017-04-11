@@ -9,10 +9,13 @@ import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,71 +27,68 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a melon thrower gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class GadgetMelonThrower extends Gadget implements Listener {
 
-    Random random = new Random();
-
-    ArrayList<Item> melons = new ArrayList<>();
-    ArrayList<Item> melonBlocks = new ArrayList<>();
+    private Random random = new Random();
+    private Item melon = null;
+    private World world = null;
 
     public GadgetMelonThrower(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, GadgetType.MELONTHROWER,ultraCosmetics);
+        super(owner, GadgetType.MELONTHROWER, ultraCosmetics);
     }
 
     @EventHandler
     public void onTakeUpMelon(PlayerPickupItemEvent event) {
-        if (melons.contains(event.getItem()) && event.getItem().getTicksLived() > 5
+        if (event.getItem().hasMetadata("UC#MELONITEM")
+                && event.getItem().getTicksLived() > 5
                 && affectPlayers) {
             event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 2));
             SoundUtil.playSound(getPlayer().getLocation(), Sounds.BURP, 1.4f, 1.5f);
             event.setCancelled(true);
-            melons.remove(event.getItem());
             event.getItem().remove();
         }
-        if (melonBlocks.contains(event.getItem()))
-            event.setCancelled(true);
     }
 
     @Override
     void onRightClick() {
+        this.world = getPlayer().getWorld();
         SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
         Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.MELON_BLOCK, (byte) 0x0, UUID.randomUUID().toString()));
         item.setPickupDelay(0);
+        item.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONBLOCK"));
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
-        melonBlocks.add(item);
+        melon = item;
     }
 
     @Override
     public void onUpdate() {
         try {
-            Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
-                @Override
-                public void run() {
-                    Iterator<Item> melonBlockIterator = melonBlocks.iterator();
-                    while (melonBlockIterator.hasNext()) {
-                        Item item = melonBlockIterator.next();
-                        if (item.isOnGround()) {
-                            item.getWorld().playEffect(item.getLocation(), Effect.STEP_SOUND, 103);
-                            for (int i = 0; i < 8; i++) {
-                                final Item melon = getPlayer().getWorld().dropItem(item.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UUID.randomUUID().toString()));
-                                melon.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
-                                melons.add(melon);
-                                Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        if (melon.isValid()) {
-                                            melon.remove();
-                                            melons.remove(melon);
-                                        }
-                                    }
-                                }, 100);
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                if (melon == null || !melon.isValid()) {
+                    return;
+                }
+                if (melon.isOnGround()) {
+                    melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
+                    for (int i = 0; i < 8; i++) {
+                        final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UUID.randomUUID().toString()));
+                        newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
+                        newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (newItem.isValid()) {
+                                    newItem.remove();
+                                }
                             }
-                            item.remove();
-                            melonBlockIterator.remove();
-                        }
+                        }, 100);
                     }
+                    melon.remove();
+                    melon = null;
                 }
             });
         } catch (Exception exc) {
@@ -97,11 +97,17 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 
     @Override
     public void onClear() {
-        for (Item melon : melons)
+        if (melon != null) {
             melon.remove();
+        }
 
-        for (Item melonBlock : melonBlocks)
-            melonBlock.remove();
+        if (world != null) {
+            for (Item i : world.getEntitiesByClass(Item.class)) {
+                if(i.hasMetadata("UC#MELONITEM")) {
+                    i.remove();
+                }
+            }
+        }
 
     }
 

@@ -4,12 +4,10 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.menu.menus.*;
 
 /**
- * Package: be.isach.ultracosmetics.menu
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
- * <p>
  * Stores menus.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public class Menus {
 

@@ -23,14 +23,14 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a ethereal pearl gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class GadgetEtherealPearl extends Gadget implements Listener {
 
-    Random r = new Random();
-
-    HashMap<Player, BukkitRunnable> runnableHashMap = new HashMap<>();
-    ArrayList<EnderPearl> pearls = new ArrayList<>();
+    private EnderPearl pearl;
 
     public GadgetEtherealPearl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.ETHEREALPEARL, ultraCosmetics);
@@ -38,74 +38,48 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @Override
     public void onClear() {
-        for (EnderPearl pearl : pearls)
+        if (pearl != null) {
             pearl.remove();
-        HandlerList.unregisterAll(this);
+        }
     }
 
     @Override
     void onRightClick() {
-        if (getOwner().getCurrentMount() != null)
+        if (getOwner().getCurrentMount() != null) {
             getOwner().removeMount();
+        }
+
         if (getPlayer().getVehicle() instanceof EnderPearl) {
             getPlayer().getVehicle().remove();
         }
-        if (runnableHashMap.containsKey(getPlayer())) {
-            if (getPlayer().getVehicle() != null)
-                getPlayer().getVehicle().remove();
-            getPlayer().eject();
-            if (getPlayer().getGameMode() != GameMode.CREATIVE)
-                getPlayer().setAllowFlight(false);
-            runnableHashMap.get(getPlayer()).cancel();
-            runnableHashMap.remove(getPlayer());
-            spawnRandomFirework(getPlayer().getLocation());
-        }
-        final EnderPearl pearl = getPlayer().launchProjectile(EnderPearl.class);
+
+        EnderPearl pearl = getPlayer().launchProjectile(EnderPearl.class);
         pearl.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.53d));
         pearl.setPassenger(getPlayer());
         getPlayer().teleport(getPlayer().getLocation().add(0, 5, 0));
-        pearls.add(pearl);
         if (!getPlayer().getAllowFlight()) {
             getPlayer().setAllowFlight(true);
         }
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (pearl.isValid()) {
-                    getPlayer().eject();
-                    pearl.setPassenger(getPlayer());
-                } else {
-                    pearl.remove();
-                    getPlayer().eject();
-                    if (getPlayer().getGameMode() != GameMode.CREATIVE)
-                        getPlayer().setAllowFlight(false);
-                    runnableHashMap.remove(getPlayer());
-                    spawnRandomFirework(getPlayer().getLocation());
-                    cancel();
-                }
-            }
-        };
-        runnableHashMap.put(getPlayer(), runnable);
-        runnable.runTaskTimer(getUltraCosmetics(), 0, 10);
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && runnableHashMap.containsKey(event.getEntity()))
+        if (event.getEntity() instanceof Player && event.getEntity() == getPlayer()) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent event) {
-        if (runnableHashMap.containsKey(event.getPlayer()) && event.getPlayer().getName().equals(getPlayer().getName())) {
+        if (pearl != null && event.getPlayer().getName().equals(getPlayer().getName())) {
             getPlayer().eject();
-            if (getPlayer().getGameMode() != GameMode.CREATIVE)
+
+            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
                 getPlayer().setAllowFlight(false);
-            runnableHashMap.get(getPlayer()).cancel();
-            runnableHashMap.remove(getPlayer());
+            }
+
             spawnRandomFirework(getPlayer().getLocation());
-            for (Entity entity : pearls)
-                entity.remove();
+            pearl.remove();
         }
     }
 
@@ -117,27 +91,24 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     public void spawnRandomFirework(Location location) {
         final ArrayList<Firework> fireworks = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            final Firework f = getPlayer().getWorld().spawn(location, Firework.class);
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
 
-            FireworkMeta fm = f.getFireworkMeta();
-            fm.addEffect(getRandomFireworkEffect());
-            f.setFireworkMeta(fm);
-            fireworks.add(f);
-        }
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                for (Firework f : fireworks)
-                    f.detonate();
+            for (int i = 0; i < 4; i++) {
+                final Firework f = getPlayer().getWorld().spawn(location, Firework.class);
+
+                FireworkMeta fm = f.getFireworkMeta();
+                fm.addEffect(getRandomFireworkEffect());
+                f.setFireworkMeta(fm);
+                fireworks.add(f);
             }
-        }, 2);
+        });
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> fireworks.forEach(Firework::detonate), 2);
     }
 
 
     @EventHandler
     public void onItemFrameBreak(HangingBreakByEntityEvent event) {
-        if (pearls.contains(event.getRemover())
+        if (pearl == event.getRemover()
                 || event.getRemover() == getPlayer()) {
             event.setCancelled(true);
         }
@@ -146,20 +117,32 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity() instanceof EnderPearl) {
-            if (pearls.contains(event.getEntity())) {
-                pearls.remove(event.getEntity());
+            if (pearl == event.getEntity()) {
                 event.getEntity().remove();
+                pearl = null;
             }
         }
     }
 
     @Override
     public void onUpdate() {
-        if (runnableHashMap.containsKey(getPlayer())) {
+        if (pearl != null && pearl.isValid()) {
+            getPlayer().eject();
+            pearl.setPassenger(getPlayer());
+
             if (getPlayer().isOnGround()) {
-                //getBukkitPlayer().getVehicle().remove();
-                getPlayer().eject();
+                pearl.remove();
+                pearl = null;
             }
+        } else {
+            getPlayer().eject();
+
+            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+                getPlayer().setAllowFlight(false);
+            }
+
+            pearl = null;
+            spawnRandomFirework(getPlayer().getLocation());
         }
     }
 

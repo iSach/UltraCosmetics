@@ -9,8 +9,12 @@ import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
-import java.util.UUID;
-
+/**
+* Represents an instance of a hype cart mount.
+ * 
+ * @author 	iSach
+ * @since 	08-03-2015
+ */
 public class MountHypeCart extends Mount<Minecart> {
 
     public MountHypeCart(UltraPlayer owner, UltraCosmetics ultraCosmetics) {

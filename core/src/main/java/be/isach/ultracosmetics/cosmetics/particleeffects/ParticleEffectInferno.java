@@ -7,7 +7,10 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 
 /**
- * Created by Sacha on 18/10/15.
+ * Represents an instance of inferno particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	10-18-2015
  */
 public class ParticleEffectInferno extends ParticleEffect {
 
@@ -49,10 +52,5 @@ public class ParticleEffectInferno extends ParticleEffect {
             else
                 steps[i] += 4;
         }
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 }

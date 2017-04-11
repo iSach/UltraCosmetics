@@ -8,10 +8,11 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by sacha on 12/08/15.
+ * Represents an instance of blood helix particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class ParticleEffectBloodHelix extends ParticleEffect {
 
@@ -19,11 +20,6 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
 
     public ParticleEffectBloodHelix(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, owner, ParticleEffectType.BLOODHELIX);
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 
     @Override
@@ -58,5 +54,4 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
         }
         i += 0.05;
     }
-
 }

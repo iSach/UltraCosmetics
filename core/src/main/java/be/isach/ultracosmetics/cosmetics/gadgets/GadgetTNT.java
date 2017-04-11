@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a TNT gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
 public class GadgetTNT extends Gadget {
 
@@ -32,9 +35,8 @@ public class GadgetTNT extends Gadget {
 
     @Override
     void onRightClick() {
-
         TNTPrimed tnt = getPlayer().getWorld().spawn(getPlayer().getLocation().add(0, 2, 0), TNTPrimed.class);
-        // vector stuff
+        // Vector stuff
         tnt.setFuseTicks(20);
         tnt.setVelocity(getPlayer().getLocation().getDirection().multiply(0.854321));
         entities.add(tnt);
@@ -95,12 +97,10 @@ public class GadgetTNT extends Gadget {
 
     @Override
     void onLeftClick() {
-
     }
 
     @Override
     public void onUpdate() {
-
     }
 
     @Override

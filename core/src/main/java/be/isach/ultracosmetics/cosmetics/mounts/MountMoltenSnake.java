@@ -17,9 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Sacha on 28/11/15.
+* Represents an instance of a moltonsnake mount.
+ * 
+ * @author 	iSach
+ * @since 	11-28-2015
  */
-public class MountMoltenSnake extends Mount {
+public class MountMoltenSnake extends Mount<MagmaCube> {
 
     private List<Entity> entities = new ArrayList<>();
     private Entity last;

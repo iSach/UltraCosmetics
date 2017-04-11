@@ -9,109 +9,125 @@ import org.bukkit.Location;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a bat blaster gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class GadgetBatBlaster extends Gadget {
 
-    private HashMap<Player, Long> isActive = new HashMap();
-    private HashMap<Player, Location> playerVelocity = new HashMap();
-    private HashMap<Player, ArrayList<Bat>> bats = new HashMap();
+	private boolean active = false;
+	private Location playerVelocity;
+	private List<Bat> bats;
 
-    public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, GadgetType.BATBLASTER, ultraCosmetics);
-    }
+	public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, GadgetType.BATBLASTER, ultraCosmetics);
+	}
 
-    @Override
-    void onRightClick() {
-        this.playerVelocity.put(getPlayer(), getPlayer().getEyeLocation());
-        this.isActive.put(getPlayer(), Long.valueOf(System.currentTimeMillis()));
+	@Override
+	void onRightClick() {
+		this.active = true;
+		this.playerVelocity = getPlayer().getEyeLocation();
+		this.bats = new ArrayList<>();
 
-        this.bats.put(getPlayer(), new ArrayList<>());
+		for (int i = 0; i < 16; i++) {
+			this.bats.add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
+		}
 
-        for (int i = 0; i < 16; i++) {
-            this.bats.get(getPlayer()).add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
-        }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                onClear();
-            }
-        }, 60);
-    }
+		Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), this::clean, 60);
+	}
 
-    public boolean hitPlayer(Location loc, Player player) {
-        if (loc.add(0, -loc.getY(), 0).toVector().subtract(player.getLocation().add(0, -player.getLocation().getY(), 0).toVector()).length() < 0.8D) {
-            return true;
-        }
-        if (loc.add(0, -loc.getY(), 0).toVector().subtract(player.getLocation().add(0, -player.getLocation().getY(), 0).toVector()).length() < 1.2) {
-            if ((loc.getY() > player.getLocation().getY()) && (loc.getY() < player.getEyeLocation().getY())) {
-                return true;
-            }
-        }
-        return false;
-    }
+	public boolean hitPlayer(Location location, Player player) {
+		Vector locVec = location.add(0, -location.getY(), 0).toVector();
+		Vector playerVec = player.getLocation().add(0, -player.getLocation().getY(), 0).toVector();
+		double vecLength = locVec.subtract(playerVec).length();
 
-    @Override
-    public void onUpdate() {
-        Location loc = this.playerVelocity.get(getPlayer());
-        if (this.isActive.containsKey(getPlayer())) {
-            this.bats.get(getPlayer()).stream().filter(Entity::isValid).forEachOrdered(bat -> {
-                Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D);
-                bat.setVelocity(loc.getDirection().clone().multiply(0.5D).add(rand));
+		if (vecLength < 0.8D) {
+			return true;
+		}
 
-                getPlayer().getWorld().getPlayers().stream().filter(other -> !other.equals(getPlayer())
-                        && getOwner().hasGadgetsEnabled() && hitPlayer(bat.getLocation(), other)).forEachOrdered(other -> {
+		if (vecLength < 1.2) {
+			if ((location.getY() > player.getLocation().getY()) && (location.getY() < player.getEyeLocation().getY())) {
+				return true;
+			}
+		}
 
-                    Vector v = bat.getLocation().getDirection();
-                    v.normalize();
-                    v.multiply(.4d);
-                    v.setY(v.getY() + 0.2d);
+		return false;
+	}
 
-                    if (v.getY() > 7.5)
-                        v.setY(7.5);
+	@Override
+	public void onUpdate() {
+		if (active) {
+			bats.stream().filter(Entity::isValid).forEachOrdered(bat -> {
+				Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
+						(Math.random() - 0.5D) / 3.0D);
+				if (bat != null && playerVelocity != null) {
+					bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
+				}
+				getPlayer().getWorld().getPlayers().stream()
+						.filter(other -> !other.equals(getPlayer()) && getOwner().hasGadgetsEnabled() && hitPlayer(
+								bat.getLocation(), other)).forEachOrdered(other -> {
 
-                    if (other.isOnGround())
-                        v.setY(v.getY() + 0.4d);
+					Vector v = bat.getLocation().getDirection();
+					v.normalize();
+					v.multiply(.4d);
+					v.setY(v.getY() + 0.2d);
 
-                    other.setFallDistance(0);
+					if (v.getY() > 7.5) {
+						v.setY(7.5);
+					}
 
-                    if (affectPlayers)
-                        MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
+					if (other.isOnGround()) {
+						v.setY(v.getY() + 0.4d);
+					}
 
+					other.setFallDistance(0);
 
-                    SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
-                    UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
+					if (affectPlayers) {
+						MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
+					}
 
-                    bat.remove();
-                });
-            });
-        }
-    }
+					SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
+					UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
 
-    @Override
-    public void onClear() {
-        this.isActive.remove(getPlayer());
-        this.playerVelocity.remove(getPlayer());
-        if (this.bats.containsKey(getPlayer())) {
-            for (Bat bat : this.bats.get(getPlayer())) {
-                if (bat.isValid()) {
-                    UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
-                }
-                bat.remove();
-            }
-            this.bats.remove(getPlayer());
-        }
-        HandlerList.unregisterAll(this);
-    }
+					bat.remove();
+				});
+			});
+		} else {
+			playerVelocity = null;
+			if (bats != null) {
+				synchronized (bats) {
+					for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
+						Bat bat = iterator.next();
+						if (bat.isValid()) {
+							UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+						}
+						bat.remove();
+						iterator.remove();
+					}
+				}
+				bats.clear();
+			}
+		}
+	}
 
-    @Override
-    void onLeftClick() {
-    }
+	private void clean() {
+		active = false;
+	}
+
+	@Override
+	public void onClear() {
+		clean();
+	}
+
+	@Override
+	void onLeftClick() {
+	}
 }

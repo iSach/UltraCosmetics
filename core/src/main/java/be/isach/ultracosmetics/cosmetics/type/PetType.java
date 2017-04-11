@@ -1,24 +1,22 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.pets.*;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Pet types.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public final class PetType extends CosmeticMatType<Pet> {
 
@@ -52,7 +50,7 @@ public final class PetType extends CosmeticMatType<Pet> {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
 
-    public static final PetType PIGGY = new PetType("ultracosmetics.pets.piggy", "Piggy", Material.MONSTER_EGG, (byte) 90, "&7&oOink! Oink!", EntityType.PIG, PetPiggy.class);
+    public static final PetType PIGGY = new PetType("ultracosmetics.pets.piggy", "Piggy", Material.PORK, (byte) 0, "&7&oOink! Oink!", EntityType.PIG, PetPiggy.class);
     public static final PetType SHEEP = new PetType("ultracosmetics.pets.sheep", "Sheep", Material.WOOL, (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class);
     public static final PetType EASTERBUNNY = new PetType("ultracosmetics.pets.easterbunny", "EasterBunny", Material.CARROT_ITEM, (byte) 0, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class);
     public static final PetType COW = new PetType("ultracosmetics.pets.cow", "Cow", Material.MILK_BUCKET, (byte) 0, "&7&oMoooo!", EntityType.COW, PetCow.class);
@@ -62,7 +60,7 @@ public final class PetType extends CosmeticMatType<Pet> {
     public static final PetType CHICK = new PetType("ultracosmetics.pets.chick", "Chick", Material.EGG, (byte) 0, "&7&oBwaaaaaaak!!", EntityType.CHICKEN, PetChick.class);
     public static final PetType WITHER = new PetType("ultracosmetics.pets.wither", "Wither", Material.SKULL_ITEM, (byte) 1, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class);
     public static final PetType PUMPLING = new PetType("ultracosmetics.pets.pumpling", "Pumpling", Material.PUMPKIN, (byte) 0, "&7&oJust a little floating pumpkin", EntityType.ZOMBIE, UltraCosmeticsData.get().getVersionManager().getPets().getPumplingClass());
-    public static final PetType CHRISTMASELF = new PetType("ultracosmetics.pets.christmaself", "ChristmasElf", Material.MONSTER_EGG, (byte) 120, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class);
+    public static final PetType CHRISTMASELF = new PetType("ultracosmetics.pets.christmaself", "ChristmasElf", Material.BEACON, (byte) 0, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class);
 
     private EntityType entityType;
 

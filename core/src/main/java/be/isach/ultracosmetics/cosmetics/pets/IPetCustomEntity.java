@@ -3,10 +3,12 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import org.bukkit.entity.Entity;
 
 /**
- * Created by Sacha on 6/03/16.
+ * Custom pet entity interface.
+ * 
+ * @author 	iSach
+ * @since 	03-06-2016
  */
 public interface IPetCustomEntity {
-
+	
     Entity getEntity();
-
 }

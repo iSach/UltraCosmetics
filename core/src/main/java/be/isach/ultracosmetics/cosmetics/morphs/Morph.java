@@ -1,12 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
-import be.isach.ultracosmetics.util.TextUtil;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import org.bukkit.event.HandlerList;
@@ -14,14 +13,17 @@ import org.bukkit.event.HandlerList;
 import java.util.UUID;
 
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a morph summoned by a player.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
-public abstract class Morph extends Cosmetic<MorphType> {
+public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
 
     /**
      * The MobDiguise
      *
-     * @see MobDisguise (from Lib's Disguises)
+     * @see me.libraryaddict.disguise.disguisetypes.MobDisguise MobDisguise from Lib's Disguises
      */
     public MobDisguise disguise;
 
@@ -32,37 +34,44 @@ public abstract class Morph extends Cosmetic<MorphType> {
 
     public Morph(UltraPlayer owner, MorphType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MORPHS, owner, type);
+    }
 
-        if (owner.getCurrentMorph() != null) {
-            owner.removeMorph();
+    @Override
+    protected void onEquip() {
+
+        if (getOwner().getCurrentMorph() != null) {
+            getOwner().removeMorph();
         }
-
-        getPlayer().sendMessage(MessageManager.getMessage("Morphs.Morph").replace("%morphname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())));
-        owner.setCurrentMorph(this);
 
         disguise = new MobDisguise(getType().getDisguiseType());
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 
-        if (!owner.canSeeSelfMorph()) {
+        if (!getOwner().canSeeSelfMorph()) {
             disguise.setViewSelfDisguise(false);
         }
+
+        runTaskTimer(getUltraCosmetics(), 0, 1);
+
+        getOwner().setCurrentMorph(this);
+    }
+
+    @Override
+    public void run() {
+        if (getPlayer() == null || getOwner().getCurrentMorph() != this) {
+            return;
+        }
+
+        onUpdate();
     }
 
     /**
      * Called when Morph is cleared.
      */
     @Override
-    protected void onClear() {
-        super.clear();
+    public void clear() {
         DisguiseAPI.undisguiseToAll(getPlayer());
         getOwner().setCurrentMorph(null);
-        if (getPlayer() != null)
-            getPlayer().sendMessage(MessageManager.getMessage("Morphs.Unmorph").replace("%morphname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics())));
-        owner = null;
-        try {
-            HandlerList.unregisterAll(this);
-        } catch (Exception exc) {
-        }
+        super.clear();
     }
 
     /**

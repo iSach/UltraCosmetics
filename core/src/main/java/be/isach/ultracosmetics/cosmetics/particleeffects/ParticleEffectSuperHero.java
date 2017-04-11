@@ -8,13 +8,11 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Package: be.isach.ultracosmetics.cosmetics.particleeffects
- * Created by: Sacha
- * Date: 11/11/15
- * Project: UltraCosmetics
+ * Represents an instance of super hero particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-11-2015
  */
 public class ParticleEffectSuperHero extends ParticleEffect {
 
@@ -115,10 +113,5 @@ public class ParticleEffectSuperHero extends ParticleEffect {
         final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 90))));
         final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90))));
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 }

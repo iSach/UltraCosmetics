@@ -1,10 +1,7 @@
 package be.isach.ultracosmetics.v1_9_R1.customentities;
 
 import be.isach.ultracosmetics.v1_9_R1.morphs.MorphElderGuardian;
-import net.minecraft.server.v1_9_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_9_R1.EntityGuardian;
-import net.minecraft.server.v1_9_R1.SoundEffect;
-import net.minecraft.server.v1_9_R1.World;
+import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
 
@@ -39,6 +36,12 @@ public class CustomGuardian extends EntityGuardian {
         if (custom) return null;
         else return super.bR();
     }
+
+    @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Slime.name");
+    }
+
 
     @Override
     protected SoundEffect bS() {

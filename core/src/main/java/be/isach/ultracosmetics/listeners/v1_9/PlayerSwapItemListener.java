@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,7 +13,10 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by Sacha on 16/05/16.
+ * 1.9 offhand listeners.
+ * 
+ * @author 	iSach
+ * @since 	05-16-2016
  */
 public class PlayerSwapItemListener implements Listener {
 
@@ -45,24 +50,21 @@ public class PlayerSwapItemListener implements Listener {
         }
     }
 
-
-
     @EventHandler
     public void onPlayerSwapoffHand(PlayerSwapHandItemsEvent event) {
         if (event.getMainHandItem() != null
                 && event.getMainHandItem().hasItemMeta()
                 && event.getMainHandItem().getItemMeta().hasDisplayName()
                 && event.getMainHandItem().getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
         }
         if (event.getOffHandItem() != null
                 && event.getOffHandItem().hasItemMeta()
                 && event.getOffHandItem().getItemMeta().hasDisplayName()
                 && event.getOffHandItem().getItemMeta().getDisplayName()
-                .equals(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")).replace("&", "§"))) {
+                .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             event.setCancelled(true);
         }
     }
-
 }

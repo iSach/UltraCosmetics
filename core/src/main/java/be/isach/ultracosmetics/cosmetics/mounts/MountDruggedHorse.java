@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Created by sacha on 10/08/15.
  */
-public class MountDruggedHorse extends Mount<Horse> {
+public class MountDruggedHorse extends MountHorse {
 
     public MountDruggedHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.DRUGGEDHORSE, ultraCosmetics);
@@ -25,17 +25,14 @@ public class MountDruggedHorse extends Mount<Horse> {
     public void onEquip() {
         super.onEquip();
 
-        getEntity().setColor(Horse.Color.CHESTNUT);
-        color = Horse.Color.CHESTNUT;
-        variant = Horse.Variant.HORSE;
-        getEntity().setVariant(Horse.Variant.HORSE);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(getEntity(), 1.1d);
         getEntity().setJumpStrength(1.3);
 
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             try {
                 getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }, 1);
     }
 
@@ -52,5 +49,15 @@ public class MountDruggedHorse extends Mount<Horse> {
     protected void onClear() {
         super.onClear();
         getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
+    }
+
+    @Override
+    protected Horse.Variant getVariant() {
+        return Horse.Variant.HORSE;
+    }
+
+    @Override
+    protected Horse.Color getColor() {
+        return Horse.Color.CHESTNUT;
     }
 }

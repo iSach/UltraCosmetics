@@ -7,10 +7,11 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 
-import java.util.UUID;
-
 /**
- * Created by Sacha on 28/11/15.
+ * Represents an instance of  particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-28-2015
  */
 public class ParticleEffectSantaHat extends ParticleEffect {
 
@@ -51,10 +52,5 @@ public class ParticleEffectSantaHat extends ParticleEffect {
             UtilParticles.display(255, red ? 0 : 255, red ? 0 : 255, location);
             location.subtract(x, height, z);
         }
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 }

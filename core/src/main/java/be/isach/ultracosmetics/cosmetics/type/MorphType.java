@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 19/12/15.
+ * Morph types.
+ * 
+ * @author 	iSach
+ * @since 	12-19-2015
  */
 public class MorphType extends CosmeticMatType<Morph> {
 
@@ -32,14 +35,6 @@ public class MorphType extends CosmeticMatType<Morph> {
             if (morphType.getConfigName().equalsIgnoreCase(s)) return morphType;
         }
         return null;
-    }
-
-    public static MorphType getByName(String s) {
-        try {
-            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
     }
 
     public static void checkEnabled() {

@@ -4,17 +4,19 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.*;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import be.isach.ultracosmetics.player.UltraPlayer;
 
+import org.bukkit.Material;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Suit types.
+ * 
+ * @author 	iSach
+ * @since 	12-20-2015
  */
 public class SuitType extends CosmeticMatType<Suit> {
 
@@ -34,14 +36,6 @@ public class SuitType extends CosmeticMatType<Suit> {
             if (suitType.getConfigName().equalsIgnoreCase(s)) return suitType;
         }
         return null;
-    }
-
-    public static SuitType getByName(String s) {
-        try {
-            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
     }
 
     public static void checkEnabled() {
@@ -86,14 +80,15 @@ public class SuitType extends CosmeticMatType<Suit> {
      * @param armorSlot The Armor Slot.
      * @return The suit Object equipped to the player.
      */
-    public Suit equip(Player player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
-        Suit effect = null;
+    public Suit equip(UltraPlayer player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
+        Suit suit = null;
         try {
-            effect = getClazz().getDeclaredConstructor(UUID.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player.getUniqueId(), armorSlot, ultraCosmetics);
+            suit = getClazz().getDeclaredConstructor(UltraPlayer.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player == null ? null : player, armorSlot, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        return effect;
+        suit.equip(armorSlot);
+        return suit;
     }
 
     /**
@@ -143,6 +138,11 @@ public class SuitType extends CosmeticMatType<Suit> {
             case BOOTS:
                 return getBoots();
         }
+    }
+
+    @Override
+    public String getName() {
+        return getName(ArmorSlot.CHESTPLATE);
     }
 
     /**

@@ -8,7 +8,10 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 12/08/15.
+ * Represents an instance of flame ring particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class ParticleEffectFlameRings extends ParticleEffect {
 
@@ -18,10 +21,6 @@ public class ParticleEffectFlameRings extends ParticleEffect {
         super(ultraCosmetics, owner, ParticleEffectType.FLAMERINGS);
     }
 
-    @Override
-    protected void onEquip() {
-
-    }
 
     @Override
     public void onUpdate() {
@@ -43,5 +42,4 @@ public class ParticleEffectFlameRings extends ParticleEffect {
         }
         step += 3;
     }
-
 }

@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,7 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sacha on 17/08/15.
+ * Represents an instance of a rocket gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-17-2015
  */
 public class GadgetRocket extends Gadget {
 
@@ -73,12 +77,27 @@ public class GadgetRocket extends Gadget {
 
                 @Override
                 public void run() {
+                    if(getOwner() == null) {
+                        cancel();
+                        return;
+                    }
+
+                    if (getPlayer() == null) {
+                        cancel();
+                        return;
+                    }
+
+                    if (!getPlayer().isOnline()) {
+                        cancel();
+                        return;
+                    }
+
                     if (i > 0) {
                         if (!isStillCurrentGadget()) {
                             cancel();
                             return;
                         }
-                        getPlayer().sendTitle("§c§l" + i, "");
+                        getPlayer().sendTitle(ChatColor.RED + "" + ChatColor.BOLD + i, "");
                         SoundUtil.playSound(getPlayer(), Sounds.NOTE_BASS_DRUM, 1.0f, 1.0f);
                         i--;
                     } else {
@@ -114,8 +133,9 @@ public class GadgetRocket extends Gadget {
 
                         fallingBlocks.add(top);
                         fallingBlocks.add(base);
-                        if (fallingBlocks.get(8).getPassenger() == null)
+                        if (fallingBlocks.get(8).getPassenger() == null) {
                             fallingBlocks.get(8).setPassenger(getPlayer());
+                        }
                         top.setPassenger(getPlayer());
                         launching = true;
                         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
@@ -179,24 +199,23 @@ public class GadgetRocket extends Gadget {
     }
 
     @Override
-    protected void onEquip() {
-
-    }
-
-    @Override
     public void onClear() {
-        for (Block block : BLOCKS)
+        for (Block block : BLOCKS) {
             block.setType(Material.AIR);
-        for (FallingBlock fallingBlock : fallingBlocks)
+        }
+        for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.remove();
+        }
         BLOCKS.clear();
         fallingBlocks.clear();
-        if (armorStand != null)
+        if (armorStand != null) {
             armorStand.remove();
-
+        }
         launching = false;
-        getPlayer().sendTitle(" ", "");
-        HandlerList.unregisterAll(this);
+
+        if (getPlayer() != null) {
+            getPlayer().sendTitle(" ", "");
+        }
     }
 
     @Override

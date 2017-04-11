@@ -6,6 +6,8 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,7 +17,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Sacha on 15/10/15.
+ * Hat types.
+ * 
+ * @author 	iSach
+ * @since 	10-15-2015
  */
 public class HatType extends CosmeticMatType<Hat> {
 
@@ -35,14 +40,6 @@ public class HatType extends CosmeticMatType<Hat> {
             if (hat.getConfigName().equalsIgnoreCase(s)) return hat;
         }
         return null;
-    }
-
-    public static HatType getByName(String s) {
-        try {
-            return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
     }
 
     public static void checkEnabled() {
@@ -101,8 +98,8 @@ public class HatType extends CosmeticMatType<Hat> {
     private ItemStack itemStack;
 
     HatType(String str, String configName, String defaultDesc) {
-        super(Category.HATS, configName, "ultracosmetics.emotes." + configName.toLowerCase(), defaultDesc, Material.SKULL_ITEM, (byte) 3, Hat.class);
-        this.itemStack = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" + str, "§8§oHat");
+        super(Category.HATS, configName, "ultracosmetics.hats." + configName.toLowerCase(), defaultDesc, Material.SKULL_ITEM, (byte) 3, Hat.class);
+        this.itemStack = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" + str, ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Hat");
 
         VALUES.add(this);
     }

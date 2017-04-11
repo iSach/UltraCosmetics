@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/07/16
- * Project: UltraCosmetics
+ * Gadget {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	07-23-2016
  */
 public class MenuGadgets extends CosmeticMenu<GadgetType> {
 
@@ -72,7 +72,7 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
             if (SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount")
                     && !(player.getCurrentGadget() != null
                     && player.getCurrentGadget().getType() == gadgetType)) {
-                itemStack.setAmount(Math.max(0, Math.min(64, ammo)));
+                itemStack.setAmount(Math.max(1, Math.min(64, ammo)));
             }
             itemMeta.setLore(loreList);
         }
@@ -86,8 +86,8 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        GadgetType.getByName(name).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, GadgetType gadgetType, UltraCosmetics ultraCosmetics) {
+        gadgetType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override

@@ -1,34 +1,35 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.TextUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics.suits
- * Created by: Sacha
- * Date: 20/12/15
- * Project: UltraCosmetics
+ * Represents an instance of a suit summoned by a player.
+ *
+ * @author iSach
+ * @since 12-20-2015
  */
-public abstract class Suit extends Cosmetic<SuitType> {
-
+public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     /**
      * Armor Slot of the Suit.
      */
     private ArmorSlot armorSlot;
-
-    /**
-     * Type of the Suit.
-     */
-    private SuitType suitType;
 
     /**
      * ItemStack of the Suit.
@@ -37,22 +38,73 @@ public abstract class Suit extends Cosmetic<SuitType> {
 
     public Suit(UltraPlayer ultraPlayer, ArmorSlot armorSlot, SuitType suitType, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.SUITS, ultraPlayer, suitType);
-
         this.armorSlot = armorSlot;
-        this.suitType = suitType;
+        Bukkit.getPluginManager().registerEvents(this, ultraCosmetics);
+    }
 
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+        if(getOwner() == null || getPlayer() == null) {
+            return;
+        }
+        ItemStack drop = event.getItemDrop().getItemStack();
+        if (event.getPlayer().equals(getPlayer()) && drop.hasItemMeta() && drop.getItemMeta().hasDisplayName() && drop.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+            event.getItemDrop().remove();
+            if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
+                clear();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        ItemStack current = event.getCurrentItem();
+        if (event.getSlotType().equals(InventoryType.SlotType.ARMOR) && getPlayer() != null && player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && itemStack != null && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+            event.setCancelled(true);
+            if (event.getAction().name().contains("DROP") && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
+                clear();
+            }
+            player.updateInventory();
+        }
+    }
+
+    public void equip(ArmorSlot slot) {
+        if (!getOwner().getBukkitPlayer().hasPermission(getType().getPermission())) {
+            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
+            return;
+        }
+
+        getUltraCosmetics().getServer().getPluginManager().registerEvents(this, getUltraCosmetics());
+
+        this.equipped = true;
+
+        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+        getPlayer().sendMessage(mess);
+
+        this.armorSlot = slot;
+
+        onEquip();
+    }
+
+    @Override
+    protected void onEquip() {
         if (getOwner().getCurrentHat() != null
-                && armorSlot == ArmorSlot.HELMET)
+                && armorSlot == ArmorSlot.HELMET) {
             getOwner().removeHat();
+        }
 
         getOwner().removeSuit(getArmorSlot());
 
         switch (getArmorSlot()) {
             case HELMET:
-                if (getOwner().getCurrentHat() != null)
+                if (getOwner().getCurrentHat() != null) {
                     getOwner().removeHat();
-                if (getOwner().getCurrentEmote() != null)
+                }
+                if (getOwner().getCurrentEmote() != null) {
                     getOwner().removeEmote();
+                }
                 if (getPlayer().getInventory().getHelmet() != null) {
                     ItemStack itemStack = getPlayer().getInventory().getHelmet();
                     drop(itemStack);
@@ -91,11 +143,7 @@ public abstract class Suit extends Cosmetic<SuitType> {
         }
 
         getOwner().setSuit(armorSlot, this);
-    }
-
-    @Override
-    protected void onEquip() {
-        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, 1);
+        runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
     }
 
     @Override
@@ -133,12 +181,8 @@ public abstract class Suit extends Cosmetic<SuitType> {
                 getPlayer().getInventory().setBoots(null);
                 break;
         }
-
         getOwner().setSuit(getArmorSlot(), null);
-
-        armorSlot = null;
-        suitType = null;
-        itemStack = null;
+        HandlerList.unregisterAll(this);
     }
 
     /**
@@ -148,12 +192,6 @@ public abstract class Suit extends Cosmetic<SuitType> {
      */
     public ItemStack getItemStack() {
         return itemStack;
-    }
-
-    /**
-     * Called each tick while suit active, async.
-     */
-    protected void onUpdate() {
     }
 
     /**
@@ -172,5 +210,10 @@ public abstract class Suit extends Cosmetic<SuitType> {
      */
     private void drop(ItemStack itemStack) {
         getPlayer().getWorld().dropItem(getPlayer().getLocation(), itemStack);
+    }
+
+    @Override
+    protected String getTypeName() {
+        return getType().getName(getArmorSlot());
     }
 }

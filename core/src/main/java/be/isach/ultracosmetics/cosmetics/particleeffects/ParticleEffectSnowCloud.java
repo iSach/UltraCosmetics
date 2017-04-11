@@ -7,7 +7,10 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 
 /**
- * Created by sacha on 12/08/15.
+ * Represents an instance of snow cloud particles summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class ParticleEffectSnowCloud extends ParticleEffect {
 
@@ -21,8 +24,4 @@ public class ParticleEffectSnowCloud extends ParticleEffect {
         UtilParticles.display(getType().getEffect(), 0.25F, 0.05f, 0.25f, getPlayer().getLocation().add(0, 3, 0), 1);
     }
 
-    @Override
-    protected void onEquip() {
-
-    }
 }

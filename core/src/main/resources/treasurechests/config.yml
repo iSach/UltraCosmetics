@@ -1,0 +1,5 @@
+enabled: true
+allow-static-chests: false
+allow-chests-anywhere-from-gui: true
+allow-buy-key-from-gui: true
+key-price: 1000

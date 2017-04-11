@@ -14,8 +14,9 @@ public class EntitySpawningManager implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
-        if (event.isCancelled() && bypass)
+        if (event.isCancelled() && bypass) {
             event.setCancelled(false);
+        }
     }
 
     public static void setBypass(boolean newbypass) {

@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.util;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.Version;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 
@@ -62,7 +63,7 @@ public class UpdateManager extends Thread {
 
 
         if (outdated) {
-            Bukkit.getOnlinePlayers().stream().filter((Predicate<Player>) ServerOperator::isOp).forEachOrdered(p -> p.sendMessage("§l§oUltraCosmetics > §c§lAn update is available: " + lastVersion));
+            Bukkit.getOnlinePlayers().stream().filter((Predicate<Player>) ServerOperator::isOp).forEachOrdered(p -> p.sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics >" + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + lastVersion));
         }
     }
 

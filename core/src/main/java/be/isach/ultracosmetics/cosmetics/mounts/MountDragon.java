@@ -12,12 +12,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by sacha on 17/08/15.
+* Represents an instance of a enderdragon mount.
+ * 
+ * @author 	iSach
+ * @since 	08-17-2015
  */
-public class MountDragon extends Mount {
+public class MountDragon extends Mount<EnderDragon> {
 
     public MountDragon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.DRAGON, ultraCosmetics);
@@ -50,7 +51,6 @@ public class MountDragon extends Mount {
             e = ((EnderDragonPart) e).getParent();
         if (e instanceof EnderDragon && e == entity)
             event.setCancelled(true);
-
     }
 
     @EventHandler
@@ -61,7 +61,6 @@ public class MountDragon extends Mount {
         }
         if (e instanceof EnderDragon && e == entity) {
             event.setCancelled(true);
-
         }
     }
 }

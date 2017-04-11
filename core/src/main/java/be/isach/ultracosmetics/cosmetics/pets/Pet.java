@@ -10,33 +10,35 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Package: ${PACKAGE_NAME}
- * Created by: sacha
- * Date: 03/08/15
- * Project: UltraCosmetics
+ * Represents an instance of a pet summoned by a player.
+ *
+ * @author iSach
+ * @since 03-08-2015
  */
 public abstract class Pet extends Cosmetic<PetType> implements Updatable {
-
     /**
      * List of items popping out from Pet.
      */
     public ArrayList<Item> items = new ArrayList<>();
 
     /**
-     * Armor stand which is the name of the pet.
+     * ArmorStand for nametags. Most pets don't use this.
      */
     public ArmorStand armorStand;
 
@@ -63,103 +65,106 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
     @Override
     protected void onEquip() {
-        this.followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
-        if (getOwner().getCurrentPet() != null)
+        if (getOwner().getCurrentPet() != null) {
             getOwner().removePet();
-        getOwner().setCurrentPet(this);
-
-        final Pet pet = this;
-
-        armorStand = (ArmorStand) this.getPlayer().getWorld().spawnEntity(this.getPlayer().getLocation(), EntityType.ARMOR_STAND);
-        armorStand.setVisible(false);
-        armorStand.setSmall(true);
-        armorStand.setGravity(false);
-        armorStand.setCustomName(getType().getEntityName(getPlayer()));
-        armorStand.setCustomNameVisible(true);
-        armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand"));
-        armorStand.setRemoveWhenFarAway(true);
-        if (getOwner().getPetName(getType()) != null) {
-            armorStand.setCustomName(getOwner().getPetName(getType()));
         }
 
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!entity.isValid()) {
-                        if (armorStand != null)
-                            armorStand.remove();
-                        entity.remove();
-                        if (getPlayer() != null)
-                            getOwner().setCurrentPet(null);
-                        items.forEach(Entity::remove);
-                        items.clear();
-                        try {
-                            HandlerList.unregisterAll(pet);
-                        } catch (Exception ignored) {
-                        }
-                        cancel();
-                        return;
-                    }
-                    if (Bukkit.getPlayer(getOwnerUniqueId()) != null
-                            && getOwner().getCurrentPet() != null
-                            && getOwner().getCurrentPet().getType() == getType()) {
-                        if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items"))
-                            onUpdate();
-                        pathUpdater.submit(followTask.getTask());
-                    } else {
-                        cancel();
-                        if (armorStand != null)
-                            armorStand.remove();
-                        items.forEach(Entity::remove);
-                        items.clear();
-                        clear();
-                        return;
-                    }
-                    if (armorStand != null && getType() != PetType.WITHER) {
-                        armorStand.teleport(getEntity().getLocation().add(0, -0.7, 0));
-                    }
-                } catch (NullPointerException exc) {
-                    exc.printStackTrace();
-                    cancel();
-                    if (armorStand != null)
-                        armorStand.remove();
-                    items.forEach(Entity::remove);
-                    items.clear();
-                    clear();
-                }
-            }
-        };
-        runnable.runTaskTimer(getUltraCosmetics(), 0, 3);
+        this.followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
 
+        getOwner().setCurrentPet(this);
+
+        runTaskTimer(getUltraCosmetics(), 0, 3);
+
+        // Bypass WorldGuard protection.
         EntitySpawningManager.setBypass(true);
         this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
         EntitySpawningManager.setBypass(false);
+
         if (entity instanceof Ageable) {
-            if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) ((Ageable) entity).setBaby();
-            else ((Ageable) entity).setAdult();
+            if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) {
+                ((Ageable) entity).setBaby();
+            } else {
+                ((Ageable) entity).setAdult();
+            }
             ((Ageable) entity).setAgeLock(true);
         }
+        
+        getEntity().setCustomNameVisible(true);
+        getEntity().setCustomName(getType().getEntityName(getPlayer()));
+
+        if (getOwner().getPetName(getType()) != null) {
+            getEntity().setCustomName(getOwner().getPetName(getType()));
+        }
+
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(entity);
 
-
-//        this.entity.setPassenger(armorStand);
-        if (getType() == PetType.WITHER) {
-            this.entity.setCustomName(getType().getEntityName(getPlayer()));
-            this.entity.setCustomNameVisible(true);
-
-            if (getOwner().getPetName(getType()) != null) {
-                this.entity.setCustomName(getOwner().getPetName(getType()));
-            }
-            armorStand.remove();
-        }
         this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
     }
 
     @Override
-    protected void onClear() {
+    public void run() {
+        try {
+            if (!entity.isValid()) {
+                if (armorStand != null) {
+                    armorStand.remove();
+                }
 
+                entity.remove();
+
+                if (getPlayer() != null) {
+                    getOwner().setCurrentPet(null);
+                }
+
+                items.forEach(Entity::remove);
+                items.clear();
+
+                try {
+                    HandlerList.unregisterAll(this);
+                } catch (Exception ignored) {
+                    // Ignored.
+                }
+
+                cancel();
+                return;
+            }
+
+            if (Bukkit.getPlayer(getOwnerUniqueId()) != null
+                    && getOwner().getCurrentPet() != null
+                    && getOwner().getCurrentPet().getType() == getType()) {
+                if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items")) {
+                    onUpdate();
+                }
+
+                pathUpdater.submit(followTask.getTask());
+            } else {
+                cancel();
+
+                if (armorStand != null) {
+                    armorStand.remove();
+                }
+
+                items.forEach(Entity::remove);
+                items.clear();
+                clear();
+                return;
+            }
+        } catch (NullPointerException exc) {
+            exc.printStackTrace();
+            cancel();
+
+            if (armorStand != null) {
+                armorStand.remove();
+            }
+
+            items.forEach(Entity::remove);
+            items.clear();
+            clear();
+        }
+    }
+
+    @Override
+    protected void onClear() {
         // Remove Armor Stand.
         if (armorStand != null) {
             armorStand.remove();
@@ -188,7 +193,13 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     }
 
     protected void removeEntity() {
-        entity.remove();
+        if (entity != null) {
+            entity.remove();
+        }
+    }
+
+    public IPlayerFollower getFollowTask() {
+        return followTask;
     }
 
     public Entity getEntity() {
@@ -206,5 +217,4 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         if (event.getPlayer() == getPlayer())
             getEntity().teleport(getPlayer());
     }
-
 }

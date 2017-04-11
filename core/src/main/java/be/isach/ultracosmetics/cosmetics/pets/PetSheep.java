@@ -14,7 +14,10 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by sacha on 12/08/15.
+ * Represents an instance of a sheep pet summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-12-2015
  */
 public class PetSheep extends Pet {
 
@@ -26,16 +29,10 @@ public class PetSheep extends Pet {
 
     @Override
     public void onUpdate() {
-        final Item ITEM = entity.getWorld().dropItem(((Sheep) entity).getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) r.nextInt(017), UUID.randomUUID().toString()));
-        ITEM.setPickupDelay(30000);
-        ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-        items.add(ITEM);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                ITEM.remove();
-                items.remove(ITEM);
-            }
-        }, 5);
+        Sheep sheep = (Sheep) entity;
+        Item item = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) r.nextInt(017), UUID.randomUUID().toString()));
+        item.setPickupDelay(30000);
+        item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> item.remove(), 5);
     }
 }

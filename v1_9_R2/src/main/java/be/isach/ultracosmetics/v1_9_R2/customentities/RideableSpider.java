@@ -37,6 +37,11 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
             exc.printStackTrace();
         }
     }
+    @Override
+    public String getName() {
+        return LocaleI18n.get("entity.Spider.name");
+    }
+
 
     @Override
     public void removeAi() {

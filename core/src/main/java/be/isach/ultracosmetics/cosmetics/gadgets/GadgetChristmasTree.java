@@ -8,37 +8,34 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 /**
- * Created by Sacha on 29/11/15.
+* Represents an instance of a Christmas Tree gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	11-29-2015
  */
 public class GadgetChristmasTree extends Gadget {
 
     private boolean active = false;
     private Location lastLocation;
 
-    int[] logColor = {
-            101, 67, 33
-    };
+    private static final Color LOG_COLOR = Color.fromRGB(101, 67, 33);
 
     public GadgetChristmasTree(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.CHRISTMASTREE, ultraCosmetics);
     }
 
     @Override
-    void onRightClick() {
+    public void onRightClick() {
         lastLocation = lastClickedBlock.getLocation().add(0.5d, 1.05d, 0.5d);
         active = true;
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                active = false;
-            }
-        }, 200);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> active = false, 200);
     }
 
     @Override
@@ -62,9 +59,9 @@ public class GadgetChristmasTree extends Gadget {
         if (event.getClickedBlock() == null
                 || event.getClickedBlock().getType() == Material.AIR) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     private void drawLog() {
@@ -76,7 +73,7 @@ public class GadgetChristmasTree extends Gadget {
         float ratio = length / 10;
         Vector vector = link.multiply(ratio);
         for (int i = 0; i < 10; i++) {
-            UtilParticles.display(logColor[0], logColor[1], logColor[2], current);
+            UtilParticles.display(LOG_COLOR.getRed(), LOG_COLOR.getGreen(), LOG_COLOR.getBlue(), current);
             current.add(vector);
         }
     }
@@ -124,6 +121,6 @@ public class GadgetChristmasTree extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
+    public void onLeftClick() {
     }
 }

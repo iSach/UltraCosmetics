@@ -3,11 +3,15 @@ package be.isach.ultracosmetics.cosmetics.suits;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 /**
- * Created by Sacha on 20/12/15.
+ * Represents an instance of a rave suit summoned by a player.
+ *
+ * @author iSach
+ * @since 12-20-2015
  */
 public class SuitRave extends Suit {
 
@@ -17,7 +21,8 @@ public class SuitRave extends Suit {
         super(owner, armorSlot, SuitType.RAVE, ultraCosmetics);
     }
 
-    protected void onUpdate() {
+    @Override
+    public void onUpdate() {
         if (colors[0] == 255 && colors[1] < 255 && colors[2] == 0)
             colors[1] += 15;
         if (colors[1] == 255 && colors[0] > 0 && colors[2] == 0)
@@ -32,7 +37,6 @@ public class SuitRave extends Suit {
             colors[2] -= 15;
 
         refresh();
-
     }
 
     private void refresh() {
@@ -54,10 +58,5 @@ public class SuitRave extends Suit {
                 getPlayer().getInventory().setBoots(itemStack);
                 break;
         }
-    }
-
-    @Override
-    protected void onEquip() {
-
     }
 }

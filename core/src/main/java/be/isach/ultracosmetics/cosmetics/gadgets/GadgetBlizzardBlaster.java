@@ -2,79 +2,78 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.event.HandlerList;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.Random;
-
 /**
- * Created by sacha on 08/08/15.
+ * Represents an instance of a blizzard blaster gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-08-2015
  */
 public class GadgetBlizzardBlaster extends Gadget {
 
-    GadgetBlizzardBlaster instance;
-    Random r = new Random();
+	private boolean active;
+	private Location location;
+	private Vector vector;
 
-    public GadgetBlizzardBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, GadgetType.BLIZZARDBLASTER, ultraCosmetics);
-        instance = this;
-    }
+	public GadgetBlizzardBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, GadgetType.BLIZZARDBLASTER, ultraCosmetics);
+	}
 
-    @Override
-    void onRightClick() {
-        final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
-        v.setY(0);
-        final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
-        final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (getOwner().getCurrentGadget() != instance) {
-                    cancel();
-                    return;
-                }
-                if (loc.getBlock().getType() != Material.AIR
-                        && loc.getBlock().getType().isSolid()) {
-                    loc.add(0, 1, 0);
-                }
-                if (loc.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR) {
-                    if (loc.clone().getBlock().getTypeId() != 43 && loc.clone().getBlock().getTypeId() != 44)
-                        loc.add(0, -1, 0);
-                }
-                for (int i = 0; i < 3; i++) {
-                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendBlizzard(getPlayer(), loc, affectPlayers, v);
-                }
-                loc.add(v);
-            }
-        }, 0, 1).getTaskId();
+	@Override
+	void onRightClick() {
+		this.vector = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
+		this.vector.setY(0);
 
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.getScheduler().cancelTask(i);
-            }
-        }, 40);
+		this.location = getPlayer().getLocation().subtract(0, 1, 0).add(vector);
+		this.active = true;
 
-    }
+		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 40);
 
-    @Override
-    void onLeftClick() {
+	}
 
-    }
+	@Override
+	public void onUpdate() {
+		if (active) {
+			if (location.getBlock().getType() != Material.AIR && location.getBlock().getType().isSolid()) {
+				location.add(0, 1, 0);
+			}
 
-    @Override
-    public void onUpdate() {
+			if (location.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR) {
+				if (location.clone().getBlock().getTypeId() != 43 && location.clone().getBlock().getTypeId() != 44)
+					location.add(0, -1, 0);
+			}
 
-    }
+			for (int i = 0; i < 3; i++) {
+				UltraCosmeticsData.get().getVersionManager().getEntityUtil()
+						.sendBlizzard(getPlayer(), location, affectPlayers, vector);
+			}
 
-    @Override
-    public void onClear() {
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearBlizzard(getPlayer());
-        HandlerList.unregisterAll(this);
-    }
+			location.add(vector);
+		} else {
+			location = null;
+			vector = null;
+		}
+	}
+
+	@Override
+	void onLeftClick() {
+	}
+
+	@Override
+	public void onClear() {
+		if (getOwner() == null || getPlayer() == null) {
+			return;
+		}
+		UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearBlizzard(getPlayer());
+	}
+
+	private void clean() {
+		active = false;
+	}
 }

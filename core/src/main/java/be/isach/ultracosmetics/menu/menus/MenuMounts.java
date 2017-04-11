@@ -3,8 +3,6 @@ package be.isach.ultracosmetics.menu.menus;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
-import be.isach.ultracosmetics.cosmetics.type.CosmeticMatType;
-import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -13,10 +11,10 @@ import org.bukkit.inventory.Inventory;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu.menus
- * Created by: sachalewin
- * Date: 23/08/16
- * Project: UltraCosmetics
+ * Mount {@link be.isach.ultracosmetics.menu.Menu Menu}.
+ * 
+ * @author 	iSach
+ * @since 	08-23-2016
  */
 public class MenuMounts extends CosmeticMenu<MountType> {
 
@@ -26,7 +24,6 @@ public class MenuMounts extends CosmeticMenu<MountType> {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
-
     }
 
     @Override
@@ -35,8 +32,8 @@ public class MenuMounts extends CosmeticMenu<MountType> {
     }
 
     @Override
-    protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics) {
-        MountType.getByName(name).equip(ultraPlayer, ultraCosmetics);
+    protected void toggleOn(UltraPlayer ultraPlayer, MountType mountType, UltraCosmetics ultraCosmetics) {
+        mountType.equip(ultraPlayer, ultraCosmetics);
     }
 
     @Override

@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics.menu
- * Created by: sachalewin
- * Date: 9/08/16
- * Project: UltraCosmetics
+ * A cosmetic menu.
+ *
+ * @author iSach
+ * @since 08-09-2016
  */
 public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
@@ -83,11 +83,15 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                     && !player.hasPermission(cosmeticMatType.getPermission())) {
                 Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
                 Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-                String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", cosmeticMatType.getName()).replace("&", "§");
+                String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", cosmeticMatType.getName()));
                 List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
                 String[] array = new String[npLore.size()];
                 npLore.toArray(array);
-                putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), null);
+                putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), clickData -> {
+                    Player clicker = clickData.getClicker().getBukkitPlayer();
+                    clicker.sendMessage(MessageManager.getMessage("No-Permission"));
+                    clicker.closeInventory();
+                });
                 i++;
                 continue;
             }
@@ -143,7 +147,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                     if (getCosmetic(ultraPlayer) == null) {
                         toggleOff(ultraPlayer);
                     }
-                    toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics());
+                    toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
 
                     if (getCategory() == Category.GADGETS) {
                         if (ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
@@ -176,7 +180,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                         } catch (Exception ignored) {
                         }
                     }
-                    toggleOn(ultraPlayer, sb.toString(), getUltraCosmetics());
+                    toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
                     if (ultraPlayer.getCurrentGadget() != null && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
                         ultraPlayer.getCurrentGadget().lastPage = currentPage;
                         ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
@@ -208,10 +212,11 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
         // Clear cosmetic item.
         MaterialData materialData = ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item");
-        ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(),
-                MessageManager.getMessage(category.getClearConfigPath()));
+        String message = MessageManager.getMessage(category.getClearConfigPath());
+        ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(), message);
         putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
             toggleOff(player);
+            open(player, getCurrentPage(player));
         });
 
         // Go Back to Main Menu Arrow.
@@ -225,7 +230,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
         }
 
         putItems(inventory, player, page);
-
+        ItemFactory.fillInventory(inventory);
         player.getBukkitPlayer().openInventory(inventory);
     }
 
@@ -242,14 +247,14 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
      * @param ultraPlayer The menu owner.
      * @return The current page of the menu opened by ultraPlayer.
      */
-    private int getCurrentPage(UltraPlayer ultraPlayer) {
+    protected int getCurrentPage(UltraPlayer ultraPlayer) {
         Player player = ultraPlayer.getBukkitPlayer();
         String title = player.getOpenInventory().getTopInventory().getTitle();
         if (player.getOpenInventory() != null
                 && title.startsWith(getName())
                 && !title.equals(getName())) {
             String s = player.getOpenInventory().getTopInventory().getTitle()
-                    .replace(getName() + " §7§o(", "")
+                    .replace(getName() + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(", "")
                     .replace("/" + getMaxPages() + ")", "");
             return Integer.parseInt(s);
         }
@@ -261,13 +266,17 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
      *
      * @return the maximum amount of pages.
      */
-    private int getMaxPages() {
+    protected int getMaxPages() {
         int max = 21;
         int i = enabled().size();
         if (i % max == 0) return i / max;
         double j = i / 21;
         int h = (int) Math.floor(j * 100) / 100;
         return h + 1;
+    }
+
+    protected int getItemsPerPage() {
+        return 12;
     }
 
     /**
@@ -294,7 +303,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
      * @return The name of the menu with page detailed.
      */
     protected String getName(int page) {
-        return MessageManager.getMessage("Menus." + category.getConfigPath()) + " §7§o(" + page + "/" + getMaxPages() + ")";
+        return MessageManager.getMessage("Menus." + category.getConfigPath()) + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(" + page + "/" + getMaxPages() + ")";
     }
 
     @Override
@@ -341,7 +350,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 
     abstract public List<T> enabled();
 
-    abstract protected void toggleOn(UltraPlayer ultraPlayer, String name, UltraCosmetics ultraCosmetics);
+    abstract protected void toggleOn(UltraPlayer ultraPlayer, T type, UltraCosmetics ultraCosmetics);
 
     abstract protected void toggleOff(UltraPlayer ultraPlayer);
 

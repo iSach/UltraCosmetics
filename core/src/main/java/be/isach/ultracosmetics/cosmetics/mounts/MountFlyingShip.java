@@ -16,17 +16,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
- * Created by Matthew on 23/01/16.
- * Copy from iSach's Dragon Mount
+* Represents an instance of a flying ship mount.
+ * 
+ * @author 	iSach
+ * @author 	Matthew
+ * @since 	01-23-2016
  */
-public class MountFlyingShip extends Mount {
+public class MountFlyingShip extends Mount<Boat> {
 
     long nextAllowTime = 0;
     Entity currentboom = null;
-    //ArmorStand nameTag = null;
+    // ArmorStand nameTag = null;
 
     public MountFlyingShip(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.FLYINGSHIP, ultraCosmetics);
@@ -91,13 +92,12 @@ public class MountFlyingShip extends Mount {
              nameTag.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.get(),"C_AD_ArmorStand"));
              //getBukkitPlayer().setPassenger(nameTag);
         }
-        */
+    */
     @EventHandler
     public void stopBoatDamage(EntityExplodeEvent event) {
         Entity e = event.getEntity();
         if (e == entity)
             event.setCancelled(true);
-
     }
 
     @EventHandler
@@ -129,8 +129,6 @@ public class MountFlyingShip extends Mount {
                 ((Animals) currentboom).setBreed(false);
             }
         }
-
-
     }
 
     @EventHandler
@@ -165,5 +163,4 @@ public class MountFlyingShip extends Mount {
     	}
     	*/
     }
-
 }

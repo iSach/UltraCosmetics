@@ -1,9 +1,11 @@
 package be.isach.ultracosmetics.cosmetics;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,17 +16,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 
 /**
- * Package: be.isach.ultracosmetics.cosmetics
- * Created by: sachalewin
- * Date: 21/07/16
- * Project: UltraCosmetics
+ * A cosmetic instance summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	07-21-2016
  */
 public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable implements Listener {
 
     private UltraPlayer owner;
     private Category category;
     private UltraCosmetics ultraCosmetics;
-    private boolean equipped;
+    protected boolean equipped;
     private T cosmeticType;
 
     public Cosmetic(UltraCosmetics ultraCosmetics, Category category, UltraPlayer owner, T type) {
@@ -36,20 +38,20 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
                 || Bukkit.getPlayer(owner.getUuid()) == null) {
             throw new IllegalArgumentException("Invalid UltraPlayer.");
         }
-
-        if (!owner.getBukkitPlayer().hasPermission(type.getPermission())) {
-            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
-            clear();
-        }
-
-        ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
     }
 
     public void equip() {
+        if (!owner.getBukkitPlayer().hasPermission(getType().getPermission())) {
+            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
+            return;
+        }
+
+        ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
+
         this.equipped = true;
 
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
         getPlayer().sendMessage(mess);
 
         onEquip();
@@ -58,18 +60,33 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     public void clear() {
 
         // Send unequip Message.
-        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
-        getPlayer().sendMessage(mess);
+        try {
+            String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
+            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+            getPlayer().sendMessage(mess);
+        } catch (Exception exc) {
+
+        }
 
         // unregister listener.
         HandlerList.unregisterAll(this);
 
+        try {
+            // Cancel task.
+            cancel();
+        } catch (Exception exc) {
+            // Not Scheduled yet. Ignore.
+        }
+
+        // Call untask finally.
         onClear();
+
+        owner = null;
     }
 
     @Override
-    public void run() {}
+    public void run() {
+    }
 
     protected abstract void onEquip();
 
@@ -88,6 +105,10 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     public final Player getPlayer() {
+        if(owner == null) {
+            return null;
+        }
+
         return owner.getBukkitPlayer();
     }
 
@@ -101,5 +122,9 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 
     public T getType() {
         return cosmeticType;
+    }
+
+    protected String getTypeName() {
+        return getType().getName();
     }
 }

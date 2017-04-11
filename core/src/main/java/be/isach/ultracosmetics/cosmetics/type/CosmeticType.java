@@ -1,23 +1,25 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+
+import be.isach.ultracosmetics.util.ServerVersion;
+import org.bukkit.ChatColor;
 
 /**
- * Created by sachalewin on 5/07/16.
+ * A cosmetic type.
+ * 
+ * @author 	iSach
+ * @since 	07-05-2016
  */
 public abstract class CosmeticType<T extends Cosmetic> {
 
@@ -53,6 +55,10 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     public boolean isEnabled() {
+        if(this == GadgetType.ETHEREALPEARL
+                && UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
+            return false;
+        }
         return SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled");
     }
 
@@ -93,7 +99,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
     public List<String> getDescription() {
         List<String> desc = new ArrayList<>();
         for (String string : getDescriptionAsString().split("\n"))
-            desc.add(string.replace('&', '§'));
+            desc.add(ChatColor.translateAlternateColorCodes('&', string));
         return desc;
     }
 
@@ -108,7 +114,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     /**
-     * Check if the Suittype should show a description.
+     * Check if the SuitType should show a description.
      *
      * @return {@code true} if it should show a description, otherwise {@code false}.
      */
@@ -117,7 +123,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     /**
-     * Check if the Suittype can be found in Treasure Chests.
+     * Check if the SuitType can be found in Treasure Chests.
      *
      * @return {@code true} if it can be found in treasure chests, otherwise {@code false}.
      */
@@ -146,5 +152,4 @@ public abstract class CosmeticType<T extends Cosmetic> {
     public String toString() {
         return getConfigName().toUpperCase();
     }
-
 }

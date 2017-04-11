@@ -3,9 +3,14 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,9 +18,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -23,7 +27,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by sacha on 03/08/15.
+ * Represents an instance of a discoball gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-03-2015
  */
 public class GadgetDiscoBall extends Gadget {
 
@@ -40,34 +47,16 @@ public class GadgetDiscoBall extends Gadget {
     }
 
     @Override
-    public void onClear() {
-        try {
-            running = false;
-            armorStand.remove();
-            armorStand = null;
-            i = 0;
-            i2 = 0;
-            DISCO_BALLS.remove(this);
-        } catch (Exception ignored) {
-        }
-        HandlerList.unregisterAll(this);
-    }
-
-    @Override
     void onRightClick() {
         armorStand = (ArmorStand) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(0, 3, 0), EntityType.ARMOR_STAND);
+        armorStand.setMetadata("NO_INTER", new FixedMetadataValue(getUltraCosmetics(), ""));
         armorStand.setVisible(false);
         armorStand.setGravity(false);
         armorStand.setSmall(false);
-        armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte)3, " "));
+        armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) 3, " "));
         running = true;
         DISCO_BALLS.add(this);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new BukkitRunnable() {
-            @Override
-            public void run() {
-                onClear();
-            }
-        }, 20 * 20);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 400);
     }
 
     @Override
@@ -87,8 +76,11 @@ public class GadgetDiscoBall extends Gadget {
     public void onUpdate() {
         if (running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
-            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0)
+
+            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0) {
                 armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
+            }
+
             UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
             UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
             Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
@@ -97,23 +89,49 @@ public class GadgetDiscoBall extends Gadget {
             angle = 2 * Math.PI * i / 100;
             x = Math.cos(angle) * 4;
             z = Math.sin(angle) * 4;
-            if (UltraCosmeticsData.get().isUsingSpigot())
+
+            if (UltraCosmeticsData.get().isUsingSpigot()) {
                 drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), false, 20);
+            }
+
             i += 6;
             angle2 = 2 * Math.PI * i2 / 100;
             x2 = Math.cos(angle2) * 4;
             z2 = Math.sin(angle2) * 4;
             drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), true, 50);
             i2 += 0.4;
-            for (Entity ent : getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5))
-                if (ent.isOnGround()
-                        && affectPlayers)
-                    MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
 
-            for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false))
-                if (b.getType() == Material.WOOL || b.getType() == Material.CARPET)
+            for (Entity ent : getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5)) {
+                if (ent.isOnGround()
+                        && affectPlayers) {
+                    MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
+                }
+            }
+
+            for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
+                if (b.getType() == Material.WOOL || b.getType() == Material.CARPET) {
                     BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
-        }
+                }
+            }
+        } else {
+			i = 0;
+			i2 = 0;
+			DISCO_BALLS.remove(this);
+
+			if (armorStand != null)
+				armorStand.remove();
+
+			armorStand = null;
+		}
+    }
+
+    private void clean() {
+        running = false;
+    }
+
+    @Override
+    public void onClear() {
+        clean();
     }
 
     public ArrayList<Entity> getNearbyEntities(Location loc, double distance) {
@@ -153,7 +171,7 @@ public class GadgetDiscoBall extends Gadget {
                 UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
                 continue;
             }
-//            location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
+            // location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
         }
     }
 

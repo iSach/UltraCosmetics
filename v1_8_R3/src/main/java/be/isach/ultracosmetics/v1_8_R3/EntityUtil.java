@@ -43,7 +43,7 @@ public class EntityUtil implements IEntityUtil {
     }
 
     @Override
-    public void setHorseSpeed(Horse horse, double speed) {
+    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
         ((CraftHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
@@ -79,8 +79,12 @@ public class EntityUtil implements IEntityUtil {
         Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
             @Override
             public void run() {
-                for (Player pl : player.getWorld().getPlayers())
+                for (Player pl : player.getWorld().getPlayers()) {
+                    if(as == null) {
+                        continue;
+                    }
                     PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
+                }
                 fakeArmorStands.remove(as);
             }
         }, 20);

@@ -20,7 +20,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by sacha on 07/08/15.
+* Represents an instance of a portal gun gadget summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-07-2015
  */
 public class GadgetPortalGun extends Gadget {
 
@@ -58,7 +61,6 @@ public class GadgetPortalGun extends Gadget {
             locBlue.add(0.4, 1.8, 1.2);
         }
     }
-
 
     @Override
     void onLeftClick() {
@@ -137,9 +139,10 @@ public class GadgetPortalGun extends Gadget {
         if (locBlue != null) {
             Location portalCenter = locBlue.clone();
             if (locRed != null && !teleported) {
-                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                if(!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
                     locRed = null;
                     locBlue = null;
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
                     return;
                 }
                 Location toDistance;
@@ -202,9 +205,10 @@ public class GadgetPortalGun extends Gadget {
         }
         if (locRed != null) {
             if (locBlue != null && !teleported) {
-                if(!locRed.getWorld().equals(locBlue.getWorld())) {
+                if(!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
                     locRed = null;
                     locBlue = null;
+                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
                     return;
                 }
                 Location toDistance;
@@ -261,12 +265,11 @@ public class GadgetPortalGun extends Gadget {
                 UtilParticles.display(255, 0, 0, loc.add(v));
             }
         }
-
     }
 
     @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
-        if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR) {
+        if (getPlayer().getTargetBlock((Set<Material>) null, 20).getType() == Material.AIR || getPlayer().getLastTwoTargetBlocks((Set<Material>) null, 20).size() < 2) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
             return false;
         }

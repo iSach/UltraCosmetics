@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Package: be.isach.ultracosmetics
- * Created by: sachalewin
- * Date: 9/08/16
- * Project: UltraCosmetics
+ * Cosmetic manager.
+ * 
+ * @author 	iSach
+ * @since 	08-09-2016
  */
 public class CosmeticManager {
 

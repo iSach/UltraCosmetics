@@ -6,17 +6,20 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Set;
 
 /**
- * Created by sacha on 26/08/15.
+* Represents an instance of an enderman morph summoned by a player.
+ * 
+ * @author 	iSach
+ * @since 	08-26-2015
  */
 public class MorphEnderman extends Morph {
 
@@ -24,9 +27,12 @@ public class MorphEnderman extends Morph {
 
     public MorphEnderman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.ENDERMAN, ultraCosmetics);
-        if (owner != null) {
-            getPlayer().setAllowFlight(true);
-        }
+    }
+
+    @Override
+    protected void onEquip() {
+        super.onEquip();
+        getPlayer().setAllowFlight(true);
     }
 
     @EventHandler
@@ -57,9 +63,21 @@ public class MorphEnderman extends Morph {
         }
     }
 
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(event.getEntity() == getPlayer()
+                && getOwner().getCurrentMorph() == this) {
+            event.setCancelled(true);
+        }
+    }
+
+    @Override
+    public void onUpdate() {
+
+    }
+
     public static FireworkEffect getRandomFireworkEffect() {
         FireworkEffect.Builder builder = FireworkEffect.builder();
-        Random r = new Random();
         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(0, 0, 0)).withFade(Color.fromRGB(0, 0, 0)).build();
         return effect;
     }
@@ -74,32 +92,16 @@ public class MorphEnderman extends Morph {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                for (Firework f : fireworks)
-                    f.detonate();
-            }
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            for (Firework f : fireworks)
+                f.detonate();
         }, 2);
-    }
-
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION
-                && event.getEntity() == getPlayer())
-            event.setCancelled(true);
     }
 
     @Override
     public void onClear() {
-        if (getPlayer().getGameMode() != GameMode.CREATIVE)
+        if (getPlayer().getGameMode() != GameMode.CREATIVE) {
             getPlayer().setAllowFlight(false);
-        super.clear();
+        }
     }
-
-    @Override
-    protected void onEquip() {
-
-    }
-
 }
