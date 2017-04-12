@@ -113,6 +113,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         if (entity != null) {
             entity.remove();
         }
+
         getOwner().setCurrentMount(null);
 
         try {
