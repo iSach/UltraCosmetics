@@ -1,18 +1,29 @@
 package be.isach.ultracosmetics.treasurechests;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.type.*;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.EmoteType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.HatType;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.TextUtil;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -383,7 +394,7 @@ public class TreasureRandomizer {
     }
 
     public void giveMoney() {
-        if (!UltraCosmeticsData.get().getPlugin().isVaultLoaded()) {
+        if (!UltraCosmeticsData.get().isUsingVaultEconomy()) {
             giveNothing();
             return;
         }
