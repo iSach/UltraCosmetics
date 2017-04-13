@@ -131,7 +131,6 @@ public class MountFlyingShip extends Mount<Boat> {
 
     @Override
     public void onClear() {
-        super.onClear();
         if (currentboom != null) {
             currentboom.remove();
         }
