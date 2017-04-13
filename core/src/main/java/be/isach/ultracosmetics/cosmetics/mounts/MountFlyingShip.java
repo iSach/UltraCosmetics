@@ -24,10 +24,8 @@ import org.bukkit.util.Vector;
  * @since 	01-23-2016
  */
 public class MountFlyingShip extends Mount<Boat> {
-
     long nextAllowTime = 0;
     Entity currentboom = null;
-    // ArmorStand nameTag = null;
 
     public MountFlyingShip(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.FLYINGSHIP, ultraCosmetics);
@@ -80,23 +78,9 @@ public class MountFlyingShip extends Mount<Boat> {
         }
     }
 
-    /*
-        private void spawnNameTag(){
-             nameTag = (ArmorStand) ent.getWorld().spawnEntity(ent.getLocation(), EntityType.ARMOR_STAND);
-             nameTag.setVisible(false);
-             nameTag.setSmall(true);
-             nameTag.setCustomName(getGadgetType().getName(getBukkitPlayer()));
-             nameTag.setCustomNameVisible(true);
-             //hide name of ent
-             ent.setCustomNameVisible(false);
-             nameTag.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(Core.get(),"C_AD_ArmorStand"));
-             //getBukkitPlayer().setPassenger(nameTag);
-        }
-    */
     @EventHandler
     public void stopBoatDamage(EntityExplodeEvent event) {
-        Entity e = event.getEntity();
-        if (e == entity)
+        if (event.getEntity() == entity)
             event.setCancelled(true);
     }
 
@@ -133,16 +117,14 @@ public class MountFlyingShip extends Mount<Boat> {
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
-        Entity e = event.getDamager();
-        if (e == entity) {
+        if (event.getDamager() == entity) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBoatBreak(VehicleDestroyEvent event) {
-        Entity e = event.getVehicle();
-        if (e == entity) {
+        if (event.getVehicle() == entity) {
             event.setCancelled(true);
         }
     }
@@ -153,15 +135,6 @@ public class MountFlyingShip extends Mount<Boat> {
         if (currentboom != null) {
             currentboom.remove();
         }
-        /*
-        if(owner != null){
-    		nameTag.getVehicle().eject();
-    	}
-    	try{
-    		nameTag.remove();
-    	}catch(Exception e){
-    		
-    	}
-    	*/
+        super.onClear();
     }
 }
