@@ -240,7 +240,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
             MaterialData backData = ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item");
             String message = MessageManager.getMessage("Menu.Main-Menu");
             ItemStack item = ItemFactory.create(backData.getItemType(), backData.getData(), message);
-            putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().getMenus().getMainMenu().open(ultraPlayer));
+            putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(ultraPlayer));
         }
     }
 

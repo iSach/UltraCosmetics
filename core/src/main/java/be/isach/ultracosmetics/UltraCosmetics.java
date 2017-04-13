@@ -11,6 +11,7 @@ import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.manager.ArmorStandManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.menu.Menus;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -373,7 +374,7 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     /**
-     * @return The Update Checker.
+     * @return The Update CheckerC.
      */
     public UpdateManager getUpdateChecker() {
         return updateChecker;
@@ -406,5 +407,14 @@ public class UltraCosmetics extends JavaPlugin {
 
     public boolean isVaultLoaded() {
         return vaultLoaded;
+    }
+
+    public void openMainMenu(UltraPlayer ultraPlayer) {
+        if(getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled")) {
+            String command = getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "").replace("{player}", ultraPlayer.getBukkitPlayer().getName()).replace("{playeruuid}", ultraPlayer.getUuid().toString());
+            getServer().dispatchCommand(getServer().getConsoleSender(), command);
+        } else {
+            getMenus().getMainMenu().open(ultraPlayer);
+        }
     }
 }

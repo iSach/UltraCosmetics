@@ -225,7 +225,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
             ItemStack item = ItemFactory.create(backData.getItemType(), backData.getData(),
                     MessageManager.getMessage("Menu.Main-Menu"));
             putItem(inventory, inventory.getSize() - 6, item, (data) -> {
-                getUltraCosmetics().getMenus().getMainMenu().open(player);
+                getUltraCosmetics().openMainMenu(player);
             });
         }
 
