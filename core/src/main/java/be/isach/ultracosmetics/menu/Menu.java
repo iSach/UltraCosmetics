@@ -10,7 +10,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +57,10 @@ public abstract class Menu implements Listener {
     protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {
         Validate.notNull(itemStack);
         Validate.notNull(clickRunnable);
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.values());
+        itemStack.setItemMeta(itemMeta);
 
         inventory.setItem(slot, itemStack);
         if(clickRunnableMap.containsKey(inventory)) {

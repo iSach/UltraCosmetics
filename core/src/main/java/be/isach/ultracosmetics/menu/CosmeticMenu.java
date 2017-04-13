@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
@@ -125,6 +126,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
             }
 
             itemMeta.setLore(loreList);
+
             is.setItemMeta(itemMeta);
             is = filterItem(is, cosmeticMatType, player);
             putItem(inventory, COSMETICS_SLOTS[i], is, (data) -> {
