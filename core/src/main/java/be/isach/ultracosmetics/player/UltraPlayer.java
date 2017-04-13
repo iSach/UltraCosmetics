@@ -796,4 +796,23 @@ public class UltraPlayer {
     public void setLastPos(Location lastPos) {
         this.lastPos = lastPos;
     }
+
+    public void removeCosmetic(Category category) {
+        switch (category) {
+            case EFFECTS:
+                removeParticleEffect();
+            case EMOTES:
+                removeEmote();
+            case GADGETS:
+                removeGadget();
+            case HATS:
+                removeHat();
+            case MORPHS:
+                removeMorph();
+            case MOUNTS:
+                removeMount();
+            case PETS:
+                removePet();
+        }
+    }
 }

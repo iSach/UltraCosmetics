@@ -96,7 +96,11 @@ public enum CustomEntities {
 
 	public static void unregisterEntities() {
 		for (CustomEntities entity : values()) {
-			EntityTypes.b.a(entity.getID(), entity.getMinecraftKey(), entity.getNMSClass());
+			try {
+				EntityTypes.b.a(entity.getID(), entity.getMinecraftKey(), entity.getNMSClass());
+			} catch (Exception exc) {
+				// ignore temporarily... TODO fix NMS problems... I hate Mojang
+			}
 		}
 	}
 }
