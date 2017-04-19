@@ -126,6 +126,9 @@ public class GadgetDiscoBall extends Gadget {
     }
 
     private void clean() {
+        if(armorStand != null) {
+            armorStand.remove();
+        }
         running = false;
     }
 

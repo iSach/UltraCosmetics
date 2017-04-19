@@ -10,16 +10,14 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Slime;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -189,6 +187,25 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
                     || event.getFrom().getBlockZ() != event.getTo().getBlockZ()
                     || !event.getFrom().getWorld().getName().equalsIgnoreCase(event.getTo().getWorld().getName()))) {
                 //clear();
+            }
+        }
+    }
+
+    @EventHandler
+    public void openInv(InventoryOpenEvent event) {
+        if(getType() == MountType.DRUGGEDHORSE
+                || getType() == MountType.ECOLOGISTHORSE
+                || getType() == MountType.GLACIALSTEED
+                || getType() == MountType.INFERNALHORROR
+                || getType() == MountType.MOUNTOFFIRE
+                || getType() == MountType.MOUNTOFWATER
+                || getType() == MountType.WALKINGDEAD
+                || getType() == MountType.RUDOLPH) {
+            if (getOwner() != null
+                    && getPlayer() != null
+                    && event.getPlayer() == getPlayer()
+                    && event.getInventory().equals(((InventoryHolder)entity).getInventory())) {
+                event.setCancelled(true);
             }
         }
     }

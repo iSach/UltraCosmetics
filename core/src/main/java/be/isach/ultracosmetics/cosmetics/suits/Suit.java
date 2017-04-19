@@ -62,9 +62,6 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
         ItemStack current = event.getCurrentItem();
         if (event.getSlotType().equals(InventoryType.SlotType.ARMOR) && getPlayer() != null && player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && itemStack != null && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
             event.setCancelled(true);
-            if (event.getAction().name().contains("DROP") && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
-                clear();
-            }
             player.updateInventory();
         }
     }

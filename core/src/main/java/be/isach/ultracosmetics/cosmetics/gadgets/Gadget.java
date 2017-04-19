@@ -157,6 +157,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 				} catch (NullPointerException ignored) {
 					// Caused by rapid item switching in inventory.
 				}
+				if (getOwner() == null || getPlayer() == null) {
+					return;
+				}
+
 				double left = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
 				if (left > -0.1) {
 					String leftRounded = DECIMAL_FORMAT.format(left);

@@ -183,7 +183,9 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                         }
                     }
                     toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
-                    if (ultraPlayer.getCurrentGadget() != null && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
+                    if (category == Category.GADGETS &&
+                            ultraPlayer.getCurrentGadget() != null &&
+                            UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
                         ultraPlayer.getCurrentGadget().lastPage = currentPage;
                         ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
                     } else {

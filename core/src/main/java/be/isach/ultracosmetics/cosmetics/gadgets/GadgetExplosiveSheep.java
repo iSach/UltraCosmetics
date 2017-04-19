@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
-* Represents an instance of a explosive sheep gadget summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-08-2015
+ * Represents an instance of a explosive sheep gadget summoned by a player.
+ *
+ * @author iSach
+ * @since 08-08-2015
  */
 public class GadgetExplosiveSheep extends Gadget {
 
@@ -70,7 +70,7 @@ public class GadgetExplosiveSheep extends Gadget {
     @EventHandler
     public void onShear(PlayerShearEntityEvent event) {
         if (sheepArrayList.contains(event.getEntity()))
-            event.setCancelled(true);
+            event.setCancelled(true) ;
     }
 
     @EventHandler
@@ -85,6 +85,13 @@ public class GadgetExplosiveSheep extends Gadget {
 
     @Override
     public void onClear() {
+        try {
+            for (Sheep sheep : sheepArrayList) {
+                sheep.remove();
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
         EXPLOSIVE_SHEEP.remove(this);
         HandlerList.unregisterAll(this);
     }
@@ -105,6 +112,10 @@ public class GadgetExplosiveSheep extends Gadget {
 
         @Override
         public void run() {
+            if (getOwner() == null || getPlayer() == null) {
+                cancel();
+                return;
+            }
             if (red) s.setColor(DyeColor.RED);
             else s.setColor(DyeColor.WHITE);
             SoundUtil.playSound(s.getLocation(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
@@ -115,16 +126,21 @@ public class GadgetExplosiveSheep extends Gadget {
                 SoundUtil.playSound(s.getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
                 UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
                 for (int i = 0; i < 50; i++) {
+                    if (getOwner() == null || getPlayer() == null) {
+                        return;
+                    }
                     final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
                     try {
                         sheep.setColor(DyeColor.values()[MathUtils.randomRangeInt(0, 15)]);
                     } catch (Exception exc) {
+                        exc.printStackTrace();
                     }
                     Random r = new Random();
                     MathUtils.applyVelocity(sheep, new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
                     sheep.setBaby();
                     sheep.setAgeLock(true);
                     sheep.setNoDamageTicks(120);
+                    sheepArrayList.add(sheep);
                     UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
                     UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
                     Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {

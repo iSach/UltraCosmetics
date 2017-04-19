@@ -2,11 +2,16 @@ package be.isach.ultracosmetics.cosmetics.hats;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -34,6 +39,27 @@ public class Hat extends Cosmetic<HatType> {
 
         getPlayer().getInventory().setHelmet(getType().getItemStack());
         getOwner().setCurrentHat(this);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        ItemStack current = event.getCurrentItem();
+        if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)
+                && getPlayer() != null
+                && player.equals(getPlayer())
+                && current != null
+                && current.hasItemMeta()
+                && current.getItemMeta().hasDisplayName()
+                && getType().getItemStack() != null
+                && current.getItemMeta().getDisplayName().equals(getType().getItemStack().getItemMeta().getDisplayName())) {
+            event.setCancelled(true);
+            if (event.getAction().name().contains("DROP")
+                    && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
+                clear();
+            }
+            player.updateInventory();
+        }
     }
 
     @Override
