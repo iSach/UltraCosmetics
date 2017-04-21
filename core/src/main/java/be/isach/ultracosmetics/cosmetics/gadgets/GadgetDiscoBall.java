@@ -23,6 +23,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -139,7 +140,9 @@ public class GadgetDiscoBall extends Gadget {
 
     public ArrayList<Entity> getNearbyEntities(Location loc, double distance) {
         ArrayList<Entity> entities = new ArrayList<>();
-        for (Entity ent : loc.getWorld().getEntities()) {
+        Iterator<Entity> iterator = loc.getWorld().getEntities().iterator();
+        while(iterator.hasNext()) {
+            Entity ent = iterator.next();
             if (ent.getLocation().distance(loc) <= distance) {
                 entities.add(ent);
             }

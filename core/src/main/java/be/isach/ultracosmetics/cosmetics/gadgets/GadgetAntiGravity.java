@@ -89,6 +89,9 @@ public class GadgetAntiGravity extends Gadget {
 
     @Override
     public void onClear() {
+        if (as != null) {
+            as.remove();
+        }
         running = false;
     }
 }

@@ -112,6 +112,7 @@ public abstract class Menu implements Listener {
         }
 
         event.setCancelled(true);
+
         ClickRunnable clickRunnable = clickRunnableMap.get(event.getInventory()).get(event.getCurrentItem());
 
         // Check clickrunnable isn't null.
