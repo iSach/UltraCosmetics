@@ -375,7 +375,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 		if (event.getAction() == Action.PHYSICAL)
 			return;
 		if(UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
-            if(event.getHand() == EquipmentSlot.OFF_HAND) {
+            if(event.getHand() != null && event.getHand() == EquipmentSlot.OFF_HAND) {
                 return;
             }
         }

@@ -112,8 +112,9 @@ public class GadgetThorHammer extends Gadget implements Listener {
     }
     @Override
     public void onClear() {
-        for (Item i : hammer)
+        for (Item i : hammer) {
             i.remove();
+        }
         hammer.clear();
         v = null;
         HandlerList.unregisterAll(this);
