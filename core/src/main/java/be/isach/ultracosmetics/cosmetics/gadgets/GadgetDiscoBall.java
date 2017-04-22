@@ -75,7 +75,7 @@ public class GadgetDiscoBall extends Gadget {
 
     @Override
     public void onUpdate() {
-        if (running) {
+        if (armorStand != null && armorStand.isValid() && running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
 
             if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0) {
@@ -114,23 +114,16 @@ public class GadgetDiscoBall extends Gadget {
                     BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
                 }
             }
-        } else {
-			i = 0;
-			i2 = 0;
-			DISCO_BALLS.remove(this);
-
-			if (armorStand != null)
-				armorStand.remove();
-
-			armorStand = null;
-		}
+        }
     }
 
     private void clean() {
-        if(armorStand != null) {
+    	running = false;
+    	if(armorStand != null) {
             armorStand.remove();
+            armorStand = null;
         }
-        running = false;
+        DISCO_BALLS.remove(this);
     }
 
     @Override
