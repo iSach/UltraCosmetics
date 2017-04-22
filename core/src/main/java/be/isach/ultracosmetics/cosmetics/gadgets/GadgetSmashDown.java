@@ -48,8 +48,10 @@ public class GadgetSmashDown extends Gadget {
                 UtilParticles.display(Particles.CLOUD, getPlayer().getLocation()), 0, 1).getTaskId();
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             Bukkit.getScheduler().cancelTask(taskId);
-            getOwner().applyVelocity(new Vector(0, -3, 0));
-            active = true;
+            if (getOwner() != null) {
+		        getOwner().applyVelocity(new Vector(0, -3, 0));
+		        active = true;
+            }
         }, 25);
     }
 
