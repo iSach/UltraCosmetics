@@ -19,7 +19,7 @@ public class VersionManager {
     private IMounts mounts;
     private IPets pets;
     private IMorphs morphs;
-    private Constructor<? extends IPlayerFollower> playerFolowerConstructor;
+    private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
     private Constructor<? extends AAnvilGUI> anvilGUIConstructor;
     private IPathfinderUtil pathfinderUtil;
 
@@ -40,8 +40,8 @@ public class VersionManager {
         morphs = loadModule("Morphs");
         anvilGUIConstructor = (Constructor<AAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI") , Player.class , AAnvilGUI.AnvilClickEventHandler.class);
         anvilGUIConstructor.setAccessible(true);
-        playerFolowerConstructor = (Constructor<? extends IPlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pets.PlayerFollower") , Pet.class , Player.class);
-        playerFolowerConstructor.setAccessible(true);
+        playerFollowerConstructor = (Constructor<? extends IPlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pets.PlayerFollower") , Pet.class , Player.class);
+        playerFollowerConstructor.setAccessible(true);
     }
     @SuppressWarnings("unchecked")
     private <T> T loadModule(String name) throws ReflectiveOperationException{
@@ -80,7 +80,7 @@ public class VersionManager {
 
     public IPlayerFollower newPlayerFollower(Pet pet , Player player){
         try {
-            return playerFolowerConstructor.newInstance(pet , player);
+            return playerFollowerConstructor.newInstance(pet , player);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
             return null;

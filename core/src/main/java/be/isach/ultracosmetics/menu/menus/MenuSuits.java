@@ -19,6 +19,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -143,6 +144,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 }
 
                 itemMeta.setLore(loreList);
+
                 is.setItemMeta(itemMeta);
                 is = filterItem(is, suitType, player);
                 putItem(inventory, slot, is, (data) -> {
@@ -175,14 +177,6 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                             }
                         }
                         toggleOn(ultraPlayer, suitType, getUltraCosmetics(), armorSlot);
-                        if (ultraPlayer.getCurrentGadget() != null && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
-                            ultraPlayer.getCurrentGadget().lastPage = currentPage;
-                            ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
-                        } else {
-                            if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {
-                                open(ultraPlayer, currentPage);
-                            }
-                        }
                     }
                 });
             }
@@ -240,7 +234,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
             MaterialData backData = ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item");
             String message = MessageManager.getMessage("Menu.Main-Menu");
             ItemStack item = ItemFactory.create(backData.getItemType(), backData.getData(), message);
-            putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().getMenus().getMainMenu().open(ultraPlayer));
+            putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(ultraPlayer));
         }
     }
 

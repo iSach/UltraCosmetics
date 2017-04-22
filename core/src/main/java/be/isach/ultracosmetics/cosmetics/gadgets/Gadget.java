@@ -26,6 +26,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -157,6 +158,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 				} catch (NullPointerException ignored) {
 					// Caused by rapid item switching in inventory.
 				}
+				if (getOwner() == null || getPlayer() == null) {
+					return;
+				}
+
 				double left = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
 				if (left > -0.1) {
 					String leftRounded = DECIMAL_FORMAT.format(left);
@@ -369,6 +374,11 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 			return;
 		if (event.getAction() == Action.PHYSICAL)
 			return;
+		if(UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
+            if(event.getHand() != null && event.getHand() == EquipmentSlot.OFF_HAND) {
+                return;
+            }
+        }
 		event.setCancelled(true);
 		player.updateInventory();
 		if (!ultraPlayer.hasGadgetsEnabled()) {

@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
@@ -125,6 +126,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
             }
 
             itemMeta.setLore(loreList);
+
             is.setItemMeta(itemMeta);
             is = filterItem(is, cosmeticMatType, player);
             putItem(inventory, COSMETICS_SLOTS[i], is, (data) -> {
@@ -181,7 +183,9 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                         }
                     }
                     toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
-                    if (ultraPlayer.getCurrentGadget() != null && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
+                    if (category == Category.GADGETS &&
+                            ultraPlayer.getCurrentGadget() != null &&
+                            UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType().toString().toLowerCase()) < 1 && ultraPlayer.getCurrentGadget().getType().requiresAmmo()) {
                         ultraPlayer.getCurrentGadget().lastPage = currentPage;
                         ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
                     } else {
@@ -225,7 +229,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
             ItemStack item = ItemFactory.create(backData.getItemType(), backData.getData(),
                     MessageManager.getMessage("Menu.Main-Menu"));
             putItem(inventory, inventory.getSize() - 6, item, (data) -> {
-                getUltraCosmetics().getMenus().getMainMenu().open(player);
+                getUltraCosmetics().openMainMenu(player);
             });
         }
 
