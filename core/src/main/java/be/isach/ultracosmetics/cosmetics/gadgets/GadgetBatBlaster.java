@@ -108,6 +108,7 @@ public class GadgetBatBlaster extends Gadget {
 
 	private void clean() {
 		active = false;
+		playerVelocity = null;
 		if (bats != null) {
 			synchronized (bats) {
 				for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
