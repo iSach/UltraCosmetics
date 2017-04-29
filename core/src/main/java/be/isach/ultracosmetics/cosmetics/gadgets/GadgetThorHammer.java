@@ -36,9 +36,6 @@ public class GadgetThorHammer extends Gadget implements Listener {
 
     public GadgetThorHammer(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.THORHAMMER, ultraCosmetics);
-        if (owner != null) {
-            Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
-        }
     }
 
     @Override

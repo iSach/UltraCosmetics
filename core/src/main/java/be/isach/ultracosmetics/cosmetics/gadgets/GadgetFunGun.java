@@ -30,9 +30,6 @@ public class GadgetFunGun extends Gadget {
 
     public GadgetFunGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.FUNGUN, ultraCosmetics);
-
-        if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
     }
 
     @Override

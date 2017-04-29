@@ -35,9 +35,6 @@ public class GadgetParachute extends Gadget {
 
     public GadgetParachute(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.PARACHUTE, ultraCosmetics);
-
-        if (owner != null)
-            Bukkit.getPluginManager().registerEvents(this, getUltraCosmetics());
     }
 
 

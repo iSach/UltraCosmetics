@@ -44,12 +44,19 @@ public class GadgetSmashDown extends Gadget {
     void onRightClick() {
         SoundUtil.playSound(getPlayer().getLocation(), Sounds.FIREWORK_LAUNCH, 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
-        final int taskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () ->
-                UtilParticles.display(Particles.CLOUD, getPlayer().getLocation()), 0, 1).getTaskId();
+        final int taskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
+            if (getOwner() != null && getPlayer() != null && isEquipped()) {
+                UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
+            } else {
+                cancel();
+            }
+        }, 0, 1).getTaskId();
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-            Bukkit.getScheduler().cancelTask(taskId);
-            getOwner().applyVelocity(new Vector(0, -3, 0));
-            active = true;
+            if (getOwner() != null && getPlayer() != null && isEquipped()) {
+                Bukkit.getScheduler().cancelTask(taskId);
+                getOwner().applyVelocity(new Vector(0, -3, 0));
+                active = true;
+            }
         }, 25);
     }
 

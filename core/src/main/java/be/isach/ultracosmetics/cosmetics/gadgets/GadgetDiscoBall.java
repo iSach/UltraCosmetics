@@ -117,16 +117,12 @@ public class GadgetDiscoBall extends Gadget {
         } else {
 			i = 0;
 			i2 = 0;
-			DISCO_BALLS.remove(this);
-
-			if (armorStand != null)
-				armorStand.remove();
-
-			armorStand = null;
+			clean();
 		}
     }
 
     private void clean() {
+        DISCO_BALLS.remove(this);
         if(armorStand != null) {
             armorStand.remove();
         }

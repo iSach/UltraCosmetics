@@ -415,6 +415,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 			itemStack = ItemFactory.create(getType().getMaterial(), getType().getData(),
 					ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType().toString().toLowerCase())
 							+ " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
+			this.itemStack = itemStack;
 			getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
 		}
 		if (event.getClickedBlock() != null && event.getClickedBlock().getType() != Material.AIR)
@@ -477,7 +478,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 				return;
 			}
 			if (event.getCurrentItem() != null) {
-				if (event.getCurrentItem().equals(itemStack)) {
+				if (event.getCurrentItem().equals(getItemStack())) {
 					event.setCancelled(true);
 					player.updateInventory();
 				}
