@@ -136,134 +136,142 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     public void onUpdate() {
-        if (locBlue != null) {
-            Location portalCenter = locBlue.clone();
-            if (locRed != null && !teleported) {
-                if(!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
-                    locRed = null;
-                    locBlue = null;
-                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
-                    return;
-                }
-                Location toDistance;
-                if (blueBlockFace == BlockFace.DOWN) {
-                    toDistance = getPlayer().getEyeLocation().clone();
-                } else if (blueBlockFace == BlockFace.UP) {
-                    toDistance = getPlayer().getLocation().clone();
-                } else {
-                    toDistance = getPlayer().getLocation().add(0, 1.03, 0);
-                }
-                if (blueBlockFace == BlockFace.UP || blueBlockFace == BlockFace.DOWN) {
-                    portalCenter.add(0, 0, 1);
-                } else if (blueBlockFace == BlockFace.NORTH || blueBlockFace == BlockFace.SOUTH) {
-                    portalCenter.add(0, -1, 0);
-                } else if (blueBlockFace == BlockFace.EAST || blueBlockFace == BlockFace.WEST) {
-                    portalCenter.add(0, 0, 1);
-                }
-                if (toDistance.distance(locBlue) < 1.01) {
-                    teleported = true;
-                    teleport(getPlayer(), locRed);
-                    getPlayer().setVelocity(getVectorFromBlockFace(redBlockFace));
-                    if (redBlockFace == BlockFace.UP || redBlockFace == BlockFace.DOWN) {
-                        Location loc = locRed.clone();
-                        loc.setPitch(getPitch(redBlockFace));
-                        teleport(getPlayer(), loc);
+        try {
+            if (locBlue != null) {
+                Location portalCenter = locBlue.clone();
+                if (locRed != null && !teleported) {
+                    if (!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
+                        locRed = null;
+                        locBlue = null;
+                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
+                        return;
+                    }
+                    Location toDistance;
+                    if (blueBlockFace == BlockFace.DOWN) {
+                        toDistance = getPlayer().getEyeLocation().clone();
+                    } else if (blueBlockFace == BlockFace.UP) {
+                        toDistance = getPlayer().getLocation().clone();
                     } else {
-                        Location loc = locRed.clone();
-                        loc.setYaw(getYaw(redBlockFace));
-                        teleport(getPlayer(), loc);
+                        toDistance = getPlayer().getLocation().add(0, 1.03, 0);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                        @Override
-                        public void run() {
-                            teleported = false;
-                        }
-                    }, 20);
-                }
-            }
-            Location loc = locBlue.clone();
-            for (int i = 0; i < 25; i++) {
-                double inc = (2 * Math.PI) / 20;
-                double angle = i * inc;
-                Vector v = new Vector();
-                v.setX(Math.cos(angle) * 0.3);
-                v.setZ(Math.sin(angle) * 0.3);
-                double x = 0;
-                double z = 0;
-                if (blueBlockFace != BlockFace.UP && blueBlockFace != BlockFace.DOWN) {
-                    if (blueBlockFace == BlockFace.EAST || blueBlockFace == BlockFace.WEST) {
-                        x = 0;
-                        z = 1.5;
-                    } else if (blueBlockFace == BlockFace.NORTH || blueBlockFace == BlockFace.SOUTH) {
-                        z = 0;
-                        x = 1.5;
-                    }
-                }
-                MathUtils.rotateVector(v, x, 0, z);
-                UtilParticles.display(31, 0, 127, loc.add(v));
-            }
-        }
-        if (locRed != null) {
-            if (locBlue != null && !teleported) {
-                if(!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
-                    locRed = null;
-                    locBlue = null;
-                    getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
-                    return;
-                }
-                Location toDistance;
-                if (redBlockFace == BlockFace.DOWN) {
-                    toDistance = getPlayer().getEyeLocation().clone();
-                } else if (redBlockFace == BlockFace.UP) {
-                    toDistance = getPlayer().getLocation().clone();
-                } else {
-                    toDistance = getPlayer().getLocation().add(0, 1.1, 0);
-                }
-                if (toDistance.distance(locRed) < 1.1) {
-                    teleported = true;
-                    teleport(getPlayer(), locBlue);
-                    getPlayer().setVelocity(getVectorFromBlockFace(blueBlockFace));
                     if (blueBlockFace == BlockFace.UP || blueBlockFace == BlockFace.DOWN) {
-                        Location loc = locBlue.clone();
-                        loc.setPitch(getPitch(blueBlockFace));
-                        teleport(getPlayer(), loc);
-                    } else {
-                        Location loc = locBlue.clone();
-                        loc.setYaw(getYaw(blueBlockFace));
-                        teleport(getPlayer(), loc);
+                        portalCenter.add(0, 0, 1);
+                    } else if (blueBlockFace == BlockFace.NORTH || blueBlockFace == BlockFace.SOUTH) {
+                        portalCenter.add(0, -1, 0);
+                    } else if (blueBlockFace == BlockFace.EAST || blueBlockFace == BlockFace.WEST) {
+                        portalCenter.add(0, 0, 1);
                     }
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                        @Override
-                        public void run() {
-                            teleported = false;
+                    if (toDistance.distance(locBlue) < 1.01) {
+                        teleported = true;
+                        teleport(getPlayer(), locRed);
+                        getPlayer().setVelocity(getVectorFromBlockFace(redBlockFace));
+                        if (redBlockFace == BlockFace.UP || redBlockFace == BlockFace.DOWN) {
+                            Location loc = locRed.clone();
+                            loc.setPitch(getPitch(redBlockFace));
+                            teleport(getPlayer(), loc);
+                        } else {
+                            Location loc = locRed.clone();
+                            loc.setYaw(getYaw(redBlockFace));
+                            teleport(getPlayer(), loc);
                         }
-                    }, 20);
-                }
-            }
-            Location loc = locRed.clone();
-            for (int i = 0; i < 25; i++) {
-                double inc = (2 * Math.PI) / 20;
-                double angle = i * inc;
-                Vector v = new Vector();
-                v.setX(Math.cos(angle) * 0.3);
-                v.setZ(Math.sin(angle) * 0.3);
-                double x = 0;
-                double z = 0;
-                if (redBlockFace != BlockFace.UP
-                        && redBlockFace != BlockFace.DOWN) {
-                    if (redBlockFace == BlockFace.EAST
-                            || redBlockFace == BlockFace.WEST) {
-                        x = 0;
-                        z = 1.5;
-                    } else if (redBlockFace == BlockFace.NORTH
-                            || redBlockFace == BlockFace.SOUTH) {
-                        z = 0;
-                        x = 1.5;
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
+                            @Override
+                            public void run() {
+                                teleported = false;
+                            }
+                        }, 20);
                     }
                 }
-                MathUtils.rotateVector(v, x, 0, z);
-                UtilParticles.display(255, 0, 0, loc.add(v));
+                Location loc = locBlue.clone();
+                for (int i = 0; i < 25; i++) {
+                    double inc = (2 * Math.PI) / 20;
+                    double angle = i * inc;
+                    Vector v = new Vector();
+                    v.setX(Math.cos(angle) * 0.3);
+                    v.setZ(Math.sin(angle) * 0.3);
+                    double x = 0;
+                    double z = 0;
+                    if (blueBlockFace != BlockFace.UP && blueBlockFace != BlockFace.DOWN) {
+                        if (blueBlockFace == BlockFace.EAST || blueBlockFace == BlockFace.WEST) {
+                            x = 0;
+                            z = 1.5;
+                        } else if (blueBlockFace == BlockFace.NORTH || blueBlockFace == BlockFace.SOUTH) {
+                            z = 0;
+                            x = 1.5;
+                        }
+                    }
+                    MathUtils.rotateVector(v, x, 0, z);
+                    UtilParticles.display(31, 0, 127, loc.add(v));
+                }
             }
+            if (locRed != null) {
+                if (locBlue != null && !teleported) {
+                    if (!locRed.getWorld().getName().equals(locBlue.getWorld().getName())) {
+                        locRed = null;
+                        locBlue = null;
+                        getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.Different-Worlds"));
+                        return;
+                    }
+                    Location toDistance;
+                    if (redBlockFace == BlockFace.DOWN) {
+                        toDistance = getPlayer().getEyeLocation().clone();
+                    } else if (redBlockFace == BlockFace.UP) {
+                        toDistance = getPlayer().getLocation().clone();
+                    } else {
+                        toDistance = getPlayer().getLocation().add(0, 1.1, 0);
+                    }
+                    if (toDistance.distance(locRed) < 1.1) {
+                        teleported = true;
+                        teleport(getPlayer(), locBlue);
+                        getPlayer().setVelocity(getVectorFromBlockFace(blueBlockFace));
+                        if (blueBlockFace == BlockFace.UP || blueBlockFace == BlockFace.DOWN) {
+                            Location loc = locBlue.clone();
+                            loc.setPitch(getPitch(blueBlockFace));
+                            teleport(getPlayer(), loc);
+                        } else {
+                            Location loc = locBlue.clone();
+                            loc.setYaw(getYaw(blueBlockFace));
+                            teleport(getPlayer(), loc);
+                        }
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
+                            @Override
+                            public void run() {
+                                teleported = false;
+                            }
+                        }, 20);
+                    }
+                }
+                Location loc = locRed.clone();
+                for (int i = 0; i < 25; i++) {
+                    double inc = (2 * Math.PI) / 20;
+                    double angle = i * inc;
+                    Vector v = new Vector();
+                    v.setX(Math.cos(angle) * 0.3);
+                    v.setZ(Math.sin(angle) * 0.3);
+                    double x = 0;
+                    double z = 0;
+                    if (redBlockFace != BlockFace.UP
+                            && redBlockFace != BlockFace.DOWN) {
+                        if (redBlockFace == BlockFace.EAST
+                                || redBlockFace == BlockFace.WEST) {
+                            x = 0;
+                            z = 1.5;
+                        } else if (redBlockFace == BlockFace.NORTH
+                                || redBlockFace == BlockFace.SOUTH) {
+                            z = 0;
+                            x = 1.5;
+                        }
+                    }
+                    MathUtils.rotateVector(v, x, 0, z);
+                    UtilParticles.display(255, 0, 0, loc.add(v));
+                }
+            }
+        } catch (IllegalArgumentException ex) {
+            // Ignore. Other world.
+            locBlue = null;
+            locRed = null;
+            blueBlockFace = null;
+            redBlockFace = null;
         }
     }
 
