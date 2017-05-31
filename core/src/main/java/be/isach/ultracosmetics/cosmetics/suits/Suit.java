@@ -67,7 +67,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     }
 
     public void equip(ArmorSlot slot) {
-        if (!getOwner().getBukkitPlayer().hasPermission(getType().getPermission())) {
+        if (!getOwner().getBukkitPlayer().hasPermission(getType().getPermission(slot))) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
