@@ -1,6 +1,6 @@
-package be.isach.ultracosmetics.v1_11_R1.nms;
+package be.isach.ultracosmetics.v1_12_R1.nms;
 
-import net.minecraft.server.v1_11_R1.EntityInsentient;
+import net.minecraft.server.v1_12_R1.EntityInsentient;
 
 /**
  * @author RadBuilder

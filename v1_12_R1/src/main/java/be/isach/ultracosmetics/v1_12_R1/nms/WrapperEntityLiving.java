@@ -1,6 +1,6 @@
-package be.isach.ultracosmetics.v1_11_R1.nms;
+package be.isach.ultracosmetics.v1_12_R1.nms;
 
-import net.minecraft.server.v1_11_R1.EntityLiving;
+import net.minecraft.server.v1_12_R1.EntityLiving;
 
 /**
  * @author RadBuilder
@@ -24,8 +24,8 @@ public class WrapperEntityLiving extends WrapperEntity {
     public float getMoveStrafing() { return handle.be; }
     public void setMoveStrafing(float moveStrafing) { handle.be = moveStrafing; }
 
-    public float getMoveForward() { return handle.bf; }
-    public void setMoveForward(float moveForward) { handle.bf = moveForward; }
+    public float getMoveForward() { return handle.bg; }
+    public void setMoveForward(float moveForward) { handle.bg = moveForward; }
 
     public boolean isJumping() { return getField("bd", EntityLiving.class, Boolean.class); }
     public void setJumping(boolean jumping) { setField("bd", EntityLiving.class, jumping); }
@@ -42,8 +42,8 @@ public class WrapperEntityLiving extends WrapperEntity {
     public float getLimbSwing() { return handle.aH; }
     public void setLimbSwing(float limbSwing) { handle.aH = limbSwing; }
 
-    public float getMoveSpeed() { return handle.cq(); }
-    public void setMoveSpeed(float moveSpeed) { handle.l(moveSpeed); }
+    public float getMoveSpeed() { return handle.cw(); }
+    public void setMoveSpeed(float moveSpeed) { handle.m(moveSpeed); }
 
     @Override
     public EntityLiving getHandle() { return handle; }

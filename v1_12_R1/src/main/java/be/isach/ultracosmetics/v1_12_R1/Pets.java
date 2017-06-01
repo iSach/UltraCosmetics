@@ -1,7 +1,7 @@
-package be.isach.ultracosmetics.v1_11_R1;
+package be.isach.ultracosmetics.v1_12_R1;
 
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
-import be.isach.ultracosmetics.v1_11_R1.pets.PetPumpling;
+import be.isach.ultracosmetics.v1_12_R1.pets.PetPumpling;
 import be.isach.ultracosmetics.version.IPets;
 
 /**

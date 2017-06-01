@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_11_R1.mount;
+package be.isach.ultracosmetics.v1_12_R1.mount;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
@@ -12,7 +12,7 @@ import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by sacha on 1/03/17.
+ * @author RadBuilder
  */
 public class MountInfernalHorror extends MountHorse<SkeletonHorse> {
 

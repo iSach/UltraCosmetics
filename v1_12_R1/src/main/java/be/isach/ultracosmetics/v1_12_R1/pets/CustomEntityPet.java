@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_11_R1.pets;
+package be.isach.ultracosmetics.v1_12_R1.pets;
 
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
@@ -6,16 +6,19 @@ import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import be.isach.ultracosmetics.v1_11_R1.customentities.CustomEntities;
-import be.isach.ultracosmetics.v1_11_R1.customentities.Pumpling;
-import net.minecraft.server.v1_11_R1.Entity;
+import be.isach.ultracosmetics.v1_12_R1.customentities.CustomEntities;
+import be.isach.ultracosmetics.v1_12_R1.customentities.Pumpling;
+import net.minecraft.server.v1_12_R1.Entity;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.metadata.FixedMetadataValue;
 
+/**
+ * @author RadBuilder
+ */
 public abstract class CustomEntityPet extends Pet {
 
     /**
@@ -61,7 +64,7 @@ public abstract class CustomEntityPet extends Pet {
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);
-        ((org.bukkit.craftbukkit.v1_11_R1.CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
+        ((org.bukkit.craftbukkit.v1_12_R1.CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         EntitySpawningManager.setBypass(false);
     }
 

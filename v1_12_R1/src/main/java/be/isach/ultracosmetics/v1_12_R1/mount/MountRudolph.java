@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_11_R1.mount;
+package be.isach.ultracosmetics.v1_12_R1.mount;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
@@ -7,12 +7,8 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PlayerUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftHorse;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftSkeletonHorse;
-import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftInventoryHorse;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Mule;
@@ -23,7 +19,7 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 /**
- * Created by sacha on 1/03/17.
+ * @author RadBuilder
  */
 public class MountRudolph extends MountHorse<Mule> {
 

@@ -1,10 +1,10 @@
-package be.isach.ultracosmetics.v1_11_R1;
+package be.isach.ultracosmetics.v1_12_R1;
 
 import be.isach.ultracosmetics.version.IActionBar;
-import net.minecraft.server.v1_11_R1.IChatBaseComponent;
-import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_12_R1.ChatMessageType;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_12_R1.PacketPlayOutChat;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,7 +15,7 @@ public class ActionBar implements IActionBar {
     public void sendActionMessage(Player player, String message) {
         CraftPlayer p = (CraftPlayer) player;
         IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
-        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
+        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);
         p.getHandle().playerConnection.sendPacket(ppoc);
     }
 }

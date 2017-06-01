@@ -1,61 +1,65 @@
-package be.isach.ultracosmetics.v1_11_R1.customentities;
+package be.isach.ultracosmetics.v1_12_R1.customentities;
 
-import net.minecraft.server.v1_11_R1.*;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftArmorStand;
+import be.isach.ultracosmetics.v1_12_R1.morphs.MorphElderGuardian;
+import net.minecraft.server.v1_12_R1.DamageSource;
+import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_12_R1.EntityGuardian;
+import net.minecraft.server.v1_12_R1.LocaleI18n;
+import net.minecraft.server.v1_12_R1.SoundEffect;
+import net.minecraft.server.v1_12_R1.World;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
-
-import be.isach.ultracosmetics.v1_11_R1.morphs.MorphElderGuardian;
 
 /**
  * @author RadBuilder
  */
 public class CustomGuardian extends EntityGuardian {
-
+    
     private boolean custom;
-
+    
     public CustomGuardian(World world) {
         super(world);
     }
-
+    
     public void check() {
         custom = MorphElderGuardian.customEntities.contains(this);
     }
-
+    
     public void target(ArmorStand armorStand) {
         try {
             getDataWatcher().set(DataWatcherRegistry.c.a(17), (float) (armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId()));
         } catch (Exception exc) {
-
+        
         }
     }
-
+    
     @Override
-    protected SoundEffect G() {
+    protected SoundEffect F() {
         if (custom) return null;
-        else return super.G();
+        else return super.F();
     }
-
+    
     @Override
-    protected SoundEffect bW() {
+    protected SoundEffect d(DamageSource paramDamageSource) {
         if (custom) return null;
-        else return super.bW();
+        else return super.d(paramDamageSource);
     }
-
+    
     @Override
     public String getName() {
         return LocaleI18n.get("entity.Guardian.name");
     }
-
-
+    
+    
     @Override
-    protected SoundEffect bX() {
+    protected SoundEffect cd() {
         if (custom) return null;
-        else return super.bX();
+        else return super.cd();
     }
-
+    
     @Override
-    public void A_() {
-        if (!custom) super.A_();
+    public void B_() {
+        if (!custom) super.B_();
         else setHealth(getMaxHealth());
     }
 }

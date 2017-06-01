@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_11_R1.pets;
+package be.isach.ultracosmetics.v1_12_R1.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;

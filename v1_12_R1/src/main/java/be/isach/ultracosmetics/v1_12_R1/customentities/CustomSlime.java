@@ -1,10 +1,15 @@
-package be.isach.ultracosmetics.v1_11_R1.customentities;
+package be.isach.ultracosmetics.v1_12_R1.customentities;
 
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
-import be.isach.ultracosmetics.v1_11_R1.EntityBase;
-import be.isach.ultracosmetics.v1_11_R1.nms.WrapperEntityHuman;
-import be.isach.ultracosmetics.v1_11_R1.nms.WrapperEntityInsentient;
-import net.minecraft.server.v1_11_R1.*;
+import be.isach.ultracosmetics.v1_12_R1.EntityBase;
+import be.isach.ultracosmetics.v1_12_R1.nms.WrapperEntityHuman;
+import be.isach.ultracosmetics.v1_12_R1.nms.WrapperEntityInsentient;
+import net.minecraft.server.v1_12_R1.EntityHuman;
+import net.minecraft.server.v1_12_R1.EntityInsentient;
+import net.minecraft.server.v1_12_R1.EntitySlime;
+import net.minecraft.server.v1_12_R1.LocaleI18n;
+import net.minecraft.server.v1_12_R1.MathHelper;
+import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.entity.Entity;
 
 /**
@@ -17,17 +22,19 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
     }
 
     @Override
-    public void g(float sideMot, float forMot) {
+    public void a(float sideMot, float forMot, float f2) {
         if (!CustomEntities.customEntities.contains(this)) {
             super.g(sideMot, forMot);
             return;
         }
         EntityHuman passenger = null;
-        if (!bx().isEmpty()) {
-            passenger = (EntityHuman) bx().get(0);
+        if (!bD().isEmpty()) {
+            passenger = (EntityHuman) bD().get(0);
         }
         ride(sideMot, forMot, passenger, this);
-    } @Override
+    }
+    
+    @Override
     public String getName() {
         return LocaleI18n.get("entity.Slime.name");
     }
@@ -117,6 +124,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
     @Override
     public void removeAi() {
-        setAI(false);
+        setNoAI(true);
     }
 }

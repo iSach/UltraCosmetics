@@ -1,13 +1,21 @@
-package be.isach.ultracosmetics.v1_11_R1.customentities;
+package be.isach.ultracosmetics.v1_12_R1.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
-import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.v1_11_R1.pets.CustomEntityPet;
-import be.isach.ultracosmetics.v1_11_R1.pets.PetPumpling;
-import net.minecraft.server.v1_11_R1.*;
+import be.isach.ultracosmetics.v1_12_R1.pets.CustomEntityPet;
+import net.minecraft.server.v1_12_R1.Block;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.Blocks;
+import net.minecraft.server.v1_12_R1.DamageSource;
+import net.minecraft.server.v1_12_R1.EntityZombie;
+import net.minecraft.server.v1_12_R1.EnumItemSlot;
+import net.minecraft.server.v1_12_R1.ItemStack;
+import net.minecraft.server.v1_12_R1.LocaleI18n;
+import net.minecraft.server.v1_12_R1.SoundEffect;
+import net.minecraft.server.v1_12_R1.SoundEffects;
+import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.entity.Zombie;
 
 /**
@@ -31,23 +39,29 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     }
 
     @Override
-    protected SoundEffect G() { // say
+    protected SoundEffect F() { // say
         if (isCustomEntity()) {
             a(SoundEffects.bM, 0.05f, 2f);
             return null;
-        } else return super.G();
+        } else return super.F();
     }
 
     @Override
-    protected SoundEffect bW() { // Hurt
+    protected SoundEffect d(DamageSource damageSource) { // Hurt
         if (isCustomEntity()) return null;
-        else return super.bW();
+        else return super.d(damageSource);
     }
 
     @Override
-    protected SoundEffect bX() { // Death
+    protected SoundEffect cd() { // Death
         if (isCustomEntity()) return null;
-        else return super.bX();
+        else return super.cd();
+    }
+    
+    @Override
+    protected SoundEffect dk() { // Step
+        if (isCustomEntity()) return null;
+        else return super.dk();
     }
 
     @Override
@@ -62,8 +76,8 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     }
 
     @Override
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (!isCustomEntity()) return;
         fireTicks = 0;
         UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);

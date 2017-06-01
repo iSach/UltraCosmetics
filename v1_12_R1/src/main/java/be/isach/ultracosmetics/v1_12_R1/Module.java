@@ -1,8 +1,11 @@
-package be.isach.ultracosmetics.v1_11_R1;
+package be.isach.ultracosmetics.v1_12_R1;
 
-import be.isach.ultracosmetics.v1_11_R1.customentities.CustomEntities;
+import be.isach.ultracosmetics.v1_12_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.version.IModule;
 
+/**
+ * @author RadBuilder
+ */
 public class Module implements IModule {
 
 	@Override

@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_11_R1.morphs;
+package be.isach.ultracosmetics.v1_12_R1.morphs;
 
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.UltraCosmetics;
@@ -7,15 +7,15 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.v1_11_R1.customentities.CustomEntityFirework;
-import be.isach.ultracosmetics.v1_11_R1.customentities.CustomGuardian;
-import net.minecraft.server.v1_11_R1.World;
+import be.isach.ultracosmetics.v1_12_R1.customentities.CustomEntityFirework;
+import be.isach.ultracosmetics.v1_12_R1.customentities.CustomGuardian;
+import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -23,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class MorphElderGuardian extends Morph {
     /**
      * List of the custom entities.
      */
-    public static List<net.minecraft.server.v1_11_R1.Entity> customEntities = new ArrayList<>();
+    public static List<net.minecraft.server.v1_12_R1.Entity> customEntities = new ArrayList<>();
 
     private boolean cooldown;
     private CustomGuardian customGuardian;

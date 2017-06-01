@@ -1,6 +1,11 @@
-package be.isach.ultracosmetics.v1_11_R1.pathfinders;
+package be.isach.ultracosmetics.v1_12_R1.pathfinders;
 
-import net.minecraft.server.v1_11_R1.*;
+
+import net.minecraft.server.v1_12_R1.EntityCreature;
+import net.minecraft.server.v1_12_R1.EntityLiving;
+import net.minecraft.server.v1_12_R1.PathfinderGoal;
+import net.minecraft.server.v1_12_R1.RandomPositionGenerator;
+import net.minecraft.server.v1_12_R1.Vec3D;
 
 /**
  * @author RadBuilder
@@ -53,7 +58,7 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
             return false;
         }
         // CraftBukkit end
-        return !this.b.getNavigation().n();
+        return !this.b.getNavigation().o();
     }
 
 

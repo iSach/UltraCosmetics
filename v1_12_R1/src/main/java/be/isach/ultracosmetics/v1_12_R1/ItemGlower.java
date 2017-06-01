@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_11_R1;
+package be.isach.ultracosmetics.v1_12_R1;
 
 import be.isach.ultracosmetics.version.IItemGlower;
 import org.bukkit.enchantments.Enchantment;

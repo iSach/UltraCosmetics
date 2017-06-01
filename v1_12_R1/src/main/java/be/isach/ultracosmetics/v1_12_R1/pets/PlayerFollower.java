@@ -1,13 +1,13 @@
-package be.isach.ultracosmetics.v1_11_R1.pets;
+package be.isach.ultracosmetics.v1_12_R1.pets;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.*;
-import net.minecraft.server.v1_11_R1.Entity;
-import net.minecraft.server.v1_11_R1.EntityInsentient;
-import net.minecraft.server.v1_11_R1.PathEntity;
+import net.minecraft.server.v1_12_R1.Entity;
+import net.minecraft.server.v1_12_R1.EntityInsentient;
+import net.minecraft.server.v1_12_R1.PathEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 

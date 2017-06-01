@@ -1,6 +1,6 @@
-package be.isach.ultracosmetics.v1_11_R1.nms;
+package be.isach.ultracosmetics.v1_12_R1.nms;
 
-import net.minecraft.server.v1_11_R1.Entity;
+import net.minecraft.server.v1_12_R1.Entity;
 
 /**
  * @author RadBuilder
@@ -14,17 +14,11 @@ public class WrapperEntity extends WrapperBase {
 
         this.handle = handle;
     }
-
-    /*
-     * 1_9_R2 : P
-     */
+    
     public float getStepHeight() { return handle.P; }
     public void setStepHeight(float stepHeight) { handle.P = stepHeight; }
-
-    /*
-     * 1_9_R2 : by()
-     */
-    public boolean canPassengerSteer() { return handle.bA(); }
+    
+    public boolean canPassengerSteer() { return handle.bG(); }
 
     public Entity getHandle() { return handle; }
 

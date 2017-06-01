@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_11_R1;
+package be.isach.ultracosmetics.v1_12_R1;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.treasurechests.ChestType;
@@ -7,7 +7,7 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.v1_11_R1.pathfinders.CustomPathFinderGoalPanic;
+import be.isach.ultracosmetics.v1_12_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_12_R1.*;
