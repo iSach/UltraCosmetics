@@ -10,25 +10,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Module implements IModule {
-    @Override
-    public void enable() {
-        CustomEntities.registerEntities();
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                Player pl = Bukkit.getPlayer("iSach");
-                RideableSpider rabbit = new RideableSpider(((CraftWorld)pl.getWorld()).getHandle());
-                Location l = pl.getLocation();
-                rabbit.setLocation(l.getX(), l.getBlockY(), l.getZ(), 0f, 0f);
-                ((CraftWorld)pl.getWorld()).getHandle().addEntity(rabbit);
-                rabbit.getBukkitEntity().setPassenger(pl);
-            }
-        };
+	@Override
+	public void enable() {
+		CustomEntities.registerEntities();
+		BukkitRunnable runnable = new BukkitRunnable() {
+			@Override
+			public void run() {
+				Player pl = Bukkit.getPlayer("iSach");
+				RideableSpider rabbit = new RideableSpider(((CraftWorld) pl.getWorld()).getHandle());
+				Location l = pl.getLocation();
+				rabbit.setLocation(l.getX(), l.getBlockY(), l.getZ(), 0f, 0f);
+				((CraftWorld) pl.getWorld()).getHandle().addEntity(rabbit);
+				rabbit.getBukkitEntity().setPassenger(pl);
+			}
+		};
 //        runnable.runTaskLater(UltraCosmetics.get(), 100);
-    }
+	}
 
-    @Override
-    public void disable() {
-        CustomEntities.unregisterEntities();
-    }
+	@Override
+	public void disable() {
+		CustomEntities.unregisterEntities();
+	}
 }

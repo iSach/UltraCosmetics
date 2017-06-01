@@ -5,5 +5,5 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public interface IFireworkFactory {
-    void spawn(Location location, FireworkEffect effect, Player... players);
+	void spawn(Location location, FireworkEffect effect, Player... players);
 }

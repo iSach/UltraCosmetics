@@ -1,19 +1,18 @@
 package be.isach.ultracosmetics.tempchests.reward;
 
-import java.util.List;
-
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.TreasureManager;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.config.TreasureManager;
-import be.isach.ultracosmetics.player.UltraPlayer;
+import java.util.List;
 
 /**
  * A permission reward.
- * 
+ *
  * @author RadBuilder
  * @since 01-16-2017
  */
@@ -103,7 +102,7 @@ public class PermissionReward extends Reward {
 
 	@Override
 	public void give() {
-		for(String rewardCommand : rewardCommands) {
+		for (String rewardCommand : rewardCommands) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), rewardCommand.replace("{player-name}", ultraPlayer.getBukkitPlayer().getName()).replace("{player-uuid}", "" + ultraPlayer.getBukkitPlayer().getUniqueId()));
 		}
 	}

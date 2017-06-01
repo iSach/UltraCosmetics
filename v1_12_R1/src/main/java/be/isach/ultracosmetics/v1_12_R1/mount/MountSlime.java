@@ -9,13 +9,13 @@ import org.bukkit.entity.Slime;
  * @author RadBuilder
  */
 public class MountSlime extends MountCustomEntity {
-
-    public MountSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, MountType.SLIME, ultraCosmetics);
-    }
-
-    @Override
-    public void onUpdate() {
-        ((Slime)getEntity()).setSize(3);
-    }
+	
+	public MountSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, MountType.SLIME, ultraCosmetics);
+	}
+	
+	@Override
+	public void onUpdate() {
+		((Slime) getEntity()).setSize(3);
+	}
 }

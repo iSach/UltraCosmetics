@@ -7,22 +7,22 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 
 /**
  * Main listener
- * 
- * @author 	iSach
- * @since 	12-25-2015
+ *
+ * @author iSach
+ * @since 12-25-2015
  */
 public class MainListener implements Listener {
-
-    @EventHandler
-    public void onInteractAtEntity(PlayerInteractAtEntityEvent event) {
-        if(event.getRightClicked().hasMetadata("NO_INTER"))
-            event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onTakeUpMelon(PlayerPickupItemEvent event) {
-        if (event.getItem().hasMetadata("UNPICKABLEUP")) {
-            event.setCancelled(true);
-        }
-    }
+	
+	@EventHandler
+	public void onInteractAtEntity(PlayerInteractAtEntityEvent event) {
+		if (event.getRightClicked().hasMetadata("NO_INTER"))
+			event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onTakeUpMelon(PlayerPickupItemEvent event) {
+		if (event.getItem().hasMetadata("UNPICKABLEUP")) {
+			event.setCancelled(true);
+		}
+	}
 }

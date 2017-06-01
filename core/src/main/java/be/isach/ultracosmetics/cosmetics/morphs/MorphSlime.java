@@ -13,54 +13,54 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
 
 /**
-* Represents an instance of a slime morph summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-26-2015
+ * Represents an instance of a slime morph summoned by a player.
+ *
+ * @author iSach
+ * @since 08-26-2015
  */
 public class MorphSlime extends Morph {
 
-    private boolean cooldown;
+	private boolean cooldown;
 
-    public MorphSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, MorphType.SLIME, ultraCosmetics);
-    }
+	public MorphSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, MorphType.SLIME, ultraCosmetics);
+	}
 
-    @EventHandler
-    public void onKick(PlayerKickEvent event) {
-        if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && event.getReason().equalsIgnoreCase("Flying is not enabled on this server"))
-            event.setCancelled(true);
-    }
+	@EventHandler
+	public void onKick(PlayerKickEvent event) {
+		if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && event.getReason().equalsIgnoreCase("Flying is not enabled on this server"))
+			event.setCancelled(true);
+	}
 
-    @EventHandler
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
-            MathUtils.applyVelocity(getPlayer(), new Vector(0, 2.3, 0));
-            cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> cooldown = false, 80);
-        }
-    }
+	@EventHandler
+	public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+		if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
+			MathUtils.applyVelocity(getPlayer(), new Vector(0, 2.3, 0));
+			cooldown = true;
+			Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> cooldown = false, 80);
+		}
+	}
 
-    @EventHandler
-    public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() == getPlayer() && getOwner().getCurrentMorph() == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
-            event.setCancelled(true);
-    }
+	@EventHandler
+	public void onDamage(EntityDamageEvent event) {
+		if (event.getEntity() == getPlayer() && getOwner().getCurrentMorph() == this && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+			event.setCancelled(true);
+	}
 
-    @Override
-    protected void onEquip() {
-        super.onEquip();
-        SlimeWatcher slimeWatcher = (SlimeWatcher) disguise.getWatcher();
-        slimeWatcher.setSize(3);
-    }
+	@Override
+	protected void onEquip() {
+		super.onEquip();
+		SlimeWatcher slimeWatcher = (SlimeWatcher) disguise.getWatcher();
+		slimeWatcher.setSize(3);
+	}
 
-    @Override
-    public void onUpdate() {
+	@Override
+	public void onUpdate() {
 
-    }
+	}
 
-    @Override
-    protected void onClear() {
+	@Override
+	protected void onClear() {
 
-    }
+	}
 }

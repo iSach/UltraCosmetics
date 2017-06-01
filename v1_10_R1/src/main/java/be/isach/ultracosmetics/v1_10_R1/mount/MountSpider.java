@@ -8,11 +8,11 @@ import be.isach.ultracosmetics.player.UltraPlayer;
  * Created by Sacha on 18/10/15.
  */
 public class MountSpider extends MountCustomEntity {
-    public MountSpider(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, MountType.SPIDER, ultraCosmetics);
-    }
+	public MountSpider(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, MountType.SPIDER, ultraCosmetics);
+	}
 
-    @Override
-    public void onUpdate() {
-    }
+	@Override
+	public void onUpdate() {
+	}
 }

@@ -9,18 +9,18 @@ import be.isach.ultracosmetics.util.UtilParticles;
 
 /**
  * Represents an instance of enchanted particles summoned by a player.
- * 
- * @author 	iSach
- * @since 	10-12-2015
+ *
+ * @author iSach
+ * @since 10-12-2015
  */
 public class ParticleEffectEnchanted extends ParticleEffect {
 
-    public ParticleEffectEnchanted(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(ultraCosmetics, owner, ParticleEffectType.ENCHANTED);
-    }
+	public ParticleEffectEnchanted(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(ultraCosmetics, owner, ParticleEffectType.ENCHANTED);
+	}
 
-    @Override
-    public void onUpdate() {
-        UtilParticles.display(Particles.ENCHANTMENT_TABLE, getPlayer().getLocation().add(0, MathUtils.randomDouble(0.1, 2), 0), 60, 8f);
-    }
+	@Override
+	public void onUpdate() {
+		UtilParticles.display(Particles.ENCHANTMENT_TABLE, getPlayer().getLocation().add(0, MathUtils.randomDouble(0.1, 2), 0), 60, 8f);
+	}
 }

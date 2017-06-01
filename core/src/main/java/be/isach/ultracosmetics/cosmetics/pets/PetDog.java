@@ -16,36 +16,36 @@ import java.util.UUID;
 
 /**
  * Represents an instance of a dog pet summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-12-2015
+ *
+ * @author iSach
+ * @since 08-12-2015
  */
 public class PetDog extends Pet {
-
-    Random r = new Random();
-
-    public PetDog(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.DOG);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-                if (getOwner() != null && getEntity() != null) {
-                    Wolf w = (Wolf) entity;
-                    w.setTamed(true);
-                    w.setSitting(false);
-                }
-        }, 30);
-    }
-
-    @Override
-    public void onUpdate() {
-        Wolf w = (Wolf) entity;
-        w.setCollarColor(DyeColor.values()[r.nextInt(15)]);
-        final Item ITEM = entity.getWorld().dropItem(((Wolf) entity).getEyeLocation(), ItemFactory.create(Material.BONE, (byte) 0x0, UUID.randomUUID().toString()));
-        ITEM.setPickupDelay(30000);
-        ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-        items.add(ITEM);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-                ITEM.remove();
-                items.remove(ITEM);
-        }, 5);
-    }
+	
+	Random r = new Random();
+	
+	public PetDog(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, ultraCosmetics, PetType.DOG);
+		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+			if (getOwner() != null && getEntity() != null) {
+				Wolf w = (Wolf) entity;
+				w.setTamed(true);
+				w.setSitting(false);
+			}
+		}, 30);
+	}
+	
+	@Override
+	public void onUpdate() {
+		Wolf w = (Wolf) entity;
+		w.setCollarColor(DyeColor.values()[r.nextInt(15)]);
+		final Item ITEM = entity.getWorld().dropItem(((Wolf) entity).getEyeLocation(), ItemFactory.create(Material.BONE, (byte) 0x0, UUID.randomUUID().toString()));
+		ITEM.setPickupDelay(30000);
+		ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
+		items.add(ITEM);
+		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+			ITEM.remove();
+			items.remove(ITEM);
+		}, 5);
+	}
 }

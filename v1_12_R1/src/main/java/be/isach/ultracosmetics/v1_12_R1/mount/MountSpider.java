@@ -8,11 +8,11 @@ import be.isach.ultracosmetics.player.UltraPlayer;
  * @author RadBuilder
  */
 public class MountSpider extends MountCustomEntity {
-    public MountSpider(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, MountType.SPIDER, ultraCosmetics);
-    }
-
-    @Override
-    public void onUpdate() {
-    }
+	public MountSpider(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, MountType.SPIDER, ultraCosmetics);
+	}
+	
+	@Override
+	public void onUpdate() {
+	}
 }

@@ -1,20 +1,20 @@
 package be.isach.ultracosmetics.tempchests.reward;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 
 /**
  * A money reward.
- * 
+ *
  * @author RadBuilder
  * @since 01-14-2017
  */
@@ -44,16 +44,16 @@ public class MoneyReward extends Reward {
 		if (ultraCosmetics.getEconomy() == null) {
 			name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
 			itemStack = new ItemStack(Material.BARRIER);
-            return;
-        }
-        int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max"));
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
-        ultraCosmetics.getEconomy().depositPlayer(ultraPlayer.getBukkitPlayer(), money);
-        itemStack = new ItemStack(Material.DOUBLE_PLANT);
-        if (TreasureManager.getRewardFile().getBoolean("UcRewards.money.firework-effect.enabled"))
-        	super.firework(TreasureManager.getRewardFile().getString("UcRewards.money.firework-effect.color"));
-        if (TreasureManager.getRewardFile().getBoolean("UcRewards.money.chat-message.enabled"))
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', TreasureManager.getRewardFile().getString("UcRewards.money.chat-message.message")).replace("%name%", ultraPlayer.getBukkitPlayer().getName()).replace("%money%", money + ""));
+			return;
+		}
+		int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max"));
+		name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
+		ultraCosmetics.getEconomy().depositPlayer(ultraPlayer.getBukkitPlayer(), money);
+		itemStack = new ItemStack(Material.DOUBLE_PLANT);
+		if (TreasureManager.getRewardFile().getBoolean("UcRewards.money.firework-effect.enabled"))
+			super.firework(TreasureManager.getRewardFile().getString("UcRewards.money.firework-effect.color"));
+		if (TreasureManager.getRewardFile().getBoolean("UcRewards.money.chat-message.enabled"))
+			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', TreasureManager.getRewardFile().getString("UcRewards.money.chat-message.message")).replace("%name%", ultraPlayer.getBukkitPlayer().getName()).replace("%money%", money + ""));
 	}
 
 	@Override

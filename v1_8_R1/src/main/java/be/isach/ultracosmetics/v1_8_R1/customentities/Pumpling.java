@@ -4,7 +4,13 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import net.minecraft.server.v1_8_R1.*;
+import net.minecraft.server.v1_8_R1.Block;
+import net.minecraft.server.v1_8_R1.BlockPosition;
+import net.minecraft.server.v1_8_R1.Blocks;
+import net.minecraft.server.v1_8_R1.EntityZombie;
+import net.minecraft.server.v1_8_R1.ItemStack;
+import net.minecraft.server.v1_8_R1.PathEntity;
+import net.minecraft.server.v1_8_R1.World;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -14,88 +20,88 @@ import org.bukkit.entity.Zombie;
  */
 public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
-    Player player;
+	Player player;
 
-    public Pumpling(World world, Player player) {
-        super(world);
+	public Pumpling(World world, Player player) {
+		super(world);
 
-        this.player = player;
-    }
+		this.player = player;
+	}
 
-    public org.bukkit.entity.Entity getEntity() {
-        return getBukkitEntity();
-    }
+	public org.bukkit.entity.Entity getEntity() {
+		return getBukkitEntity();
+	}
 
-    @Override
-    protected String z() { // say
-        if (isCustomEntity()) {
-            makeSound("mob.ghast.scream", 0.05f, 2f);
-            return null;
-        } else
-            super.z();
-        return "mob.zombie.say";
-    }
+	@Override
+	protected String z() { // say
+		if (isCustomEntity()) {
+			makeSound("mob.ghast.scream", 0.05f, 2f);
+			return null;
+		} else
+			super.z();
+		return "mob.zombie.say";
+	}
 
-    @Override
-    protected String bn() { // Hurt
-        if (isCustomEntity())
-            return null;
-        else
-            super.z();
-        return "mob.zombie.hurt";
-    }
+	@Override
+	protected String bn() { // Hurt
+		if (isCustomEntity())
+			return null;
+		else
+			super.z();
+		return "mob.zombie.hurt";
+	}
 
-    @Override
-    protected String bo() { // Death
-        if (isCustomEntity())
-            return null;
-        else
-            super.z();
-        return "mob.zombie.death";
-    }
+	@Override
+	protected String bo() { // Death
+		if (isCustomEntity())
+			return null;
+		else
+			super.z();
+		return "mob.zombie.death";
+	}
 
-    @Override
-    protected void a(BlockPosition blockposition, Block block) {
-        if (isCustomEntity()) {
-        } else {
-            super.a(blockposition, block);
-        }
-    }
+	@Override
+	protected void a(BlockPosition blockposition, Block block) {
+		if (isCustomEntity()) {
+		} else {
+			super.a(blockposition, block);
+		}
+	}
 
-    @Override
-    public void m() {
-        super.m();
-        if (isCustomEntity()) {
-            fireTicks = 0;
-            UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
-            UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
-            setInvisible(true);
-            setBaby(true);
-            setEquipment(4, new ItemStack(Blocks.PUMPKIN));
-            follow();
-        }
-    }
+	@Override
+	public void m() {
+		super.m();
+		if (isCustomEntity()) {
+			fireTicks = 0;
+			UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
+			UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
+			setInvisible(true);
+			setBaby(true);
+			setEquipment(4, new ItemStack(Blocks.PUMPKIN));
+			follow();
+		}
+	}
 
-    private void follow() {
-        Location petLoc = getBukkitEntity().getLocation();
-        Location loc = player.getLocation();
-        if (!petLoc.getWorld().equals(loc.getWorld())
-                || (petLoc.distance(loc) > 10 && valid && player.isOnGround())) {
-            getBukkitEntity().teleport(player);
-            return;
-        }
-        if (petLoc.distance(loc) > 3.3d) {
-            PathEntity pathEntity = this.navigation.a(loc.getX(), loc.getY(), loc.getZ());
-            this.navigation.a(pathEntity, 1f);
-        }
-    }
+	private void follow() {
+		Location petLoc = getBukkitEntity().getLocation();
+		Location loc = player.getLocation();
+		if (!petLoc.getWorld().equals(loc.getWorld())
+		    || (petLoc.distance(loc) > 10 && valid && player.isOnGround())) {
+			getBukkitEntity().teleport(player);
+			return;
+		}
+		if (petLoc.distance(loc) > 3.3d) {
+			PathEntity pathEntity = this.navigation.a(loc.getX(), loc.getY(), loc.getZ());
+			this.navigation.a(pathEntity, 1f);
+		}
+	}
 
-    @Override
-    public String getName() {
-        return super.getName();
-    }
+	@Override
+	public String getName() {
+		return super.getName();
+	}
 
-    private boolean isCustomEntity() {
-        return CustomEntities.customEntities.contains(this);
-    }
+	private boolean isCustomEntity() {
+		return CustomEntities.customEntities.contains(this);
+	}
 }

@@ -16,59 +16,59 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Represents an instance of a hat summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-23-2016
+ *
+ * @author iSach
+ * @since 08-23-2016
  */
 public class Hat extends Cosmetic<HatType> {
-
-    public Hat(UltraCosmetics ultraCosmetics, UltraPlayer owner, HatType type) {
-        super(ultraCosmetics, Category.HATS, owner, type);
-    }
-
-    @Override
-    protected void onEquip() {
-        getOwner().removeHat();
-        getOwner().removeEmote();
-        getOwner().removeSuit(ArmorSlot.HELMET);
-
-        if (getPlayer().getInventory().getHelmet() != null) {
-            getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-Hat"));
-            return;
-        }
-
-        getPlayer().getInventory().setHelmet(getType().getItemStack());
-        getOwner().setCurrentHat(this);
-    }
-
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        ItemStack current = event.getCurrentItem();
-        if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)
-                && getPlayer() != null
-                && player.equals(getPlayer())
-                && current != null
-                && current.hasItemMeta()
-                && current.getItemMeta().hasDisplayName()
-                && getType().getItemStack() != null
-                && current.getItemMeta().getDisplayName().equals(getType().getItemStack().getItemMeta().getDisplayName())) {
-            event.setCancelled(true);
-            if (event.getAction().name().contains("DROP")
-                    && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
-                clear();
-            }
-            player.updateInventory();
-        }
-    }
-
-    @Override
-    protected void onClear() {
-        getPlayer().getInventory().setHelmet(null);
-        getOwner().setCurrentHat(null);
-    }
-
-    public ItemStack getItemStack() {
-        return getType().getItemStack();
-    }
+	
+	public Hat(UltraCosmetics ultraCosmetics, UltraPlayer owner, HatType type) {
+		super(ultraCosmetics, Category.HATS, owner, type);
+	}
+	
+	@Override
+	protected void onEquip() {
+		getOwner().removeHat();
+		getOwner().removeEmote();
+		getOwner().removeSuit(ArmorSlot.HELMET);
+		
+		if (getPlayer().getInventory().getHelmet() != null) {
+			getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-Hat"));
+			return;
+		}
+		
+		getPlayer().getInventory().setHelmet(getType().getItemStack());
+		getOwner().setCurrentHat(this);
+	}
+	
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		ItemStack current = event.getCurrentItem();
+		if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)
+		    && getPlayer() != null
+		    && player.equals(getPlayer())
+		    && current != null
+		    && current.hasItemMeta()
+		    && current.getItemMeta().hasDisplayName()
+		    && getType().getItemStack() != null
+		    && current.getItemMeta().getDisplayName().equals(getType().getItemStack().getItemMeta().getDisplayName())) {
+			event.setCancelled(true);
+			if (event.getAction().name().contains("DROP")
+			    && SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
+				clear();
+			}
+			player.updateInventory();
+		}
+	}
+	
+	@Override
+	protected void onClear() {
+		getPlayer().getInventory().setHelmet(null);
+		getOwner().setCurrentHat(null);
+	}
+	
+	public ItemStack getItemStack() {
+		return getType().getItemStack();
+	}
 }

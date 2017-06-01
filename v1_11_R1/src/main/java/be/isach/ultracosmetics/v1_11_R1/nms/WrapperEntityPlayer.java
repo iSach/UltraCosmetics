@@ -7,15 +7,15 @@ import net.minecraft.server.v1_11_R1.EntityPlayer;
  */
 public class WrapperEntityPlayer extends WrapperEntityHuman {
 
-    protected EntityPlayer handle;
+	protected EntityPlayer handle;
 
-    public WrapperEntityPlayer(EntityPlayer handle) {
-        super(handle);
+	public WrapperEntityPlayer(EntityPlayer handle) {
+		super(handle);
 
-        this.handle = handle;
-    }
+		this.handle = handle;
+	}
 
-    @Override
-    public EntityPlayer getHandle() { return handle; }
+	@Override
+	public EntityPlayer getHandle() { return handle; }
 
 }

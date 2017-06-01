@@ -14,52 +14,52 @@ import org.bukkit.entity.ArmorStand;
  * @author RadBuilder
  */
 public class CustomGuardian extends EntityGuardian {
-    
-    private boolean custom;
-    
-    public CustomGuardian(World world) {
-        super(world);
-    }
-    
-    public void check() {
-        custom = MorphElderGuardian.customEntities.contains(this);
-    }
-    
-    public void target(ArmorStand armorStand) {
-        try {
-            getDataWatcher().set(DataWatcherRegistry.c.a(17), (float) (armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId()));
-        } catch (Exception exc) {
-        
-        }
-    }
-    
-    @Override
-    protected SoundEffect F() {
-        if (custom) return null;
-        else return super.F();
-    }
-    
-    @Override
-    protected SoundEffect d(DamageSource paramDamageSource) {
-        if (custom) return null;
-        else return super.d(paramDamageSource);
-    }
-    
-    @Override
-    public String getName() {
-        return LocaleI18n.get("entity.Guardian.name");
-    }
-    
-    
-    @Override
-    protected SoundEffect cd() {
-        if (custom) return null;
-        else return super.cd();
-    }
-    
-    @Override
-    public void B_() {
-        if (!custom) super.B_();
-        else setHealth(getMaxHealth());
-    }
+	
+	private boolean custom;
+	
+	public CustomGuardian(World world) {
+		super(world);
+	}
+	
+	public void check() {
+		custom = MorphElderGuardian.customEntities.contains(this);
+	}
+	
+	public void target(ArmorStand armorStand) {
+		try {
+			getDataWatcher().set(DataWatcherRegistry.c.a(17), (float) (armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId()));
+		} catch (Exception exc) {
+		
+		}
+	}
+	
+	@Override
+	protected SoundEffect F() {
+		if (custom) return null;
+		else return super.F();
+	}
+	
+	@Override
+	protected SoundEffect d(DamageSource paramDamageSource) {
+		if (custom) return null;
+		else return super.d(paramDamageSource);
+	}
+	
+	@Override
+	public String getName() {
+		return LocaleI18n.get("entity.Guardian.name");
+	}
+	
+	
+	@Override
+	protected SoundEffect cd() {
+		if (custom) return null;
+		else return super.cd();
+	}
+	
+	@Override
+	public void B_() {
+		if (!custom) super.B_();
+		else setHealth(getMaxHealth());
+	}
 }
