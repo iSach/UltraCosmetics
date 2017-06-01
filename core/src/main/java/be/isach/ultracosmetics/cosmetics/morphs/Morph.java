@@ -8,7 +8,6 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import org.bukkit.event.HandlerList;
 
 import java.util.UUID;
 

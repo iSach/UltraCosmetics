@@ -11,13 +11,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -75,9 +72,7 @@ public class GadgetSmashDown extends Gadget {
     public void onUpdate() {
         if (active && getPlayer().isOnGround()) {
             this.playEffect = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> {
-                active = false;
-            }, 5);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> active = false, 5);
             return;
         }
 

@@ -12,13 +12,11 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Item;
-import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -52,9 +50,7 @@ public class GadgetChickenator extends Gadget {
                 ITEM.setVelocity(new Vector(MathUtils.random.nextDouble() - 0.5, MathUtils.random.nextDouble() / 2.0, MathUtils.random.nextDouble() - 0.5));
                 items.add(ITEM);
             }
-            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-                items.forEach(Item::remove);
-            }, 50);
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> items.forEach(Item::remove), 50);
         }, 9);
         getPlayer().updateInventory();
     }

@@ -24,7 +24,7 @@ import java.util.HashMap;
  */
 public class MountSnake extends Mount<Sheep> {
 
-    private HashMap<Player, ArrayList<Entity>> tailMap = new HashMap<Player, ArrayList<Entity>>();
+    private HashMap<Player, ArrayList<Entity>> tailMap = new HashMap<>();
     private int color = 1;
 
 
@@ -36,10 +36,10 @@ public class MountSnake extends Mount<Sheep> {
     public void onEquip() {
         super.onEquip();
         color = MathUtils.randomRangeInt(0, 14);
-        ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
-        ((Sheep) entity).setColor(DyeColor.values()[color]);
-        tailMap.put(getPlayer(), new ArrayList());
-        ((ArrayList) tailMap.get(getPlayer())).add(entity);
+        entity.setNoDamageTicks(Integer.MAX_VALUE);
+        entity.setColor(DyeColor.values()[color]);
+        tailMap.put(getPlayer(), new ArrayList<>());
+        tailMap.get(getPlayer()).add(entity);
         addSheepToTail(4);
     }
 
@@ -55,14 +55,12 @@ public class MountSnake extends Mount<Sheep> {
     @Override
     public void onUpdate() {
         if (getPlayer() != null)
-            Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
-                @Override
-                public void run() {
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                     if (getPlayer() != null) {
                         Vector vel = getPlayer().getLocation().getDirection().setY(0).normalize().multiply(4);
 
                         Creature before = null;
-                        for (int i = 0; i < ((ArrayList) tailMap.get(getPlayer())).size(); i++) {
+                        for (int i = 0; i < tailMap.get(getPlayer()).size(); i++) {
                             Creature tail = (Creature) ((ArrayList) tailMap.get(getPlayer())).get(i);
                             Location loc = getPlayer().getLocation().add(vel);
                             if (i == 0)
@@ -84,7 +82,6 @@ public class MountSnake extends Mount<Sheep> {
 
                         }
                     }
-                }
             });
     }
 
@@ -104,11 +101,11 @@ public class MountSnake extends Mount<Sheep> {
         Player player = getPlayer();
         for (int i = 0; i < amount; i++) {
             Location loc = player.getLocation();
-            if (!((ArrayList) tailMap.get(player)).isEmpty()) {
-                loc = ((Creature) ((ArrayList) tailMap.get(player)).get(((ArrayList) tailMap.get(player)).size() - 1)).getLocation();
+            if (!tailMap.get(player).isEmpty()) {
+                loc = tailMap.get(player).get(tailMap.get(player).size() - 1).getLocation();
             }
-            if (((ArrayList) tailMap.get(player)).size() > 1) {
-                loc.add(traj((Entity) ((ArrayList) tailMap.get(player)).get(((ArrayList) tailMap.get(player)).size() - 2), (Entity) ((ArrayList) tailMap.get(player)).get(((ArrayList) tailMap.get(player)).size() - 1)));
+            if (tailMap.get(player).size() > 1) {
+                loc.add(traj(tailMap.get(player).get(tailMap.get(player).size() - 2), tailMap.get(player).get(tailMap.get(player).size() - 1)));
             } else {
                 loc.subtract(player.getLocation().getDirection().setY(0));
             }
@@ -116,7 +113,7 @@ public class MountSnake extends Mount<Sheep> {
             tail.setNoDamageTicks(Integer.MAX_VALUE);
             tail.setRemoveWhenFarAway(false);
             tail.teleport(loc);
-            ((ArrayList) tailMap.get(player)).add(tail);
+            tailMap.get(player).add(tail);
             tail.setColor(DyeColor.values()[color]);
             /*if (tail != ent)
                 tail.setPassenger(tail.getWorld().spawnEntity(tail.getLocation(), EntityType.MINECART));

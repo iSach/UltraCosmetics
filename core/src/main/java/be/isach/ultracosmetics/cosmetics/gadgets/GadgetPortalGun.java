@@ -174,12 +174,7 @@ public class GadgetPortalGun extends Gadget {
                             loc.setYaw(getYaw(redBlockFace));
                             teleport(getPlayer(), loc);
                         }
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                            @Override
-                            public void run() {
-                                teleported = false;
-                            }
-                        }, 20);
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> teleported = false, 20);
                     }
                 }
                 Location loc = locBlue.clone();
@@ -233,12 +228,7 @@ public class GadgetPortalGun extends Gadget {
                             loc.setYaw(getYaw(blueBlockFace));
                             teleport(getPlayer(), loc);
                         }
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                            @Override
-                            public void run() {
-                                teleported = false;
-                            }
-                        }, 20);
+                        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> teleported = false, 20);
                     }
                 }
                 Location loc = locRed.clone();
@@ -300,14 +290,11 @@ public class GadgetPortalGun extends Gadget {
     }
 
     private void teleport(final Entity entity, final Location location) {
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                 entity.teleport(location);
                 if(entity instanceof Player) {
                     SoundUtil.playSound(((Player) entity), Sounds.ENDERMAN_TELEPORT);
                 }
-            }
         });
     }
 

@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.cosmetics.type.*;
 
 import java.io.IOException;

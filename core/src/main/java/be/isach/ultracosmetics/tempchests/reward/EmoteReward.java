@@ -40,7 +40,7 @@ public class EmoteReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		emoteList = new ArrayList<EmoteType>();
+		emoteList = new ArrayList<>();
         for (EmoteType type : EmoteType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission())

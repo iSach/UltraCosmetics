@@ -113,7 +113,7 @@ public class SqlUtils {
 	}
 
 	public void setName(int index, String pet, String name) {
-		DatabaseMetaData md = null;
+		DatabaseMetaData md;
 		ResultSet rs = null;
 		try {
 			md = MySqlConnectionManager.co.getMetaData();
@@ -172,7 +172,7 @@ public class SqlUtils {
 	}
 
 	public void setGadgetsEnabled(int index, boolean enabled) {
-		DatabaseMetaData md = null;
+		DatabaseMetaData md;
 		ResultSet rs = null;
 		try {
 			md = MySqlConnectionManager.co.getMetaData();
@@ -227,7 +227,7 @@ public class SqlUtils {
 	}
 
 	public void setSeeSelfMorph(int index, boolean enabled) {
-		DatabaseMetaData md = null;
+		DatabaseMetaData md;
 		ResultSet rs = null;
 		try {
 			md = MySqlConnectionManager.co.getMetaData();

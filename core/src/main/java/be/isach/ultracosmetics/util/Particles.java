@@ -1,9 +1,5 @@
 package be.isach.ultracosmetics.util;
 
-/**
- * Created by Sacha on 14/10/15.
- */
-
 import be.isach.ultracosmetics.util.ReflectionUtils.PackageType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -387,8 +383,8 @@ public enum Particles {
      */
     MOB_APPEARANCE("mobappearance", 41, 8);
 
-    private static final Map<String, Particles> NAME_MAP = new HashMap<String, Particles>();
-    private static final Map<Integer, Particles> ID_MAP = new HashMap<Integer, Particles>();
+    private static final Map<String, Particles> NAME_MAP = new HashMap<>();
+    private static final Map<Integer, Particles> ID_MAP = new HashMap<>();
     private final String name;
     private final int id;
     private final int requiredVersion;
@@ -459,10 +455,7 @@ public enum Particles {
      * @return Whether the particle effect is supported or not
      */
     public boolean isSupported() {
-        if (requiredVersion == -1) {
-            return true;
-        }
-        return ParticlePacket.getVersion() >= requiredVersion;
+        return requiredVersion == -1 || ParticlePacket.getVersion() >= requiredVersion;
     }
 
     /**

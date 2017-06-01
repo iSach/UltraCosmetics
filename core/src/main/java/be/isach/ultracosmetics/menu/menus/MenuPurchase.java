@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.menu.ClickData;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.player.UltraPlayer;

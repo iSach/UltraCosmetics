@@ -55,25 +55,12 @@ public class GadgetTsunami extends Gadget {
                     if (!cooldownJump.contains(ent) && ent != getPlayer() && !(ent instanceof ArmorStand)) {
                         MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v.clone().multiply(2)));
                         cooldownJump.add(ent);
-                        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-                            @Override
-                            public void run() {
-                                cooldownJump.remove(ent);
-                            }
-                        }, 20);
+                        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cooldownJump.remove(ent), 20);
                     }
                 }
-
             loc.add(v);
         }, 0, 1).getTaskId();
-
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.getScheduler().cancelTask(i);
-            }
-        }, 40);
-
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> Bukkit.getScheduler().cancelTask(i), 40);
     }
 
     @Override

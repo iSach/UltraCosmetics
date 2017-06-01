@@ -81,7 +81,6 @@ public class GadgetAntiGravity extends Gadget {
                 }
                 event.setCancelled(true);
                 System.out.println("UltraCosmetics >> Cancelling invalid Flight KicK.");
-                return;
             }
         } catch (Exception exc) {
         }

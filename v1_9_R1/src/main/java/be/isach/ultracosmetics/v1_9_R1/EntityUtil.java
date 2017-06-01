@@ -55,9 +55,9 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v) {
         if (!fakeArmorStandsMap.containsKey(player))
-            fakeArmorStandsMap.put(player, new ArrayList<EntityArmorStand>());
+            fakeArmorStandsMap.put(player, new ArrayList<>());
         if (!cooldownJumpMap.containsKey(player))
-            cooldownJumpMap.put(player, new ArrayList<org.bukkit.entity.Entity>());
+            cooldownJumpMap.put(player, new ArrayList<>());
 
         final List<EntityArmorStand> fakeArmorStands = fakeArmorStandsMap.get(player);
         final List<org.bukkit.entity.Entity> cooldownJump = cooldownJumpMap.get(player);
@@ -77,9 +77,7 @@ public class EntityUtil implements IEntityUtil {
             PacketSender.send(players, new PacketPlayOutEntityEquipment(as.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         }
         UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
-        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
                 for (Player pl : player.getWorld().getPlayers()) {
                     if(as == null) {
                         continue;
@@ -87,19 +85,13 @@ public class EntityUtil implements IEntityUtil {
                     PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
                 }
                 fakeArmorStands.remove(as);
-            }
         }, 20);
         if (affectPlayers)
             for (final org.bukkit.entity.Entity ent : as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
                 if (!cooldownJump.contains(ent) && ent != player) {
                     MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
                     cooldownJump.add(ent);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
-                        @Override
-                        public void run() {
-                            cooldownJump.remove(ent);
-                        }
-                    }, 20);
+                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
                 }
             }
     }

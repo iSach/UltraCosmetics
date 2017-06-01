@@ -40,7 +40,7 @@ public class GadgetReward extends Reward {
 
 	@Override
 	public boolean canEarn() {
-		gadgetList = new ArrayList<GadgetType>();
+		gadgetList = new ArrayList<>();
         for (GadgetType type : GadgetType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission())

@@ -41,7 +41,7 @@ public class HelmetReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		helmetList = new ArrayList<SuitType>();
+		helmetList = new ArrayList<>();
         for (SuitType type : SuitType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission(ArmorSlot.HELMET))

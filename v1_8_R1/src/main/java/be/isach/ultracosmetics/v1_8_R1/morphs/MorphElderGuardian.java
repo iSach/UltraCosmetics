@@ -23,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -53,12 +52,7 @@ public class MorphElderGuardian extends Morph {
                 && event.getPlayer() == getPlayer()) {
             shootLaser();
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                @Override
-                public void run() {
-                    cooldown = false;
-                }
-            }, 80);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> cooldown = false, 80);
         }
     }
 
@@ -85,9 +79,7 @@ public class MorphElderGuardian extends Morph {
 
         customGuardian.target(armorStand);
 
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                 FireworkEffect.Builder builder = FireworkEffect.builder();
                 FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                         .withColor(Color.TEAL).withFade(Color.TEAL).build();
@@ -105,10 +97,8 @@ public class MorphElderGuardian extends Morph {
                             MathUtils.applyVelocity(entity, new Vector(0, 0.5d, 0));
                     current.add(vector);
                 }
-
                 armorStand.remove();
                 customGuardian.target(null);
-            }
         }, 25);
     }
 
@@ -155,7 +145,6 @@ public class MorphElderGuardian extends Morph {
                 || !customGuardian.isAlive()) {
             getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
             cancel();
-            return;
         }
     }
 }

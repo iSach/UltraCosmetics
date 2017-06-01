@@ -5,9 +5,6 @@ import be.isach.ultracosmetics.v1_10_R1.EntityBase;
 import be.isach.ultracosmetics.v1_10_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_10_R1.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_10_R1.*;
-import org.bukkit.craftbukkit.v1_10_R1.util.UnsafeList;
-
-import java.lang.reflect.Field;
 
 /**
  * Custom Squid class.

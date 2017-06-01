@@ -98,9 +98,7 @@ public class PermissionReward extends Reward {
 
 	@Override
 	public boolean canEarn() {
-		if(permDisable)
-			return !ultraPlayer.getBukkitPlayer().hasPermission(disablePerm);
-		return true;
+		return !permDisable || !ultraPlayer.getBukkitPlayer().hasPermission(disablePerm);
 	}
 
 	@Override

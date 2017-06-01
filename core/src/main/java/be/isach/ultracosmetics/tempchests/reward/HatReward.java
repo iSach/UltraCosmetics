@@ -40,7 +40,7 @@ public class HatReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		hatList = new ArrayList<HatType>();
+		hatList = new ArrayList<>();
         for (HatType type : HatType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission())

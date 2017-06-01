@@ -13,7 +13,7 @@ public class DeleteQuery extends Query {
     public DeleteQuery(Connection connection, String sql) {
         super(connection, sql);
         and = false;
-        values = new ArrayList<Object>();
+        values = new ArrayList<>();
     }
 
     public DeleteQuery where(String key, Object value) {

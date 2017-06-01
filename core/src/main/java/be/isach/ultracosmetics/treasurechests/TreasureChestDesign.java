@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.treasurechests;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.material.MaterialData;

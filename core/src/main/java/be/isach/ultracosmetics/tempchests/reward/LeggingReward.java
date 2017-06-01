@@ -41,7 +41,7 @@ public class LeggingReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		leggingList = new ArrayList<SuitType>();
+		leggingList = new ArrayList<>();
         for (SuitType type : SuitType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission(ArmorSlot.LEGGINGS))

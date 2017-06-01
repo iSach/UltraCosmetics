@@ -11,7 +11,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 /**
  * Clear {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.

@@ -33,17 +33,7 @@ public class MovingChecker extends BukkitRunnable {
     }
 
     private boolean areEqual(Location from, Location to) {
-        if (from == null || to == null) {
-            return false;
-        } else if (from.getClass() != to.getClass()) {
-            return false;
-        } else {
-            return !(from.getWorld() != to.getWorld()
-                    && (from.getWorld() == null || !from.getWorld().equals(to.getWorld())))
-                    && (Double.doubleToLongBits(from.getX()) == Double.doubleToLongBits(to.getX())
-                    && (Double.doubleToLongBits(from.getY()) == Double.doubleToLongBits(to.getY())
-                    && (Double.doubleToLongBits(from.getZ()) == Double.doubleToLongBits(to.getZ()))));
-        }
+	    return !(from == null || to == null) && from.getClass() == to.getClass() && !(from.getWorld() != to.getWorld() && (from.getWorld() == null || !from.getWorld().equals(to.getWorld()))) && (Double.doubleToLongBits(from.getX()) == Double.doubleToLongBits(to.getX()) && (Double.doubleToLongBits(from.getY()) == Double.doubleToLongBits(to.getY()) && (Double.doubleToLongBits(from.getZ()) == Double.doubleToLongBits(to.getZ()))));
     }
 
 }

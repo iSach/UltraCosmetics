@@ -1,15 +1,11 @@
 package be.isach.ultracosmetics.v1_10_R1.customentities;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.entity.Zombie;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Sacha on 18/10/15.

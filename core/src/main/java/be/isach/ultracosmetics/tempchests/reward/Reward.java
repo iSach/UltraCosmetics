@@ -73,12 +73,7 @@ public abstract class Reward {
         fm.addEffect(getRandomFireworkEffect(color));
         f.setFireworkMeta(fm);
         
-        Bukkit.getScheduler().runTaskLater(ultraCosmetics, new Runnable() {
-            @Override
-            public void run() {
-            	f.detonate();
-            }
-        }, 2L);
+        Bukkit.getScheduler().runTaskLater(ultraCosmetics, f::detonate, 2L);
 	}
 	
     /**
@@ -94,8 +89,7 @@ public abstract class Reward {
 	private FireworkEffect getRandomFireworkEffect(String color) {
         Color c = parseColor(color);
         FireworkEffect.Builder builder = FireworkEffect.builder();
-        FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL).withColor(c).withFade(c).build();
-        return effect;
+		return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL).withColor(c).withFade(c).build();
     }
 	
 	private Color parseColor(String color) {

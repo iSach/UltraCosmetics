@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.suits;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 

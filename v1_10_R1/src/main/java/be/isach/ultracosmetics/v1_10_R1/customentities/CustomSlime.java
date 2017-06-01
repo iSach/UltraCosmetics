@@ -5,10 +5,7 @@ import be.isach.ultracosmetics.v1_10_R1.EntityBase;
 import be.isach.ultracosmetics.v1_10_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_10_R1.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_10_R1.*;
-import org.bukkit.craftbukkit.v1_10_R1.util.UnsafeList;
 import org.bukkit.entity.Entity;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by Sacha on 17/10/15.

@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Effect;
 
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by Sacha on 11/10/15.

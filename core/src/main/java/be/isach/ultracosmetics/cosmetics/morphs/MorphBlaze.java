@@ -10,7 +10,6 @@ import be.isach.ultracosmetics.util.SoundUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Represents an instance of a blaze morph summoned by a player.

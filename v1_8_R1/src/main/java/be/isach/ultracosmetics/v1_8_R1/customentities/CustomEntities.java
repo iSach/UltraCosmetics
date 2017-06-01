@@ -27,7 +27,7 @@ public enum CustomEntities {
     private Class<? extends EntityInsentient> customClass;
 
     // mounts
-    public static List<Entity> customEntities = new ArrayList<Entity>();
+    public static List<Entity> customEntities = new ArrayList<>();
 
     CustomEntities(String name, int id, EntityType entityType,
                    Class<? extends EntityInsentient> nmsClass,

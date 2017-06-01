@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.v1_11_R1.EntityBase;
 import be.isach.ultracosmetics.v1_11_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_11_R1.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_11_R1.*;
-import org.bukkit.Bukkit;
 
 /**
  * @author RadBuilder

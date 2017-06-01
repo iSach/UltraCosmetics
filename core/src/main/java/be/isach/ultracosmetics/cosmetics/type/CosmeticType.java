@@ -46,7 +46,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
     public T equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
         T cosmetic = null;
         try {
-            cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, UltraCosmetics.class).newInstance(player == null ? null : player, ultraCosmetics);
+            cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, UltraCosmetics.class).newInstance(player, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -55,11 +55,8 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     public boolean isEnabled() {
-        if(this == GadgetType.ETHEREALPEARL
-                && UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) {
-            return false;
-        }
-        return SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled");
+	    return !(this == GadgetType.ETHEREALPEARL
+	             && UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1) && SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled");
     }
 
     public String getName() {

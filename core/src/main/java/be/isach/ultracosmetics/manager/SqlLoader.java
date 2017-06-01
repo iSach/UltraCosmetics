@@ -31,7 +31,7 @@ public class SqlLoader {
                 }
                 Iterator<String> iter = loadList.iterator();
                 while (iter.hasNext()) {
-                    UltraPlayer current = null;
+                    UltraPlayer current;
                     try {
                         Player p = Bukkit.getPlayer(UUID.fromString(iter.next()));
                         if (p == null || !p.isOnline()) {
@@ -47,7 +47,6 @@ public class SqlLoader {
                     } catch (Exception e) {
                         iter.remove();
                         // exception or not, just remove it.
-                        continue;
                     }
                 }
             }

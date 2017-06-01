@@ -40,7 +40,7 @@ public class MorphReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		morphList = new ArrayList<MorphType>();
+		morphList = new ArrayList<>();
         for (MorphType type : MorphType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission())

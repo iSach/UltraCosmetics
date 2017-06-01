@@ -44,7 +44,6 @@ public class PlayerSwapItemListener implements Listener {
                 if (event.getOffHandItem().equals(itemStack)) {
                     event.setCancelled(true);
                     event.getPlayer().updateInventory();
-                    return;
                 }
             }
         }

@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -46,12 +45,7 @@ public class MorphEnderman extends Morph {
                 return;
             }
             cooldown = true;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-                @Override
-                public void run() {
-                    cooldown = false;
-                }
-            }, 70);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> cooldown = false, 70);
             Block b = event.getPlayer().getTargetBlock((Set<Material>) null, 17);
             Location loc = b.getLocation();
             loc.setPitch(event.getPlayer().getLocation().getPitch());
@@ -78,8 +72,7 @@ public class MorphEnderman extends Morph {
 
     public static FireworkEffect getRandomFireworkEffect() {
         FireworkEffect.Builder builder = FireworkEffect.builder();
-        FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(0, 0, 0)).withFade(Color.fromRGB(0, 0, 0)).build();
-        return effect;
+	    return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(0, 0, 0)).withFade(Color.fromRGB(0, 0, 0)).build();
     }
 
     public void spawnRandomFirework(Location location) {

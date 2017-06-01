@@ -24,8 +24,8 @@ public class TreasureRandomizer {
 	private Reward reward;
 	
 	public TreasureRandomizer(UltraPlayer owner, Location location, UltraCosmetics ultraCosmetics) {
-		chance = new ArrayList<Reward>();
-		customRewards = new ArrayList<PermissionReward>();
+		chance = new ArrayList<>();
+		customRewards = new ArrayList<>();
 		for(String key : TreasureManager.getRewardFile().getConfigurationSection("CustomRewards").getKeys(false))
 			if(TreasureManager.getRewardFile().getBoolean("CustomRewards." + key + ".enabled"))
 				customRewards.add(new PermissionReward(key, owner, ultraCosmetics));
@@ -33,7 +33,7 @@ public class TreasureRandomizer {
 		this.owner = owner;
 		this.ultraCosmetics = ultraCosmetics;
 		
-		this.rewards = new ArrayList<Reward>();
+		this.rewards = new ArrayList<>();
 		rewards.add(new AmmoReward(owner, ultraCosmetics));
 		rewards.add(new BootReward(owner, ultraCosmetics));
 		rewards.add(new ChestplateReward(owner, ultraCosmetics));
@@ -80,7 +80,7 @@ public class TreasureRandomizer {
 			else
 				reward = rewards.get(9);
 		} else {
-			List<Reward> random = new ArrayList<Reward>(chance);
+			List<Reward> random = new ArrayList<>(chance);
 			Collections.shuffle(random);
 			reward = random.get(0);
 		}

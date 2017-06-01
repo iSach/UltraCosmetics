@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -77,6 +78,6 @@ public class SubCommandTreasure extends SubCommand {
 
         opener.teleport(location);
 
-        getUltraCosmetics().getTreasureChestManager().tryOpenChest(opener);
+        TreasureChestManager.tryOpenChest(opener);
     }
 }

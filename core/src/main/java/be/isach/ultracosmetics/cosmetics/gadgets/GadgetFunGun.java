@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.util.SoundUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;

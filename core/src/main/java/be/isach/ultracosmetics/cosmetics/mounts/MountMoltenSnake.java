@@ -37,9 +37,8 @@ public class MountMoltenSnake extends Mount<MagmaCube> {
     @Override
     public void onEquip() {
         super.onEquip();
-        MagmaCube magmaCube = (MagmaCube) entity;
-        magmaCube.setSize(2);
-        entities.add(magmaCube);
+        entity.setSize(2);
+        entities.add(entity);
         summonTailPart(25);
     }
 

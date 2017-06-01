@@ -79,9 +79,7 @@ public class MorphElderGuardian extends Morph {
 
         customGuardian.target(armorStand);
 
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                 FireworkEffect.Builder builder = FireworkEffect.builder();
                 FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                         .withColor(Color.TEAL).withFade(Color.TEAL).build();
@@ -102,7 +100,6 @@ public class MorphElderGuardian extends Morph {
 
                 armorStand.remove();
                 customGuardian.target(null);
-            }
         }, 25);
     }
 
@@ -148,7 +145,6 @@ public class MorphElderGuardian extends Morph {
                 || !customGuardian.isAlive()) {
             getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
             cancel();
-            return;
         }
     }
 }

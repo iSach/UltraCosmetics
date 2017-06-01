@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
@@ -50,8 +49,7 @@ public class GadgetFreezeCannon extends Gadget {
 
     @Override
     public void onUpdate() {
-        for (Item item : queue)
-            items.add(item);
+        items.addAll(queue);
         queue.clear();
         Iterator<Item> itemIterator = items.iterator();
         while (itemIterator.hasNext()) {

@@ -15,7 +15,7 @@ public class UpdateQuery extends Query {
 		super(connection, sql);
 		comma = false;
 		and = false;
-		values = new ArrayList<Object>();
+		values = new ArrayList<>();
 	}
 
 	public UpdateQuery set(String field, Object value) {

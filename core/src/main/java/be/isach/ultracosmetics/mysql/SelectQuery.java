@@ -15,7 +15,7 @@ public class SelectQuery extends Query {
     public SelectQuery(Connection connection, String sql) {
         super(connection, sql);
         and = false;
-        values = new ArrayList<Object>();
+        values = new ArrayList<>();
     }
 
     public SelectQuery where(String key, Object value) {

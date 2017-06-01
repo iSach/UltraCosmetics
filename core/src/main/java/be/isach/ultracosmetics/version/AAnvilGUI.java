@@ -90,7 +90,7 @@ public abstract class AAnvilGUI {
 
     protected AnvilClickEventHandler handler;
 
-    protected Map<AnvilSlot, ItemStack> items = new HashMap<AnvilSlot, ItemStack>();
+    protected Map<AnvilSlot, ItemStack> items = new HashMap<>();
 
     protected Inventory inv;
 
@@ -126,12 +126,8 @@ public abstract class AAnvilGUI {
                         if (player.getGameMode() == GameMode.ADVENTURE
                                 || player.getGameMode() == GameMode.SURVIVAL
                                 && player.getLevel() > 0)
-                            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
-                                @Override
-                                public void run() {
-                                    player.setLevel(player.getLevel());
-                                }
-                            }, 5);
+                            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(),
+                                                               () -> player.setLevel(player.getLevel()), 5);
 
 
                         AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name);

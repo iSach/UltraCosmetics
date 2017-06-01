@@ -77,7 +77,6 @@ public class SubCommandGive extends SubCommand {
                 addKey(receiver);
 
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + keys + " treasure keys given to " + receiver.getName());
-            return;
 
         } else if (arg1.startsWith("a")) { // Giving ammo. /uc give ammo <type> <amount> [player]
             if (args.length < 4) {
@@ -127,10 +126,8 @@ public class SubCommandGive extends SubCommand {
             int ammo = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[3])));
             addAmmo(gadgetType, receiver, ammo);
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + ammo + " " + gadgetType.toString().toLowerCase() + " ammo given to " + receiver.getName());
-            return;
         } else {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + getUsage());
-            return;
         }
     }
 
@@ -178,7 +175,6 @@ public class SubCommandGive extends SubCommand {
             for (int i = 0; i < keys; i++)
                 addKey(receiver);
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + keys + " treasure keys given to " + receiver.getName());
-            return;
 
         } else if (arg1.startsWith("a")) {
             if (args.length < 5) {
@@ -224,10 +220,8 @@ public class SubCommandGive extends SubCommand {
             int ammo = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[3])));
             addAmmo(gadgetType, receiver, ammo);
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + ammo + " " + gadgetType.toString().toLowerCase() + " ammo given to " + receiver.getName());
-            return;
         } else {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give <key|ammo> <amount> <player>");
-            return;
         }
     }
 

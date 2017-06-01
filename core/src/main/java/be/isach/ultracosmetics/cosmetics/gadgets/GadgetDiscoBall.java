@@ -23,7 +23,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -137,21 +136,18 @@ public class GadgetDiscoBall extends Gadget {
 
     public ArrayList<Entity> getNearbyEntities(Location loc, double distance) {
         ArrayList<Entity> entities = new ArrayList<>();
-        Iterator<Entity> iterator = loc.getWorld().getEntities().iterator();
-        while(iterator.hasNext()) {
-            Entity ent = iterator.next();
-            if (ent.getLocation().distance(loc) <= distance) {
-                entities.add(ent);
-            }
-        }
+	    for (Entity ent : loc.getWorld().getEntities()) {
+		    if (ent.getLocation().distance(loc) <= distance) {
+			    entities.add(ent);
+		    }
+	    }
         return entities;
     }
 
     public void drawParticleLine(Location a, Location b, boolean dust, int particles) {
         Location location = a.clone();
         Location target = b.clone();
-        double amount = particles;
-        Vector link = target.toVector().subtract(location.toVector());
+	    Vector link = target.toVector().subtract(location.toVector());
         float length = (float) link.length();
         link.normalize();
 
@@ -166,13 +162,12 @@ public class GadgetDiscoBall extends Gadget {
         Location loc = location.clone().subtract(v);
         int step = 0;
         for (int i = 0; i < particles; i++) {
-            if (step >= amount)
+            if (step >= (double) particles)
                 step = 0;
             step++;
             loc.add(v);
             if (dust) {
                 UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
-                continue;
             }
             // location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
         }

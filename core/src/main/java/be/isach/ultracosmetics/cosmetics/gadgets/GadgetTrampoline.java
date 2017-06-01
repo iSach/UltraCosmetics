@@ -152,12 +152,7 @@ public class GadgetTrampoline extends Gadget {
         genLadder(get(-3, 1, 0));
         genLadder(get(-3, 0, 0));
 
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                clearBlocks();
-            }
-        }, durationInTicks);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clearBlocks, durationInTicks);
     }
 
     private void genBarr(Block block) {

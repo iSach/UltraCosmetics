@@ -15,7 +15,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
@@ -228,9 +227,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
             MaterialData backData = ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item");
             ItemStack item = ItemFactory.create(backData.getItemType(), backData.getData(),
                     MessageManager.getMessage("Menu.Main-Menu"));
-            putItem(inventory, inventory.getSize() - 6, item, (data) -> {
-                getUltraCosmetics().openMainMenu(player);
-            });
+            putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(player));
         }
 
         putItems(inventory, player, page);

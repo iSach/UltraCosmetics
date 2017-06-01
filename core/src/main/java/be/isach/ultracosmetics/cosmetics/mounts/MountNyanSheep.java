@@ -7,8 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.util.Vector;
@@ -32,7 +30,7 @@ public class MountNyanSheep extends Mount<Sheep> {
     @Override
     public void onEquip() {
         super.onEquip();
-        ((LivingEntity) entity).setNoDamageTicks(Integer.MAX_VALUE);
+        entity.setNoDamageTicks(Integer.MAX_VALUE);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
     }
 
@@ -40,7 +38,7 @@ public class MountNyanSheep extends Mount<Sheep> {
     public void onUpdate() {
         move();
 
-        ((Sheep) entity).setColor(DyeColor.values()[new Random().nextInt(15)]);
+        entity.setColor(DyeColor.values()[new Random().nextInt(15)]);
 
         List<RGBColor> colors = new ArrayList<>();
 
@@ -69,7 +67,7 @@ public class MountNyanSheep extends Mount<Sheep> {
             Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
             Location loc = player.getLocation().add(vel);
 
-            UltraCosmeticsData.get().getVersionManager().getEntityUtil().move((Creature) entity, loc);
+            UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(entity, loc);
         } catch (Exception exc) {
             getOwner().removeMount();
         }

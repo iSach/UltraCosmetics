@@ -73,9 +73,7 @@ public class MountType extends CosmeticEntType<Mount> {
 
     @Override
     public boolean isEnabled() {
-        if ((this == FLYINGSHIP || this == SKYSQUID) && (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0))
-            return false;
-        return SettingsManager.getConfig().getBoolean("Mounts." + getConfigName() + ".Enabled");
+	    return !((this == FLYINGSHIP || this == SKYSQUID) && (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0)) && SettingsManager.getConfig().getBoolean("Mounts." + getConfigName() + ".Enabled");
     }
 
     public String getMenuName() {

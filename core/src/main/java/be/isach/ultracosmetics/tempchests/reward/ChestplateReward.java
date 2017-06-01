@@ -42,7 +42,7 @@ public class ChestplateReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		chestplateList = new ArrayList<SuitType>();
+		chestplateList = new ArrayList<>();
         for (SuitType type : SuitType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission(ArmorSlot.CHESTPLATE))

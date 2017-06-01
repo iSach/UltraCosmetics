@@ -50,12 +50,7 @@ public class GadgetGhostParty extends Gadget {
             bat.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 160, 1));
             bats.put(bat, ghost);
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                killBats();
-            }
-        }, 160);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), this::killBats, 160);
     }
 
     @EventHandler

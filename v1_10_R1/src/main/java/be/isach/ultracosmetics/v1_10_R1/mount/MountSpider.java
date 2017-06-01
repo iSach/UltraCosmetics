@@ -4,8 +4,6 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
-import java.util.UUID;
-
 /**
  * Created by Sacha on 18/10/15.
  */

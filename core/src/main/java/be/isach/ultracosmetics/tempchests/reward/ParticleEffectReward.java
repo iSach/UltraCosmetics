@@ -40,7 +40,7 @@ public class ParticleEffectReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		particleList = new ArrayList<ParticleEffectType>();
+		particleList = new ArrayList<>();
         for (ParticleEffectType type : ParticleEffectType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission())

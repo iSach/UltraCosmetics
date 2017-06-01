@@ -12,7 +12,6 @@ import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**

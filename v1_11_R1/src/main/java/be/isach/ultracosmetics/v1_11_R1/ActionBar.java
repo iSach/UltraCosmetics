@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.v1_11_R1;
 import be.isach.ultracosmetics.version.IActionBar;
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 

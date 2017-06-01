@@ -31,15 +31,9 @@ public class PetPumpling extends CustomEntityPet {
         item.setPickupDelay(30000);
         item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
         items.add(item);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                 item.remove();
                 items.remove(item);
-            }
         }, 5);
     }
-
-
-
 }

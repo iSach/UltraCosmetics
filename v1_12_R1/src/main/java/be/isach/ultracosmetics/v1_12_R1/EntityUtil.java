@@ -56,9 +56,9 @@ public class EntityUtil implements IEntityUtil {
     public void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v) {
         try {
             if (!fakeArmorStandsMap.containsKey(player))
-                fakeArmorStandsMap.put(player, new ArrayList<EntityArmorStand>());
+                fakeArmorStandsMap.put(player, new ArrayList<>());
             if (!cooldownJumpMap.containsKey(player))
-                cooldownJumpMap.put(player, new ArrayList<org.bukkit.entity.Entity>());
+                cooldownJumpMap.put(player, new ArrayList<>());
 
             final List<EntityArmorStand> fakeArmorStands = fakeArmorStandsMap.get(player);
             final List<org.bukkit.entity.Entity> cooldownJump = cooldownJumpMap.get(player);
@@ -87,9 +87,7 @@ public class EntityUtil implements IEntityUtil {
                 as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(ent -> !cooldownJump.contains(ent) && ent != player).forEachOrdered(ent -> {
                     MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
                     cooldownJump.add(ent);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
-                        cooldownJump.remove(ent);
-                    }, 20);
+                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
                 });
         } catch(Exception exc) {
 

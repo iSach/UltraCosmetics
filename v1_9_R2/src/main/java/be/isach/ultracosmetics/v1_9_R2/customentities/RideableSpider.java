@@ -1,13 +1,10 @@
 package be.isach.ultracosmetics.v1_9_R2.customentities;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.v1_9_R2.EntityBase;
 import be.isach.ultracosmetics.v1_9_R2.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_9_R2.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_9_R2.*;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_9_R2.Overridden;
 import org.bukkit.craftbukkit.v1_9_R2.util.UnsafeList;
 
 import java.lang.reflect.Field;

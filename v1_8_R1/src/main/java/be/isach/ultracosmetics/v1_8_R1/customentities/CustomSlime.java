@@ -76,8 +76,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
             if (jump != null && BlockUtils.isOnGround(this.getBukkitEntity())) {
                 try {
                     if (jump.getBoolean(this.passenger)) {
-                        double jumpHeight = 0.3D;
-                        this.motY = jumpHeight;
+	                    this.motY = 0.3D;
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();

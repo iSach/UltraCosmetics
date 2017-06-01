@@ -53,12 +53,7 @@ public class PetChristmasElf extends Pet {
         final Item ITEM = entity.getWorld().dropItem(((Villager) entity).getEyeLocation(), presents.get(r.nextInt(presents.size())));
         ITEM.setPickupDelay(30000);
         ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
-                ITEM.remove();
-            }
-        }, 5);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), ITEM::remove, 5);
     }
 
     private static ItemStack getSkull(String url, String name) {

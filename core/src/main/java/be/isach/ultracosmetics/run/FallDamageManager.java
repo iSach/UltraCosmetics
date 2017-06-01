@@ -7,7 +7,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,17 +32,14 @@ public class FallDamageManager extends BukkitRunnable {
     public void run() {
         List<Entity> toRemove = new ArrayList<>();
         synchronized (noFallDamage) {
-            for (Iterator<Entity> iterator = noFallDamage.iterator(); iterator.hasNext(); ) {
-                Entity ent = iterator.next();
-                if (ent.isOnGround()) {
-                    toRemove.add(ent);
-                }
-            }
+	        for (Entity ent : noFallDamage) {
+		        if (ent.isOnGround()) {
+			        toRemove.add(ent);
+		        }
+	        }
         }
         Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
-            for(Entity entity : toRemove) {
-                noFallDamage.remove(entity);
-            }
+            noFallDamage.removeAll(toRemove);
         }, 5);
         noFallDamage.addAll(queue);
         queue.clear();

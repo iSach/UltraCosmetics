@@ -326,19 +326,7 @@ public class TreasureRandomizer {
                     break;
             }
 
-        } catch (IndexOutOfBoundsException exception) {
-            if ((!d("Gadgets") || gadgetList.isEmpty())
-                    && (!d("Gadgets-Ammo") || ammoList.isEmpty())
-                    && (!d("Pets") || petList.isEmpty())
-                    && (!d("Morphs") || morphList.isEmpty())
-                    && (!d("Mounts") || mountList.isEmpty())
-                    && (!d("Hats") || hatList.isEmpty())
-                    && (!d("Effects") || particleEffectList.isEmpty())
-                    || RESULT_TYPES.isEmpty())
-                giveNothing();
-            else
-                giveRandomThing();
-        } catch (IllegalArgumentException exception) {
+        } catch (IndexOutOfBoundsException | IllegalArgumentException exception) {
             if ((!d("Gadgets") || gadgetList.isEmpty())
                     && (!d("Gadgets-Ammo") || ammoList.isEmpty())
                     && (!d("Pets") || petList.isEmpty())
@@ -548,8 +536,7 @@ public class TreasureRandomizer {
             return null;
         Random r = new Random();
         FireworkEffect.Builder builder = FireworkEffect.builder();
-        FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL).withColor(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).withFade(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).build();
-        return effect;
+        return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL).withColor(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).withFade(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).build();
     }
 
     public void givePermission(String permission) {
@@ -569,13 +556,9 @@ public class TreasureRandomizer {
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
-        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
                 for (Firework f : fireworks)
                     f.detonate();
-            }
         }, 2);
     }
-
 }

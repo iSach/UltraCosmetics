@@ -33,6 +33,6 @@ public class PetPiggy extends Pet {
         Item item = entity.getWorld().dropItem(pig.getEyeLocation(), ItemFactory.create(Material.PORK, (byte) 0, UUID.randomUUID().toString()));
         item.setPickupDelay(30000);
         item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> item.remove(), 5);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), item::remove, 5);
     }
 }

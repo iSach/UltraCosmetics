@@ -4,8 +4,6 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.menu.Menus;
 import be.isach.ultracosmetics.menu.menus.MenuGadgets;
 import be.isach.ultracosmetics.player.UltraPlayer;

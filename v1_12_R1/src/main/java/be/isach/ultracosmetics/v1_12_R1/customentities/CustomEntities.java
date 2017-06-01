@@ -9,12 +9,10 @@ import net.minecraft.server.v1_12_R1.EntitySpider;
 import net.minecraft.server.v1_12_R1.EntityTypes;
 import net.minecraft.server.v1_12_R1.EntityZombie;
 import net.minecraft.server.v1_12_R1.MinecraftKey;
-import net.minecraft.server.v1_12_R1.RegistryBlockID;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -75,26 +73,24 @@ public enum CustomEntities {
         }
     
         // TODO Test this code
-        Iterator<BiomeBase> iterator = BiomeBase.i.iterator();
-        while (iterator.hasNext()) {
-            BiomeBase biomeBase = iterator.next();
-            if (biomeBase == null)
-                break;
-            for (String field : new String[] {"u", "v", "w", "x"})
-                try {
-                    Field list = BiomeBase.class.getDeclaredField(field);
-                    list.setAccessible(true);
-                    @SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
-                            .get(biomeBase);
-            
-                    for (BiomeBase.BiomeMeta meta : mobList)
-                        for (CustomEntities entity : values())
-                            if (entity.getNMSClass().equals(meta.b))
-                                meta.b = entity.getCustomClass();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-        }
+	    for (BiomeBase biomeBase : (Iterable<BiomeBase>) BiomeBase.i) {
+		    if (biomeBase == null)
+			    break;
+		    for (String field : new String[]{ "u", "v", "w", "x" })
+			    try {
+				    Field list = BiomeBase.class.getDeclaredField(field);
+				    list.setAccessible(true);
+				    @SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
+						    .get(biomeBase);
+				
+				    for (BiomeBase.BiomeMeta meta : mobList)
+					    for (CustomEntities entity : values())
+						    if (entity.getNMSClass().equals(meta.b))
+							    meta.b = entity.getCustomClass();
+			    } catch (Exception e) {
+				    e.printStackTrace();
+			    }
+	    }
     }
 
     public static void unregisterEntities() {

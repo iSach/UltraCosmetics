@@ -41,7 +41,7 @@ public class BootReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		bootList = new ArrayList<SuitType>();
+		bootList = new ArrayList<>();
         for (SuitType type : SuitType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission(ArmorSlot.BOOTS))

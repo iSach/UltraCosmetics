@@ -433,12 +433,7 @@ public class MathUtils {
                 return;
         }
         ent.setVelocity(v);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                FallDamageManager.addNoFall(ent);
-            }
-        }, 5);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> FallDamageManager.addNoFall(ent), 5);
     }
 
     public static void applyVelocity(final Entity ent, Vector v, boolean ignoreGadgetsEnabled) {
@@ -452,12 +447,7 @@ public class MathUtils {
             }
         }
         ent.setVelocity(v);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                FallDamageManager.addNoFall(ent);
-            }
-        }, 4);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> FallDamageManager.addNoFall(ent), 4);
     }
 
     public static Vector getRandomCircleVector() {

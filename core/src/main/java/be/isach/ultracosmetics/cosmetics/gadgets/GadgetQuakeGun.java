@@ -54,12 +54,9 @@ public class GadgetQuakeGun extends Gadget {
                     }
                 }
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new Runnable() {
-            @Override
-            public void run() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> {
                 for (Firework firework : fireworkList)
                     UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendDestroyPacket(getPlayer(), firework);
-            }
         }, 6);
     }
 

@@ -4,13 +4,9 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.menu.menus.MenuMain;
 import be.isach.ultracosmetics.util.Cuboid;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -94,7 +90,6 @@ public class TreasureChestManager implements Listener {
                 } else {
                     event.getWhoClicked().sendMessage(MessageManager.getMessage("Not-Enough-Money"));
                     event.getWhoClicked().closeInventory();
-                    return;
                 }
             } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
                 event.getWhoClicked().closeInventory();

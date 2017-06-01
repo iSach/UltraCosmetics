@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.v1_9_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_9_R1.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.craftbukkit.v1_9_R1.util.UnsafeList;
-import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 
 import java.lang.reflect.Field;

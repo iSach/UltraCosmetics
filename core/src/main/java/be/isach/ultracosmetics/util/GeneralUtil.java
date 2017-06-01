@@ -32,13 +32,11 @@ public class GeneralUtil {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(new File(ultraCosmetics.getDataFolder(), "permissions.yml"), "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
 
         writer.println();

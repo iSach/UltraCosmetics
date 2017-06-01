@@ -40,7 +40,7 @@ public class MountReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		mountList = new ArrayList<MountType>();
+		mountList = new ArrayList<>();
         for (MountType type : MountType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission())

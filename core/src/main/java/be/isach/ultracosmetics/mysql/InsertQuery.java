@@ -13,7 +13,7 @@ public class InsertQuery extends Query {
     public InsertQuery(Connection connection, String sql) {
         super(connection, sql);
         firstValue = true;
-        values = new ArrayList<Object>();
+        values = new ArrayList<>();
     }
 
     public InsertQuery insert(String insert) {

@@ -1,19 +1,13 @@
 package be.isach.ultracosmetics.v1_8_R3.customentities;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.v1_8_R3.pets.PlayerFollower;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Sacha on 18/10/15.
@@ -67,7 +61,6 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     @Override
     protected void a(BlockPosition blockposition, Block block) {
         if (isCustomEntity()) {
-            return;
         } else {
             super.a(blockposition, block);
         }

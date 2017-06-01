@@ -50,9 +50,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
                 if (player.hasPermission("ultracosmetics.pets.rename")) {
                     if (player.getCurrentPet() != null) {
                         stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
-                        run = data -> {
-                            renamePet(player);
-                        };
+                        run = data -> renamePet(player);
                     } else {
                         stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed"));
                         run = data -> {
@@ -63,9 +61,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
                 }
             } else if (player.getCurrentPet() != null) {
                 stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
-                run = data -> {
-                    renamePet(player);
-                };
+                run = data -> renamePet(player);
             } else {
                 stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed"));
                 run = data -> {

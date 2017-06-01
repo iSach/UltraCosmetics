@@ -11,7 +11,6 @@ import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
 import be.isach.ultracosmetics.util.ItemFactory;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -68,9 +67,7 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
         List<String> lore = new ArrayList<>();
         if (cosmeticType.showsDescription()) {
             lore.add("");
-            for (String s : cosmeticType.getDescription()) {
-                lore.add(s);
-            }
+            lore.addAll(cosmeticType.getDescription());
         }
         if (lore != null) {
             lore.add("");

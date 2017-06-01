@@ -147,7 +147,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 items.forEach(Entity::remove);
                 items.clear();
                 clear();
-                return;
             }
         } catch (NullPointerException exc) {
             exc.printStackTrace();

@@ -9,12 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -47,7 +45,7 @@ public class GadgetColorBomb extends Gadget {
         if (bomb != null && bomb.isValid() && !running && bomb.isOnGround()) {
             running = true;
             bomb.setVelocity(new Vector(0, 0, 0));
-            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> onClear(), 100);
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::onClear, 100);
         }
 
         if (running) {

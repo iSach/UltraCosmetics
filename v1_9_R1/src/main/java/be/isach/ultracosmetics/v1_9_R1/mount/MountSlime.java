@@ -5,8 +5,6 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Slime;
 
-import java.util.UUID;
-
 /**
  * Created by Sacha on 17/10/15.
  */

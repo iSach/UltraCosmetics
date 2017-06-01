@@ -2,11 +2,9 @@ package be.isach.ultracosmetics.v1_11_R1.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
-import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_11_R1.pets.CustomEntityPet;
-import be.isach.ultracosmetics.v1_11_R1.pets.PetPumpling;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.entity.Zombie;
 

@@ -40,7 +40,7 @@ public class PetReward extends Reward {
 	
 	@Override
 	public boolean canEarn() {
-		petList = new ArrayList<PetType>();
+		petList = new ArrayList<>();
         for (PetType type : PetType.values())
             if (type.isEnabled()
                     && !ultraPlayer.getBukkitPlayer().hasPermission(type.getPermission())
