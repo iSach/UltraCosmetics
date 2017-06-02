@@ -76,7 +76,7 @@ public enum CustomEntities {
 		for (BiomeBase biomeBase : (Iterable<BiomeBase>) BiomeBase.i) {
 			if (biomeBase == null)
 				break;
-			for (String field : new String[]{ "u", "v", "w", "x" })
+			for (String field : new String[]{ "t", "u", "v", "w" })
 				try {
 					Field list = BiomeBase.class.getDeclaredField(field);
 					list.setAccessible(true);
