@@ -1,14 +1,14 @@
 package be.isach.ultracosmetics.tempchests.reward;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * A "nothing" reward.
- * 
+ *
  * @author RadBuilder
  * @since 01-16-2017
  */

@@ -19,40 +19,40 @@ import java.util.UUID;
  */
 public class SqlUtils {
 	private MySqlConnectionManager MySqlConnectionManager;
-
+	
 	SqlUtils(MySqlConnectionManager MySqlConnectionManager) {
 		this.MySqlConnectionManager = MySqlConnectionManager;
 	}
-
+	
 	public void initStats(UltraPlayer up) {
 		Player p = up.getBukkitPlayer();
-
+		
 		try {
 			if (!MySqlConnectionManager.getTable().select().where("uuid", p.getUniqueId().toString()).execute()
-					.next()) {
+			                           .next()) {
 				MySqlConnectionManager.getTable().insert().insert("uuid").value(p.getUniqueId().toString()).execute();
 				MySqlConnectionManager.getTable().update().set("username", p.getName())
-						.where("uuid", p.getUniqueId().toString()).execute();
+				                      .where("uuid", p.getUniqueId().toString()).execute();
 				return;
 			} else {
 				ResultSet res = MySqlConnectionManager.getTable().select().where("uuid", p.getUniqueId().toString())
-						.execute();
+				                                      .execute();
 				res.first();
 				String s = res.getString("username");
 				if (s == null) {
 					MySqlConnectionManager.getTable().update().set("username", p.getName())
-							.where("uuid", p.getUniqueId().toString()).execute();
+					                      .where("uuid", p.getUniqueId().toString()).execute();
 					return;
 				}
 				if (!s.equals(p.getName())) {
 					MySqlConnectionManager.getTable().update().set("username", p.getName())
-							.where("uuid", p.getUniqueId().toString()).execute();
+					                      .where("uuid", p.getUniqueId().toString()).execute();
 				}
 				res.close();
 			}
-
+			
 			ResultSet res = MySqlConnectionManager.getTable().select().where("uuid", p.getUniqueId().toString())
-					.execute();
+			                                      .execute();
 			res.first();
 			be.isach.ultracosmetics.mysql.MySqlConnectionManager.INDEXS.put(p.getUniqueId(), res.getInt("id"));
 			res.close();
@@ -60,7 +60,7 @@ public class SqlUtils {
 			// Triggered when user is already offline when this method is invoked.
 		}
 	}
-
+	
 	public int getAmmo(int index, String name) {
 		ResultSet res = null;
 		try {
@@ -77,7 +77,7 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public String getPetName(int index, String pet) {
 		ResultSet res = null;
 		try {
@@ -94,7 +94,7 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public boolean exists(int index) {
 		ResultSet resultSet = null;
 		try {
@@ -111,9 +111,9 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public void setName(int index, String pet, String name) {
-		DatabaseMetaData md = null;
+		DatabaseMetaData md;
 		ResultSet rs = null;
 		try {
 			md = MySqlConnectionManager.co.getMetaData();
@@ -135,7 +135,7 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public int getKeys(int index) {
 		ResultSet res = null;
 		try {
@@ -152,27 +152,27 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public void removeKey(int index) {
 		MySqlConnectionManager.getTable().update().set("treasureKeys", getKeys(index) - 1).where("id", index).execute();
 	}
-
+	
 	public void addKey(int index) {
 		MySqlConnectionManager.getTable().update().set("treasureKeys", getKeys(index) + 1).where("id", index).execute();
 	}
-
+	
 	public void removeAmmo(int index, String name) {
 		MySqlConnectionManager.getTable().update().set(name.replace("_", ""), getAmmo(index, name) - 1)
-				.where("id", index).execute();
+		                      .where("id", index).execute();
 	}
-
+	
 	public void addAmmo(int index, String name, int i) {
 		MySqlConnectionManager.getTable().update().set(name.replace("_", ""), getAmmo(index, name) + i)
-				.where("id", index).execute();
+		                      .where("id", index).execute();
 	}
-
+	
 	public void setGadgetsEnabled(int index, boolean enabled) {
-		DatabaseMetaData md = null;
+		DatabaseMetaData md;
 		ResultSet rs = null;
 		try {
 			md = MySqlConnectionManager.co.getMetaData();
@@ -186,7 +186,7 @@ public class SqlUtils {
 				return;
 			}
 			MySqlConnectionManager.getTable().update().set("gadgetsEnabled", enabled ? 1 : 0).where("id", index)
-					.execute();
+			                      .execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -197,7 +197,7 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public boolean hasGadgetsEnabled(int index) {
 		DatabaseMetaData md;
 		ResultSet rs = null;
@@ -225,9 +225,9 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public void setSeeSelfMorph(int index, boolean enabled) {
-		DatabaseMetaData md = null;
+		DatabaseMetaData md;
 		ResultSet rs = null;
 		try {
 			md = MySqlConnectionManager.co.getMetaData();
@@ -241,7 +241,7 @@ public class SqlUtils {
 				return;
 			}
 			MySqlConnectionManager.getTable().update().set("selfmorphview", enabled ? 1 : 0).where("id", index)
-					.execute();
+			                      .execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -252,7 +252,7 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public boolean canSeeSelfMorph(int index) {
 		DatabaseMetaData md;
 		ResultSet rs = null;
@@ -280,7 +280,7 @@ public class SqlUtils {
 				}
 		}
 	}
-
+	
 	public Map<UUID, Integer> getIds() {
 		Map<UUID, Integer> map = new HashMap<>();
 		ResultSet rs = MySqlConnectionManager.getTable().select("*").execute();

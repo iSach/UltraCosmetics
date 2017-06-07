@@ -10,38 +10,38 @@ import org.bukkit.util.Vector;
 
 /**
  * Represents an instance of frozen walk particles summoned by a player.
- * 
- * @author 	iSach
- * @since 	10-12-2015
+ *
+ * @author iSach
+ * @since 10-12-2015
  */
 public class ParticleEffectFrozenWalk extends ParticleEffect {
 
-    public ParticleEffectFrozenWalk(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(ultraCosmetics, owner, ParticleEffectType.FROZENWALK);
-    }
+	public ParticleEffectFrozenWalk(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(ultraCosmetics, owner, ParticleEffectType.FROZENWALK);
+	}
 
-    @Override
-    public void onUpdate() {
-        Vector vectorLeft = getLeftVector(getPlayer().getLocation()).normalize().multiply(0.15);
-        Vector vectorRight = getRightVector(getPlayer().getLocation()).normalize().multiply(0.15);
-        Location locationLeft = getPlayer().getLocation().add(vectorLeft);
-        Location locationRight = getPlayer().getLocation().add(vectorRight);
-        locationLeft.setY(getPlayer().getLocation().getY());
-        locationRight.setY(getPlayer().getLocation().getY());
+	@Override
+	public void onUpdate() {
+		Vector vectorLeft = getLeftVector(getPlayer().getLocation()).normalize().multiply(0.15);
+		Vector vectorRight = getRightVector(getPlayer().getLocation()).normalize().multiply(0.15);
+		Location locationLeft = getPlayer().getLocation().add(vectorLeft);
+		Location locationRight = getPlayer().getLocation().add(vectorRight);
+		locationLeft.setY(getPlayer().getLocation().getY());
+		locationRight.setY(getPlayer().getLocation().getY());
 
-        Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationLeft, 32);
-        Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationRight, 32);
-    }
+		Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationLeft, 32);
+		Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationRight, 32);
+	}
 
-    public static Vector getLeftVector(Location loc) {
-        final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 0))));
-        final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 0))));
-        return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
-    }
+	public static Vector getLeftVector(Location loc) {
+		final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 0))));
+		final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 0))));
+		return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
+	}
 
-    public static Vector getRightVector(Location loc) {
-        final float newX = (float) (loc.getX() + (-1 * Math.cos(Math.toRadians(loc.getYaw() + 0))));
-        final float newZ = (float) (loc.getZ() + (-1 * Math.sin(Math.toRadians(loc.getYaw() + 0))));
-        return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
-    }
+	public static Vector getRightVector(Location loc) {
+		final float newX = (float) (loc.getX() + (-1 * Math.cos(Math.toRadians(loc.getYaw() + 0))));
+		final float newZ = (float) (loc.getZ() + (-1 * Math.sin(Math.toRadians(loc.getYaw() + 0))));
+		return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
+	}
 }

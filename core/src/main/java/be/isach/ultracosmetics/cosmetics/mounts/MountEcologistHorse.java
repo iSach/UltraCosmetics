@@ -20,51 +20,51 @@ import java.util.Random;
 
 /**
  * Represents an instance of an ecologist mount.
- * 
- * @author 	iSach
- * @since 	08-10-2015
+ *
+ * @author iSach
+ * @since 08-10-2015
  */
 public class MountEcologistHorse extends MountHorse {
-
-    public MountEcologistHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, MountType.ECOLOGISTHORSE, ultraCosmetics);
-    }
-
-    @Override
-    public void onEquip() {
-        super.onEquip();
-        entity.setJumpStrength(0.7);
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
-    }
-
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.getPlayer() == getPlayer()
-                && getOwner().getCurrentMount() == this
-                && (boolean) SettingsManager.getConfig().get("Mounts-Block-Trails")) {
-            List<Byte> datas = new ArrayList<>();
-            datas.add((byte) 0x5);
-            datas.add((byte) 0xd);
-            for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
-                if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
-                    BlockUtils.setToRestore(b, Material.STAINED_CLAY, datas.get(new Random().nextInt(2)), 20);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onUpdate() {
-        UtilParticles.display(Particles.VILLAGER_HAPPY, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
-    }
-
-    @Override
-    protected Horse.Variant getVariant() {
-        return Horse.Variant.HORSE;
-    }
-
-    @Override
-    protected Horse.Color getColor() {
-        return Horse.Color.CHESTNUT;
-    }
+	
+	public MountEcologistHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, MountType.ECOLOGISTHORSE, ultraCosmetics);
+	}
+	
+	@Override
+	public void onEquip() {
+		super.onEquip();
+		entity.setJumpStrength(0.7);
+		UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
+	}
+	
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event) {
+		if (event.getPlayer() == getPlayer()
+		    && getOwner().getCurrentMount() == this
+		    && (boolean) SettingsManager.getConfig().get("Mounts-Block-Trails")) {
+			List<Byte> datas = new ArrayList<>();
+			datas.add((byte) 0x5);
+			datas.add((byte) 0xd);
+			for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
+				if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
+					BlockUtils.setToRestore(b, Material.STAINED_CLAY, datas.get(new Random().nextInt(2)), 20);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void onUpdate() {
+		UtilParticles.display(Particles.VILLAGER_HAPPY, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+	}
+	
+	@Override
+	protected Horse.Variant getVariant() {
+		return Horse.Variant.HORSE;
+	}
+	
+	@Override
+	protected Horse.Color getColor() {
+		return Horse.Color.CHESTNUT;
+	}
 }

@@ -1,6 +1,6 @@
 dependencies {
     compile 'org.spigotmc:spigot:1.8.8'
-    shaded (project(':core')){
+    shaded(project(':core')) {
         transitive false
     }
 }

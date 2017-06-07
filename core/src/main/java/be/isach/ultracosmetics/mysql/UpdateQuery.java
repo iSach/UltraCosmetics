@@ -10,14 +10,14 @@ public class UpdateQuery extends Query {
 	private boolean comma;
 	private boolean and;
 	private final List<Object> values;
-
+	
 	public UpdateQuery(Connection connection, String sql) {
 		super(connection, sql);
 		comma = false;
 		and = false;
-		values = new ArrayList<Object>();
+		values = new ArrayList<>();
 	}
-
+	
 	public UpdateQuery set(String field, Object value) {
 		if (comma)
 			sql += ",";
@@ -26,7 +26,7 @@ public class UpdateQuery extends Query {
 		comma = true;
 		return this;
 	}
-
+	
 	public UpdateQuery where(String key, Object value) {
 		if (and) {
 			sql += " AND";
@@ -39,7 +39,7 @@ public class UpdateQuery extends Query {
 		and = true;
 		return this;
 	}
-
+	
 	public void execute() {
 		PreparedStatement prest;
 		try {

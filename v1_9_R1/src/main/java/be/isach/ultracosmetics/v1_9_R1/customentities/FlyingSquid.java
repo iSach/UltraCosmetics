@@ -4,7 +4,12 @@ import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.v1_9_R1.EntityBase;
 import be.isach.ultracosmetics.v1_9_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_9_R1.nms.WrapperEntityInsentient;
-import net.minecraft.server.v1_9_R1.*;
+import net.minecraft.server.v1_9_R1.EntityHuman;
+import net.minecraft.server.v1_9_R1.EntityInsentient;
+import net.minecraft.server.v1_9_R1.EntitySquid;
+import net.minecraft.server.v1_9_R1.MathHelper;
+import net.minecraft.server.v1_9_R1.PathfinderGoalSelector;
+import net.minecraft.server.v1_9_R1.World;
 import org.bukkit.craftbukkit.v1_9_R1.util.UnsafeList;
 
 import java.lang.reflect.Field;
@@ -16,123 +21,126 @@ import java.lang.reflect.Field;
  */
 public class FlyingSquid extends EntitySquid implements IMountCustomEntity, EntityBase {
 
-    boolean canFly = true;
+	boolean canFly = true;
 
-    public FlyingSquid(World world) {
-        super(world);
-    }private void removeSelectors() {
-        try {
-            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-            bField.setAccessible(true);
-            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
-            bField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            bField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-    }
-    @Override
-    public void removeAi() {
-        removeSelectors();
-    }
+	public FlyingSquid(World world) {
+		super(world);
+	}
 
-    @Override
-    public void g(float sideMot, float forMot) {
-        if (!CustomEntities.customEntities.contains(this)) {
-            super.g(sideMot, forMot);
-            return;
-        }
-        EntityHuman passenger = null;
-        if (!bv().isEmpty()) {
-            passenger = (EntityHuman) bv().iterator().next();
-        }
-        ride(sideMot, forMot, passenger, this);
-    }
+	private void removeSelectors() {
+		try {
+			Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
+			bField.setAccessible(true);
+			Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
+			cField.setAccessible(true);
+			bField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
+			bField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
+			cField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
+			cField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+	}
 
-    @Override
-    public void g_(float sideMot, float forMot) {
-        super.g(sideMot, forMot);
-    }
+	@Override
+	public void removeAi() {
+		removeSelectors();
+	}
 
-    @Override
-    public float getSpeed() {
-        return 0.5f;
-    }
+	@Override
+	public void g(float sideMot, float forMot) {
+		if (!CustomEntities.customEntities.contains(this)) {
+			super.g(sideMot, forMot);
+			return;
+		}
+		EntityHuman passenger = null;
+		if (!bv().isEmpty()) {
+			passenger = (EntityHuman) bv().iterator().next();
+		}
+		ride(sideMot, forMot, passenger, this);
+	}
 
-    @Override
-    public boolean canFly() {
-        return true;
-    }
+	@Override
+	public void g_(float sideMot, float forMot) {
+		super.g(sideMot, forMot);
+	}
 
-    @Override
-    public org.bukkit.entity.Entity getEntity() {
-        return getBukkitEntity();
-    }
+	@Override
+	public float getSpeed() {
+		return 0.5f;
+	}
 
-    static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
-        if(!(entity instanceof EntityBase))
-            throw new IllegalArgumentException("The entity field should implements EntityBase");
+	@Override
+	public boolean canFly() {
+		return true;
+	}
 
-        EntityBase entityBase = (EntityBase) entity;
+	@Override
+	public org.bukkit.entity.Entity getEntity() {
+		return getBukkitEntity();
+	}
 
-        WrapperEntityInsentient wEntity = new WrapperEntityInsentient(entity);
-        WrapperEntityHuman wPassenger = new WrapperEntityHuman(passenger);
+	static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
+		if (!(entity instanceof EntityBase))
+			throw new IllegalArgumentException("The entity field should implements EntityBase");
 
-        if(passenger != null) {
-            entity.lastYaw = entity.yaw = passenger.yaw % 360f;
-            entity.pitch = (passenger.pitch * 0.5F) % 360f;
+		EntityBase entityBase = (EntityBase) entity;
 
-            wEntity.setRenderYawOffset(entity.yaw);
-            wEntity.setRotationYawHead(entity.yaw);
+		WrapperEntityInsentient wEntity = new WrapperEntityInsentient(entity);
+		WrapperEntityHuman wPassenger = new WrapperEntityHuman(passenger);
 
-            sideMot = wPassenger.getMoveStrafing() * 0.25f;
-            forMot = wPassenger.getMoveForward() * 0.5f;
+		if (passenger != null) {
+			entity.lastYaw = entity.yaw = passenger.yaw % 360f;
+			entity.pitch = (passenger.pitch * 0.5F) % 360f;
 
-            if(forMot <= 0.0F)
-                forMot *= 0.25F;
+			wEntity.setRenderYawOffset(entity.yaw);
+			wEntity.setRotationYawHead(entity.yaw);
 
-            wEntity.setJumping(wPassenger.isJumping());
+			sideMot = wPassenger.getMoveStrafing() * 0.25f;
+			forMot = wPassenger.getMoveForward() * 0.5f;
 
-            if(wPassenger.isJumping() && (entity.onGround || entityBase.canFly())) {
-                entity.motY = 0.4D;
+			if (forMot <= 0.0F)
+				forMot *= 0.25F;
 
-                float f2 = MathHelper.sin(entity.yaw * 0.017453292f);
-                float f3 = MathHelper.cos(entity.yaw * 0.017453292f);
-                entity.motX += (double) (-0.4f * f2);
-                entity.motZ += (double) (0.4f * f3);
-            }
+			wEntity.setJumping(wPassenger.isJumping());
 
-            wEntity.setStepHeight(1.0f);
-            wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
+			if (wPassenger.isJumping() && (entity.onGround || entityBase.canFly())) {
+				entity.motY = 0.4D;
 
-            wEntity.setRotationYawHead(entity.yaw);
+				float f2 = MathHelper.sin(entity.yaw * 0.017453292f);
+				float f3 = MathHelper.cos(entity.yaw * 0.017453292f);
+				entity.motX += (double) (-0.4f * f2);
+				entity.motZ += (double) (0.4f * f3);
+			}
 
-            if(wEntity.canPassengerSteer()) {
-                wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
-                entityBase.g_(sideMot, forMot);
-            }
+			wEntity.setStepHeight(1.0f);
+			wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
 
-            wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
+			wEntity.setRotationYawHead(entity.yaw);
 
-            double dx = entity.locX - entity.lastX;
-            double dz = entity.locZ - entity.lastZ;
+			if (wEntity.canPassengerSteer()) {
+				wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
+				entityBase.g_(sideMot, forMot);
+			}
 
-            float f4 = MathHelper.sqrt(dx * dx + dz * dz) * 4;
+			wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
 
-            if(f4 > 1)
-                f4 = 1;
+			double dx = entity.locX - entity.lastX;
+			double dz = entity.locZ - entity.lastZ;
 
-            wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
-            wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
-        } else {
-            wEntity.setStepHeight(0.5f);
-            wEntity.setJumpMovementFactor(0.02f);
+			float f4 = MathHelper.sqrt(dx * dx + dz * dz) * 4;
 
-            entityBase.g_(sideMot, forMot);
-        }
+			if (f4 > 1)
+				f4 = 1;
 
-    }
+			wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
+			wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
+		} else {
+			wEntity.setStepHeight(0.5f);
+			wEntity.setJumpMovementFactor(0.02f);
+
+			entityBase.g_(sideMot, forMot);
+		}
+
+	}
 }

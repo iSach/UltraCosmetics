@@ -6,11 +6,8 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import me.libraryaddict.disguise.DisguiseAPI;
-
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
@@ -22,39 +19,39 @@ import org.bukkit.util.Vector;
  */
 public class MorphBat extends Morph {
 
-    public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, MorphType.BAT, ultraCosmetics);
-    }
+	public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, MorphType.BAT, ultraCosmetics);
+	}
 
-    @Override
-    protected void onEquip() {
-        super.onEquip();
-        getPlayer().setAllowFlight(true);
-    }
+	@Override
+	protected void onEquip() {
+		super.onEquip();
+		getPlayer().setAllowFlight(true);
+	}
 
-    @Override
-    public void onUpdate() {
-        //--
-    }
+	@Override
+	public void onUpdate() {
+		//--
+	}
 
-    @EventHandler
-    public void onPlayerToggleFligh(PlayerToggleFlightEvent event) {
-        if (event.getPlayer() == getPlayer()
-                && event.getPlayer().getGameMode() != GameMode.CREATIVE
-                && !event.getPlayer().isFlying()) {
-            Vector v = event.getPlayer().getLocation().getDirection();
-            v.setY(0.75);
-            MathUtils.applyVelocity(getPlayer(), v);
-            event.getPlayer().setFlying(false);
-            event.setCancelled(true);
-            SoundUtil.playSound(getPlayer(), Sounds.BAT_LOOP, 0.4f, 1.0f);
-        }
-    }
+	@EventHandler
+	public void onPlayerToggleFligh(PlayerToggleFlightEvent event) {
+		if (event.getPlayer() == getPlayer()
+		    && event.getPlayer().getGameMode() != GameMode.CREATIVE
+		    && !event.getPlayer().isFlying()) {
+			Vector v = event.getPlayer().getLocation().getDirection();
+			v.setY(0.75);
+			MathUtils.applyVelocity(getPlayer(), v);
+			event.getPlayer().setFlying(false);
+			event.setCancelled(true);
+			SoundUtil.playSound(getPlayer(), Sounds.BAT_LOOP, 0.4f, 1.0f);
+		}
+	}
 
-    @Override
-    public void onClear() {
-        if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-            getPlayer().setAllowFlight(false);
-        }
-    }
+	@Override
+	public void onClear() {
+		if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+			getPlayer().setAllowFlight(false);
+		}
+	}
 }

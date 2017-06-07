@@ -9,37 +9,37 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
-* Represents an instance of a snowman morph summoned by a player.
- * 
- * @author 	iSach
- * @since 	11-29-2015
+ * Represents an instance of a snowman morph summoned by a player.
+ *
+ * @author iSach
+ * @since 11-29-2015
  */
 public class MorphSnowman extends Morph {
 
 	private long coolDown = 0;
 
-    public MorphSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, MorphType.SNOWNMAN, ultraCosmetics);
-    }
+	public MorphSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, MorphType.SNOWNMAN, ultraCosmetics);
+	}
 
-    @EventHandler
-    public void onLeftClick(PlayerInteractEvent event) {
-        if ((event.getAction() == Action.LEFT_CLICK_AIR
-                || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
-            if(coolDown > System.currentTimeMillis() ) return;
-        	event.setCancelled(true);
-            event.getPlayer().launchProjectile(Snowball.class);
-            coolDown = System.currentTimeMillis() + 500;
-        }
-    }
+	@EventHandler
+	public void onLeftClick(PlayerInteractEvent event) {
+		if ((event.getAction() == Action.LEFT_CLICK_AIR
+		     || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
+			if (coolDown > System.currentTimeMillis()) return;
+			event.setCancelled(true);
+			event.getPlayer().launchProjectile(Snowball.class);
+			coolDown = System.currentTimeMillis() + 500;
+		}
+	}
 
-    @Override
-    public void onUpdate() {
+	@Override
+	public void onUpdate() {
 
-    }
+	}
 
-    @Override
-    protected void onClear() {
+	@Override
+	protected void onClear() {
 
-    }
+	}
 }

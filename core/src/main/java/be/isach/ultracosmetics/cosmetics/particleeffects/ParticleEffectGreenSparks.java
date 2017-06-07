@@ -8,39 +8,39 @@ import org.bukkit.util.Vector;
 
 /**
  * Represents an instance of green spark particles summoned by a player.
- * 
- * @author 	iSach
- * @since 	08-13-2015
+ *
+ * @author iSach
+ * @since 08-13-2015
  */
 public class ParticleEffectGreenSparks extends ParticleEffect {
 
-    boolean up;
-    float height;
-    int step;
+	boolean up;
+	float height;
+	int step;
 
-    public ParticleEffectGreenSparks(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(ultraCosmetics, owner, ParticleEffectType.GREENSPARKS);
-    }
+	public ParticleEffectGreenSparks(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(ultraCosmetics, owner, ParticleEffectType.GREENSPARKS);
+	}
 
-    @Override
-    public void onUpdate() {
-        if (up) {
-            if (height < 2)
-                height += 0.05;
-            else
-                up = false;
-        } else {
-            if (height > 0)
-                height -= 0.05;
-            else
-                up = true;
-        }
-        double inc = (2 * Math.PI) / 100;
-        double angle = step * inc;
-        Vector v = new Vector();
-        v.setX(Math.cos(angle) * 1.1);
-        v.setZ(Math.sin(angle) * 1.1);
-        UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
-        step += 4;
-    }
+	@Override
+	public void onUpdate() {
+		if (up) {
+			if (height < 2)
+				height += 0.05;
+			else
+				up = false;
+		} else {
+			if (height > 0)
+				height -= 0.05;
+			else
+				up = true;
+		}
+		double inc = (2 * Math.PI) / 100;
+		double angle = step * inc;
+		Vector v = new Vector();
+		v.setX(Math.cos(angle) * 1.1);
+		v.setZ(Math.sin(angle) * 1.1);
+		UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(v).add(0, height, 0));
+		step += 4;
+	}
 }

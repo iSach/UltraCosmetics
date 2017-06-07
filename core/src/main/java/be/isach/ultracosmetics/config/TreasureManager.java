@@ -1,10 +1,9 @@
 package be.isach.ultracosmetics.config;
 
-import java.io.File;
-
+import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import be.isach.ultracosmetics.UltraCosmetics;
+import java.io.File;
 
 public class TreasureManager {
 	private static YamlConfiguration rewardFile;

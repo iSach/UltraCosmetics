@@ -9,9 +9,9 @@ import be.isach.ultracosmetics.config.SettingsManager;
  * Project: UltraCosmetics
  */
 public class ConfigUtils {
-
-    public static int getGadgetSlot() {
-        return SettingsManager.getConfig().getInt("Gadget-Slot");
-    }
-
+	
+	public static int getGadgetSlot() {
+		return SettingsManager.getConfig().getInt("Gadget-Slot");
+	}
+	
 }
