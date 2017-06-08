@@ -79,7 +79,7 @@ public class GadgetTrampoline extends Gadget {
 	@Override
 	protected boolean checkRequirements(PlayerInteractEvent event) {
 		Location loc1 = getPlayer().getLocation().add(2, 15, 2);
-		Location loc2 = getPlayer().getLocation().clone().add(-2, 0, -2);
+		Location loc2 = getPlayer().getLocation().clone().add(-3, 0, -2);
 		Block block = loc1.getBlock().getRelative(3, 0, 0);
 		Block block2 = loc1.getBlock().getRelative(3, 1, 0);
 		Cuboid checkCuboid = new Cuboid(loc1, loc2);
