@@ -43,9 +43,9 @@ public class MenuPets extends CosmeticMenu<PetType> {
 
 	private void addPetRenameItem(Inventory inventory, UltraPlayer player) {
 		if (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
-			ItemStack stack = null;
+			ItemStack stack;
 			int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 5 : 6);
-			ClickRunnable run = null;
+			ClickRunnable run;
 			if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
 				if (player.hasPermission("ultracosmetics.pets.rename")) {
 					if (player.getCurrentPet() != null) {
@@ -58,6 +58,9 @@ public class MenuPets extends CosmeticMenu<PetType> {
 							player.getBukkitPlayer().closeInventory();
 						};
 					}
+				} else {
+					stack = new ItemStack(Material.AIR);
+					run = data -> {};
 				}
 			} else if (player.getCurrentPet() != null) {
 				stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));

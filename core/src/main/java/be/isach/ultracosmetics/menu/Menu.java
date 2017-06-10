@@ -58,9 +58,11 @@ public abstract class Menu implements Listener {
 		Validate.notNull(itemStack);
 		Validate.notNull(clickRunnable);
 		
-		ItemMeta itemMeta = itemStack.getItemMeta();
-		itemMeta.addItemFlags(ItemFlag.values());
-		itemStack.setItemMeta(itemMeta);
+		if (itemStack.hasItemMeta()) {
+			ItemMeta itemMeta = itemStack.getItemMeta();
+			itemMeta.addItemFlags(ItemFlag.values());
+			itemStack.setItemMeta(itemMeta);
+		}
 		
 		inventory.setItem(slot, itemStack);
 		if (clickRunnableMap.containsKey(inventory)) {
