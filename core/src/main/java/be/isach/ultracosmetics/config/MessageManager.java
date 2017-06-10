@@ -105,6 +105,7 @@ public class MessageManager {
 		addMessage("Gadgets.PaintballGun.name", "&b&lPaintball Gun");
 		addMessage("Gadgets.BatBlaster.name", "&7&lBat Blaster");
 		addMessage("Gadgets.MelonThrower.name", "&a&lMelon Thrower");
+		addMessage("Gadgets.MelonThrower.Wait-For-Finish", "%prefix% &c&lWait for your previous melon to finish exploding!");
 		addMessage("Gadgets.EtherealPearl.name", "&5&lEthereal Pearl");
 		addMessage("Gadgets.FleshHook.name", "&7&lFlesh Hook");
 		addMessage("Gadgets.DiscoBall.name", "&d&lDisco Ball");
