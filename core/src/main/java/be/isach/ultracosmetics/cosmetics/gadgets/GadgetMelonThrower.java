@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -55,7 +56,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 	void onRightClick() {
 		this.world = getPlayer().getWorld();
 		SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
-		Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.MELON_BLOCK, (byte) 0x0, UUID.randomUUID().toString()));
+		Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.MELON_BLOCK, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 		item.setPickupDelay(0);
 		item.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONBLOCK"));
 		item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
@@ -72,7 +73,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 				if (melon.isOnGround()) {
 					melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
 					for (int i = 0; i < 8; i++) {
-						final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UUID.randomUUID().toString()));
+						final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 						newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
 						newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
 						Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {

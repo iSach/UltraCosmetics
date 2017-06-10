@@ -73,7 +73,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
 		}
 	}
 
-	private void renamePet(final UltraPlayer ultraPlayer) {
+	public void renamePet(final UltraPlayer ultraPlayer) {
 		Player p = ultraPlayer.getBukkitPlayer();
 		AAnvilGUI gui = newAnvilGUI(ultraPlayer.getBukkitPlayer(), (AAnvilGUI.AnvilClickEvent event) -> {
 			if (event.getSlot() == AAnvilGUI.AnvilSlot.OUTPUT) {

@@ -240,7 +240,7 @@ public class EntityUtil implements IEntityUtil {
 		};
 		ei.getBukkitEntity().setVelocity(new Vector(0.0D, 0.25D, 0.0D));
 		ei.pickupDelay = 2147483647;
-		ei.getBukkitEntity().setCustomName(UUID.randomUUID().toString());
+		ei.getBukkitEntity().setCustomName(UltraCosmeticsData.get().getItemNoPickupString());
 		ei.pickupDelay = 20;
 		
 		((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addEntity(ei);

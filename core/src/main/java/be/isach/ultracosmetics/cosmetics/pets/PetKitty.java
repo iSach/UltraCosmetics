@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -37,7 +38,7 @@ public class PetKitty extends Pet {
 	
 	@Override
 	public void onUpdate() {
-		final Item item = entity.getWorld().dropItem(((Ocelot) entity).getEyeLocation(), ItemFactory.create(Material.RAW_FISH, (byte) 0x0, UUID.randomUUID().toString()));
+		final Item item = entity.getWorld().dropItem(((Ocelot) entity).getEyeLocation(), ItemFactory.create(Material.RAW_FISH, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 		item.setPickupDelay(30000);
 		item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
 		items.add(item);

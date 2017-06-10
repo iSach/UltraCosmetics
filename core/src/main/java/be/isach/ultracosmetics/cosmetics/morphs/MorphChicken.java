@@ -44,7 +44,7 @@ public class MorphChicken extends Morph {
 		if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
 			final List<Item> items = new ArrayList<>();
 			for (int j = 0; j < 10; j++) {
-				final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(Material.EGG, (byte) 0x0, UUID.randomUUID().toString()));
+				final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(Material.EGG, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 				i.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
 				items.add(i);
 				Random r = new Random();
