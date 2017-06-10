@@ -10,11 +10,14 @@ import net.minecraft.server.v1_11_R1.EntitySpider;
 import net.minecraft.server.v1_11_R1.EntityTypes;
 import net.minecraft.server.v1_11_R1.EntityZombie;
 import net.minecraft.server.v1_11_R1.MinecraftKey;
+import net.minecraft.server.v1_11_R1.RegistryID;
+import net.minecraft.server.v1_11_R1.RegistryMaterials;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author RadBuilder
@@ -71,7 +74,22 @@ public enum CustomEntities {
 	
 	public static void registerEntities() {
 		for (CustomEntities entity : values()) {
-			EntityTypes.b.a(entity.getID(), entity.getMinecraftKey(), entity.getCustomClass());
+			try {
+				// Use reflection to get the RegistryID of entities.
+				@SuppressWarnings("unchecked") RegistryID<Class<? extends Entity>> registryID = (RegistryID<Class<? extends Entity>>) getPrivateField(RegistryMaterials.class, EntityTypes.b, "a");
+				Object[] idToClassMap = (Object[]) getPrivateField(RegistryID.class, registryID, "d");
+				
+				// Save the the ID -> entity class mapping before the registration.
+				Object oldValue = idToClassMap[entity.getID()];
+				
+				// Register the entity class.
+				registryID.a(entity.getCustomClass(), entity.getID());
+				
+				// Restore the ID -> entity class mapping.
+				idToClassMap[entity.getID()] = oldValue;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		for (BiomeBase biomeBase : BiomeBase.i) {
@@ -102,5 +120,11 @@ public enum CustomEntities {
 				// ignore temporarily... TODO fix NMS problems... I hate Mojang
 			}
 		}
+	}
+	
+	public static Object getPrivateField(Class<?> clazz, Object handle, String fieldName) throws Exception {
+		Field field = clazz.getDeclaredField(fieldName);
+		field.setAccessible(true);
+		return field.get(handle);
 	}
 }
