@@ -2,10 +2,13 @@ package be.isach.ultracosmetics.cosmetics;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -20,7 +23,6 @@ import java.util.UUID;
  * @since 07-21-2016
  */
 public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable implements Listener {
-	
 	private UltraPlayer owner;
 	private Category category;
 	private UltraCosmetics ultraCosmetics;
@@ -49,21 +51,31 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 		this.equipped = true;
 		
 		String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-		mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+		if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null
+		    && SettingsManager.getConfig().get("Pets-Rename.Replace-In-Equip-Message") != null
+		    && SettingsManager.getConfig().getBoolean("Pets-Rename.Replace-In-Equip-Message")) {
+			mess = mess.replace(getCategory().getChatPlaceholder(), ChatColor.WHITE + owner.getPetName((PetType) cosmeticType));
+		} else {
+			mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+		}
 		getPlayer().sendMessage(mess);
 		
 		onEquip();
 	}
 	
 	public void clear() {
-		
 		// Send unequip Message.
 		try {
 			String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-			mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+			if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null
+			    && SettingsManager.getConfig().get("Pets-Rename.Replace-In-Equip-Message") != null
+			    && SettingsManager.getConfig().getBoolean("Pets-Rename.Replace-In-Equip-Message")) {
+				mess = mess.replace(getCategory().getChatPlaceholder(), ChatColor.WHITE + owner.getPetName((PetType) cosmeticType));
+			} else {
+				mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+			}
 			getPlayer().sendMessage(mess);
-		} catch (Exception exc) {
-		
+		} catch (Exception ignored) {
 		}
 		
 		// unregister listener.
@@ -72,7 +84,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 		try {
 			// Cancel task.
 			cancel();
-		} catch (Exception exc) {
+		} catch (Exception ignored) {
 			// Not Scheduled yet. Ignore.
 		}
 		
@@ -106,7 +118,6 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 		if (owner == null) {
 			return null;
 		}
-		
 		return owner.getBukkitPlayer();
 	}
 	

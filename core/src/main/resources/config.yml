@@ -183,6 +183,7 @@ Fill-Blank-Slots-With-Item:
 Pets-Rename:
   Enabled: false
   Permission-Required: false
+  Replace-In-Equip-Message: true
   Requires-Money:
     Enabled: true
     Price: 100
