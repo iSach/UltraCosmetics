@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -62,7 +63,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
 	
 	@Override
 	void onRightClick() {
-		Item hook = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, UUID.randomUUID().toString()));
+		Item hook = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 		hook.setPickupDelay(0);
 		hook.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.5));
 		items.add(hook);

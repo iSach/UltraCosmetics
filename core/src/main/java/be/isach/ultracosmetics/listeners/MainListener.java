@@ -1,9 +1,11 @@
 package be.isach.ultracosmetics.listeners;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Main listener
@@ -20,8 +22,11 @@ public class MainListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onTakeUpMelon(PlayerPickupItemEvent event) {
-		if (event.getItem().hasMetadata("UNPICKABLEUP")) {
+	public void onItemPickup(InventoryPickupItemEvent event) {
+		ItemStack stack = event.getItem().getItemStack();
+		if (event.getItem().hasMetadata("UNPICKABLEUP")
+		    || (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()
+		        && stack.getItemMeta().getDisplayName().equals(UltraCosmeticsData.get().getItemNoPickupString()))) {
 			event.setCancelled(true);
 		}
 	}

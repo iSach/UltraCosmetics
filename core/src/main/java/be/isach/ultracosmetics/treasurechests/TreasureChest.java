@@ -384,7 +384,7 @@ public class TreasureChest implements Listener {
 				this.randomGenerator.giveRandomThing();
 				org.bukkit.inventory.ItemStack is = this.randomGenerator.getItemStack();
 				ItemMeta itemMeta = is.getItemMeta();
-				itemMeta.setDisplayName(UUID.randomUUID().toString());
+				itemMeta.setDisplayName(UltraCosmeticsData.get().getItemNoPickupString());
 				is.setItemMeta(itemMeta);
 				
 				Entity entity = UltraCosmeticsData.get().getVersionManager().getEntityUtil().spawnItem(is, b.getLocation());
@@ -470,7 +470,7 @@ public class TreasureChest implements Listener {
 				
 				org.bukkit.inventory.ItemStack is = this.randomGenerator.getItemStack();
 				ItemMeta itemMeta = is.getItemMeta();
-				itemMeta.setDisplayName(UUID.randomUUID().toString());
+				itemMeta.setDisplayName(UltraCosmeticsData.get().getItemNoPickupString());
 				is.setItemMeta(itemMeta);
 				
 				Entity itemEntity = UltraCosmeticsData.get().getVersionManager().getEntityUtil().spawnItem(is, event.getClickedBlock().getLocation());

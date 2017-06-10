@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.v1_8_R1.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -26,7 +27,7 @@ public class PetPumpling extends CustomEntityPet {
 
 	@Override
 	public void onUpdate() {
-		final Item ITEM = customEntity.getEntity().getWorld().dropItem(((Zombie) customEntity.getEntity()).getEyeLocation(), ItemFactory.create(Material.JACK_O_LANTERN, (byte) 0x0, UUID.randomUUID().toString()));
+		final Item ITEM = customEntity.getEntity().getWorld().dropItem(((Zombie) customEntity.getEntity()).getEyeLocation(), ItemFactory.create(Material.JACK_O_LANTERN, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 		ITEM.setPickupDelay(30000);
 		ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
 		items.add(ITEM);

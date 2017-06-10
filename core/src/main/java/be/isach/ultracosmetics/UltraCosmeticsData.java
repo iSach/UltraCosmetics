@@ -5,6 +5,8 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 
+import java.util.UUID;
+
 /**
  * This class is only for cleaning main class a bit.
  *
@@ -86,9 +88,15 @@ public class UltraCosmeticsData {
 	
 	private UltraCosmetics ultraCosmetics;
 	
+	/**
+	 * A String that items that shouldn't be picked up are given. Randomly generated each time the server starts.
+	 */
+	private final String itemNoPickupString;
+	
 	public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
 		this.ultraCosmetics = ultraCosmetics;
 		this.usingSpigot = ultraCosmetics.getServer().getVersion().contains("Spigot");
+		this.itemNoPickupString = UUID.randomUUID().toString();
 	}
 	
 	public static void init(UltraCosmetics ultraCosmetics) {
@@ -239,5 +247,9 @@ public class UltraCosmeticsData {
 	
 	public boolean isUsingVaultEconomy() {
 		return this.usingVaultEconomy;
+	}
+	
+	public final String getItemNoPickupString() {
+		return this.itemNoPickupString;
 	}
 }

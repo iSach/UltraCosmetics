@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import com.mojang.authlib.GameProfile;
@@ -32,14 +33,14 @@ public class PetChristmasElf extends Pet {
 	private static List<ItemStack> presents = new ArrayList<>();
 	
 	static {
-		presents.add(getSkull("f5612dc7b86d71afc1197301c15fd979e9f39e7b1f41d8f1ebdf8115576e2e", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
-		presents.add(getSkull("6b4cde16a4014de0a7651f6067f12695bb5fed6feaec1e9413ca4271e7c819", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
-		presents.add(getSkull("d08ce7deba56b726a832b61115ca163361359c30434f7d5e3c3faa6fe4052", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
-		presents.add(getSkull("928e692d86e224497915a39583dbe38edffd39cbba457cc95a7ac3ea25d445", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
-		presents.add(getSkull("1b6730de7e5b941efc6e8cbaf5755f9421a20de871759682cd888cc4a81282", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
-		presents.add(getSkull("1ac1163f54dcbb0e8e31ac675696f2409299c5abbf6c3fe73bf1cfe91422e1", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
-		presents.add(getSkull("6cef9aa14e884773eac134a4ee8972063f466de678363cf7b1a21a85b7", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
-		presents.add(getSkull("aa074845885202e17ed5c4be4103733121235c5440ae3a1c49fbd39317b04d", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Present"));
+		presents.add(getSkull("f5612dc7b86d71afc1197301c15fd979e9f39e7b1f41d8f1ebdf8115576e2e", UltraCosmeticsData.get().getItemNoPickupString()));
+		presents.add(getSkull("6b4cde16a4014de0a7651f6067f12695bb5fed6feaec1e9413ca4271e7c819", UltraCosmeticsData.get().getItemNoPickupString()));
+		presents.add(getSkull("d08ce7deba56b726a832b61115ca163361359c30434f7d5e3c3faa6fe4052", UltraCosmeticsData.get().getItemNoPickupString()));
+		presents.add(getSkull("928e692d86e224497915a39583dbe38edffd39cbba457cc95a7ac3ea25d445", UltraCosmeticsData.get().getItemNoPickupString()));
+		presents.add(getSkull("1b6730de7e5b941efc6e8cbaf5755f9421a20de871759682cd888cc4a81282", UltraCosmeticsData.get().getItemNoPickupString()));
+		presents.add(getSkull("1ac1163f54dcbb0e8e31ac675696f2409299c5abbf6c3fe73bf1cfe91422e1", UltraCosmeticsData.get().getItemNoPickupString()));
+		presents.add(getSkull("6cef9aa14e884773eac134a4ee8972063f466de678363cf7b1a21a85b7", UltraCosmeticsData.get().getItemNoPickupString()));
+		presents.add(getSkull("aa074845885202e17ed5c4be4103733121235c5440ae3a1c49fbd39317b04d", UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 	
 	Random r = new Random();

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -40,7 +41,7 @@ public class PetEasterBunny extends Pet {
 	
 	@Override
 	public void onUpdate() {
-		final Item ITEM = entity.getWorld().dropItem(((Rabbit) entity).getEyeLocation(), ItemFactory.create(Material.MONSTER_EGG, eggDatas.get(r.nextInt(6)), UUID.randomUUID().toString()));
+		final Item ITEM = entity.getWorld().dropItem(((Rabbit) entity).getEyeLocation(), ItemFactory.create(Material.MONSTER_EGG, eggDatas.get(r.nextInt(6)), UltraCosmeticsData.get().getItemNoPickupString()));
 		ITEM.setPickupDelay(30000);
 		ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
 		items.add(ITEM);

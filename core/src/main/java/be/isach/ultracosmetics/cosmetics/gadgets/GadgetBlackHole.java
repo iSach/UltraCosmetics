@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -40,7 +41,7 @@ public class GadgetBlackHole extends Gadget {
 			item = null;
 		}
 		
-		Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.STAINED_CLAY, (byte) 0xf, UUID.randomUUID().toString()));
+		Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.STAINED_CLAY, (byte) 0xf, UltraCosmeticsData.get().getItemNoPickupString()));
 		newItem.setPickupDelay(Integer.MAX_VALUE);
 		newItem.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
 		this.item = newItem;

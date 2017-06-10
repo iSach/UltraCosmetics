@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -38,7 +39,7 @@ public class GadgetColorBomb extends Gadget {
 	
 	@Override
 	void onRightClick() {
-		ItemStack item = ItemFactory.create(Material.WOOL, (byte) MathUtils.random.nextInt(15), UUID.randomUUID().toString());
+		ItemStack item = ItemFactory.create(Material.WOOL, (byte) MathUtils.random.nextInt(15), UltraCosmeticsData.get().getItemNoPickupString());
 		Item bomb = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), item);
 		bomb.setPickupDelay(50000);
 		bomb.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(0.7532));
@@ -85,7 +86,7 @@ public class GadgetColorBomb extends Gadget {
 						return;
 					}
 					
-					ItemStack item = ItemFactory.create(Material.WOOL, (byte) MathUtils.random.nextInt(15), UUID.randomUUID().toString());
+					ItemStack item = ItemFactory.create(Material.WOOL, (byte) MathUtils.random.nextInt(15), UltraCosmeticsData.get().getItemNoPickupString());
 					Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
 					i.setPickupDelay(500000);
 					i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
