@@ -121,7 +121,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
 		if (player.getPetName(cosmeticType) != null) {
 			ItemStack item = itemStack.clone();
 			ItemMeta itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(itemMeta.getDisplayName() + ChatColor.GRAY + " (" + player.getPetName(cosmeticType) + ")");
+			itemMeta.setDisplayName(itemMeta.getDisplayName() + ChatColor.GRAY + " (" + player.getPetName(cosmeticType) + ChatColor.GRAY + ")");
 			item.setItemMeta(itemMeta);
 			return item;
 		}
