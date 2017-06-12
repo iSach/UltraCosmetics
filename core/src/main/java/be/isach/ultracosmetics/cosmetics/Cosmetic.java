@@ -51,10 +51,9 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 		this.equipped = true;
 		
 		String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-		if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null
-		    && SettingsManager.getConfig().get("Pets-Rename.Replace-In-Equip-Message") != null
-		    && SettingsManager.getConfig().getBoolean("Pets-Rename.Replace-In-Equip-Message")) {
-			mess = mess.replace(getCategory().getChatPlaceholder(), ChatColor.WHITE + owner.getPetName((PetType) cosmeticType));
+		if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null) {
+			mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics())
+			                                                        + " " + ChatColor.GRAY + "(" + owner.getPetName((PetType) cosmeticType) + ChatColor.GRAY + ")");
 		} else {
 			mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
 		}
@@ -67,10 +66,9 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 		// Send unequip Message.
 		try {
 			String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-			if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null
-			    && SettingsManager.getConfig().get("Pets-Rename.Replace-In-Equip-Message") != null
-			    && SettingsManager.getConfig().getBoolean("Pets-Rename.Replace-In-Equip-Message")) {
-				mess = mess.replace(getCategory().getChatPlaceholder(), ChatColor.WHITE + owner.getPetName((PetType) cosmeticType));
+			if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null) {
+				mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics())
+				                                                        + " " + ChatColor.GRAY + "(" + owner.getPetName((PetType) cosmeticType) + ChatColor.GRAY + ")");
 			} else {
 				mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
 			}
