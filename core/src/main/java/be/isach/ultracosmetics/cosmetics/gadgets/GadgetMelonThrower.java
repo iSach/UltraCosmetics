@@ -76,27 +76,29 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 	
 	@Override
 	public void onUpdate() {
-		if (melon == null || !melon.isValid()) {
-			return;
-		}
-		if (melon.isOnGround()) {
-			melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
-			for (int i = 0; i < 8; i++) {
-				final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
-				newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
-				newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
-				Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
-					@Override
-					public void run() {
-						if (newItem.isValid()) {
-							newItem.remove();
-						}
-					}
-				}, 100);
+		Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+			if (melon == null || !melon.isValid()) {
+				return;
 			}
-			melon.remove();
-			melon = null;
-		}
+			if (melon.isOnGround()) {
+				melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
+				for (int i = 0; i < 8; i++) {
+					final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+					newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
+					newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
+					Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
+						@Override
+						public void run() {
+							if (newItem.isValid()) {
+								newItem.remove();
+							}
+						}
+					}, 100);
+				}
+				melon.remove();
+				melon = null;
+			}
+		});
 	}
 	
 	@Override
