@@ -28,8 +28,8 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 			return;
 		}
 		EntityHuman passenger = null;
-		if (!bD().isEmpty()) {
-			passenger = (EntityHuman) bD().get(0);
+		if (!bF().isEmpty()) {
+			passenger = (EntityHuman) bF().get(0);
 		}
 		ride(sideMot, forMot, passenger, this);
 	}
@@ -119,7 +119,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 			
 			entityBase.g_(sideMot, forMot);
 		}
-		
 	}
 	
 	@Override

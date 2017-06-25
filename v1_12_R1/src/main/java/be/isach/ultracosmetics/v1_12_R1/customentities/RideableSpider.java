@@ -30,8 +30,8 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 		}
 		
 		EntityHuman passenger = null;
-		if (!bD().isEmpty()) {
-			passenger = (EntityHuman) bD().get(0);
+		if (!bF().isEmpty()) {
+			passenger = (EntityHuman) bF().get(0);
 		}
 		ride(sideMot, forMot, passenger, this);
 	}
@@ -112,15 +112,12 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 			
 			wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
 			wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
-		} else
-		
-		{
+		} else {
 			wEntity.setStepHeight(0.5f);
 			wEntity.setJumpMovementFactor(0.02f);
 			
 			entityBase.g_(sideMot, forMot);
 		}
-		
 	}
 	
 	@Override

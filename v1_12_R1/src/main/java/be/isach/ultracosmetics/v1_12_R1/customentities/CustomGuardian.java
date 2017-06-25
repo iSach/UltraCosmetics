@@ -52,9 +52,9 @@ public class CustomGuardian extends EntityGuardian {
 	
 	
 	@Override
-	protected SoundEffect cd() {
+	protected SoundEffect cf() {
 		if (custom) return null;
-		else return super.cd();
+		else return super.cf();
 	}
 	
 	@Override

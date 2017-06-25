@@ -19,7 +19,7 @@ public class WrapperEntity extends WrapperBase {
 	
 	public void setStepHeight(float stepHeight) { handle.P = stepHeight; }
 	
-	public boolean canPassengerSteer() { return handle.bG(); }
+	public boolean canPassengerSteer() { return handle.bI(); }
 	
 	public Entity getHandle() { return handle; }
 	

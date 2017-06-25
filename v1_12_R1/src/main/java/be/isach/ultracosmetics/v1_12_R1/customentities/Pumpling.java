@@ -53,15 +53,15 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 	}
 	
 	@Override
-	protected SoundEffect cd() { // Death
+	protected SoundEffect cf() { // Death
 		if (isCustomEntity()) return null;
-		else return super.cd();
+		else return super.cf();
 	}
 	
 	@Override
-	protected SoundEffect dk() { // Step
+	protected SoundEffect dm() { // Step
 		if (isCustomEntity()) return null;
-		else return super.dk();
+		else return super.dm();
 	}
 	
 	@Override

@@ -51,9 +51,9 @@ public class WrapperEntityLiving extends WrapperEntity {
 	
 	public void setLimbSwing(float limbSwing) { handle.aH = limbSwing; }
 	
-	public float getMoveSpeed() { return handle.cw(); }
+	public float getMoveSpeed() { return handle.cy(); }
 	
-	public void setMoveSpeed(float moveSpeed) { handle.m(moveSpeed); }
+	public void setMoveSpeed(float moveSpeed) { handle.k(moveSpeed); }
 	
 	@Override
 	public EntityLiving getHandle() { return handle; }

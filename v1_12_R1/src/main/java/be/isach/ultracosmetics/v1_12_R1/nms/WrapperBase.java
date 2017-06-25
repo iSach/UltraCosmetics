@@ -40,5 +40,4 @@ public abstract class WrapperBase {
 	}
 	
 	public Object getHandle() { return handle; }
-	
 }
