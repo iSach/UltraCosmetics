@@ -31,7 +31,7 @@ public class PetSheep extends Pet {
 	@Override
 	public void onUpdate() {
 		Sheep sheep = (Sheep) entity;
-		Item item = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) r.nextInt(17), UltraCosmeticsData.get().getItemNoPickupString()));
+		Item item = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) r.nextInt(16), UltraCosmeticsData.get().getItemNoPickupString()));
 		item.setPickupDelay(30000);
 		item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
 		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), item::remove, 5);
