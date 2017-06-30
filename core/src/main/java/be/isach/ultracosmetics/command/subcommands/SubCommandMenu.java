@@ -31,6 +31,11 @@ public class SubCommandMenu extends SubCommand {
 	
 	@Override
 	protected void onExePlayer(Player sender, String... args) {
+		if (!UltraCosmeticsData.get().getEnabledWorlds().contains(sender.getWorld().getName())) {
+			sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+			return;
+		}
+
 		if (args.length < 2) {
 			sender.sendMessage(getMenuList());
 			return;

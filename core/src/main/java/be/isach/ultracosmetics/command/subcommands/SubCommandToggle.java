@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -19,24 +20,41 @@ import java.util.Arrays;
  * @since 12-21-2015
  */
 public class SubCommandToggle extends SubCommand {
-	
-	
+
+
 	public SubCommandToggle(UltraCosmetics ultraCosmetics) {
 		super("Toggles a cosmetic.", "ultracosmetics.command.toggle", "/uc toggle <type> <cosmetic> [player]", ultraCosmetics, "toggle");
 	}
-	
+
 	@Override
 	protected void onExePlayer(Player sender, String... args) {
 		UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(sender);
-		
+
 		if (args.length < 3) {
 			sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l" + getUsage());
 			return;
 		}
-		
+
 		String type = args[1].toLowerCase();
 		String cosm = args[2].toLowerCase();
-		
+
+		if (args.length > 3) {
+			try {
+				if (!UltraCosmeticsData.get().getEnabledWorlds().contains(Bukkit.getPlayer(args[3]).getWorld().getName())) {
+					sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+					return;
+				}
+			} catch (Exception e) {
+				sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
+				return;
+			}
+		} else {
+			if (!UltraCosmeticsData.get().getEnabledWorlds().contains(sender.getWorld().getName())) {
+				sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+				return;
+			}
+		}
+
 		Object[] categories = Arrays.stream(Category.values()).filter(category -> category.isEnabled() && category.toString().toLowerCase().startsWith(type)).toArray();
 		if (categories.length == 1) {
 			Category category = (Category) categories[0];
@@ -77,17 +95,27 @@ public class SubCommandToggle extends SubCommand {
 			sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid category.");
 		}
 	}
-	
+
 	@Override
 	protected void onExeConsole(ConsoleCommandSender sender, String... args) {
 		if (args.length < 4) {
 			sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle <type> <cosmetic> <player>");
 			return;
 		}
-		
+
 		String type = args[1].toLowerCase();
 		String cosm = args[2].toLowerCase();
-		
+
+		try {
+			if (!UltraCosmeticsData.get().getEnabledWorlds().contains(Bukkit.getPlayer(args[3]).getWorld().getName())) {
+				sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+				return;
+			}
+		} catch (Exception e) {
+			sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
+			return;
+		}
+
 		Object[] categories = Arrays.stream(Category.values()).filter(category -> category.isEnabled() && category.toString().toLowerCase().startsWith(type)).toArray();
 		if (categories.length == 1) {
 			Category category = (Category) categories[0];

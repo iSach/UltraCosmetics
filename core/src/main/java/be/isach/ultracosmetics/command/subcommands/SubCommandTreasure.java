@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
@@ -45,6 +47,12 @@ public class SubCommandTreasure extends SubCommand {
 			sender.sendMessage("§c§lPlayer " + args[1] + " not found!");
 			return;
 		}
+
+		if (!UltraCosmeticsData.get().getEnabledWorlds().contains(opener.getWorld().getName())) {
+			sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+			return;
+		}
+
 		double x, y, z;
 		if (!MathUtils.isDouble(args[2])) {
 			sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[2] + " isn't a number!");

@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -87,6 +88,11 @@ public class UltraCosmeticsData {
 	private VersionManager versionManager;
 	
 	private UltraCosmetics ultraCosmetics;
+
+	/**
+	 * A list of worlds where cosmetics are enabled.
+	 */
+	private List<String> enabledWorlds;
 	
 	/**
 	 * A String that items that shouldn't be picked up are given. Randomly generated each time the server starts.
@@ -178,6 +184,7 @@ public class UltraCosmeticsData {
 		this.customCommandBackArrow = ultraCosmetics.getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled");
 		this.customBackMenuCommand = ultraCosmetics.getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
 		this.closeAfterSelect = ultraCosmetics.getConfig().getBoolean("Categories.Close-GUI-After-Select");
+		this.enabledWorlds = ultraCosmetics.getConfig().getStringList("Enabled-Worlds");
 	}
 	
 	public boolean isAmmoEnabled() {
@@ -251,5 +258,9 @@ public class UltraCosmeticsData {
 	
 	public final String getItemNoPickupString() {
 		return this.itemNoPickupString;
+	}
+
+	public List<String> getEnabledWorlds() {
+		return this.enabledWorlds;
 	}
 }
