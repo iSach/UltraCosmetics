@@ -368,7 +368,7 @@ public class TreasureRandomizer {
 	}
 
 	public void giveNothing() {
-		if (UltraCosmeticsData.get().getPlugin().isVaultLoaded()) {
+		if (UltraCosmeticsData.get().isUsingVaultEconomy()) {
 			try {
 				giveMoney();
 			} catch (Exception e) {
