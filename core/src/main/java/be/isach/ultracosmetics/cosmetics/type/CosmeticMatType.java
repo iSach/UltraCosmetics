@@ -11,7 +11,7 @@ import org.bukkit.Material;
  * @author iSach
  * @since 08-04-2016
  */
-public class CosmeticMatType<T extends Cosmetic> extends CosmeticType<T> {
+public abstract class CosmeticMatType<T extends Cosmetic> extends CosmeticType<T> {
 	private Material material;
 	private byte data;
 	

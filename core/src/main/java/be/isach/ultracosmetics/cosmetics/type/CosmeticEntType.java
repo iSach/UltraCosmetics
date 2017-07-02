@@ -12,7 +12,7 @@ import org.bukkit.entity.EntityType;
  * @author iSach
  * @since 08-04-2016
  */
-public class CosmeticEntType<T extends Cosmetic> extends CosmeticMatType<T> {
+public abstract class CosmeticEntType<T extends Cosmetic> extends CosmeticMatType<T> {
 	
 	private EntityType entityType;
 	

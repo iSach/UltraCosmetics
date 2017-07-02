@@ -36,6 +36,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
 		this.descriptionAsString = description;
 		this.clazz = clazz;
 		this.category = category;
+		this.baseVersion = baseVersion;
 		
 		if (SettingsManager.getConfig().get(getCategory().getConfigPath() + "." + configName + ".Description") == null) {
 			setDescriptionAsString(description);

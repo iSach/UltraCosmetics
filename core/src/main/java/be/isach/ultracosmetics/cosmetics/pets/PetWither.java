@@ -15,7 +15,7 @@ import org.bukkit.entity.Wither;
 public class PetWither extends Pet {
 	
 	public PetWither(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.WITHER);
+		super(owner, ultraCosmetics, PetType.getByName("wither"), null);
 	}
 	
 	@Override

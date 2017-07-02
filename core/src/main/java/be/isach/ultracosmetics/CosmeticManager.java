@@ -1,14 +1,8 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.type.EmoteType;
-import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.cosmetics.type.HatType;
-import be.isach.ultracosmetics.cosmetics.type.MorphType;
-import be.isach.ultracosmetics.cosmetics.type.MountType;
-import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
-import be.isach.ultracosmetics.cosmetics.type.PetType;
-import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.type.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +42,8 @@ public class CosmeticManager {
 		GadgetType.ANTIGRAVITY.getConfigName();
 		MountType.DRAGON.getConfigName();
 		ParticleEffectType.ANGELWINGS.getConfigName();
-		PetType.CHICK.getConfigName();
+		PetType.register();
+		PetType.getByName("chick").getConfigName();
 		SuitType.ASTRONAUT.getConfigName();
 		EmoteType.ANGRY.getConfigName();
 		if (Category.MORPHS.isEnabled()) {

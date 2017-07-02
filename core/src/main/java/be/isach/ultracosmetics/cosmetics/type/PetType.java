@@ -41,7 +41,7 @@ public final class PetType extends CosmeticMatType<Pet> {
 	
 	public static PetType getByName(String s) {
 		try {
-			return VALUES.stream().filter(value -> value.getName().equalsIgnoreCase(s)).findFirst().get();
+			return VALUES.stream().filter(value -> value.getConfigName().equalsIgnoreCase(s)).findFirst().get();
 		} catch (Exception exc) {
 			return null;
 		}
@@ -50,18 +50,6 @@ public final class PetType extends CosmeticMatType<Pet> {
 	public static void checkEnabled() {
 		ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
 	}
-	
-	public static final PetType PIGGY = new PetType("ultracosmetics.pets.piggy", "Piggy", Material.PORK, (byte) 0, "&7&oOink! Oink!", EntityType.PIG, PetPiggy.class, ServerVersion.v1_8_R1);
-	public static final PetType SHEEP = new PetType("ultracosmetics.pets.sheep", "Sheep", Material.WOOL, (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.v1_8_R1);
-	public static final PetType EASTERBUNNY = new PetType("ultracosmetics.pets.easterbunny", "EasterBunny", Material.CARROT_ITEM, (byte) 0, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class, ServerVersion.v1_8_R1);
-	public static final PetType COW = new PetType("ultracosmetics.pets.cow", "Cow", Material.MILK_BUCKET, (byte) 0, "&7&oMoooo!", EntityType.COW, PetCow.class, ServerVersion.v1_8_R1);
-	public static final PetType MOOSHROOM = new PetType("ultracosmetics.pets.mooshroom", "Mooshroom", Material.RED_MUSHROOM, (byte) 0, "&7&oMoooo!", EntityType.MUSHROOM_COW, PetMooshroom.class, ServerVersion.v1_8_R1);
-	public static final PetType KITTY = new PetType("ultracosmetics.pets.kitty", "Kitty", Material.RAW_FISH, (byte) 0, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class, ServerVersion.v1_8_R1);
-	public static final PetType DOG = new PetType("ultracosmetics.pets.dog", "Dog", Material.BONE, (byte) 0, "&7&oWoof!", EntityType.WOLF, PetDog.class, ServerVersion.v1_8_R1);
-	public static final PetType CHICK = new PetType("ultracosmetics.pets.chick", "Chick", Material.EGG, (byte) 0, "&7&oBwaaaaaaak!!", EntityType.CHICKEN, PetChick.class, ServerVersion.v1_8_R1);
-	public static final PetType WITHER = new PetType("ultracosmetics.pets.wither", "Wither", Material.SKULL_ITEM, (byte) 1, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.v1_8_R1);
-	public static final PetType PUMPLING = new PetType("ultracosmetics.pets.pumpling", "Pumpling", Material.PUMPKIN, (byte) 0, "&7&oJust a little floating pumpkin", EntityType.ZOMBIE, UltraCosmeticsData.get().getVersionManager().getPets().getPumplingClass(), ServerVersion.v1_8_R1);
-	public static final PetType CHRISTMASELF = new PetType("ultracosmetics.pets.christmaself", "ChristmasElf", Material.BEACON, (byte) 0, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class, ServerVersion.v1_8_R1);
 
 	private EntityType entityType;
 	
@@ -69,7 +57,6 @@ public final class PetType extends CosmeticMatType<Pet> {
 		super(Category.PETS, configName, permission, defaultDesc, material, data, clazz, baseVersion);
 		
 		this.entityType = entityType;
-		
 		VALUES.add(this);
 	}
 	
@@ -84,5 +71,19 @@ public final class PetType extends CosmeticMatType<Pet> {
 	@Override
 	public String getName() {
 		return MessageManager.getMessage("Pets." + getConfigName() + ".menu-name");
+	}
+
+	public static void register() {
+		new PetType("ultracosmetics.pets.piggy", "Piggy", Material.PORK, (byte) 0, "&7&oOink! Oink!", EntityType.PIG, PetPiggy.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.sheep", "Sheep", Material.WOOL, (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.easterbunny", "EasterBunny", Material.CARROT_ITEM, (byte) 0, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.cow", "Cow", Material.MILK_BUCKET, (byte) 0, "&7&oMoooo!", EntityType.COW, PetCow.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.mooshroom", "Mooshroom", Material.RED_MUSHROOM, (byte) 0, "&7&oMoooo!", EntityType.MUSHROOM_COW, PetMooshroom.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.kitty", "Kitty", Material.RAW_FISH, (byte) 0, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.dog", "Dog", Material.BONE, (byte) 0, "&7&oWoof!", EntityType.WOLF, PetDog.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.chick", "Chick", Material.EGG, (byte) 0, "&7&oBwaaaaaaak!!", EntityType.CHICKEN, PetChick.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.wither", "Wither", Material.SKULL_ITEM, (byte) 1, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.pumpling", "Pumpling", Material.PUMPKIN, (byte) 0, "&7&oJust a little floating pumpkin", EntityType.ZOMBIE, UltraCosmeticsData.get().getVersionManager().getPets().getPumplingClass(), ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.christmaself", "ChristmasElf", Material.BEACON, (byte) 0, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class, ServerVersion.v1_8_R1);
 	}
 }

@@ -21,11 +21,8 @@ import java.util.UUID;
  * @since 08-12-2015
  */
 public class PetKitty extends Pet {
-	
-	Random r = new Random();
-	
 	public PetKitty(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.KITTY);
+		super(owner, ultraCosmetics, PetType.getByName("kitty"), ItemFactory.create(Material.RAW_FISH, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
 			if (getOwner() != null && getEntity() != null) {
 				Ocelot ocelot = (Ocelot) getEntity();
@@ -34,17 +31,5 @@ public class PetKitty extends Pet {
 				ocelot.setCatType(Ocelot.Type.RED_CAT);
 			}
 		}, 30);
-	}
-	
-	@Override
-	public void onUpdate() {
-		final Item item = entity.getWorld().dropItem(((Ocelot) entity).getEyeLocation(), ItemFactory.create(Material.RAW_FISH, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
-		item.setPickupDelay(30000);
-		item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-		items.add(item);
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-			item.remove();
-			items.remove(item);
-		}, 5);
 	}
 }

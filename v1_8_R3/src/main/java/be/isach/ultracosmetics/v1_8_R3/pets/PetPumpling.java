@@ -18,22 +18,7 @@ import java.util.UUID;
  * Created by Sacha on 18/10/15.
  */
 public class PetPumpling extends CustomEntityPet {
-
-	Random r = new Random();
-
-	public PetPumpling(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
-		super(ultraPlayer, ultraCosmetics, PetType.PUMPLING);
-	}
-
-	@Override
-	public void onUpdate() {
-		final Item ITEM = customEntity.getEntity().getWorld().dropItem(((Zombie) customEntity.getEntity()).getEyeLocation(), ItemFactory.create(Material.JACK_O_LANTERN, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
-		ITEM.setPickupDelay(30000);
-		ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-		items.add(ITEM);
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-			ITEM.remove();
-			items.remove(ITEM);
-		}, 5);
+	public PetPumpling(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+		super(owner, ultraCosmetics, PetType.getByName("pumpling"), ItemFactory.create(Material.JACK_O_LANTERN, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 }

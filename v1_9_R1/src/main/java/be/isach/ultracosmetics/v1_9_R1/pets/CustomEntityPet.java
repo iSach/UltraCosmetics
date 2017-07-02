@@ -15,6 +15,7 @@ import org.bukkit.craftbukkit.v1_9_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 /**
@@ -27,8 +28,8 @@ public abstract class CustomEntityPet extends Pet {
 	 */
 	public IPetCustomEntity customEntity;
 
-	public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
-		super(owner, ultraCosmetics, petType);
+	public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
+		super(owner, ultraCosmetics, petType, dropItem);
 
 	}
 
