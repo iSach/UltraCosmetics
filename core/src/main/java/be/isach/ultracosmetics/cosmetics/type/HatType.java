@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -97,7 +98,7 @@ public class HatType extends CosmeticMatType<Hat> {
 	private ItemStack itemStack;
 	
 	HatType(String str, String configName, String defaultDesc) {
-		super(Category.HATS, configName, "ultracosmetics.hats." + configName.toLowerCase(), defaultDesc, Material.SKULL_ITEM, (byte) 3, Hat.class);
+		super(Category.HATS, configName, "ultracosmetics.hats." + configName.toLowerCase(), defaultDesc, Material.SKULL_ITEM, (byte) 3, Hat.class, ServerVersion.v1_8_R1);
 		this.itemStack = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" + str, ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Hat");
 		
 		VALUES.add(this);
