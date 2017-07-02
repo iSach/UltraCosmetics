@@ -74,6 +74,8 @@ public final class PetType extends CosmeticMatType<Pet> {
 	}
 
 	public static void register() {
+		ServerVersion serverVersion = UltraCosmeticsData.get().getServerVersion();
+
 		new PetType("ultracosmetics.pets.piggy", "Piggy", Material.PORK, (byte) 0, "&7&oOink! Oink!", EntityType.PIG, PetPiggy.class, ServerVersion.v1_8_R1);
 		new PetType("ultracosmetics.pets.sheep", "Sheep", Material.WOOL, (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.v1_8_R1);
 		new PetType("ultracosmetics.pets.easterbunny", "EasterBunny", Material.CARROT_ITEM, (byte) 0, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class, ServerVersion.v1_8_R1);
@@ -85,5 +87,19 @@ public final class PetType extends CosmeticMatType<Pet> {
 		new PetType("ultracosmetics.pets.wither", "Wither", Material.SKULL_ITEM, (byte) 1, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.v1_8_R1);
 		new PetType("ultracosmetics.pets.pumpling", "Pumpling", Material.PUMPKIN, (byte) 0, "&7&oJust a little floating pumpkin", EntityType.ZOMBIE, UltraCosmeticsData.get().getVersionManager().getPets().getPumplingClass(), ServerVersion.v1_8_R1);
 		new PetType("ultracosmetics.pets.christmaself", "ChristmasElf", Material.BEACON, (byte) 0, "&7&oI can make presents for you!", EntityType.VILLAGER, PetChristmasElf.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.irongolem", "IronGolem", Material.IRON_INGOT, (byte) 0, "&7&oI like flowers", EntityType.IRON_GOLEM, PetIronGolem.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.snowman", "Snowman", Material.SNOW_BALL, (byte) 0, "&7&oPew pew pew", EntityType.SNOWMAN, PetSnowman.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.villager", "Villager", Material.EMERALD, (byte) 0, "&7&oHmmmmmmmmm", EntityType.VILLAGER, PetVillager.class, ServerVersion.v1_8_R1);
+		new PetType("ultracosmetics.pets.bat", "Bat", Material.COAL, (byte) 0, "&7&oI prefer dark areas", EntityType.BAT, PetBat.class, ServerVersion.v1_8_R1);
+
+		if (serverVersion.compareTo(ServerVersion.v1_10_R1) >= 0) {
+			new PetType("ultracosmetics.pets.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, "&7&oI prefer cold areas", EntityType.POLAR_BEAR, PetBat.class, ServerVersion.v1_10_R1);
+		}
+		if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
+			new PetType("ultracosmetics.pets.llama", "Llama", Material.WOOL, (byte) 14, "&7&oNeed me to carry anything?", EntityType.LLAMA, PetLlama.class, ServerVersion.v1_11_R1);
+		}
+		if (serverVersion.compareTo(ServerVersion.v1_12_R1) >= 0) {
+			new PetType("ultracosmetics.pets.parrot", "Parrot", Material.COOKIE, (byte) 0, "&7&oPolly want a cracker?", EntityType.PARROT, PetParrot.class, ServerVersion.v1_12_R1);
+		}
 	}
 }
