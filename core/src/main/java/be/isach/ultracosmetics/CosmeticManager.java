@@ -47,7 +47,8 @@ public class CosmeticManager {
 		SuitType.ASTRONAUT.getConfigName();
 		EmoteType.ANGRY.getConfigName();
 		if (Category.MORPHS.isEnabled()) {
-			MorphType.BAT.getConfigName();
+			MorphType.register();
+			MorphType.valueOf("bat").getConfigName();
 		}
 		
 		for (GadgetType gadgetType : GadgetType.values()) {

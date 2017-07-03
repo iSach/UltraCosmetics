@@ -20,7 +20,7 @@ import org.bukkit.util.Vector;
 public class MorphBat extends Morph {
 
 	public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.BAT, ultraCosmetics);
+		super(owner, MorphType.valueOf("bat"), ultraCosmetics);
 	}
 
 	@Override
@@ -31,7 +31,6 @@ public class MorphBat extends Morph {
 
 	@Override
 	public void onUpdate() {
-		//--
 	}
 
 	@EventHandler

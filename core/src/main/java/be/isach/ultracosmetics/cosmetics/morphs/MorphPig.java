@@ -19,11 +19,10 @@ import org.bukkit.util.Vector;
  * @since 08-27-2015
  */
 public class MorphPig extends Morph {
-
 	private boolean cooldown = false;
 
 	public MorphPig(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.PIG, ultraCosmetics);
+		super(owner, MorphType.valueOf("pig"), ultraCosmetics);
 	}
 
 	@Override
@@ -52,6 +51,5 @@ public class MorphPig extends Morph {
 
 	@Override
 	protected void onClear() {
-
 	}
 }

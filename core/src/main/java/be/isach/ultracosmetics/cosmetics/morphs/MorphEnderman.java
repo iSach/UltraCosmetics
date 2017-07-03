@@ -26,11 +26,10 @@ import java.util.Set;
  * @since 08-26-2015
  */
 public class MorphEnderman extends Morph {
-
 	private boolean cooldown;
 
 	public MorphEnderman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.ENDERMAN, ultraCosmetics);
+		super(owner, MorphType.valueOf("enderman"), ultraCosmetics);
 	}
 
 	@Override
@@ -72,7 +71,6 @@ public class MorphEnderman extends Morph {
 
 	@Override
 	public void onUpdate() {
-
 	}
 
 	public static FireworkEffect getRandomFireworkEffect() {

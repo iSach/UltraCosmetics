@@ -19,11 +19,10 @@ import org.bukkit.util.Vector;
  * @since 08-26-2015
  */
 public class MorphSlime extends Morph {
-
 	private boolean cooldown;
 
 	public MorphSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.SLIME, ultraCosmetics);
+		super(owner, MorphType.valueOf("slime"), ultraCosmetics);
 	}
 
 	@EventHandler
@@ -56,11 +55,9 @@ public class MorphSlime extends Morph {
 
 	@Override
 	public void onUpdate() {
-
 	}
 
 	@Override
 	protected void onClear() {
-
 	}
 }

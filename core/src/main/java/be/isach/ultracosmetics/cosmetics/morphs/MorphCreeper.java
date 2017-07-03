@@ -23,11 +23,10 @@ import org.bukkit.util.Vector;
  * @since 08-26-2015
  */
 public class MorphCreeper extends Morph {
-
 	private int charge = 0;
 
 	public MorphCreeper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.CREEPER, ultraCosmetics);
+		super(owner, MorphType.valueOf("creeper"), ultraCosmetics);
 	}
 
 	@Override
@@ -83,6 +82,5 @@ public class MorphCreeper extends Morph {
 
 	@Override
 	protected void onClear() {
-
 	}
 }

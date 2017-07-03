@@ -28,16 +28,14 @@ import java.util.UUID;
  * @since 10-18-2015
  */
 public class MorphWitherSkeleton extends Morph {
-
 	boolean inCooldown;
 
 	public MorphWitherSkeleton(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.WITHERSKELETON, ultraCosmetics);
+		super(owner, MorphType.valueOf("witherskeleton"), ultraCosmetics);
 	}
 
 	@Override
 	public void onUpdate() {
-
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -67,6 +65,5 @@ public class MorphWitherSkeleton extends Morph {
 
 	@Override
 	protected void onClear() {
-
 	}
 }
