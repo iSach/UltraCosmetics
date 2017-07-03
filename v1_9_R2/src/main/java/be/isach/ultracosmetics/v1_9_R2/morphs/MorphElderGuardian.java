@@ -42,7 +42,7 @@ public class MorphElderGuardian extends Morph {
 	private CustomGuardian customGuardian;
 	
 	public MorphElderGuardian(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.ELDERGUARDIAN, ultraCosmetics);
+		super(owner, MorphType.valueOf("elderguardian"), ultraCosmetics);
 		
 	}
 	
