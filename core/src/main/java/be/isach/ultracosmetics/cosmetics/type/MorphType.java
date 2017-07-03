@@ -73,6 +73,8 @@ public class MorphType extends CosmeticMatType<Morph> {
 	}
 
 	public static void register() {
+		ServerVersion serverVersion = UltraCosmeticsData.get().getServerVersion();
+
 		new MorphType("ultracosmetics.morphs.bat", "Bat", Material.COAL, (byte) 0, DisguiseType.BAT, "&7&oBecome a bat!", MorphBat.class, ServerVersion.v1_8_R1);
 		new MorphType("ultracosmetics.morphs.blaze", "Blaze", Material.BLAZE_POWDER, (byte) 0, DisguiseType.BLAZE, "&7&oIt might be hot on there..", MorphBlaze.class, ServerVersion.v1_8_R1);
 		new MorphType("ultracosmetics.morphs.chicken", "Chicken", Material.EGG, (byte) 0, DisguiseType.CHICKEN, "&7&oBecome a chicken!", MorphChicken.class, ServerVersion.v1_8_R1);
@@ -83,5 +85,22 @@ public class MorphType extends CosmeticMatType<Morph> {
 		new MorphType("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", Material.SKULL_ITEM, (byte) 1, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class, ServerVersion.v1_8_R1);
 		new MorphType("ultracosmetics.morphs.snowman", "Snowman", Material.SNOW_BALL, (byte) 0, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class, ServerVersion.v1_8_R1);
 		new MorphType("ultracosmetics.morphs.elderguardian", "ElderGuardian", Material.PRISMARINE_CRYSTALS, (byte) 0, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", UltraCosmeticsData.get().getVersionManager().getMorphs().getElderGuardianClass(), ServerVersion.v1_8_R1);
+		new MorphType("ultracosmetics.morphs.cow", "Cow", Material.MILK_BUCKET, (byte) 0, DisguiseType.COW, "&7&oMoooo!", MorphCow.class, ServerVersion.v1_8_R1);
+		new MorphType("ultracosmetics.morphs.sheep", "Sheep", Material.WOOL, (byte) 0, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class, ServerVersion.v1_8_R1);
+		new MorphType("ultracosmetics.morphs.mooshroom", "Mooshroom", Material.RED_MUSHROOM, (byte) 0, DisguiseType.MUSHROOM_COW, "&7&oMoooo!", MorphMooshroom.class, ServerVersion.v1_8_R1);
+		new MorphType("ultracosmetics.morphs.villager", "Villager", Material.EMERALD, (byte) 0, DisguiseType.VILLAGER, "&7&oHmmmmmmmmm", MorphVillager.class, ServerVersion.v1_8_R1);
+
+		if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0) {
+			new MorphType("ultracosmetics.morphs.witch", "Witch", Material.POISONOUS_POTATO, (byte) 0, DisguiseType.WITCH, "&7&oMuahahahahaha", MorphWitch.class, ServerVersion.v1_9_R1);
+		}
+		if (serverVersion.compareTo(ServerVersion.v1_10_R1) >= 0) {
+			new MorphType("ultracosmetics.morphs.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, DisguiseType.POLAR_BEAR, "&7&oI prefer cold areas", MorphPolarBear.class, ServerVersion.v1_10_R1);
+		}
+		if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
+			new MorphType("ultracosmetics.morphs.llama", "Llama", Material.WOOL, (byte) 14, DisguiseType.LLAMA, "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_11_R1);
+		}
+		if (serverVersion.compareTo(ServerVersion.v1_12_R1) >= 0) {
+			new MorphType("ultracosmetics.morphs.parrot", "Parrot", Material.COOKIE, (byte) 0, DisguiseType.PARROT, "&7&oPolly want a cracker?", MorphParrot.class, ServerVersion.v1_12_R1);
+		}
 	}
 }
