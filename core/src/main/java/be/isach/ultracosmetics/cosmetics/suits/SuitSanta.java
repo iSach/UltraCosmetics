@@ -13,9 +13,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  * @since 12-20-2015
  */
 public class SuitSanta extends Suit {
-
 	public SuitSanta(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
-		super(owner, armorSlot, SuitType.SANTA, ultraCosmetics);
+		super(owner, armorSlot, SuitType.valueOf("santa"), ultraCosmetics);
 	}
 
 	@Override
@@ -29,6 +28,5 @@ public class SuitSanta extends Suit {
 
 	@Override
 	public void onUpdate() {
-
 	}
 }

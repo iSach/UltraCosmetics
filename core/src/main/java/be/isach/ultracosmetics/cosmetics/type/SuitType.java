@@ -43,11 +43,6 @@ public class SuitType extends CosmeticMatType<Suit> {
 		ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
 	}
 	
-	public final static SuitType RAVE = new SuitType("Rave", "rave", "&7&oSuch amazing colors!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
-	public final static SuitType ASTRONAUT = new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
-	public final static SuitType DIAMOND = new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
-	public final static SuitType SANTA = new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
-	
 	/**
 	 * The parts materials.
 	 */
@@ -162,5 +157,12 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 */
 	public String getPermission(ArmorSlot armorSlot) {
 		return getPermission() + "." + armorSlot.toString().toLowerCase();
+	}
+
+	public static void register() {
+		new SuitType("Rave", "rave", "&7&oSuch amazing colors!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
+		new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
+		new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
+		new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
 	}
 }
