@@ -54,13 +54,11 @@ public class MountType extends CosmeticEntType<Mount> {
 	public static final MountType SNAKE = new MountType("ultracosmetics.mounts.snake", "Snake", Material.SEEDS, (byte) 0, EntityType.SHEEP, "&7&oWatch out! It may bite..", 2, MountSnake.class, ServerVersion.v1_8_R1);
 	public static final MountType NYANSHEEP = new MountType("ultracosmetics.mounts.nyansheep", "NyanSheep", Material.STAINED_GLASS, (byte) 9, EntityType.SHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", 1, MountNyanSheep.class, ServerVersion.v1_8_R1);
 	public static final MountType DRAGON = new MountType("ultracosmetics.mounts.dragon", "Dragon", Material.DRAGON_EGG, (byte) 0, EntityType.ENDER_DRAGON, "&7&oBecome a dragon rider!", 1, MountDragon.class, ServerVersion.v1_8_R1);
-	public static final MountType SKYSQUID = new MountType("ultracosmetics.mounts.skysquid", "SkySquid", Material.INK_SACK, (byte) 0, EntityType.SQUID, "&7&oWat.", 4, UltraCosmeticsData.get().getVersionManager().getMounts().getSquidClass(), ServerVersion.v1_8_R1);
 	public static final MountType SLIME = new MountType("ultracosmetics.mounts.slime", "Slime", Material.SLIME_BALL, (byte) 0, EntityType.SLIME, "&7&oSplat! Splat!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getSlimeClass(), ServerVersion.v1_8_R1);
 	public static final MountType HYPECART = new MountType("ultracosmetics.mounts.hypecart", "HypeCart", Material.MINECART, (byte) 0, EntityType.MINECART, "&7&oEver wanted to drive a F1?\n&7&oNow you can!", 1, MountHypeCart.class, ServerVersion.v1_8_R1);
 	public static final MountType SPIDER = new MountType("ultracosmetics.mounts.spider", "Spider", Material.WEB, (byte) 0, EntityType.SPIDER, "&7&oYOU are the spider jockey!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getSpiderClass(), ServerVersion.v1_8_R1);
 	public static final MountType RUDOLPH = new MountType("ultracosmetics.mounts.rudolph", "Rudolph", Material.DEAD_BUSH, (byte) 0, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphType(), "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reeinder?", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphClass(), ServerVersion.v1_8_R1);
 	public static final MountType MOLTENSNAKE = new MountType("ultracosmetics.mounts.moltensnake", "MoltenSnake", Material.MAGMA_CREAM, (byte) 0, EntityType.MAGMA_CUBE, "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", 1, MountMoltenSnake.class, ServerVersion.v1_8_R1);
-	public static final MountType FLYINGSHIP = new MountType("ultracosmetics.mounts.flyingship", "FlyingShip", Material.BOAT, (byte) 0, EntityType.BOAT, "&7&oBomb them all!", 2, MountFlyingShip.class, ServerVersion.v1_8_R1);
 	
 	private int repeatDelay;
 	
@@ -69,11 +67,6 @@ public class MountType extends CosmeticEntType<Mount> {
 		this.repeatDelay = repeatDelay;
 		
 		VALUES.add(this);
-	}
-	
-	@Override
-	public boolean isEnabled() {
-		return !((this == FLYINGSHIP || this == SKYSQUID) && (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0)) && SettingsManager.getConfig().getBoolean("Mounts." + getConfigName() + ".Enabled");
 	}
 	
 	public String getMenuName() {

@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_9_R2.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_9_R2.customentities.CustomSlime;
-import be.isach.ultracosmetics.v1_9_R2.customentities.FlyingSquid;
 import be.isach.ultracosmetics.v1_9_R2.customentities.RideableSpider;
 import net.minecraft.server.v1_9_R2.Entity;
 import org.bukkit.Bukkit;
@@ -34,9 +33,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
 
 	@Override
 	public void onEquip() {
-		if (getType() == MountType.SKYSQUID)
-			customEntity = new FlyingSquid(((CraftPlayer) getPlayer()).getHandle().getWorld());
-		else if (getType() == MountType.SLIME)
+		if (getType() == MountType.SLIME)
 			customEntity = new CustomSlime(((CraftPlayer) getPlayer()).getHandle().getWorld());
 		else if (getType() == MountType.SPIDER)
 			customEntity = new RideableSpider(((CraftWorld) getPlayer().getWorld()).getHandle());
