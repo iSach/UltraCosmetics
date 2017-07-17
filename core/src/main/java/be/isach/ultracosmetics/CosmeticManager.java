@@ -43,8 +43,7 @@ public class CosmeticManager {
 		MountType.DRAGON.getConfigName();
 		ParticleEffectType.ANGELWINGS.getConfigName();
 		PetType.register();
-		PetType.getByName("chick").getConfigName();
-		SuitType.ASTRONAUT.getConfigName();
+		HatType.register();
 		EmoteType.ANGRY.getConfigName();
 		if (Category.MORPHS.isEnabled()) {
 			MorphType.register();
