@@ -109,14 +109,12 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
 				ItemMeta itemMeta = is.getItemMeta();
 
-				if (suitType == SuitType.SANTA
-				    || suitType == SuitType.RAVE) {
-
+				if (suitType == SuitType.valueOf("santa") || suitType == SuitType.valueOf("rave")) {
 					LeatherArmorMeta laMeta = (LeatherArmorMeta) itemMeta;
 
 					Color color = Color.RED;
 
-					if (suitType == SuitType.RAVE) {
+					if (suitType == SuitType.valueOf("rave")) {
 						int r = MathUtils.random(255);
 						int g = MathUtils.random(255);
 						int b = MathUtils.random(255);
@@ -125,7 +123,6 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 					}
 
 					laMeta.setColor(color);
-
 				}
 
 				List<String> loreList = new ArrayList<>();
