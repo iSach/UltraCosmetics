@@ -107,7 +107,7 @@ public class UltraCosmetics extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		this.smartLogger = new SmartLogger();
+		this.smartLogger = new SmartLogger(getLogger());
 		
 		UltraCosmeticsData.init(this);
 		
@@ -121,11 +121,7 @@ public class UltraCosmetics extends JavaPlugin {
 		this.armorStandManager = new ArmorStandManager(this);
 		
 		// Beginning of boot log. basic informations.
-		getSmartLogger().write("-------------------------------------------------------------------");
-		getSmartLogger().write("UltraCosmetics v" + getDescription().getVersion() + " is loading... (server: " + UltraCosmeticsData.get().getServerVersion().getName() + ")");
-		getSmartLogger().write("Thanks for downloading it!");
-		getSmartLogger().write("Plugin by iSach.");
-		getSmartLogger().write("Link: http://bit.ly/UltraCosmetics");
+		getSmartLogger().write("UltraCosmetics v" + getDescription().getVersion() + " by iSach is loading... (server: " + UltraCosmeticsData.get().getServerVersion().getName() + ")");
 		
 		// Set up config.
 		setUpConfig();
@@ -138,7 +134,7 @@ public class UltraCosmetics extends JavaPlugin {
 			MetricsLite metrics = new MetricsLite(this);
 			metrics.start();
 		} catch (IOException e) {
-			System.out.println("Couldn't send data to Metrics :(");
+			System.out.println("Couldn't send data to Metrics!");
 		}
 		
 		// Init Message manager.
@@ -160,18 +156,13 @@ public class UltraCosmetics extends JavaPlugin {
 		new CosmeticManager(this).setupCosmeticsConfigs();
 		
 		if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-			getSmartLogger().write("");
-			getSmartLogger().write("Morphs require Lib's Disguises!");
-			getSmartLogger().write("");
-			getSmartLogger().write("Morphs disabled.");
-			getSmartLogger().write("");
+			getSmartLogger().write("Morphs require Lib's Disguises! Morphs are disabled!");
 		}
 		
 		// Set up economy if needed.
 		setupEconomy();
 		
 		if (!UltraCosmeticsData.get().usingFileStorage()) {
-			getSmartLogger().write("");
 			getSmartLogger().write("Connecting to MySQL database...");
 			
 			// Start MySQL.
@@ -179,7 +170,6 @@ public class UltraCosmetics extends JavaPlugin {
 			mySqlConnectionManager.start();
 			
 			getSmartLogger().write("Connected to MySQL database.");
-			getSmartLogger().write("");
 		}
 		
 		// Initialize UltraPlayers and give chest (if needed).
@@ -206,7 +196,6 @@ public class UltraCosmetics extends JavaPlugin {
 		
 		// Ended well :v
 		getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
-		getSmartLogger().write("-------------------------------------------------------------------");
 	}
 	
 	/**
@@ -274,7 +263,7 @@ public class UltraCosmetics extends JavaPlugin {
 			file.getParentFile().mkdirs();
 			FileUtils.copy(getResource("config.yml"), file);
 			getSmartLogger().write("Config file doesn't exist yet.");
-			getSmartLogger().write("Creating Config File and loading it.");
+			getSmartLogger().write("Creating config file and loading it.");
 		}
 		
 		config = CustomConfiguration.loadConfiguration(file);

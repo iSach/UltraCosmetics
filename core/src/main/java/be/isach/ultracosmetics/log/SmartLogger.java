@@ -3,6 +3,8 @@ package be.isach.ultracosmetics.log;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a smart logger.
@@ -11,32 +13,37 @@ import java.util.Date;
  * @since 05-15-2016
  */
 public class SmartLogger {
-	
+
 	private enum LogLevel {
-		INFO,
-		WARNING,
-		ERROR
+		INFO(Level.INFO),
+		WARNING(Level.SEVERE),
+		ERROR(Level.WARNING);
+
+		LogLevel(Level level) {
+			realLevel = level;
+		}
+
+		private Level realLevel;
+
+		public Level getRealLevel() {
+			return realLevel;
+		}
 	}
-	
+
+	private Logger log;
+
+	public SmartLogger(Logger log) {
+		this.log = log;
+	}
+
 	private static final DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-	
-	public String format(String logRecord, LogLevel logLevel) {
-		StringBuilder builder = new StringBuilder(1000);
-		builder.append(df.format(new Date(System.currentTimeMillis()))).append(" - UltraCosmetics ");
-		builder.append("[").append(logLevel).append("]: ");
-		builder.append(logRecord);
-		return builder.toString();
-	}
-	
+
+
 	public void write(LogLevel logLevel, Object... objects) {
-		if (objects.length == 0) {
-			System.out.println(format("", logLevel));
-		}
-		for (Object object : objects) {
-			System.out.println(format(object.toString(), logLevel));
+		for (int i = 0; i < objects.length; i++) {
+			log.log(logLevel.getRealLevel(), objects[i].toString());
 		}
 	}
-	
 	public void write(Object... objects) {
 		write(LogLevel.INFO, objects);
 	}
