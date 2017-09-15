@@ -1,0 +1,470 @@
+Prefix: '&l&oGadget >&r'
+No-Permission: '%prefix% &c&lNessun permesso'
+Cosmetic-Disabled: '%prefix% &c&lQuesto gadget è disabilitato!'
+Invalid-Gadget: '%prefix% &c&lGadget invalido!'
+Invalid-Pet: '%prefix% &c&lCucciolo invalido!'
+Invalid-Mount: '%prefix% &c&lCavalcatura invalida!'
+Invalid-Effect: '%prefix% &c&lEffetto invalido!'
+Invalid-Morph: '%prefix% &c&lTransformazione invalida!'
+Invalid-Menu: '%prefix% &c&lIMenu invalido!'
+Ammo: '&7Munizioni: &e%ammo%'
+Purchase: '&a&lACQUISTA'
+Cancel: '&c&lANULLA'
+Buy-Ammo-Description: '&e&lAcquista %amount% munizioni per %gadgetname% &e&la %price%$'
+Right-Click-Buy-Ammo: '&7Click-dx per acquistare munizioni'
+Not-Enough-Money: '%prefix% &c&lNon hai abbastanza tokens!'
+Successful-Purchase: '%prefix% &a&lAcquisto eseguito!'
+Buy-Treasure-Key: '&lAcquista una chiave'
+Treasure-Keys: §7§lChiavi dei tesori
+Treasure-Chests: §6§lCassa dei tesori
+Dont-Have-Key: §4§lHai bisogno di una chiave!
+Click-Open-Chest: §aClicca per aprire la cassa
+Click-Buy-Key: §aClicca per acquistare le chiavi
+Your-Keys: '§7§oChiavi in posseso: §f§l%keys%'
+Buy-Treasure-Key-ItemName: '&e&l1 &7&lChiave &e&lper %price%$'
+Found-Legendary: '%prefix% &c&l%name% ha trovato un leggendario %found%'
+Chest-Not-Enough-Space: '%prefix% &c&lNon c''è spazio sufficiente per piazzarlo!'
+Too-Close-To-Other-Chest: '%prefix% &c&lSei troppo vicino a un altro tesoro!'
+You-Won-Treasure-Chests: '%prefix% &f&lHai vinto: %name%!'
+Clear-Cosmetics: §c§lTogli Tutto
+Clear-Gadget: §c§lTogli Giocattolo
+Clear-Pet: §c§lTogli Cucciolo
+Clear-Mount: §c§lTogli Cavalcatura
+Clear-Effect: §c§lTogli Effetti
+Clear-Morph: §c§lTogli Transformazione
+Rename-Pet-Purchase: §c§lRename the pet to &f&l%name% &c&lfor &e&l%price%$
+Active-Pet-Needed: §c§lYou need to spawn a pet to rename it
+Rename-Pet: '§c§lClick to rename: %petname%'
+Treasure-Chests-Loot:
+  Gadget: '%ammo% %name% ammo'
+  Pet: '%pet% pet'
+  Mount: '%mount% mount'
+  Effect: '%effect% effect'
+  Morph: '%morph% morph'
+  Money: '&e&l%money%$'
+  Hat: '%hat% hat'
+  Ammo: '%ammo% %name% ammo'
+  gadget: '%gadget% gadget'
+  Suit: '%suit%'
+  Nothing: '&c&lNothing'
+  Emote: '%emote% emote'
+Menus:
+  Main-Menu: '&6&lCassa dei misteri'
+  Pets: '&lCuccioli'
+  Gadgets: '&lGiocattoli'
+  Mounts: '&lCavalcature'
+  Morphs: '&lTransformazioni'
+  Particle-Effects: '&lEffetti'
+  Buy-Ammo: '&lAcquista munizioni'
+  Rename-Pet: '&lRinomina Pet'
+  Hats: '&lCapelli'
+  Suits: '&lAbiti'
+  Emotes: '&lEmotes'
+Disable-Gadgets: '&c&lDisabilita i Gadget'
+Enable-Gadgets: '&a&lAbilita i Gadget'
+Disable-Third-Person-View: '&c&lNascondi visuale costume'
+Enable-Third-Person-View: '&a&lMostra visuale costume'
+Gadgets-Enabled-Needed: '%prefix% &c&lDevi prima abilitare i gadget!'
+Gadgets:
+  Equip: '%prefix% &9Hai equipaggiato %gadgetname%'
+  Unequip: '%prefix% &9Hai lasciato %gadgetname%'
+  Countdown-Message: '%prefix% &c&lNon puoi usare %gadgetname% &c&lper %time%s!'
+  PaintballGun:
+    name: '&b&lPistola Paintball'
+  BatBlaster:
+    name: '&7&lSpara-Pipistrelli'
+  MelonThrower:
+    name: '&a&lSpara-Meloni'
+  EtherealPearl:
+    name: '&5&lPearla volante'
+  FleshHook:
+    name: '&7&lGancio da pesca'
+  DiscoBall:
+    name: '&d&lSfera Disco'
+    Already-Active: '&c&lUna Sfera Disco è già presente!'
+    Not-Space-Above: '&c&lSpazio insuficiente!'
+  ColorBomb:
+    name: '&d&lBomba dei Colori'
+  Chickenator:
+    name: '&f&lSpara-Polli'
+  PortalGun:
+    name: '&c&lPortal &9&lGun'
+    No-Block-Range: '%prefix% &c&lNessun blocco in raggio!'
+    Different-Worlds: '%prefix% &c&lPortals must be in the same world!'
+  BlizzardBlaster:
+    name: '&b&lGhiaccio'
+  ThorHammer:
+    name: '&f&lMartello di Thor'
+  SmashDown:
+    name: '&c&lSpaccatutto'
+  ExplosiveSheep:
+    name: '&4&lPecora Kamikaze'
+    Already-Active: '&c&lUna pecora kamikaze è già evocata!'
+  AntiGravity:
+    name: '&d&lDispositivo antigravità'
+  Tsunami:
+    name: '&9&lTsunami'
+  Rocket:
+    name: '&4&lRazzo'
+    Not-Enough-Space: '%prefix% &c&lSpazio insuficiente!'
+    Not-On-Ground: '%prefix% &c&lDevi essere a terra!'
+    Takeoff: '&4&lPARTENZA!!'
+  BlackHole:
+    name: '&1&lBuco Nero'
+  TNT:
+    name: '&4&lT&f&lN&4&lT'
+  FunGun:
+    name: '&6&lPistolaFun'
+  Parachute:
+    name: '&f&lParacadute'
+  QuakeGun:
+    name: '&5§lPistola &d&lQuake'
+  GhostParty:
+    name: '&f&lFesta Spettrale'
+  Firework:
+    name: '&c&lFirework'
+  ChristmasTree:
+    name: '&2&lAlbero Natalizio'
+    Click-On-Block: '%prefix% &c&lClicca su un blocco!'
+  FreezeCannon:
+    name: '&b&lCannone congelante'
+  Snowball:
+    name: '&f&lPalla di neve'
+  PartyPopper:
+    name: '&e&lPetardi'
+  Trampoline:
+    name: '&9&lTrampolino'
+  Gadget-Ready-ActionBar: '%gadgetname% §f§lè pronto!'
+  Lore: '&9Gadget'
+Mounts:
+  DruggedHorse:
+    menu-name: '&2&lDrogavallo'
+    entity-displayname: '&lDrogavallo di %playername%'
+  InfernalHorror:
+    menu-name: '&4&lNecro'
+    entity-displayname: '&lNecro di %playername%'
+  GlacialSteed:
+    menu-name: '&b&lShiva'
+    entity-displayname: '&lShiva di %playername%'
+  WalkingDead:
+    menu-name: '&2&lMorte'
+    entity-displayname: '&lMorte di %playername%'
+  MountOfFire:
+    menu-name: '&c&lIfrit'
+    entity-displayname: '&lIfrit di %playername%'
+  MountOfWater:
+    menu-name: '&9&lPoseidone'
+    entity-displayname: '&lPoseidone di %playername%'
+  EcologistHorse:
+    menu-name: '&a&lSiren'
+    entity-displayname: '&lSiren di %playername%'
+  NyanSheep:
+    menu-name: '&a&lPe&b&lco&d&lra &4&lNy&6&la&e&ln'
+    entity-displayname: '&lPecora Nyan di %playername%'
+  Snake:
+    menu-name: '&6&lSerpente'
+    entity-displayname: '&lSerpente di %playername%'
+  Dragon:
+    menu-name: '&5&lDragone'
+    entity-displayname: '&lDragone di %playername%'
+  Spawn: '%prefix% &9Hai evocato %mountname%'
+  Despawn: '%prefix% &9Hai disattivato %mountname%'
+  SkySquid:
+    menu-name: '&9&lSky Squid'
+    entity-displayname: '&lPolipo Volante di %playername%'
+  HypeCart:
+    menu-name: '&7&lCarrello'
+    entity-displayname: Carrello di &l%playername%
+  Slime:
+    menu-name: '&a&lSlime'
+    entity-displayname: '&lSlime di %playername%'
+  Spider:
+    menu-name: '&8&lRagno'
+    entity-displayname: '&lRagno di %playername%'
+  Rudolph:
+    menu-name: '&f&lRudolp&4&lh'
+    entity-displayname: '&lRudolph di %playername%'
+  MoltenSnake:
+    menu-name: '&c&lSerpe infernale'
+    entity-displayname: '&lSerpe infernale di %playername%'
+  FlyingShip:
+    menu-name: '&a&lNave Volante'
+    entity-displayname: '&lNave volante di %playername%'
+Particle-Effects:
+  Summon: '%prefix% &9Hai attivato %effectname%'
+  Unsummon: '%prefix% &9Hai disattivato %effectname%'
+  RainCloud:
+    name: '&9&lNuvola di pioggia'
+  SnowCloud:
+    name: '&f&lNuvola di neve'
+  BloodHelix:
+    name: '&4&lElica insanguinata'
+  FrostLord:
+    name: '&b&lLord delle Nevi'
+  FlameRings:
+    name: '&c&lAnelli di Fuoco'
+  GreenSparks:
+    name: '&a&lMagia dei Boschi'
+  InLove:
+    name: '&c&lCuoricini'
+  FrozenWalk:
+    name: '&b&lGhiaccio'
+  Enchanted:
+    name: '&7&lIncanto'
+  Music:
+    name: '&9&lMusica'
+  Inferno:
+    name: '&4&lInferno'
+  AngelWings:
+    name: '&f&lAli Angeliche'
+  SuperHero:
+    name: '&4&lSuper Eroe'
+  SantaHat:
+    name: '&4&lCapello di &f&lNatale'
+  CrushedCandyCane:
+    name: '&4&lCaramella &f&lRotta'
+  EnderAura:
+    name: '&d&lEnder Aura'
+  FlameFairy:
+    name: '&6&lFiamma Fatata'
+Pets:
+  Piggy:
+    menu-name: '&d&lPiggy'
+    entity-displayname: '&lPiggy di %playername%'
+  Sheep:
+    menu-name: '&f&lBegora'
+    entity-displayname: '&lBegora di %playername%'
+  EasterBunny:
+    menu-name: '&6&lBugs Bunny'
+    entity-displayname: '&lBugs Bunny di %playername%'
+  Cow:
+    menu-name: '&c&lMukka'
+    entity-displayname: '&lMukka di %playername%'
+  Kitty:
+    menu-name: '&9&lMiaolo'
+    entity-displayname: '&lMiaolo di %playername%'
+  Dog:
+    menu-name: '&7&lLessie'
+    entity-displayname: '&lLessie di %playername%'
+  Chick:
+    menu-name: '&e&lChica'
+    entity-displayname: '&lChica di %playername%'
+  Spawn: '%prefix% &9Hai evocato %petname%'
+  Despawn: '%prefix% &9Hai disattivato %petname%'
+  Wither:
+    menu-name: '&8&lMiniWither'
+    entity-displayname: '&lMiniWither di %playername%'
+  Pumpling:
+    menu-name: '&6&lZuccky'
+    entity-displayname: '&lZukky di %playername%'
+  ChristmasElf:
+    menu-name: '&a&lElfo Natalizio'
+    entity-displayname: '&lElfo Natalizio di %playername%'
+  CompanionCube:
+    menu-name: '&d&lCompanion Cube'
+    entity-displayname: '&l%playername%''s cube'
+  Mooshroom:
+    menu-name: '&4&lMooshroom'
+    entity-displayname: '&l%playername%''s Mooshroom'
+Morphs:
+  Blaze:
+    name: '&6&lBlaze'
+    skill: '&eShift§7 per: &aVolare'
+  Chicken:
+    name: '&f&lPollo'
+    skill: '&eShift§7 per: &aFare uova'
+  Slime:
+    name: '&a&lSlime'
+    skill: '&eShift§7 to: &aSaltare'
+  Pig:
+    name: '&d&lMaiale'
+    skill: '&eScontra§7 gli: &aAltri giocatori'
+  Enderman:
+    name: '&5&lEnderman'
+    skill: '&eDoppio salto§7 per: &aTeletrasportarti'
+  Bat:
+    name: '&8&lPipistrello'
+    skill: '&eDoppio salto§7 per: &aflappare'
+  Creeper:
+    name: '&a&lCreeper'
+    skill: '&eShifta7 per: &aEsplodere'
+    charging: '&a&lCaricamento: %chargelevel%/100'
+    release-to-explode: '&f&lRilascia per esplodere!'
+  Morph: '%prefix% &9Sei diventato un %morphname%'
+  Unmorph: '%prefix% &9Sei tornato normale'
+  WitherSkeleton:
+    name: '&8&lScheletro Wither'
+    skill: '&eShifta§7 per: &aBomba di ossa'
+  Snowman:
+    name: '&f&lSnowman'
+    skill: '&eClick sinistro§7 per: &aLanciare palle di neve'
+  ElderGuardian:
+    name: '&8&lElder Guardian'
+    skill: '&eClick sinistro§7 per usare: &aLaser'
+Menu:
+  Gadgets: '&9&lGiocattoli'
+  Particle-Effects: '&b&lEffetti'
+  Mounts: '&6&lCavalcature'
+  Pets: '&a&lCuccioli'
+  Morphs: '&2&lTransformazioni'
+  Main-Menu: '&c&lMenu Principale'
+  Activate: '&b&lAttiva'
+  Deactivate: '&c&lDisattiva'
+  Spawn: '&b&lSpawna'
+  Despawn: '&c&lToglie'
+  Summon: '&b&lEvoca'
+  Unsummon: '&c&lTogli'
+  Morph: '&b&lTransformati in'
+  Unmorph: '&c&lTogliti il'
+  Hats: '&b&lCapelli'
+  Equip: '&b&lEquipaggia'
+  Unequip: '&c&lTogli'
+  Previous-Page: '&c&lPagina Precedente'
+  Next-Page: '&a&lPagina Sucessiva'
+  Suits: '&c&lAbiti'
+  Emotes: '&e&lEmotes'
+Enabled-SelfMorphView: '%prefix% &9hai attivato la visuale!'
+Disabled-SelfMorphView: '%prefix% &9hai disabilitato la visuale!'
+Enabled-Gadgets: '%prefix% &9hai abilitato i gadgets!'
+Disabled-Gadgets: '%prefix% &9hai disabilitato i gadgets!'
+Invalid-Hat: '%prefix% &c&lCapello invalido!'
+Clear-Hat: §c§lTogliti il capello
+Hats:
+  Equip: '%prefix% &9Hai equipaggiato il capello %hatname%&9!'
+  Unequip: '%prefix% &9Hai tolto il capello %hatname%&9!'
+  Astronaut:
+    Name: '&7&lAstronauta'
+  Scared:
+    Name: '&4&lSpaventato'
+  Angel:
+    Name: '&f&lAngelo'
+  Embarassed:
+    Name: '&7&lImbarazzato'
+  Kissy:
+    Name: '&c&lBacino'
+  Sad:
+    Name: '&9&lTriste'
+  Cool:
+    Name: '&6&lSwag'
+  Surprised:
+    Name: '&4&lSorpreso'
+  Dead:
+    Name: '&8&lMorto'
+  Crying:
+    Name: '&9&lPianto'
+  BigSmile:
+    Name: '&6&lMega Sorriso'
+  Wink:
+    Name: '&e&lOcchiolino'
+  Derp:
+    Name: '&3&lDerp'
+  Smile:
+    Name: '&e&lSorriso'
+  Iron:
+    Name: '&7&lFerro'
+  Gold:
+    Name: '&e&lOror'
+  Diamond:
+    Name: '&b&lDiamante'
+  CommandBlock:
+    Name: '&7&lBlocco Commando'
+  Music:
+    Name: '&9&lMusica'
+  Squid:
+    Name: '&3&lPolipo'
+  Chicken:
+    Name: '&f&lPollo'
+  Blaze:
+    Name: '&6&lBlaze'
+  Piston:
+    Name: '&7&lPistone'
+  Sheep:
+    Name: '&f&lPecora'
+  Pig:
+    Name: '&d&lMaiale'
+  Golem:
+    Name: '&7&lGolem'
+  Enderman:
+    Name: '&5&lEnderman'
+  Mario:
+    Name: '&4&lMario'
+  Luigi:
+    Name: '&2&lLuigi'
+  Batman:
+    Name: '&8&lBatman'
+  Chest:
+    Name: '&6&lCassa'
+  Must-Remove-Hat: '%prefix% &c&lDevi togliere il tuo capello per equipaggiare un
+    capello!'
+  Skull:
+    Name: '&f&lTeschio'
+  JackOLantern:
+    Name: '&6&lZucca'
+  Ghost:
+    Name: '&f&lSpettro'
+  ScaryClown:
+    Name: '&4&lPagliaccio spaventoso'
+  Santa:
+    Name: '&4&lBabbo Natale'
+  Snowman:
+    Name: '&f&lPupazzo di Neve'
+  Present:
+    Name: '&c&lRegalo'
+  Elf:
+    Name: '&a&lElfo'
+  Bedrock:
+    Name: '&8&lBedrock'
+Invalid-Suit: '%prefix% &c&lSet invalido!'
+Clear-Suit: §c§l
+Suits:
+  Rave:
+    helmet-name: '&f&lElmo &b&lD&a&li&e&ls&6&lco'
+    chestplate-name: '&f&lArmatura &b&lD&a&li&e&ls&6&lco'
+    leggings-name: '&f&lPantaloni &b&lD&a&li&e&ls&6&lco'
+    boots-name: '&f&lScarpe &b&lD&a&li&e&ls&6&lco'
+  Astronaut:
+    helmet-name: '&f&lElmo &f&lAstronauta'
+    chestplate-name: '&f&lArmatura &f&lAstronauta'
+    leggings-name: '&f&lPantaloni &f&lAstronauta'
+    boots-name: '&f&lScarpe &f&lAstronauta'
+  Diamond:
+    helmet-name: '&f&lElmo &b&lDiamante'
+    chestplate-name: '&f&lArmatura &b&lDiamante'
+    leggings-name: '&f&lPantaloni &b&lDiamante'
+    boots-name: '&f&lScarpe &b&lDiamante'
+  Santa:
+    helmet-name: '&f&lElmo &4&lNatalizio'
+    chestplate-name: '&f&lArmatura &4&lNatalizia'
+    leggings-name: '&f&lPantaloni&4&lNatalizi'
+    boots-name: '&f&lScarpe &4&lNatalizie'
+  Equip: '%prefix% &9Stai indossando %suitname%!'
+  Unequip: '%prefix% &9Hai levato %suitname%!'
+  Suit-Part-Lore: '&9Pezzi di vestiti'
+Not-Allowed-From-Console: '&c&lNon puoi eseguirlo da console!'
+Clear-Emote: §c§lElimina il proprio emote
+Emotes:
+  Equip: '%prefix% &9Ora sei %emotename%'
+  Unequip: '%prefix% &9Non sei più %emotename%'
+  Cry:
+    Name: '&9&lTriste'
+  Angry:
+    Name: '&c&lArrabiato'
+  Happy:
+    Name: '&e&lFelice'
+  Cheeky:
+    Name: '&6&lSorridente'
+  Love:
+    Name: '&4&lInnamorato'
+  Must-Remove-Helmet: '%prefix% &c&lDevi rimuovere il tuo elmo per usare gli emote!'
+  DealWithIt:
+    Name: '&7&lDeal With it'
+  Cool:
+    Name: '&9&lCool'
+  Surprised:
+    Name: '&6&lSurprised'
+  Wink:
+    Name: '&a&lWink'
+World-Disabled: '%prefix% &c&lCosmetic disabilitato in questo mondo!'
+Invalid-Emote: '%prefix% &c&lEmote invalida!'
+Disabled-Command-Holding-Message: '%prefix% &c&lNon puoi usare questo commando mentre tieni oggetti!'
+Disabled-Command-Wearing-Message: '%prefix% &c&lNon puoi usare questo commando mentre indossi oggetti'
