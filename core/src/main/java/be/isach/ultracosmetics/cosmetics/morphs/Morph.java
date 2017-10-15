@@ -43,11 +43,12 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
 		}
 		
 		disguise = new MobDisguise(getType().getDisguiseType());
-		DisguiseAPI.disguiseToAll(getPlayer(), disguise);
-		
+
 		if (!getOwner().canSeeSelfMorph()) {
 			disguise.setViewSelfDisguise(false);
 		}
+
+		DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 		
 		runTaskTimer(getUltraCosmetics(), 0, 1);
 		

@@ -41,10 +41,12 @@ public class MorphCreeper extends Morph {
 		} else {
 			if (creeperWatcher.isIgnited()) {
 				disguise = new MobDisguise(getType().getDisguiseType());
-				DisguiseAPI.disguiseToAll(getPlayer(), disguise);
-				//  disguise.setShowName(true);
+
 				if (!getOwner().canSeeSelfMorph())
 					disguise.setViewSelfDisguise(false);
+
+				DisguiseAPI.disguiseToAll(getPlayer(), disguise);
+				//  disguise.setShowName(true);
 			}
 			if (charge == 100) {
 				UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
