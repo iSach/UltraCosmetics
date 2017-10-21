@@ -22,7 +22,7 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 	private static Random random = new Random();
 
 	public ParticleEffectCrushedCandyCane(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.CRUSHEDCANDYCANE);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("crushedcandycane"));
 	}
 
 	@Override

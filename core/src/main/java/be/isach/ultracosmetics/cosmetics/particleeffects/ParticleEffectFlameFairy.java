@@ -24,7 +24,7 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
 	public double noMoveTime = 0, movementSpeed = 0.2d;
 
 	public ParticleEffectFlameFairy(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.FLAMEFAIRY);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("flamefairy"));
 
 		currentLocation = getPlayer().getLocation();
 		targetLocation = generateNewTarget();
