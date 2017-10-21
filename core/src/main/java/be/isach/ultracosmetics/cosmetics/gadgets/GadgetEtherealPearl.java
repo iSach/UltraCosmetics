@@ -32,7 +32,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 	private EnderPearl pearl;
 	
 	public GadgetEtherealPearl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.ETHEREALPEARL, ultraCosmetics);
+		super(owner, GadgetType.valueOf("etherealpearl"), ultraCosmetics);
 	}
 	
 	@Override

@@ -31,7 +31,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
 	private ArrayList<Item> items = new ArrayList<>();
 	
 	public GadgetFleshHook(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.FLESHHOOK, ultraCosmetics);
+		super(owner, GadgetType.valueOf("fleshhook"), ultraCosmetics);
 	}
 	
 	@EventHandler

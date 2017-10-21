@@ -32,7 +32,7 @@ public class GadgetGhostParty extends Gadget {
 	Map<Bat, ArmorStand> bats = new HashMap<>();
 	
 	public GadgetGhostParty(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.GHOSTPARTY, ultraCosmetics);
+		super(owner, GadgetType.valueOf("ghostparty"), ultraCosmetics);
 	}
 	
 	@Override

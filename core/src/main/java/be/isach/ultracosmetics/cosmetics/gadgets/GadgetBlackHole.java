@@ -31,7 +31,7 @@ public class GadgetBlackHole extends Gadget {
 	private Item item;
 	
 	public GadgetBlackHole(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.BLACKHOLE, ultraCosmetics);
+		super(owner, GadgetType.valueOf("blackhole"), ultraCosmetics);
 	}
 	
 	@Override

@@ -27,7 +27,7 @@ public class GadgetFreezeCannon extends Gadget {
 	private List<Item> queue;
 	
 	public GadgetFreezeCannon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.FREEZECANNON, ultraCosmetics);
+		super(owner, GadgetType.valueOf("freezecannon"), ultraCosmetics);
 		if (owner == null) return;
 		items = new ArrayList<>();
 		queue = new ArrayList<>();

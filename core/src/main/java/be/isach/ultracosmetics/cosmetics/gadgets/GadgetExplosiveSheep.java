@@ -39,7 +39,7 @@ public class GadgetExplosiveSheep extends Gadget {
 	private ArrayList<Sheep> sheepArrayList = new ArrayList<>();
 	
 	public GadgetExplosiveSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.EXPLOSIVESHEEP, ultraCosmetics);
+		super(owner, GadgetType.valueOf("explosivesheep"), ultraCosmetics);
 	}
 	
 	@Override

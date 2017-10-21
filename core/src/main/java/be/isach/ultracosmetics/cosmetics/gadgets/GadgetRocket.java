@@ -41,7 +41,7 @@ public class GadgetRocket extends Gadget {
 	List<FallingBlock> fallingBlocks = new ArrayList<>();
 	
 	public GadgetRocket(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.ROCKET, ultraCosmetics);
+		super(owner, GadgetType.valueOf("rocket"), ultraCosmetics);
 	}
 	
 	@Override

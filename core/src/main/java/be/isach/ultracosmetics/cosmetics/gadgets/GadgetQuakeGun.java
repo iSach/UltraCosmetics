@@ -34,7 +34,7 @@ public class GadgetQuakeGun extends Gadget {
 	List<Firework> fireworkList = new ArrayList<>();
 	
 	public GadgetQuakeGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.QUAKEGUN, ultraCosmetics);
+		super(owner, GadgetType.valueOf("quakegun"), ultraCosmetics);
 	}
 	
 	@Override

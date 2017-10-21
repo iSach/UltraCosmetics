@@ -28,7 +28,7 @@ public class GadgetChristmasTree extends Gadget {
 	private static final Color LOG_COLOR = Color.fromRGB(101, 67, 33);
 	
 	public GadgetChristmasTree(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.CHRISTMASTREE, ultraCosmetics);
+		super(owner, GadgetType.valueOf("christmastree"), ultraCosmetics);
 	}
 	
 	@Override

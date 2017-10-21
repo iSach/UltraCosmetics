@@ -22,7 +22,7 @@ public class GadgetFirework extends Gadget {
 	private static Random random = new Random();
 	
 	public GadgetFirework(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.FIREWORK, ultraCosmetics);
+		super(owner, GadgetType.valueOf("firework"), ultraCosmetics);
 	}
 	
 	@Override

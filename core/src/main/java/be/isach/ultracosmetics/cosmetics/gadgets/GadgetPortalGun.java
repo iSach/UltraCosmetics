@@ -40,7 +40,7 @@ public class GadgetPortalGun extends Gadget {
 	BlockFace redBlockFace;
 	
 	public GadgetPortalGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.PORTALGUN, ultraCosmetics);
+		super(owner, GadgetType.valueOf("portalgun"), ultraCosmetics);
 		displayCooldownMessage = false;
 		useTwoInteractMethods = true;
 	}

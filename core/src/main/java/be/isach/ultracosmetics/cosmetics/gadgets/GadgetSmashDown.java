@@ -39,7 +39,7 @@ public class GadgetSmashDown extends Gadget {
 	private boolean playEffect;
 	
 	public GadgetSmashDown(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.SMASHDOWN, ultraCosmetics);
+		super(owner, GadgetType.valueOf("smashdown"), ultraCosmetics);
 	}
 	
 	@Override
