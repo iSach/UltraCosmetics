@@ -5,18 +5,20 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
 
 /**
  * Clear {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
  *
  * @author iSach
+ * @author RadBuilder
  * @since 12-21-2015
  */
 public class SubCommandToggle extends SubCommand {
@@ -61,9 +63,16 @@ public class SubCommandToggle extends SubCommand {
 			if (args.length > 3) {
 				try {
 					UltraPlayer other = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-					if (other.getCosmetic(category) != null) {
+					if (category == Category.SUITS) {
+						try {
+							ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
+							other.removeSuit(armorSlot);
+						} catch (Exception ex) {
+							sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
+							return;
+						}
+					} else {
 						other.removeCosmetic(category);
-						return;
 					}
 				} catch (Exception exc) {
 					sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
@@ -71,7 +80,16 @@ public class SubCommandToggle extends SubCommand {
 				}
 			} else {
 				if (ultraPlayer.getCosmetic(category) != null) {
-					ultraPlayer.removeCosmetic(category);
+					if (category == Category.SUITS) {
+						try {
+							ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
+							ultraPlayer.removeSuit(armorSlot);
+						} catch (Exception ex) {
+							sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
+						}
+					} else {
+						ultraPlayer.removeCosmetic(category);
+					}
 					return;
 				}
 			}
@@ -81,12 +99,32 @@ public class SubCommandToggle extends SubCommand {
 				if (args.length > 3) {
 					try {
 						UltraPlayer other = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-						cosmeticType.equip(other, getUltraCosmetics());
+						if (cosmeticType.getCategory() == Category.SUITS) {
+							try {
+								ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
+								SuitType suitType = SuitType.valueOf(args[2].split(":")[0]);
+								suitType.equip(other, getUltraCosmetics(), armorSlot);
+							} catch (Exception ex) {
+								sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
+							}
+						} else {
+							cosmeticType.equip(other, getUltraCosmetics());
+						}
 					} catch (Exception exc) {
 						sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
 					}
 				} else {
-					cosmeticType.equip(ultraPlayer, getUltraCosmetics());
+					if (cosmeticType.getCategory() == Category.SUITS) {
+						try {
+							ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
+							SuitType suitType = SuitType.valueOf(args[2].split(":")[0]);
+							suitType.equip(ultraPlayer, getUltraCosmetics(), armorSlot);
+						} catch (Exception ex) {
+							sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
+						}
+					} else {
+						cosmeticType.equip(ultraPlayer, getUltraCosmetics());
+					}
 				}
 			} else {
 				sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid cosmetic.");
@@ -121,9 +159,16 @@ public class SubCommandToggle extends SubCommand {
 			Category category = (Category) categories[0];
 			try {
 				UltraPlayer other = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-				if (other.getCosmetic(category) != null) {
+				if (category == Category.SUITS) {
+					try {
+						ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
+						other.removeSuit(armorSlot);
+					} catch (Exception ex) {
+						sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
+						return;
+					}
+				} else {
 					other.removeCosmetic(category);
-					return;
 				}
 			} catch (Exception exc) {
 				sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
@@ -134,7 +179,17 @@ public class SubCommandToggle extends SubCommand {
 				CosmeticType cosmeticType = (CosmeticType) cosmeticTypes[0];
 				try {
 					UltraPlayer other = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-					cosmeticType.equip(other, getUltraCosmetics());
+					if (cosmeticType.getCategory() == Category.SUITS) {
+						try {
+							ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
+							SuitType suitType = SuitType.valueOf(args[2].split(":")[0]);
+							suitType.equip(other, getUltraCosmetics(), armorSlot);
+						} catch (Exception ex) {
+							sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
+						}
+					} else {
+						cosmeticType.equip(other, getUltraCosmetics());
+					}
 				} catch (Exception exc) {
 					sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
 				}
