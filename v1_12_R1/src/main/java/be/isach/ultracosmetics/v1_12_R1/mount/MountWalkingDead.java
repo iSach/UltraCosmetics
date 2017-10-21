@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 public class MountWalkingDead extends MountHorse<ZombieHorse> {
 	
 	public MountWalkingDead(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.WALKINGDEAD, ultraCosmetics);
+		super(owner, MountType.valueOf("walkingdead"), ultraCosmetics);
 	}
 	
 	@Override

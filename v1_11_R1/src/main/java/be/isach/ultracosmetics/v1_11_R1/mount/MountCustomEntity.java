@@ -32,9 +32,9 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
 
 	@Override
 	public void onEquip() {
-		if (getType() == MountType.SLIME)
+		if (getType() == MountType.valueOf("slime"))
 			customEntity = new CustomSlime(((CraftPlayer) getPlayer()).getHandle().getWorld());
-		else if (getType() == MountType.SPIDER)
+		else if (getType() == MountType.valueOf("spider"))
 			customEntity = new RideableSpider(((CraftWorld) getPlayer().getWorld()).getHandle());
 		double x = getPlayer().getLocation().getX();
 		double y = getPlayer().getLocation().getY();

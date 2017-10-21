@@ -39,15 +39,15 @@ public class CosmeticManager {
 		ultraCosmetics.getConfig().addDefault("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount", true, "Do you want that in the gadgets menu", "each gadget item has an amount", "corresponding to your ammo.");
 		
 		// CALL STATIC BLOCK.
-		GadgetType.ANTIGRAVITY.getConfigName();
-		MountType.DRAGON.getConfigName();
-		ParticleEffectType.ANGELWINGS.getConfigName();
+		GadgetType.register();
+		MountType.register();
+		ParticleEffectType.register();
 		PetType.register();
 		HatType.register();
 		EmoteType.ANGRY.getConfigName();
 		if (Category.MORPHS.isEnabled()) {
 			MorphType.register();
-			MorphType.valueOf("bat").getConfigName();
+			// MorphType.valueOf("bat").getConfigName();
 		}
 		
 		for (GadgetType gadgetType : GadgetType.values()) {
@@ -55,7 +55,7 @@ public class CosmeticManager {
 			ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Enabled", true, "if true, the gadget will be enabled.");
 			ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Show-Description", true, "if true, the description of gadget will be showed.");
 			ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-			if (gadgetType == GadgetType.PAINTBALLGUN) {
+			if (gadgetType == GadgetType.valueOf("paintballgun")) {
 				ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
 				ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Enabled", false, "Should it display particles?");
 				ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
