@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.pets.*;
 import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.GetForVersion;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -93,13 +94,13 @@ public final class PetType extends CosmeticMatType<Pet> {
 		new PetType("ultracosmetics.pets.bat", "Bat", Material.COAL, (byte) 0, "&7&oI prefer dark areas", EntityType.BAT, PetBat.class, ServerVersion.v1_8_R1);
 
 		if (serverVersion.compareTo(ServerVersion.v1_10_R1) >= 0) {
-			new PetType("ultracosmetics.pets.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, "&7&oI prefer cold areas", EntityType.POLAR_BEAR, PetBat.class, ServerVersion.v1_10_R1);
+			new PetType("ultracosmetics.pets.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetBat.class, ServerVersion.v1_10_R1);
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
-			new PetType("ultracosmetics.pets.llama", "Llama", Material.WOOL, (byte) 14, "&7&oNeed me to carry anything?", EntityType.LLAMA, PetLlama.class, ServerVersion.v1_11_R1);
+			new PetType("ultracosmetics.pets.llama", "Llama", Material.WOOL, (byte) 14, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_11_R1);
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_12_R1) >= 0) {
-			new PetType("ultracosmetics.pets.parrot", "Parrot", Material.COOKIE, (byte) 0, "&7&oPolly want a cracker?", EntityType.PARROT, PetParrot.class, ServerVersion.v1_12_R1);
+			new PetType("ultracosmetics.pets.parrot", "Parrot", Material.COOKIE, (byte) 0, "&7&oPolly want a cracker?", GetForVersion.entityType("PARROT"), PetParrot.class, ServerVersion.v1_12_R1);
 		}
 	}
 }
