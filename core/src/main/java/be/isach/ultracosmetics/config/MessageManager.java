@@ -228,6 +228,20 @@ public class MessageManager {
 		addMessage("Pets.ChristmasElf.entity-displayname", "&l%playername%'s Christmas elf");
 		addMessage("Pets.Mooshroom.menu-name", "&4&lMooshroom");
 		addMessage("Pets.Mooshroom.entity-displayname", "&l%playername%'s Mooshroom");
+		addMessage("Pets.IronGolem.menu-name", "&7&lIronGolem");
+		addMessage("Pets.IronGolem.entity-displayname", "&l%playername%'s IronGolem");
+		addMessage("Pets.Snowman.menu-name", "&f&lSnowman");
+		addMessage("Pets.Snowman.entity-displayname", "&l%playername%'s Snowman");
+		addMessage("Pets.Villager.menu-name", "&a&lVillager");
+		addMessage("Pets.Villager.entity-displayname", "&l%playername%'s Villager");
+		addMessage("Pets.Bat.menu-name", "&8&lBat");
+		addMessage("Pets.Bat.entity-displayname", "&l%playername%'s Bat");
+		addMessage("Pets.PolarBear.menu-name", "&b&lPolarBear");
+		addMessage("Pets.PolarBear.entity-displayname", "&l%playername%'s PolarBear");
+		addMessage("Pets.Llama.menu-name", "&7&lLlama");
+		addMessage("Pets.Llama.entity-displayname", "&l%playername%'s Llama");
+		addMessage("Pets.Parrot.menu-name", "&a&lParrot");
+		addMessage("Pets.Parrot.entity-displayname", "&l%playername%'s Parrot");
 		addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
 		addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 		

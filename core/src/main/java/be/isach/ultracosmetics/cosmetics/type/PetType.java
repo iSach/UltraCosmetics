@@ -94,7 +94,7 @@ public final class PetType extends CosmeticMatType<Pet> {
 		new PetType("ultracosmetics.pets.bat", "Bat", Material.COAL, (byte) 0, "&7&oI prefer dark areas", EntityType.BAT, PetBat.class, ServerVersion.v1_8_R1);
 
 		if (serverVersion.compareTo(ServerVersion.v1_10_R1) >= 0) {
-			new PetType("ultracosmetics.pets.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetBat.class, ServerVersion.v1_10_R1);
+			new PetType("ultracosmetics.pets.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetPolarBear.class, ServerVersion.v1_10_R1);
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
 			new PetType("ultracosmetics.pets.llama", "Llama", Material.WOOL, (byte) 14, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_11_R1);
