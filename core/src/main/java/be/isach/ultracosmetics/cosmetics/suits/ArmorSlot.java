@@ -19,6 +19,6 @@ public enum ArmorSlot {
 			if (a.toString().equalsIgnoreCase(ChatColor.stripColor(s)))
 				return a;
 		}
-		return null;
+		return ArmorSlot.CHESTPLATE;
 	}
 }
