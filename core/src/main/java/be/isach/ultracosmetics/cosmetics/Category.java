@@ -12,6 +12,7 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
@@ -106,7 +107,7 @@ public enum Category {
 		
 		@Override
 		public List<? extends CosmeticType> getEnabled() {
-			return EmoteType.enabled();
+			return SuitType.enabled();
 		}
 	},
 	EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote", "%emotename%", "Equip", "Unequip") {

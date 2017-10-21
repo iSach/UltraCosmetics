@@ -93,7 +93,7 @@ public class SubCommandToggle extends SubCommand {
 					return;
 				}
 			}
-			Object[] cosmeticTypes = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().contains(cosm)).toArray();
+			Object[] cosmeticTypes = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().contains(cosm.split(":")[0])).toArray();
 			if (cosmeticTypes.length == 1) {
 				CosmeticType cosmeticType = (CosmeticType) cosmeticTypes[0];
 				if (args.length > 3) {
@@ -101,8 +101,8 @@ public class SubCommandToggle extends SubCommand {
 						UltraPlayer other = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
 						if (cosmeticType.getCategory() == Category.SUITS) {
 							try {
-								ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
-								SuitType suitType = SuitType.valueOf(args[2].split(":")[0]);
+								ArmorSlot armorSlot = ArmorSlot.getByName(cosm.split(":")[1]);
+								SuitType suitType = SuitType.valueOf(cosm.split(":")[0]);
 								suitType.equip(other, getUltraCosmetics(), armorSlot);
 							} catch (Exception ex) {
 								sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
@@ -148,8 +148,7 @@ public class SubCommandToggle extends SubCommand {
 			if (!UltraCosmeticsData.get().getEnabledWorlds().contains(Bukkit.getPlayer(args[3]).getWorld().getName())) {
 				sender.sendMessage(MessageManager.getMessage("World-Disabled"));
 				return;
-			}
-		} catch (Exception e) {
+			}		} catch (Exception e) {
 			sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
 			return;
 		}
@@ -174,7 +173,7 @@ public class SubCommandToggle extends SubCommand {
 				sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
 				return;
 			}
-			Object[] cosmeticTypes = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().startsWith(cosm)).toArray();
+			Object[] cosmeticTypes = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().startsWith(cosm.split(":")[0])).toArray();
 			if (cosmeticTypes.length == 1) {
 				CosmeticType cosmeticType = (CosmeticType) cosmeticTypes[0];
 				try {

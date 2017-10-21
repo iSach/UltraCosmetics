@@ -44,6 +44,7 @@ public class CosmeticManager {
 		ParticleEffectType.register();
 		PetType.register();
 		HatType.register();
+		SuitType.register();
 		EmoteType.ANGRY.getConfigName();
 		if (Category.MORPHS.isEnabled()) {
 			MorphType.register();
