@@ -18,7 +18,7 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 public class MountHypeCart extends Mount<Minecart> {
 	
 	public MountHypeCart(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.HYPECART, ultraCosmetics);
+		super(owner, MountType.valueOf("hypecart"), ultraCosmetics);
 	}
 	
 	@Override

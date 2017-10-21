@@ -24,7 +24,7 @@ import java.util.Random;
 public class MountNyanSheep extends Mount<Sheep> {
 	
 	public MountNyanSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.NYANSHEEP, ultraCosmetics);
+		super(owner, MountType.valueOf("nyansheep"), ultraCosmetics);
 	}
 	
 	@Override

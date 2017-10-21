@@ -27,7 +27,7 @@ import java.util.Random;
 public class MountEcologistHorse extends MountHorse {
 	
 	public MountEcologistHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.ECOLOGISTHORSE, ultraCosmetics);
+		super(owner, MountType.valueOf("ecologisthorse"), ultraCosmetics);
 	}
 	
 	@Override

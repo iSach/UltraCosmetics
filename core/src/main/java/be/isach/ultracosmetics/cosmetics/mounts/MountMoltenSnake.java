@@ -31,7 +31,7 @@ public class MountMoltenSnake extends Mount<MagmaCube> {
 	private float lastPitch;
 	
 	public MountMoltenSnake(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.MOLTENSNAKE, ultraCosmetics);
+		super(owner, MountType.valueOf("moltensnake"), ultraCosmetics);
 	}
 	
 	@Override
