@@ -1,5 +1,5 @@
 dependencies {
-    compile 'org.spigotmc:spigot:1.12'
+    compile 'org.spigotmc:spigot:1.12-R0.1-SNAPSHOT'
     compile('LibsDisguises:LibsDisguises:9.4.0') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'

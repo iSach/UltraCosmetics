@@ -1,5 +1,5 @@
 dependencies {
-    compile 'org.spigotmc:spigot:1.9.4'
+    compile 'org.spigotmc:spigot:1.9.4-R0.1-SNAPSHOT'
     shaded(project(':core')) {
         transitive false
     }
