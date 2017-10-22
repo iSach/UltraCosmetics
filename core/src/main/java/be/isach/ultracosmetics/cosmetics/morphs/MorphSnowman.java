@@ -19,7 +19,7 @@ public class MorphSnowman extends Morph {
 	private long coolDown = 0;
 
 	public MorphSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.SNOWNMAN, ultraCosmetics);
+		super(owner, MorphType.valueOf("snowman"), ultraCosmetics);
 	}
 
 	@EventHandler
@@ -35,11 +35,9 @@ public class MorphSnowman extends Morph {
 
 	@Override
 	public void onUpdate() {
-
 	}
 
 	@Override
 	protected void onClear() {
-
 	}
 }

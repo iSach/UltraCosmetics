@@ -22,7 +22,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
 	float radius = 1.5f;
 
 	public ParticleEffectFrostLord(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.FROSTLORD);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("frostlord"));
 	}
 
 	@Override

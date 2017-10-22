@@ -34,7 +34,7 @@ public class GadgetColorBomb extends Gadget {
 	private boolean running = false;
 	
 	public GadgetColorBomb(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.COLORBOMB, ultraCosmetics);
+		super(owner, GadgetType.valueOf("colorbomb"), ultraCosmetics);
 	}
 	
 	@Override

@@ -29,7 +29,7 @@ public class GadgetAntiGravity extends Gadget {
 	private boolean running;
 	
 	public GadgetAntiGravity(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.ANTIGRAVITY, ultraCosmetics);
+		super(owner, GadgetType.valueOf("antigravity"), ultraCosmetics);
 	}
 	
 	@Override

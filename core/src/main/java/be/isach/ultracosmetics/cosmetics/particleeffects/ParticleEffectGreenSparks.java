@@ -19,7 +19,7 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
 	int step;
 
 	public ParticleEffectGreenSparks(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.GREENSPARKS);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("greensparks"));
 	}
 
 	@Override

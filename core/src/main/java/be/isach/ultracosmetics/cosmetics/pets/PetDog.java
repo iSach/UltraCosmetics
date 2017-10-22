@@ -26,7 +26,7 @@ public class PetDog extends Pet {
 	Random r = new Random();
 	
 	public PetDog(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.DOG);
+		super(owner, ultraCosmetics, PetType.getByName("dog"), ItemFactory.create(Material.BONE, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
 			if (getOwner() != null && getEntity() != null) {
 				Wolf w = (Wolf) entity;
@@ -38,15 +38,15 @@ public class PetDog extends Pet {
 	
 	@Override
 	public void onUpdate() {
-		Wolf w = (Wolf) entity;
-		w.setCollarColor(DyeColor.values()[r.nextInt(15)]);
-		final Item ITEM = entity.getWorld().dropItem(((Wolf) entity).getEyeLocation(), ItemFactory.create(Material.BONE, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
-		ITEM.setPickupDelay(30000);
-		ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-		items.add(ITEM);
+		Wolf wolf = (Wolf) entity;
+		wolf.setCollarColor(DyeColor.values()[r.nextInt(15)]);
+		final Item drop = entity.getWorld().dropItem(((Wolf) entity).getEyeLocation(), ItemFactory.create(Material.BONE, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+		drop.setPickupDelay(30000);
+		drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
+		items.add(drop);
 		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-			ITEM.remove();
-			items.remove(ITEM);
+			drop.remove();
+			items.remove(drop);
 		}, 5);
 	}
 }

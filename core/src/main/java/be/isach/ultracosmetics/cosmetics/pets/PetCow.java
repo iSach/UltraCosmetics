@@ -20,18 +20,7 @@ import java.util.Random;
  * @since 08-12-2015
  */
 public class PetCow extends Pet {
-	
-	Random r = new Random();
-	
 	public PetCow(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.COW);
-	}
-	
-	@Override
-	public void onUpdate() {
-		final Item ITEM = entity.getWorld().dropItem(((Cow) entity).getEyeLocation(), ItemFactory.create(Material.MILK_BUCKET, (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
-		ITEM.setPickupDelay(30000);
-		ITEM.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), ITEM::remove, 5);
+		super(owner, ultraCosmetics, PetType.getByName("cow"), ItemFactory.create(Material.MILK_BUCKET, (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 }

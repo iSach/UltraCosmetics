@@ -10,18 +10,17 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,10 +55,18 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 	 * If Pet is a normal entity, it will be stored here.
 	 */
 	public Entity entity;
+
+	/**
+	 * The {@link org.bukkit.inventory.ItemStack ItemStack} this pet drops, null if none.
+	 */
+	private ItemStack dropItem;
+
+	private Random r = new Random();
 	
-	public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
+	public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
 		super(ultraCosmetics, Category.PETS, owner, petType);
-		
+
+		this.dropItem = dropItem;
 		this.pathUpdater = Executors.newSingleThreadExecutor();
 	}
 	
@@ -203,6 +210,18 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 	
 	public Entity getEntity() {
 		return entity;
+	}
+
+	@Override
+	public void onUpdate() {
+		final Item drop = entity.getWorld().dropItem(((LivingEntity) entity).getEyeLocation(), dropItem);
+		drop.setPickupDelay(30000);
+		drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
+		items.add(drop);
+		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+			drop.remove();
+			items.remove(drop);
+		}, 5);
 	}
 	
 	@EventHandler

@@ -42,7 +42,7 @@ public class MorphElderGuardian extends Morph {
 	public static List<net.minecraft.server.v1_8_R1.Entity> customEntities = new ArrayList<>();
 	
 	public MorphElderGuardian(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.ELDERGUARDIAN, ultraCosmetics);
+		super(owner, MorphType.valueOf("elderguardian"), ultraCosmetics);
 	}
 	
 	@EventHandler

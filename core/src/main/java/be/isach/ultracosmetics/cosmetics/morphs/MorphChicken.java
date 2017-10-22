@@ -32,11 +32,10 @@ import java.util.UUID;
  * @since 08-27-2015
  */
 public class MorphChicken extends Morph {
-
 	private boolean cooldown;
 
 	public MorphChicken(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.CHICKEN, ultraCosmetics);
+		super(owner, MorphType.valueOf("chicken"), ultraCosmetics);
 	}
 
 	@EventHandler
@@ -95,7 +94,6 @@ public class MorphChicken extends Morph {
 
 	@Override
 	protected void onClear() {
-
 	}
 
 	@Override

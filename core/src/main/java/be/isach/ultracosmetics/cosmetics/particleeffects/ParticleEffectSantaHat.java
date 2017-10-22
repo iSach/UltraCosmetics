@@ -18,7 +18,7 @@ public class ParticleEffectSantaHat extends ParticleEffect {
 	public int particles = 12;
 
 	public ParticleEffectSantaHat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.SANTAHAT);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("santahat"));
 		this.ignoreMove = true;
 	}
 

@@ -36,7 +36,7 @@ public class GadgetTrampoline extends Gadget {
 	private boolean running;
 	
 	public GadgetTrampoline(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.TRAMPOLINE, ultraCosmetics);
+		super(owner, GadgetType.valueOf("trampoline"), ultraCosmetics);
 	}
 	
 	@Override

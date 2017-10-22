@@ -22,7 +22,7 @@ public class GadgetBlizzardBlaster extends Gadget {
 	private Vector vector;
 	
 	public GadgetBlizzardBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.BLIZZARDBLASTER, ultraCosmetics);
+		super(owner, GadgetType.valueOf("blizzardblaster"), ultraCosmetics);
 	}
 	
 	@Override

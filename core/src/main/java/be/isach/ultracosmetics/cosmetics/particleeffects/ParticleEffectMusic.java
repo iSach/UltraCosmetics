@@ -17,7 +17,7 @@ import java.util.Random;
 public class ParticleEffectMusic extends ParticleEffect {
 	
 	public ParticleEffectMusic(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.MUSIC);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("music"));
 	}
 	
 	@Override

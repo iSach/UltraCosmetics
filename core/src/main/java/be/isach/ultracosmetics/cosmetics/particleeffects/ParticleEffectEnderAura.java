@@ -14,7 +14,7 @@ import org.bukkit.Effect;
 public class ParticleEffectEnderAura extends ParticleEffect {
 
 	public ParticleEffectEnderAura(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.ENDERAURA);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("enderaura"));
 	}
 
 	@Override

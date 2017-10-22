@@ -19,7 +19,7 @@ public class ParticleEffectInferno extends ParticleEffect {
 	int[] steps = { 0, 0, 0, 0 };
 
 	public ParticleEffectInferno(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.INFERNO);
+		super(ultraCosmetics, owner, ParticleEffectType.valueOf("inferno"));
 	}
 
 	@Override

@@ -47,16 +47,16 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 			if (Bukkit.getPlayer(getOwnerUniqueId()) != null
 			    && getOwner().getCurrentParticleEffect() != null
 			    && getOwner().getCurrentParticleEffect().getType() == getType()) {
-				if (getType() != ParticleEffectType.FROZENWALK
-				    && getType() != ParticleEffectType.ENCHANTED
-				    && getType() != ParticleEffectType.MUSIC
-				    && getType() != ParticleEffectType.SANTAHAT
-				    && getType() != ParticleEffectType.FLAMEFAIRY
-				    && getType() != ParticleEffectType.ENDERAURA) {
+				if (getType() != ParticleEffectType.valueOf("frozenwalk")
+				    && getType() != ParticleEffectType.valueOf("enchanted")
+				    && getType() != ParticleEffectType.valueOf("music")
+				    && getType() != ParticleEffectType.valueOf("santahat")
+				    && getType() != ParticleEffectType.valueOf("flamefairy")
+				    && getType() != ParticleEffectType.valueOf("enderaura")) {
 					if (!isMoving() || ignoreMove)
 						onUpdate();
 					if (isMoving()) {
-						boolean c = getType() == ParticleEffectType.ANGELWINGS;
+						boolean c = getType() == ParticleEffectType.valueOf("angelwings");
 						if (getType().getEffect() == Particles.REDSTONE) {
 							if (!ignoreMove) {
 								for (int i = 0; i < 15; i++) {

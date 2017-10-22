@@ -25,15 +25,19 @@ public class PetSheep extends Pet {
 	Random r = new Random();
 	
 	public PetSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.SHEEP);
+		super(owner, ultraCosmetics, PetType.getByName("sheep"), ItemFactory.create(Material.WOOL, (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 	
 	@Override
 	public void onUpdate() {
 		Sheep sheep = (Sheep) entity;
-		Item item = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) r.nextInt(16), UltraCosmeticsData.get().getItemNoPickupString()));
-		item.setPickupDelay(30000);
-		item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), item::remove, 5);
+		Item drop = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.create(Material.WOOL, (byte) r.nextInt(16), UltraCosmeticsData.get().getItemNoPickupString()));
+		drop.setPickupDelay(30000);
+		drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
+		items.add(drop);
+		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+			drop.remove();
+			items.remove(drop);
+		}, 5);
 	}
 }

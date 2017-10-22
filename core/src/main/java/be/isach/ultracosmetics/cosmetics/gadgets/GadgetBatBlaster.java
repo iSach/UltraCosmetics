@@ -32,7 +32,7 @@ public class GadgetBatBlaster extends Gadget {
 	private List<Bat> bats;
 	
 	public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.BATBLASTER, ultraCosmetics);
+		super(owner, GadgetType.valueOf("batblaster"), ultraCosmetics);
 	}
 	
 	@Override

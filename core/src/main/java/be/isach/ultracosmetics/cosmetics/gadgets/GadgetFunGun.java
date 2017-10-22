@@ -28,7 +28,7 @@ public class GadgetFunGun extends Gadget {
 	private List<Projectile> projectiles = new ArrayList<>();
 	
 	public GadgetFunGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.FUNGUN, ultraCosmetics);
+		super(owner, GadgetType.valueOf("fungun"), ultraCosmetics);
 	}
 	
 	@Override

@@ -43,7 +43,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
 	int radius = 2;
 	
 	public GadgetPaintballGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.PAINTBALLGUN, ultraCosmetics);
+		super(owner, GadgetType.valueOf("paintballgun"), ultraCosmetics);
 		if (owner != null) {
 			radius = SettingsManager.getConfig().getInt("Gadgets." + getType().getConfigName() + ".Radius");
 		}

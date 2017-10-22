@@ -26,7 +26,7 @@ import java.util.Random;
 public class MountOfFire extends MountHorse {
 	
 	public MountOfFire(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.MOUNTOFFIRE, ultraCosmetics);
+		super(owner, MountType.valueOf("mountoffire"), ultraCosmetics);
 	}
 	
 	@Override

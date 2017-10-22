@@ -13,11 +13,10 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  * @since 12-20-2015
  */
 public class SuitRave extends Suit {
-
 	private int[] colors = new int[]{ 255, 0, 0 };
 
 	public SuitRave(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
-		super(owner, armorSlot, SuitType.RAVE, ultraCosmetics);
+		super(owner, armorSlot, SuitType.valueOf("rave"), ultraCosmetics);
 	}
 
 	@Override

@@ -197,14 +197,14 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 	
 	@EventHandler
 	public void openInv(InventoryOpenEvent event) {
-		if (getType() == MountType.DRUGGEDHORSE
-		    || getType() == MountType.ECOLOGISTHORSE
-		    || getType() == MountType.GLACIALSTEED
-		    || getType() == MountType.INFERNALHORROR
-		    || getType() == MountType.MOUNTOFFIRE
-		    || getType() == MountType.MOUNTOFWATER
-		    || getType() == MountType.WALKINGDEAD
-		    || getType() == MountType.RUDOLPH) {
+		if (getType() == MountType.valueOf("druggedhorse")
+		    || getType() == MountType.valueOf("ecologisthorse")
+		    || getType() == MountType.valueOf("glacialsteed")
+		    || getType() == MountType.valueOf("infernalhorror")
+		    || getType() == MountType.valueOf("mountoffire")
+		    || getType() == MountType.valueOf("mountofwater")
+		    || getType() == MountType.valueOf("walkingdead")
+		    || getType() == MountType.valueOf("rudolph")) {
 			if (getOwner() != null
 			    && getPlayer() != null
 			    && event.getPlayer() == getPlayer()

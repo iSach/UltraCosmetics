@@ -14,7 +14,7 @@ import org.bukkit.entity.Horse;
 public class MountInfernalHorror extends MountHorse {
 
 	public MountInfernalHorror(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.INFERNALHORROR, ultraCosmetics);
+		super(owner, MountType.valueOf("infernalhorror"), ultraCosmetics);
 	}
 
 	@Override

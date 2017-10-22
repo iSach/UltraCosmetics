@@ -21,17 +21,7 @@ import java.util.UUID;
  * @since 06-26-2015
  */
 public class PetMooshroom extends Pet {
-	Random r = new Random();
-	
 	public PetMooshroom(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.MOOSHROOM);
-	}
-	
-	@Override
-	public void onUpdate() {
-		Item item = entity.getWorld().dropItem(((MushroomCow) entity).getEyeLocation(), ItemFactory.create(Material.RED_MUSHROOM, (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
-		item.setPickupDelay(30000);
-		item.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), item::remove, 5);
+		super(owner, ultraCosmetics, PetType.getByName("mooshroom"), ItemFactory.create(Material.RED_MUSHROOM, (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 }

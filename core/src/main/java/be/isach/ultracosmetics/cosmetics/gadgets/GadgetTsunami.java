@@ -28,7 +28,7 @@ public class GadgetTsunami extends Gadget {
 	List<Entity> cooldownJump = new ArrayList<>();
 	
 	public GadgetTsunami(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.TSUNAMI, ultraCosmetics);
+		super(owner, GadgetType.valueOf("tsunami"), ultraCosmetics);
 	}
 	
 	@Override

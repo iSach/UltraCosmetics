@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 public class MorphBlaze extends Morph {
 
 	public MorphBlaze(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.BLAZE, ultraCosmetics);
+		super(owner, MorphType.valueOf("blaze"), ultraCosmetics);
 	}
 
 	@Override
@@ -42,7 +42,6 @@ public class MorphBlaze extends Morph {
 
 	@Override
 	protected void onClear() {
-
 	}
 
 	@EventHandler

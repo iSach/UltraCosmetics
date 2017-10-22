@@ -34,7 +34,7 @@ public class GadgetTNT extends Gadget {
 	List<Entity> entities = new ArrayList<>();
 	
 	public GadgetTNT(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.TNT, ultraCosmetics);
+		super(owner, GadgetType.valueOf("tnt"), ultraCosmetics);
 	}
 	
 	@Override

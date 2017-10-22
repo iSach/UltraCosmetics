@@ -38,7 +38,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 	private World world = null;
 	
 	public GadgetMelonThrower(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.MELONTHROWER, ultraCosmetics);
+		super(owner, GadgetType.valueOf("melonthrower"), ultraCosmetics);
 	}
 	
 	@EventHandler

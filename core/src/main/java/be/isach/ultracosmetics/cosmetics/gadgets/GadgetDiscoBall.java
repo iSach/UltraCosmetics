@@ -43,7 +43,7 @@ public class GadgetDiscoBall extends Gadget {
 	private boolean running = false;
 	
 	public GadgetDiscoBall(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.DISCOBALL, ultraCosmetics);
+		super(owner, GadgetType.valueOf("discoball"), ultraCosmetics);
 	}
 	
 	@Override

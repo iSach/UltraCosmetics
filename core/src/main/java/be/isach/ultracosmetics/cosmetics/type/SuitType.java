@@ -3,13 +3,9 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.suits.Suit;
-import be.isach.ultracosmetics.cosmetics.suits.SuitAstronaut;
-import be.isach.ultracosmetics.cosmetics.suits.SuitDiamond;
-import be.isach.ultracosmetics.cosmetics.suits.SuitRave;
-import be.isach.ultracosmetics.cosmetics.suits.SuitSanta;
+import be.isach.ultracosmetics.cosmetics.suits.*;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.Material;
 
 import java.lang.reflect.InvocationTargetException;
@@ -47,11 +43,6 @@ public class SuitType extends CosmeticMatType<Suit> {
 		ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
 	}
 	
-	public final static SuitType RAVE = new SuitType("Rave", "rave", "&7&oSuch amazing colors!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitRave.class);
-	public final static SuitType ASTRONAUT = new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS, SuitAstronaut.class);
-	public final static SuitType DIAMOND = new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, SuitDiamond.class);
-	public final static SuitType SANTA = new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitSanta.class);
-	
 	/**
 	 * The parts materials.
 	 */
@@ -68,8 +59,8 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 * @param clazz            The Suit Class
 	 */
 	SuitType(String configName, String permissionSuffix, String defaultDesc,
-	         Material h, Material c, Material l, Material b, Class<? extends Suit> clazz) {
-		super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, (byte) 0, clazz);
+	         Material h, Material c, Material l, Material b, Class<? extends Suit> clazz, ServerVersion baseVersion) {
+		super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, (byte) 0, clazz, baseVersion);
 		this.boots = b;
 		this.helmet = h;
 		this.chestplate = c;
@@ -166,5 +157,12 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 */
 	public String getPermission(ArmorSlot armorSlot) {
 		return getPermission() + "." + armorSlot.toString().toLowerCase();
+	}
+
+	public static void register() {
+		new SuitType("Rave", "rave", "&7&oSuch amazing colors!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
+		new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
+		new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
+		new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
 	}
 }

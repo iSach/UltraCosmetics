@@ -34,7 +34,7 @@ public class GadgetParachute extends Gadget {
 	boolean active;
 	
 	public GadgetParachute(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.PARACHUTE, ultraCosmetics);
+		super(owner, GadgetType.valueOf("parachute"), ultraCosmetics);
 	}
 	
 	

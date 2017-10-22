@@ -35,7 +35,7 @@ public class GadgetChickenator extends Gadget {
 	private List<Item> items = new ArrayList<>();
 	
 	public GadgetChickenator(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.CHICKENATOR, ultraCosmetics);
+		super(owner, GadgetType.valueOf("chickenator"), ultraCosmetics);
 	}
 	
 	@Override

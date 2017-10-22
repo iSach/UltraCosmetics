@@ -32,7 +32,7 @@ public class MountSnake extends Mount<Sheep> {
 	
 	
 	public MountSnake(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.SNAKE, ultraCosmetics);
+		super(owner, MountType.valueOf("snake"), ultraCosmetics);
 	}
 	
 	@Override

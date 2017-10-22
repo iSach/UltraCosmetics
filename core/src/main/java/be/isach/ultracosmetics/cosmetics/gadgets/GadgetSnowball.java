@@ -22,7 +22,7 @@ public class GadgetSnowball extends Gadget {
 	private List<Snowball> snowballs;
 	
 	public GadgetSnowball(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.SNOWBALL, ultraCosmetics);
+		super(owner, GadgetType.valueOf("snowball"), ultraCosmetics);
 		
 		if (owner != null)
 			snowballs = new ArrayList<>();

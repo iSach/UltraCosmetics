@@ -34,7 +34,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
 	Vector v;
 	
 	public GadgetThorHammer(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.THORHAMMER, ultraCosmetics);
+		super(owner, GadgetType.valueOf("thorhammer"), ultraCosmetics);
 	}
 	
 	@Override

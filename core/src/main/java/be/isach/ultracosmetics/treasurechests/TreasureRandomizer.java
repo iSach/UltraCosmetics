@@ -14,10 +14,12 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.util.CustomConfiguration;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.TextUtil;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -39,26 +41,40 @@ import java.util.Random;
  * Created by sacha on 19/08/15.
  */
 public class TreasureRandomizer {
+	private static final int MONEY_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Chance");
+	private static final int GADGET_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets.Chance");
+	private static final int AMMO_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Chance");
+	private static final int MORPHS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Morphs.Chance");
+	private static final int PETS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Pets.Chance");
+	private static final int EFFECTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Effects.Chance");
+	private static final int MOUNTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Mounts.Chance");
+	private static final int HATS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Hats.Chance");
+	private static final int HELMET_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
+	private static final int CHESTPLATE_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
+	private static final int LEGGINGS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
+	private static final int BOOTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
+	private static final int EMOTES_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Emotes.Chance");
 
-	Player player;
+	private static List<GadgetType> gadgetList = new ArrayList<>();
+	private static List<GadgetType> ammoList = new ArrayList<>();
+	private static List<ParticleEffectType> particleEffectList = new ArrayList<>();
+	private static List<MountType> mountList = new ArrayList<>();
+	private static List<PetType> petList = new ArrayList<>();
+	private static List<MorphType> morphList = new ArrayList<>();
+	private static List<HatType> hatList = new ArrayList<>();
+	private static List<SuitType> helmetList = new ArrayList<>();
+	private static List<SuitType> chestplateList = new ArrayList<>();
+	private static List<SuitType> leggingList = new ArrayList<>();
+	private static List<SuitType> bootList = new ArrayList<>();
+	private static List<EmoteType> emoteList = new ArrayList<>();
+	private static List<CommandReward> commandRewardList = new ArrayList<>();
+
+	private static Random random = new Random();
+
+	private Player player;
 	public Location loc;
 	private ItemStack itemStack;
 	private String name;
-
-	public static List<GadgetType> gadgetList = new ArrayList<>();
-	public static List<GadgetType> ammoList = new ArrayList<>();
-	public static List<ParticleEffectType> particleEffectList = new ArrayList<>();
-	public static List<MountType> mountList = new ArrayList<>();
-	public static List<PetType> petList = new ArrayList<>();
-	public static List<MorphType> morphList = new ArrayList<>();
-	public static List<HatType> hatList = new ArrayList<>();
-	public static List<SuitType> helmetList = new ArrayList<>();
-	public static List<SuitType> chestplateList = new ArrayList<>();
-	public static List<SuitType> leggingList = new ArrayList<>();
-	public static List<SuitType> bootList = new ArrayList<>();
-	public static List<EmoteType> emoteList = new ArrayList<>();
-
-	private static Random random = new Random();
 
 	private enum ResultType {
 		AMMO,
@@ -73,24 +89,11 @@ public class TreasureRandomizer {
 		CHESTPLATE,
 		LEGGINGS,
 		BOOTS,
-		EMOTE
+		EMOTE,
+		COMMAND
 	}
 
 	private static final List<ResultType> RESULT_TYPES = new ArrayList<>();
-
-	private static final int MONEY_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Chance");
-	private static final int GADGET_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets.Chance");
-	private static final int AMMO_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Chance");
-	private static final int MORPHS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Morphs.Chance");
-	private static final int PETS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Pets.Chance");
-	private static final int EFFECTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Effects.Chance");
-	private static final int MOUNTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Mounts.Chance");
-	private static final int HATS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Hats.Chance");
-	private static final int HELMET_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
-	private static final int CHESTPLATE_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
-	private static final int LEGGINGS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
-	private static final int BOOTS_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Suits.Chance") / 4;
-	private static final int EMOTES_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Emotes.Chance");
 
 	private static void setupChance(List<ResultType> resultRef, int percent, ResultType resultType) {
 		for (int i = 0; i < percent; i++) {
@@ -177,7 +180,19 @@ public class TreasureRandomizer {
 				if (emoteType.canBeFound()
 				    && !player.hasPermission(emoteType.getPermission()))
 					emoteList.add(emoteType);
+		if (commandRewardList.isEmpty()) {
+			CustomConfiguration config = UltraCosmeticsData.get().getPlugin().getConfig();
 
+			for (String key : config.getConfigurationSection("TreasureChests.Loots.Commands").getKeys(false)) {
+				String path = "TreasureChests.Loots.Commands." + key;
+				if (config.getBoolean(path + ".Enabled")) {
+					String cancelPermission = config.getString(path + ".Cancel-If-Permission");
+					if (cancelPermission.equals("no") || !player.hasPermission(cancelPermission)) {
+						commandRewardList.add(new CommandReward(path));
+					}
+				}
+			}
+		}
 
 		if (!Category.MOUNTS.isEnabled())
 			mountList.clear();
@@ -253,6 +268,12 @@ public class TreasureRandomizer {
 		    && !emoteList.isEmpty()
 		    && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Emotes.Enabled"))
 			setupChance(RESULT_TYPES, EMOTES_CHANCE, ResultType.EMOTE);
+
+		for (CommandReward commandReward : commandRewardList) {
+			for (int i = 0; i < commandReward.getChance(); i++) {
+				RESULT_TYPES.add(ResultType.COMMAND);
+			}
+		}
 	}
 
 	private String getMessage(String s) {
@@ -324,6 +345,9 @@ public class TreasureRandomizer {
 				case EMOTE:
 					giveRandomEmote();
 					break;
+				case COMMAND:
+					giveRandomCommandReward();
+					break;
 			}
 
 		} catch (IndexOutOfBoundsException | IllegalArgumentException exception) {
@@ -363,6 +387,7 @@ public class TreasureRandomizer {
 		leggingList.clear();
 		bootList.clear();
 		emoteList.clear();
+		commandRewardList.clear();
 		RESULT_TYPES.clear();
 		types.clear();
 	}
@@ -528,6 +553,26 @@ public class TreasureRandomizer {
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Morphs.Message.enabled"))
 			Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Morphs.Message.message"))
 					                        .replace("%name%", player.getName()).replace("%morph%", (UltraCosmeticsData.get().arePlaceholdersColored()) ? morph.getName() : TextUtil.filterColor(morph.getName())));
+	}
+
+	public void giveRandomCommandReward() {
+		ArrayList<CommandReward> rewards = new ArrayList<>();
+		for (CommandReward commandReward : commandRewardList) {
+			for (int i = 0; i < commandReward.getChance(); i++) {
+				rewards.add(commandReward);
+			}
+		}
+		CommandReward reward = rewards.get(random.nextInt(rewards.size()));
+		rewards.clear();
+		for (String command : reward.getCommands()) {
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', command.replace("%name%", player.getName())));
+		}
+		name = reward.getName().replace("%name%", player.getName());
+		itemStack = new ItemStack(reward.getMaterial());
+		spawnRandomFirework(loc);
+
+		if (reward.getMessageEnabled())
+			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', reward.getMessage().replace("%name%", player.getName()).replace("%prefix%", MessageManager.getMessage("Prefix"))));
 	}
 
 

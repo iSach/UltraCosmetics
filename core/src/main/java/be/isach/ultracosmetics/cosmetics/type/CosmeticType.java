@@ -28,13 +28,15 @@ public abstract class CosmeticType<T extends Cosmetic> {
 	private String descriptionAsString;
 	private Class<? extends T> clazz;
 	private Category category;
+	private ServerVersion baseVersion;
 	
-	public CosmeticType(Category category, String configName, String permission, String description, Class clazz) {
+	public CosmeticType(Category category, String configName, String permission, String description, Class clazz, ServerVersion baseVersion) {
 		this.configName = configName;
 		this.permission = permission;
 		this.descriptionAsString = description;
 		this.clazz = clazz;
 		this.category = category;
+		this.baseVersion = baseVersion;
 		
 		if (SettingsManager.getConfig().get(getCategory().getConfigPath() + "." + configName + ".Description") == null) {
 			setDescriptionAsString(description);
@@ -55,9 +57,8 @@ public abstract class CosmeticType<T extends Cosmetic> {
 	}
 	
 	public boolean isEnabled() {
-		return !(this == GadgetType.ETHEREALPEARL
-		         && (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1 || UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_12_R1))
-		       && SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled");
+		return !(this == GadgetType.valueOf("etherealpearl") && (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1 || UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_12_R1))
+				&& SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled") && UltraCosmeticsData.get().getServerVersion().compareTo(baseVersion) >= 0;
 	}
 	
 	public String getName() {
