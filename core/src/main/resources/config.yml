@@ -137,6 +137,30 @@ TreasureChests:
       Message:
         enabled: false
         message: '%prefix% &6&l%name% found rare %emote%'
+    Commands:
+      shoutout:
+        Name: '&d&lShoutout'
+        Material: 'NETHER_STAR'
+        Enabled: false
+        Chance: 100
+        Message:
+          enabled: false
+          message: '%prefix% &6&l%name% found a rare shoutout!'
+        Cancel-If-Permission: 'no'
+        Commands:
+        - 'say %name% is awesome!'
+      flower:
+        Name: '&e&lFlower'
+        Material: 'YELLOW_FLOWER'
+        Enabled: false
+        Chance: 100
+        Message:
+          enabled: true
+          message: '%prefix% &6&l%name% found a flower!'
+        Cancel-If-Permission: 'example.yellowflower'
+        Commands:
+          - 'give %name% yellow_flower 1'
+          - 'pex user %name% add example.yellowflower'
   Designs:
     Classic:
       center-block: '169:0'
