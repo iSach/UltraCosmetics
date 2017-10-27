@@ -1,3 +1,5 @@
+![](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)
+
 # UltraCosmetics
 UltraCosmetics is a Spigot (not Bukkit/CraftBukkit) plugin for Minecraft 1.8+ that adds cool cosmetics to your server.  
 
