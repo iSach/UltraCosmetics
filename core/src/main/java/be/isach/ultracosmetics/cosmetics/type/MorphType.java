@@ -3,14 +3,30 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.morphs.*;
+import be.isach.ultracosmetics.cosmetics.morphs.Morph;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphBat;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphBlaze;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphChicken;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphCow;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphCreeper;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphEnderman;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphLlama;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphMooshroom;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphParrot;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphPig;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphPolarBear;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphSheep;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphSlime;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphSnowman;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphVillager;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphWitch;
+import be.isach.ultracosmetics.cosmetics.morphs.MorphWitherSkeleton;
 import be.isach.ultracosmetics.util.ServerVersion;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import org.bukkit.Material;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import org.bukkit.Material;
 
 /**
  * Morph types.
@@ -91,16 +107,24 @@ public class MorphType extends CosmeticMatType<Morph> {
 		new MorphType("ultracosmetics.morphs.villager", "Villager", Material.EMERALD, (byte) 0, DisguiseType.VILLAGER, "&7&oHmmmmmmmmm", MorphVillager.class, ServerVersion.v1_8_R1);
 
 		if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0) {
-			new MorphType("ultracosmetics.morphs.witch", "Witch", Material.POISONOUS_POTATO, (byte) 0, DisguiseType.WITCH, "&7&oMuahahahahaha", MorphWitch.class, ServerVersion.v1_9_R1);
+			new MorphType("ultracosmetics.morphs.witch", "Witch", Material.POISONOUS_POTATO, (byte) 0, getDisguiseType("WITCH"), "&7&oMuahahahahaha", MorphWitch.class, ServerVersion.v1_9_R1);
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_10_R1) >= 0) {
-			new MorphType("ultracosmetics.morphs.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, DisguiseType.POLAR_BEAR, "&7&oI prefer cold areas", MorphPolarBear.class, ServerVersion.v1_10_R1);
+			new MorphType("ultracosmetics.morphs.polarbear", "PolarBear", Material.SNOW_BLOCK, (byte) 0, getDisguiseType("POLAR_BEAR"), "&7&oI prefer cold areas", MorphPolarBear.class, ServerVersion.v1_10_R1);
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
-			new MorphType("ultracosmetics.morphs.llama", "Llama", Material.WOOL, (byte) 14, DisguiseType.LLAMA, "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_11_R1);
+			new MorphType("ultracosmetics.morphs.llama", "Llama", Material.WOOL, (byte) 14, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_11_R1);
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_12_R1) >= 0) {
-			new MorphType("ultracosmetics.morphs.parrot", "Parrot", Material.COOKIE, (byte) 0, DisguiseType.PARROT, "&7&oPolly want a cracker?", MorphParrot.class, ServerVersion.v1_12_R1);
+			new MorphType("ultracosmetics.morphs.parrot", "Parrot", Material.COOKIE, (byte) 0, getDisguiseType("PARROT"), "&7&oPolly want a cracker?", MorphParrot.class, ServerVersion.v1_12_R1);
+		}
+	}
+
+	private static DisguiseType getDisguiseType(String type) {
+		try {
+			return DisguiseType.valueOf(type);
+		} catch (Exception e) {
+			return DisguiseType.values()[0];
 		}
 	}
 }

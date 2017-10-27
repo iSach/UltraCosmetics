@@ -22,7 +22,6 @@ import java.util.Random;
  * @since 07-03-2017
  */
 public class MorphWitch extends Morph {
-	private static final List<PotionEffectType> POTION_EFFECTS = new ArrayList<>(Arrays.asList(PotionEffectType.JUMP, PotionEffectType.LEVITATION, PotionEffectType.GLOWING, PotionEffectType.SPEED));
 	private long coolDown = 0;
 	private Random r = new Random();
 
@@ -36,8 +35,8 @@ public class MorphWitch extends Morph {
 				&& event.getPlayer() == getPlayer()) {
 			if (coolDown > System.currentTimeMillis()) return;
 			event.setCancelled(true);
-			ThrownPotion thrownPotion = getPlayer().launchProjectile(ThrownPotion.class);
-			thrownPotion.getEffects().add(new PotionEffect(POTION_EFFECTS.get(r.nextInt(POTION_EFFECTS.size())), 40, 1));
+			getPlayer().launchProjectile(ThrownPotion.class);
+			coolDown = System.currentTimeMillis() + 2000;
 		}
 	}
 
