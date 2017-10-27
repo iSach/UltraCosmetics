@@ -1,3 +1,6 @@
 language: java
+<<<<<<< HEAD
 jdk:
  - oraclejdk8
+=======
+>>>>>>> f074c51905b56d0957e1ddf73dcdd17522db8504
