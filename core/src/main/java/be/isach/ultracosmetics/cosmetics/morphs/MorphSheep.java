@@ -37,14 +37,16 @@ public class MorphSheep extends Morph {
 			event.setCancelled(true);
 			SoundUtil.playSound(event.getPlayer().getLocation(), Sounds.SHEEP_IDLE, 1.0F, 1.0F);
 			SheepWatcher sheepWatcher = (SheepWatcher) getDisguise().getWatcher();
+			count = 0;
 			Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
 				if (count > 9) {
 					cancel();
+					return;
 				}
 				sheepWatcher.setColor(DyeColor.values()[r.nextInt(DyeColor.values().length)]);
 				count++;
 			}, 0, 2);
-			coolDown = System.currentTimeMillis() + 2000;
+			coolDown = System.currentTimeMillis() + 3000;
 		}
 	}
 

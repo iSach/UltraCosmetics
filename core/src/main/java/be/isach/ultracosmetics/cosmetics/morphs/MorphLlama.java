@@ -4,11 +4,16 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import me.libraryaddict.disguise.disguisetypes.watchers.LlamaWatcher;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.LlamaSpit;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
@@ -31,8 +36,8 @@ public class MorphLlama extends Morph {
 			if (coolDown > System.currentTimeMillis()) return;
 			event.setCancelled(true);
 			LlamaSpit llamaSpit = event.getPlayer().launchProjectile(LlamaSpit.class);
-			System.out.println("llama spit is from: " + llamaSpit.getShooter());
-			coolDown = System.currentTimeMillis() + 500;
+			llamaSpit.setShooter(event.getPlayer());
+			coolDown = System.currentTimeMillis() + 1500;
 		}
 	}
 
@@ -42,5 +47,12 @@ public class MorphLlama extends Morph {
 
 	@Override
 	protected void onClear() {
+	}
+
+	@EventHandler
+	public void onDamage(EntityDamageByEntityEvent event) {
+		if (getOwner() != null && getPlayer() != null && event.getDamager() == getPlayer()) {
+			event.setCancelled(true);
+		}
 	}
 }
