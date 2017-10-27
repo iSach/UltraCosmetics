@@ -19,6 +19,7 @@ import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.CustomConfiguration;
+import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.FileUtils;
 import be.isach.ultracosmetics.util.MetricsLite;
 import be.isach.ultracosmetics.util.ServerVersion;
@@ -234,6 +235,7 @@ public class UltraCosmetics extends JavaPlugin {
 		
 		pluginManager.registerEvents(new PlayerListener(this), this);
 		pluginManager.registerEvents(new MainListener(), this);
+		pluginManager.registerEvents(new EntitySpawningManager(), this);
 		
 		if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
 			pluginManager.registerEvents(new PlayerSwapItemListener(this), this);
