@@ -270,7 +270,23 @@ public class MessageManager {
 		addMessage("Morphs.WitherSkeleton.skill", "&eSneak&7 to: &aBone Bomb");
 		addMessage("Morphs.ElderGuardian.name", "&8&lElder Guardian");
 		addMessage("Morphs.ElderGuardian.skill", "&eLeft-Click&7 to: &aLaser");
-		
+		addMessage("Morphs.Cow.name", "&8&lCow");
+		addMessage("Morphs.Cow.skill", "&eLeft-Click&7 to: &aMoo");
+		addMessage("Morphs.Sheep.name", "&f&lSheep");
+		addMessage("Morphs.Sheep.skill", "&eLeft-Click&7 to: &aChange Colors");
+		addMessage("Morphs.Mooshroom.name", "&c&lMooshroom");
+		addMessage("Morphs.Mooshroom.skill", "&eCrouch&7 to: &aSoup Throw");
+		addMessage("Morphs.Villager.name", "&a&lVillager");
+		addMessage("Morphs.Villager.skill", "&eLeft-Click&7 to: &aEmerald Throw");
+		addMessage("Morphs.Witch.name", "&5&lWitch");
+		addMessage("Morphs.Witch.skill", "&eLEft-Click&7 to: &aPotion Throw");
+		addMessage("Morphs.PolarBear.name", "&f&lPolarBear");
+		addMessage("Morphs.PolarBear.skill", "&eLeft-Click&7 to: &aBlizzard");
+		addMessage("Morphs.Llama.name", "&3&lLlama");
+		addMessage("Morphs.Llama.skill", "&eLeft-Click&7 to: &aSpit");
+		addMessage("Morphs.Parrot.name", "&a&lParrot");
+		addMessage("Morphs.Parrot.skill", "&eDouble Jump&7 to: &aFlap");
+
 		//HATS
 		addMessage("Hats.Equip", "%prefix% &9You equipped %hatname% &9hat!");
 		addMessage("Hats.Unequip", "%prefix% &9You unequipped %hatname% &9hat!");
