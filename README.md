@@ -5,6 +5,7 @@ UltraCosmetics is a Spigot (not Bukkit/CraftBukkit) plugin for Minecraft 1.8+ th
 
 THE (“UltraCosmetics”) SOURCE IS PROVIDED AS IS AT NO MONETARY COST FOR PERSONAL USE ONLY. ANY COMMERCIAL DISTRIBUTION/USE OF THE (“UltraCosmetics”) SOURCE IS STRICTLY PROHIBITED.
 
+
 Looking for support? Check out [the wiki](https://github.com/iSach/UltraCosmetics/wiki) or join the [Discord](https://discord.gg/0125SVBfnBFwl7XOP)!
 
 Adding a new cosmetic is really simple.  
