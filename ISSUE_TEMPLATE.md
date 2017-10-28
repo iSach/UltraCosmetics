@@ -3,7 +3,9 @@
 2. 
 3. 
 
-### What were you expecting to happen? What happened instead?  
+### What was supposed to happen?
+
+### What happened? 
 
 ### What version of UltraCosmetics are you using?  
 
