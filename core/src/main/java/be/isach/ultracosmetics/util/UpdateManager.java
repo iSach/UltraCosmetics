@@ -74,12 +74,10 @@ public class UpdateManager extends Thread {
 	 */
 	public synchronized String getLastVersion() {
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
+			HttpURLConnection con = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=10905").openConnection();
 			con.setDoOutput(true);
 			con.setConnectTimeout(2000);
-			con.setRequestMethod("POST");
-			con.getOutputStream().write(
-					("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=10905").getBytes("UTF-8"));
+			con.setRequestMethod("GET");
 			String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
 			if (version.length() <= 7) {
 				return version;
