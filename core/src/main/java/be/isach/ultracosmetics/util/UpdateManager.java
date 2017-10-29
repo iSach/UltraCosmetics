@@ -2,14 +2,13 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.Version;
+import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.*;
 import java.net.URL;
 import java.util.function.Predicate;
 
@@ -74,11 +73,11 @@ public class UpdateManager extends Thread {
 	 */
 	public synchronized String getLastVersion() {
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=10905").openConnection();
-			con.setDoOutput(true);
-			con.setConnectTimeout(2000);
-			con.setRequestMethod("GET");
-			String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine().replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
+			String json = readUrl("https://api.spiget.org/v2/resources/10905/versions?size=1&sort=-id");
+
+			Gson gson = new Gson();
+			UcVersion[] ver = gson.fromJson(json, UcVersion[].class);
+			String version = ver[0].name.replace("Beta ", "").replace("Pre-", "").replace("Release ", "").replace("Hype Update (", "").replace(")", "");
 			if (version.length() <= 7) {
 				return version;
 			}
@@ -87,7 +86,38 @@ public class UpdateManager extends Thread {
 		}
 		return null;
 	}
-	
+
+	static class Rating {
+		int count;
+		int average;
+	}
+
+	static class UcVersion {
+		int downloads;
+		Rating rating;
+		String name;
+		long releaseDate;
+		long id;
+	}
+
+	private static String readUrl(String urlString) throws Exception {
+		BufferedReader reader = null;
+		try {
+			URL url = new URL(urlString);
+			reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			StringBuffer buffer = new StringBuffer();
+			int read;
+			char[] chars = new char[1024];
+			while ((read = reader.read(chars)) != -1)
+				buffer.append(chars, 0, read);
+
+			return buffer.toString();
+		} finally {
+			if (reader != null)
+				reader.close();
+		}
+	}
+
 	public synchronized boolean isOutdated() {
 		return outdated;
 	}
