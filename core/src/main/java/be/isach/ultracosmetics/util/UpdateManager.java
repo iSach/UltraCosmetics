@@ -13,6 +13,8 @@ import java.net.URL;
 import java.util.function.Predicate;
 
 /**
+ * Manages update checking.
+ *
  * Package: be.isach.ultracosmetics.util
  * Created by: sachalewin
  * Date: 5/08/16
