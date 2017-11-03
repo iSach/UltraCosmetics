@@ -1,18 +1,17 @@
-![Build status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)
+[![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
+[![Jenkins Build Status](https://img.shields.io/jenkins/s/https/ci.isach.be/job/Ultra%20Cosmetics.svg)](https://ci.isach.be/job/Ultra%20Cosmetics/)
+[![GitHub last commit](https://img.shields.io/github/last-commit/iSach/UltraCosmetics.svg)](https://github.com/iSach/UltraCosmetics/commits/master)
+[![Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](http://discord.me/ucsupport/)
+[![View on SpigotMC](https://img.shields.io/badge/view-on%20spigotmc-orange.svg)](https://www.spigotmc.org/resources/10905/)
+[![View the Wiki](https://img.shields.io/badge/view-the%20wiki-ff68b4.svg)](https://github.com/iSach/UltraCosmetics/wiki/)
 
-# UltraCosmetics
-UltraCosmetics is a Spigot (not Bukkit/CraftBukkit) plugin for Minecraft 1.8+ that adds cool cosmetics to your server.  
+## Welcome to the UltraCosmetics GitHub repository!
+UltraCosmetics is a Spigot plugin compatible with Spigot versions 1.8 through 1.12.2, that adds cosmetics to your server's hub!
 
-THE (“UltraCosmetics”) SOURCE IS PROVIDED AS IS AT NO MONETARY COST FOR PERSONAL USE ONLY. ANY COMMERCIAL DISTRIBUTION/USE OF THE (“UltraCosmetics”) SOURCE IS STRICTLY PROHIBITED.
+In order for everyone to have the best experience possible, we have a few guidelines that everyone must follow.    
+- For all things on GitHub, please make sure you follow the [code of conduct](https://github.com/iSach/UltraCosmetics/blob/master/CODE_OF_CONDUCT.md).  
+- When creating an issue, please make sure you're using the [issue template](https://github.com/iSach/UltraCosmetics/blob/master/ISSUE_TEMPLATE.md).  
+- When submitting a pull request, please make sure you're using the [pull request template](https://github.com/iSach/UltraCosmetics/blob/master/PULL_REQUEST_TEMPLATE.md).
+- When contributing, please make sure you check out the [contribution guidelines](https://github.com/iSach/UltraCosmetics/blob/master/CONTRIBUTING.md).  
 
-Looking for support? Check out [the wiki](https://github.com/iSach/UltraCosmetics/wiki) or join the [Discord](https://discord.gg/0125SVBfnBFwl7XOP)!
-
-Adding a new cosmetic is really simple.  
-1. Create your GadgetType, PetType, etc. in the enum file located in the corresponding cosmetic package.  
-2. Have the file extend Gadget/Pet/etc.  
-3. Make your gadget!  
-*(Take a look to other gadgets if you don't know how or need help)*
-
-Enjoy!
-
-Builds: http://ci.isach.be/job/UltraCosmetics/
+*The UltraCosmetics source is provided as is at no monetary cost for personal use only. Any commercial distribution/use of the UltraCosmetics source is strictly prohibited.*
