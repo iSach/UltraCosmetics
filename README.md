@@ -3,7 +3,7 @@
 [jenkins]: https://img.shields.io/badge/download-Jenkins-brightgreen.svg
 [wiki]: https://img.shields.io/badge/go%20to-Wiki-blue.svg
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
-[ ![version][] ][download]
+[ ![version][] ][version]
 [ ![jenkins][] ](https://ci.isach.be/job/Ultra%20Cosmetics/lastSuccessfulBuild/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/iSach/UltraCosmetics.svg)](https://github.com/iSach/UltraCosmetics/commits/master)
 [ ![discord](https://discordapp.com/api/guilds/185055040036143104/widget.png) ][discord-invite]
