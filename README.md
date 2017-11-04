@@ -1,5 +1,5 @@
 [discord-invite]: https://discord.gg/0125SVBfnBFwl7XOP
-[jenkins]: https://img.shields.io/badge/download-jenkins-brightgreen.svg
+[jenkins]: https://img.shields.io/badge/download%20from-jenkins-brightgreen.svg
 [wiki]: https://img.shields.io/badge/go%20to-wiki-blue.svg
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
 [![version](https://img.shields.io/github/release/iSach/UltraCosmetics/all.svg?colorB=1565C0)](https://github.com/iSach/UltraCosmetics/releases/tag/2.5.0-beta-1)
