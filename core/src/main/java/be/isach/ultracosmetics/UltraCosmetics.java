@@ -12,6 +12,7 @@ import be.isach.ultracosmetics.manager.ArmorStandManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.menu.Menus;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
+import be.isach.ultracosmetics.placeholderapi.PlaceholderHook;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -165,6 +166,13 @@ public class UltraCosmetics extends JavaPlugin {
 			getSmartLogger().write("Morphs require Lib's Disguises!");
 			getSmartLogger().write("");
 			getSmartLogger().write("Morphs disabled.");
+			getSmartLogger().write("");
+		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+			getSmartLogger().write("");
+			new PlaceholderHook(this).hook();
+			getSmartLogger().write("Hooked into PlaceholderAPI");
 			getSmartLogger().write("");
 		}
 		

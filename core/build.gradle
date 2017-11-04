@@ -7,6 +7,7 @@ dependencies {
     compile('net.milkbowl.vault:VaultAPI:1.6') {
         exclude group: 'org.bukkit'
     }
+    compile 'me.clip:placeholderapi:2.8.2'
 }
 
 processResources {
