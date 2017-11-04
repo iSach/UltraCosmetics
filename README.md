@@ -1,4 +1,4 @@
-[version]: https://img.shields.io/github/release/iSach/UltraCosmetics/all.svg
+[version]: https://img.shields.io/github/release/iSach/UltraCosmetics/all.svg?colorB=1565C0
 [download]: https://bintray.com/dv8fromtheworld/maven/JDA/_latestVersion
 [discord-invite]: https://discord.gg/0125SVBfnBFwl7XOP
 [jenkins]: https://img.shields.io/badge/Download-Jenkins-brightgreen.svg
