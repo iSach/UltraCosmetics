@@ -1,7 +1,6 @@
 [version]: https://img.shields.io/github/release/iSach/UltraCosmetics/all.svg?colorB=1565C0
-[download]: https://bintray.com/dv8fromtheworld/maven/JDA/_latestVersion
 [discord-invite]: https://discord.gg/0125SVBfnBFwl7XOP
-[jenkins]: https://img.shields.io/badge/Download-Jenkins-brightgreen.svg
+[jenkins]: https://img.shields.io/badge/download-Jenkins-brightgreen.svg
 [wiki]: https://img.shields.io/badge/go%20to-Wiki-blue.svg
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
 [ ![version][] ][download]
