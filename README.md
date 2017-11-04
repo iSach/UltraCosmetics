@@ -1,8 +1,8 @@
-[version]: https://api.bintray.com/packages/dv8fromtheworld/maven/JDA/images/download.svg
+[version]: https://img.shields.io/github/release/qubyte/rubidium/all.svg?style=for-the-badge
 [download]: https://bintray.com/dv8fromtheworld/maven/JDA/_latestVersion
 [discord-invite]: https://discord.gg/0125SVBfnBFwl7XOP
-[jenkins]: https://img.shields.io/badge/Download-Jenkins-brightgreen.svg
-[wiki]: https://img.shields.io/badge/Go%20To-Wiki-blue.svg
+[jenkins]: https://img.shields.io/badge/Download-Jenkins-brightgreen.svg?style=for-the-badge
+[wiki]: https://img.shields.io/badge/Go%20To-Wiki-blue.svg?style=for-the-badge
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
 [ ![version][] ][download]
 [ ![jenkins][] ](https://ci.isach.be/job/Ultra%20Cosmetics/lastSuccessfulBuild/)
