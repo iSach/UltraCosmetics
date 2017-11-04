@@ -7,6 +7,7 @@ dependencies {
     compile('net.milkbowl.vault:VaultAPI:1.6') {
         exclude group: 'org.bukkit'
     }
+    compile 'org.black_ixx:PlayerPoints:2.1.3'
 }
 
 processResources {

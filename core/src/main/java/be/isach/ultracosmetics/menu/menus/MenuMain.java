@@ -95,17 +95,17 @@ public class MenuMain extends Menu {
 
 			String msgChests = MessageManager.getMessage("Treasure-Chests");
 			if (player.getKeys() == 0) {
-				chest = ItemFactory.create(Material.CHEST, (byte) 0x0, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), getUltraCosmetics().isVaultLoaded() ?
-				                                                                                                                  "" : null, getUltraCosmetics().isVaultLoaded() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().isVaultLoaded() ? "" : null);
+				chest = ItemFactory.create(Material.CHEST, (byte) 0x0, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
+				                                                                                                                  "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
 			} else {
 				chest = ItemFactory.create(Material.CHEST, (byte) 0x0, msgChests, "", MessageManager.getMessage("Click-Open-Chest"), "");
 			}
 			ItemStack keys = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0x0, MessageManager.getMessage("Treasure-Keys"), "",
-			                                    MessageManager.getMessage("Your-Keys").replace("%keys%", player.getKeys() + ""), getUltraCosmetics().isVaultLoaded() ?
-			                                                                                                                     "" : null, getUltraCosmetics().isVaultLoaded() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().isVaultLoaded() ? "" : null);
+			                                    MessageManager.getMessage("Your-Keys").replace("%keys%", player.getKeys() + ""), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
+			                                                                                                                     "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
 
 			putItem(inventory, 5, keys, (data) -> {
-				if (!getUltraCosmetics().isVaultLoaded() && player.getKeys() == 0) {
+				if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
 					SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
 					return;
 				}
@@ -114,7 +114,7 @@ public class MenuMain extends Menu {
 			});
 
 			putItem(inventory, 3, chest, (data) -> {
-				if (!getUltraCosmetics().isVaultLoaded() && player.getKeys() == 0) {
+				if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
 					SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
 					return;
 				}

@@ -17,6 +17,10 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.TextUtil;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -37,11 +41,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Represents an instance of a Gadget summoned by a player.
@@ -329,7 +328,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 				if (displayName.equals(purchase)) {
 					if (getUltraCosmetics().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked())
 					                       .getBalance() >= getPrice()) {
-						getUltraCosmetics().getEconomy().withdrawPlayer((Player) event.getWhoClicked(), getPrice());
+						getUltraCosmetics().getEconomyHandler().withdraw((Player) event.getWhoClicked(), getPrice());
 						getUltraCosmetics().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked())
 						                   .addAmmo(getType().toString().toLowerCase(), getResultAmmoAmount());
 						event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));

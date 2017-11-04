@@ -82,7 +82,7 @@ public class TreasureChestManager implements Listener {
 		    && event.getCurrentItem().getItemMeta().hasDisplayName()) {
 			if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) {
 				if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getBalance() >= (int) SettingsManager.getConfig().get("TreasureChests.Key-Price")) {
-					UltraCosmeticsData.get().getPlugin().getEconomy().withdrawPlayer((Player) event.getWhoClicked(), (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"));
+					ultraCosmetics.getEconomyHandler().withdraw((Player) event.getWhoClicked(), (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"));
 					UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).addKey();
 					event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
 					event.getWhoClicked().closeInventory();

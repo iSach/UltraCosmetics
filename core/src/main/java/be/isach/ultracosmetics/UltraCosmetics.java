@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.command.CommandManager;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
+import be.isach.ultracosmetics.economy.EconomyHandler;
+import be.isach.ultracosmetics.economy.EconomyHook;
 import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
@@ -14,6 +16,7 @@ import be.isach.ultracosmetics.menu.Menus;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
+import be.isach.ultracosmetics.economy.PlayerPointsHook;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
@@ -45,7 +48,6 @@ import java.util.stream.Collectors;
  * @since 08-03-2015
  */
 public class UltraCosmetics extends JavaPlugin {
-	
 	/**
 	 * Manages sub commands.
 	 */
@@ -60,11 +62,6 @@ public class UltraCosmetics extends JavaPlugin {
 	 * Config File.
 	 */
 	private File file;
-	
-	/**
-	 * Economy, used only if Vault is enabled.
-	 */
-	private Economy economy = null;
 	
 	/**
 	 * Player Manager instance.
@@ -100,9 +97,9 @@ public class UltraCosmetics extends JavaPlugin {
 	 * Manages armor stands.
 	 */
 	private ArmorStandManager armorStandManager;
-	
-	private boolean vaultLoaded = false;
-	
+
+
+	private EconomyHandler economyHandler;
 	/**
 	 * Called when plugin is enabled.
 	 */
@@ -167,7 +164,7 @@ public class UltraCosmetics extends JavaPlugin {
 			getSmartLogger().write("Morphs disabled.");
 			getSmartLogger().write("");
 		}
-		
+
 		// Set up economy if needed.
 		setupEconomy();
 		
@@ -246,27 +243,11 @@ public class UltraCosmetics extends JavaPlugin {
 	}
 	
 	/**
-	 * Sets Vault up.
+	 * Sets the economy up.
 	 */
 	private void setupEconomy() {
+		economyHandler = new EconomyHandler(this, getConfig().getString("Economy"));
 		UltraCosmeticsData.get().checkTreasureChests();
-		if (!(UltraCosmeticsData.get().isAmmoEnabled()
-		      || (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") && SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled"))
-		      || UltraCosmeticsData.get().areTreasureChestsEnabled())) {
-			return;
-		}
-		
-		if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-			return;
-		}
-		
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-		if (economyProvider != null) {
-			economy = economyProvider.getProvider();
-			UltraCosmeticsData.get().setUsingVaultEconomy(true);
-		}
-		
-		vaultLoaded = true;
 	}
 	
 	private void setUpConfig() {
@@ -376,13 +357,6 @@ public class UltraCosmetics extends JavaPlugin {
 	}
 	
 	/**
-	 * @return Vault Economy.
-	 */
-	public Economy getEconomy() {
-		return economy;
-	}
-	
-	/**
 	 * @return The Update CheckerC.
 	 */
 	public UpdateManager getUpdateChecker() {
@@ -414,10 +388,6 @@ public class UltraCosmetics extends JavaPlugin {
 		return armorStandManager;
 	}
 	
-	public boolean isVaultLoaded() {
-		return vaultLoaded;
-	}
-	
 	public void openMainMenu(UltraPlayer ultraPlayer) {
 		if (getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled")) {
 			String command = getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "").replace("{player}", ultraPlayer.getBukkitPlayer().getName()).replace("{playeruuid}", ultraPlayer.getUuid().toString());
@@ -425,5 +395,9 @@ public class UltraCosmetics extends JavaPlugin {
 		} else {
 			getMenus().getMainMenu().open(ultraPlayer);
 		}
+	}
+
+	public EconomyHandler getEconomyHandler() {
+		return economyHandler;
 	}
 }
