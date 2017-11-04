@@ -1,12 +1,12 @@
-[version]: https://img.shields.io/github/release/qubyte/rubidium/all.svg?style=for-the-badge
+[version]: https://img.shields.io/github/release/qubyte/rubidium/all.svg
 [download]: https://bintray.com/dv8fromtheworld/maven/JDA/_latestVersion
 [discord-invite]: https://discord.gg/0125SVBfnBFwl7XOP
-[jenkins]: https://img.shields.io/badge/Download-Jenkins-brightgreen.svg?style=for-the-badge
-[wiki]: https://img.shields.io/badge/Go%20To-Wiki-blue.svg?style=for-the-badge
+[jenkins]: https://img.shields.io/badge/Download-Jenkins-brightgreen.svg
+[wiki]: https://img.shields.io/badge/Go%20To-Wiki-blue.svg
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
 [ ![version][] ][download]
 [ ![jenkins][] ](https://ci.isach.be/job/Ultra%20Cosmetics/lastSuccessfulBuild/)
-[![GitHub last commit](https://img.shields.io/github/last-commit/iSach/UltraCosmetics.svg?style=for-the-badge)](https://github.com/iSach/UltraCosmetics/commits/master)
+[![GitHub last commit](https://img.shields.io/github/last-commit/iSach/UltraCosmetics.svg)](https://github.com/iSach/UltraCosmetics/commits/master)
 [ ![Discord](https://discordapp.com/api/guilds/185055040036143104/widget.png) ][discord-invite]
 [![View on SpigotMC](https://img.shields.io/badge/View%20On-SpigotMC-orange.svg)](https://www.spigotmc.org/resources/10905/)
 [ ![wiki] ](https://github.com/iSach/UltraCosmetics/wiki)
