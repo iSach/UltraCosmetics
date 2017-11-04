@@ -393,7 +393,7 @@ public class TreasureRandomizer {
 	}
 
 	public void giveNothing() {
-		if (UltraCosmeticsData.get().isUsingVaultEconomy()) {
+		if (UltraCosmeticsData.get().getPlugin().getEconomyHandler().isUsingEconomy()) {
 			try {
 				giveMoney();
 			} catch (Exception e) {
@@ -407,13 +407,13 @@ public class TreasureRandomizer {
 	}
 
 	public void giveMoney() {
-		if (!UltraCosmeticsData.get().isUsingVaultEconomy()) {
+		if (!UltraCosmeticsData.get().getPlugin().getEconomyHandler().isUsingEconomy()) {
 			giveNothing();
 			return;
 		}
 		int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max"));
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
-		UltraCosmeticsData.get().getPlugin().getEconomy().depositPlayer(player, money);
+		UltraCosmeticsData.get().getPlugin().getEconomyHandler().deposit(player, money);
 		itemStack = new ItemStack(Material.DOUBLE_PLANT);
 		if (money > 3 * (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max") / 4)
 			spawnRandomFirework(loc);

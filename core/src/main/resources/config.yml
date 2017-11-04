@@ -42,6 +42,10 @@ Categories:
   Emotes:
     Go-Back-Arrow: true
   Clear-Cosmetic-Item: '152:0'
+
+# The economy that should be used. Supports 'Vault' or 'PlayerPoints'
+Economy: 'Vault'
+
 # Treasure Chests Settings.
 # /uc reload will not be enough to toggle them!
 #

@@ -284,8 +284,8 @@ public class UltraPlayer {
 	
 	public double getBalance() {
 		try {
-			if (ultraCosmetics.getEconomy() != null) {
-				return ultraCosmetics.getEconomy().getBalance(getBukkitPlayer());
+			if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
+				return ultraCosmetics.getEconomyHandler().balance(getBukkitPlayer());
 			}
 		} catch (Exception exc) {
 			ultraCosmetics.getSmartLogger().write("Error happened while getting a player's balance.");
@@ -385,11 +385,7 @@ public class UltraPlayer {
 	 * Opens the Key Purchase Menu.
 	 */
 	public void openKeyPurchaseMenu() {
-		if (ultraCosmetics.getEconomy() == null) {
-			return;
-		}
-		
-		if (!ultraCosmetics.isVaultLoaded()) {
+		if (!ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
 			return;
 		}
 		

@@ -58,11 +58,6 @@ public class UltraCosmeticsData {
 	private boolean moneyTreasureLoot;
 	
 	/**
-	 * If a Vault economy is being used.
-	 */
-	private boolean usingVaultEconomy;
-	
-	/**
 	 * Determines if Gadget Cooldown should be shown in action bar.
 	 */
 	private boolean cooldownInBar;
@@ -116,13 +111,8 @@ public class UltraCosmeticsData {
 		moneyTreasureLoot = SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled");
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Enabled")) {
 			treasureChests = true;
-			if (!Bukkit.getPluginManager().isPluginEnabled("Vault")
-			    && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
-				ultraCosmetics.getSmartLogger().write("-------------------------");
-				ultraCosmetics.getSmartLogger().write("Treasure Chests' Money Loot requires Vault!");
-				ultraCosmetics.getSmartLogger().write("Money Loot is turned off!");
-				ultraCosmetics.getSmartLogger().write("-------------------------");
-				moneyTreasureLoot = false;
+			if ((boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
+				moneyTreasureLoot = true;
 			}
 		}
 	}
@@ -246,14 +236,6 @@ public class UltraCosmeticsData {
 	
 	public void setServerVersion(ServerVersion serverVersion) {
 		this.serverVersion = serverVersion;
-	}
-	
-	public void setUsingVaultEconomy(boolean usingVaultEconomy) {
-		this.usingVaultEconomy = usingVaultEconomy;
-	}
-	
-	public boolean isUsingVaultEconomy() {
-		return this.usingVaultEconomy;
 	}
 	
 	public final String getItemNoPickupString() {

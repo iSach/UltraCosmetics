@@ -83,7 +83,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
 				if (event.getName() == null) {
 					return;
 				}
-				if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") && UltraCosmeticsData.get().isUsingVaultEconomy()) {
+				if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") && ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
 					event.setWillClose(false);
 					event.setWillDestroy(false);
 					buyRenamePet(ultraPlayer, event.getName());

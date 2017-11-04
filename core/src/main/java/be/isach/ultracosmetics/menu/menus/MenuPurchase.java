@@ -33,7 +33,7 @@ public class MenuPurchase extends Menu {
 		// Purchase Item
 		ItemStack purchaseItem = ItemFactory.create(Material.EMERALD_BLOCK, MessageManager.getMessage("Purchase"));
 		ClickRunnable purchaseClickRunnable = data -> {
-			getUltraCosmetics().getEconomy().withdrawPlayer(player.getBukkitPlayer(), purchaseData.getPrice());
+			getUltraCosmetics().getEconomyHandler().withdraw(player.getBukkitPlayer(), purchaseData.getPrice());
 			purchaseData.getOnPurchase().run();
 			player.getBukkitPlayer().closeInventory();
 		};
