@@ -1,7 +1,7 @@
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
-[![Jenkins Build Status](https://img.shields.io/jenkins/s/https/ci.isach.be/job/Ultra%20Cosmetics.svg)](https://ci.isach.be/job/Ultra%20Cosmetics/)
+[download]: https://bintray.com/dv8fromtheworld/maven/JDA/_latestVersion
 [![GitHub last commit](https://img.shields.io/github/last-commit/iSach/UltraCosmetics.svg)](https://github.com/iSach/UltraCosmetics/commits/master)
-[![Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](http://discord.me/ucsupport/)
+[discord-invite]: https://discord.gg/0125SVBfnBFwl7XOP
 [![View on SpigotMC](https://img.shields.io/badge/view-on%20spigotmc-orange.svg)](https://www.spigotmc.org/resources/10905/)
 [![View the Wiki](https://img.shields.io/badge/view-the%20wiki-ff68b4.svg)](https://github.com/iSach/UltraCosmetics/wiki/)
 
