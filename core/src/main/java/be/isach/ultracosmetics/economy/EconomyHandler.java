@@ -18,8 +18,10 @@ public class EconomyHandler {
 		this.ultraCosmetics = ultraCosmetics;
 		if (economy.equalsIgnoreCase("vault")) {
 			economyHook = new VaultHook(ultraCosmetics);
+			usingEconomy = true;
 		} else if (economy.equalsIgnoreCase("playerpoints")) {
 			economyHook = new PlayerPointsHook(ultraCosmetics);
+			usingEconomy = true;
 		} else {
 			usingEconomy = false;
 		}

@@ -53,6 +53,6 @@ public class VaultHook implements EconomyHook {
 
 	@Override
 	public boolean economyEnabled() {
-		return false;
+		return economyEnabled;
 	}
 }
