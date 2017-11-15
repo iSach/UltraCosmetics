@@ -4,7 +4,7 @@
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)](https://travis-ci.org/iSach/UltraCosmetics)
 [![GitHub last commit](https://img.shields.io/github/last-commit/iSach/UltraCosmetics.svg)](https://github.com/iSach/UltraCosmetics/commits/master)
 [![version](https://img.shields.io/github/release/iSach/UltraCosmetics.svg?colorB=1565C0)](https://github.com/iSach/UltraCosmetics/releases/latest)
-[comment]: <> ([![beta](https://img.shields.io/badge/dynamic/json.svg?label=beta&colorB=1565C0&query=version&uri=https%3A%2F%2Fapi.isach.be%2Fultracosmetics%2Fversion%2F)])(https://ci.isach.be/job/UltraCosmetics/lastSuccessfulBuild/)
+[![beta](https://img.shields.io/badge/dynamic/json.svg?label=beta&colorB=1565C0&query=version&uri=https%3A%2F%2Fapi.isach.be%2Fultracosmetics%2Fversion%2F)](https://ci.isach.be/job/UltraCosmetics/lastSuccessfulBuild/)
 [ ![discord](https://discordapp.com/api/guilds/185055040036143104/widget.png) ][discord-invite]
 [![view on SpigotMC](https://img.shields.io/badge/view%20on-spigotmc-orange.svg)](https://www.spigotmc.org/resources/10905/)
 [ ![wiki] ](https://github.com/iSach/UltraCosmetics/wiki)
