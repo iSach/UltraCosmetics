@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomEntityFirework;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomGuardian;
@@ -68,8 +67,7 @@ public class MorphElderGuardian extends Morph {
 			return;
 
 		final Location FROM = customGuardian.getBukkitEntity().getLocation();
-		final Location TO = FROM.clone().add(getPlayer()
-				                                     .getLocation().getDirection().multiply(10));
+		final Location TO = FROM.clone().add(getPlayer().getLocation().getDirection().multiply(10));
 
 		final ArmorStand armorStand = getPlayer().getWorld().spawn(TO, ArmorStand.class);
 
@@ -91,7 +89,7 @@ public class MorphElderGuardian extends Morph {
 			Location current = FROM.clone();
 
 			for (int i = 0; i < 10; i++) {
-				for (Entity entity : EntityUtils.getEntitiesInRadius(current, 4.5))
+				for (Entity entity : current.getWorld().getNearbyEntities(current, 4.5, 4.5, 4.5))
 					if (entity instanceof LivingEntity
 					    && entity != getPlayer())
 						MathUtils.applyVelocity(entity, new Vector(0, 0.5d, 0));
