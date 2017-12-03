@@ -21,11 +21,7 @@ public class AnvilGUI extends AAnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(EntityHuman entity) {
 			super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
-		}
-		
-		@Override
-		public boolean a(EntityHuman entityhuman) {
-			return true;
+			this.checkReachable = false;
 		}
 	}
 	
