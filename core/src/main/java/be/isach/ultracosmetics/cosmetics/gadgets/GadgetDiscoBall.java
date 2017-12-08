@@ -100,10 +100,9 @@ public class GadgetDiscoBall extends Gadget {
 			z2 = Math.sin(angle2) * 4;
 			drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), true, 50);
 			i2 += 0.4;
-			
-			for (Entity ent : getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5)) {
-				if (ent.isOnGround()
-				    && affectPlayers) {
+
+			for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
+				if (ent.isOnGround() && affectPlayers) {
 					MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
 				}
 			}
@@ -132,16 +131,6 @@ public class GadgetDiscoBall extends Gadget {
 	@Override
 	public void onClear() {
 		clean();
-	}
-	
-	public ArrayList<Entity> getNearbyEntities(Location loc, double distance) {
-		ArrayList<Entity> entities = new ArrayList<>();
-		for (Entity ent : loc.getWorld().getEntities()) {
-			if (ent.getLocation().distance(loc) <= distance) {
-				entities.add(ent);
-			}
-		}
-		return entities;
 	}
 	
 	public void drawParticleLine(Location a, Location b, boolean dust, int particles) {

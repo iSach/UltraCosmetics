@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Cuboid;
-import be.isach.ultracosmetics.util.EntityUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -58,14 +57,14 @@ public class GadgetTrampoline extends Gadget {
 	
 	@Override
 	protected boolean checkRequirements(PlayerInteractEvent event) {
-		Location loc1 = getPlayer().getLocation().add(2, 15, 2);
-		Location loc2 = getPlayer().getLocation().clone().add(-3, 0, -2);
+		Location loc1 = event.getPlayer().getLocation().add(2, 15, 2);
+		Location loc2 = event.getPlayer().getLocation().clone().add(-3, 0, -2);
 		Block block = loc1.getBlock().getRelative(3, 0, 0);
 		Block block2 = loc1.getBlock().getRelative(3, 1, 0);
 		Cuboid checkCuboid = new Cuboid(loc1, loc2);
 		
 		if (!checkCuboid.isEmpty() || block.getType() != Material.AIR || block2.getType() != Material.AIR) {
-			getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
+			event.getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
 			return false;
 		}
 		return true;
@@ -78,7 +77,7 @@ public class GadgetTrampoline extends Gadget {
 	@Override
 	public void onUpdate() {
 		if (running && cuboid != null) {
-			for (Entity entity : EntityUtils.getEntitiesInRadius(center, 4d)) {
+			for (Entity entity : center.getWorld().getNearbyEntities(center, 4, 4, 4)) {
 				Block b = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
 				if (b.getType() == Material.WOOL && cuboid.contains(b))
 					MathUtils.applyVelocity(entity, new Vector(0, 3, 0));
@@ -162,7 +161,7 @@ public class GadgetTrampoline extends Gadget {
 		if (cuboid != null && running && cuboid.contains(event.getBlock()))
 			event.setCancelled(true);
 		if (cuboid != null && running && (event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 0, 0).getLocation())
-		                                  || event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation())))
+				|| event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation())))
 			event.setCancelled(true);
 	}
 	
@@ -171,7 +170,7 @@ public class GadgetTrampoline extends Gadget {
 		if (cuboid != null && running && cuboid.contains(event.getBlock()))
 			event.setCancelled(true);
 		if (cuboid != null && running && (event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 0, 0).getLocation())
-		                                  || event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation())))
+				|| event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation())))
 			event.setCancelled(true);
 	}
 	

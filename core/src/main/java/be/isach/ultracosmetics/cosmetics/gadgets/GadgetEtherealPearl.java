@@ -70,14 +70,14 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 	
 	@EventHandler
 	public void onToggleSneak(PlayerToggleSneakEvent event) {
-		if (pearl != null && event.getPlayer().getName().equals(getPlayer().getName())) {
-			getPlayer().eject();
+		if (pearl != null && event.getPlayer() == getPlayer()) {
+			event.getPlayer().eject();
 			
-			if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-				getPlayer().setAllowFlight(false);
+			if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+				event.getPlayer().setAllowFlight(false);
 			}
 			
-			spawnRandomFirework(getPlayer().getLocation());
+			spawnRandomFirework(event.getPlayer().getLocation());
 			pearl.remove();
 		}
 	}
@@ -88,26 +88,27 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 	}
 	
 	public void spawnRandomFirework(Location location) {
-		final ArrayList<Firework> fireworks = new ArrayList<>();
+		ArrayList<Firework> fireworks = new ArrayList<>();
 		Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-			
 			for (int i = 0; i < 4; i++) {
-				final Firework f = getPlayer().getWorld().spawn(location, Firework.class);
-				
+				Firework f = location.getWorld().spawn(location, Firework.class);
 				FireworkMeta fm = f.getFireworkMeta();
 				fm.addEffect(getRandomFireworkEffect());
 				f.setFireworkMeta(fm);
 				fireworks.add(f);
 			}
 		});
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> fireworks.forEach(Firework::detonate), 2);
+		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+			fireworks.forEach(Firework::detonate);
+			fireworks.clear();
+		}, 2);
 	}
 	
 	
 	@EventHandler
 	public void onItemFrameBreak(HangingBreakByEntityEvent event) {
 		if (pearl == event.getRemover()
-		    || event.getRemover() == getPlayer()) {
+				|| event.getRemover() == getPlayer()) {
 			event.setCancelled(true);
 		}
 	}
