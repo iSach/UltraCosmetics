@@ -9,10 +9,12 @@ import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityUnleashEvent;
@@ -70,7 +72,7 @@ public class GadgetParachute extends Gadget {
 	public void onLeashBreak(EntityUnleashEvent event) {
 		if (chickens.contains(event.getEntity())) {
 			event.getEntity().getNearbyEntities(1, 1, 1).stream().filter(ent -> ent instanceof Item
-			                                                                    && ((Item) ent).getItemStack().getType() == Material.LEASH).forEachOrdered(Entity::remove);
+					&& ((Item) ent).getItemStack().getType() == Material.LEASH).forEachOrdered(Entity::remove);
 		}
 	}
 	
@@ -91,11 +93,16 @@ public class GadgetParachute extends Gadget {
 	@Override
 	public void onUpdate() {
 		if (active) {
-			if (!getPlayer().isOnGround() && getPlayer().getVelocity().getY() < -0.3)
+			// isOnGround returns true if they're on a solid block and doesn't account for non-solid blocks (#362)
+			if (!isNotOnAir(getPlayer()) && getPlayer().getVelocity().getY() < -0.3)
 				MathUtils.applyVelocity(getPlayer(), getPlayer().getVelocity().add(new Vector(0, 0.1, 0)), true);
-			if (getPlayer().isOnGround())
+			if (isNotOnAir(getPlayer()))
 				killParachute();
 		}
+	}
+	
+	private boolean isNotOnAir(Player p) {
+		return p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR;
 	}
 	
 	@Override
