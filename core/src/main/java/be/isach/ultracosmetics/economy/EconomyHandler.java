@@ -16,6 +16,11 @@ public class EconomyHandler {
 
 	public EconomyHandler(UltraCosmetics ultraCosmetics, String economy) {
 		this.ultraCosmetics = ultraCosmetics;
+		if (economy == null || economy.equalsIgnoreCase("")) {
+			ultraCosmetics.getSmartLogger().write("Economy not specified in the config, disabling economy features.");
+			usingEconomy = false;
+			return;
+		}
 		if (economy.equalsIgnoreCase("vault")) {
 			economyHook = new VaultHook(ultraCosmetics);
 			usingEconomy = true;
@@ -23,6 +28,7 @@ public class EconomyHandler {
 			economyHook = new PlayerPointsHook(ultraCosmetics);
 			usingEconomy = true;
 		} else {
+			ultraCosmetics.getSmartLogger().write("Unknown economy: '" + economy + "'. Valid economies: Vault, PlayerPoints.");
 			usingEconomy = false;
 		}
 	}
