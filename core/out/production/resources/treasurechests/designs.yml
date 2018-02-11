@@ -1,0 +1,24 @@
+Classic:
+  center-block: '169:0'
+  around-center: '5:0'
+  third-blocks: '5:1'
+  below-chests: '17:0'
+  barriers: '85:0'
+  chest-type: NORMAL
+  effect: FLAME
+Modern:
+  center-block: '169:0'
+  around-center: '159:11'
+  third-blocks: '155:0'
+  below-chests: '159:11'
+  barriers: '160:3'
+  chest-type: ENDER
+  effect: REDSTONE
+Nether:
+  center-block: '89:0'
+  around-center: '88:0'
+  third-blocks: '87:0'
+  below-chests: '112:0'
+  barriers: '113:0'
+  chest-type: NORMAL
+  effect: SMOKE_NORMAL

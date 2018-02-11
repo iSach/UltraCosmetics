@@ -1,9 +1,9 @@
 name: UltraCosmetics
-version: @VERSION@
+version: 2.5.0
 author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
-softdepend: [LibsDisguises, Vault, PlaceholderAPI, PlayerPoints]
+softdepend: [LibsDisguises, Vault, PlaceholderAPI]
 commands:
   ultracosmetics:
     aliases: [uc, cosmetics]

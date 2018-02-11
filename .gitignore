@@ -98,6 +98,8 @@ local.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+QFpuiZ5X6trY
+
 # Java annotation processor (APT)
 .factorypath
 
@@ -132,3 +134,5 @@ gradle-app.setting
 testserver/
 testserver
 testserver/*
+
+hts*

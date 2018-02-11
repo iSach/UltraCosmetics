@@ -88,20 +88,24 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 	}
 	
 	public void spawnRandomFirework(Location location) {
-		ArrayList<Firework> fireworks = new ArrayList<>();
-		Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-			for (int i = 0; i < 4; i++) {
-				Firework f = location.getWorld().spawn(location, Firework.class);
-				FireworkMeta fm = f.getFireworkMeta();
-				fm.addEffect(getRandomFireworkEffect());
-				f.setFireworkMeta(fm);
-				fireworks.add(f);
-			}
-		});
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-			fireworks.forEach(Firework::detonate);
-			fireworks.clear();
-		}, 2);
+		// Temporary try/catch to avoid errors. //TODO fix NPE here (unknown reason yet)
+		try {
+			ArrayList<Firework> fireworks = new ArrayList<>();
+			Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+				for (int i = 0; i < 4; i++) {
+					Firework f = location.getWorld().spawn(location, Firework.class);
+					FireworkMeta fm = f.getFireworkMeta();
+					fm.addEffect(getRandomFireworkEffect());
+					f.setFireworkMeta(fm);
+					fireworks.add(f);
+				}
+			});
+			Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+				fireworks.forEach(Firework::detonate);
+				fireworks.clear();
+			}, 2);
+		} catch (Exception exc) {
+		}
 	}
 	
 	

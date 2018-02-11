@@ -16,6 +16,10 @@ public class VaultHook implements EconomyHook {
 	private boolean economyEnabled;
 
 	public VaultHook(UltraCosmetics ultraCosmetics) {
+		if(!ultraCosmetics.getServer().getPluginManager().isPluginEnabled("Vault")) {
+			economyEnabled = false;
+			return;
+		}
 		RegisteredServiceProvider<Economy> economyProvider = ultraCosmetics.getServer().getServicesManager().getRegistration(Economy.class);
 		if (economyProvider != null) {
 			economy = economyProvider.getProvider();

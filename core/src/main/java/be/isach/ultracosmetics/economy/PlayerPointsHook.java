@@ -18,6 +18,10 @@ public class PlayerPointsHook implements EconomyHook {
 
 	public PlayerPointsHook(UltraCosmetics ultraCosmetics) {
 		this.ultraCosmetics = ultraCosmetics;
+		if(!ultraCosmetics.getServer().getPluginManager().isPluginEnabled("PlayerPoints")) {
+			economyEnabled = false;
+			return;
+		}
 		if (hookPlayerPoints()) {
 			ultraCosmetics.getSmartLogger().write("");
 			ultraCosmetics.getSmartLogger().write("Hooked into PlayerPoints for economy.");

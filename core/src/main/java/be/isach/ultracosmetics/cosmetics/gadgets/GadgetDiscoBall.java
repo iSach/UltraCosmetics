@@ -74,6 +74,9 @@ public class GadgetDiscoBall extends Gadget {
 	
 	@Override
 	public void onUpdate() {
+		if(armorStand == null) {
+			return;
+		}
 		if (armorStand != null && armorStand.isValid() && running) {
 			armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
 			

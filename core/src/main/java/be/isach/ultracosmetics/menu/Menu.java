@@ -57,13 +57,13 @@ public abstract class Menu implements Listener {
 	protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {
 		Validate.notNull(itemStack);
 		Validate.notNull(clickRunnable);
-		
+
 		if (itemStack.hasItemMeta()) {
 			ItemMeta itemMeta = itemStack.getItemMeta();
 			itemMeta.addItemFlags(ItemFlag.values());
 			itemStack.setItemMeta(itemMeta);
 		}
-		
+
 		inventory.setItem(slot, itemStack);
 		if (clickRunnableMap.containsKey(inventory)) {
 			Map<ItemStack, ClickRunnable> map = clickRunnableMap.get(inventory);
@@ -77,51 +77,57 @@ public abstract class Menu implements Listener {
 	
 	@EventHandler
 	public void onClick(InventoryClickEvent event) {
+
 		// Check Inventory isn't null
 		if (event.getInventory() == null) {
 			return;
 		}
-		
+
 		// Check Item clicked isn't null
 		if (event.getCurrentItem() == null) {
 			return;
 		}
-		
+
 		// Check clicker is player
 		if (!(event.getWhoClicked() instanceof Player)) {
 			return;
 		}
-		
+
 		// Check Inventory is the good one
 		if (!event.getInventory().getName().contains(getName())) {
 			return;
 		}
-		
+
 		// Check that the filler item isn't being clicked
 		if (fillerItem != null && event.getCurrentItem().equals(fillerItem)) {
 			event.setCancelled(true);
 			return;
 		}
-		
 		// Check that Inventory is valid.
 		if (!clickRunnableMap.keySet().contains(event.getInventory())) {
 			return;
 		}
-		
-		// Check that Item is meant to do an action.
-		if (!clickRunnableMap.get(event.getInventory()).keySet().contains(event.getCurrentItem())) {
-			return;
-		}
+
+		boolean correctItem = false;
+
+        ClickRunnable clickRunnable = null;
+		for(ItemStack itemStack : clickRunnableMap.get(event.getInventory()).keySet()) {
+            if(ItemFactory.areSame(itemStack, event.getCurrentItem())) {
+		        correctItem = true;
+		        clickRunnable = clickRunnableMap.get(event.getInventory()).get(itemStack);
+            }
+        }
+        if(!correctItem) {
+		    return;
+        }
 		
 		event.setCancelled(true);
-		
-		ClickRunnable clickRunnable = clickRunnableMap.get(event.getInventory()).get(event.getCurrentItem());
-		
+
 		// Check clickrunnable isn't null.
 		if (clickRunnable == null) {
 			return;
 		}
-		
+
 		Player player = (Player) event.getWhoClicked();
 		UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(player);
 		clickRunnable.run(new ClickData(event.getInventory(), ultraPlayer, event.getAction(), event.getCurrentItem(), event.getSlot()));

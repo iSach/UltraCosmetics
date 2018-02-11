@@ -78,6 +78,7 @@ public class ItemFactory {
 		if (url.isEmpty()) return head;
 		
 		SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+		headMeta.setOwner("Notch");
 		GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 		profile.getProperties().put("textures", new Property("textures", url));
 		Field profileField;
@@ -102,5 +103,29 @@ public class ItemFactory {
 	
 	public static ItemStack addGlow(ItemStack item) {
 		return UltraCosmeticsData.get().getVersionManager().getItemGlower().glow(item);
+	}
+
+	public static boolean areSame(ItemStack a, ItemStack b) {
+		if(a.getType() != b.getType()) {
+			return false;
+		}
+
+		if(a.getData().getData() != b.getData().getData()) {
+			return false;
+		}
+		if((a.hasItemMeta() && !b.hasItemMeta())
+			|| (!a.hasItemMeta() && b.hasItemMeta())) {
+			return false;
+		}
+		if(!a.hasItemMeta() && !b.hasItemMeta()) {
+			return true;
+		}
+		ItemMeta am = a.getItemMeta();
+		ItemMeta bm = b.getItemMeta();
+
+		if(!am.getDisplayName().equalsIgnoreCase(bm.getDisplayName())) {
+			return false;
+		}
+		return true;
 	}
 }
