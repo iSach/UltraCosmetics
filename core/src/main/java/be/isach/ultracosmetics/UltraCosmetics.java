@@ -278,6 +278,7 @@ public class UltraCosmetics extends JavaPlugin {
 		config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");
 		
 		config.set("Disabled-Items", null);
+        config.addDefault("Economy", "Vault");
 		
 		if (!config.contains("TreasureChests.Loots.Gadgets")) {
 			config.createSection("TreasureChests.Loots.Gadgets", "Chance of getting a GADGET", "This is different from ammo!");

@@ -96,6 +96,7 @@ public class UpdateManager extends Thread {
                 return version;
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.out.print("[UltraCosmetics] Failed to check for an update on spigot. ");
         }
         return null;
