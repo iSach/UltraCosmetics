@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -299,6 +300,28 @@ public class UltraCosmetics extends JavaPlugin {
 			config.createSection("Categories.Suits");
 			config.set("Categories.Suits.Main-Menu-Item", "299:0");
 			config.set("Categories.Suits.Go-Back-Arrow", true);
+		}
+		
+		if (!config.contains("TreasureChests.Loots.Commands")) {
+			config.createSection("TreasureChests.Loots.Commands");
+			String section = "TreasureChests.Loots.Commands.shoutout";
+			config.set(section + ".Name", "&d&lShoutout");
+			config.set(section + ".Material", "NETHER_STAR");
+			config.set(section + ".Enabled", false);
+			config.set(section + ".Chance", 100);
+			config.set(section + ".Message.enabled", false);
+			config.set(section + ".Message.message", "%prefix% &6&l%name% found a rare shoutout!");
+			config.set(section + ".Cancel-If-Permission", "no");
+			config.set(section + ".Commands", Collections.singletonList("say %name% is awesome!"));
+			section = "TreasureChests.Loots.Commands.flower";
+			config.set(section + ".Name", "&e&lFlower");
+			config.set(section + ".Material", "YELLOW_FLOWER");
+			config.set(section + ".Enabled", false);
+			config.set(section + ".Chance", 100);
+			config.set(section + ".Message.enabled", false);
+			config.set(section + ".Message.message", "%prefix% &6&l%name% found a flower!");
+			config.set(section + ".Cancel-If-Permission", "example.yellowflower");
+			config.set(section + ".Commands", Arrays.asList("give %name% yellow_flower 1", "pex user %name% add example.yellowflower"));
 		}
 		
 		config.addDefault("Categories.Clear-Cosmetic-Item", "152:0", "Item where user click to clear a cosmetic.");

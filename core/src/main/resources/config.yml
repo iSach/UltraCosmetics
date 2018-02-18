@@ -159,7 +159,7 @@ TreasureChests:
         Enabled: false
         Chance: 100
         Message:
-          enabled: true
+          enabled: false
           message: '%prefix% &6&l%name% found a flower!'
         Cancel-If-Permission: 'example.yellowflower'
         Commands:
