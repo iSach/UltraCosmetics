@@ -389,6 +389,11 @@ public class UltraPlayer {
 			return;
 		}
 		
+		if (!getBukkitPlayer().hasPermission("ultracosmetics.treasurechests.buykey")) {
+			getBukkitPlayer().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You don't have permission to buy Treasure Keys.");
+			return;
+		}
+		
 		try {
 			final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
 			for (int i = 27; i < 30; i++) {
