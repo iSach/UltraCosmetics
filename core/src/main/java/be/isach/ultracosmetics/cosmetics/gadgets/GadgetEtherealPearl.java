@@ -32,7 +32,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 	private EnderPearl pearl;
 	
 	public GadgetEtherealPearl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, GadgetType.valueOf("etherealpearl"), ultraCosmetics);
+		super(owner, GadgetType.valueOf("EtherealPearl"), ultraCosmetics);
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 	}
 	
 	@Override
-	void onRightClick() {
+	public void onRightClick() {
 		if (getOwner().getCurrentMount() != null) {
 			getOwner().removeMount();
 		}
@@ -93,11 +93,26 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 			ArrayList<Firework> fireworks = new ArrayList<>();
 			Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
 				for (int i = 0; i < 4; i++) {
-					Firework f = location.getWorld().spawn(location, Firework.class);
-					FireworkMeta fm = f.getFireworkMeta();
-					fm.addEffect(getRandomFireworkEffect());
-					f.setFireworkMeta(fm);
-					fireworks.add(f);
+					Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+					FireworkMeta fwm = fw.getFireworkMeta();
+					Random r = new Random();
+					int rt = r.nextInt(4) + 1;
+        				Type type = Type.BALL;
+        				if (rt == 1) type = Type.BALL;
+        				if (rt == 2) type = Type.BALL_LARGE;
+        				if (rt == 3) type = Type.BURST;
+        				if (rt == 4) type = Type.CREEPER;
+        				if (rt == 5) type = Type.STAR;
+        				int r1i = r.nextInt(17) + 1;
+        				int r2i = r.nextInt(17) + 1;
+        				Color c1 = plugin.getColor(r1i);
+        				Color c2 = plugin.getColor(r2i);
+        				FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean()).withColor(c1).withFade(c2).with(type).trail(r.nextBoolean()).build();
+        				fwm.addEffect(effect);
+        				fw.setFireworkMeta(fwm);
+					/**fm.addEffect(getRandomFireworkEffect());
+					f.setFireworkMeta(fm);*/
+					fireworks.add(fw);
 				}
 			});
 			Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
@@ -122,6 +137,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 		if (event.getEntity() instanceof EnderPearl) {
 			if (pearl == event.getEntity()) {
 				event.getEntity().remove();
+				pearl.remove();
 				pearl = null;
 			}
 		}
@@ -144,12 +160,28 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 				getPlayer().setAllowFlight(false);
 			}
 			
+			pearl.remove();
 			pearl = null;
 			spawnRandomFirework(getPlayer().getLocation());
 		}
 	}
 	
 	@Override
-	void onLeftClick() {
+	public void onLeftClick() {
+		if (getOwner().getCurrentMount() != null) {
+			getOwner().removeMount();
+		}
+		
+		if (getPlayer().getVehicle() instanceof EnderPearl) {
+			getPlayer().getVehicle().remove();
+		}
+		
+		EnderPearl pearl = getPlayer().launchProjectile(EnderPearl.class);
+		pearl.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.53d));
+		pearl.setPassenger(getPlayer());
+		getPlayer().teleport(getPlayer().getLocation().add(0, 5, 0));
+		if (!getPlayer().getAllowFlight()) {
+			getPlayer().setAllowFlight(true);
+		}
 	}
 }
