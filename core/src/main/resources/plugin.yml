@@ -36,6 +36,7 @@ permissions:
       - ultracosmetics.command.give.others
       - ultracosmetics.command.toggle.others
       - ultracosmetics.command.treasure
+      - ultracosmetics.command.reload
   ultracosmetics.command.clear:
     default: op
   ultracosmetics.command.toggle:
@@ -51,6 +52,8 @@ permissions:
   ultracosmetics.command.gadgets:
     default: op
   ultracosmetics.command.selfview:
+    default: op
+  ultracosmetics.command.reload:
     default: op
   ultracosmetics.gadgets.*:
     children: 
