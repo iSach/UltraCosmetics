@@ -1,9 +1,8 @@
 package be.isach.ultracosmetics.command.subcommands;
 
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ public class SubCommandClear extends SubCommand {
 	}
 
 	private void common(CommandSender sender, String... args) {
-		getUltraCosmetics().getConfig().loadConfiguration(getUltraCosmetics().getFile());
-		sender.sendMessage(ChatColor.GREEN + "Plugin has been loaded successfully.");
+		SettingsManager.getConfig().loadConfiguration(getUltraCosmetics().getFile());
+		sender.sendMessage(org.bukkit.ChatColor.GREEN + "Plugin has been loaded successfully.");
 	}
 }
