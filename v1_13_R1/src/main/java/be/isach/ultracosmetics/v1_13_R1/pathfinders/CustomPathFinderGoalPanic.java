@@ -54,7 +54,7 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
 			return false;
 		}
 		// CraftBukkit end
-		return !this.b.getNavigation().o();
+		return !this.b.getNavigation().p();
 	}
 	
 	

@@ -143,7 +143,7 @@ public class EntityUtil implements IEntityUtil {
 	@Override
 	public void move(Creature creature, Location loc) {
 		EntityCreature ec = ((CraftCreature) creature).getHandle();
-		ec.P = 1;
+		ec.Q = 1;
 		
 		if (loc == null) return;
 		
@@ -190,10 +190,10 @@ public class EntityUtil implements IEntityUtil {
 		BlockPosition position = new BlockPosition(location.getX(), location.getY(), location.getZ());
 		if (design.getChestType() == ChestType.ENDER) {
 			TileEntityEnderChest tileChest = (TileEntityEnderChest) world.getTileEntity(position);
-			world.playBlockAction(position, tileChest.getBlock(), 1, open ? 1 : 0);
+			world.playBlockAction(position, tileChest.getBlock().getBlock(), 1, open ? 1 : 0);
 		} else {
 			TileEntityChest tileChest = (TileEntityChest) world.getTileEntity(position);
-			world.playBlockAction(position, tileChest.getBlock(), 1, open ? 1 : 0);
+			world.playBlockAction(position, tileChest.getBlock().getBlock(), 1, open ? 1 : 0);
 		}
 	}
 	

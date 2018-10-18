@@ -19,25 +19,25 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 	@Override
 	public void a(float sideMot, float forMot, float f2) {
 		if (!CustomEntities.customEntities.contains(this)) {
-			super.g(sideMot, forMot);
+			super.e(sideMot, forMot);
 			return;
 		}
 		EntityHuman passenger = null;
-		if (!bF().isEmpty()) {
-			passenger = (EntityHuman) bF().get(0);
+		if (!bP().isEmpty()) {
+			passenger = (EntityHuman) bP().get(0);
 		}
 		ride(sideMot, forMot, passenger, this);
 	}
 	
 	@Override
 	public String getName() {
-		return LocaleI18n.get("entity.Slime.name");
+		return LocaleLanguage.a().a("entity.Slime.name");
 	}
 	
 	
 	@Override
 	public void g_(float sideMot, float forMot) {
-		super.g(sideMot, forMot);
+		super.e(sideMot, forMot);
 	}
 	
 	@Override

@@ -29,9 +29,9 @@ public class CustomGuardian extends EntityGuardian {
 	}
 	
 	@Override
-	protected SoundEffect F() {
+	protected SoundEffect D() {
 		if (custom) return null;
-		else return super.F();
+		else return super.D();
 	}
 	
 	@Override
@@ -42,19 +42,19 @@ public class CustomGuardian extends EntityGuardian {
 	
 	@Override
 	public String getName() {
-		return LocaleI18n.get("entity.Guardian.name");
+		return LocaleLanguage.a().a("entity.Guardian.name");
 	}
 	
 	
 	@Override
-	protected SoundEffect cf() {
+	protected SoundEffect cs() {
 		if (custom) return null;
-		else return super.cf();
+		else return super.cs();
 	}
 	
 	@Override
-	public void B_() {
-		if (!custom) super.B_();
+	public void tick() {
+		if (!custom) super.tick();
 		else setHealth(getMaxHealth());
 	}
 }

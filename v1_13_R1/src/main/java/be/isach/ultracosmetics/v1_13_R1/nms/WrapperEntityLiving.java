@@ -15,45 +15,45 @@ public class WrapperEntityLiving extends WrapperEntity {
 		this.handle = handle;
 	}
 	
-	public float getRotationYawHead() { return handle.aP; }
+	public float getRotationYawHead() { return handle.aS; }
 	
-	public void setRotationYawHead(float rotationYawHead) { handle.aP = rotationYawHead; }
+	public void setRotationYawHead(float rotationYawHead) { handle.aS = rotationYawHead; }
 	
-	public float getRenderYawOffset() { return handle.aN; }
+	public float getRenderYawOffset() { return handle.aQ; }
 	
-	public void setRenderYawOffset(float renderYawOffset) { handle.aN = renderYawOffset; }
+	public void setRenderYawOffset(float renderYawOffset) { handle.aQ = renderYawOffset; }
 	
-	public float getMoveStrafing() { return handle.be; }
+	public float getMoveStrafing() { return handle.bh; }
 	
-	public void setMoveStrafing(float moveStrafing) { handle.be = moveStrafing; }
+	public void setMoveStrafing(float moveStrafing) { handle.bh = moveStrafing; }
 	
-	public float getMoveForward() { return handle.bg; }
+	public float getMoveForward() { return handle.bj; }
 	
-	public void setMoveForward(float moveForward) { handle.bg = moveForward; }
+	public void setMoveForward(float moveForward) { handle.bj = moveForward; }
 	
-	public boolean isJumping() { return getField("bd", EntityLiving.class, Boolean.class); }
+	public boolean isJumping() { return getField("bg", EntityLiving.class, Boolean.class); }
 	
-	public void setJumping(boolean jumping) { setField("bd", EntityLiving.class, jumping); }
+	public void setJumping(boolean jumping) { setField("bg", EntityLiving.class, jumping); }
 	
-	public float getJumpMovementFactor() { return handle.aQ; }
+	public float getJumpMovementFactor() { return handle.aT; }
 	
-	public void setJumpMovementFactor(float jumpMovementFactor) { handle.aQ = jumpMovementFactor; }
+	public void setJumpMovementFactor(float jumpMovementFactor) { handle.aT = jumpMovementFactor; }
 	
-	public float getPrevLimbSwingAmount() { return handle.aF; }
+	public float getPrevLimbSwingAmount() { return handle.aI; }
 	
-	public void setPrevLimbSwingAmount(float prevLimbSwingAmount) { handle.aF = prevLimbSwingAmount; }
+	public void setPrevLimbSwingAmount(float prevLimbSwingAmount) { handle.aI = prevLimbSwingAmount; }
 	
-	public float getLimbSwingAmount() { return handle.aG; }
+	public float getLimbSwingAmount() { return handle.aJ; }
 	
-	public void setLimbSwingAmount(float limbSwingAmount) { handle.aG = limbSwingAmount; }
+	public void setLimbSwingAmount(float limbSwingAmount) { handle.aJ = limbSwingAmount; }
 	
-	public float getLimbSwing() { return handle.aH; }
+	public float getLimbSwing() { return handle.aK; }
 	
-	public void setLimbSwing(float limbSwing) { handle.aH = limbSwing; }
+	public void setLimbSwing(float limbSwing) { handle.aK = limbSwing; }
 	
-	public float getMoveSpeed() { return handle.cy(); }
+	public float getMoveSpeed() { return handle.cK(); }
 	
-	public void setMoveSpeed(float moveSpeed) { handle.k(moveSpeed); }
+	public void setMoveSpeed(float moveSpeed) { handle.o(moveSpeed); }
 	
 	@Override
 	public EntityLiving getHandle() { return handle; }

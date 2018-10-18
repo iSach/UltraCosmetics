@@ -20,13 +20,13 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 	@Override
 	public void a(float sideMot, float forMot, float f2) {
 		if (!CustomEntities.customEntities.contains(this)) {
-			super.g(sideMot, forMot);
+			super.e(sideMot, forMot);
 			return;
 		}
 		
 		EntityHuman passenger = null;
-		if (!bF().isEmpty()) {
-			passenger = (EntityHuman) bF().get(0);
+		if (!bP().isEmpty()) {
+			passenger = (EntityHuman) bP().get(0);
 		}
 		ride(sideMot, forMot, passenger, this);
 	}
@@ -38,7 +38,7 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 	
 	@Override
 	public void g_(float sideMot, float forMot) {
-		super.g(sideMot, forMot);
+		super.e(sideMot, forMot);
 	}
 	
 	@Override
@@ -117,7 +117,7 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 	
 	@Override
 	public String getName() {
-		return LocaleI18n.get("entity.Spider.name");
+		return LocaleLanguage.a().a("entity.Spider.name");
 	}
 	
 	@Override

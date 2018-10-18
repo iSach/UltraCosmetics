@@ -26,7 +26,7 @@ public class CustomEntityFirework extends EntityFireworks {
 	boolean gone = false;
 	
 	@Override
-	public void B_() {
+	public void tick() {
 		if (gone) {
 			return;
 		}

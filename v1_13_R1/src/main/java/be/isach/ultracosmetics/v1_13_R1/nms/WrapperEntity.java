@@ -15,11 +15,11 @@ public class WrapperEntity extends WrapperBase {
 		this.handle = handle;
 	}
 	
-	public float getStepHeight() { return handle.P; }
+	public float getStepHeight() { return handle.Q; }
 	
-	public void setStepHeight(float stepHeight) { handle.P = stepHeight; }
+	public void setStepHeight(float stepHeight) { handle.Q = stepHeight; }
 	
-	public boolean canPassengerSteer() { return handle.bI(); }
+	public boolean canPassengerSteer() { return handle.bT(); }
 	
 	public Entity getHandle() { return handle; }
 	

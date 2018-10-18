@@ -29,11 +29,11 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 	}
 	
 	@Override
-	protected SoundEffect F() { // say
+	protected SoundEffect D() { // say (ambient)
 		if (isCustomEntity()) {
-			a(SoundEffects.bM, 0.05f, 2f);
+			a(SoundEffects.BLOCK_FIRE_AMBIENT, 0.05f, 2f);
 			return null;
-		} else return super.F();
+		} else return super.D();
 	}
 	
 	@Override
@@ -43,31 +43,31 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 	}
 	
 	@Override
-	protected SoundEffect cf() { // Death
+	protected SoundEffect cs() { // Death
 		if (isCustomEntity()) return null;
-		else return super.cf();
+		else return super.cs();
 	}
 	
 	@Override
-	protected SoundEffect dm() { // Step
+	protected SoundEffect dB() { // Step
 		if (isCustomEntity()) return null;
-		else return super.dm();
+		else return super.dB();
 	}
 	
 	@Override
-	protected void a(BlockPosition blockposition, Block block) {
+	protected void a(BlockPosition blockposition, IBlockData iblockdata) {
 		if (isCustomEntity()) return;
-		super.a(blockposition, block);
+		super.a(blockposition, iblockdata);
 	}
 	
 	@Override
 	public String getName() {
-		return LocaleI18n.get("entity.Zombie.name");
+		return LocaleLanguage.a().a("entity.Zombie.name");
 	}
 	
 	@Override
-	public void B_() {
-		super.B_();
+	public void tick() {
+		super.tick();
 		if (!isCustomEntity()) return;
 		fireTicks = 0;
 		UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
