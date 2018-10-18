@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.v1_13_R2.EntityBase;
 import be.isach.ultracosmetics.v1_13_R2.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_13_R2.nms.WrapperEntityInsentient;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.entity.Entity;
 
 /**

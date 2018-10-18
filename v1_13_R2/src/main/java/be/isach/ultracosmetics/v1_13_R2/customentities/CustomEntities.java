@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.v1_13_R2.customentities;
 
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
@@ -62,7 +63,7 @@ public enum CustomEntities {
 		for (CustomEntities entity : values()) {
 			try {
 				// Use reflection to get the RegistryID of entities.
-				@SuppressWarnings("unchecked") RegistryID<EntityTypes<?>> registryID = (RegistryID<EntityTypes<?>>) getPrivateField(RegistryMaterials.class, EntityTypes.REGISTRY, "a");
+				@SuppressWarnings("unchecked") RegistryID<EntityTypes<?>> registryID = (RegistryID<EntityTypes<?>>) getPrivateField(RegistryMaterials.class, IRegistry.ENTITY_TYPE, "a");
 				Object[] idToClassMap = (Object[]) getPrivateField(RegistryID.class, registryID, "d");
 				
 				// Save the the ID -> entity class mapping before the registration.

@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics.v1_13_R2.pathfinders;
 
 
+import net.minecraft.server.v1_13_R2.*;
+
 /**
  * @author RadBuilder
  */

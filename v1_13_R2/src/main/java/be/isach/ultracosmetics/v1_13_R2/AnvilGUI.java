@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.v1_13_R2;
 
 import be.isach.ultracosmetics.version.AAnvilGUI;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 

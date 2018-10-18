@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_13_R2.pets.CustomEntityPet;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.entity.Zombie;
 
 /**
@@ -48,9 +49,9 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 	}
 	
 	@Override
-	protected SoundEffect dB() { // Step
+	protected SoundEffect dA() { // Step
 		if (isCustomEntity()) return null;
-		else return super.dB();
+		else return super.dA();
 	}
 	
 	@Override
