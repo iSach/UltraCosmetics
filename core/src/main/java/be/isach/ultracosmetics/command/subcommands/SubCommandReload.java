@@ -7,9 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class SubCommandClear extends SubCommand {
+public class SubCommandReload extends SubCommand {
 
-	public SubCommandClear(UltraCosmetics ultraCosmetics) {
+	public SubCommandReload(UltraCosmetics ultraCosmetics) {
 		super("Reload the plugin and config.", "ultracosmetics.command.reload", "/uc reload", ultraCosmetics, "reload");
 	}
 
