@@ -1,0 +1,6 @@
+dependencies {
+    compile 'org.spigotmc:spigot113:1.13'
+    shaded(project(':core')) {
+        transitive false
+    }
+}
