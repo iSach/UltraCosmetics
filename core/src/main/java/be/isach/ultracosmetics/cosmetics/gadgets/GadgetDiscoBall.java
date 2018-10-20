@@ -53,7 +53,7 @@ public class GadgetDiscoBall extends Gadget {
 		armorStand.setVisible(false);
 		armorStand.setGravity(false);
 		armorStand.setSmall(false);
-		armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) 3, " "));
+		armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) 3, " "));
 		running = true;
 		DISCO_BALLS.add(this);
 		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 400);
@@ -81,7 +81,7 @@ public class GadgetDiscoBall extends Gadget {
 			armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
 			
 			if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0) {
-				armorStand.setHelmet(ItemFactory.create(Material.STAINED_GLASS, (byte) r.nextInt(15), " "));
+				armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) r.nextInt(15), " "));
 			}
 			
 			UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
@@ -111,7 +111,7 @@ public class GadgetDiscoBall extends Gadget {
 			}
 			
 			for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
-				if (b.getType() == Material.WOOL || b.getType() == Material.CARPET) {
+				if (b.getType().toString().contains("WOOL") || b.getType().toString().contains("CARPET")) {
 					BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
 				}
 			}

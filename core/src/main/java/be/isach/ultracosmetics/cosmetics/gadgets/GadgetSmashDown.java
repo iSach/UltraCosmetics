@@ -102,30 +102,30 @@ public class GadgetSmashDown extends Gadget {
 		for (Block b : BlockUtils.getBlocksInRadius(loc.clone().add(0, -1, 0), i, true)) {
 			if (b.getLocation().getBlockY() == loc.getBlockY() - 1) {
 				if (b.getType() != Material.AIR
-				    && b.getType() != Material.SIGN_POST
+				    && b.getType() != BlockUtils.getOldMaterial("SIGN_POST")
 				    && b.getType() != Material.CHEST
-				    && b.getType() != Material.STONE_PLATE
-				    && b.getType() != Material.WOOD_PLATE
+				    && b.getType() != BlockUtils.getOldMaterial("Material.STONE_PLATE")
+				    && b.getType() != BlockUtils.getOldMaterial("Material.WOOD_PLATE")
 				    && b.getType() != Material.WALL_SIGN
-				    && b.getType() != Material.WALL_BANNER
-				    && b.getType() != Material.STANDING_BANNER
-				    && b.getType() != Material.CROPS
-				    && b.getType() != Material.LONG_GRASS
-				    && b.getType() != Material.SAPLING
+				    && b.getType() != BlockUtils.getOldMaterial("Material.WALL_BANNER")
+				    && b.getType() != BlockUtils.getOldMaterial("Material.STANDING_BANNER")
+				    && b.getType() != BlockUtils.getOldMaterial("Material.CROPS")
+				    && b.getType() != BlockUtils.getOldMaterial("Material.LONG_GRASS")
+				    && b.getType() != BlockUtils.getOldMaterial("Material.SAPLING")
 				    && b.getType() != Material.DEAD_BUSH
-				    && b.getType() != Material.RED_ROSE
+				    && b.getType() != BlockUtils.getOldMaterial("Material.RED_ROSE")
 				    && b.getType() != Material.RED_MUSHROOM
 				    && b.getType() != Material.BROWN_MUSHROOM
 				    && b.getType() != Material.TORCH
 				    && b.getType() != Material.LADDER
 				    && b.getType() != Material.VINE
-				    && b.getType() != Material.DOUBLE_PLANT
-				    && b.getType() != Material.PORTAL
+				    && b.getType() != BlockUtils.getOldMaterial("Material.DOUBLE_PLANT")
+				    && b.getType() != BlockUtils.getOldMaterial("Material.PORTAL")
 				    && b.getType() != Material.CACTUS
 				    && b.getType() != Material.WATER
-				    && b.getType() != Material.STATIONARY_WATER
+				    && b.getType() != BlockUtils.getOldMaterial("Material.STATIONARY_WATER")
 				    && b.getType() != Material.LAVA
-				    && b.getType() != Material.STATIONARY_LAVA
+				    && b.getType() != BlockUtils.getOldMaterial("Material.STATIONARY_LAVA")
 				    && !BlockUtils.isRocketBlock(b)
 				    && !BlockUtils.isTreasureChestBlock(b)
 				    && b.getType().isSolid()
@@ -155,7 +155,7 @@ public class GadgetSmashDown extends Gadget {
 			event.setCancelled(true);
 			fallingBlocks.remove(event.getEntity());
 			FallingBlock fb = (FallingBlock) event.getEntity();
-			Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.getMaterial(fb.getBlockId()), fb.getBlockData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
+			Particles.BLOCK_CRACK.display(new Particles.BlockData(fb.getMaterial(), event.getBlock().getData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
 			SoundUtil.playSound(getPlayer().getLocation(), Sounds.ANVIL_BREAK, 0.05f, 1.0f);
 			event.getEntity().remove();
 		}

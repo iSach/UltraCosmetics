@@ -49,10 +49,10 @@ public class MenuPets extends CosmeticMenu<PetType> {
 			if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
 				if (player.hasPermission("ultracosmetics.pets.rename")) {
 					if (player.getCurrentPet() != null) {
-						stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
+						stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
 						run = data -> renamePet(player);
 					} else {
-						stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed"));
+						stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Active-Pet-Needed"));
 						run = data -> {
 							player.getBukkitPlayer().sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
 							player.getBukkitPlayer().closeInventory();
@@ -63,10 +63,10 @@ public class MenuPets extends CosmeticMenu<PetType> {
 					run = data -> {};
 				}
 			} else if (player.getCurrentPet() != null) {
-				stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
+				stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
 				run = data -> renamePet(player);
 			} else {
-				stack = ItemFactory.create(ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getItemType(), ItemFactory.createFromConfig("Categories.Rename-Pet-Item").getData(), MessageManager.getMessage("Active-Pet-Needed"));
+				stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Active-Pet-Needed"));
 				run = data -> {
 					player.getBukkitPlayer().sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
 					player.getBukkitPlayer().closeInventory();

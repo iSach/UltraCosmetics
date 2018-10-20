@@ -45,7 +45,7 @@ public class GadgetBlizzardBlaster extends Gadget {
 			}
 			
 			if (location.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR) {
-				if (location.clone().getBlock().getTypeId() != 43 && location.clone().getBlock().getTypeId() != 44)
+				if (!location.clone().getBlock().getType().toString().contains("SLAB"))
 					location.add(0, -1, 0);
 			}
 			

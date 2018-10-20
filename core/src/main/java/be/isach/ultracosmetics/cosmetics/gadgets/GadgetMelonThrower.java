@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
@@ -67,7 +68,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 	void onRightClick() {
 		this.world = getPlayer().getWorld();
 		SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
-		Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.MELON_BLOCK, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+		Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(BlockUtils.getOldMaterial("MELON_BLOCK"), (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
 		item.setPickupDelay(0);
 		item.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONBLOCK"));
 		item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));

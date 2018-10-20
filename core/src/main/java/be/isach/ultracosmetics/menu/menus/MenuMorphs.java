@@ -38,13 +38,13 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
 
 	private void putSelfViewItem(Inventory inventory, UltraPlayer player) {
 		int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 5 : 6);
-		MaterialData materialData;
+		ItemStack selfViewStack;
 		boolean toggle;
 		if (player.canSeeSelfMorph()) {
-			materialData = ItemFactory.createFromConfig("Categories.Self-View-Item.When-Enabled");
+			selfViewStack = ItemFactory.getItemStackFromConfig("Categories.Self-View-Item.When-Enabled");
 			toggle = false;
 		} else {
-			materialData = ItemFactory.createFromConfig("Categories.Self-View-Item.When-Disabled");
+			selfViewStack = ItemFactory.getItemStackFromConfig("Categories.Self-View-Item.When-Disabled");
 			toggle = true;
 		}
 		String msg = MessageManager.getMessage((toggle ? "Enable" : "Disable") + "-Third-Person-View");
@@ -52,7 +52,7 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
 			player.setSeeSelfMorph(!player.canSeeSelfMorph());
 			putSelfViewItem(inventory, player);
 		};
-		putItem(inventory, slot, ItemFactory.create(materialData.getItemType(), materialData.getData(), msg), run);
+		putItem(inventory, slot, ItemFactory.rename(selfViewStack, msg), run);
 	}
 
 	@Override

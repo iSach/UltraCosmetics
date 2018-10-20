@@ -473,14 +473,14 @@ public class Cuboid implements Iterable<Block>, Cloneable,
 		Cuboid face = getFace(dir.opposite());
 		switch (dir) {
 			case Down:
-				while (face.containsOnly(0)
+				while (face.containsOnly(Material.AIR)
 				       && face.getLowerY() > this.getLowerY()) {
 					face = face.shift(CuboidDirection.Down, 1);
 				}
 				return new Cuboid(this.worldName, this.x1, this.y1,
 				                  this.z1, this.x2, face.getUpperY(), this.z2);
 			case Up:
-				while (face.containsOnly(0)
+				while (face.containsOnly(Material.AIR)
 				       && face.getUpperY() < this.getUpperY()) {
 					face = face.shift(CuboidDirection.Up, 1);
 				}
@@ -488,28 +488,28 @@ public class Cuboid implements Iterable<Block>, Cloneable,
 				                  face.getLowerY(), this.z1, this.x2, this.y2,
 				                  this.z2);
 			case North:
-				while (face.containsOnly(0)
+				while (face.containsOnly(Material.AIR)
 				       && face.getLowerX() > this.getLowerX()) {
 					face = face.shift(CuboidDirection.North, 1);
 				}
 				return new Cuboid(this.worldName, this.x1, this.y1,
 				                  this.z1, face.getUpperX(), this.y2, this.z2);
 			case South:
-				while (face.containsOnly(0)
+				while (face.containsOnly(Material.AIR)
 				       && face.getUpperX() < this.getUpperX()) {
 					face = face.shift(CuboidDirection.South, 1);
 				}
 				return new Cuboid(this.worldName, face.getLowerX(),
 				                  this.y1, this.z1, this.x2, this.y2, this.z2);
 			case East:
-				while (face.containsOnly(0)
+				while (face.containsOnly(Material.AIR)
 				       && face.getLowerZ() > this.getLowerZ()) {
 					face = face.shift(CuboidDirection.East, 1);
 				}
 				return new Cuboid(this.worldName, this.x1, this.y1,
 				                  this.z1, this.x2, this.y2, face.getUpperZ());
 			case West:
-				while (face.containsOnly(0)
+				while (face.containsOnly(Material.AIR)
 				       && face.getUpperZ() < this.getUpperZ()) {
 					face = face.shift(CuboidDirection.West, 1);
 				}
@@ -558,13 +558,13 @@ public class Cuboid implements Iterable<Block>, Cloneable,
 	/**
 	 * Check if the Cuboid contains only BLOCKS of the given type
 	 *
-	 * @param blockId - The block ID to check for
+	 * @param m - The material to check for
 	 * @return true if this Cuboid contains only BLOCKS of the given type
 	 */
 	@SuppressWarnings("deprecation")
-	public boolean containsOnly(int blockId) {
+	public boolean containsOnly(Material m) {
 		for (Block b : this) {
-			if (b.getTypeId() != blockId)
+			if (b.getType() != m)
 				return false;
 		}
 		return true;

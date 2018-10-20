@@ -41,7 +41,7 @@ public class GadgetBlackHole extends Gadget {
 			item = null;
 		}
 		
-		Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.STAINED_CLAY, (byte) 0xf, UltraCosmeticsData.get().getItemNoPickupString()));
+		Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.createColored("STAINED_CLAY", (byte) 0xf, UltraCosmeticsData.get().getItemNoPickupString()));
 		newItem.setPickupDelay(Integer.MAX_VALUE);
 		newItem.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
 		this.item = newItem;

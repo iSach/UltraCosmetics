@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,6 +23,6 @@ import java.util.UUID;
  */
 public class PetPiggy extends Pet {
 	public PetPiggy(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("piggy"), ItemFactory.create(Material.PORK, (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
+		super(owner, ultraCosmetics, PetType.getByName("piggy"), ItemFactory.create(BlockUtils.getOldMaterial("PORK"), (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 }

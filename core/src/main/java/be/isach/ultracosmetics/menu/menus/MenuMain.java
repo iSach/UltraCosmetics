@@ -82,9 +82,8 @@ public class MenuMain extends Menu {
 		}
 
 		// Clear cosmetics item.
-		MaterialData materialData = ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item");
 		String message = MessageManager.getMessage("Clear-Cosmetics");
-		ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(), message);
+		ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
 		putItem(inventory, inventory.getSize() - 5, itemStack, data -> {
 			player.clear();
 			open(player);

@@ -4,11 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
@@ -57,7 +53,7 @@ public class MorphChicken extends Morph {
 				public void run() {
 					final List<Chicken> chickens = new ArrayList<>();
 					for (Item i : items) {
-						Particles.BLOCK_CRACK.display(new Particles.BlockData(Material.STAINED_CLAY, (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
+						Particles.BLOCK_CRACK.display(new Particles.BlockData(BlockUtils.getOldMaterial("STAINED_CLAY"), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
 						SoundUtil.playSound(i.getLocation(), Sounds.ZOMBIE_WOOD, .05f, 1f);
 						final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
 						chicken.setAgeLock(true);

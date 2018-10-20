@@ -159,7 +159,7 @@ public class PlayerListener implements Listener {
             int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
             if (event.getPlayer().getInventory().getItem(slot) != null) {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
-                event.getPlayer().getInventory().remove(slot);
+                event.getPlayer().getInventory().setItem(slot, null);
             }
             String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
             Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));

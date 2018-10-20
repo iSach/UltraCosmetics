@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
@@ -72,7 +73,7 @@ public class GadgetParachute extends Gadget {
 	public void onLeashBreak(EntityUnleashEvent event) {
 		if (chickens.contains(event.getEntity())) {
 			event.getEntity().getNearbyEntities(1, 1, 1).stream().filter(ent -> ent instanceof Item
-					&& ((Item) ent).getItemStack().getType() == Material.LEASH).forEachOrdered(Entity::remove);
+					&& ((Item) ent).getItemStack().getType() == BlockUtils.getOldMaterial("LEASH")).forEachOrdered(Entity::remove);
 		}
 	}
 	

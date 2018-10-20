@@ -665,11 +665,12 @@ public class UltraPlayer {
 			if (getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
 			    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
 			    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
-				getBukkitPlayer().getInventory().remove(slot);
+				// getBukkitPlayer().getInventory().remove(slot);
 				getBukkitPlayer().getInventory().setItem(slot, null);
 			}
 			getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), getBukkitPlayer().getInventory().getItem(slot));
-			getBukkitPlayer().getInventory().remove(slot);
+			// getBukkitPlayer().getInventory().remove(slot);
+			getBukkitPlayer().getInventory().setItem(slot, null);
 		}
 		String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
 		Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
