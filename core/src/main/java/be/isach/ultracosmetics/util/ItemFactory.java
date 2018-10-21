@@ -116,8 +116,9 @@ public class ItemFactory {
 	}
 	
 	public static ItemStack getItemStackFromConfig(String path) {
-		int id = Integer.parseInt(path.split(":")[0]);
-		byte data = path.split(":").length > 1 ? (byte) Integer.parseInt(path.split(":")[1]) : (byte) 0;
+		String fromConfig = UltraCosmeticsData.get().getPlugin().getConfig().getString(path);
+		int id = Integer.parseInt(fromConfig.split(":")[0]);
+		byte data = fromConfig.split(":").length > 1 ? (byte) Integer.parseInt(fromConfig.split(":")[1]) : (byte) 0;
 		Material m = Material.AIR;
 		for (Material mat : EnumSet.allOf(Material.class)) {
 			if (mat.getId() == id) {
@@ -130,7 +131,7 @@ public class ItemFactory {
 	public static ItemStack createSkull(String url, String name) {
 		ItemStack head;
 		if (VersionManager.IS_VERSION_1_13) {
-			head = create(Material.valueOf("PLAYER_HEAD"), name);
+			head = create(Material.getMaterial("PLAYER_HEAD"), name);
 		} else {
 			head = create(Material.valueOf("SKULL_ITEM"), (byte) 3, name);
 		}
