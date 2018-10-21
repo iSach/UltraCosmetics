@@ -39,7 +39,8 @@ public class SubCommandReload extends SubCommand {
 			uc.getPlayerManager().getUltraPlayer(pl.getBukkitPlayer()).removeMenuItem();
 
 			uc.getPlayerManager().getUltraPlayer(pl.getBukkitPlayer()).giveMenuItem();
-			uc.getPlayerManager().getUltraPlayer(pl.getBukkitPlayer()).updateInventory();
+
+			pl.getBukkitPlayer().updateInventory();
 		}
 		sender.sendMessage(ChatColor.GREEN + "Plugin has been loaded successfully.");
 	}
