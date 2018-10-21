@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.util.PlayerUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
@@ -80,7 +81,7 @@ public class MountRudolph extends MountHorse {
 		double y = location.getY();
 		location.add(location.getDirection().multiply(1.15));
 		location.setY(y - 0.073);
-		UtilParticles.display(255, 0, 0, location);
+		location.getWorld().spawnParticle(Particle.REDSTONE, location, 1, 255, 0, 0);
 		new Thread(() -> {
 			for (Player player : getPlayer().getWorld().getPlayers()) {
 				UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendTeleportPacket(player, right);

@@ -5,7 +5,9 @@ import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 
 /**
  * Represents an instance of  particles summoned by a player.
@@ -31,7 +33,7 @@ public class ParticleEffectSantaHat extends ParticleEffect {
 			double x = MathUtils.randomDouble(-0.05, 0.05);
 			double z = MathUtils.randomDouble(-0.05, 0.05);
 			location.add(x, 0.46f, z);
-			UtilParticles.display(255, 255, 255, location);
+			location.getWorld().spawnParticle(Particle.REDSTONE, location, 1, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1));
 			location.subtract(x, 0.46f, z);
 		}
 		for (float f = 0; f <= 0.4f; f += 0.1f) {
@@ -49,7 +51,7 @@ public class ParticleEffectSantaHat extends ParticleEffect {
 			float x = MathUtils.cos(angle) * radius;
 			float z = MathUtils.sin(angle) * radius;
 			location.add(x, height, z);
-			UtilParticles.display(255, red ? 0 : 255, red ? 0 : 255, location);
+			location.getWorld().spawnParticle(Particle.REDSTONE, location, 1, new Particle.DustOptions(Color.fromRGB(255, red ? 0 : 255, red ? 0 : 255), 1));
 			location.subtract(x, height, z);
 		}
 	}

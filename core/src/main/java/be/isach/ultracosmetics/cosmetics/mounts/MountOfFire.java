@@ -6,10 +6,10 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -56,7 +56,7 @@ public class MountOfFire extends MountHorse {
 	
 	@Override
 	public void onUpdate() {
-		UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+		entity.getWorld().spawnParticle(Particle.FLAME, entity.getLocation().clone().add(0, 1, 0), 5, 0.4f, 0.2f, 0.4f);
 	}
 	
 	@Override

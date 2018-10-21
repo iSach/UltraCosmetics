@@ -6,12 +6,11 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -19,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Represents an instance of a color bomb gadget summoned by a player.
@@ -55,23 +53,23 @@ public class GadgetColorBomb extends Gadget {
 		}
 		
 		if (running) {
-			Particles effect;
+			Particle effect;
 			switch (MathUtils.random.nextInt(5)) {
 				default:
-					effect = Particles.FIREWORKS_SPARK;
+					effect = Particle.FIREWORKS_SPARK;
 					break;
 				case 1:
-					effect = Particles.FIREWORKS_SPARK;
+					effect = Particle.FIREWORKS_SPARK;
 					break;
 				case 4:
-					effect = Particles.FLAME;
+					effect = Particle.FLAME;
 					break;
 				case 5:
-					effect = Particles.SPELL_WITCH;
+					effect = Particle.SPELL_WITCH;
 					break;
 			}
 			
-			UtilParticles.display(effect, bomb.getLocation(), 1, 0.2f);
+			bomb.getWorld().spawnParticle(effect, bomb.getLocation(), 1, 0.2f);
 			
 			try {
 				for (Item item : items) {

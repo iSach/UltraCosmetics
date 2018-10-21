@@ -5,8 +5,10 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.util.Vector;
@@ -52,9 +54,8 @@ public class MountNyanSheep extends Mount<Sheep> {
 		float y = 1.2f;
 		for (RGBColor rgbColor : colors) {
 			for (int i = 0; i < 10; i++)
-				UtilParticles.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue(),
-				                      entity.getLocation().add(entity.getLocation().getDirection()
-				                                                     .normalize().multiply(-1).multiply(1.4)).add(0, y, 0));
+				entity.getWorld().spawnParticle(Particle.REDSTONE, entity.getLocation().add(entity.getLocation().getDirection()
+						.normalize().multiply(-1).multiply(1.4)).add(0, y, 0), 1, new Particle.DustOptions(Color.fromRGB(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue()), 1));
 			y -= 0.2;
 		}
 	}

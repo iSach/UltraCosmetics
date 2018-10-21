@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -53,7 +54,7 @@ public class MorphChicken extends Morph {
 				public void run() {
 					final List<Chicken> chickens = new ArrayList<>();
 					for (Item i : items) {
-						Particles.BLOCK_CRACK.display(new Particles.BlockData(BlockUtils.getOldMaterial("STAINED_CLAY"), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
+						i.getWorld().spawnParticle(Particle.BLOCK_CRACK, i.getLocation(), 128, 0, 0, 0, 0.3f, 50);
 						SoundUtil.playSound(i.getLocation(), Sounds.ZOMBIE_WOOD, .05f, 1f);
 						final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
 						chicken.setAgeLock(true);
@@ -73,7 +74,7 @@ public class MorphChicken extends Morph {
 					}, 0, 1);
 					Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
 						for (Chicken chicken : chickens) {
-							UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
+							chicken.getWorld().spawnParticle(Particle.LAVA, chicken.getLocation(), 10);
 							chicken.remove();
 						}
 						chickens.clear();

@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
 /**
@@ -26,9 +27,7 @@ public class GadgetPartyPopper extends Gadget {
 		for (int i = 0; i < 30; i++) {
 			Vector rand = new Vector(Math.random() - 0.5D,
 			                         Math.random() - 0.5D, Math.random() - 0.5D);
-			Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"),
-			                                                    MathUtils.randomByte(15)), getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(1.2),
-			                             0.6f, getPlayer().getEyeLocation(), 128);
+			getPlayer().getWorld().spawnParticle(Particle.BLOCK_CRACK, getPlayer().getEyeLocation(), 128, 0.6f);
 		}
 		for (int i = 0; i < 3; i++)
 			SoundUtil.playSound(getPlayer().getLocation(), Sounds.CHICKEN_EGG_POP, 1.0f, 1.0f);

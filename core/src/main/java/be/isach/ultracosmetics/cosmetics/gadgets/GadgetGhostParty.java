@@ -4,11 +4,11 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Bat;
 import org.bukkit.event.EventHandler;
@@ -77,7 +77,7 @@ public class GadgetGhostParty extends Gadget {
 		try {
 			if (!bats.isEmpty()) {
 				for (Bat bat : bats.keySet())
-					UtilParticles.display(Particles.CLOUD, 0.05f, 0.05f, 0.05f, bat.getLocation().add(0, 1.5, 0), 1);
+					bat.getWorld().spawnParticle(Particle.CLOUD, bat.getLocation().add(0, 1.5, 0), 1, 0.05f, 0.05f, 0.05f);
 			}
 		} catch (Exception exc) {
 		}

@@ -3,9 +3,9 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
 /**
@@ -29,8 +29,8 @@ public class ParticleEffectFrozenWalk extends ParticleEffect {
 		locationLeft.setY(getPlayer().getLocation().getY());
 		locationRight.setY(getPlayer().getLocation().getY());
 
-		Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationLeft, 32);
-		Particles.ITEM_CRACK.display(new Particles.ItemData(Material.SNOW, (byte) 0), 0, 0, 0, 0f, 0, locationRight, 32);
+		locationLeft.getWorld().spawnParticle(Particle.ITEM_CRACK, locationLeft, 32, 0, 0, 0, 0f, 0);
+		locationRight.getWorld().spawnParticle(Particle.ITEM_CRACK, locationRight, 32, 0, 0, 0, 0f, 0);
 	}
 
 	public static Vector getLeftVector(Location loc) {

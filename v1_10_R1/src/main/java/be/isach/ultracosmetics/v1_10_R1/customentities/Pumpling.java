@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.v1_10_R1.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import net.minecraft.server.v1_10_R1.Block;
 import net.minecraft.server.v1_10_R1.BlockPosition;
@@ -13,6 +12,7 @@ import net.minecraft.server.v1_10_R1.ItemStack;
 import net.minecraft.server.v1_10_R1.SoundEffect;
 import net.minecraft.server.v1_10_R1.SoundEffects;
 import net.minecraft.server.v1_10_R1.World;
+import org.bukkit.Particle;
 import org.bukkit.entity.Zombie;
 
 /**
@@ -59,7 +59,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 		super.m();
 		if (!isCustomEntity()) return;
 		fireTicks = 0;
-		UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
+		getBukkitEntity().getWorld().spawnParticle(Particle.FLAME, ((Zombie) getBukkitEntity()).getEyeLocation(), 3, 0.2f, 0.2f, 0.2f);
 		UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
 		setInvisible(true);
 		setBaby(true);

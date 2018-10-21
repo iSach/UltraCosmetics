@@ -19,6 +19,6 @@ public class ParticleEffectInLove extends ParticleEffect {
 
 	@Override
 	public void onUpdate() {
-		UtilParticles.display(getType().getEffect(), 0.5f, 0.5f, 0.5f, getPlayer().getLocation().add(0, 1, 0), 2);
+		getPlayer().getWorld().spawnParticle(getType().getEffect(), getPlayer().getLocation().add(0, 1, 0), 2, 0.5f, 0.5f, 0.5f);
 	}
 }

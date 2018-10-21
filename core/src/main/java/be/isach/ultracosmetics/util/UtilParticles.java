@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -12,7 +14,7 @@ public class UtilParticles {
 	
 	private final static int DEF_RADIUS = 128;
 	
-	public static void drawParticleLine(Location from, Location to, Particles effect, int particles, int r, int g, int b) {
+	public static void drawParticleLine(Location from, Location to, Particle effect, int particles, int r, int g, int b) {
 		Location location = from.clone();
 		Location target = to.clone();
 		Vector link = target.toVector().subtract(location.toVector());
@@ -28,14 +30,14 @@ public class UtilParticles {
 				step = 0;
 			step++;
 			loc.add(v);
-			if (effect == Particles.REDSTONE)
-				effect.display(new Particles.OrdinaryColor(r, g, b), loc, 128);
+			if (effect == Particle.REDSTONE)
+				loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 128, new Particle.DustOptions(Color.fromRGB(r, g, b), 1));
 			else
-				effect.display(0, 0, 0, 0, 1, loc, 128);
+				loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 128, new Particle.DustOptions(Color.fromRGB(0, 0, 0), 1));
 		}
 	}
 	
-	public static void playHelix(final Location loc, final float i, final Particles effect) {
+	public static void playHelix(final Location loc, final float i, final Particle effect) {
 		BukkitRunnable runnable = new BukkitRunnable() {
 			double radius = 0;
 			double step;
@@ -49,10 +51,10 @@ public class UtilParticles {
 				Vector v = new Vector();
 				v.setX(Math.cos(angle) * radius);
 				v.setZ(Math.sin(angle) * radius);
-				if (effect == Particles.REDSTONE)
-					display(0, 0, 255, location);
+				if (effect == Particle.REDSTONE)
+					loc.getWorld().spawnParticle(Particle.REDSTONE, location, 255, new Particle.DustOptions(Color.fromRGB(0, 0, 255), 1));
 				else
-					display(effect, location);
+					loc.getWorld().spawnParticle(effect, location, 1);
 				location.subtract(v);
 				location.subtract(0, 0.1d, 0);
 				if (location.getY() <= y) {
@@ -64,35 +66,4 @@ public class UtilParticles {
 		};
 		runnable.runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, 1);
 	}
-	
-	public static void display(Particles effect, Location location, int amount, float speed) {
-		effect.display(0, 0, 0, speed, amount, location, 128);
-	}
-	
-	public static void display(Particles effect, Location location, int amount) {
-		effect.display(0, 0, 0, 0, amount, location, 128);
-	}
-	
-	public static void display(Particles effect, Location location) {
-		display(effect, location, 1);
-	}
-	
-	public static void display(Particles effect, double x, double y, double z, Location location, int amount) {
-		effect.display((float) x, (float) y, (float) z, 0f, amount, location, 128);
-	}
-	
-	public static void display(Particles effect, int red, int green, int blue, Location location, int amount) {
-		for (int i = 0; i < amount; i++)
-			effect.display(new Particles.OrdinaryColor(red, green, blue), location, DEF_RADIUS);
-	}
-	
-	public static void display(int red, int green, int blue, Location location) {
-		display(Particles.REDSTONE, red, green, blue, location, 1);
-	}
-	
-	public static void display(Particles effect, int red, int green, int blue, Location location) {
-		display(effect, red, green, blue, location, 1);
-	}
-	
-	
 }

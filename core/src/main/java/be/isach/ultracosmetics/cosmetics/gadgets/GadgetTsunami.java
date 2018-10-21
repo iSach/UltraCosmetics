@@ -4,11 +4,9 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import be.isach.ultracosmetics.version.VersionManager;
+import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
@@ -45,11 +43,13 @@ public class GadgetTsunami extends Gadget {
 			Location loc1 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
 			Location loc2 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1.3, 1.8) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
 			for (int i1 = 0; i1 < 5; i1++) {
-				UtilParticles.display(Particles.EXPLOSION_NORMAL, 0.2d, 0.2d, 0.2d, loc1, 1);
-				UtilParticles.display(Particles.DRIP_WATER, 0.4d, 0.4d, 0.4d, loc2, 2);
+				loc1.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, loc1, 1, 0.2d, 0.2d, 0.2d);
+				loc2.getWorld().spawnParticle(Particle.DRIP_WATER, loc2, 2, 0.4d, 0.4d, 0.4d);
 			}
-			for (int a = 0; a < 100; a++)
-				UtilParticles.display(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
+			if (VersionManager.IS_VERSION_1_13) {
+				for (int a = 0; a < 100; a++)
+					loc.getWorld().spawnParticle(Particle.REDSTONE, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 1, new Particle.DustOptions(Color.fromRGB(0, 0, 255), 1));
+			}
 			if (affectPlayers)
 				for (final Entity ent : getPlayer().getWorld().getNearbyEntities(loc, 0.6, 0.6, 0.6)) {
 					if (!cooldownJump.contains(ent) && ent != getPlayer() && !(ent instanceof ArmorStand)) {

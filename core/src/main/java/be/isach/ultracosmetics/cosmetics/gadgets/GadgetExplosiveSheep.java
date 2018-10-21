@@ -6,13 +6,13 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -128,7 +128,7 @@ public class GadgetExplosiveSheep extends Gadget {
 			
 			if (time < 0.5) {
 				SoundUtil.playSound(s.getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
-				UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
+				s.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, s.getLocation(), 1);
 				for (int i = 0; i < 50; i++) {
 					if (getOwner() == null || getPlayer() == null) {
 						return;
@@ -148,7 +148,7 @@ public class GadgetExplosiveSheep extends Gadget {
 					UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
 					UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
 					Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-						UtilParticles.display(Particles.LAVA, sheep.getLocation(), 5);
+						sheep.getWorld().spawnParticle(Particle.LAVA, sheep.getLocation(), 5);
 						sheep.remove();
 						EXPLOSIVE_SHEEP.remove(gadgetExplosiveSheep);
 					}, 110);

@@ -3,10 +3,10 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
+import org.bukkit.Particle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -26,8 +26,8 @@ public class MorphBlaze extends Morph {
 	@Override
 	public void onUpdate() {
 		if (getPlayer().isSneaking()) {
-			UtilParticles.display(Particles.FLAME, getPlayer().getLocation());
-			UtilParticles.display(Particles.LAVA, getPlayer().getLocation());
+			getPlayer().getWorld().spawnParticle(Particle.FLAME, getPlayer().getLocation(), 1);
+			getPlayer().getWorld().spawnParticle(Particle.LAVA, getPlayer().getLocation(), 1);
 			SoundUtil.playSound(getPlayer(), Sounds.FIZZ, 0.1f, 1.5f);
 			getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
 		}
