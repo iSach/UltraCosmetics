@@ -27,17 +27,19 @@ public class SubCommandReload extends SubCommand {
 	}
 
 	private void common(CommandSender sender, String... args) {
+		SettingsManager.getConfig().save(uc.getFile());
+		SettingsManager.getConfig().load(uc.getFile());
 		SettingsManager.getConfig().loadConfiguration(uc.getFile());
 
 		for (be.isach.ultracosmetics.player.UltraPlayer pl : uc.getPlayerManager().getUltraPlayers()) {
-			if (pl.getInventory().getTitle().equalsIgnoreCase(uc.getMenus().getMainMenu().getName())) {
-				pl.closeInventory();
+			if (pl.getPlayer().getInventory().getTitle().equalsIgnoreCase(SettingsManager.getConfig().getString("Menu-Item.Displayname"))) {
+				pl.getPlayer().closeInventory();
 				//sender.sendMessage(ChatColor.RED + "The cosmetics menu has been closed, because reloading the plugin.");
 			}
-			uc.getPlayerManager().getUltraPlayer(pl).removeMenuItem();
+			uc.getPlayerManager().getUltraPlayer(pl.getPlayer()).removeMenuItem();
 
-			uc.getPlayerManager().getUltraPlayer(pl).giveMenuItem();
-			uc.getPlayerManager().getUltraPlayer(pl).updateInventory();
+			uc.getPlayerManager().getUltraPlayer(pl.getPlayer()).giveMenuItem();
+			uc.getPlayerManager().getUltraPlayer(pl.getPlayer()).updateInventory();
 		}
 		sender.sendMessage(ChatColor.GREEN + "Plugin has been loaded successfully.");
 	}
