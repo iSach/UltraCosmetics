@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.command.subcommands;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
+import java.io.IOException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -27,9 +28,13 @@ public class SubCommandReload extends SubCommand {
 	}
 
 	private void common(CommandSender sender, String... args) {
-		SettingsManager.getConfig().save(uc.getFile());
-		SettingsManager.getConfig().load(uc.getFile());
-		SettingsManager.getConfig().loadConfiguration(uc.getFile());
+		try {
+			SettingsManager.getConfig().save(uc.getFile());
+			SettingsManager.getConfig().load(uc.getFile());
+			SettingsManager.getConfig().loadConfiguration(uc.getFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		for (be.isach.ultracosmetics.player.UltraPlayer pl : uc.getPlayerManager().getUltraPlayers()) {
 			if (pl.getBukkitPlayer().getInventory().getTitle().equalsIgnoreCase(SettingsManager.getConfig().getString("Menu-Item.Displayname"))) {
