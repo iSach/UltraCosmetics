@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.command.subcommands;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
-import java.io.IOException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -32,7 +31,7 @@ public class SubCommandReload extends SubCommand {
 			SettingsManager.getConfig().save(uc.getFile());
 			SettingsManager.getConfig().load(uc.getFile());
 			SettingsManager.getConfig().loadConfiguration(uc.getFile());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
