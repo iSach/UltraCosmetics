@@ -6,16 +6,19 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+
+import java.util.UUID;
 
 /**
  * Represents an instance of a blackhole gadget summoned by a player.
@@ -60,17 +63,15 @@ public class GadgetBlackHole extends Gadget {
 			double rotation = Math.PI / 4;
 			
 			Location location = item.getLocation();
-			if (!Bukkit.getVersion().contains("1.8")) {
-				for (int i = 1; i <= strands; i++) {
-					for (int j = 1; j <= particles; j++) {
-						float ratio = (float) j / particles;
-						double angle = curve * ratio * 2 * Math.PI / strands + (2 * Math.PI * i / strands) + rotation;
-						double x = Math.cos(angle) * ratio * radius;
-						double z = Math.sin(angle) * ratio * radius;
-						location.add(x, 0, z);
-						location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 1);
-						location.subtract(x, 0, z);
-					}
+			for (int i = 1; i <= strands; i++) {
+				for (int j = 1; j <= particles; j++) {
+					float ratio = (float) j / particles;
+					double angle = curve * ratio * 2 * Math.PI / strands + (2 * Math.PI * i / strands) + rotation;
+					double x = Math.cos(angle) * ratio * radius;
+					double z = Math.sin(angle) * ratio * radius;
+					location.add(x, 0, z);
+					UtilParticles.display(Particles.SMOKE_LARGE, location);
+					location.subtract(x, 0, z);
 				}
 			}
 			

@@ -6,9 +6,9 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
@@ -48,7 +48,7 @@ public class MountGlacialSteed extends MountHorse {
 	
 	@Override
 	public void onUpdate() {
-		entity.getWorld().spawnParticle(Particle.SNOW_SHOVEL, entity.getLocation().clone().add(0, 1, 0), 5, 0.4f, 0.2f, 0.4f);
+		UtilParticles.display(Particles.SNOW_SHOVEL, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
 	}
 	
 	@Override

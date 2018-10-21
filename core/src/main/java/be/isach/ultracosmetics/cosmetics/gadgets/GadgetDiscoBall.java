@@ -8,9 +8,12 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -81,10 +84,10 @@ public class GadgetDiscoBall extends Gadget {
 				armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) r.nextInt(15), " "));
 			}
 			
-			armorStand.getWorld().spawnParticle(Particle.SPELL, armorStand.getEyeLocation(), 1, 1f);
-			armorStand.getWorld().spawnParticle(Particle.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
+			UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
+			UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
 			Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
-			armorStand.getWorld().spawnParticle(Particle.NOTE, loc, 128);
+			Particles.NOTE.display(new Particles.NoteColor(r.nextInt(25)), loc, 128);
 			double angle, angle2, x, x2, z, z2;
 			angle = 2 * Math.PI * i / 100;
 			x = Math.cos(angle) * 4;
@@ -156,7 +159,7 @@ public class GadgetDiscoBall extends Gadget {
 			step++;
 			loc.add(v);
 			if (dust) {
-				loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 1, new Particle.DustOptions(Color.fromRGB(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255)), 1));
+				UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
 			}
 			// location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
 		}

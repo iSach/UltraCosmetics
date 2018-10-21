@@ -2,7 +2,8 @@ package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.ItemFactory;
-import org.bukkit.Particle;
+import be.isach.ultracosmetics.util.Particles;
+import org.bukkit.Material;
 import org.bukkit.material.MaterialData;
 
 /**
@@ -16,7 +17,7 @@ public class TreasureChestDesign {
 	private MaterialData belowChests;
 	private MaterialData barriers;
 	private ChestType chestType;
-	private Particle effect;
+	private Particles effect;
 	private String path;
 	
 	public TreasureChestDesign(String path) {
@@ -39,9 +40,9 @@ public class TreasureChestDesign {
 			this.chestType = ChestType.NORMAL;
 		}
 		try {
-			this.effect = Particle.valueOf(effect);
+			this.effect = Particles.valueOf(effect);
 		} catch (Exception exc) {
-			this.effect = Particle.FLAME;
+			this.effect = Particles.FLAME;
 		}
 	}
 	
@@ -78,7 +79,7 @@ public class TreasureChestDesign {
 		return belowChests;
 	}
 	
-	public Particle getEffect() {
+	public Particles getEffect() {
 		return effect;
 	}
 }

@@ -4,9 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
 /**
@@ -65,7 +63,7 @@ public class ParticleEffectAngelWings extends ParticleEffect {
 					location.add(v);
 					location.add(v2);
 					for (int k = 0; k < 3; k++)
-						location.getWorld().spawnParticle(Particle.REDSTONE, location, 1, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1));
+						UtilParticles.display(255, 255, 255, location);
 					location.subtract(v2);
 					location.subtract(v);
 				}

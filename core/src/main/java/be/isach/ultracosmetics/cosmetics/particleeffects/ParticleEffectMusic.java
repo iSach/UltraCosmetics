@@ -4,7 +4,9 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import org.bukkit.Particle;
+import be.isach.ultracosmetics.util.Particles;
+
+import java.util.Random;
 
 /**
  * Represents an instance of music particles summoned by a player.
@@ -21,7 +23,10 @@ public class ParticleEffectMusic extends ParticleEffect {
 	@Override
 	public void onUpdate() {
 		for (int i = 0; i < 12; i++) {
-			getPlayer().getWorld().spawnParticle(Particle.NOTE, getPlayer().getLocation().add(MathUtils.randomDouble(-1.5, 1.5),
+			Random random = new Random();
+			int j = random.nextInt(25);
+			Particles.ParticleColor particleColor = new Particles.NoteColor(j);
+			Particles.NOTE.display(particleColor, getPlayer().getLocation().add(MathUtils.randomDouble(-1.5, 1.5),
 			                                                                    MathUtils.randomDouble(0, 2.5), MathUtils.randomDouble(-1.5, 1.5)), 32);
 		}
 	}

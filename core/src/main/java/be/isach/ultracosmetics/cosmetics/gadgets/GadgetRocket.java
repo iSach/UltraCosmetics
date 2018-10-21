@@ -7,7 +7,10 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.*;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -143,7 +146,7 @@ public class GadgetRocket extends Gadget {
 							fallingBlocks.clear();
 							FallDamageManager.addNoFall(getPlayer());
 							SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
-							getPlayer().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, getPlayer().getLocation(), 1);
+							UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
 							launching = false;
 						}, 80);
 						cancel();
@@ -177,7 +180,7 @@ public class GadgetRocket extends Gadget {
 		if (armorStand != null) {
 			if (armorStand.getPassenger() == null)
 				armorStand.setPassenger(getPlayer());
-			armorStand.getWorld().spawnParticle(Particle.SMOKE_LARGE, armorStand.getLocation().add(0, -3, 0), 10, 0.3f, 0.2f, 0.3f);
+			UtilParticles.display(Particles.SMOKE_LARGE, 0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
 			SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.FIZZ, 0.025f, 1.0f);
 		}
 		for (FallingBlock fallingBlock : fallingBlocks) {
@@ -187,8 +190,8 @@ public class GadgetRocket extends Gadget {
 			if (fallingBlocks.get(8).getPassenger() == null) {
 				fallingBlocks.get(8).setPassenger(getPlayer());
 			}
-			getPlayer().getWorld().spawnParticle(Particle.FLAME, getPlayer().getLocation().add(0, -3, 0), 10, 0.3f, 0.2f, 0.3f);
-			getPlayer().getWorld().spawnParticle(Particle.LAVA, getPlayer().getLocation().add(0, -3, 0), 10, 0.3f, 0.2f, 0.3f);
+			UtilParticles.display(Particles.FLAME, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
+			UtilParticles.display(Particles.LAVA, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
 			SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.BAT_LOOP, 1.5f, 1.0f);
 			SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.FIZZ, 0.025f, 1.0f);
 		}

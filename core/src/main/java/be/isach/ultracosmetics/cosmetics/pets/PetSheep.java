@@ -11,7 +11,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Sheep;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -28,13 +27,13 @@ public class PetSheep extends Pet {
 	Random r = new Random();
 	
 	public PetSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("sheep"), ItemFactory.rename(new ItemStack(BlockUtils.getBlockByColor("WOOL", (byte) 0)), UltraCosmeticsData.get().getItemNoPickupString()));
+		super(owner, ultraCosmetics, PetType.getByName("sheep"), ItemFactory.createColored("WOOL", (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 	
 	@Override
 	public void onUpdate() {
 		Sheep sheep = (Sheep) entity;
-		Item drop = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.rename(new ItemStack(BlockUtils.getBlockByColor("WOOL", (byte) r.nextInt(16))), UltraCosmeticsData.get().getItemNoPickupString()));
+		Item drop = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.createColored("WOOL", (byte) r.nextInt(16), UltraCosmeticsData.get().getItemNoPickupString()));
 		drop.setPickupDelay(30000);
 		drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
 		items.add(drop);

@@ -4,9 +4,9 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -55,7 +55,7 @@ public class GadgetFreezeCannon extends Gadget {
 			if (i.isOnGround()) {
 				for (Block b : BlockUtils.getBlocksInRadius(i.getLocation(), 4, false))
 					BlockUtils.setToRestore(b, Material.PACKED_ICE, (byte) 0, 50);
-				i.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, i.getLocation(), 80, 4d, 3d, 4d);
+				UtilParticles.display(Particles.FIREWORKS_SPARK, 4d, 3d, 4d, i.getLocation(), 80);
 				i.remove();
 				itemIterator.remove();
 			}

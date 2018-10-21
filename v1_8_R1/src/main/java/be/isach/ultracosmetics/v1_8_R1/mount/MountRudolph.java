@@ -80,7 +80,7 @@ public class MountRudolph extends MountHorse {
 		double y = location.getY();
 		location.add(location.getDirection().multiply(1.15));
 		location.setY(y - 0.073);
-//		UtilParticles.display(255, 0, 0, location);
+		UtilParticles.display(255, 0, 0, location);
 		new Thread(() -> {
 			for (Player player : getPlayer().getWorld().getPlayers()) {
 				UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendTeleportPacket(player, right);

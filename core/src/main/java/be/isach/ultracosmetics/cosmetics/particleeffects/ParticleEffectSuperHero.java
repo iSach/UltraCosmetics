@@ -3,10 +3,9 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
 /**
@@ -38,7 +37,7 @@ public class ParticleEffectSuperHero extends ParticleEffect {
 	@Override
 	public void onUpdate() {
 		drawParticles(getPlayer().getLocation());
-		getPlayer().getWorld().spawnParticle(Particle.CLOUD, getPlayer().getLocation(), 4, 0.15F, 0.1f, 0.15f);
+		UtilParticles.display(Particles.CLOUD, 0.15F, 0.1f, 0.15f, getPlayer().getLocation(), 4);
 	}
 
 
@@ -72,7 +71,7 @@ public class ParticleEffectSuperHero extends ParticleEffect {
 					}
 
 					for (int k = 0; k < 3; k++)
-						loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 1, new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1));
+						UtilParticles.display(255, 0, 0, loc);
 					loc.subtract(v2);
 					loc.subtract(v);
 				}

@@ -8,12 +8,10 @@ import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Effect;
-import org.bukkit.Particle;
+import org.bukkit.Material;
 
 /**
  * Represents an instance of a particle effect summoned by a player.
@@ -60,29 +58,26 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 						onUpdate();
 					if (isMoving()) {
 						boolean c = getType() == ParticleEffectType.valueOf("angelwings");
-						if (getType().getEffect() == Particle.REDSTONE && VersionManager.IS_VERSION_1_13) {
+						if (getType().getEffect() == Particles.REDSTONE) {
 							if (!ignoreMove) {
 								for (int i = 0; i < 15; i++) {
 									if (!c) {
-										getPlayer().spawnParticle(Particle.REDSTONE, getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128, new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1));
+										getType().getEffect().display(new Particles.OrdinaryColor(255, 0, 0), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
 									} else {
-										getPlayer().spawnParticle(Particle.REDSTONE, getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1));
+										getType().getEffect().display(new Particles.OrdinaryColor(255, 255, 255), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
 									}
 								}
 							}
-						} else if (getType().getEffect() == Particle.ITEM_CRACK) {
+						} else if (getType().getEffect() == Particles.ITEM_CRACK) {
 							for (int i = 0; i < 15; i++)
-								getPlayer().spawnParticle(Particle.ITEM_CRACK, getPlayer().getLocation(), 128);
-						} else {
-							getPlayer().spawnParticle(getType().getEffect(),getPlayer().getLocation().add(0, 1, 0), 3);
-						}
+								Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"), ParticleEffectCrushedCandyCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
+						} else
+							UtilParticles.display(getType().getEffect(), .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
 					}
-				} else {
+				} else
 					onUpdate();
-				}
-			} else {
+			} else
 				cancel();
-			}
 		} catch (NullPointerException exc) {
 			clear();
 			cancel();

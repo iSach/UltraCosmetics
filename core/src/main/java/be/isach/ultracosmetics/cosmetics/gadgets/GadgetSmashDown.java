@@ -5,13 +5,13 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -48,7 +48,7 @@ public class GadgetSmashDown extends Gadget {
 		getPlayer().setVelocity(new Vector(0, 3, 0));
 		final int taskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
 			if (getOwner() != null && getPlayer() != null && isEquipped()) {
-				getPlayer().getWorld().spawnParticle(Particle.CLOUD, getPlayer().getLocation(), 1);
+				UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
 			} else {
 				cancel();
 			}
@@ -155,7 +155,7 @@ public class GadgetSmashDown extends Gadget {
 			event.setCancelled(true);
 			fallingBlocks.remove(event.getEntity());
 			FallingBlock fb = (FallingBlock) event.getEntity();
-			fb.getWorld().spawnParticle(Particle.BLOCK_CRACK, fb.getLocation(), 128, 0f, 0f, 0f, 0.4f);
+			Particles.BLOCK_CRACK.display(new Particles.BlockData(fb.getMaterial(), event.getBlock().getData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
 			SoundUtil.playSound(getPlayer().getLocation(), Sounds.ANVIL_BREAK, 0.05f, 1.0f);
 			event.getEntity().remove();
 		}

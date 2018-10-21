@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
@@ -11,10 +12,10 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -50,7 +51,7 @@ public class TreasureChest implements Listener {
 	TreasureChest instance;
 	TreasureRandomizer randomGenerator;
 	Location center;
-	Particle particleEffect;
+	Particles particleEffect;
 	int chestsLeft = 4;
 	private Player player;
 	private List<Entity> items = new ArrayList();
@@ -107,8 +108,8 @@ public class TreasureChest implements Listener {
 											Block b = getChestLocation(i, center.clone()).getBlock();
 											b.setType(design.getChestType().getType());
 											SoundUtil.playSound(getPlayer(), Sounds.ANVIL_LAND, 1.4f, 1.5f);
-											b.getLocation().getWorld().spawnParticle(Particle.SMOKE_LARGE, b.getLocation(), 5);
-											b.getLocation().getWorld().spawnParticle(Particle.LAVA, b.getLocation(), 5);
+											UtilParticles.display(Particles.SMOKE_LARGE, b.getLocation(), 5);
+											UtilParticles.display(Particles.LAVA, b.getLocation(), 5);
 											BlockFace blockFace = BlockFace.SOUTH;
 											switch (i) {
 												case 4:

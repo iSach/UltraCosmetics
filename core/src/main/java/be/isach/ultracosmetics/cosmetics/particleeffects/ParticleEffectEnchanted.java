@@ -4,8 +4,8 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Particle;
 
 /**
  * Represents an instance of enchanted particles summoned by a player.
@@ -21,6 +21,6 @@ public class ParticleEffectEnchanted extends ParticleEffect {
 
 	@Override
 	public void onUpdate() {
-		getPlayer().getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, getPlayer().getLocation().add(0, MathUtils.randomDouble(0.1, 2), 0), 60, 8f);
+		UtilParticles.display(Particles.ENCHANTMENT_TABLE, getPlayer().getLocation().add(0, MathUtils.randomDouble(0.1, 2), 0), 60, 8f);
 	}
 }
