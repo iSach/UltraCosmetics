@@ -14,11 +14,8 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
-import be.isach.ultracosmetics.util.CustomConfiguration;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.TextUtil;
+import be.isach.ultracosmetics.util.*;
+
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -414,7 +411,7 @@ public class TreasureRandomizer {
 		int money = MathUtils.randomRangeInt(20, (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max"));
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
 		UltraCosmeticsData.get().getPlugin().getEconomyHandler().deposit(player, money);
-		itemStack = new ItemStack(Material.DOUBLE_PLANT);
+		itemStack = new ItemStack(BlockUtils.getOldMaterial("DOUBLE_PLANT"));
 		if (money > 3 * (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max") / 4)
 			spawnRandomFirework(loc);
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Message.enabled"))

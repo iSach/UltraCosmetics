@@ -4,11 +4,16 @@ import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ReflectionUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 
 public class VersionManager {
+	/**
+	 * If the version of Bukkit/Spigot is 1.13.
+	 */
+	public static boolean IS_VERSION_1_13 = Bukkit.getVersion().contains("1.13");
 	private final String PACKAGE = "be.isach.ultracosmetics";
 	private IModule module;
 	private ServerVersion serverVersion;

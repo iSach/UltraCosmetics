@@ -38,13 +38,13 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
 	
 	private void putToggleGadgetsItems(Inventory inventory, UltraPlayer player) {
 		int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 5 : 6);
-		MaterialData materialData;
+		String configPath;
 		boolean toggle;
 		if (player.hasGadgetsEnabled()) {
-			materialData = ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Enabled");
+			configPath = "Categories.Gadgets-Item.When-Enabled";
 			toggle = false;
 		} else {
-			materialData = ItemFactory.createFromConfig("Categories.Gadgets-Item.When-Disabled");
+			configPath = "Categories.Gadgets-Item.When-Disabled";
 			toggle = true;
 		}
 		String msg = MessageManager.getMessage((toggle ? "Enable" : "Disable") + "-Gadgets");
@@ -52,7 +52,7 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
 			player.setGadgetsEnabled(!player.hasGadgetsEnabled());
 			putToggleGadgetsItems(inventory, player);
 		};
-		putItem(inventory, slot, ItemFactory.create(materialData.getItemType(), materialData.getData(), msg), run);
+		putItem(inventory, slot, ItemFactory.rename(ItemFactory.getItemStackFromConfig(configPath), msg), run);
 	}
 	
 	@Override

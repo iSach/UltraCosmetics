@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.apache.commons.codec.binary.Base64;
@@ -56,7 +57,12 @@ public class PetChristmasElf extends Pet {
 	
 	private static ItemStack getSkull(String url) {
 		url = "http://textures.minecraft.net/texture/" + url;
-		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+		ItemStack skull;
+		if (VersionManager.IS_VERSION_1_13) {
+			skull = new ItemStack(Material.valueOf("PLAYER_HEAD"));
+		} else {
+			skull = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
+		}
 		if (url == null || url.isEmpty())
 			return skull;
 		SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();

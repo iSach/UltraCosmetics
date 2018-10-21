@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -161,7 +162,8 @@ public class TreasureChest implements Listener {
 						oldDatas.put(lampBlock.getLocation(), lampBlock.getData());
 						blocksToRestore.add(lampBlock);
 						lampBlock.setType(design.getCenter().getItemType());
-						lampBlock.setData(design.getCenter().getData());
+						lampBlock.getState().setRawData(design.getCenter().getData());
+						lampBlock.getState().update();
 //                        Particles.BLOCK_CRACK.display(new Particles.BlockData(lampBlock.getType(), lampBlock.getData()), 0f, 0f, 0f, 1f, 50, lampBlock.getLocation());
 					} else if (this.i == 4) {
 						for (Block b : getSurroundingBlocks(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
@@ -170,7 +172,8 @@ public class TreasureChest implements Listener {
 							blocksToRestore.add(b);
 							BlockUtils.treasureBlocks.add(b);
 							b.setType(design.getBlocks2().getItemType());
-							b.setData(design.getBlocks2().getData());
+							b.getState().setRawData(design.getBlocks2().getData());
+							b.getState().update();
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
 						}
 					} else if (this.i == 3) {
@@ -180,7 +183,8 @@ public class TreasureChest implements Listener {
 							blocksToRestore.add(b);
 							BlockUtils.treasureBlocks.add(b);
 							b.setType(design.getBlocks3().getItemType());
-							b.setData(design.getBlocks3().getData());
+							b.getState().setRawData(design.getBlocks3().getData());
+							b.getState().update();
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
 						}
 					} else if (this.i == 2) {
@@ -191,7 +195,8 @@ public class TreasureChest implements Listener {
 							BlockUtils.treasureBlocks.add(b);
 							BlockUtils.treasureBlocks.add(b);
 							b.setType(design.getBelowChests().getItemType());
-							b.setData(design.getBelowChests().getData());
+							b.getState().setRawData(design.getBelowChests().getData());
+							b.getState().update();
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
 						}
 					} else if (this.i == 1) {
@@ -201,7 +206,8 @@ public class TreasureChest implements Listener {
 							blocksToRestore.add(b);
 							BlockUtils.treasureBlocks.add(b);
 							b.setType(design.getBarriers().getItemType());
-							b.setData(design.getBarriers().getData());
+							b.getState().setRawData(design.getBarriers().getData());
+							b.getState().update();
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
 						}
 					}
@@ -271,7 +277,8 @@ public class TreasureChest implements Listener {
 		for (Block b : this.blocksToRestore) {
 //            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
 			b.setType(this.oldMaterials.get(b.getLocation()));
-			b.setData(this.oldDatas.get(b.getLocation()));
+			b.getState().setRawData(this.oldDatas.get(b.getLocation()));
+			b.getState().update();
 			BlockUtils.treasureBlocks.remove(b);
 		}
 		if (!this.stopping) {

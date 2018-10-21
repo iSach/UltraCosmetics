@@ -1,7 +1,9 @@
 package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
+import org.bukkit.Material;
 import org.bukkit.material.MaterialData;
 
 /**
@@ -45,7 +47,7 @@ public class TreasureChestDesign {
 	}
 	
 	private MaterialData initMData(String name) {
-		return new MaterialData(Integer.parseInt(name.split(":")[0]),
+		return new MaterialData(ItemFactory.fromId(Integer.parseInt(name.split(":")[0])),
 		                        (name.split(":").length > 1 ? (byte) Integer.parseInt(name.split(":")[1]) : (byte) 0));
 	}
 	

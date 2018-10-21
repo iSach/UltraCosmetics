@@ -3,9 +3,8 @@ package be.isach.ultracosmetics.util;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import be.isach.ultracosmetics.version.VersionManager;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -20,7 +19,6 @@ import java.util.Map;
  * Created by sacha on 03/08/15.
  */
 public class BlockUtils {
-	
 	/**
 	 * List of all the BLOCKS to restore.
 	 */
@@ -90,7 +88,8 @@ public class BlockUtils {
 				Material m = Material.valueOf(s.split(",")[0]);
 				byte d = Byte.valueOf(s.split(",")[1]);
 				b.setType(m);
-				b.setData(d);
+				b.getState().setRawData(d);
+				b.getState().update();
 			} catch (Exception ignored) {
 			}
 		}
@@ -144,41 +143,41 @@ public class BlockUtils {
 			if (blocksToRestore.containsKey(block.getLocation())) return;
 			Block bUp = block.getRelative(BlockFace.UP);
 			if (!(block.getType() != Material.AIR
-			      && block.getType() != Material.SIGN_POST
+			      && block.getType() != getOldMaterial("SIGN_POST")
 			      && block.getType() != Material.CHEST
-			      && block.getType() != Material.STONE_PLATE
-			      && block.getType() != Material.WOOD_PLATE
+			      && block.getType() != getOldMaterial("STONE_PLATE")
+			      && block.getType() != getOldMaterial("WOOD_PLATE")
 			      && block.getType() != Material.WALL_SIGN
-			      && block.getType() != Material.WALL_BANNER
-			      && block.getType() != Material.STANDING_BANNER
-			      && block.getType() != Material.CROPS
-			      && block.getType() != Material.LONG_GRASS
-			      && block.getType() != Material.SAPLING
+			      && block.getType() != getOldMaterial("WALL_BANNER")
+			      && block.getType() != getOldMaterial("STANDING_BANNER")
+			      && block.getType() != getOldMaterial("CROPS")
+			      && block.getType() != getOldMaterial("LONG_GRASS")
+			      && block.getType() != getOldMaterial("SAPLING")
 			      && block.getType() != Material.DEAD_BUSH
-			      && block.getType() != Material.RED_ROSE
+			      && block.getType() != getOldMaterial("RED_ROSE")
 			      && block.getType() != Material.RED_MUSHROOM
 			      && block.getType() != Material.BROWN_MUSHROOM
 			      && block.getType() != Material.TORCH
 			      && block.getType() != Material.LADDER
 			      && block.getType() != Material.VINE
-			      && block.getType() != Material.DOUBLE_PLANT
-			      && block.getType() != Material.PORTAL
+			      && block.getType() != getOldMaterial("DOUBLE_PLANT")
+			      && block.getType() != getOldMaterial("PORTAL")
 			      && block.getType() != Material.CACTUS
 			      && block.getType() != Material.WATER
-			      && block.getType() != Material.STATIONARY_WATER
+			      && block.getType() != getOldMaterial("STATIONARY_WATER")
 			      && block.getType() != Material.LAVA
-			      && block.getType() != Material.STATIONARY_LAVA
-			      && block.getType() != Material.PORTAL
-			      && block.getType() != Material.ENDER_PORTAL
-			      && block.getType() != Material.SOIL
+			      && block.getType() != getOldMaterial("STATIONARY_LAVA")
+			      && block.getType() != getOldMaterial("PORTAL")
+			      && block.getType() != getOldMaterial("ENDER_PORTAL")
+			      && block.getType() != getOldMaterial("SOIL")
 			      && block.getType() != Material.BARRIER
-			      && block.getType() != Material.COMMAND
+			      && block.getType() != getOldMaterial("COMMAND")
 			      && block.getType() != Material.DROPPER
 			      && block.getType() != Material.DISPENSER
 			      && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(block.getType().toString().toUpperCase())
 			      && !block.getType().toString().toLowerCase().contains("door")
-			      && block.getType() != Material.BED
-			      && block.getType() != Material.BED_BLOCK
+			      && block.getType() != getOldMaterial("BED")
+			      && block.getType() != getOldMaterial("BED_BLOCK")
 			      && !isPortalBlock(block)
 			      && !isRocketBlock(block)
 			      && !isTreasureChestBlock(block)
@@ -219,10 +218,61 @@ public class BlockUtils {
 	 */
 	public static boolean isPortalBlock(Block b) {
 		for (BlockFace face : BlockFace.values())
-			if (b.getRelative(face).getType() == Material.PORTAL)
+			if (b.getRelative(face).getType() == getOldMaterial("PORTAL"))
 				return true;
 		return false;
 	}
 	
+	public static Material getOldMaterial(String material) {
+		if (VersionManager.IS_VERSION_1_13) {
+			return Material.getMaterial(material, true);
+		}
+		return Material.getMaterial(material);
+	}
 	
+	public static Material getBlockByColor(String oldMaterialName, byte color) {
+		switch (color) {
+			case 0x0:
+				return getBlockByColor(oldMaterialName, DyeColor.WHITE);
+			case 0x1:
+				return getBlockByColor(oldMaterialName, DyeColor.ORANGE);
+			case 0x2:
+				return getBlockByColor(oldMaterialName, DyeColor.MAGENTA);
+			case 0x3:
+				return getBlockByColor(oldMaterialName, DyeColor.LIGHT_BLUE);
+			case 0x4:
+				return getBlockByColor(oldMaterialName, DyeColor.YELLOW);
+			case 0x5:
+				return getBlockByColor(oldMaterialName, DyeColor.LIME);
+			case 0x6:
+				return getBlockByColor(oldMaterialName, DyeColor.PINK);
+			case 0x7:
+				return getBlockByColor(oldMaterialName, DyeColor.GRAY);
+			case 0x8:
+				return getBlockByColor(oldMaterialName, DyeColor.LIGHT_GRAY);
+			case 0x9:
+				return getBlockByColor(oldMaterialName, DyeColor.CYAN);
+			case 0xA:
+				return getBlockByColor(oldMaterialName, DyeColor.PURPLE);
+			case 0xB:
+				return getBlockByColor(oldMaterialName, DyeColor.BLUE);
+			case 0xC:
+				return getBlockByColor(oldMaterialName, DyeColor.BROWN);
+			case 0xD:
+				return getBlockByColor(oldMaterialName, DyeColor.GREEN);
+			case 0xE:
+				return getBlockByColor(oldMaterialName, DyeColor.RED);
+			case 0xF:
+				return getBlockByColor(oldMaterialName, DyeColor.BLACK);
+			default:
+				return getBlockByColor(oldMaterialName, DyeColor.WHITE);
+		}
+	}
+	
+	public static Material getBlockByColor(String oldMaterialName, DyeColor color) {
+		if (VersionManager.IS_VERSION_1_13) {
+			return Material.getMaterial(color.getColor().toString() + "_" + oldMaterialName);
+		}
+		return Material.WHITE_WOOL;
+	}
 }

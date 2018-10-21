@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.*;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.Material;
 
@@ -161,7 +162,7 @@ public class SuitType extends CosmeticMatType<Suit> {
 
 	public static void register() {
 		new SuitType("Rave", "rave", "&7&oSuch amazing colors!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
-		new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
+		new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, BlockUtils.getOldMaterial("GOLD_CHESTPLATE"), BlockUtils.getOldMaterial("GOLD_LEGGINGS"), BlockUtils.getOldMaterial("GOLD_BOOTS"), SuitAstronaut.class, ServerVersion.v1_8_R1);
 		new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
 		new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
 	}

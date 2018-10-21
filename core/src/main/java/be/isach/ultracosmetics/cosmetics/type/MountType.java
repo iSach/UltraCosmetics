@@ -5,7 +5,9 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.mounts.*;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -76,15 +78,21 @@ public class MountType extends CosmeticEntType<Mount> {
 		new MountType("ultracosmetics.mounts.glacialsteed", "GlacialSteed", Material.PACKED_ICE, (byte) 0, EntityType.HORSE, "&7&oThis mount comes from North Pole!", 2, MountGlacialSteed.class, ServerVersion.v1_8_R1);
 		new MountType("ultracosmetics.mounts.walkingdead", "WalkingDead", Material.ROTTEN_FLESH, (byte) 0, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadType(), "&7&oGraaaaw...", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadClass(), ServerVersion.v1_8_R1);
 		new MountType("ultracosmetics.mounts.mountoffire", "MountOfFire", Material.BLAZE_POWDER, (byte) 0, EntityType.HORSE, "&7&oThe mount of Hadès!", 2, MountOfFire.class, ServerVersion.v1_8_R1);
-		new MountType("ultracosmetics.mounts.mountofwater", "MountOfWater", Material.INK_SACK, (byte) 4, EntityType.HORSE, "&7&oThe mount of Poséidon!", 2, MountOfWater.class, ServerVersion.v1_8_R1);
-		new MountType("ultracosmetics.mounts.ecologisthorse", "EcologistHorse", Material.RED_ROSE, (byte) 0, EntityType.HORSE, "&7&oBecome ecologist!", 2, MountEcologistHorse.class, ServerVersion.v1_8_R1);
-		new MountType("ultracosmetics.mounts.snake", "Snake", Material.SEEDS, (byte) 0, EntityType.SHEEP, "&7&oWatch out! It may bite..", 2, MountSnake.class, ServerVersion.v1_8_R1);
-		new MountType("ultracosmetics.mounts.nyansheep", "NyanSheep", Material.STAINED_GLASS, (byte) 9, EntityType.SHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", 1, MountNyanSheep.class, ServerVersion.v1_8_R1);
+		new MountType("ultracosmetics.mounts.ecologisthorse", "EcologistHorse", BlockUtils.getOldMaterial("RED_ROSE"), (byte) 0, EntityType.HORSE, "&7&oBecome ecologist!", 2, MountEcologistHorse.class, ServerVersion.v1_8_R1);
+		new MountType("ultracosmetics.mounts.snake", "Snake", BlockUtils.getOldMaterial("SEEDS"), (byte) 0, EntityType.SHEEP, "&7&oWatch out! It may bite..", 2, MountSnake.class, ServerVersion.v1_8_R1);
 		new MountType("ultracosmetics.mounts.dragon", "Dragon", Material.DRAGON_EGG, (byte) 0, EntityType.ENDER_DRAGON, "&7&oBecome a dragon rider!", 1, MountDragon.class, ServerVersion.v1_8_R1);
 		new MountType("ultracosmetics.mounts.slime", "Slime", Material.SLIME_BALL, (byte) 0, EntityType.SLIME, "&7&oSplat! Splat!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getSlimeClass(), ServerVersion.v1_8_R1);
 		new MountType("ultracosmetics.mounts.hypecart", "HypeCart", Material.MINECART, (byte) 0, EntityType.MINECART, "&7&oEver wanted to drive a F1?\n&7&oNow you can!", 1, MountHypeCart.class, ServerVersion.v1_8_R1);
-		new MountType("ultracosmetics.mounts.spider", "Spider", Material.WEB, (byte) 0, EntityType.SPIDER, "&7&oYOU are the spider jockey!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getSpiderClass(), ServerVersion.v1_8_R1);
+		new MountType("ultracosmetics.mounts.spider", "Spider", BlockUtils.getOldMaterial("WEB"), (byte) 0, EntityType.SPIDER, "&7&oYOU are the spider jockey!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getSpiderClass(), ServerVersion.v1_8_R1);
 		new MountType("ultracosmetics.mounts.rudolph", "Rudolph", Material.DEAD_BUSH, (byte) 0, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphType(), "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reeinder?", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphClass(), ServerVersion.v1_8_R1);
 		new MountType("ultracosmetics.mounts.moltensnake", "MoltenSnake", Material.MAGMA_CREAM, (byte) 0, EntityType.MAGMA_CUBE, "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", 1, MountMoltenSnake.class, ServerVersion.v1_8_R1);
+		
+		if (VersionManager.IS_VERSION_1_13) {
+			new MountType("ultracosmetics.mounts.mountofwater", "MountOfWater", Material.valueOf("LAPIS_LAZULI"), (byte) 0, EntityType.HORSE, "&7&oThe mount of Poséidon!", 2, MountOfWater.class, ServerVersion.v1_13_R1);
+			new MountType("ultracosmetics.mounts.nyansheep", "NyanSheep", Material.valueOf("CYAN_STAINED_GLASS"), (byte) 0, EntityType.SHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", 1, MountNyanSheep.class, ServerVersion.v1_13_R1);
+		} else {
+			new MountType("ultracosmetics.mounts.mountofwater", "MountOfWater", Material.valueOf("INK_SACK"), (byte) 4, EntityType.HORSE, "&7&oThe mount of Poséidon!", 2, MountOfWater.class, ServerVersion.v1_8_R1);
+			new MountType("ultracosmetics.mounts.nyansheep", "NyanSheep", Material.valueOf("STAINED_GLASS"), (byte) 9, EntityType.SHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", 1, MountNyanSheep.class, ServerVersion.v1_8_R1);
+		}
 	}
 }

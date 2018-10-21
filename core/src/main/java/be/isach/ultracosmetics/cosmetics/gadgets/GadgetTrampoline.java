@@ -4,8 +4,10 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -79,7 +81,7 @@ public class GadgetTrampoline extends Gadget {
 		if (running && cuboid != null) {
 			for (Entity entity : center.getWorld().getNearbyEntities(center, 4, 4, 4)) {
 				Block b = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-				if (b.getType() == Material.WOOL && cuboid.contains(b))
+				if (b.getType().toString().contains("WOOL") && cuboid.contains(b))
 					MathUtils.applyVelocity(entity, new Vector(0, 3, 0));
 			}
 		}
@@ -133,15 +135,23 @@ public class GadgetTrampoline extends Gadget {
 	}
 	
 	private void genBarr(Block block) {
-		setToRestore(block, Material.FENCE, (byte) 0);
+		setToRestore(block, BlockUtils.getOldMaterial("FENCE"), (byte) 0);
 	}
 	
 	private void genBlue(Block block) {
-		setToRestore(block, Material.WOOL, (byte) 11);
+		if (VersionManager.IS_VERSION_1_13) {
+			setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 11), (byte) 0);
+		} else {
+			setToRestore(block, Material.valueOf("WOOL"), (byte) 11);
+		}
 	}
 	
 	private void genBlack(Block block) {
-		setToRestore(block, Material.WOOL, (byte) 15);
+		if (VersionManager.IS_VERSION_1_13) {
+			setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 15), (byte) 0);
+		} else {
+			setToRestore(block, Material.valueOf("WOOL"), (byte) 15);
+		}
 	}
 	
 	private void genLadder(Block block) {
@@ -153,7 +163,8 @@ public class GadgetTrampoline extends Gadget {
 		MaterialData materialData = new MaterialData(material, data);
 		trampoline.put(block, materialData);
 		block.setType(material);
-		block.setData(data);
+		block.getState().setRawData(data);
+		block.getState().update();
 	}
 	
 	@EventHandler

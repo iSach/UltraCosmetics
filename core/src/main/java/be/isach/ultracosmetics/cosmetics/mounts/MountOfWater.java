@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Horse;
@@ -48,7 +49,11 @@ public class MountOfWater extends MountHorse {
 			datas.add((byte) 0xb);
 			for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
 				if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
-					BlockUtils.setToRestore(b, Material.STAINED_CLAY, datas.get(new Random().nextInt(2)), 20);
+					if (VersionManager.IS_VERSION_1_13) {
+						BlockUtils.setToRestore(b, BlockUtils.getBlockByColor("STAINED_CLAY", datas.get(new Random().nextInt(2))), (byte) 0, 20);
+					} else {
+						BlockUtils.setToRestore(b, Material.valueOf("STAINED_CLAY"), datas.get(new Random().nextInt(2)), 20);
+					}
 				}
 			}
 		}

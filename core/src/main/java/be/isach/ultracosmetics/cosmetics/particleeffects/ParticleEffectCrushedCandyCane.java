@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,7 +37,7 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 		double z = Math.sin(angle) * 1.1f;
 		center.add(x, 0, z);
 		for (int i = 0; i < 15; i++)
-			Particles.ITEM_CRACK.display(new Particles.ItemData(Material.INK_SACK, getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
+			Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"), getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
 		step++;
 	}
 

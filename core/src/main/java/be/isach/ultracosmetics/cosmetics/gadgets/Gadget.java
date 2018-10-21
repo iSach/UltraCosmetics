@@ -125,7 +125,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 		if (getPlayer().getInventory().getItem(ConfigUtils.getGadgetSlot()) != null) {
 			getPlayer().getWorld().dropItem(getPlayer().getLocation(),
 			                                getPlayer().getInventory().getItem(ConfigUtils.getGadgetSlot()));
-			getPlayer().getInventory().remove(ConfigUtils.getGadgetSlot());
+			getPlayer().getInventory().setItem(ConfigUtils.getGadgetSlot(), null);
 		}
 		
 		String ammo = "";

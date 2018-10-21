@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.ChatColor;
@@ -16,6 +17,7 @@ import org.bukkit.material.MaterialData;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,15 +42,57 @@ public class ItemFactory {
 		return itemStack;
 	}
 	
+	public static ItemStack createColored(String oldMaterialName, byte data, String displayName, String... lore) {
+		ItemStack itemStack;
+		if (VersionManager.IS_VERSION_1_13) {
+			itemStack = new ItemStack(BlockUtils.getBlockByColor(oldMaterialName, data), 1);
+		} else {
+			itemStack = new MaterialData(BlockUtils.getOldMaterial(oldMaterialName), data).toItemStack(1);
+		}
+		
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(displayName);
+		if (lore != null) {
+			List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList();
+			for (String s : lore)
+				if (s != null)
+					finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
+			itemMeta.setLore(finalLore);
+		}
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
+	}
+	
 	public static ItemStack create(Material material, String displayName, String... lore) {
 		return create(material, (byte) 0x0, displayName, lore);
+	}
+	
+	public static ItemStack rename(ItemStack itemstack, String displayName) {
+		ItemMeta meta = itemstack.getItemMeta();
+		meta.setDisplayName(displayName);
+		itemstack.setItemMeta(meta);
+		return itemstack;
+	}
+	
+	
+	public static ItemStack rename(ItemStack itemstack, String displayName, String... lore) {
+		ItemMeta meta = itemstack.getItemMeta();
+		meta.setDisplayName(displayName);
+		if (lore != null) {
+			List<String> finalLore = meta.hasLore() ? meta.getLore() : new ArrayList();
+			for (String s : lore)
+				if (s != null)
+					finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
+			meta.setLore(finalLore);
+		}
+		itemstack.setItemMeta(meta);
+		return itemstack;
 	}
 	
 	public static void fillInventory(Inventory inventory) {
 		if (SettingsManager.getConfig().getBoolean("Fill-Blank-Slots-With-Item.Enabled")) {
 			if (fillerItem == null) {
-				MaterialData materialData = getMaterialData(SettingsManager.getConfig().getString("Fill-Blank-Slots-With-Item.Item"));
-				ItemStack itemStack = materialData.toItemStack(1);
+				ItemStack itemStack = getItemStackFromConfig("Fill-Blank-Slots-With-Item.Item");
 				ItemMeta itemMeta = itemStack.getItemMeta();
 				itemMeta.setDisplayName(ChatColor.GRAY + "");
 				itemStack.setItemMeta(itemMeta);
@@ -62,18 +106,34 @@ public class ItemFactory {
 		}
 	}
 	
-	public static MaterialData createFromConfig(String path) {
-		String config = SettingsManager.getConfig().getString(path);
-		return getMaterialData(config);
+	public static Material fromId(int id) {
+		for (Material m : EnumSet.allOf(Material.class)) {
+			if (m.getId() == id) {
+				return m;
+			}
+		}
+		return Material.AIR;
 	}
 	
-	private static MaterialData getMaterialData(String name) {
-		return new MaterialData(Integer.parseInt(name.split(":")[0]),
-		                        (name.split(":").length > 1 ? (byte) Integer.parseInt(name.split(":")[1]) : (byte) 0));
+	public static ItemStack getItemStackFromConfig(String path) {
+		int id = Integer.parseInt(path.split(":")[0]);
+		byte data = path.split(":").length > 1 ? (byte) Integer.parseInt(path.split(":")[1]) : (byte) 0;
+		Material m = Material.AIR;
+		for (Material mat : EnumSet.allOf(Material.class)) {
+			if (mat.getId() == id) {
+				m = mat;
+			}
+		}
+		return new ItemStack(m, 1, data);
 	}
 	
 	public static ItemStack createSkull(String url, String name) {
-		ItemStack head = create(Material.SKULL_ITEM, (byte) 3, name);
+		ItemStack head;
+		if (VersionManager.IS_VERSION_1_13) {
+			head = create(Material.valueOf("PLAYER_HEAD"), name);
+		} else {
+			head = create(Material.valueOf("SKULL_ITEM"), (byte) 3, name);
+		}
 		
 		if (url.isEmpty()) return head;
 		

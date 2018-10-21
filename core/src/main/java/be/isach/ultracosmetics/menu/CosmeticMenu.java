@@ -199,24 +199,21 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 		
 		// Previous page item.
 		if (page > 1) {
-			MaterialData materialData = ItemFactory.createFromConfig("Categories.Previous-Page-Item");
 			int finalPage = page;
-			putItem(inventory, getSize() - 18, ItemFactory.create(materialData.getItemType(), materialData.getData(),
+			putItem(inventory, getSize() - 18, ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Previous-Page-Item"),
 			                                                      MessageManager.getMessage("Menu.Previous-Page")), (data) -> open(player, finalPage - 1));
 		}
 		
 		// Next page item.
 		if (page < getMaxPages()) {
-			MaterialData materialData = ItemFactory.createFromConfig("Categories.Next-Page-Item");
 			int finalPage = page;
-			putItem(inventory, getSize() - 10, ItemFactory.create(materialData.getItemType(), materialData.getData(),
+			putItem(inventory, getSize() - 10, ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Next-Page-Item"),
 			                                                      MessageManager.getMessage("Menu.Next-Page")), (data) -> open(player, finalPage + 1));
 		}
 		
 		// Clear cosmetic item.
-		MaterialData materialData = ItemFactory.createFromConfig("Categories.Clear-Cosmetic-Item");
 		String message = MessageManager.getMessage(category.getClearConfigPath());
-		ItemStack itemStack = ItemFactory.create(materialData.getItemType(), materialData.getData(), message);
+		ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
 		putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
 			toggleOff(player);
 			open(player, getCurrentPage(player));
@@ -224,9 +221,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 		
 		// Go Back to Main Menu Arrow.
 		if (getCategory().hasGoBackArrow()) {
-			MaterialData backData = ItemFactory.createFromConfig("Categories.Back-Main-Menu-Item");
-			ItemStack item = ItemFactory.create(backData.getItemType(), backData.getData(),
-			                                    MessageManager.getMessage("Menu.Main-Menu"));
+			ItemStack item = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Back-Main-Menu-Item"), MessageManager.getMessage("Menu.Main-Menu"));
 			putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(player));
 		}
 		

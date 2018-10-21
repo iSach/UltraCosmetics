@@ -14,6 +14,7 @@ import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -181,7 +182,7 @@ public enum Category {
 		this.activateConfig = activateConfig;
 		this.deactivateConfig = deactivateConfig;
 		if (SettingsManager.getConfig().contains("Categories." + configPath + ".Main-Menu-Item")) {
-			this.is = initMaterialData((String) (SettingsManager.getConfig().get("Categories." + configPath + ".Main-Menu-Item"))).toItemStack(1);
+			this.is = ItemFactory.getItemStackFromConfig((String) (SettingsManager.getConfig().get("Categories." + configPath + ".Main-Menu-Item")));
 		} else {
 			this.is = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA" +
 			                                  "6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTA1OWQ1OWViNGU1OWM" +
@@ -221,18 +222,6 @@ public enum Category {
 		return !(!UltraCosmeticsData.get().areTreasureChestsEnabled()
 		         && enabledSize() == 1)
 		       && (boolean) (SettingsManager.getConfig().get("Categories." + configPath + ".Go-Back-Arrow"));
-	}
-	
-	/**
-	 * Creates Material data from a text.
-	 * {id}:{data}
-	 *
-	 * @param name The text as {id}:{data}.
-	 * @return The material data from the text.
-	 */
-	private MaterialData initMaterialData(String name) {
-		return new MaterialData(Integer.parseInt(name.split(":")[0]),
-		                        (name.split(":").length > 1 ? (byte) Integer.parseInt(name.split(":")[1]) : (byte) 0));
 	}
 	
 	/**
