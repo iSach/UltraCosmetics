@@ -63,7 +63,7 @@ public enum CustomEntities {
 		for (CustomEntities entity : values()) {
 			try {
 				// Use reflection to get the RegistryID of entities.
-				@SuppressWarnings("unchecked") RegistryID<EntityTypes<?>> registryID = (RegistryID<EntityTypes<?>>) getPrivateField(RegistryMaterials.class, IRegistry.ENTITY_TYPE, "a");
+				@SuppressWarnings("unchecked") RegistryID<EntityTypes<?>> registryID = (RegistryID<EntityTypes<?>>) getPrivateField(RegistryMaterials.class, IRegistry.ENTITY_TYPE, "b");
 				Object[] idToClassMap = (Object[]) getPrivateField(RegistryID.class, registryID, "d");
 				
 				// Save the the ID -> entity class mapping before the registration.
