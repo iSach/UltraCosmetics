@@ -189,4 +189,13 @@ public class ItemFactory {
 		}
 		return true;
 	}
+	
+	public static boolean haveSameName(ItemStack a, ItemStack b) {
+		if (a.hasItemMeta() && b.hasItemMeta()) {
+			if (a.getItemMeta().hasDisplayName() && b.getItemMeta().hasDisplayName()) {
+				return a.getItemMeta().getDisplayName().equals(b.getItemMeta().getDisplayName());
+			}
+		}
+		return false;
+	}
 }

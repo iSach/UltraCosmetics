@@ -112,7 +112,7 @@ public abstract class Menu implements Listener {
 
         ClickRunnable clickRunnable = null;
 		for(ItemStack itemStack : clickRunnableMap.get(event.getInventory()).keySet()) {
-            if(ItemFactory.areSame(itemStack, event.getCurrentItem())) {
+            if(ItemFactory.haveSameName(itemStack, event.getCurrentItem())) {
 		        correctItem = true;
 		        clickRunnable = clickRunnableMap.get(event.getInventory()).get(itemStack);
             }
