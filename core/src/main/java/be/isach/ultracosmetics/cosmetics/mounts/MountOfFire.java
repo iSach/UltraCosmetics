@@ -47,8 +47,7 @@ public class MountOfFire extends MountHorse {
 			datas.add((byte) 0x4);
 			datas.add((byte) 0xe);
 			if (VersionManager.IS_VERSION_1_13) {
-				BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false).stream().filter(b -> b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1).forEachOrdered(b -> BlockUtils.setToRestore(b, BlockUtils.getBlockByColor("STAINED_CLAY", datas.get(new Random().nextInt(2))), (byte) 0, 20));
-			} else {
+				BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false).stream().filter(b -> b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1).forEachOrdered(b -> BlockUtils.setToRestore(b, BlockUtils.getBlockByColor("STAINED_CLAY", datas.get(new Random().nextInt(2))), datas.get(new Random().nextInt(2)), 20));			} else {
 				BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false).stream().filter(b -> b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1).forEachOrdered(b -> BlockUtils.setToRestore(b, Material.valueOf("STAINED_CLAY"), datas.get(new Random().nextInt(2)), 20));
 			}
 		}

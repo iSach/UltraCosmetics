@@ -140,7 +140,7 @@ public class GadgetTrampoline extends Gadget {
 	
 	private void genBlue(Block block) {
 		if (VersionManager.IS_VERSION_1_13) {
-			setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 11), (byte) 0);
+			setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 11), (byte) 11);
 		} else {
 			setToRestore(block, Material.valueOf("WOOL"), (byte) 11);
 		}
@@ -148,7 +148,7 @@ public class GadgetTrampoline extends Gadget {
 	
 	private void genBlack(Block block) {
 		if (VersionManager.IS_VERSION_1_13) {
-			setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 15), (byte) 0);
+			setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 15), (byte) 15);
 		} else {
 			setToRestore(block, Material.valueOf("WOOL"), (byte) 15);
 		}
