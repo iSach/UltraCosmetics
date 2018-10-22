@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -36,8 +37,13 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 		double x = Math.cos(angle) * 1.1f;
 		double z = Math.sin(angle) * 1.1f;
 		center.add(x, 0, z);
-		for (int i = 0; i < 15; i++)
-			Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"), getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
+		if (VersionManager.IS_VERSION_1_13) {
+			for (int i = 0; i < 15; i++)
+				Particles.ITEM_CRACK.display(new Particles.ItemData(getRandom13Material(), (byte) 0), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
+		} else {
+			for (int i = 0; i < 15; i++)
+				Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"), getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
+		}
 		step++;
 	}
 
@@ -49,5 +55,16 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 			return (byte) 1;
 		else
 			return (byte) 15;
+	}
+	
+	public static Material getRandom13Material() {
+		switch (getRandomColor()) {
+			case (byte) 1:
+				return Material.ROSE_RED;
+			case (byte) 15:
+				return Material.BONE_MEAL;
+			default:
+				return Material.CACTUS_GREEN;
+		}
 	}
 }
