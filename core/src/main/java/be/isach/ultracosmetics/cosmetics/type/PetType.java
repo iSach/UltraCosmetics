@@ -99,7 +99,7 @@ public final class PetType extends CosmeticMatType<Pet> {
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
 			if (VersionManager.IS_VERSION_1_13) {
-				new PetType("ultracosmetics.pets.llama", "Llama", Material.valueOf("RED_WOOL"), (byte) 0, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_11_R1);
+				new PetType("ultracosmetics.pets.llama", "Llama", BlockUtils.getBlockByColor("WOOL", (byte) 14), (byte) 14, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_11_R1);
 			} else {
 				new PetType("ultracosmetics.pets.llama", "Llama", Material.valueOf("WOOL"), (byte) 14, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_11_R1);
 			}

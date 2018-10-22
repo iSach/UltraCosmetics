@@ -182,7 +182,7 @@ public enum Category {
 		this.activateConfig = activateConfig;
 		this.deactivateConfig = deactivateConfig;
 		if (SettingsManager.getConfig().contains("Categories." + configPath + ".Main-Menu-Item")) {
-			this.is = ItemFactory.getItemStackFromConfig((String) (SettingsManager.getConfig().get("Categories." + configPath + ".Main-Menu-Item")));
+			this.is = ItemFactory.getItemStackFromConfig("Categories." + configPath + ".Main-Menu-Item");
 		} else {
 			this.is = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA" +
 			                                  "6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTA1OWQ1OWViNGU1OWM" +

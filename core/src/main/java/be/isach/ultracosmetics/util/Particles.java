@@ -6,6 +6,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Constructor;
@@ -279,7 +280,7 @@ public enum Particles {
 	 * <li>The speed value has no influence on this particle effect
 	 * </ul>
 	 */
-	FOOTSTEP("footstep", 28, -1),
+//	FOOTSTEP("footstep", 28, -1), Doesn't support 1.13 Particle
 	/**
 	 * A particle effect which is displayed when a mob dies:
 	 * <ul>
@@ -372,7 +373,7 @@ public enum Particles {
 	 * <li>It has no visual effect
 	 * </ul>
 	 */
-	ITEM_TAKE("take", 40, 8),
+//	ITEM_TAKE("take", 40, 8), Doesn't support 1.13 Particle
 	/**
 	 * A particle effect which is displayed by elder guardians:
 	 * <ul>
@@ -1298,6 +1299,7 @@ public enum Particles {
 		private static Field playerConnection;
 		private static Method sendPacket;
 		private static boolean initialized;
+		private static boolean useSendParticle;
 		private final Particles effect;
 		private float offsetX;
 		private final float offsetY;
@@ -1383,8 +1385,13 @@ public enum Particles {
 			}
 			try {
 				version = Integer.parseInt(PackageType.getServerVersion().split("_")[1]);
-				if (version > 7) {
+				if (version > 7 && version < 13) {
 					enumParticle = PackageType.MINECRAFT_SERVER.getClass("EnumParticle");
+					useSendParticle = false;
+				} else { // 1.13
+					initialized = true;
+					useSendParticle = true;
+					return;
 				}
 				Class<?> packetClass = PackageType.MINECRAFT_SERVER.getClass(version < 7 ? "Packet63WorldParticles" : "PacketPlayOutWorldParticles");
 				packetConstructor = ReflectionUtils.getConstructor(packetClass);
@@ -1429,32 +1436,48 @@ public enum Particles {
 			if (packet != null) {
 				return;
 			}
-			try {
-				packet = packetConstructor.newInstance();
-				if (version < 8) {
-					String name = effect.getName();
-					if (data != null) {
-						name += data.getPacketDataString();
+			if (!useSendParticle) {
+				try {
+					packet = packetConstructor.newInstance();
+					if (version < 8) {
+						String name = effect.getName();
+						if (data != null) {
+							name += data.getPacketDataString();
+						}
+						ReflectionUtils.setValue(packet, true, "a", name);
+					} else {
+						ReflectionUtils.setValue(packet, true, "a", enumParticle.getEnumConstants()[effect.getId()]);
+						ReflectionUtils.setValue(packet, true, "j", longDistance);
+						if (data != null) {
+							int[] packetData = data.getPacketData();
+							ReflectionUtils.setValue(packet, true, "k", effect == Particles.ITEM_CRACK ? packetData : new int[]{ packetData[0] | (packetData[1] << 12) });
+						}
 					}
-					ReflectionUtils.setValue(packet, true, "a", name);
-				} else {
-					ReflectionUtils.setValue(packet, true, "a", enumParticle.getEnumConstants()[effect.getId()]);
-					ReflectionUtils.setValue(packet, true, "j", longDistance);
-					if (data != null) {
-						int[] packetData = data.getPacketData();
-						ReflectionUtils.setValue(packet, true, "k", effect == Particles.ITEM_CRACK ? packetData : new int[]{ packetData[0] | (packetData[1] << 12) });
-					}
+					ReflectionUtils.setValue(packet, true, "b", (float) center.getX());
+					ReflectionUtils.setValue(packet, true, "c", (float) center.getY());
+					ReflectionUtils.setValue(packet, true, "d", (float) center.getZ());
+					ReflectionUtils.setValue(packet, true, "e", offsetX);
+					ReflectionUtils.setValue(packet, true, "f", offsetY);
+					ReflectionUtils.setValue(packet, true, "g", offsetZ);
+					ReflectionUtils.setValue(packet, true, "h", speed);
+					ReflectionUtils.setValue(packet, true, "i", amount);
+				} catch (Exception exception) {
+					throw new PacketInstantiationException("Packet instantiation failed", exception);
 				}
-				ReflectionUtils.setValue(packet, true, "b", (float) center.getX());
-				ReflectionUtils.setValue(packet, true, "c", (float) center.getY());
-				ReflectionUtils.setValue(packet, true, "d", (float) center.getZ());
-				ReflectionUtils.setValue(packet, true, "e", offsetX);
-				ReflectionUtils.setValue(packet, true, "f", offsetY);
-				ReflectionUtils.setValue(packet, true, "g", offsetZ);
-				ReflectionUtils.setValue(packet, true, "h", speed);
-				ReflectionUtils.setValue(packet, true, "i", amount);
-			} catch (Exception exception) {
-				throw new PacketInstantiationException("Packet instantiation failed", exception);
+			} else {
+				if (effect == Particles.REDSTONE) {
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center.getX(), center.getY(), center.getZ(), amount, new org.bukkit.Particle.DustOptions(Color.fromRGB((int) offsetX * 255, (int) offsetY * 255, (int) offsetZ * 255), 1));
+				} else if (effect == Particles.SPELL_MOB || effect == Particles.SPELL_MOB_AMBIENT) {
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, offsetX, offsetY, offsetZ, 1);
+				} else if (effect == Particles.NOTE) {
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, offsetX, 0, 0, 1);
+				} else if (effect == Particles.ITEM_CRACK) {
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, new ItemStack(data.getMaterial()));
+				} else if (effect == Particles.BLOCK_CRACK) {
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, data.getMaterial().createBlockData());
+				} else {
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
+				}
 			}
 		}
 		
@@ -1469,6 +1492,9 @@ public enum Particles {
 		 */
 		public void sendTo(Location center, Player player) throws PacketInstantiationException, PacketSendingException {
 			initializePacket(center);
+			if (useSendParticle) {
+				return;
+			}
 			try {
 				sendPacket.invoke(playerConnection.get(getHandle.invoke(player)), packet);
 			} catch (Exception exception) {
@@ -1485,6 +1511,10 @@ public enum Particles {
 		 * @see #sendTo(Location center, Player player)
 		 */
 		public void sendTo(Location center, List<Player> players) throws IllegalArgumentException {
+			if (useSendParticle) {
+				initializePacket(center);
+				return;
+			}
 			if (players.isEmpty()) {
 				throw new IllegalArgumentException("The player list is empty");
 			}
@@ -1502,6 +1532,10 @@ public enum Particles {
 		 * @see #sendTo(Location center, Player player)
 		 */
 		public void sendTo(Location center, double range) throws IllegalArgumentException {
+			if (useSendParticle) {
+				initializePacket(center);
+				return;
+			}
 			if (range < 1) {
 				throw new IllegalArgumentException("The range is lower than 1");
 			}

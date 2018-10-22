@@ -188,8 +188,9 @@ public class BlockUtils {
 			      && block.getType().getId() != 44)) return;
 			
 			blocksToRestore.put(block.getLocation(), block.getType().toString() + "," + block.getData());
-			for (Player player : block.getLocation().getWorld().getPlayers())
+			for (Player player : block.getLocation().getWorld().getPlayers()) {
 				player.sendBlockChange(block.getLocation(), newType, newData);
+			}
 			Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> restoreBlockAt(block.getLocation()), tickDelay);
 		});
 	}
@@ -271,7 +272,8 @@ public class BlockUtils {
 	
 	public static Material getBlockByColor(String oldMaterialName, DyeColor color) {
 		if (VersionManager.IS_VERSION_1_13) {
-			return Material.getMaterial(color.getColor().toString() + "_" + oldMaterialName);
+			oldMaterialName = oldMaterialName.replace("STAINED_CLAY", "CONCRETE");
+			return Material.getMaterial(color.toString() + "_" + oldMaterialName);
 		}
 		return Material.WHITE_WOOL;
 	}

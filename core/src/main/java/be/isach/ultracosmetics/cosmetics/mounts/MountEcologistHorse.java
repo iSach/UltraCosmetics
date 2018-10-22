@@ -49,7 +49,7 @@ public class MountEcologistHorse extends MountHorse {
 			for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
 				if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
 					if (VersionManager.IS_VERSION_1_13) {
-						BlockUtils.setToRestore(b, BlockUtils.getBlockByColor("STAINED_CLAY", datas.get(new Random().nextInt(2))), (byte) 0, 20);
+						BlockUtils.setToRestore(b, BlockUtils.getBlockByColor("STAINED_CLAY", datas.get(new Random().nextInt(2))), datas.get(new Random().nextInt(2)), 20);
 					} else {
 						BlockUtils.setToRestore(b, Material.valueOf("STAINED_CLAY"), datas.get(new Random().nextInt(2)), 20);
 					}

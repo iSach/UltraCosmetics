@@ -115,7 +115,7 @@ public class MorphType extends CosmeticMatType<Morph> {
 		}
 		if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
 			if (VersionManager.IS_VERSION_1_13) {
-				new MorphType("ultracosmetics.morphs.llama", "Llama", Material.valueOf("RED_WOOL"), (byte) 14, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_13_R1);
+				new MorphType("ultracosmetics.morphs.llama", "Llama", BlockUtils.getBlockByColor("WOOL", (byte) 14), (byte) 14, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_13_R1);
 			} else {
 				new MorphType("ultracosmetics.morphs.llama", "Llama", Material.valueOf("WOOL"), (byte) 14, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_11_R1);
 			}
@@ -125,7 +125,7 @@ public class MorphType extends CosmeticMatType<Morph> {
 		}
 		
 		if (VersionManager.IS_VERSION_1_13) {
-			new MorphType("ultracosmetics.morphs.sheep", "Sheep", Material.valueOf("WHITE_WOOL"), (byte) 0, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class, ServerVersion.v1_8_R1);
+			new MorphType("ultracosmetics.morphs.sheep", "Sheep", BlockUtils.getBlockByColor("WOOL", (byte) 0), (byte) 0, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class, ServerVersion.v1_8_R1);
 			new MorphType("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", Material.valueOf("WITHER_SKELETON_SKULL"), (byte) 0, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class, ServerVersion.v1_13_R1);
 		} else {
 			new MorphType("ultracosmetics.morphs.sheep", "Sheep", Material.valueOf("WOOL"), (byte) 0, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class, ServerVersion.v1_8_R1);
