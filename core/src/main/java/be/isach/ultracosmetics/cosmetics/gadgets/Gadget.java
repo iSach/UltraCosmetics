@@ -21,6 +21,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.UUID;
+
+import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -372,7 +374,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 		ItemStack itemStack = player.getItemInHand();
 		if (itemStack.getType() != getType().getMaterial())
 			return;
-		if (itemStack.getData().getData() != getType().getData())
+		if (itemStack.getData().getData() != getType().getData() && !VersionManager.IS_VERSION_1_13) // 1.13 can't check data
 			return;
 		if (player.getInventory().getHeldItemSlot() != (int) SettingsManager.getConfig().get("Gadget-Slot"))
 			return;

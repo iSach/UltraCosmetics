@@ -271,7 +271,7 @@ public class BlockUtils {
 	}
 	
 	public static Material getDyeByColor(byte color) {
-		if (VersionManager.IS_VERSION_1_13) {
+		if (!VersionManager.IS_VERSION_1_13) {
 			return Material.getMaterial("INK_SACK");
 		}
 		switch (color) {
