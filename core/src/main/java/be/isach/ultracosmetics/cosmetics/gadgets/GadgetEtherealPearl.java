@@ -30,9 +30,11 @@ import java.util.ArrayList;
 public class GadgetEtherealPearl extends Gadget implements Listener {
 	
 	private EnderPearl pearl;
+	private boolean running;
 	
 	public GadgetEtherealPearl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
 		super(owner, GadgetType.valueOf("etherealpearl"), ultraCosmetics);
+		running = false;
 	}
 	
 	@Override
@@ -50,6 +52,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 		
 		if (getPlayer().getVehicle() instanceof EnderPearl) {
 			getPlayer().getVehicle().remove();
+			getPlayer().eject();
 		}
 		
 		EnderPearl pearl = getPlayer().launchProjectile(EnderPearl.class);
@@ -59,6 +62,8 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 		if (!getPlayer().getAllowFlight()) {
 			getPlayer().setAllowFlight(true);
 		}
+		pearl.setPassenger(getPlayer());
+		running = true;
 	}
 	
 	@EventHandler
@@ -79,6 +84,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 			
 			spawnRandomFirework(event.getPlayer().getLocation());
 			pearl.remove();
+			running = false;
 		}
 	}
 	
@@ -138,16 +144,20 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 				pearl = null;
 			}
 		} else {
-			Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-				getPlayer().eject();
+			if (running) {
+				running = false;
 				
-				if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-					getPlayer().setAllowFlight(false);
-				}
-			});
-			
-			pearl = null;
-			spawnRandomFirework(getPlayer().getLocation());
+				Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+					getPlayer().eject();
+					
+					if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+						getPlayer().setAllowFlight(false);
+					}
+				});
+				
+				pearl = null;
+				spawnRandomFirework(getPlayer().getLocation());
+			}
 		}
 	}
 	
