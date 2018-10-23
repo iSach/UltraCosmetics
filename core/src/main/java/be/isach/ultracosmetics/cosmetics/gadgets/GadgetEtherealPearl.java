@@ -138,11 +138,13 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 				pearl = null;
 			}
 		} else {
-			getPlayer().eject();
-			
-			if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-				getPlayer().setAllowFlight(false);
-			}
+			Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+				getPlayer().eject();
+				
+				if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+					getPlayer().setAllowFlight(false);
+				}
+			});
 			
 			pearl = null;
 			spawnRandomFirework(getPlayer().getLocation());
