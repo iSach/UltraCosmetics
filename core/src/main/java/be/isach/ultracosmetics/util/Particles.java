@@ -1466,7 +1466,10 @@ public enum Particles {
 				}
 			} else {
 				if (effect == Particles.REDSTONE) {
-					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center.getX(), center.getY(), center.getZ(), amount, new org.bukkit.Particle.DustOptions(Color.fromRGB((int) offsetX * 255, (int) offsetY * 255, (int) offsetZ * 255), 1));
+					int r = (int) (offsetX * 255);
+					int g = (int) (offsetY * 255);
+					int b = (int) (offsetZ * 255);
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, 0, new org.bukkit.Particle.DustOptions(Color.fromRGB(r, g, b), 1));
 				} else if (effect == Particles.SPELL_MOB || effect == Particles.SPELL_MOB_AMBIENT) {
 					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, offsetX, offsetY, offsetZ, 1);
 				} else if (effect == Particles.NOTE) {
