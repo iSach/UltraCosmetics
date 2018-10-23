@@ -66,7 +66,6 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
 		new ParticleEffectType("ultracosmetics.particleeffects.bloodhelix", "BloodHelix", 1, Particles.REDSTONE, Material.REDSTONE, (byte) 0, ParticleEffectBloodHelix.class, "&7&oAncient legend says this magic\n&7&oempowers the blood of its user,\n&7&ogiving them godly powers..", ServerVersion.v1_8_R1);
 		new ParticleEffectType("ultracosmetics.particleeffects.frostlord", "FrostLord", 1, Particles.SNOW_SHOVEL, Material.PACKED_ICE, (byte) 0, ParticleEffectFrostLord.class, "&7&oI am The Almighty Frostlord!", ServerVersion.v1_8_R1);
 		new ParticleEffectType("ultracosmetics.particleeffects.flamerings", "FlameRings", 1, Particles.FLAME, Material.BLAZE_POWDER, (byte) 0, ParticleEffectFlameRings.class, "&7&oWatch out! They are hot!", ServerVersion.v1_8_R1);
-		new ParticleEffectType("ultracosmetics.particleeffects.inlove", "InLove", 1, Particles.HEART, BlockUtils.getOldMaterial("RED_ROSE"), (byte) 0, ParticleEffectInLove.class, "&7&oOMG wow I'm in love!", ServerVersion.v1_8_R1);
 		new ParticleEffectType("ultracosmetics.particleeffects.greensparks", "GreenSparks", 1, Particles.VILLAGER_HAPPY, Material.EMERALD, (byte) 0, ParticleEffectGreenSparks.class, "&7&oLittle and green sparkly sparks!", ServerVersion.v1_8_R1);
 		new ParticleEffectType("ultracosmetics.particleeffects.frozenwalk", "FrozenWalk", 1, Particles.SNOW_SHOVEL, BlockUtils.getOldMaterial("SNOW_BALL"), (byte) 0, ParticleEffectFrozenWalk.class, "&7&oMy feet are so cold!", ServerVersion.v1_8_R1);
 		new ParticleEffectType("ultracosmetics.particleeffects.music", "Music", 4, Particles.FLAME, BlockUtils.getOldMaterial("RECORD_7"), (byte) 0, ParticleEffectMusic.class, "&7&oMuch music!", ServerVersion.v1_8_R1);
@@ -79,11 +78,13 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
 		new ParticleEffectType("ultracosmetics.particleeffects.flamefairy", "FlameFairy", 1, Particles.FLAME, Material.BLAZE_POWDER, (byte) 0, ParticleEffectFlameFairy.class, "&7&oHEY!!", ServerVersion.v1_8_R1);
 		
 		if (VersionManager.IS_VERSION_1_13) {
-			new ParticleEffectType("ultracosmetics.particleeffects.raincloud", "RainCloud", 1, Particles.DRIP_WATER, Material.INK_SAC, (byte) 0, ParticleEffectRainCloud.class, "&7&oThe weather forecast\n&7&ois telling me it's raining.", ServerVersion.v1_13_R1);
-			new ParticleEffectType("ultracosmetics.particleeffects.crushedcandycane", "CrushedCandyCane", 1, Particles.ITEM_CRACK, Material.valueOf("ROSE_RED"), (byte) 0, ParticleEffectCrushedCandyCane.class, "&7&oThere's no such thing as too much\n&7&oChristmas Candy. Do not listen\n&7&oto your dentist.", ServerVersion.v1_13_R1);
+			new ParticleEffectType("ultracosmetics.particleeffects.raincloud", "RainCloud", 1, Particles.DRIP_WATER, BlockUtils.getDyeByColor((byte) 0), (byte) 0, ParticleEffectRainCloud.class, "&7&oThe weather forecast\n&7&ois telling me it's raining.", ServerVersion.v1_13_R1);
+			new ParticleEffectType("ultracosmetics.particleeffects.crushedcandycane", "CrushedCandyCane", 1, Particles.ITEM_CRACK, BlockUtils.getDyeByColor((byte) 1), (byte) 1, ParticleEffectCrushedCandyCane.class, "&7&oThere's no such thing as too much\n&7&oChristmas Candy. Do not listen\n&7&oto your dentist.", ServerVersion.v1_13_R1);
+			new ParticleEffectType("ultracosmetics.particleeffects.inlove", "InLove", 1, Particles.HEART, BlockUtils.getDyeByColor((byte) 1), (byte) 1, ParticleEffectInLove.class, "&7&oOMG wow I'm in love!", ServerVersion.v1_13_R1);
 		} else {
-			new ParticleEffectType("ultracosmetics.particleeffects.raincloud", "RainCloud", 1, Particles.DRIP_WATER, Material.valueOf("INK_SACK"), (byte) 0, ParticleEffectRainCloud.class, "&7&oThe weather forecast\n&7&ois telling me it's raining.", ServerVersion.v1_8_R1);
-			new ParticleEffectType("ultracosmetics.particleeffects.crushedcandycane", "CrushedCandyCane", 1, Particles.ITEM_CRACK, Material.valueOf("INK_SACK"), (byte) 1, ParticleEffectCrushedCandyCane.class, "&7&oThere's no such thing as too much\n&7&oChristmas Candy. Do not listen\n&7&oto your dentist.", ServerVersion.v1_8_R1);
+			new ParticleEffectType("ultracosmetics.particleeffects.raincloud", "RainCloud", 1, Particles.DRIP_WATER, BlockUtils.getOldMaterial("INK_SACK"), (byte) 0, ParticleEffectRainCloud.class, "&7&oThe weather forecast\n&7&ois telling me it's raining.", ServerVersion.v1_8_R1);
+			new ParticleEffectType("ultracosmetics.particleeffects.crushedcandycane", "CrushedCandyCane", 1, Particles.ITEM_CRACK, BlockUtils.getOldMaterial("INK_SACK"), (byte) 1, ParticleEffectCrushedCandyCane.class, "&7&oThere's no such thing as too much\n&7&oChristmas Candy. Do not listen\n&7&oto your dentist.", ServerVersion.v1_8_R1);
+			new ParticleEffectType("ultracosmetics.particleeffects.inlove", "InLove", 1, Particles.HEART, BlockUtils.getOldMaterial("INK_SACK"), (byte) 1, ParticleEffectInLove.class, "&7&oOMG wow I'm in love!", ServerVersion.v1_8_R1);
 		}
 	}
 }
