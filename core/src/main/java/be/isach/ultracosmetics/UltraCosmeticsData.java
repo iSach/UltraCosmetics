@@ -111,7 +111,7 @@ public class UltraCosmeticsData {
 		moneyTreasureLoot = SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled");
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Enabled")) {
 			treasureChests = true;
-			if ((boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Enabled")) {
+			if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled")) {
 				moneyTreasureLoot = true;
 			}
 		}

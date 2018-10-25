@@ -19,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -130,6 +131,25 @@ public class PlayerListener implements Listener {
                     && event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
                 event.setCancelled(true);
                 player.updateInventory();
+            }
+        }
+    }
+    
+    /**
+     * Cancel players from removing, picking the item in their inventory.
+     *
+     * @param event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void cancelMove(InventoryCreativeEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
+            if (event.getCurrentItem() != null
+                    && event.getCurrentItem().hasItemMeta()
+                    && event.getCurrentItem().getItemMeta().hasDisplayName()
+                    && event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+                event.setCancelled(true);
+                player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
             }
         }
     }

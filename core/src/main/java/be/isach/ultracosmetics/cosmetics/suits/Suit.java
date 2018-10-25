@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -63,6 +64,16 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 		if (event.getSlotType().equals(InventoryType.SlotType.ARMOR) && getPlayer() != null && player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && itemStack != null && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
 			event.setCancelled(true);
 			player.updateInventory();
+		}
+	}
+	
+	@EventHandler
+	public void onInventoryClick(InventoryCreativeEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		ItemStack current = event.getCurrentItem();
+		if (event.getSlotType().equals(InventoryType.SlotType.ARMOR) && getPlayer() != null && player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && itemStack != null && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+			event.setCancelled(true);
+			player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
 		}
 	}
 	

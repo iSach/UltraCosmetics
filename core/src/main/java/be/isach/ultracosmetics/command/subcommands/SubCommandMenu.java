@@ -55,7 +55,7 @@ public class SubCommandMenu extends SubCommand {
 		
 		if (s.startsWith("g") && Category.GADGETS.isEnabled()) {
 			menus.getGadgetsMenu().open(ultraPlayer, page);
-		} else if (s.startsWith("pa") && Category.EFFECTS.isEnabled()) {
+		} else if ((s.startsWith("pa") || s.startsWith("ef")) && Category.EFFECTS.isEnabled()) {
 			menus.getEffectsMenu().open(ultraPlayer, page);
 		} else if (s.startsWith("pe") && Category.PETS.isEnabled()) {
 			menus.getPetsMenu().open(ultraPlayer, page);

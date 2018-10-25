@@ -21,6 +21,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.UUID;
+
+import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -33,6 +35,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -372,7 +375,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 		ItemStack itemStack = player.getItemInHand();
 		if (itemStack.getType() != getType().getMaterial())
 			return;
-		if (itemStack.getData().getData() != getType().getData())
+		if (itemStack.getData().getData() != getType().getData() && !VersionManager.IS_VERSION_1_13) // 1.13 can't check data
 			return;
 		if (player.getInventory().getHeldItemSlot() != (int) SettingsManager.getConfig().get("Gadget-Slot"))
 			return;
@@ -504,8 +507,24 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 			if (item != null && player == getPlayer() && item.equals(itemStack)) {
 				event.setCancelled(true);
 				((Player) event.getWhoClicked()).updateInventory();
+				player.closeInventory();
 				return;
 			}
+		}
+	}
+	
+	/**
+	 * Cancel players from removing, picking the item in their inventory.
+	 *
+	 * @param event
+	 */
+	@EventHandler
+	public void cancelMove(InventoryCreativeEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		ItemStack item = event.getCurrentItem();
+		if (item != null && player == getPlayer() && item.equals(itemStack)) {
+			event.setCancelled(true);
+			player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
 		}
 	}
 	

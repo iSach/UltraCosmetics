@@ -39,7 +39,7 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 		center.add(x, 0, z);
 		if (VersionManager.IS_VERSION_1_13) {
 			for (int i = 0; i < 15; i++)
-				Particles.ITEM_CRACK.display(new Particles.ItemData(getRandom13Material(), (byte) 0), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
+				Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getDyeByColor(getRandomColor()), getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
 		} else {
 			for (int i = 0; i < 15; i++)
 				Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"), getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
@@ -55,16 +55,5 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 			return (byte) 1;
 		else
 			return (byte) 15;
-	}
-	
-	public static Material getRandom13Material() {
-		switch (getRandomColor()) {
-			case (byte) 1:
-				return Material.ROSE_RED;
-			case (byte) 15:
-				return Material.BONE_MEAL;
-			default:
-				return Material.CACTUS_GREEN;
-		}
 	}
 }

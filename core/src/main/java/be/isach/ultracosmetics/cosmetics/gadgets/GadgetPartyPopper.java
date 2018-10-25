@@ -26,7 +26,7 @@ public class GadgetPartyPopper extends Gadget {
 		for (int i = 0; i < 30; i++) {
 			Vector rand = new Vector(Math.random() - 0.5D,
 			                         Math.random() - 0.5D, Math.random() - 0.5D);
-			Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"),
+			Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getDyeByColor(MathUtils.randomByte(15)),
 			                                                    MathUtils.randomByte(15)), getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(1.2),
 			                             0.6f, getPlayer().getEyeLocation(), 128);
 		}

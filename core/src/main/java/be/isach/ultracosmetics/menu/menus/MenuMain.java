@@ -56,7 +56,7 @@ public class MenuMain extends Menu {
 				break;
 		}
 
-		if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
+		if (UltraCosmeticsData.get().areTreasureChestsEnabled() && layout != null) {
 			for (int i = 0; i < layout.length; i++) {
 				layout[i] += 9;
 			}
@@ -75,10 +75,12 @@ public class MenuMain extends Menu {
 
 	@Override
 	protected void putItems(Inventory inventory, UltraPlayer player) {
-		for (int i = 0; i < Category.enabledSize(); i++) {
-			int slot = layout[i];
-			Category category = Category.enabled().get(i);
-			putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
+		if (Category.enabledSize() > 0) {
+			for (int i = 0; i < Category.enabledSize(); i++) {
+				int slot = layout[i];
+				Category category = Category.enabled().get(i);
+				putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
+			}
 		}
 
 		// Clear cosmetics item.

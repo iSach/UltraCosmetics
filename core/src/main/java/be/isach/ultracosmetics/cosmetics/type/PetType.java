@@ -109,7 +109,7 @@ public final class PetType extends CosmeticMatType<Pet> {
 		}
 		
 		if (VersionManager.IS_VERSION_1_13) {
-			new PetType("ultracosmetics.pets.sheep", "Sheep", Material.valueOf("WHITE_WOOL"), (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.v1_13_R1);
+			new PetType("ultracosmetics.pets.sheep", "Sheep", BlockUtils.getBlockByColor("WOOL", (byte) 0), (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.v1_13_R1);
 			new PetType("ultracosmetics.pets.wither", "Wither", Material.valueOf("WITHER_SKELETON_SKULL"), (byte) 0, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.v1_13_R1);
 		} else {
 			new PetType("ultracosmetics.pets.sheep", "Sheep", Material.valueOf("WOOL"), (byte) 0, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.v1_8_R1);

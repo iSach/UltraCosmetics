@@ -53,7 +53,7 @@ public class UltraPlayerManager {
 	public void initPlayers() {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			create(p);
-			if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Join")
+			if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join")
 			    && (SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(p.getWorld().getName()))
 				getUltraPlayer(p).giveMenuItem();
 		}

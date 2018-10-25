@@ -81,9 +81,9 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 			
 			if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
 			    && !player.hasPermission(cosmeticMatType.getPermission())) {
-				Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
-				Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-				String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", cosmeticMatType.getName()));
+				Material material = Material.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Type"));
+				Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
+				String name = ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", cosmeticMatType.getName());
 				List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
 				String[] array = new String[npLore.size()];
 				npLore.toArray(array);

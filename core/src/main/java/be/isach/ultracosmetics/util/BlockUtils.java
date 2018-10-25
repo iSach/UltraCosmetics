@@ -174,7 +174,7 @@ public class BlockUtils {
 			      && block.getType() != getOldMaterial("COMMAND")
 			      && block.getType() != Material.DROPPER
 			      && block.getType() != Material.DISPENSER
-			      && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(block.getType().toString().toUpperCase())
+			      && !SettingsManager.getConfig().getStringList("Gadgets.PaintballGun.BlackList").contains(block.getType().toString().toUpperCase())
 			      && !block.getType().toString().toLowerCase().contains("door")
 			      && block.getType() != getOldMaterial("BED")
 			      && block.getType() != getOldMaterial("BED_BLOCK")
@@ -267,6 +267,48 @@ public class BlockUtils {
 				return getBlockByColor(oldMaterialName, DyeColor.BLACK);
 			default:
 				return getBlockByColor(oldMaterialName, DyeColor.WHITE);
+		}
+	}
+	
+	public static Material getDyeByColor(byte color) {
+		if (!VersionManager.IS_VERSION_1_13) {
+			return Material.getMaterial("INK_SACK");
+		}
+		switch (color) {
+			case 0x0:
+				return Material.valueOf("INK_SAC");
+			case 0x1:
+				return Material.valueOf("ROSE_RED");
+			case 0x2:
+				return Material.valueOf("CACTUS_GREEN");
+			case 0x3:
+				return Material.valueOf("COCOA_BEANS");
+			case 0x4:
+				return Material.valueOf("LAPIS_LAZULI");
+			case 0x5:
+				return Material.valueOf("PURPLE_DYE");
+			case 0x6:
+				return Material.valueOf("CYAN_DYE");
+			case 0x7:
+				return Material.valueOf("LIGHT_GRAY_DYE");
+			case 0x8:
+				return Material.valueOf("GRAY_DYE");
+			case 0x9:
+				return Material.valueOf("PINK_DYE");
+			case 0xA:
+				return Material.valueOf("LIME_DYE");
+			case 0xB:
+				return Material.valueOf("DANDELION_YELLOW");
+			case 0xC:
+				return Material.valueOf("LIGHT_BLUE_DYE");
+			case 0xD:
+				return Material.valueOf("MAGENTA_DYE");
+			case 0xE:
+				return Material.valueOf("ORANGE_DYE");
+			case 0xF:
+				return Material.valueOf("BONE_MEAL");
+			default:
+				return Material.valueOf("BONE_MEAL");
 		}
 	}
 	

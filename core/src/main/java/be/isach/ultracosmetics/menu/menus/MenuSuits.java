@@ -84,9 +84,9 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
 				if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
 				    && !player.hasPermission(suitType.getPermission(armorSlot))) {
-					Material material = Material.valueOf((String) SettingsManager.getConfig().get("No-Permission.Custom-Item.Type"));
-					Byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Data")));
-					String name = String.valueOf(SettingsManager.getConfig().get("No-Permission.Custom-Item.Name"));
+					Material material = Material.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Type"));
+					Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
+					String name = SettingsManager.getConfig().getString("No-Permission.Custom-Item.Name");
 					name = ChatColor.translateAlternateColorCodes('&', name.replace("{cosmetic-name}", suitType.getName()));
 					List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
 					String[] array = new String[npLore.size()];
