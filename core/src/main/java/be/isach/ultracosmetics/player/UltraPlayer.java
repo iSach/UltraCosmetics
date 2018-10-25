@@ -343,7 +343,7 @@ public class UltraPlayer {
 		                   || currentTreasureChest != null
 		                   || currentHat != null
 		                   || currentEmote != null;
-		if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+		if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises") && SettingsManager.getConfig().getList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName())) { // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident
 			removeMorph();
 			try {
 				DisguiseAPI.undisguiseToAll(getBukkitPlayer());
