@@ -35,6 +35,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -506,8 +507,24 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 			if (item != null && player == getPlayer() && item.equals(itemStack)) {
 				event.setCancelled(true);
 				((Player) event.getWhoClicked()).updateInventory();
+				player.closeInventory();
 				return;
 			}
+		}
+	}
+	
+	/**
+	 * Cancel players from removing, picking the item in their inventory.
+	 *
+	 * @param event
+	 */
+	@EventHandler
+	public void cancelMove(InventoryCreativeEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		ItemStack item = event.getCurrentItem();
+		if (item != null && player == getPlayer() && item.equals(itemStack)) {
+			event.setCancelled(true);
+			player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
 		}
 	}
 	

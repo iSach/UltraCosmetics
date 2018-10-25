@@ -11,6 +11,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
@@ -59,6 +60,29 @@ public class Hat extends Cosmetic<HatType> {
 				clear();
 			}
 			player.updateInventory();
+		}
+	}
+	
+	@EventHandler
+	public void onInventoryClick(InventoryCreativeEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		ItemStack current = event.getCurrentItem();
+		if (event.getSlotType().equals(InventoryType.SlotType.ARMOR)
+				&& getPlayer() != null
+				&& player.equals(getPlayer())
+				&& current != null
+				&& current.hasItemMeta()
+				&& current.getItemMeta().hasDisplayName()
+				&& getType().getItemStack() != null
+				&& current.getItemMeta().getDisplayName().equals(getType().getItemStack().getItemMeta().getDisplayName())) {
+			event.setCancelled(true);
+			if (event.getAction().name().contains("DROP")
+					&& SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
+				clear();
+				player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
+				return;
+			}
+			player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
 		}
 	}
 	
