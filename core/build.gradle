@@ -1,13 +1,13 @@
 dependencies {
     compile 'org.spigotmc:spigot1131:1.13.1'
-    compile('LibsDisguises:LibsDisguises:9.4.0') {
+    compile('LibsDisguises:LibsDisguises:9.5.2') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
     }
     compile('net.milkbowl.vault:VaultAPI:1.6') {
         exclude group: 'org.bukkit'
     }
-    compile 'me.clip:placeholderapi:2.8.2'
+    compile 'me.clip:placeholderapi:2.9.2'
     compile 'org.black_ixx:PlayerPoints:2.1.3'
 }
 
