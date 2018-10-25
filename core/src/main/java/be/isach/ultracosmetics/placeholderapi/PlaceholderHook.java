@@ -27,27 +27,27 @@ public class PlaceholderHook extends EZPlaceholderHook {
 		switch (identifier) {
 			// Current cosmetics
 			case "current_gadget":
-				return ultraPlayer.getCurrentGadget().getType().getName();
+				return ultraPlayer.getCurrentGadget() == null ? "None" : ultraPlayer.getCurrentGadget().getType().getName();
 			case "current_mount":
-				return ultraPlayer.getCurrentMount().getType().getName();
+				return ultraPlayer.getCurrentMount() == null ? "None" : ultraPlayer.getCurrentMount().getType().getName();
 			case "current_particleeffect":
-				return ultraPlayer.getCurrentParticleEffect().getType().getName();
+				return ultraPlayer.getCurrentParticleEffect() == null ? "None" : ultraPlayer.getCurrentParticleEffect().getType().getName();
 			case "current_pet":
-				return ultraPlayer.getCurrentPet().getType().getName();
+				return ultraPlayer.getCurrentPet() == null ? "None" : ultraPlayer.getCurrentPet().getType().getName();
 			case "current_morph":
-				return ultraPlayer.getCurrentMorph().getType().getName();
+				return ultraPlayer.getCurrentMorph() == null ? "None" : ultraPlayer.getCurrentMorph().getType().getName();
 			case "current_hat":
-				return ultraPlayer.getCurrentHat().getType().getName();
+				return ultraPlayer.getCurrentHat() == null ? "None" : ultraPlayer.getCurrentHat().getType().getName();
 			case "current_emote":
-				return ultraPlayer.getCurrentEmote().getType().getName();
+				return ultraPlayer.getCurrentEmote() == null ? "None" : ultraPlayer.getCurrentEmote().getType().getName();
 			case "current_suit_helmet":
-				return ultraPlayer.getSuit(ArmorSlot.HELMET).getType().getName(ArmorSlot.HELMET);
+				return ultraPlayer.getSuit(ArmorSlot.HELMET) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.HELMET).getType().getName(ArmorSlot.HELMET);
 			case "current_suit_chestplate":
-				return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE).getType().getName(ArmorSlot.CHESTPLATE);
+				return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.CHESTPLATE).getType().getName(ArmorSlot.CHESTPLATE);
 			case "current_suit_leggings":
-				return ultraPlayer.getSuit(ArmorSlot.LEGGINGS).getType().getName(ArmorSlot.LEGGINGS);
+				return ultraPlayer.getSuit(ArmorSlot.LEGGINGS) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.LEGGINGS).getType().getName(ArmorSlot.LEGGINGS);
 			case "current_suit_boots":
-				return ultraPlayer.getSuit(ArmorSlot.BOOTS).getType().getName(ArmorSlot.BOOTS);
+				return ultraPlayer.getSuit(ArmorSlot.BOOTS) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.BOOTS).getType().getName(ArmorSlot.BOOTS);
 
 			// Balance, keys, and user-specific settings
 			case "balance":
