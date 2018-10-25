@@ -29,7 +29,7 @@ public class InvalidWorldChecker extends BukkitRunnable {
 		for (UltraPlayer ultraPlayer : ultraCosmetics.getPlayerManager().getUltraPlayers()) {
 			Player p = ultraPlayer.getBukkitPlayer();
 			try {
-				if (!((List) SettingsManager.getConfig().get("Enabled-Worlds")).contains(p.getWorld().getName())) {
+				if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(p.getWorld().getName())) {
 					ultraPlayer.removeMenuItem();
 					if (ultraPlayer.clear())
 						ultraPlayer.getBukkitPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));

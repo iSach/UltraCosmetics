@@ -174,7 +174,7 @@ public class BlockUtils {
 			      && block.getType() != getOldMaterial("COMMAND")
 			      && block.getType() != Material.DROPPER
 			      && block.getType() != Material.DISPENSER
-			      && !((ArrayList<String>) SettingsManager.getConfig().get("Gadgets.PaintballGun.BlackList")).contains(block.getType().toString().toUpperCase())
+			      && !SettingsManager.getConfig().getStringList("Gadgets.PaintballGun.BlackList").contains(block.getType().toString().toUpperCase())
 			      && !block.getType().toString().toLowerCase().contains("door")
 			      && block.getType() != getOldMaterial("BED")
 			      && block.getType() != getOldMaterial("BED_BLOCK")

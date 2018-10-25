@@ -66,11 +66,11 @@ public class MySqlConnectionManager extends BukkitRunnable {
 	@Override
 	public void run() {
 		try {
-			String hostname = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.hostname"));
-			String portNumber = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.port"));
-			String database = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.database"));
-			String username = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.username"));
-			String password = String.valueOf(SettingsManager.getConfig().get("Ammo-System-For-Gadgets.MySQL.password"));
+			String hostname = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.hostname");
+			String portNumber = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.port");
+			String database = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.database");
+			String username = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.username");
+			String password = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.password");
 			if (co != null)
 				co.close();
 			sql = new MySqlConnection(hostname, portNumber, database, username, password);

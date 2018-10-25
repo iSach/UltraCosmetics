@@ -343,7 +343,7 @@ public class UltraPlayer {
 		                   || currentTreasureChest != null
 		                   || currentHat != null
 		                   || currentEmote != null;
-		if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises") && SettingsManager.getConfig().getList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName())) { // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident
+		if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName())) { // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident
 			removeMorph();
 			try {
 				DisguiseAPI.undisguiseToAll(getBukkitPlayer());
@@ -404,7 +404,7 @@ public class UltraPlayer {
 				inventory.setItem(i + 9 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
 				inventory.setItem(i + 18 + 6, ItemFactory.create(Material.REDSTONE_BLOCK, (byte) 0x0, MessageManager.getMessage("Cancel")));
 			}
-			ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"))));
+			ItemStack itemStack = ItemFactory.create(Material.TRIPWIRE_HOOK, (byte) 0, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
 			inventory.setItem(13, itemStack);
 			ItemFactory.fillInventory(inventory);
 			Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(inventory), 3);
@@ -495,7 +495,7 @@ public class UltraPlayer {
 			}
 			
 			if (currentGadget != null) {
-				getBukkitPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"),
+				getBukkitPlayer().getInventory().setItem(SettingsManager.getConfig().getInt("Gadget-Slot"),
 				                                         ItemFactory.create(currentGadget.getType().getMaterial(), currentGadget.getType().getData(),
 				                                                            ChatColor.WHITE + "" + ChatColor.BOLD + getAmmo(currentGadget.getType().toString()
 				                                                                                                                         .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
@@ -664,7 +664,7 @@ public class UltraPlayer {
 		if (getBukkitPlayer().getInventory().getItem(slot) != null) {
 			if (getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
 			    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-			    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase((String) SettingsManager.getConfig().get("Menu-Item.Displayname"))) {
+			    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase(SettingsManager.getConfig().getString("Menu-Item.Displayname"))) {
 				// getBukkitPlayer().getInventory().remove(slot);
 				getBukkitPlayer().getInventory().setItem(slot, null);
 			}
@@ -672,9 +672,9 @@ public class UltraPlayer {
 			// getBukkitPlayer().getInventory().remove(slot);
 			getBukkitPlayer().getInventory().setItem(slot, null);
 		}
-		String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
-		Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-		byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
+		String name = ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("Menu-Item.Displayname"));
+		Material material = Material.valueOf(SettingsManager.getConfig().getString("Menu-Item.Type"));
+		byte data = Byte.valueOf(SettingsManager.getConfig().getString("Menu-Item.Data"));
 		getBukkitPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
 	}
 	
