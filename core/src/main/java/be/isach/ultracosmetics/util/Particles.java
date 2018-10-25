@@ -1478,9 +1478,9 @@ public enum Particles {
 				} else if (effect == Particles.NOTE) {
 					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, offsetX, 0, 0, 1);
 				} else if (effect == Particles.ITEM_CRACK) {
-					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, new ItemStack(data.getMaterial()));
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, offsetX, offsetY, offsetZ, new ItemStack(data.getMaterial()));
 				} else if (effect == Particles.BLOCK_CRACK) {
-					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, data.getMaterial().createBlockData());
+					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, offsetX, offsetY, offsetZ, data.getMaterial().createBlockData());
 				} else {
 					center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center.getX(), center.getY(), center.getZ(), amount, offsetX, offsetY, offsetZ, speed);
 				}
