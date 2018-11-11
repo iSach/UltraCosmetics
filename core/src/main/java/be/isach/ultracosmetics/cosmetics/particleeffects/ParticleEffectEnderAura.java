@@ -19,6 +19,6 @@ public class ParticleEffectEnderAura extends ParticleEffect {
 
 	@Override
 	public void onUpdate() {
-                getPlayer().getWorld().spawnParticle(Particle.PORTAL, getPlayer().getLocation().add(0, 1, 0), 3, 0.2D, 0.01D, 0.2D);
+                Particles.PORTAL.display(0.2F, 0.01F, 0.02F, 0, 3, getPlayer().getLocation().add(0, 1, 0), 128);
 	}
 }
