@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.Effect;
+import be.isach.ultracosmetics.util.Particles;
 
 /**
  * Represents an instance of ender aura particles summoned by a player.
