@@ -422,7 +422,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         if (event.getClickedBlock() != null && event.getClickedBlock().getType() != Material.AIR)
             lastClickedBlock = event.getClickedBlock();
         if (asynchronous) {
-            Bukkit.getScheduler().runTaskAsynchronously(getUltraCosmetics(), new BukkitRunnable() {
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (useTwoInteractMethods) {
@@ -436,7 +436,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                         onRightClick();
                     }
                 }
-            });
+            }.runTaskAsynchronously(getUltraCosmetics());
         } else {
             if (useTwoInteractMethods) {
                 if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)

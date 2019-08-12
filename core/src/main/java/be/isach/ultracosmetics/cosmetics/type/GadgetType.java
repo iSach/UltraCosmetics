@@ -81,7 +81,7 @@ public class GadgetType extends CosmeticMatType<Gadget> {
 		new GadgetType(UCMaterial.TRIPWIRE_HOOK, 5, "ultracosmetics.gadgets.fleshhook", "FleshHook", "&7&oMake new friends by throwing a hook" + "\n&7&ointo their face and pulling them\n&7&otowards you!", GadgetFleshHook.class, ServerVersion.v1_8_R1);
 		new GadgetType(UCMaterial.MELON, 2, "ultracosmetics.gadgets.melonthrower", "MelonThrower", "&7&oDeliciously fun!", GadgetMelonThrower.class, ServerVersion.v1_8_R1);
 		new GadgetType(UCMaterial.PACKED_ICE, 12, "ultracosmetics.gadgets.blizzardblaster", "BlizzardBlaster", "&7&oLet it go!", GadgetBlizzardBlaster.class, ServerVersion.v1_8_R1);
-		new GadgetType(UCMaterial.COMPARATOR, 2, "ultracosmetics.gadgets.portalgun", "PortalGun", "&7&oMomentum, a function of " + "mass and velocity,\n&7&ois converved between portals. In Layman''s terms,\n&7&ospeedy thing goes in, speedy thing goes out.", GadgetPortalGun.class, ServerVersion.v1_8_R1);
+		new GadgetType(UCMaterial.COMPARATOR, 2, "ultracosmetics.gadgets.portalgun", "PortalGun", "&7&oThe cake is a lie!", GadgetPortalGun.class, ServerVersion.v1_8_R1);
 		new GadgetType(UCMaterial.SHEARS, 25, "ultracosmetics.gadgets.explosivesheep", "ExplosiveSheep", "&7&oAre you sure it's supposed\n&7&oto flicker like that?", GadgetExplosiveSheep.class, ServerVersion.v1_8_R1);
 		new GadgetType(UCMaterial.DIAMOND_HORSE_ARMOR, 0.5, "ultracosmetics.gadgets.paintballgun", "PaintballGun", "&7&oPEW PEW PEW PEW!!!", GadgetPaintballGun.class, ServerVersion.v1_8_R1);
 		new GadgetType(UCMaterial.IRON_AXE, 8, "ultracosmetics.gadgets.thorhammer", "ThorHammer", "&7&oGet the real Mjölnir", GadgetThorHammer.class, ServerVersion.v1_8_R1);

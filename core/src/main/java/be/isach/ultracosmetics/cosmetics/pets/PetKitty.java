@@ -9,10 +9,10 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.UUID;
 
@@ -23,16 +23,15 @@ import java.util.UUID;
  * @since 08-12-2015
  */
 public class PetKitty extends Pet {
-	public PetKitty(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("kitty"), ItemFactory.create(UCMaterial.TROPICAL_FISH, UltraCosmeticsData.get().getItemNoPickupString()));
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-			if (getOwner() != null && getEntity() != null) {
-				Ocelot ocelot = (Ocelot) getEntity();
-				// ocelot.set(true);
-				// ocelot.setSitting(false);
-				// TODO
-				ocelot.setCatType(Ocelot.Type.RED_CAT);
-			}
-		}, 30);
-	}
+
+    public PetKitty(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, ultraCosmetics, PetType.getByName("kitty"), ItemFactory.create(UCMaterial.TROPICAL_FISH, UltraCosmeticsData.get().getItemNoPickupString()));
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            if (getOwner() != null && getEntity() != null) {
+                Ageable cat = (Ageable) getEntity();
+                cat.setBaby();
+                // cat.setCatType(Cat.Type.RED_CAT); TODO nms?
+            }
+        }, 30);
+    }
 }

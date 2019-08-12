@@ -1000,6 +1000,26 @@ public enum UCMaterial {
             "SHEARS", "FLINT_AND_STEEL", "BOW", "FISHING_ROD",
             "CARROT_ON_A_STICK", "CARROT_STICK"
     };
+
+    public static final ArrayList<UCMaterial> DYES = new ArrayList<>();
+    static {
+        DYES.add(UCMaterial.BLACK_DYE);
+        DYES.add(UCMaterial.GREEN_DYE);
+        DYES.add(UCMaterial.BROWN_DYE);
+        DYES.add(UCMaterial.BLUE_DYE);
+        DYES.add(UCMaterial.PURPLE_DYE);
+        DYES.add(UCMaterial.CYAN_DYE);
+        DYES.add(UCMaterial.LIGHT_GRAY_DYE);
+        DYES.add(UCMaterial.GRAY_DYE);
+        DYES.add(UCMaterial.PINK_DYE);
+        DYES.add(UCMaterial.LIME_DYE);
+        DYES.add(UCMaterial.YELLOW_DYE);
+        DYES.add(UCMaterial.LIGHT_BLUE_DYE);
+        DYES.add(UCMaterial.MAGENTA_DYE);
+        DYES.add(UCMaterial.ORANGE_DYE);
+        DYES.add(UCMaterial.WHITE_DYE);
+    }
+
     /**
      * A list of duplicated items in 1.13 and 1.12 with different purpose.<br>
      * Values are the new material names.<br>

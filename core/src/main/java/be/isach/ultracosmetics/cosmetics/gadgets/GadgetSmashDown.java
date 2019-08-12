@@ -129,8 +129,7 @@ public class GadgetSmashDown extends Gadget {
                         && !BlockUtils.isRocketBlock(b)
                         && !BlockUtils.isTreasureChestBlock(b)
                         && b.getType().isSolid()
-                        && b.getType().getId() != 43
-                        && b.getType().getId() != 44
+                        && !b.getType().toString().toLowerCase().contains("slab")
                         && b.getRelative(BlockFace.UP).getType() == Material.AIR) {
                     Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                         FallingBlock fb = loc.getWorld().spawnFallingBlock(b.getLocation().clone().add(0, 1.1f, 0),

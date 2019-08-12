@@ -189,8 +189,7 @@ public class BlockUtils {
                     && !blocksToRestore.containsKey(block.getLocation())
                     && block.getType().isSolid()
                     && a(bUp)
-                    && block.getType().getId() != 43
-                    && block.getType().getId() != 44)) return;
+                    && !block.getType().toString().toLowerCase().contains("slab"))) return;
 
             blocksToRestore.put(block.getLocation(), block.getType().toString() + "," + block.getData());
             for (Player player : block.getLocation().getWorld().getPlayers()) {

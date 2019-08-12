@@ -69,7 +69,7 @@ public class GadgetBatBlaster extends Gadget {
 	@Override
 	public void onUpdate() {
 		if (active) {
-			bats.stream().filter(Entity::isValid).forEachOrdered(bat -> {
+			bats.stream().filter(Entity::isValid).forEach(bat -> {
 				Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
 				                         (Math.random() - 0.5D) / 3.0D);
 				if (bat != null && playerVelocity != null) {

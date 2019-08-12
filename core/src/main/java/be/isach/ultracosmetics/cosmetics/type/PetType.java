@@ -85,7 +85,11 @@ public final class PetType extends CosmeticMatType<Pet> {
         new PetType("ultracosmetics.pets.easterbunny", "EasterBunny", UCMaterial.CARROT, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class, ServerVersion.v1_8_R1);
         new PetType("ultracosmetics.pets.cow", "Cow", UCMaterial.MILK_BUCKET, "&7&oMoooo!", EntityType.COW, PetCow.class, ServerVersion.v1_8_R1);
         new PetType("ultracosmetics.pets.mooshroom", "Mooshroom", UCMaterial.RED_MUSHROOM, "&7&oMoooo!", EntityType.MUSHROOM_COW, PetMooshroom.class, ServerVersion.v1_8_R1);
-        new PetType("ultracosmetics.pets.kitty", "Kitty", UCMaterial.PUFFERFISH, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class, ServerVersion.v1_8_R1);
+        if (serverVersion.compareTo(ServerVersion.v1_14_R1) >= 0) {
+            new PetType("ultracosmetics.pets.kitty", "Kitty", UCMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.CAT, PetKitty.class, ServerVersion.v1_14_R1);
+        } else {
+            new PetType("ultracosmetics.pets.kitty", "Kitty", UCMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class, ServerVersion.v1_8_R1);
+        }
         new PetType("ultracosmetics.pets.dog", "Dog", UCMaterial.BONE, "&7&oWoof!", EntityType.WOLF, PetDog.class, ServerVersion.v1_8_R1);
         new PetType("ultracosmetics.pets.chick", "Chick", UCMaterial.EGG, "&7&oBwaaaaaaak!!", EntityType.CHICKEN, PetChick.class, ServerVersion.v1_8_R1);
         new PetType("ultracosmetics.pets.pumpling", "Pumpling", UCMaterial.PUMPKIN, "&7&oJust a little floating pumpkin", EntityType.ZOMBIE, UltraCosmeticsData.get().getVersionManager().getPets().getPumplingClass(), ServerVersion.v1_8_R1);

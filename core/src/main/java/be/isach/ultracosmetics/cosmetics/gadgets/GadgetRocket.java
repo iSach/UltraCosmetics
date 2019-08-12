@@ -178,8 +178,15 @@ public class GadgetRocket extends Gadget {
 	@Override
 	public void onUpdate() {
 		if (armorStand != null) {
-			if (armorStand.getPassenger() == null)
-				armorStand.setPassenger(getPlayer());
+			if (armorStand.getPassenger() == null) {
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						armorStand.setPassenger(getPlayer());
+					}
+				}.runTask(getUltraCosmetics());
+			}
+
 			UtilParticles.display(Particles.SMOKE_LARGE, 0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
 			SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.FIZZ, 0.025f, 1.0f);
 		}
