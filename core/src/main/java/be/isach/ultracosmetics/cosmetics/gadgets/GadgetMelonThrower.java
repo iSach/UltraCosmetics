@@ -5,10 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -68,7 +65,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 	void onRightClick() {
 		this.world = getPlayer().getWorld();
 		SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
-		Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(BlockUtils.getOldMaterial("MELON_BLOCK"), (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+		Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(UCMaterial.MELON, UltraCosmeticsData.get().getItemNoPickupString()));
 		item.setPickupDelay(0);
 		item.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONBLOCK"));
 		item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
@@ -84,7 +81,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 			if (melon.isOnGround()) {
 				melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
 				for (int i = 0; i < 8; i++) {
-					final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(Material.MELON, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+					final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(UCMaterial.MELON_SLICE, UltraCosmeticsData.get().getItemNoPickupString()));
 					newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
 					newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
 					Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), new BukkitRunnable() {

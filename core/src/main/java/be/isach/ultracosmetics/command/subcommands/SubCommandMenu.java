@@ -24,7 +24,7 @@ public class SubCommandMenu extends SubCommand {
 	
 	public SubCommandMenu(UltraCosmetics ultraCosmetics) {
 		super("Opens Specified Menu", "ultracosmetics.command.menu", "/uc menu <menu> [page]", ultraCosmetics, "menu");
-		this.menuGadgets = new MenuGadgets(getUltraCosmetics());
+		//this.menuGadgets = new MenuGadgets(getUltraCosmetics());
 	}
 	
 	private MenuGadgets menuGadgets;

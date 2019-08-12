@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -22,6 +23,6 @@ import java.util.Random;
 public class PetVillager extends Pet {
 	public PetVillager(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
 		super(owner, ultraCosmetics, PetType.getByName("villager"),
-				ItemFactory.create(Material.EMERALD, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+				ItemFactory.create(UCMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
 	}
 }

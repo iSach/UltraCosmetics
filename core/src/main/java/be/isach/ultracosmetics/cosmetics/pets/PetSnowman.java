@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -22,7 +23,7 @@ import java.util.Random;
  */
 public class PetSnowman extends Pet {
 	public PetSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("snowman"), ItemFactory.create(BlockUtils.getOldMaterial("SNOW_BALL"), (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+		super(owner, ultraCosmetics, PetType.getByName("snowman"), ItemFactory.create(UCMaterial.SNOWBALL, UltraCosmeticsData.get().getItemNoPickupString()));
 		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
 			if (getOwner() != null && getEntity() != null) {
 				Snowman snowman = (Snowman) getEntity();

@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -182,9 +183,9 @@ public class PlayerListener implements Listener {
                 event.getPlayer().getInventory().setItem(slot, null);
             }
             String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
-            Material material = Material.valueOf((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-            byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data")));
-            event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, data, name));
+            UCMaterial material = UCMaterial.matchUCMaterial((String) SettingsManager.getConfig().get("Menu-Item.Type"));
+            // byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data"))); TODO
+            event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, name));
         }
     }
 

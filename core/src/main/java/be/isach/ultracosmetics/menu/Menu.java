@@ -94,7 +94,7 @@ public abstract class Menu implements Listener {
 		}
 
 		// Check Inventory is the good one
-		if (!event.getInventory().getName().contains(getName())) {
+		if (!event.getView().getTitle().contains(getName())) {
 			return;
 		}
 

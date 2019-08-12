@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.IronGolem;
@@ -22,7 +23,7 @@ import java.util.Random;
  */
 public class PetIronGolem extends Pet {
 	public PetIronGolem(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("irongolem"), ItemFactory.create(BlockUtils.getOldMaterial("RED_ROSE"), (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+		super(owner, ultraCosmetics, PetType.getByName("irongolem"), ItemFactory.create(UCMaterial.RED_DYE, UltraCosmeticsData.get().getItemNoPickupString()));
 
 	}
 }

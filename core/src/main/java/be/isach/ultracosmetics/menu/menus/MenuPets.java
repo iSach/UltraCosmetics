@@ -12,6 +12,7 @@ import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
+import be.isach.ultracosmetics.util.UCMaterial;
 import be.isach.ultracosmetics.version.AAnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -95,7 +96,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
 				event.setWillDestroy(false);
 			}
 		});
-		gui.setSlot(AAnvilGUI.AnvilSlot.INPUT_LEFT, ItemFactory.create(Material.PAPER, (byte) 0x0, ""));
+		gui.setSlot(AAnvilGUI.AnvilSlot.INPUT_LEFT, ItemFactory.create(UCMaterial.PAPER, ""));
 		gui.open();
 	}
 
@@ -104,7 +105,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
 	}
 
 	private void buyRenamePet(UltraPlayer ultraPlayer, final String name) {
-		ItemStack showcaseItem = ItemFactory.create(Material.NAME_TAG, (byte) 0x0, MessageManager.getMessage("Rename-Pet-Purchase")
+		ItemStack showcaseItem = ItemFactory.create(UCMaterial.NAME_TAG, MessageManager.getMessage("Rename-Pet-Purchase")
 		                                                                                         .replace("%price%", "" + SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")).replace("%name%", name));
 
 		PurchaseData purchaseData = new PurchaseData();

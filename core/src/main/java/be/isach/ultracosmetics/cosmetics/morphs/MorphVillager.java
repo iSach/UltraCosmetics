@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -34,7 +35,7 @@ public class MorphVillager extends Morph {
 			if (coolDown > System.currentTimeMillis()) return;
 			event.setCancelled(true);
 			SoundUtil.playSound(event.getPlayer(), Sounds.ORB_PICKUP);
-			Item emerald = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.EMERALD, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+			Item emerald = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(UCMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
 			emerald.setPickupDelay(30000);
 			emerald.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.5));
 			coolDown = System.currentTimeMillis() + 5000;

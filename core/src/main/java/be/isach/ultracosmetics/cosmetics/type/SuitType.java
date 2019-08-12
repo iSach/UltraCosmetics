@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.cosmetics.suits.*;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Material;
 
 import java.lang.reflect.InvocationTargetException;
@@ -47,7 +48,7 @@ public class SuitType extends CosmeticMatType<Suit> {
 	/**
 	 * The parts materials.
 	 */
-	private Material helmet, chestplate, leggings, boots;
+	private UCMaterial helmet, chestplate, leggings, boots;
 	
 	/**
 	 * @param configName       The config path name.
@@ -60,8 +61,8 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 * @param clazz            The Suit Class
 	 */
 	SuitType(String configName, String permissionSuffix, String defaultDesc,
-	         Material h, Material c, Material l, Material b, Class<? extends Suit> clazz, ServerVersion baseVersion) {
-		super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, (byte) 0, clazz, baseVersion);
+			 UCMaterial h, UCMaterial c, UCMaterial l, UCMaterial b, Class<? extends Suit> clazz, ServerVersion baseVersion) {
+		super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, clazz, baseVersion);
 		this.boots = b;
 		this.helmet = h;
 		this.chestplate = c;
@@ -93,7 +94,7 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 *
 	 * @return The Helmet material in menu
 	 */
-	public Material getHelmet() {
+	public UCMaterial getHelmet() {
 		return helmet;
 	}
 	
@@ -102,7 +103,7 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 *
 	 * @return The Chestplate material in menu
 	 */
-	public Material getChestplate() {
+	public UCMaterial getChestplate() {
 		return chestplate;
 	}
 	
@@ -111,7 +112,7 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 *
 	 * @return The Leggings material in menu
 	 */
-	public Material getLeggings() {
+	public UCMaterial getLeggings() {
 		return leggings;
 	}
 	
@@ -120,11 +121,11 @@ public class SuitType extends CosmeticMatType<Suit> {
 	 *
 	 * @return The Boots material in menu
 	 */
-	public Material getBoots() {
+	public UCMaterial getBoots() {
 		return boots;
 	}
 	
-	public Material getMaterial(ArmorSlot armorSlot) {
+	public UCMaterial getMaterial(ArmorSlot armorSlot) {
 		switch (armorSlot) {
 			default:
 				return getChestplate();
@@ -161,9 +162,9 @@ public class SuitType extends CosmeticMatType<Suit> {
 	}
 
 	public static void register() {
-		new SuitType("Rave", "rave", "&7&oSuch amazing colors!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
-		new SuitType("Astronaut", "astronaut", "&7&oHouston?", Material.GLASS, BlockUtils.getOldMaterial("GOLD_CHESTPLATE"), BlockUtils.getOldMaterial("GOLD_LEGGINGS"), BlockUtils.getOldMaterial("GOLD_BOOTS"), SuitAstronaut.class, ServerVersion.v1_8_R1);
-		new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
-		new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
+		new SuitType("Rave", "rave", "&7&oSuch amazing colors!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
+		new SuitType("Astronaut", "astronaut", "&7&oHouston?", UCMaterial.GLASS, UCMaterial.GOLDEN_CHESTPLATE, UCMaterial.GOLDEN_LEGGINGS, UCMaterial.GOLDEN_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
+		new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", UCMaterial.DIAMOND_HELMET, UCMaterial.DIAMOND_CHESTPLATE, UCMaterial.DIAMOND_LEGGINGS, UCMaterial.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
+		new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
 	}
 }

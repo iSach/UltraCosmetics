@@ -13,6 +13,7 @@ import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -84,14 +85,14 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
 				if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
 				    && !player.hasPermission(suitType.getPermission(armorSlot))) {
-					Material material = Material.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Type"));
-					Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
+					UCMaterial material = UCMaterial.matchUCMaterial(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Type"));
+					// Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
 					String name = SettingsManager.getConfig().getString("No-Permission.Custom-Item.Name");
 					name = ChatColor.translateAlternateColorCodes('&', name.replace("{cosmetic-name}", suitType.getName()));
 					List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
 					String[] array = new String[npLore.size()];
 					npLore.toArray(array);
-					putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), clickData -> {
+					putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, name, array), clickData -> {
 						Player clicker = clickData.getClicker().getBukkitPlayer();
 						clicker.sendMessage(MessageManager.getMessage("No-Permission"));
 						clicker.closeInventory();
@@ -101,7 +102,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 				}
 
 				String toggle = (suit != null && suit.getType() == suitType) ? CATEGORY.getDeactivateMenu() : CATEGORY.getActivateMenu();
-				ItemStack is = ItemFactory.create(suitType.getMaterial(armorSlot), suitType.getData(), toggle + " " + suitType.getName(armorSlot));
+				ItemStack is = ItemFactory.create(suitType.getMaterial(armorSlot), toggle + " " + suitType.getName(armorSlot));
 
 				if (suit != null && suit.getType() == suitType) {
 					is = ItemFactory.addGlow(is);

@@ -118,7 +118,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 					drop(itemStack);
 					getPlayer().getInventory().setHelmet(null);
 				}
-				getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+				getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
 				itemStack = getPlayer().getInventory().getHelmet();
 				break;
 			case CHESTPLATE:
@@ -127,7 +127,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 					drop(itemStack);
 					getPlayer().getInventory().setChestplate(null);
 				}
-				getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+				getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
 				itemStack = getPlayer().getInventory().getChestplate();
 				break;
 			case LEGGINGS:
@@ -136,7 +136,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 					drop(itemStack);
 					getPlayer().getInventory().setLeggings(null);
 				}
-				getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+				getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
 				itemStack = getPlayer().getInventory().getLeggings();
 				break;
 			case BOOTS:
@@ -145,7 +145,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 					drop(itemStack);
 					getPlayer().getInventory().setBoots(null);
 				}
-				getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), (byte) 0, getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
+				getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
 				itemStack = getPlayer().getInventory().getBoots();
 				break;
 		}

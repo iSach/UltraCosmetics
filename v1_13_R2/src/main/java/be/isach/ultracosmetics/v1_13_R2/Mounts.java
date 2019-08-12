@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.v1_13_R2;
 
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.v1_13_R2.mount.*;
+import be.isach.ultracosmetics.v1_13_R2.mount.*;
 import be.isach.ultracosmetics.version.IMounts;
 import org.bukkit.entity.EntityType;
 

@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,7 +40,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
 	
 	@Override
 	void onRightClick() {
-		final Item i = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(Material.IRON_AXE, (byte) 0, MessageManager.getMessage("Gadgets.ThorHammer.name")));
+		final Item i = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(UCMaterial.IRON_AXE, MessageManager.getMessage("Gadgets.ThorHammer.name")));
 		i.setPickupDelay(0);
 		i.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.4));
 		getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
@@ -52,9 +53,9 @@ public class GadgetThorHammer extends Gadget implements Listener {
 				if (i.isValid()) {
 					ItemStack is;
 					if (UltraCosmeticsData.get().isAmmoEnabled()) {
-						is = ItemFactory.create(getType().getMaterial(), getType().getData(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
+						is = ItemFactory.create(getType().getMaterial(),ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
 					} else {
-						is = ItemFactory.create(getType().getMaterial(), getType().getData(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
+						is = ItemFactory.create(getType().getMaterial(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
 					}
 					itemStack = is;
 					getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), is);
@@ -72,9 +73,9 @@ public class GadgetThorHammer extends Gadget implements Listener {
 				if (event.getItem().getTicksLived() > 5) {
 					ItemStack is;
 					if (UltraCosmeticsData.get().isAmmoEnabled()) {
-						is = ItemFactory.create(getType().getMaterial(), getType().getData(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
+						is = ItemFactory.create(getType().getMaterial(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
 					} else {
-						is = ItemFactory.create(getType().getMaterial(), getType().getData(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
+						is = ItemFactory.create(getType().getMaterial(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
 					}
 					itemStack = is;
 					getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), is);

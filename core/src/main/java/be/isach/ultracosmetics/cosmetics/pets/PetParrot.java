@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -21,7 +22,7 @@ import java.util.Random;
  */
 public class PetParrot extends Pet {
 	public PetParrot(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("parrot"), ItemFactory.create(Material.COOKIE, (byte) 0x0, UltraCosmeticsData.get().getItemNoPickupString()));
+		super(owner, ultraCosmetics, PetType.getByName("parrot"), ItemFactory.create(UCMaterial.COOKIE, UltraCosmeticsData.get().getItemNoPickupString()));
 		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
 			if (getOwner() != null && getEntity() != null) {
 				Parrot parrot = (Parrot) entity;

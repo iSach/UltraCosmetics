@@ -4,10 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
+import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -50,7 +47,7 @@ public class GadgetChickenator extends Gadget {
 			SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_HURT, 1.4f, 1.5f);
 			chicken.remove();
 			for (int i = 0; i < 30; i++) {
-				final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(Material.COOKED_CHICKEN, (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
+				final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(UCMaterial.COOKED_CHICKEN, UltraCosmeticsData.get().getItemNoPickupString()));
 				ITEM.setPickupDelay(30000);
 				ITEM.setVelocity(new Vector(MathUtils.random.nextDouble() - 0.5, MathUtils.random.nextDouble() / 2.0, MathUtils.random.nextDouble() - 0.5));
 				items.add(ITEM);

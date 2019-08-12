@@ -425,7 +425,7 @@ public class TreasureRandomizer {
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Ammo").replace("%name%", g.getName()).replace("%ammo%", ammo + "");
 		ammoList.remove(i);
 		UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).addAmmo(g.toString().toLowerCase(), ammo);
-		itemStack = new MaterialData(g.getMaterial(), g.getData()).toItemStack(1);
+		itemStack = g.getMaterial().parseItem();
 		if (ammo > 50) {
 			spawnRandomFirework(loc);
 		}
@@ -455,7 +455,7 @@ public class TreasureRandomizer {
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Suit").replace("%suit%", suitType.getName(armorSlot));
 		list.remove(i);
 		givePermission(suitType.getPermission(armorSlot));
-		itemStack = new ItemStack(suitType.getMaterial(armorSlot));
+		itemStack = suitType.getMaterial(armorSlot).parseItem();
 		spawnRandomFirework(loc);
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Suits.Message.enabled"))
 			Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Suits.Message.message")).replace("%name%", player.getName())
@@ -468,7 +468,7 @@ public class TreasureRandomizer {
 		name = MessageManager.getMessage("Treasure-Chests-Loot.gadget").replace("%gadget%", gadget.getName());
 		gadgetList.remove(i);
 		givePermission(gadget.getPermission());
-		itemStack = new ItemStack(gadget.getMaterial());
+		itemStack = gadget.getMaterial().parseItem();
 		spawnRandomFirework(loc);
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets.Message.enabled"))
 			Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Gadgets.Message.message")).replace("%name%", player.getName())
@@ -493,7 +493,7 @@ public class TreasureRandomizer {
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Pet").replace("%pet%", pet.getName());
 		petList.remove(i);
 		givePermission(pet.getPermission());
-		itemStack = new ItemStack(pet.getMaterial());
+		itemStack = pet.getMaterial().parseItem();
 		spawnRandomFirework(loc);
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Pets.Message.enabled"))
 			Bukkit.broadcastMessage((getMessage("TreasureChests.Loots.Pets.Message.message")).replace("%name%", player.getName())
@@ -518,7 +518,7 @@ public class TreasureRandomizer {
 		MountType mount = mountList.get(i);
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Mount").replace("%mount%", mount.getMenuName());
 		mountList.remove(i);
-		itemStack = new ItemStack(mount.getMaterial());
+		itemStack = mount.getMaterial().parseItem();
 		givePermission(mount.getPermission());
 		spawnRandomFirework(loc);
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Mounts.Message.enabled"))
@@ -532,7 +532,7 @@ public class TreasureRandomizer {
 		ParticleEffectType particleEffect = particleEffectList.get(i);
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Effect").replace("%effect%", particleEffect.getName());
 		particleEffectList.remove(i);
-		itemStack = new ItemStack(particleEffect.getMaterial());
+		itemStack = particleEffect.getMaterial().parseItem();
 		givePermission(particleEffect.getPermission());
 		spawnRandomFirework(loc);
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Effects.Message.enabled"))
@@ -544,7 +544,7 @@ public class TreasureRandomizer {
 		MorphType morph = morphList.get(i);
 		name = MessageManager.getMessage("Treasure-Chests-Loot.Morph").replace("%morph%", morph.getName());
 		morphList.remove(morph);
-		itemStack = new ItemStack(morph.getMaterial());
+		itemStack = morph.getMaterial().parseItem();
 		givePermission(morph.getPermission());
 		spawnRandomFirework(loc);
 		if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Morphs.Message.enabled"))

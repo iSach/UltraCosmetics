@@ -44,7 +44,7 @@ public class MorphMooshroom extends Morph {
 			final List<Entity> items = new ArrayList<>();
 			for (int i = 0; i < 20; i++) {
 				Item soup = getPlayer().getWorld().dropItem(getPlayer().getLocation().add(Math.random() * 5.0D - 2.5D, Math.random() * 3.0D, Math.random() * 5.0D - 2.5D), ItemFactory
-						.create(BlockUtils.getOldMaterial("MUSHROOM_SOUP"), (byte) 0, UltraCosmeticsData.get().getItemNoPickupString()));
+						.create(UCMaterial.MUSHROOM_STEW, UltraCosmeticsData.get().getItemNoPickupString()));
 				soup.setVelocity(MathUtils.getRandomVector());
 				soup.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
 				items.add(soup);

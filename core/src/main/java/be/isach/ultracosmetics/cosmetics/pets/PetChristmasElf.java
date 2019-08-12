@@ -7,7 +7,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import org.apache.commons.codec.binary.Base64;
+import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

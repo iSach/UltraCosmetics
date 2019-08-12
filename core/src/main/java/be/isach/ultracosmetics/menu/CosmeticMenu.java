@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticMatType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -81,13 +82,13 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 			
 			if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
 			    && !player.hasPermission(cosmeticMatType.getPermission())) {
-				Material material = Material.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Type"));
-				Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
+				UCMaterial material = UCMaterial.matchUCMaterial(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Type"));
+				// Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
 				String name = ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("No-Permission.Custom-Item.Name")).replace("{cosmetic-name}", cosmeticMatType.getName());
 				List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");
 				String[] array = new String[npLore.size()];
 				npLore.toArray(array);
-				putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, data, name, array), clickData -> {
+				putItem(inventory, COSMETICS_SLOTS[i], ItemFactory.create(material, name, array), clickData -> {
 					Player clicker = clickData.getClicker().getBukkitPlayer();
 					clicker.sendMessage(MessageManager.getMessage("No-Permission"));
 					clicker.closeInventory();
@@ -104,7 +105,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 			
 			String typeName = getTypeName(cosmeticMatType, player);
 			
-			ItemStack is = ItemFactory.create(cosmeticMatType.getMaterial(), cosmeticMatType.getData(), toggle + " " + typeName);
+			ItemStack is = ItemFactory.create(cosmeticMatType.getMaterial(), toggle + " " + typeName);
 			if (getCosmetic(player) != null && getCosmetic(player).getType() == cosmeticMatType) {
 				is = ItemFactory.addGlow(is);
 			}
@@ -245,11 +246,11 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
 	 */
 	protected int getCurrentPage(UltraPlayer ultraPlayer) {
 		Player player = ultraPlayer.getBukkitPlayer();
-		String title = player.getOpenInventory().getTopInventory().getTitle();
+		String title = player.getOpenInventory().getTitle();
 		if (player.getOpenInventory() != null
 		    && title.startsWith(getName())
 		    && !title.equals(getName())) {
-			String s = player.getOpenInventory().getTopInventory().getTitle()
+			String s = player.getOpenInventory().getTitle()
 			                 .replace(getName() + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(", "")
 			                 .replace("/" + getMaxPages() + ")", "");
 			return Integer.parseInt(s);

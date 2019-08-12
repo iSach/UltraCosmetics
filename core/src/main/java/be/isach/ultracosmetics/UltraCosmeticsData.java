@@ -137,8 +137,9 @@ public class UltraCosmeticsData {
 		    && !bukkVersion.contains("1.10")
 		    && !bukkVersion.contains("1.11")
 		    && !bukkVersion.contains("1.12")
-			&& !bukkVersion.contains("1.13")) {
-			System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON 1.8 through 1.13.1!\n\n----------------------------");
+			&& !bukkVersion.contains("1.13")
+		    && !bukkVersion.contains("1.14")) {
+			System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON 1.8 through 1.14.4!\n\n----------------------------");
 			Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
 			return false;
 		}

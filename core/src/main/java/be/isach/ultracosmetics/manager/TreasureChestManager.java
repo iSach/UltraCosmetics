@@ -75,7 +75,7 @@ public class TreasureChestManager implements Listener {
 	
 	@EventHandler
 	public void buyKeyConfirm(InventoryClickEvent event) {
-		if (!event.getInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("Buy-Treasure-Key"))) return;
+		if (!event.getView().getTitle().equalsIgnoreCase(MessageManager.getMessage("Buy-Treasure-Key"))) return;
 		event.setCancelled(true);
 		if (event.getCurrentItem() != null
 		    && event.getCurrentItem().hasItemMeta()
