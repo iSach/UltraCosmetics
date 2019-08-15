@@ -11,6 +11,7 @@ import be.isach.ultracosmetics.v1_13_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_13_R1.*;
+import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -26,6 +27,8 @@ import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
 import java.util.*;
+
+import static java.lang.Math.*;
 
 /**
  * @author RadBuilder
@@ -43,7 +46,7 @@ public class EntityUtil implements IEntityUtil {
 	
 	@Override
 	public void resetWitherSize(Wither wither) {
-		((CraftWither) wither).getHandle().g(600);
+		((CraftWither) wither).getHandle().e(600);
 	}
 	
 	
@@ -149,21 +152,25 @@ public class EntityUtil implements IEntityUtil {
 		
 		ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), (1.0D + 2.0D * 0.5d) * 1.0D);
 	}
-	
+
 	@Override
 	public void moveDragon(Player player, Vector vector, org.bukkit.entity.Entity entity) {
 		EntityEnderDragon ec = ((CraftEnderDragon) entity).getHandle();
-		
+
 		ec.hurtTicks = -1;
-		
-		ec.getBukkitEntity().setVelocity(vector);
-		
 		ec.pitch = player.getLocation().getPitch();
 		ec.yaw = player.getLocation().getYaw() - 180;
-		
+
+		float yaw = player.getPlayer().getLocation().getYaw();
+
+		double angleInRadians = toRadians(-yaw);
+
+		double x = sin(angleInRadians);
+		double z = cos(angleInRadians);
+
 		Vector v = ec.getBukkitEntity().getLocation().getDirection();
-		Vector v1 = ec.getBukkitEntity().getLocation().getDirection().multiply(-1);
-		ec.move(EnumMoveType.SELF, v1.getX(), v.getY(), v1.getZ());
+
+		ec.move(EnumMoveType.SELF, x, v.getY(), z);
 	}
 	
 	@Override
@@ -253,5 +260,11 @@ public class EntityUtil implements IEntityUtil {
 	@Override
 	public boolean isMoving(Player entity) {
 		return false;
+	}
+
+
+	@Override
+	public byte[] getEncodedData(String url) {
+		return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
 	}
 }

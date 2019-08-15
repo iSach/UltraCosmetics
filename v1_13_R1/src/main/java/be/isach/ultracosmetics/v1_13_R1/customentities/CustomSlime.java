@@ -1,123 +1,149 @@
 package be.isach.ultracosmetics.v1_13_R1.customentities;
 
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
+import be.isach.ultracosmetics.util.MathUtils;
+import org.bukkit.entity.Entity;
 import be.isach.ultracosmetics.v1_13_R1.EntityBase;
 import be.isach.ultracosmetics.v1_13_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_13_R1.nms.WrapperEntityInsentient;
+import be.isach.ultracosmetics.v1_13_R1.ridable.*;
 import net.minecraft.server.v1_13_R1.*;
-import org.bukkit.entity.Entity;
 
 /**
- * @author RadBuilder
+ * @author BillyGalbreath
+ *
+ * Author of plugin: "Ridables"
+ * Thanks for authorizing using Ridables code to make UC work!
  */
-public class CustomSlime extends EntitySlime implements IMountCustomEntity, EntityBase {
-	
+public class CustomSlime extends EntitySlime implements IMountCustomEntity, RidableEntity {
+
 	public CustomSlime(World world) {
 		super(world);
+		moveController = new SlimeWASDController(this);
+		lookController = new LookController(this);
 	}
-	
+
+	// canDespawn
 	@Override
-	public void a(float sideMot, float forMot, float f2) {
-		if (!CustomEntities.customEntities.contains(this)) {
-			super.e(sideMot, forMot);
-			return;
-		}
-		EntityHuman passenger = null;
-		if (!bP().isEmpty()) {
-			passenger = (EntityHuman) bP().get(0);
-		}
-		ride(sideMot, forMot, passenger, this);
+	public boolean isTypeNotPersistent() {
+		return !hasCustomName() && !isLeashed();
 	}
-	
+
 	@Override
-	public String getName() {
-		return LocaleLanguage.a().a("entity.Slime.name");
+	protected void initAttributes() {
+		super.initAttributes();
+		getAttributeMap().b(ControllerWASD.RIDING_SPEED); // registerAttribute
+		reloadAttributes();
 	}
-	
-	
+
 	@Override
-	public void g_(float sideMot, float forMot) {
-		super.e(sideMot, forMot);
+	public void reloadAttributes() {
+		getAttributeInstance(ControllerWASD.RIDING_SPEED).setValue(0.4D);
+		getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.4D);
+		getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(20d);
 	}
-	
+
+	// canBeRiddenInWater
 	@Override
-	public float getSpeed() {
-		return 1.75f;
-	}
-	
-	@Override
-	public boolean canFly() {
+	public boolean aY() {
 		return false;
 	}
-	
+
+	// travel
+	@Override
+	public void a(float strafe, float vertical, float forward) {
+		super.a(strafe, vertical, forward);
+		checkMove();
+	}
+
+	// processInteract
+	@Override
+	public boolean a(EntityHuman entityhuman, EnumHand hand) {
+		if (super.a(entityhuman, hand)) {
+			return true; // handled by vanilla action
+		}
+		return false;
+	}
+
+	// initAI - override vanilla AI
+	@Override
+	protected void n() {
+		goalSelector.a(1, new AISlimeSwim(this));
+		goalSelector.a(2, new AISlimeAttack(this));
+		goalSelector.a(3, new AISlimeFaceRandom(this));
+		goalSelector.a(5, new AISlimeHop(this));
+		targetSelector.a(1, new AIFindNearestPlayer(this));
+		targetSelector.a(3, new AIFindNearestEntity(this, EntityIronGolem.class));
+	}
+
+	// getAttackStrength
+	@Override
+	protected int dv() {
+		if(CustomEntities.customEntities.contains(this)) {
+			return 0;
+		}
+		return super.dv();
+	}
+
 	@Override
 	public Entity getEntity() {
 		return getBukkitEntity();
 	}
-	
-	static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
-		if (!(entity instanceof EntityBase))
-			throw new IllegalArgumentException("The entity field should implements EntityBase");
-		
-		EntityBase entityBase = (EntityBase) entity;
-		
-		WrapperEntityInsentient wEntity = new WrapperEntityInsentient(entity);
-		WrapperEntityHuman wPassenger = new WrapperEntityHuman(passenger);
-		
-		if (passenger != null) {
-			entity.lastYaw = entity.yaw = passenger.yaw % 360f;
-			entity.pitch = (passenger.pitch * 0.5F) % 360f;
-			
-			wEntity.setRenderYawOffset(entity.yaw);
-			wEntity.setRotationYawHead(entity.yaw);
-			
-			sideMot = wPassenger.getMoveStrafing() * 0.25f;
-			forMot = wPassenger.getMoveForward() * 0.5f;
-			
-			if (forMot <= 0.0F)
-				forMot *= 0.25F;
-			
-			wEntity.setJumping(wPassenger.isJumping());
-			
-			if (wPassenger.isJumping() && (entity.onGround || entityBase.canFly())) {
-				entity.motY = 0.4D;
-				
-				float f2 = MathHelper.sin(entity.yaw * 0.017453292f);
-				float f3 = MathHelper.cos(entity.yaw * 0.017453292f);
-				entity.motX += (double) (-0.4f * f2);
-				entity.motZ += (double) (0.4f * f3);
-			}
-			
-			wEntity.setStepHeight(1.0f);
-			wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
-			
-			wEntity.setRotationYawHead(entity.yaw);
-			
-			wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
-			entityBase.g_(sideMot, forMot);
-			
-			wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
-			
-			double dx = entity.locX - entity.lastX;
-			double dz = entity.locZ - entity.lastZ;
-			
-			float f4 = MathHelper.sqrt(dx * dx + dz * dz) * 4;
-			
-			if (f4 > 1)
-				f4 = 1;
-			
-			wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
-			wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
-		} else {
-			wEntity.setStepHeight(0.5f);
-			wEntity.setJumpMovementFactor(0.02f);
-			
-			entityBase.g_(sideMot, forMot);
-		}
-	}
-	
+
 	@Override
 	public void removeAi() {
-		setNoAI(true);
+		// setNoAI(true);
+	}
+
+	public static class SlimeWASDController extends ControllerWASD {
+		private final CustomSlime slime;
+		private float yRot;
+		private int jumpDelay;
+		private boolean isAggressive;
+
+		public SlimeWASDController(CustomSlime slime) {
+			super(slime);
+			this.slime = slime;
+			yRot = slime.yaw * (180 / MathUtils.PI);
+		}
+
+		public void setDirection(float yRot, boolean isAggressive) {
+			this.yRot = yRot;
+			this.isAggressive = isAggressive;
+		}
+
+		public void setSpeed(double speed) {
+			e = speed;
+			h = ControllerMove.Operation.MOVE_TO;
+		}
+
+		@Override
+		public void tick() {
+			slime.aQ = slime.aS = slime.yaw = a(slime.yaw, yRot, 90.0F);
+			if (h != ControllerMove.Operation.MOVE_TO) {
+				slime.r(0.0F); // forward
+				return;
+			}
+			h = ControllerMove.Operation.WAIT;
+			if (slime.onGround) {
+				slime.o((float) (e * a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+				if (jumpDelay-- <= 0) {
+					jumpDelay = slime.ds(); // getJumpDelay
+					if (isAggressive) {
+						jumpDelay /= 3;
+					}
+					slime.getControllerJump().a(); // setJumping
+					if (slime.dz()) { // makeSoundOnJump
+						slime.a(slime.dw(), slime.cD(), ((slime.getRandom().nextFloat() - slime.getRandom().nextFloat()) * 0.2F + 1.0F) * 0.8F); // playSound
+					}
+				} else {
+					slime.bh = 0.0F; // moveStrafing
+					slime.bj = 0.0F; // moveForward
+					slime.o(0.0F); // setSpeed
+				}
+				return;
+			}
+			slime.o((float) (e * a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+		}
 	}
 }

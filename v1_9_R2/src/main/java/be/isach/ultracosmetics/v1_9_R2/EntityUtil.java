@@ -31,6 +31,7 @@ import net.minecraft.server.v1_9_R2.TileEntityChest;
 import net.minecraft.server.v1_9_R2.TileEntityEnderChest;
 import net.minecraft.server.v1_9_R2.Vector3f;
 import net.minecraft.server.v1_9_R2.World;
+import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -288,5 +289,10 @@ public class EntityUtil implements IEntityUtil {
 		}
 		Bukkit.broadcastMessage("NOT MOVING");
 		return false;
+	}
+
+	@Override
+	public byte[] getEncodedData(String url) {
+		return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
 	}
 }

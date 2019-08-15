@@ -14,6 +14,7 @@ import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.*;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventory;
@@ -25,7 +26,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.*;
+
+import static java.lang.Math.*;
 
 /**
  * @authors RadBuilder, iSach
@@ -43,7 +47,7 @@ public class EntityUtil implements IEntityUtil {
 	
 	@Override
 	public void resetWitherSize(Wither wither) {
-		((CraftWither) wither).getHandle().g(600);
+		((CraftWither) wither).getHandle().r(600);
 	}
 	
 	
@@ -185,18 +189,21 @@ public class EntityUtil implements IEntityUtil {
 	@Override
 	public void moveDragon(Player player, Vector vector, org.bukkit.entity.Entity entity) {
 		EntityEnderDragon ec = ((CraftEnderDragon) entity).getHandle();
-		
+
 		ec.hurtTicks = -1;
-		
-		ec.getBukkitEntity().setVelocity(vector);
-		
 		ec.pitch = player.getLocation().getPitch();
 		ec.yaw = player.getLocation().getYaw() - 180;
-		
+
+		float yaw = player.getPlayer().getLocation().getYaw();
+
+		double angleInRadians = toRadians(-yaw);
+
+		double x = sin(angleInRadians);
+		double z = cos(angleInRadians);
+
 		Vector v = ec.getBukkitEntity().getLocation().getDirection();
-		Vector v1 = ec.getBukkitEntity().getLocation().getDirection().multiply(-1);
-		Vec3D vec3D = new Vec3D(v1.getX(), v.getY(), v1.getZ());
-		ec.move(EnumMoveType.SELF, vec3D);
+
+		ec.move(EnumMoveType.SELF, new Vec3D(x, v.getY(), z));
 	}
 	
 	@Override
@@ -286,5 +293,10 @@ public class EntityUtil implements IEntityUtil {
 	@Override
 	public boolean isMoving(Player entity) {
 		return false;
+	}
+
+	@Override
+	public byte[] getEncodedData(String url) {
+		return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
 	}
 }

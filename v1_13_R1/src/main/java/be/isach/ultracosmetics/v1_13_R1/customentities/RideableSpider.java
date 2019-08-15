@@ -1,127 +1,112 @@
 package be.isach.ultracosmetics.v1_13_R1.customentities;
 
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
-import be.isach.ultracosmetics.v1_13_R1.EntityBase;
-import be.isach.ultracosmetics.v1_13_R1.nms.WrapperEntityHuman;
-import be.isach.ultracosmetics.v1_13_R1.nms.WrapperEntityInsentient;
+import be.isach.ultracosmetics.v1_13_R1.ridable.ControllerWASD;
+import be.isach.ultracosmetics.v1_13_R1.ridable.LookController;
+import be.isach.ultracosmetics.v1_13_R1.ridable.RidableEntity;
+import net.minecraft.server.v1_13_R1.EntitySpider;
+import net.minecraft.server.v1_13_R1.GenericAttributes;
 import net.minecraft.server.v1_13_R1.*;
 
 /**
- * @author RadBuilder
+ * @author BillyGalbreath
+ *
+ * Author of plugin: "Ridables"
+ * Thanks for authorizing using Ridables code to make UC work!
  */
-public class RideableSpider extends EntitySpider implements IMountCustomEntity, EntityBase {
-	
-	boolean isOnGround;
-	
-	public RideableSpider(World world) {
-		super(world);
-	}
-	
-	@Override
-	public void a(float sideMot, float forMot, float f2) {
-		if (!CustomEntities.customEntities.contains(this)) {
-			super.e(sideMot, forMot);
-			return;
-		}
-		
-		EntityHuman passenger = null;
-		if (!bP().isEmpty()) {
-			passenger = (EntityHuman) bP().get(0);
-		}
-		ride(sideMot, forMot, passenger, this);
-	}
-	
-	@Override
-	public org.bukkit.entity.Entity getEntity() {
-		return getBukkitEntity();
-	}
-	
-	@Override
-	public void g_(float sideMot, float forMot) {
-		super.e(sideMot, forMot);
-	}
-	
-	@Override
-	public float getSpeed() {
-		return 1;
-	}
-	
-	@Override
-	public boolean canFly() {
-		return false;
-	}
-	
-	static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
-		if (!(entity instanceof EntityBase)) {
-			throw new IllegalArgumentException("The entity field should implements EntityBase");
-		}
-		
-		EntityBase entityBase = (EntityBase) entity;
-		
-		WrapperEntityInsentient wEntity = new WrapperEntityInsentient(entity);
-		WrapperEntityHuman wPassenger = new WrapperEntityHuman(passenger);
-		
-		if (passenger != null) {
-			entity.lastYaw = entity.yaw = passenger.yaw % 360f;
-			entity.pitch = (passenger.pitch * 0.5F) % 360f;
-			
-			wEntity.setRenderYawOffset(entity.yaw);
-			wEntity.setRotationYawHead(entity.yaw);
-			
-			sideMot = wPassenger.getMoveStrafing() * 0.25f;
-			forMot = wPassenger.getMoveForward() * 0.5f;
-			
-			if (forMot <= 0.0F) {
-				forMot *= 0.25F;
-			}
-			
-			wEntity.setJumping(wPassenger.isJumping());
-			
-			if (wPassenger.isJumping() && (entity.onGround || entityBase.canFly())) {
-				entity.motY = 0.4D;
-				
-				float f2 = MathHelper.sin(entity.yaw * 0.017453292f);
-				float f3 = MathHelper.cos(entity.yaw * 0.017453292f);
-				entity.motX += (double) (-0.4f * f2);
-				entity.motZ += (double) (0.4f * f3);
-			}
-			
-			wEntity.setStepHeight(1.0f);
-			wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
-			
-			wEntity.setRotationYawHead(entity.yaw);
-			
-			wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
-			entityBase.g_(sideMot, forMot);
-			
-			
-			wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
-			
-			double dx = entity.locX - entity.lastX;
-			double dz = entity.locZ - entity.lastZ;
-			
-			float f4 = MathHelper.sqrt(dx * dx + dz * dz) * 4;
-			
-			if (f4 > 1)
-				f4 = 1;
-			
-			wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
-			wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
-		} else {
-			wEntity.setStepHeight(0.5f);
-			wEntity.setJumpMovementFactor(0.02f);
-			
-			entityBase.g_(sideMot, forMot);
-		}
-	}
-	
-	@Override
-	public String getName() {
-		return LocaleLanguage.a().a("entity.Spider.name");
-	}
-	
-	@Override
-	public void removeAi() {
-		setNoAI(true);
-	}
+public class RideableSpider extends EntitySpider implements IMountCustomEntity, RidableEntity {
+
+    public RideableSpider(World world) {
+        super(world);
+        moveController = new ControllerWASD(this);
+        lookController = new LookController(this);
+    }
+
+    // canDespawn
+    @Override
+    public boolean isTypeNotPersistent() {
+        return !hasCustomName() && !isLeashed();
+    }
+
+    @Override
+    protected void initAttributes() {
+        super.initAttributes();
+        getAttributeMap().b(ControllerWASD.RIDING_SPEED); // registerAttribute
+        reloadAttributes();
+    }
+
+    @Override
+    public void reloadAttributes() {
+        getAttributeInstance(ControllerWASD.RIDING_SPEED).setValue(0.4D);
+        getAttributeInstance(GenericAttributes.maxHealth).setValue(16d);
+        getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.3d);
+        getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(0D);
+        getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(20D);
+    }
+
+    // canBeRiddenInWater
+    @Override
+    public boolean aY() {
+        return false;
+    }
+
+    // travel
+    @Override
+    public void a(float strafe, float vertical, float forward) {
+        super.a(strafe, vertical, forward);
+        if (positionChanged && z_() && getRider() != null) {
+            motY = 0.2D /** CONFIG.RIDING_CLIMB_SPEED*/;
+        }
+        checkMove();
+    }
+
+    // processInteract
+    @Override
+    public boolean a(EntityHuman entityhuman, EnumHand hand) {
+        if (super.a(entityhuman, hand)) {
+            return true; // handled by vanilla action
+        }
+        if (hand == EnumHand.MAIN_HAND && !entityhuman.isSneaking() && passengers.isEmpty() && !entityhuman.isPassenger()) {
+            return tryRide(entityhuman, false, false);
+        }
+        return false;
+    }
+
+    @Override
+    public void o(Entity passenger) {
+        if (passenger instanceof EntityPlayer && !passengers.isEmpty() && passenger == passengers.get(0)) {
+			/*if (!new RidableDismountEvent(this, (Player) passenger.getBukkitEntity(), notCancellable).callEvent() && !notCancellable) {
+				return false; // cancelled
+			}*/
+        }
+        super.o(passenger);
+    }
+
+    // isOnLadder
+    @Override
+    public boolean z_() {
+        if (getRider() == null) {
+            return l(); // isBesideClimbableBlock
+        }
+        return l();
+    }
+
+    @Override
+    public boolean onClick() {
+        EntityPlayer rider = getRider();
+        if (rider == null || !rider.b(EnumHand.MAIN_HAND).isEmpty()) {
+            return false; // must have empty hands to shoot
+        }
+        return false;
+    }
+
+    @Override
+    public org.bukkit.entity.Entity getEntity() {
+        return getBukkitEntity();
+    }
+
+    @Override
+    public void removeAi() {
+       // setNoAI(true);
+    }
 }

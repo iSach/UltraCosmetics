@@ -53,4 +53,6 @@ public interface IEntityUtil {
 	void sendTeleportPacket(Player player, Entity entity);
 	
 	boolean isMoving(Player entity);
+
+	byte[] getEncodedData(String url);
 }

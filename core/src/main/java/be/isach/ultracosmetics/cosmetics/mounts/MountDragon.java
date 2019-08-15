@@ -26,9 +26,11 @@ public class MountDragon extends Mount<EnderDragon> {
 	
 	@Override
 	public void onUpdate() {
-		if (entity.getPassenger() == null)
+		if (entity.getPassenger() == null) {
 			clear();
-		
+			return;
+		}
+
 		Vector vector = getPlayer().getLocation().toVector();
 		
 		double rotX = getPlayer().getLocation().getYaw();

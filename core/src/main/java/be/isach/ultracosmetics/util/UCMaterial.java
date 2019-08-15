@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  * 1.13 and above as priority.
  * <p>
  * Thanks to CryptoMorin for this very helpful class!
+ * Some modifications by iSach (fixes on 1.13 and 1.14).
  */
 public enum UCMaterial {
     ACACIA_BOAT(0, "BOAT_ACACIA"),
@@ -111,7 +112,7 @@ public enum UCMaterial {
     BLUE_TERRACOTTA(11, "STAINED_CLAY"),
     BLUE_WALL_BANNER(11, "WALL_BANNER"),
     BLUE_WOOL(11, "WOOL"),
-    BONE(0 ),
+    BONE(0),
     BONE_BLOCK(0),
     BONE_MEAL(15, "INK_SACK"),
     BOOK(0),
@@ -1002,6 +1003,7 @@ public enum UCMaterial {
     };
 
     public static final ArrayList<UCMaterial> DYES = new ArrayList<>();
+
     static {
         DYES.add(UCMaterial.BLACK_DYE);
         DYES.add(UCMaterial.GREEN_DYE);
@@ -1416,28 +1418,44 @@ public enum UCMaterial {
      * @return the ID of the material. -1 if it's a new block.
      */
     @SuppressWarnings("deprecation")
+    // TODO refactor because this is awful
     public int getId() {
         int id = -1;
         try {
             id = this.parseMaterial().getId();
-            if(id == -1) {
-                String s = legacy[0].contains(".") ? legacy[1] : legacy[0];
-                id = Material.valueOf(s).getId();
+            if (id == -1 || id >= 1000) {
+                String s = legacy.length == 0 ? name() : (legacy[0].contains(".") ? (legacy.length > 1 ? legacy[1] : legacy[0]) : legacy[0]);
+                id = Material.valueOf("LEGACY_" + s).getId();
             }
         } catch (Exception exc) {
             try {
-                String s = "";
-                if (legacy.length > 0) {
-                    s = legacy[0].contains(".") ? legacy[1] : legacy[0];
-                } else {
-                    s = toString();
-                }
-                id = Material.valueOf("LEGACY_" + s).getId();
-            } catch (Exception e) {
+                String s = legacy.length == 0 ? name() : (legacy[0].contains(".") ? (legacy.length > 1 ? legacy[1] : legacy[0]) : legacy[0]);
+                Material m = null;
+                try {
+                    m = Material.getMaterial(s);
+                } catch (Exception excc) {
 
+                }
+                if (m != null) {
+                    try {
+                        id = m.getId();
+                    } catch (Exception excc) {
+
+                    }
+                }
+                if (m == null || id == -1 || id >= 1000) {
+                    Material m2 = null;
+                    try {
+                        m2 = Material.getMaterial("LEGACY_" + s);
+                    } catch (Exception excc) {
+
+                    }
+                    id = m2.getId();
+                }
+            } catch (Exception e) {
             }
         }
-        return id;
+        return id == -1 ? 7 : id; // Show bedrock if nothing's found.
     }
 
     public boolean isDuplicated() {
