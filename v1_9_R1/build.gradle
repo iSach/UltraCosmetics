@@ -1,6 +1,4 @@
 dependencies {
     compile 'org.spigotmc:spigot19:1.9'
-    shaded(project(':core')) {
-        transitive false
-    }
+    compile project(':core')
 }

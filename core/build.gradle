@@ -10,11 +10,3 @@ dependencies {
     compile 'me.clip:placeholderapi:2.9.2'
     compile 'org.black_ixx:PlayerPoints:2.1.3'
 }
-
-processResources {
-    inputs.property("version", project.version)
-
-    filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-            'VERSION': project.version.split('-')[0]
-    ]
-}

@@ -1,1 +1,128 @@
-allprojects {    apply plugin: 'java'    apply plugin: 'eclipse'    apply plugin: 'idea'    group = 'be.isach'    version = '2.5-BETA'    compileJava.options.encoding = 'UTF-8'    sourceCompatibility = 1.8    targetCompatibility = 1.8    configurations {        shaded        compile.extendsFrom shaded    }    afterEvaluate {        jar {            dependsOn configurations.shaded            from configurations.shaded.collect {                it.isDirectory() ?                        it :                        zipTree(it)            }        }    }}/*need to clean this lol need help please */def supportfor18 = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3']def supportfor19 = [':core', ':v1_9_R1', ':v1_9_R2']def supportfor110 = [':core', ':v1_10_R1']def supportfor111 = [':core', ':v1_11_R1']def supportfor112 = [':core', ':v1_12_R1']def supportfor113 = [':core', ':v1_13_R1', ':v1_13_R2']def supportfor114 = [':core', ':v1_14_R1']def fullSupport = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3', ':v1_9_R1', ':v1_9_R2', ':v1_11_R1', ':v1_12_R1', ':v1_13_R1', ':v1_13_R2', ':v1_14_R1']task fullJar(type: Jar, dependsOn: fullSupport.collect { it + ":compileJava" }) {    baseName = 'UltraCosmetics'    from files(fullSupport.collect { project(it).sourceSets.main.output })}task jar18(type: Jar, dependsOn: supportfor18.collect { it + ":compileJava" }) {    def ver = dependsOn.toString().split('_')[1]    baseName = 'UltraCosmetics-1.' + ver    from files(supportfor18.collect { project(it).sourceSets.main.output })}task jar19(type: Jar, dependsOn: supportfor19.collect { it + ":compileJava" }) {    def ver = dependsOn.toString().split('_')[1]    baseName = 'UltraCosmetics-1.' + ver    from files(supportfor19.collect { project(it).sourceSets.main.output })}task jar110(type: Jar, dependsOn: supportfor110.collect { it + ":compileJava" }) {    def ver = dependsOn.toString().split('_')[1]    baseName = 'UltraCosmetics-1.' + ver    from files(supportfor110.collect { project(it).sourceSets.main.output })}task jar111(type: Jar, dependsOn: supportfor111.collect { it + ":compileJava" }) {    def ver = dependsOn.toString().split('_')[1]    baseName = 'UltraCosmetics-1.' + ver    from files(supportfor111.collect { project(it).sourceSets.main.output })}task jar112(type: Jar, dependsOn: supportfor112.collect { it + ":compileJava" }) {    def ver = dependsOn.toString().split('_')[1]    baseName = 'UltraCosmetics-1.' + ver    from files(supportfor112.collect { project(it).sourceSets.main.output })}task jar113(type: Jar, dependsOn: supportfor113.collect { it + ":compileJava" }) {    def ver = dependsOn.toString().split('_')[1]    baseName = 'UltraCosmetics-1.' + ver    from files(supportfor113.collect { project(it).sourceSets.main.output })}task jar114(type: Jar, dependsOn: supportfor114.collect { it + ":compileJava" }) {    def ver = dependsOn.toString().split('_')[1]    baseName = 'UltraCosmetics-1.' + ver    from files(supportfor114.collect { project(it).sourceSets.main.output })}boolean local = falseif (local) libsDirName = '../testserver/plugins'dependencies {    subprojects.each { p ->        shaded(p) {            transitive false        }    }}subprojects {    repositories {        mavenLocal()        mavenCentral()        // Vault        maven {            url 'http://nexus.hc.to/content/repositories/pub_releases'        }        // Lib's Disguises        maven {            url 'http://repo.md-5.net/content/groups/public/'        }        maven {            url 'https://repo.isach.be'        }        // BungeeCord        maven {            url 'https://oss.sonatype.org/content/repositories/snapshots'        }        // PlaceholderAPI        maven {            url 'http://repo.extendedclip.com/content/repositories/placeholderapi/'        }        // PlayerPoints        maven {            url 'https://repo.dakanilabs.com/repository/public/'        }    }}
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    group = 'be.isach'
+    version = '2.5-BETA'
+
+    compileJava.options.encoding = 'UTF-8'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    configurations {
+        shaded
+        compile.extendsFrom shaded
+    }
+
+    afterEvaluate {
+        jar {
+            dependsOn configurations.shaded
+            from configurations.shaded.collect {
+                it.isDirectory() ?
+                        it :
+                        zipTree(it)
+            }
+        }
+    }
+}
+
+/*
+need to clean this lol need help please
+ */
+def supportfor18 = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3']
+def supportfor19 = [':core', ':v1_9_R1', ':v1_9_R2']
+def supportfor110 = [':core', ':v1_10_R1']
+def supportfor111 = [':core', ':v1_11_R1']
+def supportfor112 = [':core', ':v1_12_R1']
+def supportfor113 = [':core', ':v1_13_R1', ':v1_13_R2']
+def supportfor114 = [':core', ':v1_14_R1']
+def fullSupport = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3', ':v1_9_R1', ':v1_9_R2', ':v1_11_R1', ':v1_12_R1', ':v1_13_R1', ':v1_13_R2', ':v1_14_R1']
+
+task fullJar(type: Jar, dependsOn: fullSupport.collect { it + ":compileJava" }) {
+    baseName = 'UltraCosmetics'
+    from files(fullSupport.collect { project(it).sourceSets.main.output })
+}
+
+task jar18(type: Jar, dependsOn: supportfor18.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor18.collect { project(it).sourceSets.main.output })
+}
+
+task jar19(type: Jar, dependsOn: supportfor19.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor19.collect { project(it).sourceSets.main.output })
+}
+task jar110(type: Jar, dependsOn: supportfor110.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor110.collect { project(it).sourceSets.main.output })
+}
+task jar111(type: Jar, dependsOn: supportfor111.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor111.collect { project(it).sourceSets.main.output })
+}
+task jar112(type: Jar, dependsOn: supportfor112.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor112.collect { project(it).sourceSets.main.output })
+}
+task jar113(type: Jar, dependsOn: supportfor113.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor113.collect { project(it).sourceSets.main.output })
+}
+task jar114(type: Jar, dependsOn: supportfor114.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor114.collect { project(it).sourceSets.main.output })
+}
+boolean local = false
+
+if (local) libsDirName = '../testserver/plugins'
+
+dependencies {
+    subprojects.each { p ->
+        shaded(p) {
+            transitive false
+        }
+    }
+}
+
+subprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        // Vault
+        maven {
+            url 'http://nexus.hc.to/content/repositories/pub_releases'
+        }
+        // Lib's Disguises
+        maven {
+            url 'http://repo.md-5.net/content/groups/public/'
+        }
+
+        maven {
+            url 'https://repo.isach.be'
+        }
+
+        // BungeeCord
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
+
+        // PlaceholderAPI
+        maven {
+            url 'http://repo.extendedclip.com/content/repositories/placeholderapi/'
+        }
+
+        // PlayerPoints
+        maven {
+            url 'https://repo.dakanilabs.com/repository/public/'
+        }
+    }
+}

@@ -1,6 +1,4 @@
 dependencies {
     compile 'org.spigotmc:spigot183:1.8.3'
-    shaded(project(':core')) {
-        transitive false
-    }
+    compile project(':core')
 }
