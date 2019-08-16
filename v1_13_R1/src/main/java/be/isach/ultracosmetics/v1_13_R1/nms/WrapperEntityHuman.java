@@ -6,16 +6,18 @@ import net.minecraft.server.v1_13_R1.EntityHuman;
  * @author RadBuilder
  */
 public class WrapperEntityHuman extends WrapperEntityLiving {
-	
-	protected EntityHuman handle;
-	
-	public WrapperEntityHuman(EntityHuman handle) {
-		super(handle);
-		
-		this.handle = handle;
-	}
-	
-	@Override
-	public EntityHuman getHandle() { return handle; }
-	
+
+    protected EntityHuman handle;
+
+    public WrapperEntityHuman(EntityHuman handle) {
+        super(handle);
+
+        this.handle = handle;
+    }
+
+    @Override
+    public EntityHuman getHandle() {
+        return handle;
+    }
+
 }

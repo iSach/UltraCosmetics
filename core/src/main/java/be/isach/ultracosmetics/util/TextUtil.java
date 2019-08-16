@@ -11,18 +11,18 @@ import org.bukkit.ChatColor;
  * Project: UltraCosmetics
  */
 public class TextUtil {
-	
-	public static String filterPlaceHolder(String placeHolderReplacement, UltraCosmetics ultraCosmetics) {
-		return UltraCosmeticsData.get().arePlaceholdersColored() ? placeHolderReplacement : "" + filterColor(placeHolderReplacement);
-	}
-	
-	/**
-	 * Removes color in a text.
-	 *
-	 * @param toFilter The text to filter.
-	 * @return The filtered text.
-	 */
-	public static CharSequence filterColor(String toFilter) {
-		return ChatColor.stripColor(toFilter);
-	}
+
+    public static String filterPlaceHolder(String placeHolderReplacement, UltraCosmetics ultraCosmetics) {
+        return UltraCosmeticsData.get().arePlaceholdersColored() ? placeHolderReplacement : "" + filterColor(placeHolderReplacement);
+    }
+
+    /**
+     * Removes color in a text.
+     *
+     * @param toFilter The text to filter.
+     * @return The filtered text.
+     */
+    public static CharSequence filterColor(String toFilter) {
+        return ChatColor.stripColor(toFilter);
+    }
 }

@@ -13,37 +13,37 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ClickData {
 
-	private Inventory inventory;
-	private UltraPlayer clicker;
-	private InventoryAction action;
-	private ItemStack clicked;
-	private int slot;
+    private Inventory inventory;
+    private UltraPlayer clicker;
+    private InventoryAction action;
+    private ItemStack clicked;
+    private int slot;
 
-	public ClickData(Inventory inventory, UltraPlayer clicker, InventoryAction action, ItemStack clicked, int slot) {
-		this.inventory = inventory;
-		this.clicker = clicker;
-		this.action = action;
-		this.clicked = clicked;
-		this.slot = slot;
-	}
+    public ClickData(Inventory inventory, UltraPlayer clicker, InventoryAction action, ItemStack clicked, int slot) {
+        this.inventory = inventory;
+        this.clicker = clicker;
+        this.action = action;
+        this.clicked = clicked;
+        this.slot = slot;
+    }
 
-	public Inventory getInventory() {
-		return inventory;
-	}
+    public Inventory getInventory() {
+        return inventory;
+    }
 
-	public ItemStack getClicked() {
-		return clicked;
-	}
+    public ItemStack getClicked() {
+        return clicked;
+    }
 
-	public int getSlot() {
-		return slot;
-	}
+    public int getSlot() {
+        return slot;
+    }
 
-	public InventoryAction getAction() {
-		return action;
-	}
+    public InventoryAction getAction() {
+        return action;
+    }
 
-	public UltraPlayer getClicker() {
-		return clicker;
-	}
+    public UltraPlayer getClicker() {
+        return clicker;
+    }
 }

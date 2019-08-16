@@ -4,11 +4,10 @@ import be.isach.ultracosmetics.v1_13_R2.customentities.CustomSlime;
 import net.minecraft.server.v1_13_R2.EntityHuman;
 import net.minecraft.server.v1_13_R2.EntityLiving;
 import net.minecraft.server.v1_13_R2.PathfinderGoal;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Slime;
+
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */
@@ -35,7 +34,7 @@ public class AISlimeAttack extends PathfinderGoal {
             return false;
         }
         return false;
-       // TODO return slime.canWander() && new SlimeTargetLivingEntityEvent((Slime) slime.getBukkitEntity(), (LivingEntity) target.getBukkitEntity()).callEvent();
+        // TODO return slime.canWander() && new SlimeTargetLivingEntityEvent((Slime) slime.getBukkitEntity(), (LivingEntity) target.getBukkitEntity()).callEvent();
     }
 
     // shouldContinueExecuting

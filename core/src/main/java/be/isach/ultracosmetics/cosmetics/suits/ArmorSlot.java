@@ -9,16 +9,16 @@ import org.bukkit.ChatColor;
  * @since 12-20-2015
  */
 public enum ArmorSlot {
-	HELMET,
-	CHESTPLATE,
-	LEGGINGS,
-	BOOTS;
-	
-	public static ArmorSlot getByName(String s) {
-		for (ArmorSlot a : ArmorSlot.values()) {
-			if (a.toString().equalsIgnoreCase(ChatColor.stripColor(s)))
-				return a;
-		}
-		return ArmorSlot.CHESTPLATE;
-	}
+    HELMET,
+    CHESTPLATE,
+    LEGGINGS,
+    BOOTS;
+
+    public static ArmorSlot getByName(String s) {
+        for (ArmorSlot a : ArmorSlot.values()) {
+            if (a.toString().equalsIgnoreCase(ChatColor.stripColor(s)))
+                return a;
+        }
+        return ArmorSlot.CHESTPLATE;
+    }
 }

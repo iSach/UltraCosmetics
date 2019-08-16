@@ -32,119 +32,119 @@ import java.util.List;
  */
 public class MorphElderGuardian extends Morph {
 
-	/**
-	 * List of the custom entities.
-	 */
-	public static List<net.minecraft.server.v1_10_R1.Entity> customEntities = new ArrayList<>();
+    /**
+     * List of the custom entities.
+     */
+    public static List<net.minecraft.server.v1_10_R1.Entity> customEntities = new ArrayList<>();
 
-	private boolean cooldown;
-	private CustomGuardian customGuardian;
+    private boolean cooldown;
+    private CustomGuardian customGuardian;
 
-	public MorphElderGuardian(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.valueOf("elderguardian"), ultraCosmetics);
-	}
+    public MorphElderGuardian(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.valueOf("elderguardian"), ultraCosmetics);
+    }
 
-	@EventHandler
-	public void onInteract(PlayerInteractEvent event) {
-		if ((event.getAction() == Action.LEFT_CLICK_AIR
-		     || event.getAction() == Action.LEFT_CLICK_BLOCK) && !cooldown
-		    && event.getPlayer() == getPlayer()) {
-			shootLaser();
-			cooldown = true;
-			Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> cooldown = false, 80);
-		}
-	}
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if ((event.getAction() == Action.LEFT_CLICK_AIR
+                || event.getAction() == Action.LEFT_CLICK_BLOCK) && !cooldown
+                && event.getPlayer() == getPlayer()) {
+            shootLaser();
+            cooldown = true;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> cooldown = false, 80);
+        }
+    }
 
-	@EventHandler
-	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if (((CraftEntity) event.getDamager()).getHandle() == customGuardian
-		    && event.getEntity() == getPlayer())
-			event.setCancelled(true);
-	}
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (((CraftEntity) event.getDamager()).getHandle() == customGuardian
+                && event.getEntity() == getPlayer())
+            event.setCancelled(true);
+    }
 
-	private void shootLaser() {
-		if (customGuardian == null)
-			return;
+    private void shootLaser() {
+        if (customGuardian == null)
+            return;
 
-		final Location FROM = customGuardian.getBukkitEntity().getLocation();
-		final Location TO = FROM.clone().add(getPlayer()
-				                                     .getLocation().getDirection().multiply(10));
+        final Location FROM = customGuardian.getBukkitEntity().getLocation();
+        final Location TO = FROM.clone().add(getPlayer()
+                .getLocation().getDirection().multiply(10));
 
-		final ArmorStand armorStand = getPlayer().getWorld().spawn(TO, ArmorStand.class);
+        final ArmorStand armorStand = getPlayer().getWorld().spawn(TO, ArmorStand.class);
 
-		armorStand.setVisible(false);
-		armorStand.setGravity(false);
-		armorStand.setSmall(true);
+        armorStand.setVisible(false);
+        armorStand.setGravity(false);
+        armorStand.setSmall(true);
 
-		customGuardian.target(armorStand);
+        customGuardian.target(armorStand);
 
-		Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-			FireworkEffect.Builder builder = FireworkEffect.builder();
-			FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
-			                               .withColor(Color.TEAL).withFade(Color.TEAL).build();
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            FireworkEffect.Builder builder = FireworkEffect.builder();
+            FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
+                    .withColor(Color.TEAL).withFade(Color.TEAL).build();
 
-			CustomEntityFirework.spawn(TO, effect);
+            CustomEntityFirework.spawn(TO, effect);
 
-			Vector vector = TO.toVector().subtract(FROM.toVector());
+            Vector vector = TO.toVector().subtract(FROM.toVector());
 
-			Location current = FROM.clone();
+            Location current = FROM.clone();
 
-			for (int i = 0; i < 10; i++) {
-				for (Entity entity : current.getWorld().getNearbyEntities(current, 4.5, 4.5, 4.5))
-					if (entity instanceof LivingEntity
-					    && entity != getPlayer())
-						MathUtils.applyVelocity(entity, new Vector(0, 0.5d, 0));
-				current.add(vector);
-			}
+            for (int i = 0; i < 10; i++) {
+                for (Entity entity : current.getWorld().getNearbyEntities(current, 4.5, 4.5, 4.5))
+                    if (entity instanceof LivingEntity
+                            && entity != getPlayer())
+                        MathUtils.applyVelocity(entity, new Vector(0, 0.5d, 0));
+                current.add(vector);
+            }
 
-			armorStand.remove();
-			customGuardian.target(null);
-		}, 25);
-	}
+            armorStand.remove();
+            customGuardian.target(null);
+        }, 25);
+    }
 
-	@Override
-	public void onClear() {
-		if (customGuardian != null) {
-			customGuardian.dead = true;
-		}
-		customEntities.remove(customGuardian);
-	}
+    @Override
+    public void onClear() {
+        if (customGuardian != null) {
+            customGuardian.dead = true;
+        }
+        customEntities.remove(customGuardian);
+    }
 
-	@Override
-	protected void onEquip() {
-		super.onEquip();
+    @Override
+    protected void onEquip() {
+        super.onEquip();
 
-		World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
+        World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
 
-		customGuardian = new CustomGuardian(world);
-		customEntities.add(customGuardian);
-		customGuardian.check();
+        customGuardian = new CustomGuardian(world);
+        customEntities.add(customGuardian);
+        customGuardian.check();
 
-		Location location = getPlayer().getLocation();
-		double x = location.getX();
-		double y = location.getY();
-		double z = location.getZ();
-		customGuardian.setLocation(x, y, z, 0, 0);
+        Location location = getPlayer().getLocation();
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+        customGuardian.setLocation(x, y, z, 0, 0);
 
-		EntitySpawningManager.setBypass(true);
-		world.addEntity(customGuardian);
-		EntitySpawningManager.setBypass(false);
+        EntitySpawningManager.setBypass(true);
+        world.addEntity(customGuardian);
+        EntitySpawningManager.setBypass(false);
 
-		getPlayer().setPassenger(customGuardian.getBukkitEntity());
+        getPlayer().setPassenger(customGuardian.getBukkitEntity());
 
-		customGuardian.setInvisible(true);
-	}
+        customGuardian.setInvisible(true);
+    }
 
-	@Override
-	public void onUpdate() {
-		if (getOwner() == null
-		    || getPlayer() == null) {
-			cancel();
-		}
-		if (customGuardian == null
-		    || !customGuardian.isAlive()) {
-			getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
-			cancel();
-		}
-	}
+    @Override
+    public void onUpdate() {
+        if (getOwner() == null
+                || getPlayer() == null) {
+            cancel();
+        }
+        if (customGuardian == null
+                || !customGuardian.isAlive()) {
+            getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
+            cancel();
+        }
+    }
 }

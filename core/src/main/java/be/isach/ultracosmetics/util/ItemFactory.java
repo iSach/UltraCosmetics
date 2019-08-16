@@ -119,8 +119,8 @@ public class ItemFactory {
             UCMaterial m = UCMaterial.matchUCMaterial(id, data);
             return m.parseItem();
         } else {
-        	return UCMaterial.matchUCMaterial(fromConfig.toUpperCase()).parseItem();
-		}
+            return UCMaterial.matchUCMaterial(fromConfig.toUpperCase()).parseItem();
+        }
     }
 
     public static ItemStack createSkull(String url, String name) {
@@ -174,10 +174,7 @@ public class ItemFactory {
         ItemMeta am = a.getItemMeta();
         ItemMeta bm = b.getItemMeta();
 
-        if (!am.getDisplayName().equalsIgnoreCase(bm.getDisplayName())) {
-            return false;
-        }
-        return true;
+        return am.getDisplayName().equalsIgnoreCase(bm.getDisplayName());
     }
 
     public static boolean haveSameName(ItemStack a, ItemStack b) {

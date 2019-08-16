@@ -1,23 +1,16 @@
 package be.isach.ultracosmetics.v1_13_R2.ridable;
 
-import net.minecraft.server.v1_13_R2.AttributeInstance;
-import net.minecraft.server.v1_13_R2.EntityCreature;
-import net.minecraft.server.v1_13_R2.EntityInsentient;
-import net.minecraft.server.v1_13_R2.EntityLiving;
-import net.minecraft.server.v1_13_R2.EntityPlayer;
-import net.minecraft.server.v1_13_R2.GenericAttributes;
-import net.minecraft.server.v1_13_R2.PathfinderGoal;
-import net.minecraft.server.v1_13_R2.PathfinderGoalNearestAttackableTarget;
-import net.minecraft.server.v1_13_R2.PathfinderGoalTarget;
+import net.minecraft.server.v1_13_R2.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.event.entity.EntityTargetEvent;
 
 import java.util.List;
 import java.util.function.Predicate;
+
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */
@@ -41,7 +34,7 @@ public class AIFindNearestEntity extends PathfinderGoal {
         predicate = (target) -> {
             double range = maxTargetRange();
             if (target.isSneaking()) {
-                range *= (double) 0.8F;
+                range *= 0.8F;
             }
             return !target.isInvisible() && (double) target.g(entity) <= range && PathfinderGoalTarget.a(entity, target, false, true);
         };

@@ -14,14 +14,14 @@ import be.isach.ultracosmetics.util.UtilParticles;
  */
 public class ParticleEffectSnowCloud extends ParticleEffect {
 
-	public ParticleEffectSnowCloud(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.valueOf("snowcloud"));
-	}
+    public ParticleEffectSnowCloud(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.valueOf("snowcloud"));
+    }
 
-	@Override
-	public void onUpdate() {
-		UtilParticles.display(Particles.CLOUD, 0.5F, 0.1f, 0.5f, getPlayer().getLocation().add(0, 3, 0), 10);
-		UtilParticles.display(getType().getEffect(), 0.25F, 0.05f, 0.25f, getPlayer().getLocation().add(0, 3, 0), 1);
-	}
+    @Override
+    public void onUpdate() {
+        UtilParticles.display(Particles.CLOUD, 0.5F, 0.1f, 0.5f, getPlayer().getLocation().add(0, 3, 0), 10);
+        UtilParticles.display(getType().getEffect(), 0.25F, 0.05f, 0.25f, getPlayer().getLocation().add(0, 3, 0), 1);
+    }
 
 }

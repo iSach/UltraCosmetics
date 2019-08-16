@@ -7,6 +7,6 @@ package be.isach.ultracosmetics.cosmetics;
  * @since 08-05-2016
  */
 public interface Updatable {
-	
-	void onUpdate();
+
+    void onUpdate();
 }

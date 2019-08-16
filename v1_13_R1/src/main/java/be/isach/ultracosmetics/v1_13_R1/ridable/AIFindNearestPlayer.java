@@ -7,9 +7,10 @@ import org.bukkit.event.entity.EntityTargetEvent;
 
 import java.util.List;
 import java.util.function.Predicate;
+
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */
@@ -36,14 +37,14 @@ public class AIFindNearestPlayer extends PathfinderGoal {
             } else {
                 double range = maxTargetRange();
                 if (target.isSneaking()) {
-                    range *= (double) 0.8F;
+                    range *= 0.8F;
                 }
                 if (target.isInvisible()) {
                     float f = ((EntityHuman) target).dk(); // getArmorVisibility
                     if (f < 0.1F) {
                         f = 0.1F;
                     }
-                    range *= (double) (0.7F * f);
+                    range *= 0.7F * f;
                 }
                 return (double) target.g(entity) <= range && PathfinderGoalTarget.a(entity, (EntityLiving) target, false, true);
             }

@@ -15,12 +15,12 @@ import be.isach.ultracosmetics.util.UtilParticles;
  */
 public class ParticleEffectEnchanted extends ParticleEffect {
 
-	public ParticleEffectEnchanted(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.valueOf("enchanted"));
-	}
+    public ParticleEffectEnchanted(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.valueOf("enchanted"));
+    }
 
-	@Override
-	public void onUpdate() {
-		UtilParticles.display(Particles.ENCHANTMENT_TABLE, getPlayer().getLocation().add(0, MathUtils.randomDouble(0.1, 2), 0), 60, 8f);
-	}
+    @Override
+    public void onUpdate() {
+        UtilParticles.display(Particles.ENCHANTMENT_TABLE, getPlayer().getLocation().add(0, MathUtils.randomDouble(0.1, 2), 0), 60, 8f);
+    }
 }

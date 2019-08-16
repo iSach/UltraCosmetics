@@ -7,7 +7,7 @@ import org.bukkit.event.entity.EntityEvent;
 
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */
@@ -34,10 +34,11 @@ public abstract class RidableEvent extends EntityEvent implements Cancellable {
      * Gets the RidableType f th RidableEntity involved in this event
      *
      * @return RidableType of the RidableEntity involved in this event
-     *
-    public RidableType getRidableType() {
-        return ridable.getType();
-    }*/
+     * <p>
+     * public RidableType getRidableType() {
+     * return ridable.getType();
+     * }
+     */
 
     @Override
     public boolean isCancelled() {

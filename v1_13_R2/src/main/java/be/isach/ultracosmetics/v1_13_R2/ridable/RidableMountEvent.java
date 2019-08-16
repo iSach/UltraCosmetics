@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */

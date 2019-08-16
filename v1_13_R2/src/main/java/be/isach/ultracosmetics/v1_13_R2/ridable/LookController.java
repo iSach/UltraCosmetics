@@ -3,9 +3,10 @@ package be.isach.ultracosmetics.v1_13_R2.ridable;
 import net.minecraft.server.v1_13_R2.ControllerLook;
 import net.minecraft.server.v1_13_R2.EntityInsentient;
 import net.minecraft.server.v1_13_R2.EntityPlayer;
+
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */

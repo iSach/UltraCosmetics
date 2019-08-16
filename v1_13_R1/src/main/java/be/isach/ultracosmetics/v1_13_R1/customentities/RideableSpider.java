@@ -4,13 +4,11 @@ import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.v1_13_R1.ridable.ControllerWASD;
 import be.isach.ultracosmetics.v1_13_R1.ridable.LookController;
 import be.isach.ultracosmetics.v1_13_R1.ridable.RidableEntity;
-import net.minecraft.server.v1_13_R1.EntitySpider;
-import net.minecraft.server.v1_13_R1.GenericAttributes;
 import net.minecraft.server.v1_13_R1.*;
 
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */
@@ -107,6 +105,6 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 
     @Override
     public void removeAi() {
-       // setNoAI(true);
+        // setNoAI(true);
     }
 }

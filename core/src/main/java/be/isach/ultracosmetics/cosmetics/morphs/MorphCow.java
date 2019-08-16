@@ -16,29 +16,29 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * @since 07-03-2017
  */
 public class MorphCow extends Morph {
-	// TODO: Add something better for this morph - having it just "moo" isn't much.
-	private long coolDown = 0;
+    // TODO: Add something better for this morph - having it just "moo" isn't much.
+    private long coolDown = 0;
 
-	public MorphCow(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.valueOf("cow"), ultraCosmetics);
-	}
+    public MorphCow(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.valueOf("cow"), ultraCosmetics);
+    }
 
-	@EventHandler
-	public void onLeftClick(PlayerInteractEvent event) {
-		if ((event.getAction() == Action.LEFT_CLICK_AIR
-				|| event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
-			if (coolDown > System.currentTimeMillis()) return;
-			event.setCancelled(true);
-			SoundUtil.playSound(event.getPlayer().getLocation(), Sounds.COW_IDLE);
-			coolDown = System.currentTimeMillis() + 500;
-		}
-	}
+    @EventHandler
+    public void onLeftClick(PlayerInteractEvent event) {
+        if ((event.getAction() == Action.LEFT_CLICK_AIR
+                || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
+            if (coolDown > System.currentTimeMillis()) return;
+            event.setCancelled(true);
+            SoundUtil.playSound(event.getPlayer().getLocation(), Sounds.COW_IDLE);
+            coolDown = System.currentTimeMillis() + 500;
+        }
+    }
 
-	@Override
-	public void onUpdate() {
-	}
+    @Override
+    public void onUpdate() {
+    }
 
-	@Override
-	protected void onClear() {
-	}
+    @Override
+    protected void onClear() {
+    }
 }

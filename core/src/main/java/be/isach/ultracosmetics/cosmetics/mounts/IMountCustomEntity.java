@@ -9,8 +9,8 @@ import org.bukkit.entity.Entity;
  * @since 03-15-2016
  */
 public interface IMountCustomEntity {
-	
-	Entity getEntity();
-	
-	void removeAi();
+
+    Entity getEntity();
+
+    void removeAi();
 }

@@ -10,10 +10,8 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UCMaterial;
-import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import static be.isach.ultracosmetics.manager.TreasureChestManager.tryOpenChest;
 
@@ -25,114 +23,114 @@ import static be.isach.ultracosmetics.manager.TreasureChestManager.tryOpenChest;
  */
 public class MenuMain extends Menu {
 
-	private int[] layout;
+    private int[] layout;
 
-	public MenuMain(UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics);
+    public MenuMain(UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics);
 
-		switch (Category.enabledSize()) {
-			case 8:
-				layout = new int[]{ 10, 12, 14, 16, 28, 30, 32, 34 };
-				break;
-			case 7:
-				layout = new int[]{ 10, 13, 16, 28, 30, 32, 34 };
-				break;
-			case 6:
-				layout = new int[]{ 10, 13, 16, 28, 31, 34 };
-				break;
-			case 5:
-				layout = new int[]{ 10, 16, 22, 29, 33 };
-				break;
-			case 4:
-				layout = new int[]{ 19, 21, 23, 25 };
-				break;
-			case 3:
-				layout = new int[]{ 20, 22, 24 };
-				break;
-			case 2:
-				layout = new int[]{ 21, 23 };
-				break;
-			case 1:
-				layout = new int[]{ 22 };
-				break;
-		}
+        switch (Category.enabledSize()) {
+            case 8:
+                layout = new int[]{10, 12, 14, 16, 28, 30, 32, 34};
+                break;
+            case 7:
+                layout = new int[]{10, 13, 16, 28, 30, 32, 34};
+                break;
+            case 6:
+                layout = new int[]{10, 13, 16, 28, 31, 34};
+                break;
+            case 5:
+                layout = new int[]{10, 16, 22, 29, 33};
+                break;
+            case 4:
+                layout = new int[]{19, 21, 23, 25};
+                break;
+            case 3:
+                layout = new int[]{20, 22, 24};
+                break;
+            case 2:
+                layout = new int[]{21, 23};
+                break;
+            case 1:
+                layout = new int[]{22};
+                break;
+        }
 
-		if (UltraCosmeticsData.get().areTreasureChestsEnabled() && layout != null) {
-			for (int i = 0; i < layout.length; i++) {
-				layout[i] += 9;
-			}
-		}
-	}
+        if (UltraCosmeticsData.get().areTreasureChestsEnabled() && layout != null) {
+            for (int i = 0; i < layout.length; i++) {
+                layout[i] += 9;
+            }
+        }
+    }
 
-	@Override
-	public void open(UltraPlayer player) {
-		if (!UltraCosmeticsData.get().areTreasureChestsEnabled()
-		    && Category.enabledSize() == 1) {
-			Category.enabled().get(0).getMenu(getUltraCosmetics()).open(player);
-			return;
-		}
-		super.open(player);
-	}
+    @Override
+    public void open(UltraPlayer player) {
+        if (!UltraCosmeticsData.get().areTreasureChestsEnabled()
+                && Category.enabledSize() == 1) {
+            Category.enabled().get(0).getMenu(getUltraCosmetics()).open(player);
+            return;
+        }
+        super.open(player);
+    }
 
-	@Override
-	protected void putItems(Inventory inventory, UltraPlayer player) {
-		if (Category.enabledSize() > 0) {
-			for (int i = 0; i < Category.enabledSize(); i++) {
-				int slot = layout[i];
-				Category category = Category.enabled().get(i);
-				putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
-			}
-		}
+    @Override
+    protected void putItems(Inventory inventory, UltraPlayer player) {
+        if (Category.enabledSize() > 0) {
+            for (int i = 0; i < Category.enabledSize(); i++) {
+                int slot = layout[i];
+                Category category = Category.enabled().get(i);
+                putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
+            }
+        }
 
-		// Clear cosmetics item.
-		String message = MessageManager.getMessage("Clear-Cosmetics");
-		ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
-		putItem(inventory, inventory.getSize() - 5, itemStack, data -> {
-			player.clear();
-			open(player);
-		});
+        // Clear cosmetics item.
+        String message = MessageManager.getMessage("Clear-Cosmetics");
+        ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
+        putItem(inventory, inventory.getSize() - 5, itemStack, data -> {
+            player.clear();
+            open(player);
+        });
 
-		if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
-			ItemStack chest;
+        if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
+            ItemStack chest;
 
-			String msgChests = MessageManager.getMessage("Treasure-Chests");
-			if (player.getKeys() == 0) {
-				chest = ItemFactory.create(UCMaterial.CHEST, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
-				                                                                                                                  "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
-			} else {
-				chest = ItemFactory.create(UCMaterial.CHEST, msgChests, "", MessageManager.getMessage("Click-Open-Chest"), "");
-			}
-			ItemStack keys = ItemFactory.create(UCMaterial.TRIPWIRE_HOOK, MessageManager.getMessage("Treasure-Keys"), "",
-			                                    MessageManager.getMessage("Your-Keys").replace("%keys%", player.getKeys() + ""), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
-			                                                                                                                     "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
+            String msgChests = MessageManager.getMessage("Treasure-Chests");
+            if (player.getKeys() == 0) {
+                chest = ItemFactory.create(UCMaterial.CHEST, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
+                        "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
+            } else {
+                chest = ItemFactory.create(UCMaterial.CHEST, msgChests, "", MessageManager.getMessage("Click-Open-Chest"), "");
+            }
+            ItemStack keys = ItemFactory.create(UCMaterial.TRIPWIRE_HOOK, MessageManager.getMessage("Treasure-Keys"), "",
+                    MessageManager.getMessage("Your-Keys").replace("%keys%", player.getKeys() + ""), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
+                            "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
 
-			putItem(inventory, 5, keys, (data) -> {
-				if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
-					SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
-					return;
-				}
-				player.getBukkitPlayer().closeInventory();
-				player.openKeyPurchaseMenu();
-			});
+            putItem(inventory, 5, keys, (data) -> {
+                if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
+                    SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
+                    return;
+                }
+                player.getBukkitPlayer().closeInventory();
+                player.openKeyPurchaseMenu();
+            });
 
-			putItem(inventory, 3, chest, (data) -> {
-				if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
-					SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
-					return;
-				}
-				tryOpenChest(player.getBukkitPlayer());
-			});
+            putItem(inventory, 3, chest, (data) -> {
+                if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
+                    SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
+                    return;
+                }
+                tryOpenChest(player.getBukkitPlayer());
+            });
 
-		}
-	}
+        }
+    }
 
-	@Override
-	protected String getName() {
-		return MessageManager.getMessage("Menus.Main-Menu");
-	}
+    @Override
+    protected String getName() {
+        return MessageManager.getMessage("Menus.Main-Menu");
+    }
 
-	@Override
-	protected int getSize() {
-		return UltraCosmeticsData.get().areTreasureChestsEnabled() ? 54 : 45;
-	}
+    @Override
+    protected int getSize() {
+        return UltraCosmeticsData.get().areTreasureChestsEnabled() ? 54 : 45;
+    }
 }

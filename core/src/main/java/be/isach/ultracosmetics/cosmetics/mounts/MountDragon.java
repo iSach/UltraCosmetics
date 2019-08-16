@@ -19,50 +19,50 @@ import org.bukkit.util.Vector;
  * @since 08-17-2015
  */
 public class MountDragon extends Mount<EnderDragon> {
-	
-	public MountDragon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.valueOf("dragon"), ultraCosmetics);
-	}
-	
-	@Override
-	public void onUpdate() {
-		if (entity.getPassenger() == null) {
-			clear();
-			return;
-		}
 
-		Vector vector = getPlayer().getLocation().toVector();
-		
-		double rotX = getPlayer().getLocation().getYaw();
-		double rotY = getPlayer().getLocation().getPitch();
-		
-		vector.setY(-Math.sin(Math.toRadians(rotY)));
-		
-		double h = Math.cos(Math.toRadians(rotY));
-		
-		vector.setX(-h * Math.sin(Math.toRadians(rotX)));
-		vector.setZ(h * Math.cos(Math.toRadians(rotX)));
-		
-		UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveDragon(getPlayer(), vector, entity);
-	}
-	
-	@EventHandler
-	public void stopDragonDamage(EntityExplodeEvent event) {
-		Entity e = event.getEntity();
-		if (e instanceof EnderDragonPart)
-			e = ((EnderDragonPart) e).getParent();
-		if (e instanceof EnderDragon && e == entity)
-			event.setCancelled(true);
-	}
-	
-	@EventHandler
-	public void onEntityDamage(EntityDamageByEntityEvent event) {
-		Entity e = event.getDamager();
-		if (e instanceof EnderDragonPart) {
-			e = ((EnderDragonPart) e).getParent();
-		}
-		if (e instanceof EnderDragon && e == entity) {
-			event.setCancelled(true);
-		}
-	}
+    public MountDragon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.valueOf("dragon"), ultraCosmetics);
+    }
+
+    @Override
+    public void onUpdate() {
+        if (entity.getPassenger() == null) {
+            clear();
+            return;
+        }
+
+        Vector vector = getPlayer().getLocation().toVector();
+
+        double rotX = getPlayer().getLocation().getYaw();
+        double rotY = getPlayer().getLocation().getPitch();
+
+        vector.setY(-Math.sin(Math.toRadians(rotY)));
+
+        double h = Math.cos(Math.toRadians(rotY));
+
+        vector.setX(-h * Math.sin(Math.toRadians(rotX)));
+        vector.setZ(h * Math.cos(Math.toRadians(rotX)));
+
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveDragon(getPlayer(), vector, entity);
+    }
+
+    @EventHandler
+    public void stopDragonDamage(EntityExplodeEvent event) {
+        Entity e = event.getEntity();
+        if (e instanceof EnderDragonPart)
+            e = ((EnderDragonPart) e).getParent();
+        if (e instanceof EnderDragon && e == entity)
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
+        Entity e = event.getDamager();
+        if (e instanceof EnderDragonPart) {
+            e = ((EnderDragonPart) e).getParent();
+        }
+        if (e instanceof EnderDragon && e == entity) {
+            event.setCancelled(true);
+        }
+    }
 }

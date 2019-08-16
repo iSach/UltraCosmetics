@@ -2,7 +2,7 @@ package be.isach.ultracosmetics.v1_13_R1.ridable;
 
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */

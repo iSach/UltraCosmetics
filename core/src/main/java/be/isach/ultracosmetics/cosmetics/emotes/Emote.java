@@ -18,56 +18,58 @@ import org.bukkit.inventory.ItemStack;
  * @since 06-17-2016
  */
 public class Emote extends Cosmetic<EmoteType> {
-	
-	private EmoteAnimation animation;
-	private ItemStack itemStack;
-	
-	public Emote(UltraPlayer owner, final EmoteType emoteType, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, Category.EMOTES, owner, emoteType);
-		
-		this.animation = new EmoteAnimation(getType().getTicksPerFrame(), this);
-		
-		owner.setCurrentEmote(this);
-	}
-	
-	@Override
-	protected void onEquip() {
-		animation.start();
-	}
-	
-	@Override
-	protected void onClear() {
-		animation.stop();
-		getPlayer().getInventory().setHelmet(null);
-	}
-	
-	public ItemStack getItemStack() { return itemStack; }
-	
-	protected void setItemStack(ItemStack itemStack) {
-		this.itemStack = itemStack;
-	}
-	
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getCurrentItem() != null && event.getCurrentItem().equals(itemStack)) {
-			event.setCancelled(true);
-		}
-		if (event.getCursor() != null && event.getCursor().equals(itemStack)) {
-			event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
-			event.setCancelled(true);
-		}
-	}
-	
-	@EventHandler
-	public void onInventoryClick(InventoryCreativeEvent event) {
-		if (event.getCurrentItem() != null && event.getCurrentItem().equals(itemStack)) {
-			event.setCancelled(true);
-			getPlayer().closeInventory(); // Close the inventory because clicking again results in the event being handled client side
-		}
-		if (event.getCursor() != null && event.getCursor().equals(itemStack)) {
-			event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
-			event.setCancelled(true);
-			getPlayer().closeInventory(); // Close the inventory because clicking again results in the event being handled client side
-		}
-	}
+
+    private EmoteAnimation animation;
+    private ItemStack itemStack;
+
+    public Emote(UltraPlayer owner, final EmoteType emoteType, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, Category.EMOTES, owner, emoteType);
+
+        this.animation = new EmoteAnimation(getType().getTicksPerFrame(), this);
+
+        owner.setCurrentEmote(this);
+    }
+
+    @Override
+    protected void onEquip() {
+        animation.start();
+    }
+
+    @Override
+    protected void onClear() {
+        animation.stop();
+        getPlayer().getInventory().setHelmet(null);
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
+    }
+
+    protected void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getCurrentItem() != null && event.getCurrentItem().equals(itemStack)) {
+            event.setCancelled(true);
+        }
+        if (event.getCursor() != null && event.getCursor().equals(itemStack)) {
+            event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryCreativeEvent event) {
+        if (event.getCurrentItem() != null && event.getCurrentItem().equals(itemStack)) {
+            event.setCancelled(true);
+            getPlayer().closeInventory(); // Close the inventory because clicking again results in the event being handled client side
+        }
+        if (event.getCursor() != null && event.getCursor().equals(itemStack)) {
+            event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
+            event.setCancelled(true);
+            getPlayer().closeInventory(); // Close the inventory because clicking again results in the event being handled client side
+        }
+    }
 }

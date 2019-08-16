@@ -3,35 +3,14 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.morphs.Morph;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphBat;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphBlaze;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphChicken;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphCow;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphCreeper;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphEnderman;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphLlama;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphMooshroom;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphParrot;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphPig;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphPolarBear;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphSheep;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphSlime;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphSnowman;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphVillager;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphWitch;
-import be.isach.ultracosmetics.cosmetics.morphs.MorphWitherSkeleton;
-import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.cosmetics.morphs.*;
 import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.UCMaterial;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import be.isach.ultracosmetics.util.UCMaterial;
-import be.isach.ultracosmetics.version.VersionManager;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import org.bukkit.Material;
 
 /**
  * Morph types.

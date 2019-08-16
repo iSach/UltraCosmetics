@@ -1,14 +1,13 @@
 package be.isach.ultracosmetics.v1_13_R2.ridable;
 
 import net.minecraft.server.v1_13_R2.*;
-
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */

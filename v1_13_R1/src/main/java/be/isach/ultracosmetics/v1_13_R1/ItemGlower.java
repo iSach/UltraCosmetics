@@ -10,12 +10,12 @@ import org.bukkit.inventory.meta.ItemMeta;
  * @author RadBuilder
  */
 public class ItemGlower implements IItemGlower {
-	
-	public ItemStack glow(ItemStack item) {
-		ItemMeta itemMeta = item.getItemMeta();
-		itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		item.setItemMeta(itemMeta);
-		return item;
-	}
+
+    public ItemStack glow(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        item.setItemMeta(itemMeta);
+        return item;
+    }
 }

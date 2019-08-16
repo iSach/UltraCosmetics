@@ -7,7 +7,7 @@ package be.isach.ultracosmetics.util;
  * Project: UltraCosmetics
  */
 public enum CacheValue {
-	
-	UNLOADED, DISABLED, ENABLED
-	
+
+    UNLOADED, DISABLED, ENABLED
+
 }

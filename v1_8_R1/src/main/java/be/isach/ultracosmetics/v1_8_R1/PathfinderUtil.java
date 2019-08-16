@@ -13,21 +13,21 @@ import java.lang.reflect.Field;
  * @author RadBuilder
  */
 public class PathfinderUtil implements IPathfinderUtil {
-	
-	@Override
-	public void removePathFinders(Entity entity) {
-		net.minecraft.server.v1_8_R1.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-		try {
-			Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-			bField.setAccessible(true);
-			Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-			cField.setAccessible(true);
-			bField.set(((EntityInsentient) nmsEntity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
-			bField.set(((EntityInsentient) nmsEntity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
-			cField.set(((EntityInsentient) nmsEntity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
-			cField.set(((EntityInsentient) nmsEntity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
-		} catch (Exception exc) {
-			exc.printStackTrace();
-		}
-	}
+
+    @Override
+    public void removePathFinders(Entity entity) {
+        net.minecraft.server.v1_8_R1.Entity nmsEntity = ((CraftEntity) entity).getHandle();
+        try {
+            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
+            bField.setAccessible(true);
+            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
+            cField.setAccessible(true);
+            bField.set(((EntityInsentient) nmsEntity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+            bField.set(((EntityInsentient) nmsEntity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+            cField.set(((EntityInsentient) nmsEntity).goalSelector, new UnsafeList<PathfinderGoalSelector>());
+            cField.set(((EntityInsentient) nmsEntity).targetSelector, new UnsafeList<PathfinderGoalSelector>());
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+    }
 }

@@ -13,30 +13,30 @@ import org.bukkit.entity.Horse;
  */
 public class MountWalkingDead extends MountHorse {
 
-	public MountWalkingDead(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.valueOf("walkingdead"), ultraCosmetics);
-	}
+    public MountWalkingDead(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.valueOf("walkingdead"), ultraCosmetics);
+    }
 
-	@Override
-	public void onEquip() {
-		super.onEquip();
-		entity.setJumpStrength(0.7);
-		UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
-	}
+    @Override
+    public void onEquip() {
+        super.onEquip();
+        entity.setJumpStrength(0.7);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
+    }
 
-	@Override
-	public void onUpdate() {
-		UtilParticles.display(Particles.CRIT_MAGIC, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
-		UtilParticles.display(Particles.SPELL_MOB_AMBIENT, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
-	}
+    @Override
+    public void onUpdate() {
+        UtilParticles.display(Particles.CRIT_MAGIC, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+        UtilParticles.display(Particles.SPELL_MOB_AMBIENT, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+    }
 
-	@Override
-	protected Horse.Variant getVariant() {
-		return Horse.Variant.UNDEAD_HORSE;
-	}
+    @Override
+    protected Horse.Variant getVariant() {
+        return Horse.Variant.UNDEAD_HORSE;
+    }
 
-	@Override
-	protected Horse.Color getColor() {
-		return Horse.Color.WHITE;
-	}
+    @Override
+    protected Horse.Color getColor() {
+        return Horse.Color.WHITE;
+    }
 }

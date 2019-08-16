@@ -7,8 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.List;
-
 /**
  * Project: UltraCosmetics
  * Package: be.isach.ultracosmetics.tick
@@ -17,25 +15,25 @@ import java.util.List;
  * at 14:03
  */
 public class InvalidWorldChecker extends BukkitRunnable {
-	
-	private UltraCosmetics ultraCosmetics;
-	
-	public InvalidWorldChecker(UltraCosmetics ultraCosmetics) {
-		this.ultraCosmetics = ultraCosmetics;
-	}
-	
-	@Override
-	public void run() {
-		for (UltraPlayer ultraPlayer : ultraCosmetics.getPlayerManager().getUltraPlayers()) {
-			Player p = ultraPlayer.getBukkitPlayer();
-			try {
-				if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(p.getWorld().getName())) {
-					ultraPlayer.removeMenuItem();
-					if (ultraPlayer.clear())
-						ultraPlayer.getBukkitPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));
-				}
-			} catch (Exception exc) {
-			}
-		}
-	}
+
+    private UltraCosmetics ultraCosmetics;
+
+    public InvalidWorldChecker(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
+    }
+
+    @Override
+    public void run() {
+        for (UltraPlayer ultraPlayer : ultraCosmetics.getPlayerManager().getUltraPlayers()) {
+            Player p = ultraPlayer.getBukkitPlayer();
+            try {
+                if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(p.getWorld().getName())) {
+                    ultraPlayer.removeMenuItem();
+                    if (ultraPlayer.clear())
+                        ultraPlayer.getBukkitPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));
+                }
+            } catch (Exception exc) {
+            }
+        }
+    }
 }

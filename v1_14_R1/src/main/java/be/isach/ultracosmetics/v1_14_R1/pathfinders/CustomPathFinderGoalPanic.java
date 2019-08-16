@@ -2,10 +2,7 @@ package be.isach.ultracosmetics.v1_14_R1.pathfinders;
 
 
 import net.minecraft.server.v1_14_R1.*;
-import net.minecraft.server.v1_14_R1.EntityCreature;
-import org.bukkit.Bukkit;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.EnumSet;

@@ -11,11 +11,11 @@ import org.bukkit.entity.Player;
  * @author RadBuilder
  */
 public class ActionBar implements IActionBar {
-	@Override
-	public void sendActionMessage(Player player, String message) {
-		CraftPlayer p = (CraftPlayer) player;
-		IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + message + "\"}");
-		PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
-		p.getHandle().playerConnection.sendPacket(ppoc);
-	}
+    @Override
+    public void sendActionMessage(Player player, String message) {
+        CraftPlayer p = (CraftPlayer) player;
+        IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + message + "\"}");
+        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
+        p.getHandle().playerConnection.sendPacket(ppoc);
+    }
 }

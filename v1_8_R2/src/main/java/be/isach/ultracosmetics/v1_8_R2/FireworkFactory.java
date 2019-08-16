@@ -10,8 +10,8 @@ import org.bukkit.entity.Player;
  * @author RadBuilder
  */
 public class FireworkFactory implements IFireworkFactory {
-	@Override
-	public void spawn(Location location, FireworkEffect effect, Player... players) {
-		CustomEntityFirework.spawn(location, effect, players);
-	}
+    @Override
+    public void spawn(Location location, FireworkEffect effect, Player... players) {
+        CustomEntityFirework.spawn(location, effect, players);
+    }
 }

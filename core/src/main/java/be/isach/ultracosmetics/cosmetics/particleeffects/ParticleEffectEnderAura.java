@@ -13,12 +13,12 @@ import org.bukkit.Effect;
  */
 public class ParticleEffectEnderAura extends ParticleEffect {
 
-	public ParticleEffectEnderAura(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.valueOf("enderaura"));
-	}
+    public ParticleEffectEnderAura(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.valueOf("enderaura"));
+    }
 
-	@Override
-	public void onUpdate() {
-		getPlayer().getWorld().playEffect(getPlayer().getLocation().add(0, 1, 0), Effect.ENDER_SIGNAL, 0);
-	}
+    @Override
+    public void onUpdate() {
+        getPlayer().getWorld().playEffect(getPlayer().getLocation().add(0, 1, 0), Effect.ENDER_SIGNAL, 0);
+    }
 }

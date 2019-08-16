@@ -2,14 +2,10 @@ package be.isach.ultracosmetics.cosmetics.type;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.mounts.*;
-import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UCMaterial;
-import be.isach.ultracosmetics.version.VersionManager;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 

@@ -2,9 +2,10 @@ package be.isach.ultracosmetics.v1_13_R1.ridable;
 
 import be.isach.ultracosmetics.v1_13_R1.customentities.CustomSlime;
 import net.minecraft.server.v1_13_R1.PathfinderGoal;
+
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */

@@ -5,13 +5,13 @@ import be.isach.ultracosmetics.version.IModule;
 
 public class Module implements IModule {
 
-	@Override
-	public void enable() {
-		CustomEntities.registerEntities();
-	}
+    @Override
+    public void enable() {
+        CustomEntities.registerEntities();
+    }
 
-	@Override
-	public void disable() {
-		CustomEntities.unregisterEntities();
-	}
+    @Override
+    public void disable() {
+        CustomEntities.unregisterEntities();
+    }
 }

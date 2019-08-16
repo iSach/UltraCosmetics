@@ -16,31 +16,31 @@ import org.bukkit.inventory.ItemStack;
  */
 public class MountInfernalHorror extends MountHorse<SkeletonHorse> {
 
-	public MountInfernalHorror(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.valueOf("infernalhorror"), ultraCosmetics);
-	}
+    public MountInfernalHorror(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.valueOf("infernalhorror"), ultraCosmetics);
+    }
 
-	@Override
-	public void onEquip() {
-		super.onEquip();
-		entity.setJumpStrength(0.7);
-		entity.getInventory().setItem(0, new ItemStack(Material.SADDLE));
-		UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
+    @Override
+    public void onEquip() {
+        super.onEquip();
+        entity.setJumpStrength(0.7);
+        entity.getInventory().setItem(0, new ItemStack(Material.SADDLE));
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
 
-	}
+    }
 
-	@Override
-	public void onUpdate() {
-		UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
-	}
+    @Override
+    public void onUpdate() {
+        UtilParticles.display(Particles.FLAME, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
+    }
 
-	@Override
-	protected Horse.Variant getVariant() {
-		return Horse.Variant.SKELETON_HORSE;
-	}
+    @Override
+    protected Horse.Variant getVariant() {
+        return Horse.Variant.SKELETON_HORSE;
+    }
 
-	@Override
-	protected Horse.Color getColor() {
-		return Horse.Color.WHITE;
-	}
+    @Override
+    protected Horse.Color getColor() {
+        return Horse.Color.WHITE;
+    }
 }

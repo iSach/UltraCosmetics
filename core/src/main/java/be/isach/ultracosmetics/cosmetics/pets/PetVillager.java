@@ -6,13 +6,6 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Villager;
-import org.bukkit.util.Vector;
-
-import java.util.Random;
 
 /**
  * Represents an instance of a villager pet summoned by a player.
@@ -21,8 +14,8 @@ import java.util.Random;
  * @since 07-02-2017
  */
 public class PetVillager extends Pet {
-	public PetVillager(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("villager"),
-				ItemFactory.create(UCMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
-	}
+    public PetVillager(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, ultraCosmetics, PetType.getByName("villager"),
+                ItemFactory.create(UCMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
+    }
 }

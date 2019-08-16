@@ -7,9 +7,10 @@ import org.bukkit.event.entity.EntityTargetEvent;
 
 import java.util.List;
 import java.util.function.Predicate;
+
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */
@@ -33,7 +34,7 @@ public class AIFindNearestEntity extends PathfinderGoal {
         predicate = (target) -> {
             double range = maxTargetRange();
             if (target.isSneaking()) {
-                range *= (double) 0.8F;
+                range *= 0.8F;
             }
             return !target.isInvisible() && (double) target.g(entity) <= range && PathfinderGoalTarget.a(entity, target, false, true);
         };

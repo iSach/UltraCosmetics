@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
  * @since 03-07-2016
  */
 public interface IPlayerFollower {
-	
-	void follow(Player player);
-	
-	Runnable getTask();
+
+    void follow(Player player);
+
+    Runnable getTask();
 }

@@ -3,10 +3,10 @@ package be.isach.ultracosmetics.v1_13_R2.ridable;
 import be.isach.ultracosmetics.v1_13_R2.customentities.CustomSlime;
 import net.minecraft.server.v1_13_R2.MobEffects;
 import net.minecraft.server.v1_13_R2.PathfinderGoal;
-import org.bukkit.entity.Slime;
+
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code to make UC work!
  */

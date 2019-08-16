@@ -8,13 +8,11 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Wolf;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * Represents an instance of a dog pet summoned by a player.

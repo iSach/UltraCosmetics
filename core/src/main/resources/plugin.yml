@@ -54,7 +54,7 @@ permissions:
   ultracosmetics.command.selfview:
     default: op
   ultracosmetics.gadgets.*:
-    children: 
+    children:
       - ultracosmetics.gadgets.paintballgun
       - ultracosmetics.gadgets.batblaster
       - ultracosmetics.gadgets.chickenator
@@ -500,28 +500,28 @@ permissions:
   ultracosmetics.suits.santa.boots:
     default: op
   ultracosmetics.emotes.*:
-      children:
-        - ultracosmetics.emotes.cry
-        - ultracosmetics.emotes.angry
-        - ultracosmetics.emotes.happy
-        - ultracosmetics.emotes.cheeky
-        - ultracosmetics.emotes.love
-        - ultracosmetics.emotes.dealwithit
-        - ultracosmetics.emotes.cool
-        - ultracosmetics.emotes.surprised
+    children:
+      - ultracosmetics.emotes.cry
+      - ultracosmetics.emotes.angry
+      - ultracosmetics.emotes.happy
+      - ultracosmetics.emotes.cheeky
+      - ultracosmetics.emotes.love
+      - ultracosmetics.emotes.dealwithit
+      - ultracosmetics.emotes.cool
+      - ultracosmetics.emotes.surprised
   ultracosmetics.emotes.cry:
-      default: op
+    default: op
   ultracosmetics.emotes.angry:
-      default: op
+    default: op
   ultracosmetics.emotes.happy:
-      default: op
+    default: op
   ultracosmetics.emotes.cheeky:
-      default: op
+    default: op
   ultracosmetics.emotes.love:
-      default: op
+    default: op
   ultracosmetics.emotes.dealwithit:
-      default: op
+    default: op
   ultracosmetics.emotes.cool:
-      default: op
+    default: op
   ultracosmetics.emotes.surprised:
-      default: op
+    default: op

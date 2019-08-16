@@ -4,17 +4,10 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.*;
-import org.bukkit.util.Vector;
-
-import java.lang.reflect.Method;
-import java.util.Random;
-import java.util.UUID;
+import org.bukkit.entity.Ageable;
 
 /**
  * Represents an instance of a kitten pet summoned by a player.

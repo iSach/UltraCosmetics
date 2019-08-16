@@ -23,111 +23,111 @@ import java.util.UUID;
  * Project: UltraCosmetics
  */
 public class MySqlConnectionManager extends BukkitRunnable {
-	/**
-	 * Player Sql Indexs.
-	 */
-	public static final Map<UUID, Integer> INDEXS = new HashMap<>();
-	
-	/**
-	 * UltraCosmetics instance.
-	 */
-	private UltraCosmetics ultraCosmetics;
-	
-	/**
-	 * MySQL Connection & Table.
-	 */
-	public Connection co;
-	private Table table;
-	
-	/**
-	 * SQLLoader Manager instance
-	 */
-	private SqlLoader sqlLoader;
-	
-	/**
-	 * MySQL Stuff.
-	 */
-	private MySqlConnection sql;
-	
-	/**
-	 * Sql Utils instance.
-	 */
-	private SqlUtils sqlUtils;
-	
-	public MySqlConnectionManager(UltraCosmetics ultraCosmetics) {
-		this.ultraCosmetics = ultraCosmetics;
-		this.sqlUtils = new SqlUtils(this);
-	}
-	
-	public void start() {
-		runTaskTimerAsynchronously(ultraCosmetics, 0, 24000);
-	}
-	
-	@Override
-	public void run() {
-		try {
-			String hostname = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.hostname");
-			String portNumber = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.port");
-			String database = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.database");
-			String username = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.username");
-			String password = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.password");
-			if (co != null)
-				co.close();
-			sql = new MySqlConnection(hostname, portNumber, database, username, password);
-			co = sql.getConnection();
-			Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD
-			                                      + "UltraCosmetics -> Successfully connected to MySQL server! :)");
-			PreparedStatement sql = co.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" + "id INTEGER not NULL AUTO_INCREMENT,"
-					+ " uuid VARCHAR(255)," + " username VARCHAR(255)," + " PRIMARY KEY ( id ))");
-			sql.executeUpdate();
-			for (GadgetType gadgetType : GadgetType.values()) {
-				DatabaseMetaData md = co.getMetaData();
-				ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData",
-				                             gadgetType.toString().replace("_", "").toLowerCase());
-				if (!rs.next()) {
-					PreparedStatement statement = co.prepareStatement(
-							"ALTER TABLE UltraCosmeticsData ADD " + gadgetType.toString().replace("_", "").toLowerCase()
-							+ " INTEGER DEFAULT 0 not NULL");
-					statement.executeUpdate();
-					statement.close();
-				}
-				rs.close();
-			}
-			table = new Table(co, "UltraCosmeticsData");
-			DatabaseMetaData md = co.getMetaData();
-			ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "treasureKeys");
-			if (!rs.next()) {
-				PreparedStatement statement = co
-						.prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
-				statement.executeUpdate();
-				statement.close();
-			}
-			rs.close();
-			
-			ultraCosmetics.getSmartLogger().write("initial SQLLoader to reduce lag when table is large");
-			sqlLoader = new SqlLoader(ultraCosmetics);
-			
-			INDEXS.putAll(sqlUtils.getIds());
-		} catch (Exception e) {
-			Bukkit.getLogger().info("");
-			Bukkit.getConsoleSender().sendMessage(
-					ChatColor.RED + "" + ChatColor.BOLD + "Ultra Cosmetics >>> Could not connect to MySQL server!");
-			Bukkit.getLogger().info("");
-			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Error:");
-			e.printStackTrace();
-		}
-	}
-	
-	public Table getTable() {
-		return table;
-	}
-	
-	public SqlUtils getSqlUtils() {
-		return sqlUtils;
-	}
-	
-	public SqlLoader getSqlLoader() {
-		return sqlLoader;
-	}
+    /**
+     * Player Sql Indexs.
+     */
+    public static final Map<UUID, Integer> INDEXS = new HashMap<>();
+
+    /**
+     * UltraCosmetics instance.
+     */
+    private UltraCosmetics ultraCosmetics;
+
+    /**
+     * MySQL Connection & Table.
+     */
+    public Connection co;
+    private Table table;
+
+    /**
+     * SQLLoader Manager instance
+     */
+    private SqlLoader sqlLoader;
+
+    /**
+     * MySQL Stuff.
+     */
+    private MySqlConnection sql;
+
+    /**
+     * Sql Utils instance.
+     */
+    private SqlUtils sqlUtils;
+
+    public MySqlConnectionManager(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
+        this.sqlUtils = new SqlUtils(this);
+    }
+
+    public void start() {
+        runTaskTimerAsynchronously(ultraCosmetics, 0, 24000);
+    }
+
+    @Override
+    public void run() {
+        try {
+            String hostname = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.hostname");
+            String portNumber = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.port");
+            String database = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.database");
+            String username = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.username");
+            String password = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.password");
+            if (co != null)
+                co.close();
+            sql = new MySqlConnection(hostname, portNumber, database, username, password);
+            co = sql.getConnection();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD
+                    + "UltraCosmetics -> Successfully connected to MySQL server! :)");
+            PreparedStatement sql = co.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS UltraCosmeticsData(" + "id INTEGER not NULL AUTO_INCREMENT,"
+                            + " uuid VARCHAR(255)," + " username VARCHAR(255)," + " PRIMARY KEY ( id ))");
+            sql.executeUpdate();
+            for (GadgetType gadgetType : GadgetType.values()) {
+                DatabaseMetaData md = co.getMetaData();
+                ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData",
+                        gadgetType.toString().replace("_", "").toLowerCase());
+                if (!rs.next()) {
+                    PreparedStatement statement = co.prepareStatement(
+                            "ALTER TABLE UltraCosmeticsData ADD " + gadgetType.toString().replace("_", "").toLowerCase()
+                                    + " INTEGER DEFAULT 0 not NULL");
+                    statement.executeUpdate();
+                    statement.close();
+                }
+                rs.close();
+            }
+            table = new Table(co, "UltraCosmeticsData");
+            DatabaseMetaData md = co.getMetaData();
+            ResultSet rs = md.getColumns(null, null, "UltraCosmeticsData", "treasureKeys");
+            if (!rs.next()) {
+                PreparedStatement statement = co
+                        .prepareStatement("ALTER TABLE UltraCosmeticsData ADD treasureKeys INTEGER DEFAULT 0 NOT NULL");
+                statement.executeUpdate();
+                statement.close();
+            }
+            rs.close();
+
+            ultraCosmetics.getSmartLogger().write("initial SQLLoader to reduce lag when table is large");
+            sqlLoader = new SqlLoader(ultraCosmetics);
+
+            INDEXS.putAll(sqlUtils.getIds());
+        } catch (Exception e) {
+            Bukkit.getLogger().info("");
+            Bukkit.getConsoleSender().sendMessage(
+                    ChatColor.RED + "" + ChatColor.BOLD + "Ultra Cosmetics >>> Could not connect to MySQL server!");
+            Bukkit.getLogger().info("");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Error:");
+            e.printStackTrace();
+        }
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public SqlUtils getSqlUtils() {
+        return sqlUtils;
+    }
+
+    public SqlLoader getSqlLoader() {
+        return sqlLoader;
+    }
 }

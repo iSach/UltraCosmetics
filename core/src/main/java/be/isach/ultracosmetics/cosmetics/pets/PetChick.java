@@ -6,14 +6,6 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Item;
-import org.bukkit.util.Vector;
-
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * Represents an instance of a chick pet summoned by a player.
@@ -22,7 +14,7 @@ import java.util.UUID;
  * @since 08-12-2015
  */
 public class PetChick extends Pet {
-	public PetChick(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, ultraCosmetics, PetType.getByName("chick"), ItemFactory.create(UCMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
-	}
+    public PetChick(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, ultraCosmetics, PetType.getByName("chick"), ItemFactory.create(UCMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
+    }
 }

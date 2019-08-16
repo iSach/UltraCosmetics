@@ -1,14 +1,10 @@
 package be.isach.ultracosmetics.v1_13_R2.customentities;
 
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
-import be.isach.ultracosmetics.v1_13_R2.EntityBase;
-import be.isach.ultracosmetics.v1_13_R2.nms.WrapperEntityHuman;
-import be.isach.ultracosmetics.v1_13_R2.nms.WrapperEntityInsentient;
 import be.isach.ultracosmetics.v1_13_R2.ridable.ControllerWASD;
 import be.isach.ultracosmetics.v1_13_R2.ridable.LookController;
 import be.isach.ultracosmetics.v1_13_R2.ridable.RidableEntity;
 import net.minecraft.server.v1_13_R2.*;
-import org.bukkit.Bukkit;
 
 /**
  * @author RadBuilder
@@ -106,6 +102,6 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 
     @Override
     public void removeAi() {
-       // setNoAI(true);
+        // setNoAI(true);
     }
 }

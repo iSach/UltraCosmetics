@@ -13,12 +13,12 @@ import be.isach.ultracosmetics.util.UtilParticles;
  */
 public class ParticleEffectInLove extends ParticleEffect {
 
-	public ParticleEffectInLove(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(ultraCosmetics, owner, ParticleEffectType.valueOf("inlove"));
-	}
+    public ParticleEffectInLove(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.valueOf("inlove"));
+    }
 
-	@Override
-	public void onUpdate() {
-		UtilParticles.display(getType().getEffect(), 0.5f, 0.5f, 0.5f, getPlayer().getLocation().add(0, 1, 0), 2);
-	}
+    @Override
+    public void onUpdate() {
+        UtilParticles.display(getType().getEffect(), 0.5f, 0.5f, 0.5f, getPlayer().getLocation().add(0, 1, 0), 2);
+    }
 }

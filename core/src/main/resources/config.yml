@@ -152,7 +152,7 @@ TreasureChests:
           message: '%prefix% &6&l%name% found a rare shoutout!'
         Cancel-If-Permission: 'no'
         Commands:
-        - 'say %name% is awesome!'
+          - 'say %name% is awesome!'
       flower:
         Name: '&e&lFlower'
         Material: 'YELLOW_FLOWER'

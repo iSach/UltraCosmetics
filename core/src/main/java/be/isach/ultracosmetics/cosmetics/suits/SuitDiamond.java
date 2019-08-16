@@ -11,11 +11,11 @@ import be.isach.ultracosmetics.player.UltraPlayer;
  * @since 12-20-2015
  */
 public class SuitDiamond extends Suit {
-	public SuitDiamond(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
-		super(owner, armorSlot, SuitType.valueOf("diamond"), ultraCosmetics);
-	}
+    public SuitDiamond(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
+        super(owner, armorSlot, SuitType.valueOf("diamond"), ultraCosmetics);
+    }
 
-	@Override
-	public void onUpdate() {
-	}
+    @Override
+    public void onUpdate() {
+    }
 }

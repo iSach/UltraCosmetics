@@ -9,6 +9,6 @@ import org.bukkit.entity.Entity;
  * @since 03-06-2016
  */
 public interface IPetCustomEntity {
-	
-	Entity getEntity();
+
+    Entity getEntity();
 }

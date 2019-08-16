@@ -6,12 +6,9 @@ import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.version.VersionManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 import java.util.Random;
 
@@ -44,8 +41,8 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
         if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
             for (int i = 0; i < 15; i++) {
                 ItemStack randomDye = UCMaterial.DYES.get(MathUtils.random(0, 14)).parseItem();
-				getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 1, 0.2d, 0.2d, 0.2d,
-						0, randomDye);
+                getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 1, 0.2d, 0.2d, 0.2d,
+                        0, randomDye);
             }
         } else {
             if (VersionManager.IS_VERSION_1_13) {

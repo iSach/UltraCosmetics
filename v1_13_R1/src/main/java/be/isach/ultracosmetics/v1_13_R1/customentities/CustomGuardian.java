@@ -9,52 +9,52 @@ import org.bukkit.entity.ArmorStand;
  * @author RadBuilder
  */
 public class CustomGuardian extends EntityGuardian {
-	
-	private boolean custom;
-	
-	public CustomGuardian(World world) {
-		super(world);
-	}
-	
-	public void check() {
-		custom = MorphElderGuardian.customEntities.contains(this);
-	}
-	
-	public void target(ArmorStand armorStand) {
-		try {
-			getDataWatcher().set(DataWatcherRegistry.c.a(17), (float) (armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId()));
-		} catch (Exception exc) {
-		
-		}
-	}
-	
-	@Override
-	protected SoundEffect D() {
-		if (custom) return null;
-		else return super.D();
-	}
-	
-	@Override
-	protected SoundEffect d(DamageSource paramDamageSource) {
-		if (custom) return null;
-		else return super.d(paramDamageSource);
-	}
-	
-	@Override
-	public String getName() {
-		return LocaleLanguage.a().a("entity.Guardian.name");
-	}
-	
-	
-	@Override
-	protected SoundEffect cs() {
-		if (custom) return null;
-		else return super.cs();
-	}
-	
-	@Override
-	public void tick() {
-		if (!custom) super.tick();
-		else setHealth(getMaxHealth());
-	}
+
+    private boolean custom;
+
+    public CustomGuardian(World world) {
+        super(world);
+    }
+
+    public void check() {
+        custom = MorphElderGuardian.customEntities.contains(this);
+    }
+
+    public void target(ArmorStand armorStand) {
+        try {
+            getDataWatcher().set(DataWatcherRegistry.c.a(17), (float) (armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId()));
+        } catch (Exception exc) {
+
+        }
+    }
+
+    @Override
+    protected SoundEffect D() {
+        if (custom) return null;
+        else return super.D();
+    }
+
+    @Override
+    protected SoundEffect d(DamageSource paramDamageSource) {
+        if (custom) return null;
+        else return super.d(paramDamageSource);
+    }
+
+    @Override
+    public String getName() {
+        return LocaleLanguage.a().a("entity.Guardian.name");
+    }
+
+
+    @Override
+    protected SoundEffect cs() {
+        if (custom) return null;
+        else return super.cs();
+    }
+
+    @Override
+    public void tick() {
+        if (!custom) super.tick();
+        else setHealth(getMaxHealth());
+    }
 }

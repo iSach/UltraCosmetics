@@ -15,24 +15,24 @@ import org.bukkit.entity.Player;
  * @since 12-20-2015
  */
 public class SubCommandGadgets extends SubCommand {
-	
-	public SubCommandGadgets(UltraCosmetics ultraCosmetics) {
-		super("Toggle Gadgets", "ultracosmetics.command.gadgets", "/uc gadgets", ultraCosmetics, "gadgets");
-	}
-	
-	@Override
-	protected void onExePlayer(Player sender, String... args) {
-		if (!UltraCosmeticsData.get().getEnabledWorlds().contains(sender.getWorld().getName())) {
-			sender.sendMessage(MessageManager.getMessage("World-Disabled"));
-			return;
-		}
 
-		UltraPlayer customPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(sender);
-		customPlayer.setGadgetsEnabled(!customPlayer.hasGadgetsEnabled());
-	}
-	
-	@Override
-	protected void onExeConsole(ConsoleCommandSender sender, String... args) {
-		notAllowed(sender);
-	}
+    public SubCommandGadgets(UltraCosmetics ultraCosmetics) {
+        super("Toggle Gadgets", "ultracosmetics.command.gadgets", "/uc gadgets", ultraCosmetics, "gadgets");
+    }
+
+    @Override
+    protected void onExePlayer(Player sender, String... args) {
+        if (!UltraCosmeticsData.get().getEnabledWorlds().contains(sender.getWorld().getName())) {
+            sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+            return;
+        }
+
+        UltraPlayer customPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(sender);
+        customPlayer.setGadgetsEnabled(!customPlayer.hasGadgetsEnabled());
+    }
+
+    @Override
+    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+        notAllowed(sender);
+    }
 }

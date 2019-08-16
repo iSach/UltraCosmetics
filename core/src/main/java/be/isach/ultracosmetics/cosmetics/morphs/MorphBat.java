@@ -19,38 +19,38 @@ import org.bukkit.util.Vector;
  */
 public class MorphBat extends Morph {
 
-	public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.valueOf("bat"), ultraCosmetics);
-	}
+    public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.valueOf("bat"), ultraCosmetics);
+    }
 
-	@Override
-	protected void onEquip() {
-		super.onEquip();
-		getPlayer().setAllowFlight(true);
-	}
+    @Override
+    protected void onEquip() {
+        super.onEquip();
+        getPlayer().setAllowFlight(true);
+    }
 
-	@Override
-	public void onUpdate() {
-	}
+    @Override
+    public void onUpdate() {
+    }
 
-	@EventHandler
-	public void onPlayerToggleFligh(PlayerToggleFlightEvent event) {
-		if (event.getPlayer() == getPlayer()
-		    && event.getPlayer().getGameMode() != GameMode.CREATIVE
-		    && !event.getPlayer().isFlying()) {
-			Vector v = event.getPlayer().getLocation().getDirection();
-			v.setY(0.75);
-			MathUtils.applyVelocity(getPlayer(), v);
-			event.getPlayer().setFlying(false);
-			event.setCancelled(true);
-			SoundUtil.playSound(getPlayer(), Sounds.BAT_LOOP, 0.4f, 1.0f);
-		}
-	}
+    @EventHandler
+    public void onPlayerToggleFligh(PlayerToggleFlightEvent event) {
+        if (event.getPlayer() == getPlayer()
+                && event.getPlayer().getGameMode() != GameMode.CREATIVE
+                && !event.getPlayer().isFlying()) {
+            Vector v = event.getPlayer().getLocation().getDirection();
+            v.setY(0.75);
+            MathUtils.applyVelocity(getPlayer(), v);
+            event.getPlayer().setFlying(false);
+            event.setCancelled(true);
+            SoundUtil.playSound(getPlayer(), Sounds.BAT_LOOP, 0.4f, 1.0f);
+        }
+    }
 
-	@Override
-	public void onClear() {
-		if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-			getPlayer().setAllowFlight(false);
-		}
-	}
+    @Override
+    public void onClear() {
+        if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+            getPlayer().setAllowFlight(false);
+        }
+    }
 }

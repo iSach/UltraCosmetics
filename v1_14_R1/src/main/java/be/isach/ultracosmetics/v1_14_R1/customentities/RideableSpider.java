@@ -5,10 +5,6 @@ import be.isach.ultracosmetics.v1_14_R1.EntityBase;
 import be.isach.ultracosmetics.v1_14_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_14_R1.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_14_R1.*;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
  * @author RadBuilder

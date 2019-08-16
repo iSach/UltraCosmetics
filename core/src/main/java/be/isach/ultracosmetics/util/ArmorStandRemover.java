@@ -13,11 +13,11 @@ import java.util.List;
  * Project: UltraCosmetics
  */
 public class ArmorStandRemover {
-	
-	private List<ArmorStand> toRemove = new ArrayList<>();
-	
-	public void clear() {
-		toRemove.stream().filter(Entity::isValid).forEach(ArmorStand::remove);
-	}
-	
+
+    private List<ArmorStand> toRemove = new ArrayList<>();
+
+    public void clear() {
+        toRemove.stream().filter(Entity::isValid).forEach(ArmorStand::remove);
+    }
+
 }

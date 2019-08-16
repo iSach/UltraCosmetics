@@ -10,12 +10,12 @@ import org.bukkit.entity.Slime;
  */
 public class MountSlime extends MountCustomEntity {
 
-	public MountSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MountType.valueOf("slime"), ultraCosmetics);
-	}
+    public MountSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MountType.valueOf("slime"), ultraCosmetics);
+    }
 
-	@Override
-	public void onUpdate() {
-		((Slime) getEntity()).setSize(3);
-	}
+    @Override
+    public void onUpdate() {
+        ((Slime) getEntity()).setSize(3);
+    }
 }

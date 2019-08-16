@@ -27,120 +27,120 @@ import static be.isach.ultracosmetics.util.ItemFactory.fillerItem;
  * @since 07-05-2016
  */
 public abstract class Menu implements Listener {
-	
-	/**
-	 * UltraCosmetcs Instance.
-	 */
-	private UltraCosmetics ultraCosmetics;
-	
-	/**
-	 * Click Runnables maps.
-	 * <p>
-	 * Key: Item
-	 * Value: ClickRunnable to call when item is clicked.
-	 */
-	private Map<Inventory, Map<ItemStack, ClickRunnable>> clickRunnableMap = new HashMap<>();
-	
-	public Menu(UltraCosmetics ultraCosmetics) {
-		this.ultraCosmetics = ultraCosmetics;
-		
-		ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
-	}
-	
-	public void open(UltraPlayer player) {
-		Inventory inventory = Bukkit.createInventory(null, getSize(), getName());
-		putItems(inventory, player);
-		ItemFactory.fillInventory(inventory);
-		player.getBukkitPlayer().openInventory(inventory);
-	}
-	
-	protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {
-		Validate.notNull(itemStack);
-		Validate.notNull(clickRunnable);
 
-		if (itemStack.hasItemMeta()) {
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			itemMeta.addItemFlags(ItemFlag.values());
-			itemStack.setItemMeta(itemMeta);
-		}
+    /**
+     * UltraCosmetcs Instance.
+     */
+    private UltraCosmetics ultraCosmetics;
 
-		inventory.setItem(slot, itemStack);
-		if (clickRunnableMap.containsKey(inventory)) {
-			Map<ItemStack, ClickRunnable> map = clickRunnableMap.get(inventory);
-			map.put(itemStack, clickRunnable);
-		} else {
-			Map<ItemStack, ClickRunnable> map = new HashMap<>();
-			map.put(itemStack, clickRunnable);
-			clickRunnableMap.put(inventory, map);
-		}
-	}
-	
-	@EventHandler
-	public void onClick(InventoryClickEvent event) {
+    /**
+     * Click Runnables maps.
+     * <p>
+     * Key: Item
+     * Value: ClickRunnable to call when item is clicked.
+     */
+    private Map<Inventory, Map<ItemStack, ClickRunnable>> clickRunnableMap = new HashMap<>();
 
-		// Check Inventory isn't null
-		if (event.getInventory() == null) {
-			return;
-		}
+    public Menu(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
 
-		// Check Item clicked isn't null
-		if (event.getCurrentItem() == null) {
-			return;
-		}
+        ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
+    }
 
-		// Check clicker is player
-		if (!(event.getWhoClicked() instanceof Player)) {
-			return;
-		}
+    public void open(UltraPlayer player) {
+        Inventory inventory = Bukkit.createInventory(null, getSize(), getName());
+        putItems(inventory, player);
+        ItemFactory.fillInventory(inventory);
+        player.getBukkitPlayer().openInventory(inventory);
+    }
 
-		// Check Inventory is the good one
-		if (!event.getView().getTitle().contains(getName())) {
-			return;
-		}
+    protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {
+        Validate.notNull(itemStack);
+        Validate.notNull(clickRunnable);
 
-		// Check that the filler item isn't being clicked
-		if (fillerItem != null && event.getCurrentItem().equals(fillerItem)) {
-			event.setCancelled(true);
-			return;
-		}
-		// Check that Inventory is valid.
-		if (!clickRunnableMap.keySet().contains(event.getInventory())) {
-			return;
-		}
+        if (itemStack.hasItemMeta()) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            itemMeta.addItemFlags(ItemFlag.values());
+            itemStack.setItemMeta(itemMeta);
+        }
 
-		boolean correctItem = false;
+        inventory.setItem(slot, itemStack);
+        if (clickRunnableMap.containsKey(inventory)) {
+            Map<ItemStack, ClickRunnable> map = clickRunnableMap.get(inventory);
+            map.put(itemStack, clickRunnable);
+        } else {
+            Map<ItemStack, ClickRunnable> map = new HashMap<>();
+            map.put(itemStack, clickRunnable);
+            clickRunnableMap.put(inventory, map);
+        }
+    }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent event) {
+
+        // Check Inventory isn't null
+        if (event.getInventory() == null) {
+            return;
+        }
+
+        // Check Item clicked isn't null
+        if (event.getCurrentItem() == null) {
+            return;
+        }
+
+        // Check clicker is player
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
+
+        // Check Inventory is the good one
+        if (!event.getView().getTitle().contains(getName())) {
+            return;
+        }
+
+        // Check that the filler item isn't being clicked
+        if (fillerItem != null && event.getCurrentItem().equals(fillerItem)) {
+            event.setCancelled(true);
+            return;
+        }
+        // Check that Inventory is valid.
+        if (!clickRunnableMap.containsKey(event.getInventory())) {
+            return;
+        }
+
+        boolean correctItem = false;
 
         ClickRunnable clickRunnable = null;
-		for(ItemStack itemStack : clickRunnableMap.get(event.getInventory()).keySet()) {
-            if(ItemFactory.haveSameName(itemStack, event.getCurrentItem())) {
-		        correctItem = true;
-		        clickRunnable = clickRunnableMap.get(event.getInventory()).get(itemStack);
+        for (ItemStack itemStack : clickRunnableMap.get(event.getInventory()).keySet()) {
+            if (ItemFactory.haveSameName(itemStack, event.getCurrentItem())) {
+                correctItem = true;
+                clickRunnable = clickRunnableMap.get(event.getInventory()).get(itemStack);
             }
         }
-        if(!correctItem) {
-		    return;
+        if (!correctItem) {
+            return;
         }
-		
-		event.setCancelled(true);
 
-		// Check clickrunnable isn't null.
-		if (clickRunnable == null) {
-			return;
-		}
+        event.setCancelled(true);
 
-		Player player = (Player) event.getWhoClicked();
-		UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(player);
-		clickRunnable.run(new ClickData(event.getInventory(), ultraPlayer, event.getAction(), event.getCurrentItem(), event.getSlot()));
-		((Player) event.getWhoClicked()).updateInventory();
-	}
-	
-	public UltraCosmetics getUltraCosmetics() {
-		return ultraCosmetics;
-	}
-	
-	protected abstract void putItems(Inventory inventory, UltraPlayer player);
-	
-	protected abstract int getSize();
-	
-	protected abstract String getName();
+        // Check clickrunnable isn't null.
+        if (clickRunnable == null) {
+            return;
+        }
+
+        Player player = (Player) event.getWhoClicked();
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(player);
+        clickRunnable.run(new ClickData(event.getInventory(), ultraPlayer, event.getAction(), event.getCurrentItem(), event.getSlot()));
+        ((Player) event.getWhoClicked()).updateInventory();
+    }
+
+    public UltraCosmetics getUltraCosmetics() {
+        return ultraCosmetics;
+    }
+
+    protected abstract void putItems(Inventory inventory, UltraPlayer player);
+
+    protected abstract int getSize();
+
+    protected abstract String getName();
 }

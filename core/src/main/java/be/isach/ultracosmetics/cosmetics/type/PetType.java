@@ -4,12 +4,9 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.pets.*;
-import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UCMaterial;
 import be.isach.ultracosmetics.version.GetForVersion;
-import be.isach.ultracosmetics.version.VersionManager;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -110,7 +107,7 @@ public final class PetType extends CosmeticMatType<Pet> {
         }
 
         new PetType("ultracosmetics.pets.sheep", "Sheep", UCMaterial.WHITE_WOOL, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.v1_8_R1);
-        new PetType("ultracosmetics.pets.wither", "Wither", UCMaterial.CARROT.WITHER_SKELETON_SKULL, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.v1_8_R1);
+        new PetType("ultracosmetics.pets.wither", "Wither", UCMaterial.WITHER_SKELETON_SKULL, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.v1_8_R1);
 
     }
 }

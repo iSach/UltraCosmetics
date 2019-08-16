@@ -6,7 +6,7 @@ import java.util.EnumSet;
 
 /**
  * @author BillyGalbreath
- *
+ * <p>
  * Author of plugin: "Ridables"
  * Thanks for authorizing using Ridables code!
  */
@@ -15,7 +15,7 @@ public class AISlimeHop extends PathfinderGoal {
 
     public AISlimeHop(CustomSlime slime) {
         this.slime = slime;
-       // a(5); // setMutexBits
+        // a(5); // setMutexBits
         a(EnumSet.of(Type.MOVE));
     }
 

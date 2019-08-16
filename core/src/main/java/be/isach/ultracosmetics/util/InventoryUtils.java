@@ -10,9 +10,9 @@ import org.bukkit.inventory.Inventory;
  * Project: UltraCosmetics
  */
 public class InventoryUtils {
-	
-	public static boolean areSame(Inventory a, Inventory b) {
-		return UltraCosmeticsData.get().getVersionManager().getEntityUtil().isSameInventory(a, b);
-	}
-	
+
+    public static boolean areSame(Inventory a, Inventory b) {
+        return UltraCosmeticsData.get().getVersionManager().getEntityUtil().isSameInventory(a, b);
+    }
+
 }

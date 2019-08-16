@@ -16,28 +16,28 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class MorphSnowman extends Morph {
 
-	private long coolDown = 0;
+    private long coolDown = 0;
 
-	public MorphSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-		super(owner, MorphType.valueOf("snowman"), ultraCosmetics);
-	}
+    public MorphSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(owner, MorphType.valueOf("snowman"), ultraCosmetics);
+    }
 
-	@EventHandler
-	public void onLeftClick(PlayerInteractEvent event) {
-		if ((event.getAction() == Action.LEFT_CLICK_AIR
-		     || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
-			if (coolDown > System.currentTimeMillis()) return;
-			event.setCancelled(true);
-			event.getPlayer().launchProjectile(Snowball.class);
-			coolDown = System.currentTimeMillis() + 500;
-		}
-	}
+    @EventHandler
+    public void onLeftClick(PlayerInteractEvent event) {
+        if ((event.getAction() == Action.LEFT_CLICK_AIR
+                || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
+            if (coolDown > System.currentTimeMillis()) return;
+            event.setCancelled(true);
+            event.getPlayer().launchProjectile(Snowball.class);
+            coolDown = System.currentTimeMillis() + 500;
+        }
+    }
 
-	@Override
-	public void onUpdate() {
-	}
+    @Override
+    public void onUpdate() {
+    }
 
-	@Override
-	protected void onClear() {
-	}
+    @Override
+    protected void onClear() {
+    }
 }

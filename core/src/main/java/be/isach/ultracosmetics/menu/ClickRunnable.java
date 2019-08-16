@@ -9,5 +9,5 @@ package be.isach.ultracosmetics.menu;
 @FunctionalInterface
 public interface ClickRunnable {
 
-	void run(ClickData data);
+    void run(ClickData data);
 }

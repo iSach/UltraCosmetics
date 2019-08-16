@@ -8,8 +8,8 @@ import be.isach.ultracosmetics.version.IPets;
  * @author RadBuilder
  */
 public class Pets implements IPets {
-	@Override
-	public Class<? extends Pet> getPumplingClass() {
-		return PetPumpling.class;
-	}
+    @Override
+    public Class<? extends Pet> getPumplingClass() {
+        return PetPumpling.class;
+    }
 }

@@ -10,17 +10,17 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
  */
 public class EntitySpawningManager implements Listener {
 
-	private static boolean bypass = false;
+    private static boolean bypass = false;
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
-		if (bypass) {
-			event.setCancelled(false);
-		}
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
+        if (bypass) {
+            event.setCancelled(false);
+        }
+    }
 
-	public static void setBypass(boolean newbypass) {
-		bypass = newbypass;
-	}
+    public static void setBypass(boolean newbypass) {
+        bypass = newbypass;
+    }
 
 }
