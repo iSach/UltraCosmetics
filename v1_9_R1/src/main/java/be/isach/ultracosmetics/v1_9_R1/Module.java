@@ -1,5 +1,7 @@
 package be.isach.ultracosmetics.v1_9_R1;
 
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.v1_9_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_9_R1.customentities.RideableSpider;
 import be.isach.ultracosmetics.version.IModule;
@@ -10,21 +12,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Module implements IModule {
+
+    Metrics metrics;
+
     @Override
     public void enable() {
+        UltraCosmetics pl = UltraCosmeticsData.get().getPlugin();
+        this.metrics = new Metrics(pl, pl.getSmartLogger());
+        UltraCosmeticsData.get().setMetrics(metrics);
         CustomEntities.registerEntities();
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                Player pl = Bukkit.getPlayer("iSach");
-                RideableSpider rabbit = new RideableSpider(((CraftWorld) pl.getWorld()).getHandle());
-                Location l = pl.getLocation();
-                rabbit.setLocation(l.getX(), l.getBlockY(), l.getZ(), 0f, 0f);
-                ((CraftWorld) pl.getWorld()).getHandle().addEntity(rabbit);
-                rabbit.getBukkitEntity().setPassenger(pl);
-            }
-        };
-//        runnable.runTaskLater(UltraCosmetics.get(), 100);
     }
 
     @Override

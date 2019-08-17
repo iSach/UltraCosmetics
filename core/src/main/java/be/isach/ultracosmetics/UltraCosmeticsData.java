@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.stats.AbstractMetrics;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
@@ -93,6 +94,11 @@ public class UltraCosmeticsData {
      * A String that items that shouldn't be picked up are given. Randomly generated each time the server starts.
      */
     private final String itemNoPickupString;
+
+    /**
+     * For bStats stuff
+     */
+    private AbstractMetrics metrics;
 
     public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -246,5 +252,9 @@ public class UltraCosmeticsData {
 
     public List<String> getEnabledWorlds() {
         return this.enabledWorlds;
+    }
+
+    public void setMetrics(AbstractMetrics metrics) {
+        this.metrics = metrics;
     }
 }

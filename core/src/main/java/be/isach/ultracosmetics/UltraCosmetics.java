@@ -19,8 +19,8 @@ import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
+import be.isach.ultracosmetics.stats.AbstractMetrics;
 import be.isach.ultracosmetics.util.*;
-import be.isach.ultracosmetics.version.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
@@ -95,11 +95,6 @@ public class UltraCosmetics extends JavaPlugin {
     private EconomyHandler economyHandler;
 
     /**
-     * bStats
-     */
-    private Metrics metrics;
-
-    /**
      * Called when plugin is enabled.
      */
     @Override
@@ -130,9 +125,8 @@ public class UltraCosmetics extends JavaPlugin {
         // Initialize NMS Module
         UltraCosmeticsData.get().initModule();
 
-        getSmartLogger().write("Enabling bStats statistics...");
         // Set up bStats.
-        this.metrics = new Metrics(this, getSmartLogger());
+        // this.metrics = new Metrics(this, getSmartLogger());
 
         // Init Message manager.
         new MessageManager();

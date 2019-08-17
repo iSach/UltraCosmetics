@@ -1,6 +1,8 @@
-package be.isach.ultracosmetics.version;
+package be.isach.ultracosmetics.v1_12_R1;
 
+import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.log.SmartLogger;
+import be.isach.ultracosmetics.stats.AbstractMetrics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -28,7 +30,7 @@ import java.util.zip.GZIPOutputStream;
  * Check out https://bStats.org/ to learn more about bStats!
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class Metrics {
+public class Metrics extends AbstractMetrics {
 
     // The version of this bStats class
     public static final int B_STATS_VERSION = 1;
@@ -69,7 +71,9 @@ public class Metrics {
      *
      * @param plugin The plugin which stats should be submitted.
      */
-    public Metrics(Plugin plugin, SmartLogger smartLogger) {
+    public Metrics(UltraCosmetics plugin, SmartLogger smartLogger) {
+        super(plugin);
+
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null!");
         }
