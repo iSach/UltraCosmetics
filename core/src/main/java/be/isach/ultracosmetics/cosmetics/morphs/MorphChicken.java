@@ -6,10 +6,14 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -26,6 +30,9 @@ import java.util.Random;
  * @since 08-27-2015
  */
 public class MorphChicken extends Morph {
+
+    private List<Item> items = new ArrayList<>();
+    private List<Chicken> chickens = new ArrayList<>();
     private boolean cooldown;
 
     public MorphChicken(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
@@ -35,13 +42,13 @@ public class MorphChicken extends Morph {
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
-            final List<Item> items = new ArrayList<>();
+            items = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
                 final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(UCMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
                 i.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
                 items.add(i);
                 Random r = new Random();
-                i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5));
+                i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(0.5));
                 SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, .5f, 1.5f);
             }
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
@@ -49,26 +56,39 @@ public class MorphChicken extends Morph {
 
                 @Override
                 public void run() {
-                    final List<Chicken> chickens = new ArrayList<>();
+                    chickens = new ArrayList<>();
                     for (Item i : items) {
-                        Particles.BLOCK_CRACK.display(new Particles.BlockData(BlockUtils.getOldMaterial("STAINED_CLAY"), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
+                        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
+                            i.getWorld().spawnParticle(Particle.BLOCK_CRACK, i.getLocation(), 0, 0, 0, 0, 0, UCMaterial.WHITE_TERRACOTTA.parseMaterial().createBlockData());
+                        } else {
+                            Particles.BLOCK_CRACK.display(new Particles.BlockData(BlockUtils.getOldMaterial("STAINED_CLAY"), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
+                        }
                         SoundUtil.playSound(i.getLocation(), Sounds.ZOMBIE_WOOD, .05f, 1f);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
                         chicken.setAgeLock(true);
                         chicken.setBaby();
                         chicken.setNoDamageTicks(Integer.MAX_VALUE);
                         chicken.setVelocity(new Vector(0, 0.5f, 0));
+                        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(chicken);
+                        UltraCosmeticsData.get().getVersionManager().getEntityUtil().follow(getPlayer(), chicken);
                         i.remove();
                         chickens.add(chicken);
                     }
-                    Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
-                        try {
-                            for (Chicken chicken : chickens) {
-                                UltraCosmeticsData.get().getVersionManager().getEntityUtil().follow(getPlayer(), chicken);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if(chickens.isEmpty()) {
+                                cancel();
                             }
-                        } catch (Exception exc) {
+                            try {
+                                for (Chicken chicken : chickens) {
+                                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().follow(getPlayer(), chicken);
+                                }
+                            } catch (Exception exc) {
+                                cancel();
+                            }
                         }
-                    }, 0, 1);
+                    }.runTaskTimer(getUltraCosmetics(), 0, 4);
                     Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                         for (Chicken chicken : chickens) {
                             UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
@@ -86,8 +106,25 @@ public class MorphChicken extends Morph {
         }
     }
 
+    /**
+     * Cancel eggs from merging
+     * @param event
+     */
+    @EventHandler
+    public void onItemMerge(ItemMergeEvent event) {
+        if (items.contains(event.getEntity())) {
+            event.setCancelled(true);
+        }
+    }
+
+
     @Override
     protected void onClear() {
+        for (Chicken chicken : chickens) {
+            UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
+            chicken.remove();
+        }
+        chickens.clear();
     }
 
     @Override

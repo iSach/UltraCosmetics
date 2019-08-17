@@ -35,6 +35,11 @@ allprojects {
         }
     }
 }
+
+boolean local = true
+
+if (local) libsDirName = '../testserver/plugins'
+
 /*
 need to clean this lol need help please
  */
@@ -88,10 +93,6 @@ task jar114(type: Jar, dependsOn: supportfor114.collect { it + ":compileJava" })
     baseName = 'UltraCosmetics-1.' + ver
     from files(supportfor114.collect { project(it).sourceSets.main.output })
 }
-boolean local = false
-
-if (local) libsDirName = '../testserver/plugins'
-
 dependencies {
     subprojects.each { p ->
         shaded(p) {

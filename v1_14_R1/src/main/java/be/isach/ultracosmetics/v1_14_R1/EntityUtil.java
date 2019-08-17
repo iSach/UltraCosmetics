@@ -261,16 +261,16 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void follow(org.bukkit.entity.Entity toFollow, org.bukkit.entity.Entity follower) {
-/**        Entity pett = ((CraftEntity) follower).getHandle();
- ((EntityInsentient) pett).getNavigation().a(2);
- Object petf = ((CraftEntity) follower).getHandle();
- Location targetLocation = toFollow.getLocation();
- PathEntity path;
- path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
- if (path != null) {
- ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
- ((EntityInsentient) petf).getNavigation().a(1.05D);
- }*/
+        Entity pett = ((CraftEntity) follower).getHandle();
+        ((EntityInsentient) pett).getNavigation().a(2);
+        Object petf = ((CraftEntity) follower).getHandle();
+        Location targetLocation = toFollow.getLocation();
+        PathEntity path;
+        path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
+        if (path != null) {
+            ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
+            ((EntityInsentient) petf).getNavigation().a(1.05D);
+        }
     }
 
     @Override
