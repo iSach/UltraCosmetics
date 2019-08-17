@@ -16,6 +16,14 @@ allprojects {
         compile.extendsFrom shaded
     }
 
+    processResources {
+        inputs.property("version", project.version)
+
+        filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                'VERSION': project.version.split('-')[0]
+        ]
+    }
+
     afterEvaluate {
         jar {
             dependsOn configurations.shaded
@@ -27,7 +35,6 @@ allprojects {
         }
     }
 }
-
 /*
 need to clean this lol need help please
  */

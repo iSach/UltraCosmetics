@@ -20,6 +20,7 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
 import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.version.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
@@ -94,6 +95,11 @@ public class UltraCosmetics extends JavaPlugin {
     private EconomyHandler economyHandler;
 
     /**
+     * bStats
+     */
+    private Metrics metrics;
+
+    /**
      * Called when plugin is enabled.
      */
     @Override
@@ -124,13 +130,9 @@ public class UltraCosmetics extends JavaPlugin {
         // Initialize NMS Module
         UltraCosmeticsData.get().initModule();
 
-        // Set up Metrics.
-        try {
-            MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        } catch (IOException e) {
-            System.out.println("Couldn't send data to Metrics :(");
-        }
+        getSmartLogger().write("Enabling bStats statistics...");
+        // Set up bStats.
+        this.metrics = new Metrics(this, getSmartLogger());
 
         // Init Message manager.
         new MessageManager();
