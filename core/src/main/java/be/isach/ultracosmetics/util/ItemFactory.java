@@ -103,12 +103,16 @@ public class ItemFactory {
     }
 
     public static Material fromId(int id) {
-        for (Material m : EnumSet.allOf(Material.class)) {
-            if (m.getId() == id) {
-                return m;
+        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) >= 0) {
+            return UCMaterial.matchUCMaterial(id, (byte) 0).parseMaterial();
+        } else {
+            for (Material m : EnumSet.allOf(Material.class)) {
+                if (m.getId() == id) {
+                    return m;
+                }
             }
+            return Material.AIR;
         }
-        return Material.AIR;
     }
 
     public static ItemStack getItemStackFromConfig(String path) {

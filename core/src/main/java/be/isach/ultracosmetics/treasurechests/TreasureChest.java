@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -515,5 +516,18 @@ public class TreasureChest implements Listener {
         }
 
         return chestLocation;
+    }
+
+
+    /**
+     * Cancel eggs from merging
+     *
+     * @param event
+     */
+    @EventHandler
+    public void onItemMerge(ItemMergeEvent event) {
+        if (items.contains(event.getEntity())) {
+            event.setCancelled(true);
+        }
     }
 }

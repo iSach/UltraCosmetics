@@ -482,7 +482,7 @@ public enum UCMaterial {
     KELP_PLANT(0, "1.13"),
     KNOWLEDGE_BOOK(0),
     LADDER(0),
-    LANTERN(0, "1.14", "SEA_LANTERN"),
+    LANTERN(0, "1.14"),
     LAPIS_BLOCK(0),
     LAPIS_LAZULI(4, "INK_SACK"),
     LAPIS_ORE(0),
@@ -810,7 +810,7 @@ public enum UCMaterial {
     SCAFFOLDING(0, "1.14", "SLIME_BLOCK"),
     SCUTE(0, "1.13"),
     SEAGRASS(0, "1.13", "GRASS"),
-    SEA_LANTERN(0),
+    SEA_LANTERN(0, "1.13", "SEA_LANTERN"),
     SEA_PICKLE(0, "1.13"),
     SHEARS(0),
     SHEEP_SPAWN_EGG(91, "MONSTER_EGG"),
@@ -1003,6 +1003,70 @@ public enum UCMaterial {
     };
 
     public static final ArrayList<UCMaterial> DYES = new ArrayList<>();
+    /**
+     * A list of duplicated items in 1.13 and 1.12 with different purpose.<br>
+     * Values are the new material names.<br>
+     * Duplicates are only checked by keys not values.<br>
+     * Checked with {@link String#equals}
+     */
+    public static final HashMap<UCMaterial, UCMaterial> DUPLICATED = new HashMap<UCMaterial, UCMaterial>() {{
+        put(UCMaterial.MELON, UCMaterial.MELON_SLICE);
+        put(UCMaterial.CARROT, UCMaterial.CARROTS);
+        put(UCMaterial.POTATO, UCMaterial.POTATOES);
+        put(UCMaterial.BEETROOT, UCMaterial.BEETROOTS);
+        put(UCMaterial.BROWN_MUSHROOM, UCMaterial.BROWN_MUSHROOM_BLOCK);
+        put(UCMaterial.BRICK, UCMaterial.BRICKS);
+        put(UCMaterial.RED_MUSHROOM, UCMaterial.RED_MUSHROOM_BLOCK);
+        put(UCMaterial.MAP, UCMaterial.FILLED_MAP);
+        put(UCMaterial.NETHER_BRICK, UCMaterial.NETHER_BRICKS);
+    }};
+    /**
+     * Temporary list with stained clay (terracota) and their color.
+     */
+    public static final HashMap<Integer, UCMaterial> CLAYS = new HashMap<Integer, UCMaterial>() {{
+        put(0, WHITE_TERRACOTTA);
+        put(1, ORANGE_TERRACOTTA);
+        put(2, MAGENTA_TERRACOTTA);
+        put(3, LIGHT_BLUE_TERRACOTTA);
+        put(4, YELLOW_TERRACOTTA);
+        put(5, LIME_TERRACOTTA);
+        put(6, PINK_TERRACOTTA);
+        put(7, GRAY_TERRACOTTA);
+        put(8, LIGHT_GRAY_TERRACOTTA);
+        put(9, CYAN_TERRACOTTA);
+        put(10, PURPLE_TERRACOTTA);
+        put(11, BLUE_TERRACOTTA);
+        put(12, BROWN_TERRACOTTA);
+        put(13, GREEN_TERRACOTTA);
+        put(14, RED_TERRACOTTA);
+        put(15, BLACK_TERRACOTTA);
+    }};
+    /**
+     * Temporary list with stained glass and their color.
+     */
+    public static final HashMap<Integer, UCMaterial> GLASS_PANELS = new HashMap<Integer, UCMaterial>() {{
+        put(0, WHITE_STAINED_GLASS_PANE);
+        put(1, ORANGE_STAINED_GLASS_PANE);
+        put(2, MAGENTA_STAINED_GLASS_PANE);
+        put(3, LIGHT_BLUE_STAINED_GLASS_PANE);
+        put(4, YELLOW_STAINED_GLASS_PANE);
+        put(5, LIME_STAINED_GLASS_PANE);
+        put(6, PINK_STAINED_GLASS_PANE);
+        put(7, GRAY_STAINED_GLASS_PANE);
+        put(8, LIGHT_GRAY_STAINED_GLASS_PANE);
+        put(9, CYAN_STAINED_GLASS_PANE);
+        put(10, PURPLE_STAINED_GLASS_PANE);
+        put(11, BLUE_STAINED_GLASS_PANE);
+        put(12, BROWN_STAINED_GLASS_PANE);
+        put(13, GREEN_STAINED_GLASS_PANE);
+        put(14, RED_STAINED_GLASS_PANE);
+        put(15, BLACK_STAINED_GLASS_PANE);
+    }};
+    public static final UCMaterial[] VALUES = UCMaterial.values();
+    public static final String[] LEGACY_VALUES = Arrays.stream(VALUES).map(m -> m.legacy).flatMap(Arrays::stream).toArray(String[]::new);
+    private static final HashMap<String, UCMaterial> CACHED_SEARCH = new HashMap<>();
+    private static MinecraftVersion version;
+    private static Boolean isNewVersion;
 
     static {
         DYES.add(UCMaterial.BLACK_DYE);
@@ -1022,28 +1086,6 @@ public enum UCMaterial {
         DYES.add(UCMaterial.WHITE_DYE);
     }
 
-    /**
-     * A list of duplicated items in 1.13 and 1.12 with different purpose.<br>
-     * Values are the new material names.<br>
-     * Duplicates are only checked by keys not values.<br>
-     * Checked with {@link String#equals}
-     */
-    public static final HashMap<UCMaterial, UCMaterial> DUPLICATED = new HashMap<UCMaterial, UCMaterial>() {{
-        put(UCMaterial.MELON, UCMaterial.MELON_SLICE);
-        put(UCMaterial.CARROT, UCMaterial.CARROTS);
-        put(UCMaterial.POTATO, UCMaterial.POTATOES);
-        put(UCMaterial.BEETROOT, UCMaterial.BEETROOTS);
-        put(UCMaterial.BROWN_MUSHROOM, UCMaterial.BROWN_MUSHROOM_BLOCK);
-        put(UCMaterial.BRICK, UCMaterial.BRICKS);
-        put(UCMaterial.RED_MUSHROOM, UCMaterial.RED_MUSHROOM_BLOCK);
-        put(UCMaterial.MAP, UCMaterial.FILLED_MAP);
-        put(UCMaterial.NETHER_BRICK, UCMaterial.NETHER_BRICKS);
-    }};
-    public static final UCMaterial[] VALUES = UCMaterial.values();
-    public static final String[] LEGACY_VALUES = Arrays.stream(VALUES).map(m -> m.legacy).flatMap(Arrays::stream).toArray(String[]::new);
-    private static final HashMap<String, UCMaterial> CACHED_SEARCH = new HashMap<>();
-    private static MinecraftVersion version;
-    private static Boolean isNewVersion;
     private final byte data;
     private final String[] legacy;
 
@@ -1203,6 +1245,13 @@ public enum UCMaterial {
      */
     @Nullable
     public static UCMaterial matchUCMaterial(int id, byte data) {
+        if (id == 169) { // TODO fix that kind of issues. Temporary work around until I make a better UCMaterial class that covers IDs perfectly.
+            return UCMaterial.SEA_LANTERN;
+        } else if (id == 159) {
+            return CLAYS.get((int) data);
+        } else if (id == 160) {
+            return GLASS_PANELS.get((int) data);
+        }
         // Looping through Material.values() will take longer.
         return Arrays.stream(UCMaterial.VALUES).filter(mat -> mat.getId() == id && mat.data == data).findFirst().orElse(null);
     }
