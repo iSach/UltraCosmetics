@@ -9,3 +9,4 @@ deploy:
   file: UltraCosmetics-2.5-BETA.jar
   on:
     repo: iSach/UltraCosmetics
+  skip_cleanup: true
