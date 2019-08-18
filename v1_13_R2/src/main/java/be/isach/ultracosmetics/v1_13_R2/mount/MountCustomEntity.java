@@ -11,6 +11,7 @@ import be.isach.ultracosmetics.v1_13_R2.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_13_R2.customentities.CustomSlime;
 import be.isach.ultracosmetics.v1_13_R2.customentities.RideableSpider;
 import net.minecraft.server.v1_13_R2.Entity;
+import net.minecraft.server.v1_13_R2.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
@@ -33,9 +34,9 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
     @Override
     public void onEquip() {
         if (getType() == MountType.valueOf("slime"))
-            customEntity = new CustomSlime(((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new CustomSlime(EntityTypes.SLIME, ((CraftPlayer) getPlayer()).getHandle().getWorld());
         else if (getType() == MountType.valueOf("spider"))
-            customEntity = new RideableSpider(((CraftWorld) getPlayer().getWorld()).getHandle());
+            customEntity = new RideableSpider(EntityTypes.SPIDER, ((CraftWorld) getPlayer().getWorld()).getHandle());
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();

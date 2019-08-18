@@ -8,7 +8,7 @@ import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.entity.Entity;
 
 /**
- * @author RadBuilder
+ * @author iSach
  */
 public class CustomSlime extends EntitySlime implements IMountCustomEntity, EntityBase {
 
@@ -37,7 +37,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
     @Override
     protected void initPathfinder() {
-        goalSelector.a(5, new AISlimeHop(this));
+        goalSelector.a(5, new CustomSlimeJumpGoal(this));
     }
 
     @Override

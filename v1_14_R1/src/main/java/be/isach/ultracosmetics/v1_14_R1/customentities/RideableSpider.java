@@ -7,7 +7,7 @@ import be.isach.ultracosmetics.v1_14_R1.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_14_R1.*;
 
 /**
- * @author RadBuilder
+ * @author iSach
  */
 public class RideableSpider extends EntitySpider implements IMountCustomEntity, EntityBase {
 
@@ -26,7 +26,6 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
         }
 
         super.e(vec3D);
-
 
         EntityHuman passenger = null;
         if (!getPassengers().isEmpty()) {
