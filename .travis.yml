@@ -1,4 +1,11 @@
 dist: trusty
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+deploy:
+  provider: releases
+  api_key:
+    secure: dTCfviwfZi5dPUPs4ytG/GKPoG/L9hBB7rAxvSzCbbwlh2+/jMmJdUfqufOwi0tlutiJ7qvJcW8KENr63ihcwb1oWw+vppG3djp0KRPEJD1nxLhfuzqBBxcnM+Kh0fogYLStGM5oV/cqFrVTucMjqwu/dONC+aIlWrVT6GFSf+w3VjwAU+HGbj5JrSaYWsA9hwxdNy/T/vuY4mOP7wHE3co68d7UZV9noteoQ+BN59chl3X4MlSiy4mkIJNn6lGV4A/P9UpLiX9GdcUnBfHUlSgYwRWEAcqi0/QoE4fHP4/FT2IQHSlbd7/eiAdLT/xRJZvL9xqGfil7ooGWFM2M40kJAlJXsiZSIEewYX+J8MdLwD89GcjP1qCJZNTlJhjKVOmK9WsOBO4xLYzYS2pPRs4oNr/Nlo/4GfQu5CywM7iikEq7cVGf+yCt6pkcT3zINDD5pZUmz5WQMRmqm5MAe+aSSa7yOT+9lmRosM7ABLRCWT526SwYd8C4XWOL9VzrsvSmEML6tJwRqYHyzCGE+dWVRdzCD/0+iMZGmRr0Tf+tGyVIR/ZIyl+Tzu+JagY4KCAd9w5BcumWOILQ8UXTk9pGlBD5m6+nbRHEUVHrDxdp7sSorbOYyGUFKH2snEBhGbZrufhFbK9OOclF+5Cdj3Z4pASqCiUPX9Eb98+75fY=
+  file: UltraCosmetics-2.5-BETA.jar
+  on:
+    repo: iSach/UltraCosmetics
