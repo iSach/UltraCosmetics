@@ -6,9 +6,7 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -77,7 +75,7 @@ public class MorphChicken extends Morph {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if(chickens.isEmpty()) {
+                            if (chickens.isEmpty()) {
                                 cancel();
                             }
                             try {
@@ -108,6 +106,7 @@ public class MorphChicken extends Morph {
 
     /**
      * Cancel eggs from merging
+     *
      * @param event
      */
     @EventHandler
