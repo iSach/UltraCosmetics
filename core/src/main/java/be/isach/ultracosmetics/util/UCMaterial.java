@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.util;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -199,7 +200,7 @@ public enum UCMaterial {
     COD_SPAWN_EGG(0, "1.13", "MONSTER_EGG"),
     COMMAND_BLOCK(0, "COMMAND"),
     COMMAND_BLOCK_MINECART(0, "COMMAND_MINECART"),
-    COMPARATOR(0, "REDSTONE_COMPARATOR", "REDSTONE_COMPARATOR_ON", "REDSTONE_COMPARATOR_OFF"),
+    COMPARATOR(0, "REDSTONE_COMPARATOR_OFF", "REDSTONE_COMPARATOR_ON", "REDSTONE_COMPARATOR"),
     COMPASS(0),
     COMPOSTER(0, "1.14", "CAULDRON"),
     CONDUIT(0, "1.13"),
@@ -1606,6 +1607,9 @@ public enum UCMaterial {
      */
     @Nullable
     public Material parseMaterial(boolean suggest) {
+        if(name().contains("DYE") && UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) < 0) {
+            return Material.valueOf("INK_SACK");
+        }
         Material newMat = Material.getMaterial(this.name());
 
         // If the name is not null it's probably the new version.
@@ -1626,24 +1630,38 @@ public enum UCMaterial {
         Material oldMat;
         boolean isNew = getVersionIfNew() != MinecraftVersion.UNKNOWN;
         for (int i = this.legacy.length - 1; i >= 0; i--) {
-            String legacyName = this.legacy[i];
-            // Slash means it's just another name for the material in another version.
-            if (legacyName.contains("/")) {
-                oldMat = Material.getMaterial(parseLegacyVersionMaterialName(legacyName));
+            try {
+                String legacyName = this.legacy[i];
+                // Slash means it's just another name for the material in another version.
+                if (legacyName.contains("/")) {
+                    oldMat = Material.getMaterial(parseLegacyVersionMaterialName(legacyName));
 
-                if (oldMat != null) return oldMat;
-                else continue;
-            }
-            if (isNew) {
-                if (suggest) {
-                    oldMat = Material.getMaterial(legacyName);
                     if (oldMat != null) return oldMat;
-                } else return null;
-                // According to the suggestion format list, all the other names continuing
-                // from here are considered as a "suggestion" if there's no slash anymore.
+                    else continue;
+                }
+                if (isNew) {
+                    if (suggest) {
+                        oldMat = Material.getMaterial(legacyName);
+                        if (oldMat != null) return oldMat;
+                    } else return null;
+                    // According to the suggestion format list, all the other names continuing
+                    // from here are considered as a "suggestion" if there's no slash anymore.
+                }
+                oldMat = Material.getMaterial(legacyName);
+                if (oldMat != null) return oldMat;
+            } catch (Exception exc) {
+                continue; // ...
             }
-            oldMat = Material.getMaterial(legacyName);
-            if (oldMat != null) return oldMat;
+        }
+        try {
+            oldMat = Material.valueOf(name());
+            if(oldMat != null) return oldMat;
+        } catch (Exception exc) {
+        }
+        try {
+            oldMat = Material.valueOf("LEGACY_" + name());
+            if(oldMat != null) return oldMat;
+        } catch (Exception exc) {
         }
         return null;
     }

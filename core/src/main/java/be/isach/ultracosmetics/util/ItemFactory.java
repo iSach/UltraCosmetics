@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -35,6 +36,7 @@ public class ItemFactory {
             List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList();
             for (String s : lore)
                 if (s != null)
+
                     finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
             itemMeta.setLore(finalLore);
         }

@@ -67,7 +67,7 @@ public class PetChristmasElf extends Pet {
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
         skullMeta.setDisplayName(UltraCosmeticsData.get().getItemNoPickupString());
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        byte[] encodedData = Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
+        byte[] encodedData = UltraCosmeticsData.get().getVersionManager().getEntityUtil().getEncodedData(url);
         profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
         Field profileField = null;
         try {
