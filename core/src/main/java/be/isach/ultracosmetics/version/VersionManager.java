@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class VersionManager {
     /**
@@ -25,7 +27,7 @@ public class VersionManager {
     private IPets pets;
     private IMorphs morphs;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
-    private Constructor<? extends AAnvilGUI> anvilGUIConstructor;
+    private Constructor<? extends IAnvilGUI> anvilGUIConstructor;
     private IPathfinderUtil pathfinderUtil;
 
     public VersionManager(ServerVersion serverVersion) {
@@ -43,7 +45,10 @@ public class VersionManager {
         mounts = loadModule("Mounts");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
-        anvilGUIConstructor = (Constructor<AAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, AAnvilGUI.AnvilClickEventHandler.class);
+        if (serverVersion.compareTo(ServerVersion.v1_14_R1) >= 0)
+            anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, String.class, Boolean.class, Consumer.class, BiFunction.class);
+        else
+            anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, AAnvilGUI.AnvilClickEventHandler.class);
         anvilGUIConstructor.setAccessible(true);
         playerFollowerConstructor = (Constructor<? extends IPlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pets.PlayerFollower"), Pet.class, Player.class);
         playerFollowerConstructor.setAccessible(true);
@@ -77,7 +82,16 @@ public class VersionManager {
 
     public AAnvilGUI newAnvilGUI(Player player, AAnvilGUI.AnvilClickEventHandler handler) {
         try {
-            return anvilGUIConstructor.newInstance(player, handler);
+            return (AAnvilGUI) anvilGUIConstructor.newInstance(player, handler);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public IAnvilGUI newAnvilGUI(Player player, String text, Consumer<Player> closeListener, BiFunction<Player, String, AAnvilGUI.Response> completeFunction) {
+        try {
+            return anvilGUIConstructor.newInstance(player, text, true, closeListener, completeFunction);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
             return null;
