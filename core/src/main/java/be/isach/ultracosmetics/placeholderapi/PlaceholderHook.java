@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.placeholderapi;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.external.EZPlaceholderHook;
 import org.bukkit.entity.Player;
 
@@ -12,12 +13,11 @@ import org.bukkit.entity.Player;
  * @author RadBuilder
  * @since 2.5
  */
-public class PlaceholderHook extends EZPlaceholderHook {
+public class PlaceholderHook extends PlaceholderExpansion {
 
     private UltraCosmetics ultraCosmetics;
 
     public PlaceholderHook(UltraCosmetics ultraCosmetics) {
-        super(ultraCosmetics, "ultracosmetics");
         this.ultraCosmetics = ultraCosmetics;
     }
 
@@ -118,5 +118,20 @@ public class PlaceholderHook extends EZPlaceholderHook {
                 return "" + ultraPlayer.getAmmo("Trampoline");
         }
         return null;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "ultracosmetics";
+    }
+
+    @Override
+    public String getAuthor() {
+        return ultraCosmetics.getDescription().getAuthors().toString();
+    }
+
+    @Override
+    public String getVersion() {
+        return ultraCosmetics.getDescription().getVersion();
     }
 }

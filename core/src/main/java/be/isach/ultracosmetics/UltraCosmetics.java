@@ -155,7 +155,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             getSmartLogger().write("");
-            new PlaceholderHook(this).hook();
+            new PlaceholderHook(this).register();
             getSmartLogger().write("Hooked into PlaceholderAPI");
             getSmartLogger().write("");
         }
