@@ -105,10 +105,14 @@ public class GadgetDiscoBall extends Gadget {
                 }
             }
 
-            for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
-                if (b.getType().toString().contains("WOOL") || b.getType().toString().contains("CARPET")) {
-                    BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
+            try {
+                for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
+                    if (b.getType().toString().contains("WOOL") || b.getType().toString().contains("CARPET")) {
+                        BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
+                    }
                 }
+            } catch (NullPointerException exc) {
+                //...
             }
         } else {
             i = 0;

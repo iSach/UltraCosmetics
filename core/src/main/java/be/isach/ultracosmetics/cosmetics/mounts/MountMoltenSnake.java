@@ -44,6 +44,7 @@ public class MountMoltenSnake extends Mount<MagmaCube> {
 
     @Override
     public void onUpdate() {
+        if (getPlayer() == null) return;
         Vector playerVector = getPlayer().getLocation().getDirection().multiply(0.7);
         for (int i = 0; i < entities.size(); i++) {
             final Entity entity = entities.get(i);

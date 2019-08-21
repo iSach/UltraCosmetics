@@ -193,7 +193,7 @@ public class GadgetRocket extends Gadget {
         for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.setVelocity(new Vector(0, 0.8, 0));
         }
-        if (launching) {
+        if (launching && !fallingBlocks.isEmpty()) {
             if (fallingBlocks.get(8).getPassenger() == null) {
                 fallingBlocks.get(8).setPassenger(getPlayer());
             }
