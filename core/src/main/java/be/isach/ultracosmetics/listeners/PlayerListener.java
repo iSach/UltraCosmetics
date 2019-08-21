@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
+import be.isach.ultracosmetics.treasurechests.TreasureRandomizer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -218,6 +220,13 @@ public class PlayerListener implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL
                 && FallDamageManager.shouldBeProtected(event.getEntity())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if(TreasureRandomizer.fireworksList.contains(event.getDamager())) {
             event.setCancelled(true);
         }
     }

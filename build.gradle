@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.5.1-RELEASE'
+    version = '2.5.2-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -36,7 +36,7 @@ allprojects {
     }
 }
 
-boolean local = false
+boolean local = true
 
 if (local) libsDirName = '../testserver/plugins'
 

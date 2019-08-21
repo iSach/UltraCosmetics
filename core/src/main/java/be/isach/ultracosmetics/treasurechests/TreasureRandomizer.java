@@ -570,6 +570,8 @@ public class TreasureRandomizer {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 
+    public static ArrayList<Firework> fireworksList = new ArrayList<>();
+
     public void spawnRandomFirework(Location location) {
         if (!UltraCosmeticsData.get().getPlugin().isEnabled())
             return;
@@ -581,10 +583,13 @@ public class TreasureRandomizer {
             fm.addEffect(getRandomFireworkEffect());
             f.setFireworkMeta(fm);
             fireworks.add(f);
+            fireworksList.add(f);
         }
         Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
             for (Firework f : fireworks)
                 f.detonate();
         }, 2);
     }
+
+
 }
