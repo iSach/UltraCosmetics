@@ -36,7 +36,7 @@ allprojects {
     }
 }
 
-boolean local = true
+boolean local = false
 
 if (local) libsDirName = '../testserver/plugins'
 
