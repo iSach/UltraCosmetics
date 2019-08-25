@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Horse;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created by sacha on 10/08/15.
@@ -48,7 +49,15 @@ public class MountDruggedHorse extends MountHorse {
     @Override
     protected void onClear() {
         super.onClear();
-        getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
+
+        // Make sure it's calling the effect method synchronously with Spigot's thread. TODO make onClear sync all the time.
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (getPlayer() != null)
+                    getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
+            }
+        }.runTask(getUltraCosmetics());
     }
 
     @Override

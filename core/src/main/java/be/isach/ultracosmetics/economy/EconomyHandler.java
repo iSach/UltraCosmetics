@@ -21,6 +21,7 @@ public class EconomyHandler {
             usingEconomy = false;
             return;
         }
+
         if (economy.equalsIgnoreCase("vault")) {
             economyHook = new VaultHook(ultraCosmetics);
             usingEconomy = true;

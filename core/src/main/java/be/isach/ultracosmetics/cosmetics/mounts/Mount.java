@@ -86,10 +86,19 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
                 cancel();
                 return;
             }
+
             if (!entity.isValid()) {
                 cancel();
                 return;
             }
+
+            // Prevents players on mounts from being able to fall in the void infinitely.
+            if(entity.getLocation().getY() <= -15) {
+                clear();
+                cancel();
+                return;
+            }
+
             if (getOwner() != null
                     && Bukkit.getPlayer(getOwnerUniqueId()) != null
                     && getOwner().getCurrentMount() != null
