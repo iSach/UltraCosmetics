@@ -35,6 +35,13 @@ public class GadgetFleshHook extends Gadget implements Listener {
 
     @EventHandler
     public void onItemPickup(PlayerPickupItemEvent event) {
+        UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(event.getPlayer());
+        if(ultraPlayer != null
+         && !ultraPlayer.canBeHitByOtherGadgets()) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (items.contains(event.getItem())) {
             event.setCancelled(true);
             if (event.getPlayer().getName().equals(getPlayer().getName())) {

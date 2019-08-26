@@ -63,6 +63,12 @@ public class UltraPlayer {
     private Emote currentEmote;
 
     /**
+     * Specifies if the player can currently be hit by any other gadget.
+     * Exemple: Get hit by a flesh hook.
+     */
+    private boolean canBeHitByOtherGadgets = true;
+
+    /**
      * boolean to identify if player is loaded correctly
      */
     public boolean isLoaded = false;
@@ -796,6 +802,14 @@ public class UltraPlayer {
 
     public void setLastPos(Location lastPos) {
         this.lastPos = lastPos;
+    }
+
+    public void setCanBeHitByOtherGadgets(boolean canBeHitByOtherGadgets) {
+        this.canBeHitByOtherGadgets = canBeHitByOtherGadgets;
+    }
+
+    public boolean canBeHitByOtherGadgets() {
+        return canBeHitByOtherGadgets;
     }
 
     public void removeCosmetic(Category category) {

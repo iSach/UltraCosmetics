@@ -44,6 +44,8 @@ public class GadgetParachute extends Gadget {
         getPlayer().teleport(loc.clone().add(0, 35, 0));
         getPlayer().setVelocity(new Vector(0, 0, 0));
 
+        getOwner().setCanBeHitByOtherGadgets(false);
+
         for (int i = 0; i < 20; i++) {
             Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(MathUtils.randomDouble(0, 0.5), 3, MathUtils.randomDouble(0, 0.5)), EntityType.CHICKEN);
             chickens.add(chicken);
@@ -63,6 +65,7 @@ public class GadgetParachute extends Gadget {
         }
         MathUtils.applyVelocity(getPlayer(), new Vector(0, 0.15, 0));
         active = false;
+        getOwner().setCanBeHitByOtherGadgets(true);
     }
 
     @EventHandler
