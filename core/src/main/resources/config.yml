@@ -80,6 +80,7 @@ TreasureChests:
   Loots:
     Money:
       Enabled: true
+      Min: 15
       Max: 100
       Chance: 10
       Message:
