@@ -267,6 +267,18 @@ public class UltraCosmetics extends JavaPlugin {
         config.set("Disabled-Items", null);
         config.addDefault("Economy", "Vault");
 
+        // Add default values people could not have because of an old version of UC.
+        if (!config.contains("TreasureChests.Loots.Money.Min")) {
+            int min = 15;
+            int max = config.getInt("TreasureChests.Loots.Money.Max");
+            if(max < 5)
+                min = 0;
+            else if(max < 15)
+                min = 5;
+            config.set("TreasureChests.Loots.Money.Min", min);
+
+        }
+
         if (!config.contains("TreasureChests.Loots.Gadgets")) {
             config.createSection("TreasureChests.Loots.Gadgets", "Chance of getting a GADGET", "This is different from ammo!");
             config.set("TreasureChests.Loots.Gadgets.Enabled", true);
