@@ -276,7 +276,6 @@ public class UltraCosmetics extends JavaPlugin {
             else if(max < 15)
                 min = 5;
             config.set("TreasureChests.Loots.Money.Min", min);
-
         }
 
         if (!config.contains("TreasureChests.Loots.Gadgets")) {

@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -41,6 +42,14 @@ public class SubCommandTreasure extends SubCommand {
         Player opener = Bukkit.getPlayer(args[1]);
         if (opener == null) {
             sender.sendMessage("§c§lPlayer " + args[1] + " not found!");
+            return;
+        }
+
+        UltraPlayer ultraPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(opener);
+
+        if (ultraPlayer.getKeys() <= 0) {
+            opener.closeInventory();
+            ultraPlayer.openKeyPurchaseMenu();
             return;
         }
 

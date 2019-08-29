@@ -62,6 +62,18 @@ public class TreasureChest implements Listener {
 
         this.player = getPlayer();
 
+        Location loc = getPlayer().getLocation().getBlock().getLocation();
+        Block centerPossibleBlock = loc.getBlock();
+        if(centerPossibleBlock.getType() != Material.AIR) {
+            // Save the block
+            oldMaterials.put(centerPossibleBlock.getLocation(), centerPossibleBlock.getType());
+            oldDatas.put(centerPossibleBlock.getLocation(), centerPossibleBlock.getData());
+            blocksToRestore.add(loc.getBlock());
+
+            // Temporarly remove it
+            centerPossibleBlock.setType(Material.AIR);
+        }
+
         if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentMorph() != null)
             UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).setSeeSelfMorph(false);
 

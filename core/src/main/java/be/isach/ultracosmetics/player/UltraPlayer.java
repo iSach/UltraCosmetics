@@ -387,10 +387,15 @@ public class UltraPlayer {
         return null;
     }
 
+    // TODO
+    public void openKeyPurchaseMenu() {
+        openKeyPurchaseMenu(true);
+    }
+
     /**
      * Opens the Key Purchase Menu.
      */
-    public void openKeyPurchaseMenu() {
+    public void openKeyPurchaseMenu(boolean openMenuAfter) {
         if (!ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
             return;
         }

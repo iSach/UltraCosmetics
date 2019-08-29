@@ -659,6 +659,14 @@ public class Cuboid implements Iterable<Block>, Cloneable,
         return true;
     }
 
+    public boolean isEmptyExcept(Location... locations) {
+        for (Block b : getBlocks()) {
+            if (!Arrays.asList(locations).contains(b.getLocation()) && b.getType() != Material.AIR)
+                return false;
+        }
+        return true;
+    }
+
     public class CuboidIterator implements Iterator<Block> {
         private World w;
         private int baseX, baseY, baseZ;

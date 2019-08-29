@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
+import be.isach.ultracosmetics.util.BlockSavedState;
 import be.isach.ultracosmetics.util.Cuboid;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -38,6 +39,12 @@ public class TreasureChestManager implements Listener {
         new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath));
     }
 
+    private static void openTreasureChest(Player player, BlockSavedState bss) {
+        String designPath = getRandomDesign();
+        player.closeInventory();
+        new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath));
+    }
+
     private static String getRandomDesign() {
         Set<String> set = UltraCosmeticsData.get().getPlugin().getConfig().getConfigurationSection("TreasureChests.Designs").getKeys(false);
         List<String> list = new ArrayList<>();
@@ -48,10 +55,18 @@ public class TreasureChestManager implements Listener {
     public static void tryOpenChest(Player player) {
         if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).getKeys() > 0) {
             Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
-            if (!c.isEmpty()) {
+
+            BlockSavedState bss = null;
+
+            if (!c.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
                 player.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
                 return;
             }
+
+            if(player.getLocation().getBlock().getType() != Material.AIR) {
+                bss = BlockSavedState.fromBlock(player.getLocation().getBlock());
+            }
+
             for (Entity ent : player.getNearbyEntities(5, 5, 5)) {
                 if (ent instanceof Player && UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent).getCurrentTreasureChest() != null) {
                     player.closeInventory();
@@ -66,7 +81,7 @@ public class TreasureChestManager implements Listener {
                 return;
             }
             UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).removeKey();
-            openTreasureChest(player);
+            openTreasureChest(player, bss);
         } else {
             player.closeInventory();
             UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).openKeyPurchaseMenu();
