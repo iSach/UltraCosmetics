@@ -6,8 +6,12 @@ import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -82,15 +86,19 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
+        Location preLoc = opener.getLocation();
         Location location = new Location(world, x + 0.5, y, z + 0.5);
 
-        if (location.getBlock().getType() != Material.AIR) {
+        Cuboid c = new Cuboid(location.add(-2, 0, -2), location.add(2, 1, 2));
+
+        if (!c.isEmptyExcept(location.getBlock().getLocation())) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "This isn't a valid location for teleporting.");
+            opener.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
             return;
         }
 
         opener.teleport(location);
 
-        TreasureChestManager.tryOpenChest(opener);
+        TreasureChestManager.tryOpenChest(opener, preLoc);
     }
 }

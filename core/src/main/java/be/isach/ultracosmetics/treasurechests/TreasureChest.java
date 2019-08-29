@@ -49,14 +49,20 @@ public class TreasureChest implements Listener {
     boolean stopping;
     boolean cooldown = false;
     private TreasureChestDesign design;
+    private Location preLoc = null;
 
     public TreasureChest(UUID owner, final TreasureChestDesign design) {
+        this(owner, design, null);
+    }
+
+    public TreasureChest(UUID owner, final TreasureChestDesign design, Location preLoc) {
         if (owner == null) return;
 
         this.instance = this;
         this.design = design;
         this.particleEffect = design.getEffect();
         this.owner = owner;
+        this.preLoc = preLoc;
 
         Bukkit.getPluginManager().registerEvents(this, UltraCosmeticsData.get().getPlugin());
 
@@ -312,8 +318,12 @@ public class TreasureChest implements Listener {
                             chestsToRemove.clear();
                         if (blocksToRestore != null)
                             blocksToRestore.clear();
-                        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()) != null)
+                        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()) != null) {
                             UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentTreasureChest(null);
+                            if(preLoc != null) {
+                                getPlayer().teleport(preLoc);
+                            }
+                        }
                         owner = null;
                         if (randomGenerator != null)
                             randomGenerator.clear();
@@ -345,8 +355,12 @@ public class TreasureChest implements Listener {
             this.holograms.clear();
             this.chestsToRemove.clear();
             this.blocksToRestore.clear();
-            if (getPlayer() != null)
+            if (getPlayer() != null) {
                 UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentTreasureChest(null);
+                if(preLoc != null) {
+                    getPlayer().teleport(preLoc);
+                }
+            }
             this.owner = null;
             if (this.randomGenerator != null)
                 this.randomGenerator.clear();

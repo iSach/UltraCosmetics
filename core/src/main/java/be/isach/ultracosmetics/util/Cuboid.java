@@ -667,6 +667,10 @@ public class Cuboid implements Iterable<Block>, Cloneable,
         return true;
     }
 
+    public static String locToString(Location location) {
+        return location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ();
+    }
+
     public class CuboidIterator implements Iterator<Block> {
         private World w;
         private int baseX, baseY, baseZ;

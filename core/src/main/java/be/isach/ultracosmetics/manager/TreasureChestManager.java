@@ -6,8 +6,8 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.util.BlockSavedState;
 import be.isach.ultracosmetics.util.Cuboid;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -34,15 +34,13 @@ public class TreasureChestManager implements Listener {
     }
 
     private static void openTreasureChest(Player player) {
-        String designPath = getRandomDesign();
-        player.closeInventory();
-        new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath));
+        openTreasureChest(player, null);
     }
 
-    private static void openTreasureChest(Player player, BlockSavedState bss) {
+    private static void openTreasureChest(Player player, Location preLoc) {
         String designPath = getRandomDesign();
         player.closeInventory();
-        new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath));
+        new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath), preLoc);
     }
 
     private static String getRandomDesign() {
@@ -52,19 +50,22 @@ public class TreasureChestManager implements Listener {
         return list.get(random.nextInt(set.size()));
     }
 
+
     public static void tryOpenChest(Player player) {
+        tryOpenChest(player, null);
+    }
+
+    public static void tryOpenChest(Player player, Location preLoc) {
         if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).getKeys() > 0) {
             Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
 
-            BlockSavedState bss = null;
-
             if (!c.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
                 player.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
-                return;
-            }
 
-            if(player.getLocation().getBlock().getType() != Material.AIR) {
-                bss = BlockSavedState.fromBlock(player.getLocation().getBlock());
+                if(preLoc != null) {
+                    player.teleport(preLoc);
+                }
+                return;
             }
 
             for (Entity ent : player.getNearbyEntities(5, 5, 5)) {
@@ -81,7 +82,7 @@ public class TreasureChestManager implements Listener {
                 return;
             }
             UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).removeKey();
-            openTreasureChest(player, bss);
+            openTreasureChest(player, preLoc);
         } else {
             player.closeInventory();
             UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).openKeyPurchaseMenu();
