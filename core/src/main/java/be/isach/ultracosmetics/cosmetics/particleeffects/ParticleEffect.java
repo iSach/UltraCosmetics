@@ -35,7 +35,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
         }
         getOwner().setCurrentParticleEffect(this);
 
-        runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
+        runTaskTimerAsynchronously(getUltraCosmetics(), 0, getType().getRepeatDelay());
     }
 
     @Override

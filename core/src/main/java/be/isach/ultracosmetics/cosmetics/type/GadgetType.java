@@ -100,7 +100,8 @@ public class GadgetType extends CosmeticMatType<Gadget> {
         new GadgetType(UCMaterial.LIGHT_BLUE_WOOL, 25, "ultracosmetics.gadgets.colorbomb", "ColorBomb", "&7&oA colorful bomb!", GadgetColorBomb.class, ServerVersion.v1_8_R1);
         new GadgetType(UCMaterial.BLUE_WOOL, 75, "ultracosmetics.gadgets.trampoline", "Trampoline", "&7&oConstructs a trampoline!" + "\n&7&othat sends you and your\n&7&ofriends into air!", GadgetTrampoline.class, ServerVersion.v1_8_R1);
         new GadgetType(UCMaterial.BLACK_TERRACOTTA, 35, "ultracosmetics.gadgets.blackhole", "BlackHole", "&7&oYou should not get caught by it..", GadgetBlackHole.class, ServerVersion.v1_8_R1);
-		/*if (VersionManager.IS_VERSION_1_13) {
+
+        /*if (VersionManager.IS_VERSION_1_13) {
 			new GadgetType(BlockUtils.getBlockByColor("WOOL", (byte) 3), (byte) 3, 25, "ultracosmetics.gadgets.colorbomb", "ColorBomb", "&7&oA colorful bomb!", GadgetColorBomb.class, ServerVersion.v1_13_R1);
 			new GadgetType(BlockUtils.getBlockByColor("WOOL", (byte) 11), (byte) 11, 75, "ultracosmetics.gadgets.trampoline", "Trampoline", "&7&oConstructs a trampoline!" + "\n&7&othat sends you and your\n&7&ofriends into air!", GadgetTrampoline.class, ServerVersion.v1_13_R1);
 			new GadgetType(BlockUtils.getBlockByColor("STAINED_CLAY", (byte) 15), (byte) 15, 35, "ultracosmetics.gadgets.blackhole", "BlackHole", "&7&oYou should not get caught by it..", GadgetBlackHole.class, ServerVersion.v1_13_R1);
