@@ -120,7 +120,7 @@ public class CommandManager implements CommandExecutor {
 		registerCommand(new SubCommandGadgets(ultraCosmetics));
 		registerCommand(new SubCommandSelfView(ultraCosmetics));
 		registerCommand(new SubCommandMenu(ultraCosmetics));
-		registerCommand(new SubCommandPurge(ultraCosmetics));
+		//registerCommand(new SubCommandPurge(ultraCosmetics));
 		registerCommand(new SubCommandGive(ultraCosmetics));
 		registerCommand(new SubCommandToggle(ultraCosmetics));
 		registerCommand(new SubCommandClear(ultraCosmetics));

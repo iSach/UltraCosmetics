@@ -203,6 +203,7 @@ public class MessageManager {
         addMessage("Particle-Effects.EnderAura.name", "&d&lEnder Aura");
         addMessage("Particle-Effects.FlameFairy.name", "&6&lFlame Fairy");
         addMessage("Particle-Effects.MagicalRods.name", "&8&lMagical Rods");
+        addMessage("Particle-Effects.FireWaves.name", "&e&lFire Waves");
 
         // PETS
         addMessage("Pets.Piggy.menu-name", "&d&lPiggy");
