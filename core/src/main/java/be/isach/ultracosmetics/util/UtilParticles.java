@@ -5,12 +5,18 @@ import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.awt.*;
+
 /**
  * Created by sacha on 07/08/15.
  */
 public class UtilParticles {
 
     private final static int DEF_RADIUS = 128;
+
+    public static void drawParticleLine(Location from, Location to, Particles effect, int particles, Color color) {
+        drawParticleLine(from, to, effect, particles, color.getRed(), color.getGreen(), color.getBlue());
+    }
 
     public static void drawParticleLine(Location from, Location to, Particles effect, int particles, int r, int g, int b) {
         Location location = from.clone();
