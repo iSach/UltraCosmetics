@@ -32,6 +32,7 @@ public class CommandManager implements CommandExecutor {
 	public CommandManager(UltraCosmetics ultraCosmetics) {
 		this.ultraCosmetics = ultraCosmetics;
 		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setExecutor(this);
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setTabCompleter(new UCTabCompleter(ultraCosmetics));
 		String[] aliases = { "uc", "cosmetics" };
 		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
 	}

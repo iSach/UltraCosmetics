@@ -55,7 +55,7 @@ public class SubCommandClear extends SubCommand {
         String s = args[2].toLowerCase();
 
         if (s.startsWith("g")) up.removeGadget();
-        else if (s.startsWith("pa")) up.removeParticleEffect();
+        else if (s.startsWith("pa") || s.startsWith("ef")) up.removeParticleEffect();
         else if (s.startsWith("pe")) up.removePet();
         else if (s.startsWith("h")) up.removeHat();
         else if (s.startsWith("s") && !s.contains(":")) up.removeSuit();
