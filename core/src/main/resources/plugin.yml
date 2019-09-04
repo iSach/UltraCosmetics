@@ -161,6 +161,8 @@ permissions:
       - ultracosmetics.particleeffects.crushedcandycane
       - ultracosmetics.particleeffects.enderaura
       - ultracosmetics.particleeffects.flamefairy
+      - ultracosmetics.particleeffects.magicalrods
+      - ultracosmetics.particleeffects.firewaves
   ultracosmetics.particleeffects.raincloud:
     default: op
   ultracosmetics.particleeffects.snowcloud:
@@ -193,7 +195,9 @@ permissions:
     default: op
   ultracosmetics.particleeffects.flamefairy:
     default: op
-  ultracosmetics.particleeffects.enderaura:
+  ultracosmetics.particleeffects.magicalrods:
+    default: op
+  ultracosmetics.particleeffects.firewaves:
     default: op
   ultracosmetics.mounts.*:
     children:
@@ -446,6 +450,7 @@ permissions:
       - ultracosmetics.suits.astronaut*
       - ultracosmetics.suits.diamond.*
       - ultracosmetics.suits.santa.*
+      - ultracosmetics.suits.frozen.*
   ultracosmetics.suits.rave.*:
     children:
       - ultracosmetics.suits.rave.helmet
@@ -470,6 +475,12 @@ permissions:
       - ultracosmetics.suits.santa.chestplate
       - ultracosmetics.suits.santa.leggings
       - ultracosmetics.suits.santa.boots
+  ultracosmetics.suits.frozen.*:
+    children:
+      - ultracosmetics.suits.frozen.helmet
+      - ultracosmetics.suits.frozen.chestplate
+      - ultracosmetics.suits.frozen.leggings
+      - ultracosmetics.suits.frozen.boots
   ultracosmetics.suits.rave.helmet:
     default: op
   ultracosmetics.suits.rave.chestplate:
@@ -501,6 +512,14 @@ permissions:
   ultracosmetics.suits.santa.leggings:
     default: op
   ultracosmetics.suits.santa.boots:
+    default: op
+  ultracosmetics.suits.frozen.helmet:
+    default: op
+  ultracosmetics.suits.frozen.chestplate:
+    default: op
+  ultracosmetics.suits.frozen.leggings:
+    default: op
+  ultracosmetics.suits.frozen.boots:
     default: op
   ultracosmetics.emotes.*:
     children:

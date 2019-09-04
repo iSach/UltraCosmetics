@@ -201,7 +201,6 @@ public class UltraCosmetics extends JavaPlugin {
         getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
         getSmartLogger().write("-------------------------------------------------------------------");
     }
-
     /**
      * Called when plugin disables.
      */

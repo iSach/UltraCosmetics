@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class SmartLogger {
 
-    private enum LogLevel {
+    public enum LogLevel {
         INFO,
         WARNING,
         ERROR

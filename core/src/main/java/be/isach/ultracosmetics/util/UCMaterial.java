@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.log.SmartLogger;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -947,7 +948,7 @@ public enum UCMaterial {
     WHITE_CARPET(0, "CARPET"),
     WHITE_CONCRETE(0, "CONCRETE"),
     WHITE_CONCRETE_POWDER(0, "CONCRETE_POWDER"),
-    WHITE_DYE(15, "1.14", "INK_SACK", "BONE_MEAL"),
+    WHITE_DYE(15, "1.14", "BONE_MEAL", "INK_SACK"),
     WHITE_GLAZED_TERRACOTTA(0, "1.12", "HARD_CLAY", "STAINED_CLAY", "WHITE_TERRACOTTA"),
     WHITE_SHULKER_BOX(0),
     WHITE_STAINED_GLASS(0, "STAINED_GLASS"),
@@ -1584,7 +1585,14 @@ public enum UCMaterial {
     @Nullable
     @SuppressWarnings("deprecation")
     public ItemStack parseItem(boolean suggest) {
+        if (this == WHITE_DYE) {
+            //    return new ItemStack(Material.BONE_MEAL);
+        }
         Material material = this.parseMaterial(suggest);
+        if (material == null) {
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(SmartLogger.LogLevel.ERROR, "Error when building item: " + name());
+            return new ItemStack(Material.BEDROCK);
+        }
         return isNewVersion() ? new ItemStack(material) : new ItemStack(material, 1, this.data);
     }
 
@@ -1607,8 +1615,11 @@ public enum UCMaterial {
      */
     @Nullable
     public Material parseMaterial(boolean suggest) {
-        if(name().contains("DYE") && UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) < 0) {
-            return Material.valueOf("INK_SACK");
+        if (name().contains("DYE")) {
+            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) < 0)
+                return Material.valueOf("INK_SACK");
+            else if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R2) <= 0 && data == 15)
+                return Material.valueOf("BONE_MEAL");
         }
         Material newMat = Material.getMaterial(this.name());
 
@@ -1655,12 +1666,12 @@ public enum UCMaterial {
         }
         try {
             oldMat = Material.valueOf(name());
-            if(oldMat != null) return oldMat;
+            if (oldMat != null) return oldMat;
         } catch (Exception exc) {
         }
         try {
             oldMat = Material.valueOf("LEGACY_" + name());
-            if(oldMat != null) return oldMat;
+            if (oldMat != null) return oldMat;
         } catch (Exception exc) {
         }
         return null;
