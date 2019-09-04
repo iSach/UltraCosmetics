@@ -380,7 +380,7 @@ public class TreasureRandomizer {
             return;
         }
         int max = (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max");
-        int min = SettingsManager.getConfig().contains("TreasureChests.Loots.Money.Min") ? SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Max") : (max > 20 ? 20 : 0);
+        int min = SettingsManager.getConfig().contains("TreasureChests.Loots.Money.Min") ? SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Min") : (max > 20 ? 20 : 0);
         int money = MathUtils.randomRangeInt(min, max);
         name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
         UltraCosmeticsData.get().getPlugin().getEconomyHandler().deposit(player, money);

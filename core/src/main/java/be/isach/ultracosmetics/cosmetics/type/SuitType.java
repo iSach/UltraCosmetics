@@ -164,5 +164,6 @@ public class SuitType extends CosmeticMatType<Suit> {
         new SuitType("Astronaut", "astronaut", "&7&oHouston?", UCMaterial.GLASS, UCMaterial.GOLDEN_CHESTPLATE, UCMaterial.GOLDEN_LEGGINGS, UCMaterial.GOLDEN_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
         new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", UCMaterial.DIAMOND_HELMET, UCMaterial.DIAMOND_CHESTPLATE, UCMaterial.DIAMOND_LEGGINGS, UCMaterial.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
         new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
+        new SuitType("Frozen", "frozen", "&7&oThis suit belongs to the\nLord of the Frozen Lands!", UCMaterial.PACKED_ICE, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitFrozen.class, ServerVersion.v1_8_R1);
     }
 }

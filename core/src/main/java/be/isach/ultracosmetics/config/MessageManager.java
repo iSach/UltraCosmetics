@@ -383,25 +383,35 @@ public class MessageManager {
         addMessage("Hats.Must-Remove-Hat", "%prefix% &c&lYou must remove your helmet to equip a hat!");
 
         //SUITS
+        addMessage("Suits.Rave.whole-equip", "&f&lwhole &b&lR&a&la&e&lv&6&le &f&lsuit");
         addMessage("Suits.Rave.helmet-name", "&b&lR&a&la&e&lv&6&le &f&lHelmet");
         addMessage("Suits.Rave.chestplate-name", "&b&lR&a&la&e&lv&6&le &f&lChestplate");
         addMessage("Suits.Rave.leggings-name", "&b&lR&a&la&e&lv&6&le &f&lLeggings");
         addMessage("Suits.Rave.boots-name", "&b&lR&a&la&e&lv&6&le &f&lBoots");
+        addMessage("Suits.Astronaut.whole-equip", "&f&lwhole &f&lAstronaut &f&lsuit");
         addMessage("Suits.Astronaut.helmet-name", "&f&lAstronaut &f&lHelmet");
         addMessage("Suits.Astronaut.chestplate-name", "&f&lAstronaut &f&lChestplate");
         addMessage("Suits.Astronaut.leggings-name", "&f&lAstronaut &f&lLeggings");
         addMessage("Suits.Astronaut.boots-name", "&f&lAstronaut &f&lBoots");
+        addMessage("Suits.Diamond.whole-equip", "&f&lwhole &b&lDiamond &f&lsuit");
         addMessage("Suits.Diamond.helmet-name", "&b&lDiamond &f&lHelmet");
         addMessage("Suits.Diamond.chestplate-name", "&b&lDiamond &f&lChestplate");
         addMessage("Suits.Diamond.leggings-name", "&b&lDiamond &f&lLeggings");
         addMessage("Suits.Diamond.boots-name", "&b&lDiamond &f&lBoots");
+        addMessage("Suits.Santa.whole-equip", "&f&lwhole &4&lSanta &f&lsuit");
         addMessage("Suits.Santa.helmet-name", "&4&lSanta &f&lHelmet");
         addMessage("Suits.Santa.chestplate-name", "&4&lSanta &f&lChestplate");
         addMessage("Suits.Santa.leggings-name", "&4&lSanta &f&lLeggings");
         addMessage("Suits.Santa.boots-name", "&4&lSanta &f&lBoots");
+        addMessage("Suits.Frozen.whole-equip", "&f&lwhole &b&lFrozen &f&lsuit");
+        addMessage("Suits.Frozen.helmet-name", "&b&lFrozen &f&lHelmet");
+        addMessage("Suits.Frozen.chestplate-name", "&b&lFrozen &f&lChestplate");
+        addMessage("Suits.Frozen.leggings-name", "&b&lFrozen &f&lLeggings");
+        addMessage("Suits.Frozen.boots-name", "&b&lFrozen &f&lBoots");
         addMessage("Suits.Equip", "%prefix% &9You equipped %suitname%!");
         addMessage("Suits.Unequip", "%prefix% &9You unequipped %suitname%!");
         addMessage("Suits.Suit-Part-Lore", "&9Suits Part");
+        addMessage("Suits.Whole-Equip-Lore", "&7&oEquip the whole suit!");
 
         addMessage("Emotes.Equip", "%prefix% &9You equipped %emotename%");
         addMessage("Emotes.Unequip", "%prefix% &9You unequipped %emotename%");

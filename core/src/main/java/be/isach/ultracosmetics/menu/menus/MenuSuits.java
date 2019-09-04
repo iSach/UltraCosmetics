@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -69,6 +70,30 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 continue;
             }
 
+            // Whole equip button
+
+            ItemStack wholeEquipStack = UCMaterial.HOPPER.parseItem();
+            ItemMeta wholeEquipMeta = wholeEquipStack.getItemMeta();
+            wholeEquipMeta.setDisplayName(CATEGORY.getActivateMenu() + " " + MessageManager.getMessage("Suits." + suitType.getConfigName() + ".whole-equip"));
+            wholeEquipMeta.setLore(Arrays.asList("", MessageManager.getMessage("Suits.Whole-Equip-Lore"), ""));
+            wholeEquipStack.setItemMeta(wholeEquipMeta);
+            putItem(inventory, SLOTS[i] - 9, wholeEquipStack, clickData -> {
+                for (ArmorSlot armorSlot : ArmorSlot.values()) {
+                    if (player.hasPermission(suitType.getPermission(armorSlot))) {
+                        if (player.getSuit(armorSlot) != null
+                                && player.getSuit(armorSlot).getType() == suitType) {
+                            continue;
+                        }
+                        toggleOn(clickData.getClicker(), suitType, getUltraCosmetics(), armorSlot);
+                    }
+                }
+                if (UltraCosmeticsData.get().shouldCloseAfterSelect()) {
+                    player.getBukkitPlayer().closeInventory();
+                } else {
+                    open(player, getCurrentPage(player));
+                }
+            });
+
             //slotLoop:
             for (int l = 0; l < 4; l++) {
                 ArmorSlot armorSlot = ArmorSlot.values()[l];
@@ -108,7 +133,9 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
                 ItemMeta itemMeta = is.getItemMeta();
 
-                if (suitType == SuitType.valueOf("santa") || suitType == SuitType.valueOf("rave")) {
+                if (suitType == SuitType.valueOf("santa")
+                        || suitType == SuitType.valueOf("rave")
+                        || (suitType == SuitType.valueOf("frozen") && l != 0)) {
                     LeatherArmorMeta laMeta = (LeatherArmorMeta) itemMeta;
 
                     Color color = Color.RED;
@@ -119,6 +146,10 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                         int b = MathUtils.random(255);
 
                         color = Color.fromRGB(r, g, b);
+                    }
+
+                    if (suitType == SuitType.valueOf("frozen")) {
+                        color = Color.AQUA;
                     }
 
                     laMeta.setColor(color);
@@ -152,9 +183,6 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
                     if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getDeactivateMenu())) {
                         toggleOff(ultraPlayer, armorSlot);
-                        if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {
-                            open(ultraPlayer, currentPage);
-                        }
                     } else if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getActivateMenu())) {
                         StringBuilder sb = new StringBuilder();
                         String name = clicked.getItemMeta().getDisplayName().replaceFirst(CATEGORY.getActivateMenu(), "");
@@ -172,6 +200,9 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                             }
                         }
                         toggleOn(ultraPlayer, suitType, getUltraCosmetics(), armorSlot);
+                    }
+                    if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {
+                        open(ultraPlayer, currentPage);
                     }
                 });
             }

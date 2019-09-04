@@ -41,6 +41,9 @@ public class GeneralUtil {
         writer.println("  - ultracosmetics.receivechest");
         writer.println("  - ultracosmetics.openmenu");
         writer.println("");
+        writer.println("Treasure Chests:");
+        writer.println("  - ultracosmetics.treasurechests.buykey");
+        writer.println("");
         writer.println("Commands:");
         writer.println("  - ultracosmetics.command.*");
         for (SubCommand subCommand : ultraCosmetics.getCommandManager().getCommands())
