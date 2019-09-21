@@ -75,12 +75,12 @@ public class GadgetAntiGravity extends Gadget {
                 if (as != null && as.isValid() && event.getReason().contains("Fly")) {
                     if (as.getLocation().distance(event.getPlayer().getLocation()) < 8) {
                         event.setCancelled(true);
-                        System.out.println("UltraCosmetics >> Cancelling invalid Flight KicK.");
+                        getUltraCosmetics().getSmartLogger().write("UltraCosmetics >> Cancelling invalid Flight Kick.");
                         return;
                     }
                 }
                 event.setCancelled(true);
-                System.out.println("UltraCosmetics >> Cancelling invalid Flight KicK.");
+                getUltraCosmetics().getSmartLogger().write("UltraCosmetics >> Cancelling invalid Flight Kick.");
             }
         } catch (Exception exc) {
         }

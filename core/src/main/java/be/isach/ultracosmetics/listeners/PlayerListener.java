@@ -1,10 +1,13 @@
 package be.isach.ultracosmetics.listeners;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
+import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureRandomizer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -24,6 +27,7 @@ import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,31 +48,68 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(final PlayerJoinEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
-            ultraCosmetics.getPlayerManager().create(event.getPlayer());
+        UltraPlayer cp = ultraCosmetics.getPlayerManager().create(event.getPlayer());
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+                    Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
+                        if (cp != null && event.getPlayer() != null)
+                            cp.giveMenuItem();
+                    }, 5);
+                }
 
-            if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
-                Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
-                    UltraPlayer cp = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-                    if (cp != null && event.getPlayer() != null)
-                        cp.giveMenuItem();
-                }, 5);
-            }
-            if (ultraCosmetics.getUpdateChecker() != null && ultraCosmetics.getUpdateChecker().isOutdated()) {
-                if (event.getPlayer().isOp()) {
-                    event.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics > " + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
+                if (ultraCosmetics.getUpdateChecker() != null && ultraCosmetics.getUpdateChecker().isOutdated()) {
+                    if (event.getPlayer().isOp()) {
+                        event.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics > " + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
+                    }
+                }
+
+                if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+                    // Cosmetics profile. TODO Add option to disable!!
+                    CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
+                    if (cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId()) == null) {
+                        ultraCosmetics.getSmartLogger().write("Creating cosmetics profile for " + event.getPlayer().getName());
+                        cosmeticsProfileManager.initForPlayer(cp);
+                    } else {
+                        ultraCosmetics.getSmartLogger().write("Loading cosmetics profile for " + event.getPlayer().getName());
+                        CosmeticsProfile cosmeticsProfile = cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId());
+                        cp.setCosmeticsProfile(cosmeticsProfile);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                cosmeticsProfile.loadToPlayer(cp);
+                            }
+                        }.runTask(ultraCosmetics);
+                    }
                 }
             }
-        });
+        };
+        bukkitRunnable.runTaskAsynchronously(ultraCosmetics);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWorldChange(final PlayerChangedWorldEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
-            if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
-                Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem(), 5);
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+            if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest")) {
+                ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem();
             }
-        });
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
+                        ultraCosmetics.getCosmeticsProfileManager().getProfile(event.getPlayer().getUniqueId()).loadToPlayer();
+                    }
+                }
+            }.runTaskLater(ultraCosmetics, 5);
+        } else { // Disable cosmetics when joining a bad world.
+            ultraPlayer.removeMenuItem();
+            ultraPlayer.setQuitting(true);
+            if (ultraPlayer.clear())
+                ultraPlayer.getBukkitPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));
+            ultraPlayer.setQuitting(false);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -186,8 +227,12 @@ public class PlayerListener implements Listener {
         if (ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest() != null) {
             ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest().forceOpen(0);
         }
-        ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).clear();
-        ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).removeMenuItem();
+        // TODO: Do anything with cosmetics profile?
+        UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        up.setQuitting(true);
+        up.clear();
+        up.removeMenuItem();
+        ultraCosmetics.getCosmeticsProfileManager().clearPlayerFromProfile(up);
         ultraCosmetics.getPlayerManager().remove(event.getPlayer());
     }
 
@@ -226,7 +271,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if(TreasureRandomizer.fireworksList.contains(event.getDamager())) {
+        if (TreasureRandomizer.fireworksList.contains(event.getDamager())) {
             event.setCancelled(true);
         }
     }

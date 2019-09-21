@@ -159,7 +159,7 @@ public class SuitType extends CosmeticMatType<Suit> {
         return getPermission() + "." + armorSlot.toString().toLowerCase();
     }
 
-    public static void register() {
+        public static void register() {
         new SuitType("Rave", "rave", "&7&oSuch amazing colors!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
         new SuitType("Astronaut", "astronaut", "&7&oHouston?", UCMaterial.GLASS, UCMaterial.GOLDEN_CHESTPLATE, UCMaterial.GOLDEN_LEGGINGS, UCMaterial.GOLDEN_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
         new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", UCMaterial.DIAMOND_HELMET, UCMaterial.DIAMOND_CHESTPLATE, UCMaterial.DIAMOND_LEGGINGS, UCMaterial.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);

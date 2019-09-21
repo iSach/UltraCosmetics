@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,6 +18,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  * Created by sacha on 10/08/15.
  */
 public class MountDruggedHorse extends MountHorse {
+
+    private Player effectPlayer;
 
     public MountDruggedHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("druggedhorse"), ultraCosmetics);
@@ -32,6 +35,7 @@ public class MountDruggedHorse extends MountHorse {
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             try {
                 getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));
+                effectPlayer = getPlayer();
             } catch (Exception ignored) {
             }
         }, 1);
@@ -48,16 +52,17 @@ public class MountDruggedHorse extends MountHorse {
 
     @Override
     protected void onClear() {
-        super.onClear();
 
         // Make sure it's calling the effect method synchronously with Spigot's thread. TODO make onClear sync all the time.
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (getPlayer() != null)
-                    getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
+                if (effectPlayer != null) {
+                    effectPlayer.removePotionEffect(PotionEffectType.CONFUSION);
+                }
             }
         }.runTask(getUltraCosmetics());
+        super.onClear();
     }
 
     @Override

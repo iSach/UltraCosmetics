@@ -16,8 +16,10 @@ import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
+import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.CacheValue;
@@ -48,7 +50,18 @@ public class UltraPlayer {
      * Player UUID.
      */
     public UUID uuid;
-
+    /**
+     * boolean to identify if player is loaded correctly
+     */
+    public boolean isLoaded = false;
+    /**
+     * MySql Index.
+     */
+    public int mySqlIndex = -1;
+    /**
+     * Saves the username for logging usage.
+     */
+    private String username;
     /**
      * Current Cosmetics.
      */
@@ -61,38 +74,35 @@ public class UltraPlayer {
     private Hat currentHat;
     private Map<ArmorSlot, Suit> suitMap = new HashMap<>();
     private Emote currentEmote;
-
+    /**
+     * Stores enabled cosmetics.
+     */
+    private CosmeticsProfile cosmeticsProfile;
     /**
      * Specifies if the player can currently be hit by any other gadget.
      * Exemple: Get hit by a flesh hook.
      */
     private boolean canBeHitByOtherGadgets = true;
-
-    /**
-     * boolean to identify if player is loaded correctly
-     */
-    public boolean isLoaded = false;
-
     /**
      * Cooldown map storing all the current cooldowns for gadgets.
      */
     private HashMap<GadgetType, Long> gadgetCooldowns = null;
-
     /**
      * MySql Cache.
      */
     private CacheValue gadgetsEnabledCache = CacheValue.UNLOADED;
     private CacheValue morphSelfViewCache = CacheValue.UNLOADED;
-
-    /**
-     * MySql Index.
-     */
-    public int mySqlIndex = -1;
-
     private UltraCosmetics ultraCosmetics;
 
     private volatile boolean moving;
     private volatile Location lastPos;
+
+    /**
+     * Indicates if the player is leaving the server.
+     * Useful to differentiate for example when a player deactivates
+     * a cosmetic on purpose or because they leave.
+     */
+    private boolean quitting = false;
 
     /**
      * Allows to store custom data for each player easily.
@@ -123,10 +133,11 @@ public class UltraPlayer {
                 SettingsManager.getData(getBukkitPlayer()).addDefault("Third-Person-Morph-View", true);
             }
 
+            this.username = getBukkitPlayer().getDisplayName();
 
         } catch (Exception exc) {
             // Player couldn't be found.
-            System.out.println("UltraCosmetics ERR -> " + "Couldn't find player with UUID: " + uuid);
+            ultraCosmetics.getSmartLogger().write("UltraCosmetics ERR -> " + "Couldn't find player with UUID: " + uuid);
             isLoaded = false;
             return;
         }
@@ -135,12 +146,11 @@ public class UltraPlayer {
             try {
                 ultraCosmetics.getMySqlConnectionManager().getSqlLoader().addPreloadPlayer(uuid);
             } catch (Exception e) {
-                System.out.println("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
+                ultraCosmetics.getSmartLogger().write("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
             }
         } else {
             isLoaded = true;
         }
-
     }
 
     /**
@@ -188,7 +198,7 @@ public class UltraPlayer {
         }
 
         currentGadget.clear();
-        currentGadget = null;
+        setCurrentGadget(null);
     }
 
     /**
@@ -199,7 +209,7 @@ public class UltraPlayer {
             return;
         }
         currentEmote.clear();
-        currentEmote = null;
+        setCurrentEmote(null);
     }
 
 
@@ -211,7 +221,7 @@ public class UltraPlayer {
             return;
         }
         currentMount.clear();
-        currentMount = null;
+        setCurrentMount(null);
     }
 
     /**
@@ -222,7 +232,7 @@ public class UltraPlayer {
             return;
         }
         currentPet.clear();
-        currentPet = null;
+        setCurrentPet(null);
     }
 
     /**
@@ -262,11 +272,13 @@ public class UltraPlayer {
         }
 
         currentHat.clear();
-        currentHat = null;
+        setCurrentHat(null);
     }
 
-    public void setSuit(ArmorSlot armorSlot, Suit suit) {
+    public void setCurrentSuitPart(ArmorSlot armorSlot, Suit suit) {
         suitMap.put(armorSlot, suit);
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledSuitPart(armorSlot, suit == null ? null : suit.getType());
     }
 
     /**
@@ -285,7 +297,7 @@ public class UltraPlayer {
         }
 
         suitMap.get(armorSlot).clear();
-        suitMap.put(armorSlot, null);
+        setCurrentSuitPart(armorSlot, null);
     }
 
     public double getBalance() {
@@ -433,7 +445,7 @@ public class UltraPlayer {
         }
 
         currentParticleEffect.clear();
-        currentParticleEffect = null;
+        setCurrentParticleEffect(null);
     }
 
     /**
@@ -445,7 +457,7 @@ public class UltraPlayer {
         }
 
         currentMorph.clear();
-        currentMorph = null;
+        setCurrentMorph(null);
     }
 
     /**
@@ -725,68 +737,82 @@ public class UltraPlayer {
         return currentEmote;
     }
 
+    public void setCurrentEmote(Emote currentEmote) {
+        this.currentEmote = currentEmote;
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledEmote(currentEmote == null ? null : currentEmote.getType());
+    }
+
     public Gadget getCurrentGadget() {
         return currentGadget;
+    }
+
+    public void setCurrentGadget(Gadget currentGadget) {
+        this.currentGadget = currentGadget;
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledGadget(currentGadget == null ? null : currentGadget.getType());
     }
 
     public HashMap<GadgetType, Long> getGadgetCooldowns() {
         return gadgetCooldowns;
     }
 
+    public void setGadgetCooldowns(HashMap<GadgetType, Long> gadgetCooldowns) {
+        this.gadgetCooldowns = gadgetCooldowns;
+    }
+
     public Hat getCurrentHat() {
         return currentHat;
+    }
+
+    public void setCurrentHat(Hat currentHat) {
+        this.currentHat = currentHat;
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledHat(currentHat == null ? null : currentHat.getType());
     }
 
     public Morph getCurrentMorph() {
         return currentMorph;
     }
 
+    public void setCurrentMorph(Morph currentMorph) {
+        this.currentMorph = currentMorph;
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledMorph(currentMorph == null ? null : currentMorph.getType());
+    }
+
     public Mount getCurrentMount() {
         return currentMount;
+    }
+
+    public void setCurrentMount(Mount currentMount) {
+        this.currentMount = currentMount;
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledMount((MountType) (currentMount == null ? null : currentMount.getType()));
     }
 
     public ParticleEffect getCurrentParticleEffect() {
         return currentParticleEffect;
     }
 
+    public void setCurrentParticleEffect(ParticleEffect currentParticleEffect) {
+        this.currentParticleEffect = currentParticleEffect;
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledEffect(currentParticleEffect == null ? null : currentParticleEffect.getType());
+    }
+
     public Pet getCurrentPet() {
         return currentPet;
     }
 
-    public TreasureChest getCurrentTreasureChest() {
-        return currentTreasureChest;
-    }
-
-    public void setCurrentGadget(Gadget currentGadget) {
-        this.currentGadget = currentGadget;
-    }
-
-    public void setGadgetCooldowns(HashMap<GadgetType, Long> gadgetCooldowns) {
-        this.gadgetCooldowns = gadgetCooldowns;
-    }
-
-    public void setCurrentEmote(Emote currentEmote) {
-        this.currentEmote = currentEmote;
-    }
-
-    public void setCurrentHat(Hat currentHat) {
-        this.currentHat = currentHat;
-    }
-
-    public void setCurrentMorph(Morph currentMorph) {
-        this.currentMorph = currentMorph;
-    }
-
-    public void setCurrentMount(Mount currentMount) {
-        this.currentMount = currentMount;
-    }
-
-    public void setCurrentParticleEffect(ParticleEffect currentParticleEffect) {
-        this.currentParticleEffect = currentParticleEffect;
-    }
-
     public void setCurrentPet(Pet currentPet) {
         this.currentPet = currentPet;
+        if (!isQuitting())
+            cosmeticsProfile.setEnabledPet(currentPet == null ? null : currentPet.getType());
+    }
+
+    public TreasureChest getCurrentTreasureChest() {
+        return currentTreasureChest;
     }
 
     public void setCurrentTreasureChest(TreasureChest currentTreasureChest) {
@@ -834,5 +860,30 @@ public class UltraPlayer {
             case PETS:
                 removePet();
         }
+    }
+
+    public CosmeticsProfile getCosmeticsProfile() {
+        return cosmeticsProfile;
+    }
+
+    public void setCosmeticsProfile(CosmeticsProfile cosmeticsProfile) {
+        this.cosmeticsProfile = cosmeticsProfile;
+    }
+
+    public boolean isOnline() {
+        Player p = Bukkit.getServer().getPlayer(uuid);
+        return p != null && p.isOnline();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public boolean isQuitting() {
+        return quitting;
+    }
+
+    public void setQuitting(boolean quitting) {
+        this.quitting = quitting;
     }
 }

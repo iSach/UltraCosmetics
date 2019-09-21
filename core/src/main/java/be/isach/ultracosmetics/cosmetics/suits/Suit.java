@@ -150,7 +150,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
                 break;
         }
 
-        getOwner().setSuit(armorSlot, this);
+        getOwner().setCurrentSuitPart(armorSlot, this);
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
     }
 
@@ -189,7 +189,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
                 getPlayer().getInventory().setBoots(null);
                 break;
         }
-        getOwner().setSuit(getArmorSlot(), null);
+        getOwner().setCurrentSuitPart(getArmorSlot(), null);
         HandlerList.unregisterAll(this);
     }
 

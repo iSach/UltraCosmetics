@@ -288,3 +288,10 @@ Gadget-Slot: 4
 # their current gadget by pressing
 # their drop key.
 Remove-Gadget-With-Drop: false
+
+# [BETA]
+# Allows for players to auto-equip on join cosmetics they had before disconnecting.
+# At the moment, only works while the server is up. Upon shutdown, the cosmetics saved states
+# are reset! Soon it will support shutdowns.
+Auto-Equip-Cosmetics:
+  enabled: false

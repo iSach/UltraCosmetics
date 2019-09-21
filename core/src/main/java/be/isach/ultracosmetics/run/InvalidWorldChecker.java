@@ -29,8 +29,10 @@ public class InvalidWorldChecker extends BukkitRunnable {
             try {
                 if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(p.getWorld().getName())) {
                     ultraPlayer.removeMenuItem();
+                    ultraPlayer.setQuitting(true);
                     if (ultraPlayer.clear())
                         ultraPlayer.getBukkitPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));
+                    ultraPlayer.setQuitting(false);
                 }
             } catch (Exception exc) {
             }

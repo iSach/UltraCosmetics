@@ -16,6 +16,7 @@ import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.placeholderapi.PlaceholderHook;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
+import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
@@ -90,8 +91,12 @@ public class UltraCosmetics extends JavaPlugin {
      */
     private ArmorStandManager armorStandManager;
 
-
     private EconomyHandler economyHandler;
+
+    /**
+     * Manages cosmetics profiles.
+     */
+    private CosmeticsProfileManager cosmeticsProfileManager;
 
     /**
      * Called when plugin is enabled.
@@ -177,6 +182,9 @@ public class UltraCosmetics extends JavaPlugin {
 
         // Initialize UltraPlayers and give chest (if needed).
         playerManager.initPlayers();
+
+        this.cosmeticsProfileManager = new CosmeticsProfileManager(this);
+        cosmeticsProfileManager.initPlayers();
 
         // Start the Fall Damage and Invalid World Check Runnables.
         new FallDamageManager().runTaskTimerAsynchronously(this, 0, 1);
@@ -284,6 +292,7 @@ public class UltraCosmetics extends JavaPlugin {
             config.set("TreasureChests.Loots.Gadgets.Message.enabled", false);
             config.set("TreasureChests.Loots.Gadgets.Message.message", "%prefix% &6&l%name% found gadget %gadget%");
         }
+
         if (!config.contains("TreasureChests.Loots.Suits")) {
             config.createSection("TreasureChests.Loots.Suits");
             config.set("TreasureChests.Loots.Suits.Enabled", true);
@@ -337,6 +346,15 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("Categories-Enabled.Suits", true, "Do you want to enable Suits category?");
 
         config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
+
+        if (!config.contains("Auto-Equip-Cosmetics")) {
+            config.createSection("Auto-Equip-Cosmetics", "[BETA!]",
+                    "Allows for players to auto-equip on join cosmetics they had before disconnecting.",
+                    "At the moment, only works while the server is up. Upon shutdown, the cosmetics saved states",
+                    "are reset! Soon it will support shutdowns.");
+            config.set("Auto-Equip-Cosmetics.enabled", false);
+            //config.set("Auto-Equip-Cosmetics.on-join", true);
+        }
 
         try {
             config.save(file);
@@ -427,5 +445,9 @@ public class UltraCosmetics extends JavaPlugin {
 
     public EconomyHandler getEconomyHandler() {
         return economyHandler;
+    }
+
+    public CosmeticsProfileManager getCosmeticsProfileManager() {
+        return cosmeticsProfileManager;
     }
 }

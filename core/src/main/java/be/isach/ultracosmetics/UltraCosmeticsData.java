@@ -100,6 +100,8 @@ public class UltraCosmeticsData {
      */
     private AbstractMetrics metrics;
 
+    private boolean cosmeticsProfilesEnabled;
+
     public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
         this.usingSpigot = ultraCosmetics.getServer().getVersion().contains("Spigot");
@@ -183,6 +185,7 @@ public class UltraCosmeticsData {
         this.customBackMenuCommand = ultraCosmetics.getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
         this.closeAfterSelect = ultraCosmetics.getConfig().getBoolean("Categories.Close-GUI-After-Select");
         this.enabledWorlds = ultraCosmetics.getConfig().getStringList("Enabled-Worlds");
+        this.cosmeticsProfilesEnabled = ultraCosmetics.getConfig().getBoolean("Auto-Equip-Cosmetics.enabled");
     }
 
     public boolean isAmmoEnabled() {
@@ -256,5 +259,9 @@ public class UltraCosmeticsData {
 
     public void setMetrics(AbstractMetrics metrics) {
         this.metrics = metrics;
+    }
+
+    public boolean areCosmeticsProfilesEnabled() {
+        return cosmeticsProfilesEnabled;
     }
 }
