@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.*;
@@ -8,7 +9,9 @@ import be.isach.ultracosmetics.util.UCMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Gadget types.
@@ -30,10 +33,29 @@ public class GadgetType extends CosmeticMatType<Gadget> {
     }
 
     public static GadgetType valueOf(String s) {
-        for (GadgetType gadgetType : VALUES) {
-            if (gadgetType.getConfigName().equalsIgnoreCase(s)) return gadgetType;
+        return valueOf(s, false);
+    }
+
+    public static GadgetType valueOf(String s, boolean onlyEnabled) {
+        s = s.toLowerCase();
+        String finalS = s;
+        Stream<GadgetType> stream = VALUES.stream().filter(gadgetType -> gadgetType.getConfigName().equalsIgnoreCase(finalS));
+        if(onlyEnabled) {
+            stream.filter(gadgetType -> gadgetType.isEnabled());
         }
-        return null;
+        Optional<GadgetType> optionalType = stream.findFirst();
+        if(optionalType.isPresent()) {
+            return optionalType.get();
+        } else {
+            stream = VALUES.stream().filter(gadgetType -> gadgetType.getConfigName().toLowerCase().startsWith(finalS));
+            if(onlyEnabled) {
+                stream.filter(gadgetType -> gadgetType.isEnabled());
+            }
+            Optional<GadgetType> bestMatchOptional = stream.findFirst();
+            if(bestMatchOptional.isPresent())
+                return bestMatchOptional.get();
+            return null;
+        }
     }
 
     public static void checkEnabled() {

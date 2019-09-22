@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.command.subcommands;
+ package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
@@ -154,7 +154,7 @@ public class SubCommandGive extends SubCommand {
                 sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " not found and has never come!");
                 return;
             }
-            if (Bukkit.getOfflinePlayer(args[3]) != null) {
+            if (Bukkit.getPlayer(args[3]) == null || (!Bukkit.getPlayer(args[3]).isOnline() && Bukkit.getOfflinePlayer(args[3]) != null)) {
                 sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " is offline.");
 
                 receiver = Bukkit.getOfflinePlayer(args[3]);
@@ -187,7 +187,7 @@ public class SubCommandGive extends SubCommand {
                 sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " not found!");
                 return;
             }
-            if (Bukkit.getOfflinePlayer(args[4]) != null) {
+            if (Bukkit.getPlayer(args[4]) == null || (!Bukkit.getPlayer(args[4]).isOnline() && Bukkit.getOfflinePlayer(args[4]) != null)) {
                 sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " is offline.");
 
                 receiver = Bukkit.getOfflinePlayer(args[4]);
@@ -206,6 +206,11 @@ public class SubCommandGive extends SubCommand {
                 for (int i = 0; i < GadgetType.enabled().size(); i++)
                     sb.append(GadgetType.enabled().get(i).toString().toLowerCase() + ((i != GadgetType.enabled().size() - 1) ? ChatColor.WHITE + "" + ChatColor.BOLD + ", " + ChatColor.RED : ""));
                 sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Gadget Types: " + ChatColor.RED + sb.toString());
+                return;
+            }
+
+            if(gadgetType == null) {
+                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "No gadget with this name!");
                 return;
             }
 

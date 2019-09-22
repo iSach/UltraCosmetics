@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.command;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -129,6 +130,21 @@ public class UCTabCompleter implements TabCompleter {
                     }
 
                     Collections.sort(commands);
+
+                    ArrayList<String> toReturn = new ArrayList<>();
+                    for (String s : commands) {
+                        if (s.toLowerCase().startsWith(args[2].toLowerCase())) {
+                            toReturn.add(s);
+                        }
+                    }
+
+                    return toReturn;
+                } else if (args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("ammo")) {
+                    List<String> commands = new ArrayList<>();
+
+                    for(GadgetType gadgetType : GadgetType.enabled()) {
+                        commands.add(gadgetType.getConfigName());
+                    }
 
                     ArrayList<String> toReturn = new ArrayList<>();
                     for (String s : commands) {
