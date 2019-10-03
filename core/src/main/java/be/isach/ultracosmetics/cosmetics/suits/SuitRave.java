@@ -38,23 +38,26 @@ public class SuitRave extends Suit {
     }
 
     private void refresh() {
-        LeatherArmorMeta itemMeta = (LeatherArmorMeta) itemStack.getItemMeta();
-        itemMeta.setColor(Color.fromRGB(colors[0], colors[1], colors[2]));
-        itemStack.setItemMeta(itemMeta);
+        try {
+            LeatherArmorMeta itemMeta = (LeatherArmorMeta) itemStack.getItemMeta();
+            itemMeta.setColor(Color.fromRGB(colors[0], colors[1], colors[2]));
+            itemStack.setItemMeta(itemMeta);
 
-        switch (getArmorSlot()) {
-            case HELMET:
-                getPlayer().getInventory().setHelmet(itemStack);
-                break;
-            case CHESTPLATE:
-                getPlayer().getInventory().setChestplate(itemStack);
-                break;
-            case LEGGINGS:
-                getPlayer().getInventory().setLeggings(itemStack);
-                break;
-            case BOOTS:
-                getPlayer().getInventory().setBoots(itemStack);
-                break;
+            switch (getArmorSlot()) {
+                case HELMET:
+                    getPlayer().getInventory().setHelmet(itemStack);
+                    break;
+                case CHESTPLATE:
+                    getPlayer().getInventory().setChestplate(itemStack);
+                    break;
+                case LEGGINGS:
+                    getPlayer().getInventory().setLeggings(itemStack);
+                    break;
+                case BOOTS:
+                    getPlayer().getInventory().setBoots(itemStack);
+                    break;
+            }
+        } catch (Exception exc) {
         }
     }
 }

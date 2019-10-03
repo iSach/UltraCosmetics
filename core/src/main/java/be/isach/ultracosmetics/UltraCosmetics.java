@@ -16,6 +16,7 @@ import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.placeholderapi.PlaceholderHook;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
+import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
@@ -25,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -183,9 +185,6 @@ public class UltraCosmetics extends JavaPlugin {
         // Initialize UltraPlayers and give chest (if needed).
         playerManager.initPlayers();
 
-        this.cosmeticsProfileManager = new CosmeticsProfileManager(this);
-        cosmeticsProfileManager.initPlayers();
-
         // Start the Fall Damage and Invalid World Check Runnables.
         new FallDamageManager().runTaskTimerAsynchronously(this, 0, 1);
         new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
@@ -205,10 +204,25 @@ public class UltraCosmetics extends JavaPlugin {
             updateChecker.checkForUpdate();
         }
 
+        if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
+            this.cosmeticsProfileManager = new CosmeticsProfileManager(this);
+            /**
+             * TODO Fix this.
+             * For some reason, the mount disappears without this kind of delay.
+             */
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    cosmeticsProfileManager.initPlayers();
+                }
+            }.runTaskLater(this, 20);
+        }
+
         // Ended well :v
         getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
         getSmartLogger().write("-------------------------------------------------------------------");
     }
+
     /**
      * Called when plugin disables.
      */
@@ -216,6 +230,10 @@ public class UltraCosmetics extends JavaPlugin {
     public void onDisable() {
         // TODO Purge Pet Names. (and Treasure Chests bugged holograms).
         // TODO Use Metadatas for that!
+
+        for (CosmeticsProfile cp : cosmeticsProfileManager.getCosmeticsProfiles().values()) {
+            cp.save();
+        }
 
         if (playerManager != null) {
             playerManager.dispose();
@@ -278,9 +296,9 @@ public class UltraCosmetics extends JavaPlugin {
         if (!config.contains("TreasureChests.Loots.Money.Min")) {
             int min = 15;
             int max = config.getInt("TreasureChests.Loots.Money.Max");
-            if(max < 5)
+            if (max < 5)
                 min = 0;
-            else if(max < 15)
+            else if (max < 15)
                 min = 5;
             config.set("TreasureChests.Loots.Money.Min", min);
         }
@@ -351,8 +369,8 @@ public class UltraCosmetics extends JavaPlugin {
             config.createSection("Auto-Equip-Cosmetics", "[BETA!]",
                     "Allows for players to auto-equip on join cosmetics they had before disconnecting.",
                     "At the moment, only works while the server is up. Upon shutdown, the cosmetics saved states",
-                    "are reset! Soon it will support shutdowns.");
-            config.set("Auto-Equip-Cosmetics.enabled", false);
+                    "are reset! Doesn't support MySQL yet.");
+            config.set("Auto-Equip-Cosmetics.enabled", true);
             //config.set("Auto-Equip-Cosmetics.on-join", true);
         }
 

@@ -89,7 +89,6 @@ public class SettingsManager {
     public static SettingsManager getData(Player p) {
         return new SettingsManager("/data/" + p.getUniqueId().toString());
     }
-
     /**
      * Gets the data settings manager of a uuid.
      *

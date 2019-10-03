@@ -43,13 +43,15 @@ public class CosmeticsProfileManager {
         CosmeticsProfile cosmeticsProfile = new CosmeticsProfile(uuid);
         cosmeticsProfiles.put(uuid, cosmeticsProfile);
         cosmeticsProfile.setUltraPlayer(up);
+
+        // Try to load
+        cosmeticsProfile.loadFromData();
+
         up.setCosmeticsProfile(cosmeticsProfile);
 
-        ultraCosmetics.getSmartLogger().write("Successfully created a cosmetics profile for " + up.getUsername());
+        // ultraCosmetics.getSmartLogger().write("Successfully created a cosmetics profile for " + up.getUsername());
 
-        // Load the profile from File/MySQL and enable cosmetics.
-        // cosmeticsProfile.loadFromData();
-        // cosmeticsProfile.loadToPlayer(); TODO
+        cosmeticsProfile.loadToPlayer();
     }
 
     public CosmeticsProfile getProfile(UltraPlayer ultraPlayer) {

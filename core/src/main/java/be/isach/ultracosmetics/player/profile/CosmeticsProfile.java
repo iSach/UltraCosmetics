@@ -2,10 +2,13 @@ package be.isach.ultracosmetics.player.profile;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.*;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,18 +40,64 @@ public class CosmeticsProfile {
     /**
      * Loads the profile from the player file/mysql data.
      */
-    public void loadFromData() {
-        // TODO
+    public boolean loadFromData() {
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            SettingsManager sm = SettingsManager.getData(uuid);
+            if (!sm.contains("enabled")) {
+                return false;
+            }
+            ConfigurationSection s = sm.fileConfiguration.getConfigurationSection("enabled");
+            try {
+                setEnabledGadget(GadgetType.valueOf(s.getString("gadget")));
+            } catch (Exception exc) {
+            }
+            try {
+                setEnabledEffect(ParticleEffectType.valueOf(s.getString("effect")));
+            } catch (Exception exc) {
+            }
+            try {
+                setEnabledEmote(EmoteType.valueOf(s.getString("emote")));
+            } catch (Exception exc) {
+            }
+            try {
+                setEnabledHat(HatType.valueOf(s.getString("hat")));
+            } catch (Exception exc) {
+            }
+            try {
+                setEnabledMorph(MorphType.valueOf(s.getString("morph")));
+            } catch (Exception exc) {
+            }
+            try {
+                setEnabledMount(MountType.valueOf(s.getString("mount")));
+            } catch (Exception exc) {
+            }
+            try {
+                setEnabledPet(PetType.valueOf(s.getString("pet")));
+            } catch (Exception exc) {
+            }
+
+            for (ArmorSlot slot : ArmorSlot.values()) {
+                try {
+                    setEnabledSuitPart(slot, SuitType.valueOf(s.getString("suit." + slot.toString().toLowerCase())));
+                } catch (Exception exc) {
+                }
+            }
+
+            return true;
+        } else {
+            // TODO MySQL
+            return false;
+        }
     }
 
     public void loadToPlayer(UltraPlayer ultraPlayer) {
-        if(!UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
+        if (!UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
             return;
         }
 
         this.ultraPlayer = ultraPlayer;
 
-        if(ultraPlayer.getCosmeticsProfile() != this)
+        if (ultraPlayer.getCosmeticsProfile() != this)
             ultraPlayer.setCosmeticsProfile(this);
 
         loadToPlayer();
@@ -116,11 +165,39 @@ public class CosmeticsProfile {
                 suitPart.equip(ultraPlayer, ultraCosmetics, armorSlot);
         }
     }
-;
-    /**
-     * Saves the profile to file/mysql.
-     */
+
     public void save() {
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            saveToFile();
+        } else {
+            // TODO SQL Save
+        }
+    }
+
+    /**
+     * Saves the profile to file.
+     */
+    public void saveToFile() {
+        SettingsManager settingsManager = SettingsManager.getData(uuid);
+
+        settingsManager.set("enabled.gadget", enabledGadget != null ? enabledGadget.getConfigName() : "none");
+        settingsManager.set("enabled.effect", enabledEffect != null ? enabledEffect.getConfigName() : "none");
+        settingsManager.set("enabled.emote", enabledEmote != null ? enabledEmote.getConfigName() : "none");
+        settingsManager.set("enabled.hat", enabledHat != null ? enabledHat.getConfigName() : "none");
+        settingsManager.set("enabled.morph", enabledMorph != null ? enabledMorph.getConfigName() : "none");
+        settingsManager.set("enabled.mount", enabledMount != null ? enabledMount.getConfigName() : "none");
+        Bukkit.broadcastMessage("");
+        settingsManager.set("enabled.pet", enabledPet != null ? enabledPet.getConfigName() : "none");
+        for (ArmorSlot slot : ArmorSlot.values()) {
+            SuitType enabledSuitPart = enabledSuitParts.get(slot);
+            settingsManager.set("enabled.suit." + slot.toString().toLowerCase(), enabledSuitPart != null ? enabledSuitPart.getConfigName() : "none");
+        }
+    }
+
+    /**
+     * Saves the profile to mysql.
+     */
+    public void saveToMySQL() {
         // TODO
     }
 

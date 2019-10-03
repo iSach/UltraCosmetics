@@ -69,10 +69,10 @@ public class PlayerListener implements Listener {
                     // Cosmetics profile. TODO Add option to disable!!
                     CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
                     if (cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId()) == null) {
-                        ultraCosmetics.getSmartLogger().write("Creating cosmetics profile for " + event.getPlayer().getName());
+                        // ultraCosmetics.getSmartLogger().write("Creating cosmetics profile for " + event.getPlayer().getName());
                         cosmeticsProfileManager.initForPlayer(cp);
                     } else {
-                        ultraCosmetics.getSmartLogger().write("Loading cosmetics profile for " + event.getPlayer().getName());
+                        //    ultraCosmetics.getSmartLogger().write("Loading cosmetics profile for " + event.getPlayer().getName());
                         CosmeticsProfile cosmeticsProfile = cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId());
                         cp.setCosmeticsProfile(cosmeticsProfile);
                         new BukkitRunnable() {
@@ -95,11 +95,17 @@ public class PlayerListener implements Listener {
             if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest")) {
                 ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem();
             }
-            new BukkitRunnable(){
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
-                        ultraCosmetics.getCosmeticsProfileManager().getProfile(event.getPlayer().getUniqueId()).loadToPlayer();
+
+                        CosmeticsProfile cp = ultraCosmetics.getCosmeticsProfileManager().getProfile(event.getPlayer().getUniqueId());
+                        if (cp == null) {
+                            ultraCosmetics.getCosmeticsProfileManager().initForPlayer(ultraPlayer);
+                        } else {
+                            cp.loadToPlayer();
+                        }
                     }
                 }
             }.runTaskLater(ultraCosmetics, 5);

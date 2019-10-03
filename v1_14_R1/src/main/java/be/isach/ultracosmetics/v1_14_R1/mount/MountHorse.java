@@ -60,6 +60,7 @@ public abstract class MountHorse<E extends AbstractHorse> extends Mount<E> {
         }
         runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
+
         getOwner().setCurrentMount(this);
     }
 

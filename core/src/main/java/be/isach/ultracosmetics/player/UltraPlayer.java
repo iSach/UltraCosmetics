@@ -263,6 +263,12 @@ public class UltraPlayer {
         return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getBukkitPlayer()).get("Keys") : ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getKeys(getMySqlIndex());
     }
 
+    public void saveCosmeticsProfile() {
+        if (cosmeticsProfile == null) return;
+
+        cosmeticsProfile.save();
+    }
+
     /**
      * Removes the current hat.
      */
