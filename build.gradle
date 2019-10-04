@@ -118,6 +118,11 @@ subprojects {
             url 'https://repo.isach.be'
         }
 
+        // Temporary repo
+        maven {
+            url 'https://repo.sachalewin.me'
+        }
+
         // BungeeCord
         maven {
             url 'https://oss.sonatype.org/content/repositories/snapshots'
