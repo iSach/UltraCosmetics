@@ -22,7 +22,7 @@ public class ArmorStandManager {
     }
 
     public boolean isUcStand(ArmorStand armorStand) {
-        return armorStand.getMetadata(META_TEXT).equals(META_TEXT);
+        return armorStand.getMetadata(META_TEXT).get(0).asString().equals(META_TEXT);
     }
 
 }

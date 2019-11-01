@@ -18,7 +18,7 @@ public class StringUtil {
         StringBuilder sb = new StringBuilder();
 
         for (char c : cs) {
-            if (current <= cs.length && c == '&') {
+            if (current < cs.length && c == '&') {
                 char tc = Character.toLowerCase(cs[current + 1]);
                 if (tc == '1' || tc == '2' || tc == '3' || tc == '4' || tc == '5' || tc == '6' || tc == '7' ||
                         tc == '8' || tc == '9' || tc == '0' || tc == 'a' || tc == 'b' || tc == 'c' || tc == 'd' ||
