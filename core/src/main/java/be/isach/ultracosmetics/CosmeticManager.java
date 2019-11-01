@@ -47,8 +47,8 @@ public class CosmeticManager {
         EmoteType.ANGRY.getConfigName();
         if (Category.MORPHS.isEnabled()) {
             MorphType.register();
-            // MorphType.valueOf("bat").getConfigName();
         }
+        MorphType.register();
 
         for (GadgetType gadgetType : GadgetType.values()) {
             ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");

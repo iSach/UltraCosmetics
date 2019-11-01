@@ -15,6 +15,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -99,11 +100,17 @@ public class GadgetDiscoBall extends Gadget {
             drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), true, 50);
             i2 += 0.4;
 
-            for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
-                if (ent.isOnGround() && affectPlayers) {
-                    MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
+                        if (ent.isOnGround() && affectPlayers) {
+                            MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
+                        }
+                    }
                 }
-            }
+            }.runTask(getUltraCosmetics());
 
             try {
                 for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {

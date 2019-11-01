@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**
@@ -55,11 +56,16 @@ public class GadgetAntiGravity extends Gadget {
                 as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
                 UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
                 UtilParticles.display(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
-                for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
-                    if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
-                        MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
+                            if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
+                                MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
+                            }
+                        }
                     }
-                }
+                }.runTask(getUltraCosmetics());
             } else {
                 as.remove();
                 as = null;

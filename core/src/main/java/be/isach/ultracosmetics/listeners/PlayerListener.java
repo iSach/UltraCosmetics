@@ -65,7 +65,8 @@ public class PlayerListener implements Listener {
                     }
                 }
 
-                if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+                if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())
+                    && UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
                     // Cosmetics profile. TODO Add option to disable!!
                     CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
                     if (cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId()) == null) {

@@ -218,6 +218,8 @@ public class UltraCosmetics extends JavaPlugin {
             }.runTaskLater(this, 20);
         }
 
+        GeneralUtil.printPermissions(this);
+
         // Ended well :v
         getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
         getSmartLogger().write("-------------------------------------------------------------------");
