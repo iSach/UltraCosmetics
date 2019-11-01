@@ -1,4 +1,5 @@
 dependencies {
-    compile 'org.spigotmc:spigot113:1.13'
+    compileOnly 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
+    compileOnly 'org.bukkit:craftbukkit:1.13-R0.1-SNAPSHOT'
     compile project(':core')
 }
