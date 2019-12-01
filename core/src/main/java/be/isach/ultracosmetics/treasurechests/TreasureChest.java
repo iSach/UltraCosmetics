@@ -289,7 +289,6 @@ public class TreasureChest implements Listener {
             BlockState blockState = b.getState();
             blockState.setRawData(this.oldDatas.get(b.getLocation()));
             blockState.update(true, true);
-            System.out.println(b.getState().getRawData());
             BlockUtils.treasureBlocks.remove(b);
         }
         if (!this.stopping) {
