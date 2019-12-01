@@ -92,7 +92,7 @@ public class BlockUtils {
                 byte d = Byte.valueOf(s.split(",")[1]);
                 b.setType(m);
                 b.getState().setRawData(d);
-                b.getState().update();
+                b.getState().update(true, true);
             } catch (Exception ignored) {
             }
         }
