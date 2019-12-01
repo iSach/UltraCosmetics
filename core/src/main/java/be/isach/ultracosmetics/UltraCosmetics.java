@@ -183,9 +183,11 @@ public class UltraCosmetics extends JavaPlugin {
         }
 
         // Initialize UltraPlayers and give chest (if needed).
+
         playerManager.initPlayers();
 
         // Start the Fall Damage and Invalid World Check Runnables.
+
         new FallDamageManager().runTaskTimerAsynchronously(this, 0, 1);
         new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
         new MovingChecker(this).runTaskTimerAsynchronously(this, 0, 1);
@@ -215,10 +217,10 @@ public class UltraCosmetics extends JavaPlugin {
                 public void run() {
                     cosmeticsProfileManager.initPlayers();
                 }
-            }.runTaskLater(this, 20);
+            }.runTaskLater(this, 20L);
         }
 
-        GeneralUtil.printPermissions(this);
+        GeneralUtil.printPermissions(this, SettingsManager.getConfig().getBoolean("Check-For-Updates"));
 
         // Ended well :v
         getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
