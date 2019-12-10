@@ -20,7 +20,7 @@ public class GeneralUtil {
     /**
      * Print permissions in a permissions.txt file.
      */
-    public static void printPermissions(UltraCosmetics ultraCosmetics) {
+    public static void printPermissions(UltraCosmetics ultraCosmetics, boolean checkedForUpdates) {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(new File(ultraCosmetics.getDataFolder(), "permissions.yml"), "UTF-8");
@@ -32,7 +32,10 @@ public class GeneralUtil {
         Date date = new Date();
 
         writer.println();
-        writer.println("UltraCosmetics v" + ultraCosmetics.getUpdateChecker().getCurrentVersion() + " permissions.");
+        if (checkedForUpdates)
+            writer.println("UltraCosmetics v" + ultraCosmetics.getUpdateChecker().getCurrentVersion() + " permissions.");
+        else
+            writer.println("UltraCosmetics permissions.");
         writer.println("Generated automatically on " + dateFormat.format(date));
         writer.println();
         writer.println();

@@ -29,13 +29,14 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+@SuppressWarnings("ALL")
 public class TreasureChest implements Listener {
 
-    Map<Location, Material> oldMaterials = new HashMap();
-    Map<Location, Byte> oldDatas = new HashMap();
-    ArrayList<Block> blocksToRestore = new ArrayList();
-    ArrayList<Block> chests = new ArrayList();
-    ArrayList<Block> chestsToRemove = new ArrayList();
+    static Map<Location, Byte> oldDatas = new HashMap<>();
+    Map<Location, Material> oldMaterials = new HashMap<>();
+    ArrayList<Block> blocksToRestore = new ArrayList<>();
+    ArrayList<Block> chests = new ArrayList<>();
+    ArrayList<Block> chestsToRemove = new ArrayList<>();
     public UUID owner;
     private final BukkitRunnable[] RUNNABLES = new BukkitRunnable[2];
     TreasureChest instance;
@@ -44,8 +45,8 @@ public class TreasureChest implements Listener {
     Particles particleEffect;
     int chestsLeft = 4;
     private Player player;
-    private List<Entity> items = new ArrayList();
-    private List<Entity> holograms = new ArrayList();
+    private List<Entity> items = new ArrayList<>();
+    private List<Entity> holograms = new ArrayList<>();
     boolean stopping;
     boolean cooldown = false;
     private TreasureChestDesign design;
@@ -73,7 +74,7 @@ public class TreasureChest implements Listener {
         if(centerPossibleBlock.getType() != Material.AIR) {
             // Save the block
             oldMaterials.put(centerPossibleBlock.getLocation(), centerPossibleBlock.getType());
-            oldDatas.put(centerPossibleBlock.getLocation(), centerPossibleBlock.getData());
+            oldDatas.put(centerPossibleBlock.getLocation(), centerPossibleBlock.getState().getRawData());
             blocksToRestore.add(loc.getBlock());
 
             // Temporarly remove it
@@ -144,7 +145,7 @@ public class TreasureChest implements Listener {
                                                 chest.setFacingDirection(blockFace);
                                                 blockState.setData(chest);
                                             }
-                                            blockState.update();
+                                            blockState.update(true, true);
 
                                             chests.add(b);
 //                                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()),
@@ -167,55 +168,55 @@ public class TreasureChest implements Listener {
                         lampBlock = getPlayer().getLocation().add(0.0D, -1.0D, 0.0D).getBlock();
                         center = lampBlock.getLocation().add(0.5D, 1.0D, 0.5D);
                         oldMaterials.put(lampBlock.getLocation(), lampBlock.getType());
-                        oldDatas.put(lampBlock.getLocation(), lampBlock.getData());
+                        oldDatas.put(lampBlock.getLocation(), lampBlock.getState().getRawData());
                         blocksToRestore.add(lampBlock);
                         lampBlock.setType(design.getCenter().getItemType());
-                        lampBlock.getState().setRawData(design.getCenter().getData());
-                        lampBlock.getState().update();
+                        lampBlock.getState().setData(design.getCenter());
+                        lampBlock.getState().update(true, true);
 //                        Particles.BLOCK_CRACK.display(new Particles.BlockData(lampBlock.getType(), lampBlock.getData()), 0f, 0f, 0f, 1f, 50, lampBlock.getLocation());
                     } else if (this.i == 4) {
                         for (Block b : getSurroundingBlocks(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
-                            oldDatas.put(b.getLocation(), b.getData());
+                            oldDatas.put(b.getLocation(), b.getState().getRawData());
                             blocksToRestore.add(b);
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBlocks2().getItemType());
-                            b.getState().setRawData(design.getBlocks2().getData());
-                            b.getState().update();
+                            b.getState().setData(design.getBlocks2());
+                            b.getState().update(true, true);
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 3) {
                         for (Block b : getSurroundingSurrounding(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
-                            oldDatas.put(b.getLocation(), b.getData());
+                            oldDatas.put(b.getLocation(), b.getState().getRawData());
                             blocksToRestore.add(b);
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBlocks3().getItemType());
-                            b.getState().setRawData(design.getBlocks3().getData());
-                            b.getState().update();
+                            b.getState().setData(design.getBlocks3());
+                            b.getState().update(true, true);
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 2) {
                         for (Block b : getBlock3(center.clone().add(0.0D, -1.0D, 0.0D).getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
-                            oldDatas.put(b.getLocation(), b.getData());
+                            oldDatas.put(b.getLocation(), b.getState().getRawData());
                             blocksToRestore.add(b);
                             BlockUtils.treasureBlocks.add(b);
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBelowChests().getItemType());
-                            b.getState().setRawData(design.getBelowChests().getData());
-                            b.getState().update();
+                            b.getState().setData(design.getBelowChests());
+                            b.getState().update(true, true);
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     } else if (this.i == 1) {
                         for (Block b : getSurroundingSurrounding(center.getBlock())) {
                             oldMaterials.put(b.getLocation(), b.getType());
-                            oldDatas.put(b.getLocation(), b.getData());
+                            oldDatas.put(b.getLocation(), b.getState().getRawData());
                             blocksToRestore.add(b);
                             BlockUtils.treasureBlocks.add(b);
                             b.setType(design.getBarriers().getItemType());
-                            b.getState().setRawData(design.getBarriers().getData());
-                            b.getState().update();
+                            b.getState().setData(design.getBarriers());
+                            b.getState().update(true, true);
 //                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
                         }
                     }
@@ -285,8 +286,9 @@ public class TreasureChest implements Listener {
         for (Block b : this.blocksToRestore) {
 //            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()), 0f, 0f, 0f, 1f, 50, b.getLocation());
             b.setType(this.oldMaterials.get(b.getLocation()));
-            b.getState().setRawData(this.oldDatas.get(b.getLocation()));
-            b.getState().update();
+            BlockState blockState = b.getState();
+            blockState.setRawData(this.oldDatas.get(b.getLocation()));
+            blockState.update(true, true);
             BlockUtils.treasureBlocks.remove(b);
         }
         if (!this.stopping) {
@@ -369,7 +371,7 @@ public class TreasureChest implements Listener {
     }
 
     public List<Block> getSurroundingBlocks(Block b) {
-        List blocks = new ArrayList();
+        List<Block> blocks = new ArrayList<>();
         blocks.add(b.getRelative(BlockFace.EAST));
         blocks.add(b.getRelative(BlockFace.WEST));
         blocks.add(b.getRelative(BlockFace.NORTH));
@@ -428,7 +430,7 @@ public class TreasureChest implements Listener {
     }
 
     public List<Block> getSurroundingSurrounding(Block b) {
-        List blocks = new ArrayList();
+        List<Block> blocks = new ArrayList<>();
         blocks.add(b.getRelative(2, 0, 1));
         blocks.add(b.getRelative(2, 0, -1));
         blocks.add(b.getRelative(2, 0, 2));
@@ -445,7 +447,7 @@ public class TreasureChest implements Listener {
     }
 
     public List<Block> getBlock3(Block b) {
-        List blocks = new ArrayList();
+        List<Block> blocks = new ArrayList<>();
         blocks.add(b.getRelative(-2, 0, 0));
         blocks.add(b.getRelative(2, 0, 0));
         blocks.add(b.getRelative(0, 0, 2));
@@ -465,10 +467,9 @@ public class TreasureChest implements Listener {
                 && UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_11_R1) < 0) {
             location.setY(location.getY() - 1);
         }
-        ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+        ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.valueOf("ARMOR_STAND"));
         armorStand.setSmall(true);
         armorStand.setVisible(false);
-        armorStand.setGravity(false);
         armorStand.setBasePlate(false);
         armorStand.setCustomName(s);
         armorStand.setCustomNameVisible(true);
