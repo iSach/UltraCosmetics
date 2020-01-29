@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.v1_15_R1.nms.WrapperEntityLiving;
 import be.isach.ultracosmetics.v1_15_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import net.minecraft.server.v1_15_R1.*;
@@ -183,7 +184,10 @@ public class EntityUtil implements IEntityUtil {
 
         if (loc == null) return;
 
-        ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), (1.0D + 2.0D * 0.5d) * 1.0D);
+        ec.aK = loc.getYaw();
+        PathEntity path = ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), 1);
+        ec.setNoAI(false);
+        ec.getNavigation().a(path, 2);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             return;
         }
 
-        ((EntityInsentient) petEntity).getNavigation().a(2);
+        ((EntityInsentient) petEntity).getNavigation().a(2d);
         Location targetLocation = player.getLocation();
         PathEntity path = ((EntityInsentient) petEntity).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
 

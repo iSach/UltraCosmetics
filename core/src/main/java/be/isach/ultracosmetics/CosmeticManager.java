@@ -48,7 +48,6 @@ public class CosmeticManager {
         if (Category.MORPHS.isEnabled()) {
             MorphType.register();
         }
-        MorphType.register();
 
         for (GadgetType gadgetType : GadgetType.values()) {
             ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");

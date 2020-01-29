@@ -7,7 +7,9 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
+import be.isach.ultracosmetics.util.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -123,6 +125,9 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
         if (getOwner() != null)
             getOwner().setCurrentMount(null);
+
+        if(this instanceof MountDragon && !getPlayer().isOnGround())
+            FallDamageManager.addNoFall(getPlayer());
 
         try {
             cancel();
