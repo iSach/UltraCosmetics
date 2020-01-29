@@ -73,14 +73,16 @@ public class GadgetBlackHole extends Gadget {
             }
 
             if (affectPlayers && item != null)
-                for (final Entity entity : item.getNearbyEntities(5, 3, 5)) {
-                    Vector vector = item.getLocation().toVector().subtract(entity.getLocation().toVector());
-                    MathUtils.applyVelocity(entity, vector);
-                    Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                        if (entity instanceof Player)
-                            ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
-                    });
-                }
+                Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                    for (final Entity entity : item.getNearbyEntities(5, 3, 5)) {
+                        Vector vector = item.getLocation().toVector().subtract(entity.getLocation().toVector());
+                        MathUtils.applyVelocity(entity, vector);
+                        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                            if (entity instanceof Player)
+                                ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
+                        });
+                    }
+                });
         }
     }
 

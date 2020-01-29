@@ -50,14 +50,17 @@ public class GadgetTsunami extends Gadget {
             }
             for (int a = 0; a < 100; a++)
                 UtilParticles.display(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
-            if (affectPlayers)
-                for (final Entity ent : getPlayer().getWorld().getNearbyEntities(loc, 0.6, 0.6, 0.6)) {
-                    if (!cooldownJump.contains(ent) && ent != getPlayer() && !(ent instanceof ArmorStand)) {
-                        MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v.clone().multiply(2)));
-                        cooldownJump.add(ent);
-                        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cooldownJump.remove(ent), 20);
+            if (affectPlayers) {
+                Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                    for (final Entity ent : getPlayer().getWorld().getNearbyEntities(loc, 0.6, 0.6, 0.6)) {
+                        if (!cooldownJump.contains(ent) && ent != getPlayer() && !(ent instanceof ArmorStand)) {
+                            MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v.clone().multiply(2)));
+                            cooldownJump.add(ent);
+                            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cooldownJump.remove(ent), 20);
+                        }
                     }
-                }
+                });
+            }
             loc.add(v);
         }, 0, 1).getTaskId();
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> Bukkit.getScheduler().cancelTask(i), 40);

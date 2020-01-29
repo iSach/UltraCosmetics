@@ -79,11 +79,13 @@ public class GadgetTrampoline extends Gadget {
     @Override
     public void onUpdate() {
         if (running && cuboid != null) {
-            for (Entity entity : center.getWorld().getNearbyEntities(center, 4, 4, 4)) {
-                Block b = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-                if (b.getType().toString().contains("WOOL") && cuboid.contains(b))
-                    MathUtils.applyVelocity(entity, new Vector(0, 3, 0));
-            }
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                for (Entity entity : center.getWorld().getNearbyEntities(center, 4, 4, 4)) {
+                    Block b = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
+                    if (b.getType().toString().contains("WOOL") && cuboid.contains(b))
+                        MathUtils.applyVelocity(entity, new Vector(0, 3, 0));
+                }
+            });
         }
     }
 

@@ -9,10 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
@@ -78,6 +78,7 @@ public class GadgetChickenator extends Gadget {
 
             FireworkMeta fm = f.getFireworkMeta();
             fm.addEffect(getRandomFireworkEffect());
+            fm.setDisplayName("uc_firework");
             f.setFireworkMeta(fm);
             fireworks.add(f);
         }
@@ -85,6 +86,14 @@ public class GadgetChickenator extends Gadget {
             for (Firework f : fireworks)
                 f.detonate();
         }, 2);
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager().getType() != EntityType.FIREWORK) return;
+        FireworkMeta fm = ((Firework) event.getDamager()).getFireworkMeta();
+        if (fm.getDisplayName().equals("uc_firework"))
+            event.setCancelled(true);
     }
 
     @Override
