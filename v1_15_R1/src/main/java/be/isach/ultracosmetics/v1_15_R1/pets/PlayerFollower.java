@@ -60,10 +60,10 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             }
 
             if (path != null && distance > 1.3) {
-                double speed = 1.05d;
+                double speed = 1.15d;
 
                 if (pet.getType().getEntityType() == EntityType.ZOMBIE) {
-                    speed *= 1.5;
+                    speed *= 1.3;
                 }
 
                 ((EntityInsentient) petEntity).getNavigation().a(path, speed);

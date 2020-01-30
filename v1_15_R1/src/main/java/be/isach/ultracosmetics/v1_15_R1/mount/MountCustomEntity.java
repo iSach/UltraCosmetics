@@ -13,6 +13,7 @@ import be.isach.ultracosmetics.v1_15_R1.customentities.RideableSpider;
 import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
@@ -33,6 +34,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
 
     @Override
     public void onEquip() {
+
         if (getType() == MountType.valueOf("slime"))
             customEntity = new CustomSlime(EntityTypes.SLIME, ((CraftPlayer) getPlayer()).getHandle().getWorld());
         else if (getType() == MountType.valueOf("spider"))
@@ -53,6 +55,13 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
 
         getOwner().setCurrentMount(this);
+
+        if(getType() == MountType.valueOf("slime") || getType() == MountType.valueOf("spider")) {
+            if(getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+                getOwner().sendMessage("§c§lUltraCosmetics > Monsters can't spawn here!");
+                getOwner().removeMount();
+            }
+        }
     }
 
     @Override

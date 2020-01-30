@@ -46,7 +46,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void resetWitherSize(Wither wither) {
-        ((CraftWither) wither).getHandle().r(600);
+        ((CraftWither) wither).getHandle().s(600);
     }
 
 
@@ -186,7 +186,6 @@ public class EntityUtil implements IEntityUtil {
 
         ec.aK = loc.getYaw();
         PathEntity path = ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), 1);
-        ec.setNoAI(false);
         ec.getNavigation().a(path, 2);
     }
 

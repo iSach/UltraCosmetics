@@ -42,9 +42,10 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     public ArmorStand armorStand;
 
     /**
-     * Runs the task for pets following players
+     * Runs the task for pets following players |: Problems with async??
      */
-    protected ExecutorService pathUpdater;
+    //protected ExecutorService pathUpdater;
+    protected int followTaskId;
 
     /**
      * Task that forces pets to follow player
@@ -67,7 +68,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         super(ultraCosmetics, Category.PETS, owner, petType);
 
         this.dropItem = dropItem;
-        this.pathUpdater = Executors.newSingleThreadExecutor();
+        //this.pathUpdater = Executors.newSingleThreadExecutor();
     }
 
     @Override
@@ -143,7 +144,8 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                     onUpdate();
                 }
 
-                pathUpdater.submit(followTask.getTask());
+                //pathUpdater.submit(followTask.getTask());
+                followTaskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), followTask.getTask(), 0, 4).getTaskId();
             } else {
                 cancel();
 
@@ -186,7 +188,8 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         items.clear();
 
         // Shutdown path updater.
-        pathUpdater.shutdown();
+        //pathUpdater.shutdown();
+        Bukkit.getScheduler().cancelTask(followTaskId);
 
         // Empty current Pet.
         if (getPlayer() != null && getOwner() != null) {

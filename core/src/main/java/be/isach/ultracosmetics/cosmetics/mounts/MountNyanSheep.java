@@ -5,8 +5,10 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.UtilParticles;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.util.Vector;
@@ -36,7 +38,7 @@ public class MountNyanSheep extends Mount<Sheep> {
 
     @Override
     public void onUpdate() {
-        move();
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), this::move);
 
         entity.setColor(DyeColor.values()[new Random().nextInt(15)]);
 
@@ -74,7 +76,6 @@ public class MountNyanSheep extends Mount<Sheep> {
     }
 
     private class RGBColor {
-
         int red;
         int green;
         int blue;
