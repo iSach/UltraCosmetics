@@ -1,6 +1,6 @@
-name: UltraCosmetics
+name: EnocraftCosmetics
 version: @VERSION@
-author: iSach
+authors: [iSach, SinfulMentality, LapCheung]
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
 api-version: 1.13

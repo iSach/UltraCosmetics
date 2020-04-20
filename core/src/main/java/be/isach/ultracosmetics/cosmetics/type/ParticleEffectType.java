@@ -81,5 +81,6 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
         new ParticleEffectType("ultracosmetics.particleeffects.firewaves", "FireWaves", 4, Particles.FLAME, UCMaterial.GOLD_NUGGET, ParticleEffectFireWaves.class, "&7&oSome say theses waves of fire acts as a shield...", ServerVersion.v1_8_R1);
         new ParticleEffectType("ultracosmetics.particleeffects.royalcrown", "RoyalCrown", 2, Particles.FLAME, UCMaterial.CAKE, ParticleEffectRoyalCrown.class, "&e&oLong live the king.", ServerVersion.v1_8_R1);
         new ParticleEffectType("ultracosmetics.particleeffects.gardennymph", "GardenNymph", 2, Particles.VILLAGER_HAPPY, UCMaterial.BONE_MEAL, ParticleEffectGardenNymph.class, "&e&oTurn a new leaf.", ServerVersion.v1_8_R1);
+        new ParticleEffectType("ultracosmetics.particleeffects.rainbowbubbles", "RainbowBubbles", 2, Particles.SPELL_MOB, UCMaterial.PUFFERFISH, ParticleEffectRainbowBubbles.class, "&e&oC'mon you, let's dance!", ServerVersion.v1_8_R1);
     }
 }
