@@ -253,7 +253,6 @@ public class UltraCosmetics extends JavaPlugin {
      */
     private void registerListeners() {
         PluginManager pluginManager = Bukkit.getPluginManager();
-
         pluginManager.registerEvents(new PlayerListener(this), this);
         pluginManager.registerEvents(new MainListener(), this);
         pluginManager.registerEvents(new EntitySpawningManager(), this);

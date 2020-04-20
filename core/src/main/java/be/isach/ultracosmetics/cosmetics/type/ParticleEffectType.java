@@ -79,5 +79,7 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
         new ParticleEffectType("ultracosmetics.particleeffects.inlove", "InLove", 1, Particles.HEART, UCMaterial.RED_DYE, ParticleEffectInLove.class, "&7&oOMG wow I'm in love!", ServerVersion.v1_8_R1);
         new ParticleEffectType("ultracosmetics.particleeffects.magicalrods", "MagicalRods", 3, Particles.REDSTONE, UCMaterial.BLAZE_ROD, ParticleEffectMagicalRods.class, "&7&oMay these magical rods protect you!", ServerVersion.v1_8_R1);
         new ParticleEffectType("ultracosmetics.particleeffects.firewaves", "FireWaves", 4, Particles.FLAME, UCMaterial.GOLD_NUGGET, ParticleEffectFireWaves.class, "&7&oSome say theses waves of fire acts as a shield...", ServerVersion.v1_8_R1);
+        new ParticleEffectType("ultracosmetics.particleeffects.royalcrown", "RoyalCrown", 2, Particles.FLAME, UCMaterial.CAKE, ParticleEffectRoyalCrown.class, "&e&oLong live the king.", ServerVersion.v1_8_R1);
+        new ParticleEffectType("ultracosmetics.particleeffects.gardennymph", "GardenNymph", 2, Particles.VILLAGER_HAPPY, UCMaterial.BONE_MEAL, ParticleEffectGardenNymph.class, "&e&oTurn a new leaf.", ServerVersion.v1_8_R1);
     }
 }

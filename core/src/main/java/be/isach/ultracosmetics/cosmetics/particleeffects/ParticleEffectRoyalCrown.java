@@ -3,89 +3,142 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 /**
- * Represents an instance of angel wing particles summoned by a player.
+ * Represents an instance of a royal crown summoned by a player.
  *
- * @author iSach
- * @since 11-11-2015
+ * @author SinfulMentality
+ * @since 04-19-20
  */
-public class ParticleEffectAngelWings extends ParticleEffect {
+public class ParticleEffectRoyalCrown extends ParticleEffect {
 
-    boolean x = true;
-    boolean o = false;
+    private final int numCrownSpokes = 5; // Number of spokes the crown has
+    private final int numParticlesBase = 10; // Number of particles the base of the crown is composed of
+    private final int numParticlesInnerPadding = 5; // Number of particles the red inner padding is made of
+    private int step = 0;
 
-    public ParticleEffectAngelWings(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(ultraCosmetics, owner, ParticleEffectType.valueOf("angelwings"));
+    public ParticleEffectRoyalCrown(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
+        super(ultraCosmetics, owner, ParticleEffectType.valueOf("royalcrown"));
+        this.ignoreMove = true; // ignoreMove is actually stopping the animation on moving if false... change naming
     }
-
-    private boolean[][] shape = {
-            {o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o},
-            {o, x, x, x, x, o, o, o, o, o, o, o, x, x, x, x, o, o},
-            {o, o, x, x, x, x, x, o, o, o, x, x, x, x, x, o, o, o},
-            {o, o, o, x, x, x, x, x, x, x, x, x, x, x, o, o, o, o},
-            {o, o, o, o, x, x, x, x, x, x, x, x, x, o, o, o, o, o},
-            {o, o, o, o, x, x, x, x, o, x, x, x, x, o, o, o, o, o},
-            {o, o, o, o, o, x, x, x, o, x, x, x, o, o, o, o, o, o},
-            {o, o, o, o, o, x, x, o, o, o, x, x, o, o, o, o, o, o},
-            {o, o, o, o, x, x, o, o, o, o, o, x, x, o, o, o, o, o}
-    };
 
     @Override
     public void onUpdate() {
-        drawParticles(getPlayer().getLocation());
+        Location location = getPlayer().getEyeLocation().add(0, 0.8, 0);
+        float radius = 0.35f; // refresh radius value
+
+        // Rotation logic
+        if(step == 720) step = 0; // at step = 720, (step * PI / 360.0f) = 2PI, equivalent to 0
+        step += 4;
+
+        drawRedCircle((radius-0.05f)/2, 0.2f, location);
+        drawGoldTop(0f, 0.5f, location);
+        drawGoldCircle(radius, 0, location);
+        drawCrownSpokes(radius, 0, location);
+        drawCrownPadding(radius, 0, location);
     }
 
-    private void drawParticles(Location location) {
-        double space = 0.2;
-        double defX = location.getX() - (space * shape[0].length / 2) + space;
-        double x = defX;
-        double y = location.clone().getY() + 2;
-        double angle = -((location.getYaw() + 180) / 60);
-        angle += (location.getYaw() < -180 ? 3.25 : 2.985);
+    // Draw each spoke of the crown, builds the spokes layer by layer
+    private void drawCrownSpokes(float radius, float y, Location location) {
+        drawCrownJewels(radius, y, location); // lowest point of spoke has a jewel
+        radius += 0.09f;
+        y += 0.2f;
+        drawCrownSpokesLayer(radius, y, location);
+        y += 0.2f;
+        drawCrownSpokesLayer(radius, y, location);
+        radius -= 0.18f;
+        y += 0.05f;
+        drawCrownSpokesLayer(radius, y, location);
+        radius -= 0.18f;
+        y -= 0.05f;
+        drawCrownSpokesLayer(radius, y, location);
+        y -= 0.4f;
+    }
 
-        for (boolean[] aShape : shape) {
-            for (boolean anAShape : aShape) {
-                if (anAShape) {
-
-                    Location target = location.clone();
-                    target.setX(x);
-                    target.setY(y);
-
-                    Vector v = target.toVector().subtract(location.toVector());
-                    Vector v2 = getBackVector(location);
-                    v = rotateAroundAxisY(v, angle);
-                    v2.setY(0).multiply(-0.2);
-
-                    location.add(v);
-                    location.add(v2);
-                    for (int k = 0; k < 3; k++)
-                        UtilParticles.display(255, 255, 255, location);
-                    location.subtract(v2);
-                    location.subtract(v);
-                }
-                x += space;
-            }
-            y -= space;
-            x = defX;
+    // Draws a single layer of all the crown spokes
+    private void drawCrownSpokesLayer(float radius, float y, Location location) {
+        for (int i = 0; i < numCrownSpokes; i++) {
+            double inc = (2 * Math.PI) / numCrownSpokes;
+            float angle = (float) ((i * inc) + (step * Math.PI / 360.0f));
+            float x = MathUtils.cos(angle) * radius;
+            float z = MathUtils.sin(angle) * radius;
+            location.add(x, y, z);
+            UtilParticles.display(255, 215, 0, location);
+            location.subtract(x, y, z);
         }
     }
 
-    public static Vector rotateAroundAxisY(Vector v, double angle) {
-        double x, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        x = v.getX() * cos + v.getZ() * sin;
-        z = v.getX() * -sin + v.getZ() * cos;
-        return v.setX(x).setZ(z);
+    // Draw the red padding of the crown, layer by layer
+    private void drawCrownPadding(float radius, float y, Location location) {
+        radius += 0.09f;
+        y += 0.2f;
+        drawCrownPads(radius, y, location);
+        y += 0.2f;
+        drawCrownPads(radius, y, location);
+        y -= 0.4f;
     }
 
-    public static Vector getBackVector(Location loc) {
-        final float newZ = (float) (loc.getZ() + (1 * Math.sin(Math.toRadians(loc.getYaw() + 90))));
-        final float newX = (float) (loc.getX() + (1 * Math.cos(Math.toRadians(loc.getYaw() + 90))));
-        return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
+    private void drawCrownPads(float radius, float y, Location location) {
+        for (int i = 0; i < numCrownSpokes; i++) {
+            double inc = (2 * Math.PI) / numCrownSpokes;
+            float angle = (float) (((i * inc) + (step * Math.PI / 360.0f)) + (Math.PI) / numCrownSpokes);
+            float x = MathUtils.cos(angle) * radius;
+            float z = MathUtils.sin(angle) * radius;
+            location.add(x, y, z);
+            UtilParticles.display(255, 0, 0, location);
+            location.subtract(x, y, z);
+        }
     }
+
+    // Draw crown jewels at the base of each spoke
+    private void drawCrownJewels(float radius, float y, Location location) {
+        for (int i = 0; i < numCrownSpokes; i++) {
+            double inc = (2 * Math.PI) / numCrownSpokes;
+            float angle = (float) ((i * inc) + (step * Math.PI / 360.0f));
+            float x = MathUtils.cos(angle) * radius;
+            float z = MathUtils.sin(angle) * radius;
+            location.add(x, y, z);
+            UtilParticles.display(0, 215, 255, location);
+            location.subtract(x, y, z);
+        }
+    }
+
+    // Draw inner circle of the red padding
+    private void drawRedCircle(float radius, float y, Location location) {
+        for (int i = 0; i < numParticlesBase; i++) {
+            double inc = (2 * Math.PI) / numParticlesInnerPadding;
+            float angle = (float) (i * inc);
+            float x = MathUtils.cos(angle) * radius;
+            float z = MathUtils.sin(angle) * radius;
+            location.add(x, y, z);
+            UtilParticles.display(255, 0, 0, location);
+            location.subtract(x, y, z);
+        }
+    }
+
+    // Draw gold circle for the crown base
+    private void drawGoldCircle(float radius, float y, Location location) {
+        for (int i = 0; i < numParticlesBase; i++) {
+            double inc = (2 * Math.PI) / numParticlesBase;
+            float angle = (float) ((i * inc) + (step * Math.PI / 360.0f));
+            float x = MathUtils.cos(angle) * radius;
+            float z = MathUtils.sin(angle) * radius;
+            location.add(x, y, z);
+            UtilParticles.display(255, 215, 0, location);
+            location.subtract(x, y, z);
+        }
+    }
+
+    // Draw the crown topper
+    private void drawGoldTop(float radius, float y, Location location) {
+        location.add(0, y + 0.2, 0);
+        UtilParticles.display(255, 215, 0, location);
+        location.subtract(0, y + 0.2, 0);
+    }
+
+
+
 }
