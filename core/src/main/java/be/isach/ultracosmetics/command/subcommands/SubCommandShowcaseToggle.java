@@ -16,11 +16,11 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-public class SubCommandShowcase implements CommandExecutor {
+public class SubCommandShowcaseToggle implements CommandExecutor {
 
     private UltraCosmetics plugin;
 
-    public SubCommandShowcase(UltraCosmetics uc) {
+    public SubCommandShowcaseToggle(UltraCosmetics uc) {
         plugin = uc;
     }
 

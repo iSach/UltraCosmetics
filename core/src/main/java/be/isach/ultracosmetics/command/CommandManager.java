@@ -35,6 +35,12 @@ public class CommandManager implements CommandExecutor {
 		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setTabCompleter(new UCTabCompleter(ultraCosmetics));
 		String[] aliases = { "uc", "cosmetics" };
 		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
+
+		// Enocraft showcase command
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setExecutor(new SubCommandShowcaseToggle(ultraCosmetics));
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setTabCompleter(new UCTabCompleter(ultraCosmetics));
+		String[] aliasessc = { "ucs", "cosmeticsshowcase" };
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setAliases(Arrays.asList(aliasessc));
 	}
 	
 	/**
@@ -81,7 +87,7 @@ public class CommandManager implements CommandExecutor {
 		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender)) {
 			return false;
 		}
-		
+
 		if (arguments == null
 		    || arguments.length == 0) {
 			showHelp(sender, 1);

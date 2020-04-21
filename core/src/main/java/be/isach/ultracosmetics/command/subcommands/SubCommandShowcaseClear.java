@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,119 +17,50 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-public class SubCommandShowcaseToggle implements CommandExecutor {
+public class SubCommandShowcaseClear implements CommandExecutor {
 
     private UltraCosmetics plugin;
 
-    public SubCommandShowcaseToggle(UltraCosmetics uc) {
+    public SubCommandShowcaseClear(UltraCosmetics uc) {
         plugin = uc;
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(CommandSender commandSender, Command command, String str, String[] args) {
+
         Player sender = (Player) commandSender;
-
-        UltraPlayer ultraPlayer = plugin.getPlayerManager().getUltraPlayer(sender);
-
-        if (args.length < 3) {
-            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l" + "/ucs toggle <type> <cosmetic> [npc]");
+        Player receiver;
+        if (args.length < 2) {
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + "/uc clear <player> [type]");
             return true;
         }
 
-        String type = args[1].toLowerCase();
-        String cosm = args[2].toLowerCase();
+        if (!sender.hasPermission("ultracosmetics.command.clear" + ".others")) return true;
+        receiver = Bukkit.getPlayer(args[1]);
 
-        if (args.length > 3) {
-            try {
-                if (!UltraCosmeticsData.get().getEnabledWorlds().contains(Bukkit.getPlayer(args[3]).getWorld().getName())) {
-                    sender.sendMessage(MessageManager.getMessage("World-Disabled"));
-                    return true;
-                }
-            } catch (Exception e) {
-                sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
-                return true;
-            }
-        } else {
-            if (!UltraCosmeticsData.get().getEnabledWorlds().contains(sender.getWorld().getName())) {
-                sender.sendMessage(MessageManager.getMessage("World-Disabled"));
-                return true;
-            }
+        if (receiver == null) {
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[1] + " not found!");
+            return true;
+        }
+        if (args.length < 3) {
+            plugin.getPlayerManager().getUltraPlayer(receiver).clear();
+            return true;
         }
 
-        Object[] categories = Arrays.stream(Category.values()).filter(category -> category.isEnabled() && category.toString().toLowerCase().startsWith(type)).toArray();
-        if (categories.length == 1) {
-            Category category = (Category) categories[0];
-            if (args.length > 3) {
-                try {
-                    UltraPlayer other = plugin.getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-                    if (category == Category.SUITS) {
-                        try {
-                            ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
-                            other.removeSuit(armorSlot);
-                        } catch (Exception ex) {
-                            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
-                            return true;
-                        }
-                    } else {
-                        other.removeCosmetic(category);
-                    }
-                } catch (Exception exc) {
-                    sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
-                    return true;
-                }
-            } else {
-                if (ultraPlayer.getCosmetic(category) != null) {
-                    if (category == Category.SUITS) {
-                        try {
-                            ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
-                            ultraPlayer.removeSuit(armorSlot);
-                        } catch (Exception ex) {
-                            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
-                        }
-                    } else {
-                        ultraPlayer.removeCosmetic(category);
-                    }
-                    return true;
-                }
-            }
-            Object[] cosmeticTypes = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().contains(cosm.split(":")[0])).toArray();
-            if (cosmeticTypes.length == 1) {
-                CosmeticType cosmeticType = (CosmeticType) cosmeticTypes[0];
-                if (args.length > 3) {
-                    try {
-                        UltraPlayer other = plugin.getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-                        if (cosmeticType.getCategory() == Category.SUITS) {
-                            try {
-                                ArmorSlot armorSlot = ArmorSlot.getByName(cosm.split(":")[1]);
-                                SuitType suitType = SuitType.valueOf(cosm.split(":")[0]);
-                                suitType.equip(other, plugin, armorSlot);
-                            } catch (Exception ex) {
-                                sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
-                            }
-                        } else {
-                            cosmeticType.equip(other, plugin);
-                        }
-                    } catch (Exception exc) {
-                        sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid player.");
-                    }
-                } else {
-                    if (cosmeticType.getCategory() == Category.SUITS) {
-                        try {
-                            ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
-                            SuitType suitType = SuitType.valueOf(args[2].split(":")[0]);
-                            suitType.equip(ultraPlayer, plugin, armorSlot);
-                        } catch (Exception ex) {
-                            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <player>.");
-                        }
-                    } else {
-                        cosmeticType.equip(ultraPlayer, plugin);
-                    }
-                }
-            } else {
-                sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid cosmetic.");
-            }
-        } else {
-            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid category.");
+        UltraPlayer up = plugin.getPlayerManager().getUltraPlayer(receiver);
+        String s = args[2].toLowerCase();
+
+        if (s.startsWith("g")) up.removeGadget();
+        else if (s.startsWith("pa") || s.startsWith("ef")) up.removeParticleEffect();
+        else if (s.startsWith("pe")) up.removePet();
+        else if (s.startsWith("h")) up.removeHat();
+        else if (s.startsWith("s") && !s.contains(":")) up.removeSuit();
+        else if (s.startsWith("s") && s.contains(":")) up.removeSuit(ArmorSlot.getByName(s.split(":")[1]));
+        else if (s.startsWith("mor")) up.removeMorph();
+        else if (s.startsWith("mou")) up.removeMount();
+        else if (s.startsWith("e")) up.removeEmote();
+        else {
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "/uc clear <player> <type>\n" + ChatColor.RED + "" + ChatColor.BOLD + "Invalid Type.\n" + ChatColor.RED + "" + ChatColor.BOLD + "Available types: gadgets, particleeffects, pets, mounts, suits, hats, morphs");
         }
         return false;
     }

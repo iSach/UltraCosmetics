@@ -10,6 +10,12 @@ commands:
     aliases: [uc, cosmetics]
     description: Main Command of Ultra Cosmetics
     usage: /ultracosmetics
+  ultracosmeticsshowcase:
+    aliases: [ucs, cosmeticsshowcase]
+    description: Enocraft showcase command
+    usage: /ultracosmeticsshowcase
+    permission: ultracosmetics.*
+    permission-message: "This command is restricted to Enocraft staff only."
 permissions:
   ultracosmetics.*:
     children:

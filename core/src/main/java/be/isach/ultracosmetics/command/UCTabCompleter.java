@@ -177,6 +177,80 @@ public class UCTabCompleter implements TabCompleter {
             }
         }
 
+        // Enocraft showcase command
+        if (cmd.getName().equalsIgnoreCase("ucs") || cmd.getName().equalsIgnoreCase("ultracosmeticsshowcase")) {
+            if (args.length == 1) {
+                List<String> commands = new ArrayList<>();
+                commands.add("clear");
+                commands.add("toggle");
+
+                return commands;
+            } else if (args.length == 2) {
+                 if (args[0].equalsIgnoreCase("toggle")) {
+                    List<String> commands = new ArrayList<>();
+
+                    for (Category category : Category.enabled()) {
+                        commands.add(category.toString().toLowerCase());
+                    }
+
+                    Collections.sort(commands);
+
+                    ArrayList<String> toReturn = new ArrayList<>();
+                    for (String s : commands) {
+                        if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
+                            toReturn.add(s);
+                        }
+                    }
+
+                    return toReturn;
+                }
+            } else if (args.length == 3) {
+                if (args[0].equalsIgnoreCase("toggle")) {
+                    String type = args[1].toUpperCase();
+                    try {
+                        Category cat = Category.valueOf(type);
+                        if (cat != null && cat.isEnabled()) {
+
+                            List<String> commands = new ArrayList<>();
+
+                            for (CosmeticType cosm : cat.getEnabled()) {
+                                commands.add(cosm.toString().toLowerCase());
+                            }
+
+                            Collections.sort(commands);
+
+                            ArrayList<String> toReturn = new ArrayList<>();
+                            for (String s : commands) {
+                                if (s.toLowerCase().startsWith(args[2].toLowerCase())) {
+                                    toReturn.add(s);
+                                }
+                            }
+
+                            return toReturn;
+                        }
+                    } catch (Exception exc) {
+                    }
+                } else if (args[0].equalsIgnoreCase("clear")) {
+                    List<String> commands = new ArrayList<>();
+
+                    for (Category category : Category.enabled()) {
+                        commands.add(category.toString().toLowerCase());
+                    }
+
+                    Collections.sort(commands);
+
+                    ArrayList<String> toReturn = new ArrayList<>();
+                    for (String s : commands) {
+                        if (s.toLowerCase().startsWith(args[2].toLowerCase())) {
+                            toReturn.add(s);
+                        }
+                    }
+
+                    return toReturn;
+                }
+            }
+        }
+
         return null;
     }
 }

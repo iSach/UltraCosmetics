@@ -140,5 +140,10 @@ subprojects {
         maven {
             url 'https://repo.dakanilabs.com/repository/public/'
         }
+
+        // Citizens
+        maven {
+            url 'https://repo.citizensnpcs.co/'
+        }
     }
 }
