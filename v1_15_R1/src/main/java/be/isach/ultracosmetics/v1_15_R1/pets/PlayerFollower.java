@@ -72,9 +72,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
         } catch (IllegalArgumentException exception) {
             petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
             exception.printStackTrace();
-        } catch (NullPointerException ex) {  // If Player no longer exists, kill the pet
-            pet.getEntity().remove();
-            ex.printStackTrace();
         }
     }
 

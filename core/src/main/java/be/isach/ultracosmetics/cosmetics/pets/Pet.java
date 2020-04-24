@@ -78,6 +78,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         }
 
         this.followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
+        followTaskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), followTask.getTask(), 0, 4).getTaskId();
 
         getOwner().setCurrentPet(this);
 
@@ -144,8 +145,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                     onUpdate();
                 }
 
-                //pathUpdater.submit(followTask.getTask());
-                followTaskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), followTask.getTask(), 0, 4).getTaskId();
             } else {
                 cancel();
 
@@ -159,6 +158,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             }
         } catch (NullPointerException exc) {
             exc.printStackTrace();
+            Bukkit.getScheduler().cancelTask(followTaskId);
             cancel();
 
             if (armorStand != null) {
