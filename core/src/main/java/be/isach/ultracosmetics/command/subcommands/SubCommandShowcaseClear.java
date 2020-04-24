@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -16,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 public class SubCommandShowcaseClear implements CommandExecutor {
 
@@ -29,25 +31,22 @@ public class SubCommandShowcaseClear implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String str, String[] args) {
 
         Player sender = (Player) commandSender;
-        Player receiver;
-        if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + "/uc clear <player> [type]");
+        Player npc;
+
+        if (args.length < 3) {
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + "/uc clear <npc id> [type]");
             return true;
         }
 
         if (!sender.hasPermission("ultracosmetics.command.clear" + ".others")) return true;
-        receiver = Bukkit.getPlayer(args[1]);
+        npc = (Player)CitizensAPI.getNPCRegistry().getById(Integer.parseInt(args[1])).getEntity();
 
-        if (receiver == null) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[1] + " not found!");
-            return true;
-        }
-        if (args.length < 3) {
-            plugin.getPlayerManager().getUltraPlayer(receiver).clear();
+        if (npc == null) {
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "NPC ID" + args[1] + " was not found!");
             return true;
         }
 
-        UltraPlayer up = plugin.getPlayerManager().getUltraPlayer(receiver);
+        UltraPlayer up = plugin.getPlayerManager().getUltraPlayer(npc);
         String s = args[2].toLowerCase();
 
         if (s.startsWith("g")) up.removeGadget();
@@ -59,8 +58,9 @@ public class SubCommandShowcaseClear implements CommandExecutor {
         else if (s.startsWith("mor")) up.removeMorph();
         else if (s.startsWith("mou")) up.removeMount();
         else if (s.startsWith("e")) up.removeEmote();
+        else if (s.startsWith("a")) up.clear(); // Add a clear all command for NPCs
         else {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "/uc clear <player> <type>\n" + ChatColor.RED + "" + ChatColor.BOLD + "Invalid Type.\n" + ChatColor.RED + "" + ChatColor.BOLD + "Available types: gadgets, particleeffects, pets, mounts, suits, hats, morphs");
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "/uc clear <npc id> <type>\n" + ChatColor.RED + "" + ChatColor.BOLD + "Invalid Type.\n" + ChatColor.RED + "" + ChatColor.BOLD + "Available types: gadgets, effects, pets, mounts, suits, hats, morphs, all");
         }
         return false;
     }

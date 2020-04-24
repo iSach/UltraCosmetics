@@ -35,14 +35,13 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
         this.category = category;
         this.ultraCosmetics = ultraCosmetics;
         this.cosmeticType = type;
-        if (owner == null
-                || Bukkit.getPlayer(owner.getUuid()) == null) {
+        if (owner == null) {
             throw new IllegalArgumentException("Invalid UltraPlayer.");
         }
     }
 
-    public void equip() {
-        if (!owner.getBukkitPlayer().hasPermission(getType().getPermission())) {
+    public void equip() { // TODO: Handle permissions and this NPC check correctly.
+        if (!owner.getBukkitPlayer().hasPermission(getType().getPermission()) && Bukkit.getPlayer(owner.getUuid()) != null) { // Check if owner has correct permissions AND IS NOT AN NPC.
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
@@ -104,8 +103,8 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     public final UltraPlayer getOwner() {
         if (owner == null) {
             // Try to fix.
-            try {
-                owner = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(getOwnerUniqueId()));
+            try { // TODO: If entity is neither player nor npc handle
+                owner = getUltraCosmetics().getPlayerManager().getUltraPlayer((Player)Bukkit.getEntity(getOwnerUniqueId()));
             } catch (Exception exc) {
 
             }

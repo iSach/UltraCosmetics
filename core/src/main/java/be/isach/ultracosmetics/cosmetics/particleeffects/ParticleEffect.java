@@ -43,7 +43,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
         super.run();
 
         try {
-            if (Bukkit.getPlayer(getOwnerUniqueId()) != null
+            if (Bukkit.getEntity(getOwnerUniqueId()) != null
                     && getOwner().getCurrentParticleEffect() != null
                     && getOwner().getCurrentParticleEffect().getType() == getType()) {
                 if (getType() != ParticleEffectType.valueOf("frozenwalk")

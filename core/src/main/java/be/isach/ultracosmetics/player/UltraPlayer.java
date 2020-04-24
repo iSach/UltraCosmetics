@@ -20,6 +20,7 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
+import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.CacheValue;
@@ -185,8 +186,8 @@ public class UltraPlayer {
      *
      * @return The player owning the UltraPlayer.
      */
-    public Player getBukkitPlayer() {
-        return Bukkit.getPlayer(uuid);
+    public Player getBukkitPlayer() { // TODO: handle if entity is neither player nor npc
+        return (Player)Bukkit.getEntity(uuid);
     }
 
     /**
@@ -804,6 +805,7 @@ public class UltraPlayer {
     public void setCurrentParticleEffect(ParticleEffect currentParticleEffect) {
         this.currentParticleEffect = currentParticleEffect;
         if (!isQuitting())
+            if(cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledEffect(currentParticleEffect == null ? null : currentParticleEffect.getType());
     }
 
@@ -814,6 +816,7 @@ public class UltraPlayer {
     public void setCurrentPet(Pet currentPet) {
         this.currentPet = currentPet;
         if (!isQuitting())
+            if(cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledPet(currentPet == null ? null : currentPet.getType());
     }
 
@@ -877,7 +880,7 @@ public class UltraPlayer {
     }
 
     public boolean isOnline() {
-        Player p = Bukkit.getServer().getPlayer(uuid);
+        Player p = (Player)Bukkit.getServer().getEntity(uuid); // TODO: Handle if not player nor npc
         return p != null && p.isOnline();
     }
 
