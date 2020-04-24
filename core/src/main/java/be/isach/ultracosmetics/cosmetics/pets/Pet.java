@@ -137,7 +137,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 return;
             }
 
-            if (Bukkit.getPlayer(getOwnerUniqueId()) != null
+            if (Bukkit.getEntity(getOwnerUniqueId()) != null
                     && getOwner().getCurrentPet() != null
                     && getOwner().getCurrentPet().getType() == getType()) {
                 if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items")) {

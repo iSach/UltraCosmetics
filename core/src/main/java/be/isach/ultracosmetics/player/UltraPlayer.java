@@ -27,9 +27,12 @@ import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
 import me.libraryaddict.disguise.DisguiseAPI;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -182,12 +185,14 @@ public class UltraPlayer {
     }
 
     /**
-     * Get the player owning the UltraPlayer.
+     * Get the player or NPC owning the UltraPlayer.
      *
      * @return The player owning the UltraPlayer.
      */
-    public Player getBukkitPlayer() { // TODO: handle if entity is neither player nor npc
-        return (Player)Bukkit.getEntity(uuid);
+    public Player getBukkitPlayer() {
+        NPC npc = CitizensAPI.getNPCRegistry().getNPC(Bukkit.getEntity(uuid));
+        if( npc != null && npc.getEntity() instanceof Player) return (Player) npc.getEntity();
+        else return Bukkit.getPlayer(uuid);
     }
 
     /**
@@ -880,7 +885,7 @@ public class UltraPlayer {
     }
 
     public boolean isOnline() {
-        Player p = (Player)Bukkit.getServer().getEntity(uuid); // TODO: Handle if not player nor npc
+        Player p = (Player)Bukkit.getServer().getEntity(uuid);
         return p != null && p.isOnline();
     }
 

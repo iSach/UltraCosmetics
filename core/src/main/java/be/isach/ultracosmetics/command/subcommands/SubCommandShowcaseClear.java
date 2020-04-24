@@ -34,7 +34,7 @@ public class SubCommandShowcaseClear implements CommandExecutor {
         Player npc;
 
         if (args.length < 3) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + "/uc clear <npc id> [type]");
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + "/ucs clear <npc id> [type]");
             return true;
         }
 

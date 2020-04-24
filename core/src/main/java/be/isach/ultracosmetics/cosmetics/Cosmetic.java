@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TextUtil;
+import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -41,7 +42,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     public void equip() { // TODO: Handle permissions and this NPC check correctly.
-        if (!owner.getBukkitPlayer().hasPermission(getType().getPermission()) && Bukkit.getPlayer(owner.getUuid()) != null) { // Check if owner has correct permissions AND IS NOT AN NPC.
+        if (!owner.getBukkitPlayer().hasPermission(getType().getPermission()) && !CitizensAPI.getNPCRegistry().isNPC(Bukkit.getEntity(ownerUniqueId))) { // Check if owner has correct permissions AND IS NOT AN NPC.
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
@@ -103,7 +104,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     public final UltraPlayer getOwner() {
         if (owner == null) {
             // Try to fix.
-            try { // TODO: If entity is neither player nor npc handle
+            try {
                 owner = getUltraCosmetics().getPlayerManager().getUltraPlayer((Player)Bukkit.getEntity(getOwnerUniqueId()));
             } catch (Exception exc) {
 
