@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
@@ -14,42 +15,51 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.UUID;
 
-public class SubCommandShowcaseToggle implements CommandExecutor {
+public class SubCommandShowcaseEquip extends SubCommand {
 
     private UltraCosmetics plugin;
 
-    public SubCommandShowcaseToggle(UltraCosmetics uc) {
-        plugin = uc;
+    public SubCommandShowcaseEquip(UltraCosmetics ultraCosmetics) { // TODO: Permissions
+        super("Equips a cosmetic.", "ultracosmetics.*", "/ucs equip <type> <cosmetic> [npc id]", ultraCosmetics, "equip");
+        plugin = ultraCosmetics;
     }
 
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(CommandSender commandSender, String... args) {
         Player sender = (Player) commandSender;
 
         if (args.length < 3) {
-            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l" + "/ucs toggle <type> <cosmetic> [npc id]");
+            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l" + getUsage());
             return true;
         }
 
-        Entity npcEntity;
+        NPC npcTarget;
         Player npc;
 
         // If no NPC specified, use the currently "selected" npc, else parse from arguments
         if (args.length < 4) {
-            npcEntity = CitizensAPI.getDefaultNPCSelector().getSelected(commandSender).getEntity();
+            npcTarget = CitizensAPI.getDefaultNPCSelector().getSelected(commandSender);
+            if(npcTarget == null) {
+                sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l" + "No NPC is selected.");
+                return true;
+            }
         }
         else {
-            npcEntity = CitizensAPI.getNPCRegistry().getById(Integer.parseInt(args[3])).getEntity();
+            npcTarget = CitizensAPI.getNPCRegistry().getById(Integer.parseInt(args[3]));
+            if(npcTarget == null) {
+                sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l" + "Invalid NPC ID.");
+                return true;
+            }
         }
 
         // Check if NPC is a player-type NPC
-        if(npcEntity instanceof Player) npc = (Player) npcEntity;
+        if(npcTarget.getEntity() instanceof Player) npc = (Player) npcTarget.getEntity();
         else {
             sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l" + "NPC is invalid. NPCs must be of player type.");
             return true;
@@ -78,7 +88,7 @@ public class SubCommandShowcaseToggle implements CommandExecutor {
                         ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
                         other.removeSuit(armorSlot);
                     } catch (Exception ex) {
-                        sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <npc id>.");
+                        sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/ucs equip suit <suit type:suit piece> <npc id>.");
                         return true;
                     }
                 } else {
@@ -101,10 +111,11 @@ public class SubCommandShowcaseToggle implements CommandExecutor {
                             SuitType suitType = SuitType.valueOf(cosm.split(":")[0]);
                             suitType.equip(other, plugin, armorSlot);
                         } catch (Exception ex) {
-                            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/uc toggle suit <suit type:suit piece> <npc id>.");
+                            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/ucs equip suit <suit type:suit piece> <npc id>.");
                         }
                     } else {
                         cosmeticType.equip(other, plugin);
+                        plugin.getNPCManager().AddNPCToList(npc.getUniqueId());
                         sender.sendMessage(MessageManager.getMessage("Prefix") + " §3§lSuccess.");
                     }
                 } catch (Exception exc) {
@@ -118,5 +129,15 @@ public class SubCommandShowcaseToggle implements CommandExecutor {
             sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§lInvalid category.");
         }
         return true;
+    }
+
+    @Override
+    protected void onExePlayer(Player sender, String... args) {
+        onCommand(sender, args);
+    }
+
+    @Override
+    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+        onCommand(sender, args);
     }
 }

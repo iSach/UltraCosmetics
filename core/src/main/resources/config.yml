@@ -1,5 +1,5 @@
 # If set to true, will check for updates
-Check-For-Updates: true
+Check-For-Updates: false
 
 # List of the enabled categories.
 Categories-Enabled:
@@ -289,9 +289,6 @@ Gadget-Slot: 4
 # their drop key.
 Remove-Gadget-With-Drop: false
 
-# [BETA]
 # Allows for players to auto-equip on join cosmetics they had before disconnecting.
-# At the moment, only works while the server is up. Upon shutdown, the cosmetics saved states
-# are reset! Soon it will support shutdowns.
 Auto-Equip-Cosmetics:
-  enabled: false
+  enabled: true

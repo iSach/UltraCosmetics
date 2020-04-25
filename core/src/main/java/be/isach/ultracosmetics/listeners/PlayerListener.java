@@ -87,6 +87,7 @@ public class PlayerListener implements Listener {
             }
         };
         bukkitRunnable.runTaskAsynchronously(ultraCosmetics);
+        ultraCosmetics.getNPCManager().LoadNPCCosmetics(); // Load NPC cosmetics
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

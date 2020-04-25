@@ -1,5 +1,5 @@
 # If set to true, will check for updates
-Check-For-Updates: true
+Check-For-Updates: false
 
 # List of the enabled categories.
 Categories-Enabled:

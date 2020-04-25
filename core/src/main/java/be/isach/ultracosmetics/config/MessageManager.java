@@ -23,7 +23,7 @@ public class MessageManager {
      * Set up the messages in the config.
      */
     private void loadMessages() {
-        addMessage("Prefix", "&l&oCosmetics >&r");
+        addMessage("Prefix", "&l&oEnocraftCosmetics >&r");
         addMessage("No-Permission", "%prefix% &c&lYou don't have the permission!");
         addMessage("Cosmetic-Disabled", "%prefix% &c&lThis cosmetic is disabled!");
         addMessage("Invalid-Gadget", "%prefix% &c&lInvalid Gadget!");

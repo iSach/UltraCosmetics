@@ -16,25 +16,25 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Command manager.
+ * Command manager for NPC Showcases.
  *
- * @author iSach
- * @since 12-20-2015
+ * @author SinfulMentality
+ * @since 04-24-2020
  */
-public class CommandManager implements CommandExecutor {
+public class CommandShowcaseManager implements CommandExecutor {
 	/**
 	 * List of the registered commands.
 	 */
 	private List<SubCommand> commands = new ArrayList<>();
-	
+
 	private UltraCosmetics ultraCosmetics;
-	
-	public CommandManager(UltraCosmetics ultraCosmetics) {
+
+	public CommandShowcaseManager(UltraCosmetics ultraCosmetics) {
 		this.ultraCosmetics = ultraCosmetics;
-		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setExecutor(this);
-		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setTabCompleter(new UCTabCompleter(ultraCosmetics));
-		String[] aliases = { "uc", "cosmetics" };
-		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setExecutor(this);
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setTabCompleter(new UCTabCompleter(ultraCosmetics));
+		String[] aliasessc = { "ucs", "cosmeticsshowcase" };
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setAliases(Arrays.asList(aliasessc));
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class CommandManager implements CommandExecutor {
 	
 	public void showHelp(CommandSender commandSender, int page) {
 		commandSender.sendMessage("");
-		commandSender.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "UltraCosmetics Help (/uc <page>) " + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "(" + page + "/" + getMaxPages() + ")");
+		commandSender.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "EnocraftCosmetics Showcase Help (/ucs <page>) " + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "(" + page + "/" + getMaxPages() + ")");
 		int from = 1;
 		if (page > 1)
 			from = 8 * (page - 1) + 1;
@@ -118,13 +118,7 @@ public class CommandManager implements CommandExecutor {
 	}
 	
 	public void registerCommands(UltraCosmetics ultraCosmetics) {
-		registerCommand(new SubCommandGadgets(ultraCosmetics));
-		registerCommand(new SubCommandSelfView(ultraCosmetics));
-		registerCommand(new SubCommandMenu(ultraCosmetics));
-		//registerCommand(new SubCommandPurge(ultraCosmetics));
-		registerCommand(new SubCommandGive(ultraCosmetics));
-		registerCommand(new SubCommandToggle(ultraCosmetics));
-		registerCommand(new SubCommandClear(ultraCosmetics));
-		registerCommand(new SubCommandTreasure(ultraCosmetics));
+		registerCommand(new SubCommandShowcaseClear(ultraCosmetics));
+		registerCommand(new SubCommandShowcaseEquip(ultraCosmetics));
 	}
 }

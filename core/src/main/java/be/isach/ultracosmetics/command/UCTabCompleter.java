@@ -187,10 +187,10 @@ public class UCTabCompleter implements TabCompleter {
                 case 1:
                     commands = new ArrayList<>();
                     commands.add("clear");
-                    commands.add("toggle");
+                    commands.add("equip");
                     return commands;
                 case 2:
-                    if (args[0].equalsIgnoreCase("toggle")) {
+                    if (args[0].equalsIgnoreCase("equip")) {
                         commands = new ArrayList<>();
                         for (Category category : Category.enabled()) {
                             commands.add(category.toString().toLowerCase());
@@ -210,7 +210,7 @@ public class UCTabCompleter implements TabCompleter {
                         return StringUtil.copyPartialMatches(args[1], commands, new ArrayList<>());
                     }
                 case 3:
-                    if (args[0].equalsIgnoreCase("toggle")) {
+                    if (args[0].equalsIgnoreCase("equip")) {
                         String type = args[1].toUpperCase();
                         try {
                             Category cat = Category.valueOf(type);
@@ -238,7 +238,7 @@ public class UCTabCompleter implements TabCompleter {
                         return StringUtil.copyPartialMatches(args[2], commands, new ArrayList<>());
                     }
                 case 4:
-                    if (args[0].equalsIgnoreCase("toggle")) {
+                    if (args[0].equalsIgnoreCase("equip")) {
                         commands = new ArrayList<>();
 
                         for (NPC npc : CitizensAPI.getNPCRegistry()) {
