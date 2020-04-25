@@ -91,22 +91,32 @@ public class NPCManager {
     }
 
     // Update the list of all NPCs affected by cosmetics
-    public void AddNPCToList(UUID uuid) {
+    public void AddNPC(UUID uuid) {
+
+        // Add NPC uuid to the npc-uuids list
         List<String> npcList = getNPCList();
-
         if(!npcList.contains(uuid.toString())) npcList.add(uuid.toString());
-
         conf.set("npcs-with-cosmetics", npcList);
         saveNPCList();
+
+        // Initialize the cosmetics profile of the newly added NPC
+        Entity npcEntity = Bukkit.getEntity(uuid);
+        Player npc;
+        if (npcEntity instanceof Player) {
+            npc = (Player) npcEntity;
+        } else return;
+        UltraPlayer ultraPlayer = plugin.getPlayerManager().getUltraPlayer(npc);
+        plugin.getCosmeticsProfileManager().initForPlayer(ultraPlayer);
     }
 
-    public void RemoveNPCFromList(UUID uuid) {
+    public void RemoveNPC(UUID uuid) {
+
+        // Remove NPC uuid from the npc-uuids list
         List<String> npcList = getNPCList();
-
         if(npcList.contains(uuid.toString())) npcList.remove(uuid.toString());
-
         conf.set("npcs-with-cosmetics", npcList);
         saveNPCList();
+
     }
 
     public List<String> getNPCList() {

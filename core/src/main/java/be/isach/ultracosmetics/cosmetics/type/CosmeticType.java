@@ -46,6 +46,12 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     public T equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
+        T cosmetic = equipWithoutSaving(player, ultraCosmetics);
+        player.saveCosmeticsProfile();
+        return cosmetic;
+    }
+
+    public T equipWithoutSaving(UltraPlayer player, UltraCosmetics ultraCosmetics) {
         T cosmetic = null;
         try {
             cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, UltraCosmetics.class).newInstance(player, ultraCosmetics);

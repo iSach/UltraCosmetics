@@ -72,7 +72,7 @@ public class CosmeticsProfile {
             } catch (Exception exc) {
             }
             try {
-                setEnabledPet(PetType.valueOf(s.getString("pet")));
+                setEnabledPet(PetType.valueOf(s.getString("pet.type")));
             } catch (Exception exc) {
             }
 
@@ -90,7 +90,7 @@ public class CosmeticsProfile {
         }
     }
 
-    public void loadToPlayer(UltraPlayer ultraPlayer) {
+    public void loadToPlayerWithoutSaving(UltraPlayer ultraPlayer) {
         if (!UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
             return;
         }
@@ -100,11 +100,11 @@ public class CosmeticsProfile {
         if (ultraPlayer.getCosmeticsProfile() != this)
             ultraPlayer.setCosmeticsProfile(this);
 
-        loadToPlayer();
+        loadToPlayerWithoutSaving();
     }
 
     /**
-     * Loads the profile and enabled the cosmetics.
+     * Loads the profile and enables the cosmetics.
      */
     public void loadToPlayer() {
         if (!ultraPlayer.isOnline()) {
@@ -166,6 +166,69 @@ public class CosmeticsProfile {
         }
     }
 
+    /**
+     * Loads the profile and enables the cosmetics without writing to the cosmetics profile.
+     */
+    public void loadToPlayerWithoutSaving() {
+        if (!ultraPlayer.isOnline()) {
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(SmartLogger.LogLevel.ERROR, "Failed to load profile for " + ultraPlayer.getUsername() + "!");
+            return;
+        }
+
+        UltraCosmetics ultraCosmetics = UltraCosmeticsData.get().getPlugin();
+
+        // Gadget
+        if (enabledGadget != null
+                && enabledGadget.getCategory().isEnabled()
+                && enabledGadget.isEnabled())
+            enabledGadget.equipWithoutSaving(ultraPlayer, ultraCosmetics);
+
+        // Pet
+        if (enabledPet != null
+                && enabledPet.getCategory().isEnabled()
+                && enabledPet.isEnabled())
+            enabledPet.equipWithoutSaving(ultraPlayer, ultraCosmetics);
+
+        // Emote
+        if (enabledEmote != null
+                && enabledEmote.getCategory().isEnabled()
+                && enabledEmote.isEnabled())
+            enabledEmote.equipWithoutSaving(ultraPlayer, ultraCosmetics);
+
+        // Hat
+        if (enabledHat != null
+                && enabledHat.getCategory().isEnabled()
+                && enabledHat.isEnabled())
+            enabledHat.equipWithoutSaving(ultraPlayer, ultraCosmetics);
+
+        // Morph
+        if (enabledMorph != null
+                && enabledMorph.getCategory().isEnabled()
+                && enabledMorph.isEnabled())
+            enabledMorph.equipWithoutSaving(ultraPlayer, ultraCosmetics);
+
+        // Mount
+        if (enabledMount != null
+                && enabledMount.getCategory().isEnabled()
+                && enabledMount.isEnabled())
+            enabledMount.equipWithoutSaving(ultraPlayer, ultraCosmetics);
+
+        // Particle Effect
+        if (enabledEffect != null
+                && enabledEffect.getCategory().isEnabled()
+                && enabledEffect.isEnabled())
+            enabledEffect.equipWithoutSaving(ultraPlayer, ultraCosmetics);
+
+        // Suit
+        for (ArmorSlot armorSlot : ArmorSlot.values()) {
+            SuitType suitPart = enabledSuitParts.get(armorSlot);
+            if (suitPart != null
+                    && suitPart.getCategory().isEnabled()
+                    && suitPart.isEnabled())
+                suitPart.equipWithoutSaving(ultraPlayer, ultraCosmetics, armorSlot);
+        }
+    }
+
     public void save() {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             saveToFile();
@@ -186,8 +249,16 @@ public class CosmeticsProfile {
         settingsManager.set("enabled.hat", enabledHat != null ? enabledHat.getConfigName() : "none");
         settingsManager.set("enabled.morph", enabledMorph != null ? enabledMorph.getConfigName() : "none");
         settingsManager.set("enabled.mount", enabledMount != null ? enabledMount.getConfigName() : "none");
-        Bukkit.broadcastMessage("");
-        settingsManager.set("enabled.pet", enabledPet != null ? enabledPet.getConfigName() : "none");
+
+        settingsManager.set("enabled.pet.type", enabledPet != null ? enabledPet.getConfigName() : "none");
+        if(getUltraPlayer() != null && getUltraPlayer().getCurrentPet() != null) { // Save metadata attached to the pet
+            settingsManager.set("enabled.pet.color", getUltraPlayer().getCurrentPet().getColorVariantString() != null ? getUltraPlayer().getCurrentPet().getColorVariantString() : "none");
+            settingsManager.set("enabled.pet.name", getUltraPlayer().getCurrentPet().getPetName() != null ? getUltraPlayer().getCurrentPet().getPetName() : "none");
+        } else if(enabledPet == null) { // If pet.type is none, clear all the metadata fields as well
+            settingsManager.set("enabled.pet.color", "none");
+            settingsManager.set("enabled.pet.name", "none"); // TODO: attach name instance to each pet
+        }
+
         for (ArmorSlot slot : ArmorSlot.values()) {
             SuitType enabledSuitPart = enabledSuitParts.get(slot);
             settingsManager.set("enabled.suit." + slot.toString().toLowerCase(), enabledSuitPart != null ? enabledSuitPart.getConfigName() : "none");

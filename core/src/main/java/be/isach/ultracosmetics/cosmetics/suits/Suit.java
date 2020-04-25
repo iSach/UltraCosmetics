@@ -100,18 +100,18 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     protected void onEquip() {
         if (getOwner().getCurrentHat() != null
                 && armorSlot == ArmorSlot.HELMET) {
-            getOwner().removeHat();
+            getOwner().removeHatWithoutSaving();
         }
 
-        getOwner().removeSuit(getArmorSlot());
+        getOwner().removeSuitWithoutSaving(getArmorSlot());
 
         switch (getArmorSlot()) {
             case HELMET:
                 if (getOwner().getCurrentHat() != null) {
-                    getOwner().removeHat();
+                    getOwner().removeHatWithoutSaving();
                 }
                 if (getOwner().getCurrentEmote() != null) {
-                    getOwner().removeEmote();
+                    getOwner().removeEmoteWithoutSaving();
                 }
                 if (getPlayer().getInventory().getHelmet() != null) {
                     ItemStack itemStack = getPlayer().getInventory().getHelmet();
@@ -170,11 +170,11 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
         switch (getArmorSlot()) {
             case HELMET:
                 if (getOwner().getCurrentHat() != null) {
-                    getOwner().removeHat();
+                    getOwner().removeHatWithoutSaving();
                 }
 
                 if (getOwner().getCurrentEmote() != null) {
-                    getOwner().removeEmote();
+                    getOwner().removeEmoteWithoutSaving();
                 }
 
                 getPlayer().getInventory().setHelmet(null);

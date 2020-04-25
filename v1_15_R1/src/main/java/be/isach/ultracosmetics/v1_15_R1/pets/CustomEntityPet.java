@@ -41,7 +41,7 @@ public abstract class CustomEntityPet extends Pet {
         followTask = new PlayerFollower(this, getPlayer());
 
         if (getOwner().getCurrentPet() != null)
-            getOwner().removePet();
+            getOwner().removePetWithoutSaving();
 
         getOwner().setCurrentPet(this);
 

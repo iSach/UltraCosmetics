@@ -29,9 +29,9 @@ public class Hat extends Cosmetic<HatType> {
 
     @Override
     protected void onEquip() {
-        getOwner().removeHat();
-        getOwner().removeEmote();
-        getOwner().removeSuit(ArmorSlot.HELMET);
+        getOwner().removeHatWithoutSaving();
+        getOwner().removeEmoteWithoutSaving();
+        getOwner().removeSuitWithoutSaving(ArmorSlot.HELMET);
 
         if (getPlayer().getInventory().getHelmet() != null) {
             getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-Hat"));

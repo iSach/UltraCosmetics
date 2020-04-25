@@ -11,16 +11,11 @@ import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 public class SubCommandShowcaseEquip extends SubCommand {
 
@@ -114,8 +109,8 @@ public class SubCommandShowcaseEquip extends SubCommand {
                             sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/ucs equip suit <suit type:suit piece> <npc id>.");
                         }
                     } else {
+                        plugin.getNPCManager().AddNPC(npc.getUniqueId());
                         cosmeticType.equip(other, plugin);
-                        plugin.getNPCManager().AddNPCToList(npc.getUniqueId());
                         sender.sendMessage(MessageManager.getMessage("Prefix") + " §3§lSuccess.");
                     }
                 } catch (Exception exc) {

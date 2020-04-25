@@ -144,7 +144,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                         } catch (Exception ignored) {
                         }
                     }
-                    if (getCosmetic(ultraPlayer) == null) {
+                    if (getCosmetic(ultraPlayer) != null) {
                         toggleOff(ultraPlayer);
                     }
                     toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
@@ -165,7 +165,9 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                         open(ultraPlayer, currentPage);
                     }
                 } else if (clicked.getItemMeta().getDisplayName().startsWith(category.getActivateMenu())) {
-                    toggleOff(ultraPlayer);
+                    if (getCosmetic(ultraPlayer) != null) {
+                        toggleOff(ultraPlayer);
+                    }
                     StringBuilder sb = new StringBuilder();
                     String name = clicked.getItemMeta().getDisplayName().replaceFirst(category.getActivateMenu(), "");
                     int j = name.split(" ").length;

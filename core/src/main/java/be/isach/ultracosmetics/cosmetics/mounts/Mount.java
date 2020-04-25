@@ -53,9 +53,11 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     @Override
     public void onEquip() {
         if (getOwner().getCurrentMount() != null) {
-            getOwner().removeMount();
+            getOwner().removeMountWithoutSaving();
         }
 
+
+        // TODO: This call is not thread safe, spawnEntity must be called in a sync BukkitRunnable
         EntitySpawningManager.setBypass(true);
         this.entity = (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
         EntitySpawningManager.setBypass(false);

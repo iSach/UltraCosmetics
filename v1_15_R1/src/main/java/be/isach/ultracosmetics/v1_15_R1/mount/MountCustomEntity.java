@@ -59,7 +59,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         if(getType() == MountType.valueOf("slime") || getType() == MountType.valueOf("spider")) {
             if(getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
                 getOwner().sendMessage("§c§lUltraCosmetics > Monsters can't spawn here!");
-                getOwner().removeMount();
+                getOwner().removeMountWithoutSaving();
             }
         }
     }

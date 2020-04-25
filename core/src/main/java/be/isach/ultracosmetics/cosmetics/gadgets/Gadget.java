@@ -108,7 +108,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     @Override
     protected void onEquip() {
         if (getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentGadget() != null) {
-            getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
+            getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeGadgetWithoutSaving();
         }
 
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);

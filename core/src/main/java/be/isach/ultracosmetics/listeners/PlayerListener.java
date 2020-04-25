@@ -67,7 +67,7 @@ public class PlayerListener implements Listener {
 
                 if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())
                     && UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
-                    // Cosmetics profile. TODO Add option to disable!!
+                    // Cosmetics profile.
                     CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
                     if (cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId()) == null) {
                         // ultraCosmetics.getSmartLogger().write("Creating cosmetics profile for " + event.getPlayer().getName());
@@ -79,14 +79,14 @@ public class PlayerListener implements Listener {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                cosmeticsProfile.loadToPlayer(cp);
+                                cosmeticsProfile.loadToPlayerWithoutSaving(cp);
                             }
                         }.runTask(ultraCosmetics);
                     }
                 }
             }
         };
-        bukkitRunnable.runTaskAsynchronously(ultraCosmetics);
+        bukkitRunnable.runTask(ultraCosmetics);
         ultraCosmetics.getNPCManager().LoadNPCCosmetics(); // Load NPC cosmetics
     }
 
@@ -106,7 +106,7 @@ public class PlayerListener implements Listener {
                         if (cp == null) {
                             ultraCosmetics.getCosmeticsProfileManager().initForPlayer(ultraPlayer);
                         } else {
-                            cp.loadToPlayer();
+                            cp.loadToPlayerWithoutSaving(); // No need to save to cosmetics profile when just changing worlds, reduces potential spam
                         }
                     }
                 }
@@ -235,10 +235,9 @@ public class PlayerListener implements Listener {
         if (ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest() != null) {
             ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest().forceOpen(0);
         }
-        // TODO: Do anything with cosmetics profile?
         UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
         up.setQuitting(true);
-        up.clear();
+        up.clearWithoutSaving();
         up.removeMenuItem();
         ultraCosmetics.getCosmeticsProfileManager().clearPlayerFromProfile(up);
         ultraCosmetics.getPlayerManager().remove(event.getPlayer());

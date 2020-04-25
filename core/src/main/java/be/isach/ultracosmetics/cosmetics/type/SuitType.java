@@ -77,6 +77,12 @@ public class SuitType extends CosmeticMatType<Suit> {
      * @return The suit Object equipped to the player.
      */
     public Suit equip(UltraPlayer player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
+        Suit suit = equipWithoutSaving(player, ultraCosmetics, armorSlot);
+        player.saveCosmeticsProfile();
+        return suit;
+    }
+
+    public Suit equipWithoutSaving(UltraPlayer player, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
         Suit suit = null;
         try {
             suit = getClazz().getDeclaredConstructor(UltraPlayer.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player, armorSlot, ultraCosmetics);

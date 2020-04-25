@@ -29,7 +29,7 @@ public abstract class MountHorse<E extends AbstractHorse> extends Mount<E> {
     @Override
     public void onEquip() {
         if (getOwner().getCurrentMount() != null) {
-            getOwner().removeMount();
+            getOwner().removeMountWithoutSaving();
         }
 
         EntityType entityType = getType().getEntityType();

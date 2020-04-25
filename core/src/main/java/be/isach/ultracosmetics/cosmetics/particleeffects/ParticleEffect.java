@@ -31,7 +31,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
     @Override
     protected void onEquip() {
         if (getOwner().getCurrentParticleEffect() != null) {
-            getOwner().removeParticleEffect();
+            getOwner().removeParticleEffectWithoutSaving();
         }
         getOwner().setCurrentParticleEffect(this);
 

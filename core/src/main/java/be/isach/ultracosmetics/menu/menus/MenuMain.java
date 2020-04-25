@@ -86,7 +86,7 @@ public class MenuMain extends Menu {
         String message = MessageManager.getMessage("Clear-Cosmetics");
         ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
         putItem(inventory, inventory.getSize() - 5, itemStack, data -> {
-            player.clear();
+            player.clearWithoutSaving();
             open(player);
         });
 

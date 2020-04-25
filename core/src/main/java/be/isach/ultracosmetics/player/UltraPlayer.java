@@ -199,6 +199,14 @@ public class UltraPlayer {
      * Removes the current gadget.
      */
     public void removeGadget() {
+        removeGadgetWithoutSaving();
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes the current gadget without saving to the cosmetics profile.
+     */
+    public void removeGadgetWithoutSaving() {
         if (currentGadget == null) {
             return;
         }
@@ -211,6 +219,14 @@ public class UltraPlayer {
      * Removes the current emote.
      */
     public void removeEmote() {
+        removeEmoteWithoutSaving();
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes the current emote without saving to the cosmetics profile.
+     */
+    public void removeEmoteWithoutSaving() {
         if (currentEmote == null) {
             return;
         }
@@ -223,6 +239,14 @@ public class UltraPlayer {
      * Removes the current Mount.
      */
     public void removeMount() {
+        removeMountWithoutSaving();
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes the current Mount without saving to the cosmetics profile.
+     */
+    public void removeMountWithoutSaving() {
         if (currentMount == null) {
             return;
         }
@@ -234,6 +258,14 @@ public class UltraPlayer {
      * Removes the current Pet.
      */
     public void removePet() {
+        removePetWithoutSaving();
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes the current Pet without saving to the cosmetics profile.
+     */
+    public void removePetWithoutSaving() {
         if (currentPet == null) {
             return;
         }
@@ -279,6 +311,14 @@ public class UltraPlayer {
      * Removes the current hat.
      */
     public void removeHat() {
+        removeHatWithoutSaving();
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes the current hat without saving to the cosmetics profile.
+     */
+    public void removeHatWithoutSaving() {
         if (currentHat == null) {
             return;
         }
@@ -299,6 +339,16 @@ public class UltraPlayer {
      * @param armorSlot The ArmorSlot to remove.
      */
     public void removeSuit(ArmorSlot armorSlot) {
+        removeSuitWithoutSaving(armorSlot);
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes the current suit of armorSlot without saving to the cosmetics profile.
+     *
+     * @param armorSlot The ArmorSlot to remove.
+     */
+    public void removeSuitWithoutSaving(ArmorSlot armorSlot) {
         if (!suitMap.containsKey(armorSlot)) {
             suitMap.put(armorSlot, null);
             return;
@@ -363,6 +413,15 @@ public class UltraPlayer {
     }
 
     /**
+     * Removes entire suit without saving to the cosmetics profile.
+     */
+    public void removeSuitWithoutSaving() {
+        for (ArmorSlot armorSlot : ArmorSlot.values()) {
+            removeSuitWithoutSaving(armorSlot);
+        }
+    }
+
+    /**
      * Clears all gadgets.
      */
     public boolean clear() {
@@ -389,14 +448,14 @@ public class UltraPlayer {
             } catch (Exception ignored) {
             }
         }
-        removeGadget();
-        removeParticleEffect();
-        removePet();
-        removeMount();
+        removeGadgetWithoutSaving();
+        removeParticleEffectWithoutSaving();
+        removePetWithoutSaving();
+        removeMountWithoutSaving();
         removeTreasureChest();
-        removeHat();
-        removeEmote();
-        removeSuit();
+        removeHatWithoutSaving();
+        removeEmoteWithoutSaving();
+        removeSuitWithoutSaving();
         return toReturn;
     }
 
@@ -461,6 +520,14 @@ public class UltraPlayer {
      * Removes current Particle Effect.
      */
     public void removeParticleEffect() {
+        removeParticleEffectWithoutSaving();
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes current Particle Effect without saving to the cosmetics profile.
+     */
+    public void removeParticleEffectWithoutSaving() {
         if (currentParticleEffect == null) {
             return;
         }
@@ -473,6 +540,14 @@ public class UltraPlayer {
      * Removes current Morph.
      */
     public void removeMorph() {
+        removeMorphWithoutSaving();
+        saveCosmeticsProfile();
+    }
+
+    /**
+     * Removes current Morph without saving to the cosmetics profile.
+     */
+    public void removeMorphWithoutSaving() {
         if (currentMorph == null) {
             return;
         }
@@ -763,7 +838,6 @@ public class UltraPlayer {
         if (!isQuitting()) {
             if (cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledEmote(currentEmote == null ? null : currentEmote.getType());
-            saveCosmeticsProfile();
         }
     }
 
@@ -776,7 +850,6 @@ public class UltraPlayer {
         if (!isQuitting()) {
             if (cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledGadget(currentGadget == null ? null : currentGadget.getType());
-            saveCosmeticsProfile();
         }
     }
 
@@ -797,7 +870,6 @@ public class UltraPlayer {
         if (!isQuitting()) {
             if (cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledHat(currentHat == null ? null : currentHat.getType());
-            saveCosmeticsProfile();
         }
     }
 
@@ -810,7 +882,6 @@ public class UltraPlayer {
         if (!isQuitting()) {
             if (cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledMorph(currentMorph == null ? null : currentMorph.getType());
-            saveCosmeticsProfile();
         }
     }
 
@@ -823,7 +894,6 @@ public class UltraPlayer {
         if (!isQuitting()) {
             if (cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledMount((MountType) (currentMount == null ? null : currentMount.getType()));
-            saveCosmeticsProfile();
         }
     }
 
@@ -836,7 +906,6 @@ public class UltraPlayer {
         if (!isQuitting()) {
             if(cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledEffect(currentParticleEffect == null ? null : currentParticleEffect.getType());
-            saveCosmeticsProfile();
         }
     }
 
@@ -849,7 +918,6 @@ public class UltraPlayer {
         if (!isQuitting()) {
             if (cosmeticsProfile == null) ultraCosmetics.getCosmeticsProfileManager().initForPlayer(this);
             cosmeticsProfile.setEnabledPet(currentPet == null ? null : currentPet.getType());
-            saveCosmeticsProfile();
         }
     }
 
@@ -886,21 +954,54 @@ public class UltraPlayer {
     }
 
     public void removeCosmetic(Category category) {
-        switch (category) {
-            case EFFECTS:
+        switch (category.name()) {
+            case "EFFECTS":
                 removeParticleEffect();
-            case EMOTES:
+                break;
+            case "EMOTES":
                 removeEmote();
-            case GADGETS:
+                break;
+            case "GADGETS":
                 removeGadget();
-            case HATS:
+                break;
+            case "HATS":
                 removeHat();
-            case MORPHS:
+                break;
+            case "MORPHS":
                 removeMorph();
-            case MOUNTS:
+                break;
+            case "MOUNTS":
                 removeMount();
-            case PETS:
+                break;
+            case "PETS":
                 removePet();
+                break;
+        }
+    }
+
+    public void removeCosmeticWithoutSaving(Category category) {
+        switch (category.name()) {
+            case "EFFECTS":
+                removeParticleEffectWithoutSaving();
+                break;
+            case "EMOTES":
+                removeEmoteWithoutSaving();
+                break;
+            case "GADGETS":
+                removeGadgetWithoutSaving();
+                break;
+            case "HATS":
+                removeHatWithoutSaving();
+                break;
+            case "MORPHS":
+                removeMorphWithoutSaving();
+                break;
+            case "MOUNTS":
+                removeMountWithoutSaving();
+                break;
+            case "PETS":
+                removePetWithoutSaving();
+                break;
         }
     }
 
@@ -928,4 +1029,5 @@ public class UltraPlayer {
     public void setQuitting(boolean quitting) {
         this.quitting = quitting;
     }
+
 }

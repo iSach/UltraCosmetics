@@ -1,26 +1,16 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
-import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
-import java.util.UUID;
 
 public class SubCommandShowcaseClear extends SubCommand {
 
@@ -76,8 +66,8 @@ public class SubCommandShowcaseClear extends SubCommand {
 
         // If no cosmetic type specified, clear all and remove the NPC from the affected NPC list
         if(args.length < 3) {
+            plugin.getNPCManager().RemoveNPC(up.getUuid());
             up.clear();
-            plugin.getNPCManager().RemoveNPCFromList(up.getUuid());
             return true;
         }
 
