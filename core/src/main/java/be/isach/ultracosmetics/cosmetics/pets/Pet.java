@@ -99,13 +99,13 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
         followTaskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), followTask.getTask(), 0, 4).getTaskId();
 
+        EntitySpawningManager.setBypass(true);
         try {
-            EntitySpawningManager.setBypass(true);
             this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
-            EntitySpawningManager.setBypass(false);
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
+        EntitySpawningManager.setBypass(false);
 
         if (entity instanceof Ageable) {
             if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) {
