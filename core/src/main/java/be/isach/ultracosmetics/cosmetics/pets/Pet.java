@@ -148,7 +148,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         // Set custom metadata
         entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
         setColorVariantString(extractColor(entity)); // Extract current color variant as string
-        getOwner().setPetName(getType(), ChatColor.stripColor(getEntity().getCustomName())); // Extract current pet name
 
         // Set this pet as the UltraPlayer's current pet
         getOwner().setCurrentPet(this);
