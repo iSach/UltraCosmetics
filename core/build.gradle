@@ -1,11 +1,11 @@
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT'
-    compileOnly 'org.bukkit:craftbukkit:1.14.4-R0.1-SNAPSHOT'
-    compile('LibsDisguises:LibsDisguises:9.5.2') {
+    compileOnly 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'org.bukkit:craftbukkit:1.15.2-R0.1-SNAPSHOT'
+    implementation('LibsDisguises:LibsDisguises:9.5.2') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
     }
-    compile('net.milkbowl.vault:VaultAPI:1.6') {
+    implementation('net.milkbowl.vault:VaultAPI:1.6') {
         exclude group: 'org.bukkit'
     }
     compile 'me.clip:placeholderapi:2.10.3'

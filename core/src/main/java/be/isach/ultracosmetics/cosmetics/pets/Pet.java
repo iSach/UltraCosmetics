@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
@@ -120,10 +121,6 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         getEntity().setCustomNameVisible(true);
         getEntity().setCustomName(getType().getEntityName(getPlayer()));
 
-        if (getOwner().getPetName(getType()) != null) {
-            getEntity().setCustomName(getOwner().getPetName(getType()));
-        }
-
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(entity);
 
@@ -141,9 +138,8 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 else if (entity instanceof MushroomCow) ((MushroomCow) entity).setVariant(MushroomCow.Variant.valueOf(colorVariant));
             }
             // Check for pre-existing pet name
-            String petName = getPetNameFromFile();
-            if(!petName.equals("none")) {
-                getEntity().setCustomName(petName);
+            if (getOwner().getPetName(getType()) != null) {
+                getEntity().setCustomName("§l" + getOwner().getPetName(getType()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,7 +148,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         // Set custom metadata
         entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
         setColorVariantString(extractColor(entity)); // Extract current color variant as string
-        setPetName(entity.getCustomName()); // Extract current pet name
+        getOwner().setPetName(getType(), ChatColor.stripColor(getEntity().getCustomName())); // Extract current pet name
 
         // Set this pet as the UltraPlayer's current pet
         getOwner().setCurrentPet(this);
@@ -172,26 +168,12 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         return s.getString("pet.type");
     }
 
-    public String getPetNameFromFile() {
-        SettingsManager sm = SettingsManager.getData(getOwnerUniqueId());
-        ConfigurationSection s = sm.fileConfiguration.getConfigurationSection("enabled");
-        return s.getString("pet.name");
-    }
-
     public String getColorVariantString() {
         return this.colorVariantStr;
     }
 
     public void setColorVariantString(String color) {
         this.colorVariantStr = color;
-    }
-
-    public String getPetName() {
-        return petName;
-    }
-
-    public void setPetName(String name) {
-        this.petName = name;
     }
 
     private String extractColor(Entity entity) {

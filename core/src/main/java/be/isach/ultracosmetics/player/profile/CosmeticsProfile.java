@@ -249,14 +249,11 @@ public class CosmeticsProfile {
         settingsManager.set("enabled.hat", enabledHat != null ? enabledHat.getConfigName() : "none");
         settingsManager.set("enabled.morph", enabledMorph != null ? enabledMorph.getConfigName() : "none");
         settingsManager.set("enabled.mount", enabledMount != null ? enabledMount.getConfigName() : "none");
-
         settingsManager.set("enabled.pet.type", enabledPet != null ? enabledPet.getConfigName() : "none");
         if(getUltraPlayer() != null && getUltraPlayer().getCurrentPet() != null) { // Save metadata attached to the pet
             settingsManager.set("enabled.pet.color", getUltraPlayer().getCurrentPet().getColorVariantString() != null ? getUltraPlayer().getCurrentPet().getColorVariantString() : "none");
-            settingsManager.set("enabled.pet.name", getUltraPlayer().getCurrentPet().getPetName() != null ? getUltraPlayer().getCurrentPet().getPetName() : "none");
         } else if(enabledPet == null) { // If pet.type is none, clear all the metadata fields as well
             settingsManager.set("enabled.pet.color", "none");
-            settingsManager.set("enabled.pet.name", "none"); // TODO: attach name instance to each pet
         }
 
         for (ArmorSlot slot : ArmorSlot.values()) {

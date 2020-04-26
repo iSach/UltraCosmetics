@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -89,9 +88,14 @@ public class AnvilGUI implements IAnvilGUI {
     private void openInventory() {
         final ItemStack paper = UCMaterial.PAPER.parseItem();
         final ItemMeta paperMeta = paper.getItemMeta();
-        paperMeta.setDisplayName("Pet name");
+        paperMeta.setDisplayName(" ");
         paper.setItemMeta(paperMeta);
         this.insert = paper;
+
+        final ItemStack paperOut = UCMaterial.PAPER.parseItem();
+        final ItemMeta paperOutMeta = paperOut.getItemMeta();
+        paperOutMeta.setDisplayName(" ");
+        paperOut.setItemMeta(paperOutMeta);
 
         CraftEventFactory.handleInventoryCloseEvent(toNMS(player));
         toNMS(player).activeContainer = toNMS(player).defaultContainer;
@@ -106,13 +110,9 @@ public class AnvilGUI implements IAnvilGUI {
         containerId = getNextContainerId(player);
         toNMS(player).playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerId, Containers.ANVIL, new ChatMessage("Repair & Name")));
         toNMS(player).activeContainer = (Container) container;
-        try {
-            final Field field = Container.class.getField("windowId");
-
-            final Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
+        try { // Change a private field in net.minecraft.server using reflection
+            Field field = (Container.class).getDeclaredField("windowId");
+            field.setAccessible(true);
             field.set(container, containerId);
         } catch (Exception ex) {
             throw new RuntimeException(ex);

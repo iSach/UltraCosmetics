@@ -563,16 +563,16 @@ public class UltraPlayer {
      * @param name    The new name.
      */
     public void setPetName(PetType petType, String name) {
-        name = ChatColor.translateAlternateColorCodes('&', name.replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace(" ", ""));
+        name = name.replaceAll("[^\\x20-\\x7E]", ""); // No special symbols allowed, bold by default
         if (currentPet != null) {
             if (currentPet.armorStand != null) {
-                currentPet.armorStand.setCustomName(name);
+                currentPet.armorStand.setCustomName("§l" + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
             } else {
-                currentPet.getEntity().setCustomName(name);
+                currentPet.getEntity().setCustomName("§l" + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
             }
         }
         if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petType.getConfigName(), name);
+            SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petType.getConfigName(), name.isEmpty() ? null : name);
         } else {
             ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petType.getConfigName(), name);
         }
@@ -587,7 +587,9 @@ public class UltraPlayer {
     public String getPetName(PetType petType) {
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).get("Pet-Names." + petType.getConfigName());
+                String raw = SettingsManager.getData(getBukkitPlayer()).get("Pet-Names." + petType.getConfigName());
+                if(raw.length() > 35) return raw.substring(0, 35); // Anvil max rename length with BOLD tag attached is 37
+                else return raw;
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;

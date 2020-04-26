@@ -210,10 +210,10 @@ Fill-Blank-Slots-With-Item:
 # If true, money will be required
 # to rename a pet.
 Pets-Rename:
-  Enabled: false
-  Permission-Required: false
+  Enabled: true
+  Permission-Required: true
   Requires-Money:
-    Enabled: true
+    Enabled: false
     Price: 100
 
 # Do pets drop items? (not pickable up by players)
