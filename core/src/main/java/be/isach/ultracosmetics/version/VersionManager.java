@@ -91,7 +91,7 @@ public class VersionManager {
 
     public IAnvilGUI newAnvilGUI(Player player, String text, Consumer<Player> closeListener, BiFunction<Player, String, AAnvilGUI.Response> completeFunction) {
         try {
-            return anvilGUIConstructor.newInstance(player, text, true, closeListener, completeFunction);
+            return anvilGUIConstructor.newInstance(player, text, false, closeListener, completeFunction);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
             return null;

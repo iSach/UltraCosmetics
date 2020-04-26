@@ -86,16 +86,11 @@ public class AnvilGUI implements IAnvilGUI {
     }
 
     private void openInventory() {
-        final ItemStack paper = UCMaterial.PAPER.parseItem();
-        final ItemMeta paperMeta = paper.getItemMeta();
-        paperMeta.setDisplayName(" ");
-        paper.setItemMeta(paperMeta);
-        this.insert = paper;
-
-        final ItemStack paperOut = UCMaterial.PAPER.parseItem();
-        final ItemMeta paperOutMeta = paperOut.getItemMeta();
-        paperOutMeta.setDisplayName(" ");
-        paperOut.setItemMeta(paperOutMeta);
+        final ItemStack nametag = UCMaterial.NAME_TAG.parseItem();
+        final ItemMeta nametagMeta = nametag.getItemMeta();
+        nametagMeta.setDisplayName(" "); //TODO: Find a workaround for resetting name back to default
+        nametag.setItemMeta(nametagMeta);
+        this.insert = nametag;
 
         CraftEventFactory.handleInventoryCloseEvent(toNMS(player));
         toNMS(player).activeContainer = toNMS(player).defaultContainer;
