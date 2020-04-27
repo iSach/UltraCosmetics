@@ -563,12 +563,12 @@ public class UltraPlayer {
      * @param name    The new name.
      */
     public void setPetName(PetType petType, String name) {
-        name = name.replaceAll("[^\\x20-\\x7E]", ""); // No special symbols allowed, bold by default
-        if (currentPet != null) {
+        name = name.replaceAll("[^\\x20-\\x7E]", ""); // No special symbols allowed, only ASCII printable chars
+        if (currentPet != null && currentPet.getType().getConfigName().equals(petType.getConfigName())) { // If the current pet is the specified pet type
             if (currentPet.armorStand != null) {
-                currentPet.armorStand.setCustomName("§l" + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
+                currentPet.armorStand.setCustomName(ChatColor.BOLD + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
             } else {
-                currentPet.getEntity().setCustomName("§l" + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
+                currentPet.getEntity().setCustomName(ChatColor.BOLD + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
             }
         }
         if (UltraCosmeticsData.get().usingFileStorage()) {

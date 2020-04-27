@@ -16,12 +16,12 @@ import java.util.Arrays;
  */
 public abstract class SubCommand {
 
-    String[] aliases;
+    String[] commandname;
     String description, permission, usage;
     private UltraCosmetics ultraCosmetics;
 
-    public SubCommand(String description, String permission, String usage, UltraCosmetics ultraCosmetics, String... aliases) {
-        this.aliases = aliases;
+    public SubCommand(String description, String permission, String usage, UltraCosmetics ultraCosmetics, String... commandname) {
+        this.commandname = commandname;
         this.description = description;
         this.permission = permission;
         this.usage = usage;
@@ -35,7 +35,7 @@ public abstract class SubCommand {
      * @return {@code true} if the String is an alias.
      */
     public boolean is(String arg) {
-        return Arrays.asList(aliases).contains(arg.toLowerCase());
+        return Arrays.asList(commandname).contains(arg.toLowerCase());
     }
 
     /**

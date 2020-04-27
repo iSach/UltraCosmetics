@@ -31,7 +31,7 @@ public class UCTabCompleter implements TabCompleter {
             if (args.length == 1) {
                 List<String> commands = new ArrayList<>();
                 for (SubCommand sc : uc.getCommandManager().getCommands()) {
-                    commands.add(sc.aliases[0]);
+                    commands.add(sc.commandname[0]);
                 }
 
                 Collections.sort(commands);
