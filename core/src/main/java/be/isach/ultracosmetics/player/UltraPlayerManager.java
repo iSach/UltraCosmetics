@@ -66,6 +66,7 @@ public class UltraPlayerManager {
         for (UltraPlayer cp : set) {
             if (cp.getCurrentTreasureChest() != null)
                 cp.getCurrentTreasureChest().forceOpen(0);
+            cp.clearWithoutSaving();
             cp.removeMenuItem();
         }
 

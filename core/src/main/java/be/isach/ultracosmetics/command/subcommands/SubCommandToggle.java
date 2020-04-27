@@ -11,7 +11,6 @@ import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
