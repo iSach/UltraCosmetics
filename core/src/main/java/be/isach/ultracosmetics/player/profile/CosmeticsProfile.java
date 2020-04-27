@@ -115,53 +115,45 @@ public class CosmeticsProfile {
         UltraCosmetics ultraCosmetics = UltraCosmeticsData.get().getPlugin();
 
         // Gadget
-        if (enabledGadget != null
-                && enabledGadget.getCategory().isEnabled()
-                && enabledGadget.isEnabled())
+        if (enabledGadget != null && enabledGadget.isEnabled()
+                && enabledGadget.getCategory().isEnabled())
             enabledGadget.equip(ultraPlayer, ultraCosmetics);
 
         // Pet
-        if (enabledPet != null
-                && enabledPet.getCategory().isEnabled()
-                && enabledPet.isEnabled())
+        if (enabledPet != null && enabledPet.isEnabled()
+                && enabledPet.getCategory().isEnabled())
             enabledPet.equip(ultraPlayer, ultraCosmetics);
 
         // Emote
-        if (enabledEmote != null
-                && enabledEmote.getCategory().isEnabled()
-                && enabledEmote.isEnabled())
+        if (enabledEmote != null && enabledEmote.isEnabled()
+                && enabledEmote.getCategory().isEnabled())
             enabledEmote.equip(ultraPlayer, ultraCosmetics);
 
         // Hat
-        if (enabledHat != null
-                && enabledHat.getCategory().isEnabled()
-                && enabledHat.isEnabled())
+        if (enabledHat != null && enabledHat.isEnabled()
+                && enabledHat.getCategory().isEnabled())
             enabledHat.equip(ultraPlayer, ultraCosmetics);
 
         // Morph
-        if (enabledMorph != null
-                && enabledMorph.getCategory().isEnabled()
-                && enabledMorph.isEnabled())
+        if (enabledMorph != null && enabledMorph.isEnabled()
+                && enabledMorph.getCategory().isEnabled())
             enabledMorph.equip(ultraPlayer, ultraCosmetics);
 
         // Mount
-        if (enabledMount != null
-                && enabledMount.getCategory().isEnabled()
-                && enabledMount.isEnabled())
+        if (enabledMount != null && enabledMount.isEnabled()
+                && enabledMount.getCategory().isEnabled())
             enabledMount.equip(ultraPlayer, ultraCosmetics);
 
         // Particle Effect
-        if (enabledEffect != null
-                && enabledEffect.getCategory().isEnabled()
-                && enabledEffect.isEnabled())
+        if (enabledEffect != null && enabledEffect.isEnabled()
+                && enabledEffect.getCategory().isEnabled())
             enabledEffect.equip(ultraPlayer, ultraCosmetics);
 
         // Suit
         for (ArmorSlot armorSlot : ArmorSlot.values()) {
             SuitType suitPart = enabledSuitParts.get(armorSlot);
-            if (suitPart != null
-                    && suitPart.getCategory().isEnabled()
-                    && suitPart.isEnabled())
+            if (suitPart != null && suitPart.isEnabled()
+                    && suitPart.getCategory().isEnabled())
                 suitPart.equip(ultraPlayer, ultraCosmetics, armorSlot);
         }
     }
@@ -178,53 +170,45 @@ public class CosmeticsProfile {
         UltraCosmetics ultraCosmetics = UltraCosmeticsData.get().getPlugin();
 
         // Gadget
-        if (enabledGadget != null
-                && enabledGadget.getCategory().isEnabled()
-                && enabledGadget.isEnabled())
+        if (enabledGadget != null && enabledGadget.isEnabled()
+                && enabledGadget.getCategory().isEnabled())
             enabledGadget.equipWithoutSaving(ultraPlayer, ultraCosmetics);
 
         // Pet
-        if (enabledPet != null
-                && enabledPet.getCategory().isEnabled()
-                && enabledPet.isEnabled())
+        if (enabledPet != null && enabledPet.isEnabled()
+                && enabledPet.getCategory().isEnabled())
             enabledPet.equipWithoutSaving(ultraPlayer, ultraCosmetics);
 
         // Emote
-        if (enabledEmote != null
-                && enabledEmote.getCategory().isEnabled()
-                && enabledEmote.isEnabled())
+        if (enabledEmote != null && enabledEmote.isEnabled()
+                && enabledEmote.getCategory().isEnabled())
             enabledEmote.equipWithoutSaving(ultraPlayer, ultraCosmetics);
 
         // Hat
-        if (enabledHat != null
-                && enabledHat.getCategory().isEnabled()
-                && enabledHat.isEnabled())
+        if (enabledHat != null && enabledHat.isEnabled()
+                && enabledHat.getCategory().isEnabled())
             enabledHat.equipWithoutSaving(ultraPlayer, ultraCosmetics);
 
         // Morph
-        if (enabledMorph != null
-                && enabledMorph.getCategory().isEnabled()
-                && enabledMorph.isEnabled())
+        if (enabledMorph != null && enabledMorph.isEnabled()
+                && enabledMorph.getCategory().isEnabled())
             enabledMorph.equipWithoutSaving(ultraPlayer, ultraCosmetics);
 
         // Mount
-        if (enabledMount != null
-                && enabledMount.getCategory().isEnabled()
-                && enabledMount.isEnabled())
+        if (enabledMount != null && enabledMount.isEnabled()
+                && enabledMount.getCategory().isEnabled())
             enabledMount.equipWithoutSaving(ultraPlayer, ultraCosmetics);
 
         // Particle Effect
-        if (enabledEffect != null
-                && enabledEffect.getCategory().isEnabled()
-                && enabledEffect.isEnabled())
+        if (enabledEffect != null && enabledEffect.isEnabled()
+                && enabledEffect.getCategory().isEnabled())
             enabledEffect.equipWithoutSaving(ultraPlayer, ultraCosmetics);
 
         // Suit
         for (ArmorSlot armorSlot : ArmorSlot.values()) {
             SuitType suitPart = enabledSuitParts.get(armorSlot);
-            if (suitPart != null
-                    && suitPart.getCategory().isEnabled()
-                    && suitPart.isEnabled())
+            if (suitPart != null && suitPart.isEnabled()
+                    && suitPart.getCategory().isEnabled())
                 suitPart.equipWithoutSaving(ultraPlayer, ultraCosmetics, armorSlot);
         }
     }
