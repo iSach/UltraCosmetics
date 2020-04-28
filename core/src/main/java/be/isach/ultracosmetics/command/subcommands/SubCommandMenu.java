@@ -115,7 +115,7 @@ public class SubCommandMenu extends SubCommand {
     }
 
     private List<String> getMenuList() {
-        List<String> menuList = new ArrayList<String>();
+        List<String> menuList = new ArrayList<>();
         menuList.add("main");
         if(UltraCosmeticsData.get().areTreasureChestsEnabled()) menuList.add("buykey");
         if(SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) menuList.add("renamepet");
