@@ -11,8 +11,14 @@ import be.isach.ultracosmetics.menu.menus.MenuGadgets;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Menu {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
@@ -37,7 +43,7 @@ public class SubCommandMenu extends SubCommand {
         }
 
         if (args.length < 2) {
-            sender.sendMessage(getMenuList());
+            sender.sendMessage(getMenuListMessage());
             return;
         }
 
@@ -89,7 +95,7 @@ public class SubCommandMenu extends SubCommand {
                 sender.sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
             }
         } else {
-            sender.sendMessage(getMenuList());
+            sender.sendMessage(getMenuListMessage());
         }
     }
 
@@ -98,7 +104,7 @@ public class SubCommandMenu extends SubCommand {
         notAllowed(sender);
     }
 
-    private String getMenuList() {
+    private String getMenuListMessage() {
         StringBuilder menuList = new StringBuilder(ChatColor.RED + "" + ChatColor.BOLD + "/uc menu <menu>\n" + ChatColor.RED + "" + ChatColor.BOLD + "Invalid Menu\n"
                 + ChatColor.RED + "" + ChatColor.BOLD + "Available Menus: main," + (UltraCosmeticsData.get().areTreasureChestsEnabled() ? " buykey," : "")
                 + (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") ? " renamepet," : ""));
@@ -106,6 +112,37 @@ public class SubCommandMenu extends SubCommand {
             menuList.append(" ").append(category.name().toLowerCase()).append(",");
         }
         return menuList.substring(0, menuList.length() - 1);
+    }
+
+    private List<String> getMenuList() {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("main");
+        if(UltraCosmeticsData.get().areTreasureChestsEnabled()) menuList.add("buykey");
+        if(SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) menuList.add("renamepet");
+        for (Category category : Category.enabled()) {
+            menuList.add(category.name().toLowerCase());
+        }
+        Collections.sort(menuList);
+        return menuList;
+    }
+
+    @Override
+    public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) {
+        //uc menu <menu> [page]
+        List<String> tabSuggestion = new ArrayList<>();
+
+        // Check if the root argument doesn't match our command's alias, or if no additional arguments are given (shouldn't happen)
+        if(!Arrays.stream(getAliases()).anyMatch(args[0]::equals) || args.length < 2)
+            return tabSuggestion;
+
+        else if(args.length == 2) { // Tab-completing first argument: <menu>
+            tabSuggestion = getMenuList();
+            return tabSuggestion;
+        }
+
+        else { // no need to tab-complete [page]
+            return tabSuggestion;
+        }
     }
 }
 

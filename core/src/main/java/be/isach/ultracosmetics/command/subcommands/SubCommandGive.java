@@ -2,7 +2,9 @@
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.command.ITabCompletable;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.command.UCTabCompleter;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
@@ -11,9 +13,13 @@ import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -259,5 +265,37 @@ public class SubCommandGive extends SubCommand {
 
     private int getKeys(UUID uuid) {
         return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : getUltraCosmetics().getMySqlConnectionManager().getSqlUtils().getKeys(MySqlConnectionManager.INDEXS.get(uuid));
+    }
+
+    @Override
+    public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) { // TODO: Change structure of command to match shown
+        //uc give <player> <key> <amount>
+        //uc give <player> <ammo> <gadget> <amount>
+        List<String> tabSuggestion = new ArrayList<>();
+
+        // Check if the root argument doesn't match our command's alias, or if no additional arguments are given (shouldn't happen)
+        if(!Arrays.stream(getAliases()).anyMatch(args[0]::equals) || args.length < 2)
+            return tabSuggestion;
+
+        else if(args.length == 2) { // Tab-completing first argument: <player>
+            return UCTabCompleter.GetOnlinePlayers(sender);
+        }
+
+        else if(args.length == 3) { // Tab-completing second argument: <key|ammo>
+            tabSuggestion.add("ammo");
+            tabSuggestion.add("key");
+            return tabSuggestion;
+        }
+
+        else if(args.length == 4 && args[3].equalsIgnoreCase("ammo")) { // Tab-completing third argument <gadget>
+            for(GadgetType gadgetType : GadgetType.enabled()) {
+                tabSuggestion.add(gadgetType.getConfigName());
+            }
+            return tabSuggestion;
+        }
+
+        else {
+            return tabSuggestion;
+        }
     }
 }

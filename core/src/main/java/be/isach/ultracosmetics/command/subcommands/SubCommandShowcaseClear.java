@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class SubCommandShowcaseClear extends SubCommand {
 
     private UltraCosmetics plugin;
@@ -97,5 +99,10 @@ public class SubCommandShowcaseClear extends SubCommand {
     @Override
     protected void onExeConsole(ConsoleCommandSender sender, String... args) {
         onCommand(sender, args);
+    }
+
+    @Override
+    public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) {
+        return null;
     }
 }

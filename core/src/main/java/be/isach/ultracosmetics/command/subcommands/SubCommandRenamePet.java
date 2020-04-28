@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.command.UCTabCompleter;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
@@ -13,7 +14,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -44,11 +47,6 @@ public class SubCommandRenamePet extends SubCommand {
         if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + getUsage());
             return;
-        }
-
-        // Check for arguments with spaces surrounded by quotes, i.e. "new name"
-        if(args.length > 4) {
-            args = quotedSpaces(args);
         }
 
         if (!sender.hasPermission(getPermission() + ".others")) return;
@@ -102,10 +100,28 @@ public class SubCommandRenamePet extends SubCommand {
                 ChatColor.translateAlternateColorCodes('&', MessageManager.getMessage("Pets." + petType.getConfigName() + ".menu-name")));
     }
 
-    // Regex function to allow new name to have spaces if in quotes
-    public static String[] quotedSpaces(String[] arguments) {
-        final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
-        return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
-    }
+    @Override
+    public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) {
+        //uc renamepet <player> [pet type] [new name]
+        List<String> tabSuggestion = new ArrayList<>();
 
+        // Check if the root argument doesn't match our command's alias, or if no additional arguments are given (shouldn't happen)
+        if(!Arrays.stream(getAliases()).anyMatch(args[0]::equals) || args.length < 2)
+            return tabSuggestion;
+
+        else if(args.length == 2) { // Tab-completing first argument: <player>
+            return UCTabCompleter.GetOnlinePlayers(sender);
+        }
+
+        else if(args.length == 3) { // Tab-completing second argument: [pet type]
+            for(PetType petType : PetType.values()) {
+                tabSuggestion.add(petType.getConfigName());
+            }
+            return tabSuggestion;
+        }
+
+        else { // No need to tab-complete [new name]
+            return tabSuggestion;
+        }
+    }
 }

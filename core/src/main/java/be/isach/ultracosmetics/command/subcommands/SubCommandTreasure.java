@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.command.subcommands;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.command.UCTabCompleter;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -15,6 +16,12 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Treasure {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
@@ -100,5 +107,34 @@ public class SubCommandTreasure extends SubCommand {
         opener.teleport(location);
 
         TreasureChestManager.tryOpenChest(opener, preLoc);
+    }
+
+    @Override
+    public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) {
+        //uc treasure <player> <x> <y> <z> <world>
+        List<String> tabSuggestion = new ArrayList<>();
+
+        // Check if the root argument doesn't match our command's alias, or if no additional arguments are given (shouldn't happen)
+        if(!Arrays.stream(getAliases()).anyMatch(args[0]::equals) || args.length < 2)
+            return tabSuggestion;
+
+        else if(args.length == 2) { // Tab-completing first argument: <player>
+            tabSuggestion = UCTabCompleter.GetOnlinePlayers(sender);
+            return tabSuggestion;
+        }
+
+        // No need to tab complete <x>, <y>, or <z>
+
+        else if(args.length == 6) { // Tab-completing fifth argument: <world>
+            for (World world : Bukkit.getWorlds()) {
+                tabSuggestion.add(world.getName().toLowerCase());
+            }
+            Collections.sort(tabSuggestion);
+            return tabSuggestion;
+        }
+
+        else {
+            return tabSuggestion;
+        }
     }
 }

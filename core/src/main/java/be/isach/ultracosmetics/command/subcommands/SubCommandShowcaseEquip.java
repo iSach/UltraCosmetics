@@ -16,6 +16,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class SubCommandShowcaseEquip extends SubCommand {
 
@@ -134,5 +135,10 @@ public class SubCommandShowcaseEquip extends SubCommand {
     @Override
     protected void onExeConsole(ConsoleCommandSender sender, String... args) {
         onCommand(sender, args);
+    }
+
+    @Override
+    public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) {
+        return null;
     }
 }

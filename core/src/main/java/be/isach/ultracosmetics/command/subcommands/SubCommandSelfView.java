@@ -5,8 +5,12 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Selfview {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
@@ -34,5 +38,12 @@ public class SubCommandSelfView extends SubCommand {
     @Override
     protected void onExeConsole(ConsoleCommandSender sender, String... args) {
         notAllowed(sender);
+    }
+
+    @Override
+    public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) {
+        //uc selfview
+        List<String> tabSuggestion = new ArrayList<>();
+        return tabSuggestion; // no need to tab-complete anything in selfview
     }
 }

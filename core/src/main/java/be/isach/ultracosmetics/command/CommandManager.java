@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Command manager.
@@ -82,6 +83,9 @@ public class CommandManager implements CommandExecutor {
 			return false;
 		}
 
+		// Parse arguments that have spaces if surrounded by quotes
+		arguments = quotedSpaces(arguments);
+
 		if (arguments == null
 		    || arguments.length == 0) {
 			showHelp(sender, 1);
@@ -95,12 +99,10 @@ public class CommandManager implements CommandExecutor {
 		
 		for (SubCommand meCommand : commands) {
 			if (meCommand.is(arguments[0])) {
-				
 				if (!sender.hasPermission(meCommand.getPermission())) {
 					sender.sendMessage(MessageManager.getMessage("No-Permission"));
 					return true;
 				}
-				
 				if (sender instanceof Player) {
 					meCommand.onExePlayer((Player) sender, arguments);
 				} else {
@@ -116,16 +118,32 @@ public class CommandManager implements CommandExecutor {
 	public List<SubCommand> getCommands() {
 		return commands;
 	}
-	
+
+	public SubCommand getCommand(String alias) throws ClassNotFoundException {
+		for (SubCommand meCommand : commands) {
+			if (meCommand.is(alias)) {
+				return meCommand;
+			}
+		}
+		throw new ClassNotFoundException();
+	}
+
 	public void registerCommands(UltraCosmetics ultraCosmetics) {
 		registerCommand(new SubCommandGadgets(ultraCosmetics));
 		registerCommand(new SubCommandSelfView(ultraCosmetics));
 		registerCommand(new SubCommandMenu(ultraCosmetics));
-		//registerCommand(new SubCommandPurge(ultraCosmetics));
 		registerCommand(new SubCommandGive(ultraCosmetics));
 		registerCommand(new SubCommandToggle(ultraCosmetics));
 		registerCommand(new SubCommandClear(ultraCosmetics));
 		registerCommand(new SubCommandTreasure(ultraCosmetics));
 		registerCommand(new SubCommandRenamePet(ultraCosmetics));
+	}
+
+	// TODO: Allow single quotes as well '
+	// Regex function to allow arguments to have spaces if in quotes, helpful for parsing NPC names
+	// i.e uc "arg with spaces" will be returned as {"uc","arg with spaces"}
+	public static String[] quotedSpaces(String[] arguments) {
+		final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
+		return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
 	}
 }

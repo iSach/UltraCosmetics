@@ -14,14 +14,14 @@ import java.util.Arrays;
  * @author iSach
  * @since 12-20-2015
  */
-public abstract class SubCommand {
+public abstract class SubCommand implements ITabCompletable {
 
-    String[] commandname;
+    String[] commandaliases;
     String description, permission, usage;
     private UltraCosmetics ultraCosmetics;
 
-    public SubCommand(String description, String permission, String usage, UltraCosmetics ultraCosmetics, String... commandname) {
-        this.commandname = commandname;
+    public SubCommand(String description, String permission, String usage, UltraCosmetics ultraCosmetics, String... commandaliases) {
+        this.commandaliases = commandaliases;
         this.description = description;
         this.permission = permission;
         this.usage = usage;
@@ -35,7 +35,7 @@ public abstract class SubCommand {
      * @return {@code true} if the String is an alias.
      */
     public boolean is(String arg) {
-        return Arrays.asList(commandname).contains(arg.toLowerCase());
+        return Arrays.asList(commandaliases).contains(arg.toLowerCase());
     }
 
     /**
@@ -63,6 +63,15 @@ public abstract class SubCommand {
      */
     public String getPermission() {
         return permission;
+    }
+
+    /**
+     * Get the name of this command + any aliases.
+     *
+     * @return The possible names of this command.
+     */
+    public String[] getAliases() {
+        return commandaliases;
     }
 
     /**
