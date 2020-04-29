@@ -84,7 +84,20 @@ public class SubCommandShowcaseToggle extends SubCommand {
             Category category = (Category) categories[0];
             try {
                 UltraPlayer other = plugin.getPlayerManager().getUltraPlayer(npc);
-                if (category == Category.SUITS) {
+                if (other.getCosmetic(category) != null) {
+                    if (category == Category.SUITS) {
+                        try {
+                            ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
+                            other.removeSuit(armorSlot);
+                        } catch (Exception ex) {
+                            sender.sendMessage(MessageManager.getMessage("Prefix") + " §c§l/ucs toggle suit <suit type:suit piece> [npc id].");
+                        }
+                    } else {
+                        other.removeCosmetic(category);
+                    }
+                    return;
+                }
+                else if (category == Category.SUITS) {
                     try {
                         ArmorSlot armorSlot = ArmorSlot.getByName(args[2].split(":")[1]);
                         other.removeSuit(armorSlot);
