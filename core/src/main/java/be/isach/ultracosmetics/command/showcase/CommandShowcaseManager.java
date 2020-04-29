@@ -1,7 +1,10 @@
-package be.isach.ultracosmetics.command;
+package be.isach.ultracosmetics.command.showcase;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.command.subcommands.*;
+import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.command.showcase.subcommands.SubCommandShowcaseClear;
+import be.isach.ultracosmetics.command.showcase.subcommands.SubCommandShowcaseToggle;
+import be.isach.ultracosmetics.command.showcase.subcommands.SubCommandShowcaseRenamePet;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.ChatColor;
@@ -14,6 +17,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Command manager for NPC Showcases.
@@ -32,7 +36,7 @@ public class CommandShowcaseManager implements CommandExecutor {
 	public CommandShowcaseManager(UltraCosmetics ultraCosmetics) {
 		this.ultraCosmetics = ultraCosmetics;
 		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setExecutor(this);
-		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setTabCompleter(new UCTabCompleter(ultraCosmetics));
+		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setTabCompleter(new UCShowcaseTabCompleter(ultraCosmetics));
 		String[] aliasessc = { "ucs", "cosmeticsshowcase" };
 		this.ultraCosmetics.getServer().getPluginCommand("ultracosmeticsshowcase").setAliases(Arrays.asList(aliasessc));
 	}
@@ -82,6 +86,9 @@ public class CommandShowcaseManager implements CommandExecutor {
 			return false;
 		}
 
+		// Parse arguments that have spaces if surrounded by quotes
+		arguments = quotedSpaces(arguments);
+
 		if (arguments == null
 		    || arguments.length == 0) {
 			showHelp(sender, 1);
@@ -116,9 +123,27 @@ public class CommandShowcaseManager implements CommandExecutor {
 	public List<SubCommand> getCommands() {
 		return commands;
 	}
+
+	public SubCommand getCommand(String alias) throws ClassNotFoundException {
+		for (SubCommand meCommand : commands) {
+			if (meCommand.is(alias)) {
+				return meCommand;
+			}
+		}
+		throw new ClassNotFoundException();
+	}
 	
 	public void registerCommands(UltraCosmetics ultraCosmetics) {
 		registerCommand(new SubCommandShowcaseClear(ultraCosmetics));
-		registerCommand(new SubCommandShowcaseEquip(ultraCosmetics));
+		registerCommand(new SubCommandShowcaseToggle(ultraCosmetics));
+		registerCommand(new SubCommandShowcaseRenamePet(ultraCosmetics));
+	}
+
+	// TODO: Allow single quotes as well '
+	// Regex function to allow arguments to have spaces if in quotes, helpful for parsing input strings
+	// i.e uc "arg with spaces" will be returned as {"uc","arg with spaces"}
+	public static String[] quotedSpaces(String[] arguments) {
+		final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
+		return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
 	}
 }

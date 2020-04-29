@@ -1,9 +1,9 @@
-package be.isach.ultracosmetics.command.subcommands;
+package be.isach.ultracosmetics.command.ultracosmetics.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.command.UCTabCompleter;
+import be.isach.ultracosmetics.command.ultracosmetics.UCTabCompleter;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -16,7 +16,6 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,12 +35,12 @@ public class SubCommandTreasure extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String... args) {
+    public void onExePlayer(Player sender, String... args) {
         common(sender, args);
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+    public void onExeConsole(ConsoleCommandSender sender, String... args) {
         common(sender, args);
     }
 

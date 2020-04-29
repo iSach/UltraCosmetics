@@ -1,7 +1,15 @@
-package be.isach.ultracosmetics.command;
+package be.isach.ultracosmetics.command.ultracosmetics;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.command.subcommands.*;
+import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandClear;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandGadgets;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandGive;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandMenu;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandRenamePet;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandSelfView;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandToggle;
+import be.isach.ultracosmetics.command.ultracosmetics.subcommands.SubCommandTreasure;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.ChatColor;
@@ -140,7 +148,7 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	// TODO: Allow single quotes as well '
-	// Regex function to allow arguments to have spaces if in quotes, helpful for parsing NPC names
+	// Regex function to allow arguments to have spaces if in quotes, helpful for parsing input strings
 	// i.e uc "arg with spaces" will be returned as {"uc","arg with spaces"}
 	public static String[] quotedSpaces(String[] arguments) {
 		final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");

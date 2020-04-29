@@ -1,6 +1,7 @@
-package be.isach.ultracosmetics.command;
+package be.isach.ultracosmetics.command.ultracosmetics;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
@@ -39,7 +40,7 @@ public class UCTabCompleter implements TabCompleter {
         // Root command: uc <subcommand>
         else if(args.length == 1) { // Tab-completing <subcommand>
             for (SubCommand sc : uc.getCommandManager().getCommands()) {
-                tabSuggestion.add(sc.commandaliases[0]);
+                tabSuggestion.add(sc.getAliases()[0]);
             }
             Collections.sort(tabSuggestion);
             // copyPartialMatches() allows us to filter based on what we've already typed.
@@ -72,42 +73,4 @@ public class UCTabCompleter implements TabCompleter {
         return matchedPlayers;
     }
 
-    public static List<String> GetNPCsAndOnlinePlayers(CommandSender sender) {
-        List<String> tabSuggestion = new ArrayList<>();
-
-        tabSuggestion = GetNPCs();
-
-        tabSuggestion.addAll(GetOnlinePlayers(sender)); // Concatenate players AFTER NPCs
-
-        return tabSuggestion;
-    }
-
-    public static List<String> GetNPCs() {
-        List<String> tabSuggestion = new ArrayList<>();
-
-        // Display NPCs first
-        for (NPC npc : CitizensAPI.getNPCRegistry()) {
-            if(npc.getFullName().contains(" ")) // NPC name has a space in it
-                tabSuggestion.add("\"" + npc.getId() + ":" + npc.getFullName() + "\"");
-            else
-                tabSuggestion.add(npc.getId() + ":" + npc.getFullName());
-        }
-        // Sort by NPC ID, compare as a numeric value
-        Collections.sort(tabSuggestion, (s1, s2) -> {
-            // Remove potential " or ' at beginning of string
-            s1 = s1.replaceFirst("^(\"|')", "");
-            s2 = s2.replaceFirst("^(\"|')", "");
-
-            // Extract only the NPC ID, not the name
-            String lhs = s1.split(":", 2)[0];
-            String rhs = s2.split(":", 2)[0];
-
-            // Compare as numeric value
-            long i1 = Long.parseLong(lhs);
-            long i2 = Long.parseLong(rhs);
-            return (int) (i1-i2);
-        });
-
-        return tabSuggestion;
-    }
 }

@@ -1,8 +1,8 @@
-package be.isach.ultracosmetics.command.subcommands;
+package be.isach.ultracosmetics.command.ultracosmetics.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.command.UCTabCompleter;
+import be.isach.ultracosmetics.command.ultracosmetics.UCTabCompleter;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -26,20 +26,20 @@ import java.util.List;
 public class SubCommandClear extends SubCommand {
 
     public SubCommandClear(UltraCosmetics ultraCosmetics) {
-        super("Clears a Cosmetic.", "ultracosmetics.command.clear", "/uc clear <player|npcID:npcname> [type]", ultraCosmetics, "clear");
+        super("Clears a Cosmetic.", "ultracosmetics.command.clear", "/uc clear <player> [type]", ultraCosmetics, "clear");
     }
 
     @Override
-    protected void onExePlayer(Player sender, String... args) {
+    public void onExePlayer(Player sender, String... args) {
         common(sender, args);
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+    public void onExeConsole(ConsoleCommandSender sender, String... args) {
         common(sender, args);
     }
 
-    private void common(CommandSender sender, String... args) {
+    private void common(CommandSender sender, String... args) { // TODO: Restructure command syntaxes, put player at end
         Player receiver;
         if (args.length < 2) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + getUsage());
@@ -47,7 +47,7 @@ public class SubCommandClear extends SubCommand {
         }
 
         if (!sender.hasPermission(getPermission() + ".others")) return;
-        receiver = Bukkit.getPlayer(args[1]); // TODO: Add npc functionality back with NEW FORMAT
+        receiver = Bukkit.getPlayer(args[1]);
 
         if (receiver == null) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[1] + " not found!");
@@ -79,15 +79,15 @@ public class SubCommandClear extends SubCommand {
 
     @Override
     public List<String> getTabCompleteSuggestion(CommandSender sender, String... args) {
-        //uc clear <player|npcID:npcname> [type]
+        //uc clear <player> [type]
         List<String> tabSuggestion = new ArrayList<>();
 
         // Check if the root argument doesn't match our command's alias, or if no additional arguments are given (shouldn't happen)
         if(!Arrays.stream(getAliases()).anyMatch(args[0]::equals) || args.length < 2)
             return tabSuggestion;
 
-        else if(args.length == 2) { // Tab-completing first argument: <player|npcID:npcname>
-            return UCTabCompleter.GetNPCsAndOnlinePlayers(sender);
+        else if(args.length == 2) { // Tab-completing first argument: <player>
+            return UCTabCompleter.GetOnlinePlayers(sender);
         }
 
         else if(args.length == 3) { // Tab-completing second argument: [type]

@@ -565,10 +565,10 @@ public class UltraPlayer {
     public void setPetName(PetType petType, String name) {
         name = name.replaceAll("[^\\x20-\\x7E]", ""); // No special symbols allowed, only ASCII printable chars
         if (currentPet != null && currentPet.getType().getConfigName().equals(petType.getConfigName())) { // If the current pet is the specified pet type
-            if (currentPet.armorStand != null) {
-                currentPet.armorStand.setCustomName(ChatColor.BOLD + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
+            if (currentPet.armorStand != null) { // If name is empty, revert to default
+                currentPet.armorStand.setCustomName(ChatColor.BOLD + (name.isEmpty() ? petType.getEntityName(getBukkitPlayer()) : name));
             } else {
-                currentPet.getEntity().setCustomName(ChatColor.BOLD + (name.isEmpty() ? getUsername() + "'s " + petType.getConfigName() : name));
+                currentPet.getEntity().setCustomName(ChatColor.BOLD + (name.isEmpty() ? petType.getEntityName(getBukkitPlayer()) : name));
             }
         }
         if (UltraCosmeticsData.get().usingFileStorage()) {
@@ -576,6 +576,17 @@ public class UltraPlayer {
         } else {
             ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petType.getConfigName(), name);
         }
+    }
+
+    /**
+     * Handler for renaming a pet.
+     *
+     * @param petType The pet name.
+     * @param name    The new name.
+     */
+    public void renamePetName(PetType petType, String name) {
+        setPetName(petType, name);
+        saveCosmeticsProfile();
     }
 
     /**

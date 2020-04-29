@@ -1,10 +1,9 @@
- package be.isach.ultracosmetics.command.subcommands;
+ package be.isach.ultracosmetics.command.ultracosmetics.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.command.ITabCompletable;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.command.UCTabCompleter;
+import be.isach.ultracosmetics.command.ultracosmetics.UCTabCompleter;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
@@ -36,12 +35,12 @@ public class SubCommandGive extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String... args) {
+    public void onExePlayer(Player sender, String... args) {
         common(sender, args);
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+    public void onExeConsole(ConsoleCommandSender sender, String... args) {
         common(sender, args);
     }
 
