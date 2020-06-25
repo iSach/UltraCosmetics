@@ -141,6 +141,7 @@ public class UltraPlayer {
             isLoaded = false;
             return;
         }
+
         // sql loader thread add player to pre-load
         if (!UltraCosmeticsData.get().usingFileStorage()) {
             try {
@@ -283,7 +284,7 @@ public class UltraPlayer {
 
     public void setCurrentSuitPart(ArmorSlot armorSlot, Suit suit) {
         suitMap.put(armorSlot, suit);
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledSuitPart(armorSlot, suit == null ? null : suit.getType());
     }
 
@@ -745,7 +746,7 @@ public class UltraPlayer {
 
     public void setCurrentEmote(Emote currentEmote) {
         this.currentEmote = currentEmote;
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledEmote(currentEmote == null ? null : currentEmote.getType());
     }
 
@@ -755,7 +756,7 @@ public class UltraPlayer {
 
     public void setCurrentGadget(Gadget currentGadget) {
         this.currentGadget = currentGadget;
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledGadget(currentGadget == null ? null : currentGadget.getType());
     }
 
@@ -773,7 +774,7 @@ public class UltraPlayer {
 
     public void setCurrentHat(Hat currentHat) {
         this.currentHat = currentHat;
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledHat(currentHat == null ? null : currentHat.getType());
     }
 
@@ -783,7 +784,7 @@ public class UltraPlayer {
 
     public void setCurrentMorph(Morph currentMorph) {
         this.currentMorph = currentMorph;
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledMorph(currentMorph == null ? null : currentMorph.getType());
     }
 
@@ -793,7 +794,7 @@ public class UltraPlayer {
 
     public void setCurrentMount(Mount currentMount) {
         this.currentMount = currentMount;
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledMount((MountType) (currentMount == null ? null : currentMount.getType()));
     }
 
@@ -803,7 +804,7 @@ public class UltraPlayer {
 
     public void setCurrentParticleEffect(ParticleEffect currentParticleEffect) {
         this.currentParticleEffect = currentParticleEffect;
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledEffect(currentParticleEffect == null ? null : currentParticleEffect.getType());
     }
 
@@ -813,7 +814,7 @@ public class UltraPlayer {
 
     public void setCurrentPet(Pet currentPet) {
         this.currentPet = currentPet;
-        if (!isQuitting())
+        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
             cosmeticsProfile.setEnabledPet(currentPet == null ? null : currentPet.getType());
     }
 

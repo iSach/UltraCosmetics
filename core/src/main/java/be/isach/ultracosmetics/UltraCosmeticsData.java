@@ -18,11 +18,10 @@ import java.util.UUID;
 public class UltraCosmeticsData {
 
     private static UltraCosmeticsData instance;
-
-    public static UltraCosmeticsData get() {
-        return instance;
-    }
-
+    /**
+     * A String that items that shouldn't be picked up are given. Randomly generated each time the server starts.
+     */
+    private final String itemNoPickupString;
     /**
      * If true, the server is using Spigot and not CraftBukkit/Bukkit.
      */
@@ -89,23 +88,20 @@ public class UltraCosmeticsData {
      * A list of worlds where cosmetics are enabled.
      */
     private List<String> enabledWorlds;
-
-    /**
-     * A String that items that shouldn't be picked up are given. Randomly generated each time the server starts.
-     */
-    private final String itemNoPickupString;
-
     /**
      * For bStats stuff
      */
     private AbstractMetrics metrics;
-
     private boolean cosmeticsProfilesEnabled;
 
     public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
         this.usingSpigot = ultraCosmetics.getServer().getVersion().contains("Spigot");
         this.itemNoPickupString = UUID.randomUUID().toString();
+    }
+
+    public static UltraCosmeticsData get() {
+        return instance;
     }
 
     public static void init(UltraCosmetics ultraCosmetics) {
@@ -139,20 +135,6 @@ public class UltraCosmeticsData {
     }
 
     boolean checkServerVersion() {
-        String bukkVersion = Bukkit.getVersion();
-        if (!bukkVersion.contains("1.8")
-                && !bukkVersion.contains("1.9")
-                && !bukkVersion.contains("1.10")
-                && !bukkVersion.contains("1.11")
-                && !bukkVersion.contains("1.12")
-                && !bukkVersion.contains("1.13")
-                && !bukkVersion.contains("1.14")
-                && !bukkVersion.contains("1.15")) {
-            System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON 1.8 through 1.15.2!\n\n----------------------------");
-            Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
-            return false;
-        }
-
         String mcVersion = "1.8.0";
 
         try {
@@ -167,8 +149,11 @@ public class UltraCosmeticsData {
                 serverVersion = ServerVersion.valueOf(mcVersion);
             } catch (Exception exc) {
                 ultraCosmetics.getSmartLogger().write("This NMS version isn't supported. (" + mcVersion + ")!");
+                String minVersion = ServerVersion.values()[0].getName();
+                String maxVersion = ServerVersion.values()[ServerVersion.values().length - 1].getName();
+                System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON " + minVersion + " through " + maxVersion + "!\n\n----------------------------");
                 Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
-                return true;
+                return false;
             }
         } else serverVersion = ServerVersion.v1_8_R1;
 
@@ -186,7 +171,7 @@ public class UltraCosmeticsData {
         this.customBackMenuCommand = ultraCosmetics.getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
         this.closeAfterSelect = ultraCosmetics.getConfig().getBoolean("Categories.Close-GUI-After-Select");
         this.enabledWorlds = ultraCosmetics.getConfig().getStringList("Enabled-Worlds");
-        this.cosmeticsProfilesEnabled = ultraCosmetics.getConfig().getBoolean("Auto-Equip-Cosmetics.enabled");
+        this.cosmeticsProfilesEnabled = ultraCosmetics.getConfig().getBoolean("Auto-Equip-Cosmetics.is-enabled");
     }
 
     public boolean isAmmoEnabled() {
@@ -237,6 +222,10 @@ public class UltraCosmeticsData {
         return serverVersion;
     }
 
+    public void setServerVersion(ServerVersion serverVersion) {
+        this.serverVersion = serverVersion;
+    }
+
     /**
      * Should be only used for running Bukkit Runnables.
      *
@@ -244,10 +233,6 @@ public class UltraCosmeticsData {
      */
     public UltraCosmetics getPlugin() {
         return ultraCosmetics;
-    }
-
-    public void setServerVersion(ServerVersion serverVersion) {
-        this.serverVersion = serverVersion;
     }
 
     public final String getItemNoPickupString() {

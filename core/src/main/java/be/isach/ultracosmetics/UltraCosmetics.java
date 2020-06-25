@@ -235,17 +235,21 @@ public class UltraCosmetics extends JavaPlugin {
         // TODO Purge Pet Names. (and Treasure Chests bugged holograms).
         // TODO Use Metadatas for that!
 
-        for (CosmeticsProfile cp : cosmeticsProfileManager.getCosmeticsProfiles().values()) {
-            cp.save();
+        try {
+            for (CosmeticsProfile cp : cosmeticsProfileManager.getCosmeticsProfiles().values()) {
+                cp.save();
+            }
+
+            if (playerManager != null) {
+                playerManager.dispose();
+            }
+
+            UltraCosmeticsData.get().getVersionManager().getModule().disable();
+
+            BlockUtils.forceRestore();
+        } catch (Exception exc) {
+            // Can't do much if this happens.
         }
-
-        if (playerManager != null) {
-            playerManager.dispose();
-        }
-
-        UltraCosmeticsData.get().getVersionManager().getModule().disable();
-
-        BlockUtils.forceRestore();
     }
 
     /**
@@ -369,12 +373,17 @@ public class UltraCosmetics extends JavaPlugin {
 
         config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
 
+        if (config.contains("Auto-Equip-Cosmetics.enabled")) {
+            config.set("Auto-Equip-Cosmetics.enabled", null);
+            config.set("Auto-Equip-Cosmetics.is-enabled", false);
+        }
+
         if (!config.contains("Auto-Equip-Cosmetics")) {
-            config.createSection("Auto-Equip-Cosmetics", "[BETA!]",
+            config.createSection("Auto-Equip-Cosmetics", "[WARNING: ALPHA!]",
                     "Allows for players to auto-equip on join cosmetics they had before disconnecting.",
                     "At the moment, only works while the server is up. Upon shutdown, the cosmetics saved states",
                     "are reset! Doesn't support MySQL yet.");
-            config.set("Auto-Equip-Cosmetics.enabled", true);
+            config.set("Auto-Equip-Cosmetics.is-enabled", false);
             //config.set("Auto-Equip-Cosmetics.on-join", true);
         }
 

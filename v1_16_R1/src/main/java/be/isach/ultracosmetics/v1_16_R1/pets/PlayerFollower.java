@@ -1,14 +1,14 @@
-package be.isach.ultracosmetics.v1_14_R1.pets;
+package be.isach.ultracosmetics.v1_16_R1.pets;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
-import net.minecraft.server.v1_14_R1.Entity;
-import net.minecraft.server.v1_14_R1.EntityInsentient;
-import net.minecraft.server.v1_14_R1.PathEntity;
+import net.minecraft.server.v1_16_R1.Entity;
+import net.minecraft.server.v1_16_R1.EntityInsentient;
+import net.minecraft.server.v1_16_R1.PathEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -43,6 +43,10 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             petEntity = ((CraftEntity) pet.entity).getHandle();
         }
 
+        if (petEntity == null) {
+            return;
+        }
+
         // Run in sync... To enhance :S
         Bukkit.getScheduler().runTask(UltraCosmeticsData.get().getPlugin(), () -> {
 
@@ -74,7 +78,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
                 }
             } catch (IllegalArgumentException exception) {
                 petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                //   exception.printStackTrace();
+                //exception.printStackTrace();
             }
         });
     }

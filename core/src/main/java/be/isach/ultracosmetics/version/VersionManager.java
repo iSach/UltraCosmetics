@@ -1,10 +1,10 @@
 package be.isach.ultracosmetics.version;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ReflectionUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
@@ -15,7 +15,7 @@ public class VersionManager {
     /**
      * If the version of Bukkit/Spigot is 1.13.
      */
-    public static boolean IS_VERSION_1_13 = Bukkit.getVersion().contains("1.13") || Bukkit.getVersion().contains("1.14") || Bukkit.getVersion().contains("1.15");
+    public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) >= 0;
     private final String PACKAGE = "be.isach.ultracosmetics";
     private IModule module;
     private ServerVersion serverVersion;

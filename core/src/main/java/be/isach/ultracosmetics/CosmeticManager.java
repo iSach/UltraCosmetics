@@ -25,7 +25,6 @@ public class CosmeticManager {
      * Setup default Cosmetics ultraCosmetics.getConfig().
      */
     public void setupCosmeticsConfigs() {
-
         for (Category category : Category.values()) {
             ultraCosmetics.getConfig().addDefault("Categories-Enabled." + category.getConfigPath(), true);
             ultraCosmetics.getConfig().addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");

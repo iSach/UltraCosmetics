@@ -325,6 +325,6 @@ public class BlockUtils {
             oldMaterialName = oldMaterialName.replace("STAINED_CLAY", "CONCRETE");
             return Material.getMaterial(color.toString() + "_" + oldMaterialName);
         }
-        return Material.WHITE_WOOL;
+        return UCMaterial.WHITE_WOOL.parseMaterial();
     }
 }

@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.5.7-RELEASE'
+    version = '2.5.8-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -50,7 +50,9 @@ def supportfor111 = [':core', ':v1_11_R1']
 def supportfor112 = [':core', ':v1_12_R1']
 def supportfor113 = [':core', ':v1_13_R1', ':v1_13_R2']
 def supportfor114 = [':core', ':v1_14_R1']
-def fullSupport = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3', ':v1_9_R1', ':v1_9_R2', 'v1_10_R1', ':v1_11_R1', ':v1_12_R1', ':v1_13_R1', ':v1_13_R2', ':v1_14_R1']
+def supportfor115 = [':core', ':v1_15_R1']
+def supportfor116 = [':core', ':v1_16_R1']
+def fullSupport = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3', ':v1_9_R1', ':v1_9_R2', 'v1_10_R1', ':v1_11_R1', ':v1_12_R1', ':v1_13_R1', ':v1_13_R2', ':v1_14_R1', 'v1_15_R1', 'v1_16_R1']
 
 task fullJar(type: Jar, dependsOn: fullSupport.collect { it + ":compileJava" }) {
     baseName = 'UltraCosmetics'
@@ -92,6 +94,16 @@ task jar114(type: Jar, dependsOn: supportfor114.collect { it + ":compileJava" })
     def ver = dependsOn.toString().split('_')[1]
     baseName = 'UltraCosmetics-1.' + ver
     from files(supportfor114.collect { project(it).sourceSets.main.output })
+}
+task jar115(type: Jar, dependsOn: supportfor115.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor115.collect { project(it).sourceSets.main.output })
+}
+task jar116(type: Jar, dependsOn: supportfor116.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor116.collect { project(it).sourceSets.main.output })
 }
 dependencies {
     subprojects.each { p ->

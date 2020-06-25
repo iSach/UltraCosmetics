@@ -78,7 +78,9 @@ public class MenuMain extends Menu {
             for (int i = 0; i < Category.enabledSize(); i++) {
                 int slot = layout[i];
                 Category category = Category.enabled().get(i);
-                putItem(inventory, slot, category.getItemStack(), data -> category.getMenu(getUltraCosmetics()).open(player));
+                putItem(inventory, slot, category.getItemStack(), data -> {
+                    category.getMenu(getUltraCosmetics()).open(player);
+                });
             }
         }
 

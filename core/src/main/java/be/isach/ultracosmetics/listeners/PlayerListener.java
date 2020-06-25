@@ -25,6 +25,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -66,7 +67,7 @@ public class PlayerListener implements Listener {
                 }
 
                 if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())
-                    && UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
+                        && UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
                     // Cosmetics profile. TODO Add option to disable!!
                     CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
                     if (cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId()) == null) {
@@ -136,6 +137,12 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onInteract(final PlayerInteractEvent event) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        // Avoid triggering this when clicking in the inventory
+        InventoryType t = event.getPlayer().getOpenInventory().getType();
+        if (t != InventoryType.CRAFTING
+                && t != InventoryType.CREATIVE) {
+            return;
+        }
         if (ultraPlayer.getCurrentTreasureChest() != null) {
             event.setCancelled(true);
             return;
@@ -239,7 +246,8 @@ public class PlayerListener implements Listener {
         up.setQuitting(true);
         up.clear();
         up.removeMenuItem();
-        ultraCosmetics.getCosmeticsProfileManager().clearPlayerFromProfile(up);
+        if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
+            ultraCosmetics.getCosmeticsProfileManager().clearPlayerFromProfile(up);
         ultraCosmetics.getPlayerManager().remove(event.getPlayer());
     }
 

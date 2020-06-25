@@ -1,0 +1,4 @@
+dependencies {
+    compileOnly 'org.spigotmc:spigot116:1.16'
+    compile project(':core')
+}
