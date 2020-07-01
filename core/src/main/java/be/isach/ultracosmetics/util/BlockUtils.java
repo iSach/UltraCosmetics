@@ -13,10 +13,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by sacha on 03/08/15.
@@ -109,7 +106,7 @@ public class BlockUtils {
         String s = blocksToRestore.get(location);
         Material m = Material.valueOf(s.split(",")[0]);
         byte d = Byte.valueOf(s.split(",")[1]);
-        b.getLocation().getWorld().getPlayers().forEach(player -> player.sendBlockChange(location, m, d));
+        Objects.requireNonNull(b.getLocation().getWorld()).getPlayers().forEach(player -> player.sendBlockChange(location, m, d));
         blocksToRestore.remove(location);
     }
 
@@ -192,7 +189,8 @@ public class BlockUtils {
                     && !blocksToRestore.containsKey(block.getLocation())
                     && block.getType().isSolid()
                     && a(bUp)
-                    && !block.getType().toString().toLowerCase().contains("slab"))) return;
+                    && !block.getType().toString().toLowerCase().contains("slab")))
+                return;
 
             blocksToRestore.put(block.getLocation(), block.getType().toString() + "," + block.getData());
             for (Player player : block.getLocation().getWorld().getPlayers()) {

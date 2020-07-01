@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * 1.13 and above as priority.
  * <p>
  * Thanks to CryptoMorin for this very helpful class!
- * Some modifications by iSach (fixes on 1.13 and 1.14).
+ * Some modifications by iSach (fixes on 1.13 and above).
  */
 public enum UCMaterial {
     ACACIA_BOAT(0, "BOAT_ACACIA"),

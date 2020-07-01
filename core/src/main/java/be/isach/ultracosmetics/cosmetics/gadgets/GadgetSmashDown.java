@@ -1,14 +1,17 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
@@ -154,7 +157,12 @@ public class GadgetSmashDown extends Gadget {
             event.setCancelled(true);
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
-            Particles.BLOCK_CRACK.display(new Particles.BlockData(fb.getMaterial(), event.getBlock().getData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
+            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_16_R1) >= 0) {
+                BlockData data = fb.getBlockData();
+                fb.getWorld().spawnParticle(Particle.BLOCK_CRACK, fb.getLocation(), 50, 0, 0, 0, 0.4d, data);
+            } else {
+                Particles.BLOCK_CRACK.display(new Particles.BlockData(fb.getMaterial(), event.getBlock().getData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
+            }
             SoundUtil.playSound(getPlayer().getLocation(), Sounds.ANVIL_BREAK, 0.05f, 1.0f);
             event.getEntity().remove();
         }

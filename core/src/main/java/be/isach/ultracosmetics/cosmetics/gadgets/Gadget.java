@@ -113,6 +113,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
 
+        // TODO Fix Async Entity Add
         if (getPlayer().getInventory().getItem(ConfigUtils.getGadgetSlot()) != null) {
             getPlayer().getWorld().dropItem(getPlayer().getLocation(),
                     getPlayer().getInventory().getItem(ConfigUtils.getGadgetSlot()));

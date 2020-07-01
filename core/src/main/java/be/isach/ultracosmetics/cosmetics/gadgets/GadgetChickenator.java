@@ -9,9 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
@@ -74,7 +76,12 @@ public class GadgetChickenator extends Gadget {
     public void spawnRandomFirework(Location location) {
         final ArrayList<Firework> fireworks = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            final Firework f = getPlayer().getWorld().spawn(location, Firework.class);
+            Firework f;
+            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_16_R1) >= 0) {
+                f = getPlayer().getWorld().spawn(location, Firework.class);
+            } else {
+                f = getPlayer().getWorld().spawn(location, Firework.class);
+            }
 
             FireworkMeta fm = f.getFireworkMeta();
             fm.addEffect(getRandomFireworkEffect());

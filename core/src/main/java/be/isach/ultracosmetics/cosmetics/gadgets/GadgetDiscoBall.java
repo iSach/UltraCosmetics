@@ -104,10 +104,17 @@ public class GadgetDiscoBall extends Gadget {
 
                 @Override
                 public void run() {
-                    for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
-                        if (ent.isOnGround() && affectPlayers) {
-                            MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
+                    try {
+                        for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
+                            if (ent == null) {
+                                break;
+                            }
+                            if (ent.isOnGround() && affectPlayers) {
+                                MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
+                            }
                         }
+                    } catch (Exception ignored) {
+                        // Sync async problem can happen, messy multithreading...
                     }
                 }
             }.runTask(getUltraCosmetics());

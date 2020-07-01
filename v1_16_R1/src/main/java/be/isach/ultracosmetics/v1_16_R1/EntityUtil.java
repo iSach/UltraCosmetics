@@ -35,7 +35,7 @@ import static java.lang.Math.*;
  */
 public class EntityUtil implements IEntityUtil {
 
-    private Random r = new Random();
+    private final Random r = new Random();
     private Map<Player, List<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
     private Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
 
@@ -46,7 +46,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void resetWitherSize(Wither wither) {
-        ((CraftWither) wither).getHandle().s(600);
+        ((CraftWither) wither).getHandle().setInvul(600);
     }
 
 
@@ -125,7 +125,7 @@ public class EntityUtil implements IEntityUtil {
         PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
 
         try {
-            Field brField = EntityLiving.class.getDeclaredField("bo");
+            Field brField = EntityLiving.class.getDeclaredField("bn");
             brField.setAccessible(true);
             BehaviorController<?> controller = (BehaviorController<?>) brField.get(nmsEntity);
 
@@ -137,7 +137,7 @@ public class EntityUtil implements IEntityUtil {
             sensorsField.setAccessible(true);
             sensorsField.set(controller, new LinkedHashMap<>());
 
-            Field cField = BehaviorController.class.getDeclaredField("c");
+            Field cField = BehaviorController.class.getDeclaredField("e");
             cField.setAccessible(true);
             cField.set(controller, new TreeMap<>());
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

@@ -24,7 +24,7 @@ public class PathfinderUtil implements IPathfinderUtil {
         PathfinderGoalSelector targetSelector = nmsEntity.targetSelector;
 
         try {
-            Field brField = EntityLiving.class.getDeclaredField("bo");
+            Field brField = EntityLiving.class.getDeclaredField("bn");
             brField.setAccessible(true);
             BehaviorController<?> controller = (BehaviorController<?>) brField.get(nmsEntity);
 
@@ -36,7 +36,7 @@ public class PathfinderUtil implements IPathfinderUtil {
             sensorsField.setAccessible(true);
             sensorsField.set(controller, new LinkedHashMap<>());
 
-            Field cField = BehaviorController.class.getDeclaredField("c");
+            Field cField = BehaviorController.class.getDeclaredField("e");
             cField.setAccessible(true);
             cField.set(controller, new TreeMap<>());
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
