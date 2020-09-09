@@ -373,6 +373,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         config.addDefault("Categories.Gadgets.Cooldown-In-ActionBar", true, "You wanna show the cooldown of", "current gadget in action bar?");
 
+        // Remove enabled field, replace by is-enabled (to replace to false by def)
         if (config.contains("Auto-Equip-Cosmetics.enabled")) {
             config.set("Auto-Equip-Cosmetics.enabled", null);
             config.set("Auto-Equip-Cosmetics.is-enabled", false);
@@ -385,6 +386,10 @@ public class UltraCosmetics extends JavaPlugin {
                     "are reset! Doesn't support MySQL yet.");
             config.set("Auto-Equip-Cosmetics.is-enabled", false);
             //config.set("Auto-Equip-Cosmetics.on-join", true);
+        }
+
+        if (!config.contains("allow-damage-to-players-on-mounts")) {
+            config.set("allow-damage-to-players-on-mounts", false);
         }
 
         try {

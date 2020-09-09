@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import be.isach.ultracosmetics.util.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -95,7 +94,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             }
 
             // Prevents players on mounts from being able to fall in the void infinitely.
-            if(entity.getLocation().getY() <= -15) {
+            if (entity.getLocation().getY() <= -15) {
                 clear();
                 cancel();
                 return;
@@ -126,7 +125,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         if (getOwner() != null)
             getOwner().setCurrentMount(null);
 
-        if(this instanceof MountDragon && !getPlayer().isOnGround())
+        if (this instanceof MountDragon && !getPlayer().isOnGround())
             FallDamageManager.addNoFall(getPlayer());
 
         try {
@@ -180,7 +179,8 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
         if (event.getEntity() == getPlayer()
                 && getOwner().getCurrentMount() != null
-                && getOwner().getCurrentMount().getType() == getType()) {
+                && getOwner().getCurrentMount().getType() == getType()
+                && !getUltraCosmetics().getConfig().getBoolean("allow-damage-to-players-on-mounts")) {
             event.setCancelled(true);
         }
     }

@@ -36,8 +36,8 @@ allprojects {
     }
 }
 
-boolean local = true
-
+// Useful for local testing, with a testserver folder containing your testing server
+boolean local = false
 if (local) libsDirName = '../testserver/plugins'
 
 /*
