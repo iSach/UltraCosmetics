@@ -57,12 +57,12 @@ public class WrapperEntityLiving extends WrapperEntity {
 
     // Corresponds to jumping
     public boolean isJumping() {
-        return getField("aQ", EntityLiving.class, Boolean.class);
+        return getField("jumping", EntityLiving.class, Boolean.class);
     }
 
     // Corresponds to jumping
     public void setJumping(boolean jumping) {
-        setField("aQ", EntityLiving.class, jumping);
+        setField("jumping", EntityLiving.class, jumping);
     }
 
     // Corresponds to yBodyRotO

@@ -109,7 +109,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
     @Override
     public void g_(float sideMot, float forMot) {
-        super.a(new Vec3D(sideMot, 0, forMot));
+        super.g(new Vec3D(sideMot, 0, forMot));
     }
 
     @Override
