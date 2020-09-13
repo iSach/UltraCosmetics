@@ -320,9 +320,9 @@ public class TreasureChest implements Listener {
                             chestsToRemove.clear();
                         if (blocksToRestore != null)
                             blocksToRestore.clear();
-                        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()) != null) {
+                        if (getPlayer() != null && UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()) != null) {
                             UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentTreasureChest(null);
-                            if(preLoc != null) {
+                            if (preLoc != null) {
                                 getPlayer().teleport(preLoc);
                             }
                         }

@@ -85,7 +85,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
         // Bypass WorldGuard protection.
         EntitySpawningManager.setBypass(true);
-        this.entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
+        setEntity(getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType()));
         EntitySpawningManager.setBypass(false);
 
         if (entity instanceof Ageable) {
@@ -113,7 +113,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     @Override
     public void run() {
         try {
-            if (!entity.isValid()) {
+            if (entity != null && !entity.isValid()) {
                 if (armorStand != null) {
                     armorStand.remove();
                 }
@@ -235,5 +235,9 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (event.getPlayer() == getPlayer())
             getEntity().teleport(getPlayer());
+    }
+
+    protected final void setEntity(Entity entity) {
+        this.entity = entity;
     }
 }

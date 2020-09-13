@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.player;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -28,6 +27,9 @@ public class UltraPlayerManager {
     }
 
     public UltraPlayer getUltraPlayer(Player player) {
+        if (player == null || !playerCache.containsKey(player.getUniqueId()))
+            return null;
+
         UltraPlayer p = playerCache.get(player.getUniqueId());
         if (p == null) {
             return create(player);
