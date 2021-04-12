@@ -143,7 +143,7 @@ public class PlayerListener implements Listener {
                 && t != InventoryType.CREATIVE) {
             return;
         }
-        if (ultraPlayer.getCurrentTreasureChest() != null) {
+        if (ultraPlayer != null && ultraPlayer.getCurrentTreasureChest() != null) {
             event.setCancelled(true);
             return;
         }
