@@ -9,6 +9,6 @@ dependencies {
         exclude group: 'org.bukkit'
     }
     compile 'me.clip:placeholderapi:2.10.3'
-    compile 'org.black_ixx:PlayerPoints:2.1.3'
+    compile 'org.black_ixx:PlayerPoints:2.1.9'
     compile 'com.google.code.gson:gson:2.2.4'
 }
