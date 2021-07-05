@@ -52,7 +52,8 @@ def supportfor113 = [':core', ':v1_13_R1', ':v1_13_R2']
 def supportfor114 = [':core', ':v1_14_R1']
 def supportfor115 = [':core', ':v1_15_R1']
 def supportfor116 = [':core', ':v1_16_R1', ':v1_16_R2',':v1_16_R3']
-def fullSupport = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3', ':v1_9_R1', ':v1_9_R2', 'v1_10_R1', ':v1_11_R1', ':v1_12_R1', ':v1_13_R1', ':v1_13_R2', ':v1_14_R1', 'v1_15_R1', 'v1_16_R1', 'v1_16_R2', 'v1_16_R3']
+def supportfor117 = [':core', ':v1_17_R1']
+def fullSupport = [':core', ':v1_8_R1', ':v1_8_R2', ':v1_8_R3', ':v1_9_R1', ':v1_9_R2', 'v1_10_R1', ':v1_11_R1', ':v1_12_R1', ':v1_13_R1', ':v1_13_R2', ':v1_14_R1', 'v1_15_R1', 'v1_16_R1', 'v1_16_R2', 'v1_16_R3', 'v1_17_R1']
 
 task fullJar(type: Jar, dependsOn: fullSupport.collect { it + ":compileJava" }) {
     baseName = 'UltraCosmetics'
@@ -105,6 +106,11 @@ task jar116(type: Jar, dependsOn: supportfor116.collect { it + ":compileJava" })
     baseName = 'UltraCosmetics-1.' + ver
     from files(supportfor116.collect { project(it).sourceSets.main.output })
 }
+task jar117(type: Jar, dependsOn: supportfor117.collect { it + ":compileJava" }) {
+    def ver = dependsOn.toString().split('_')[1]
+    baseName = 'UltraCosmetics-1.' + ver
+    from files(supportfor116.collect { project(it).sourceSets.main.output })
+}
 dependencies {
     subprojects.each { p ->
         shaded(p) {
@@ -124,10 +130,6 @@ subprojects {
         // Lib's Disguises
         maven {
             url 'http://repo.md-5.net/content/groups/public/'
-        }
-
-        maven {
-            url 'http://maven.elmakers.com/repository/'
         }
 
         maven {
@@ -161,4 +163,27 @@ subprojects {
             url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
         }
     }
+}
+
+task obfuscate(type: Exec) {
+    description 'Generates an obfuscated version of the jar for use with Spigot.'
+    group = 'jar preparation'
+    workingDir "${buildDir}"
+    ext.toolingDir = System.getProperty("user.dir")
+    ext.homeDir = project.gradle.gradleUserHomeDir.parent
+    commandLine 'java', '-jar', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar', '-i', 'libs/' + rootProject.name + '.jar',
+        '-o', 'libs/' + rootProject.name + '-obf.jar', '-m',
+        ext.homeDir + '/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt',
+        '--reverse'
+}
+
+task deobfuscate(type: Exec) {
+    description 'Generates a deobfuscated version of the jar for development purposes. Resulting jar cannot be used with Spigot.'
+    group = 'jar preparation'
+    workingDir "${buildDir}"
+    ext.toolingDir = System.getProperty("user.dir")
+    ext.homeDir = project.gradle.gradleUserHomeDir.parent
+    commandLine 'java', '-jar', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar', '-i', 'libs/' + rootProject.name + '-obf.jar',
+        '-o', 'libs/' + rootProject.name + '.jar', '-m',
+        ext.homeDir + '/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-spigot.csrg'
 }
