@@ -12,20 +12,37 @@ import be.isach.ultracosmetics.version.IEntityUtil;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3f;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.EnderChestBlockEntity;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,8 +50,13 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftAbstractHorse;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftBoat;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftCreature;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEnderDragon;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftWither;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
@@ -99,8 +121,7 @@ public class EntityUtil implements IEntityUtil {
                 PacketSender.send(players, new ClientboundSetEntityDataPacket(as.getId(), as.getEntityData(), false));
                 List<Pair<EquipmentSlot, ItemStack>> list = new ArrayList<>();
                 list.add(new Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
-                // can't find this packet???
-                PacketSender.send(players, new PacketPlayOutEntityEquipment(as.getId(), list));
+                PacketSender.send(players, new ClientboundSetEquipmentPacket(as.getId(), list));
             }
             UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
             Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
@@ -142,51 +163,42 @@ public class EntityUtil implements IEntityUtil {
         GoalSelector goalSelector = nmsEntity.goalSelector;
         GoalSelector targetSelector = nmsEntity.targetSelector;
 
+        Brain<?> brain = nmsEntity.getBrain();
+        
         try {
-            // Corresponds to net.minecraft.world.entity.EntityLiving#brain
-            Field brField = EntityLiving.class.getDeclaredField("bg");
-            brField.setAccessible(true);
-            BehaviorController<?> controller = (BehaviorController<?>) brField.get(nmsEntity);
-
-            // Corresponds to net.minecraft.world.entity.ai.Brain#memories
-            Field memoriesField = BehaviorController.class.getDeclaredField("memories");
+            Field memoriesField = Brain.class.getDeclaredField("memories");
             memoriesField.setAccessible(true);
-            memoriesField.set(controller, new HashMap<>());
+            memoriesField.set(brain, new HashMap<>());
 
-            // Corresponds to net.minecraft.world.entity.ai.Brain#sensors
-            Field sensorsField = BehaviorController.class.getDeclaredField("sensors");
+            Field sensorsField = Brain.class.getDeclaredField("sensors");
             sensorsField.setAccessible(true);
-            sensorsField.set(controller, new LinkedHashMap<>());
+            sensorsField.set(brain, new LinkedHashMap<>());
 
-            // Corresponds to net.minecraft.world.entity.ai.Brain#availableBehaviorsByPriority
-            Field cField = BehaviorController.class.getDeclaredField("e");
+            Field cField = Brain.class.getDeclaredField("availableBehaviorsByPriority");
             cField.setAccessible(true);
-            cField.set(controller, new TreeMap<>());
+            cField.set(brain, new TreeMap<>());
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
         try {
             Field dField;
-            // Corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#availableGoals
-            dField = PathfinderGoalSelector.class.getDeclaredField("d");
+            dField = GoalSelector.class.getDeclaredField("availableGoals");
             dField.setAccessible(true);
             dField.set(goalSelector, new LinkedHashSet<>());
             dField.set(targetSelector, new LinkedHashSet<>());
 
-            // Corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#lockedFlags
             Field cField;
-            cField = PathfinderGoalSelector.class.getDeclaredField("c");
+            cField = GoalSelector.class.getDeclaredField("lockedFlags");
             cField.setAccessible(true);
             dField.set(goalSelector, new LinkedHashSet<>());
-            cField.set(targetSelector, new EnumMap<>(PathfinderGoal.Type.class));
+            cField.set(targetSelector, new EnumMap<Goal.Flag,WrappedGoal>(Goal.Flag.class));
 
-            // Corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#disabledFlags
             Field fField;
-            fField = PathfinderGoalSelector.class.getDeclaredField("f");
+            fField = GoalSelector.class.getDeclaredField("disabledFlags");
             fField.setAccessible(true);
             dField.set(goalSelector, new LinkedHashSet<>());
-            fField.set(targetSelector, EnumSet.noneOf(PathfinderGoal.Type.class));
+            fField.set(targetSelector, EnumSet.noneOf(Goal.Flag.class));
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -195,35 +207,35 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void makePanic(org.bukkit.entity.Entity entity) {
-        EntityInsentient insentient = (EntityInsentient) ((CraftEntity) entity).getHandle();
-        insentient.goalSelector.a(3, new CustomPathFinderGoalPanic((EntityCreature) insentient, 0.4d));
+        PathfinderMob insentient = (PathfinderMob) ((CraftEntity) entity).getHandle();
+        insentient.goalSelector.addGoal(3, new CustomPathFinderGoalPanic(insentient, 0.4d));
     }
 
     @Override
     public void sendDestroyPacket(Player player, org.bukkit.entity.Entity entity) {
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(((CraftEntity) entity).getHandle().getId());
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+        ClientboundRemoveEntityPacket packet = new ClientboundRemoveEntityPacket(((CraftEntity) entity).getHandle().getId());
+        ((CraftPlayer) player).getHandle().connection.send(packet);
     }
 
     @Override
     public void move(Creature creature, Location loc) {
-        EntityCreature ec = ((CraftCreature) creature).getHandle();
-        ec.G = 1;
+        PathfinderMob ec = ((CraftCreature) creature).getHandle();
+        ec.maxUpStep = 1;
 
         if (loc == null) return;
 
-        ec.aC = loc.getYaw();
-        PathEntity path = ec.getNavigation().a(loc.getX(), loc.getY(), loc.getZ(), 1);
-        ec.getNavigation().a(path, 2);
+        ec.yHeadRot = loc.getYaw();
+        Path path = ec.getNavigation().createPath(loc.getX(), loc.getY(), loc.getZ(), 1);
+        ec.getNavigation().moveTo(path, 2);
     }
 
     @Override
     public void moveDragon(Player player, Vector vector, org.bukkit.entity.Entity entity) {
-        EntityEnderDragon ec = ((CraftEnderDragon) entity).getHandle();
+        EnderDragon ec = ((CraftEnderDragon) entity).getHandle();
 
-        ec.hurtTicks = -1;
-        ec.pitch = player.getLocation().getPitch();
-        ec.yaw = player.getLocation().getYaw() - 180;
+        ec.hurtTime = -1;
+        ec.setXRot(player.getLocation().getPitch());
+        ec.setYRot(player.getLocation().getYaw() - 180);
 
         float yaw = player.getPlayer().getLocation().getYaw();
 
@@ -234,43 +246,44 @@ public class EntityUtil implements IEntityUtil {
 
         Vector v = ec.getBukkitEntity().getLocation().getDirection();
 
-        ec.move(EnumMoveType.SELF, new Vec3D(x, v.getY(), z));
+        ec.move(MoverType.SELF, new Vec3(x, v.getY(), z));
     }
 
     @Override
     public void setClimb(org.bukkit.entity.Entity entity) {
-        ((CraftEntity) entity).getHandle().I = 1;
+    	// TODO: this field (I) no longer exists so I'm not sure what to do here
+        //((CraftEntity) entity).getHandle().I = 1;
     }
 
     @Override
     public void moveShip(Player player, org.bukkit.entity.Entity entity, Vector vector) {
-        EntityBoat ec = ((CraftBoat) entity).getHandle();
+        Boat ec = ((CraftBoat) entity).getHandle();
 
         ec.getBukkitEntity().setVelocity(vector);
 
-        ec.pitch = player.getLocation().getPitch();
-        ec.yaw = player.getLocation().getYaw() - 180;
+        ec.setXRot(player.getLocation().getPitch());
+        ec.setYRot(player.getLocation().getYaw() - 180);
 
-        ec.move(EnumMoveType.SELF, new Vec3D(1, 0, 0));
+        ec.move(MoverType.SELF, new Vec3(1, 0, 0));
     }
 
     @Override
     public void playChestAnimation(Block b, boolean open, TreasureChestDesign design) {
         Location location = b.getLocation();
-        World world = ((CraftWorld) location.getWorld()).getHandle();
-        BlockPosition position = new BlockPosition(location.getX(), location.getY(), location.getZ());
+        Level world = ((CraftWorld) location.getWorld()).getHandle();
+        BlockPos position = new BlockPos(location.getX(), location.getY(), location.getZ());
         if (design.getChestType() == ChestType.ENDER) {
-            TileEntityEnderChest tileChest = (TileEntityEnderChest) world.getTileEntity(position);
-            world.playBlockAction(position, tileChest.getBlock().getBlock(), 1, open ? 1 : 0);
+            EnderChestBlockEntity tileChest = (EnderChestBlockEntity) world.getBlockEntity(position);
+            world.blockEvent(position, tileChest.getBlockState().getBlock(), 1, open ? 1 : 0);
         } else {
-            TileEntityChest tileChest = (TileEntityChest) world.getTileEntity(position);
-            world.playBlockAction(position, tileChest.getBlock().getBlock(), 1, open ? 1 : 0);
+            ChestBlockEntity tileChest = (ChestBlockEntity) world.getBlockEntity(position);
+            world.blockEvent(position, tileChest.getBlockState().getBlock(), 1, open ? 1 : 0);
         }
     }
 
     @Override
     public org.bukkit.entity.Entity spawnItem(org.bukkit.inventory.ItemStack itemStack, Location blockLocation) {
-        EntityItem ei = new EntityItem(
+        ItemEntity ei = new ItemEntity(
                 ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle(),
                 blockLocation.clone().add(0.5D, 1.2D, 0.5D).getX(),
                 blockLocation.clone().add(0.5D, 1.2D, 0.5D).getY(),
@@ -282,7 +295,7 @@ public class EntityUtil implements IEntityUtil {
         ei.getBukkitEntity().setCustomName(UltraCosmeticsData.get().getItemNoPickupString());
         ei.pickupDelay = 20;
 
-        ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addEntity(ei);
+        ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addFreshEntity(ei);
 
         return ei.getBukkitEntity();
     }
@@ -295,30 +308,30 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void follow(org.bukkit.entity.Entity toFollow, org.bukkit.entity.Entity follower) {
         Entity pett = ((CraftEntity) follower).getHandle();
-        ((EntityInsentient) pett).getNavigation().a(2);
+        ((Mob) pett).getNavigation().setMaxVisitedNodesMultiplier(2);
         Object petf = ((CraftEntity) follower).getHandle();
         Location targetLocation = toFollow.getLocation();
-        PathEntity path;
-        path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
+        Path path;
+        path = ((Mob) petf).getNavigation().createPath(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
         if (path != null) {
-            ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
-            ((EntityInsentient) petf).getNavigation().a(1.05D);
+            ((Mob) petf).getNavigation().moveTo(path, 1.05D);
+            ((Mob) petf).getNavigation().setSpeedModifier(1.05D);
         }
     }
 
     @Override
     public void chickenFall(Player player) {
-        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-        if (!entityPlayer.isOnGround() && entityPlayer.getMot().getY() < 0.0D) {
+        ServerPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+        if (!entityPlayer.isOnGround() && entityPlayer.getDeltaMovement().y() < 0.0D) {
             Vector v = player.getVelocity();
             player.setVelocity(v);
-            entityPlayer.setMot(entityPlayer.getMot().a(0.85));
+            entityPlayer.setDeltaMovement(entityPlayer.getDeltaMovement().scale(0.85));
         }
     }
 
     @Override
     public void sendTeleportPacket(Player player, org.bukkit.entity.Entity entity) {
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityTeleport(((CraftEntity) entity).getHandle()));
+        ((CraftPlayer) player).getHandle().connection.send(new ClientboundTeleportEntityPacket(((CraftEntity) entity).getHandle()));
     }
 
     @Override

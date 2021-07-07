@@ -1,22 +1,22 @@
 package be.isach.ultracosmetics.v1_17_R1.nms;
 
-import net.minecraft.server.v1_16_R3.EntityInsentient;
+import net.minecraft.world.entity.Mob;
 
 /**
  * @author RadBuilder
  */
 public class WrapperEntityInsentient extends WrapperEntityLiving {
 
-    protected EntityInsentient handle;
+    protected Mob handle;
 
-    public WrapperEntityInsentient(EntityInsentient handle) {
+    public WrapperEntityInsentient(Mob handle) {
         super(handle);
 
         this.handle = handle;
     }
 
     @Override
-    public EntityInsentient getHandle() {
+    public Mob getHandle() {
         return handle;
     }
 

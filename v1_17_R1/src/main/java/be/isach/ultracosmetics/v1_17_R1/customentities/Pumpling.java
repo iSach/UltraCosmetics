@@ -5,21 +5,34 @@ import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_17_R1.pets.CustomEntityPet;
-import net.minecraft.server.v1_16_R3.*;
-import org.bukkit.entity.Zombie;
+import net.minecraft.core.BlockPos;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * @author RadBuilder
  */
-public class Pumpling extends EntityZombie implements IPetCustomEntity {
+public class Pumpling extends Zombie implements IPetCustomEntity {
 
     private CustomEntityPet pet = null;
 
-    public Pumpling(EntityTypes<? extends EntityZombie> entitytypes, World world) {
+    public Pumpling(EntityType<? extends Zombie> entitytypes, Level world) {
         super(entitytypes, world);
     }
 
-    public Pumpling(EntityTypes<? extends EntityZombie> entitytypes, World world, CustomEntityPet pet) {
+    public Pumpling(EntityType<? extends Zombie> entitytypes, Level world, CustomEntityPet pet) {
         super(entitytypes, world);
         this.pet = pet;
     }
@@ -29,53 +42,53 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     }
 
     @Override
-    protected SoundEffect getSoundAmbient() { // say (ambient)
+    protected SoundEvent getAmbientSound() { // say (ambient)
         if (isCustomEntity()) {
-            playSound(SoundEffects.BLOCK_FIRE_AMBIENT, 0.05f, 2f);
+            playSound(SoundEvents.FIRE_AMBIENT, 0.05f, 2f);
             return null;
-        } else return super.getSoundAmbient();
+        } else return super.getAmbientSound();
     }
 
     @Override
-    protected SoundEffect getSoundHurt(DamageSource damageSource) { // Hurt
+    protected SoundEvent getHurtSound(DamageSource damageSource) { // Hurt
         if (isCustomEntity()) return null;
-        else return super.getSoundHurt(damageSource);
+        else return super.getHurtSound(damageSource);
     }
 
     @Override
-    protected SoundEffect getSoundDeath() { // Death
+    protected SoundEvent getDeathSound() { // Death
         if (isCustomEntity()) return null;
-        else return super.getSoundDeath();
+        else return super.getDeathSound();
     }
 
     @Override
-    protected SoundEffect getSoundStep() { // Step
+    protected SoundEvent getStepSound() { // Step
         if (isCustomEntity()) return null;
-        else return super.getSoundStep();
+        else return super.getStepSound();
     }
 
     @Override
-    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
+    protected void playStepSound(BlockPos blockposition, BlockState iblockdata) {
         if (isCustomEntity()) return;
-        super.b(blockposition, iblockdata);
+        super.playStepSound(blockposition, iblockdata);
     }
 
     @Override
-    public String getName() {
-        return LocaleLanguage.a().a("entity.Zombie.name");
+    public TextComponent getName() {
+        return new TextComponent(Language.getInstance().getOrDefault("entity.Zombie.name"));
     }
 
     @Override
     public void tick() {
         super.tick();
         if (!isCustomEntity()) return;
-        fireTicks = 0;
-        UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
+        ((Entity)this).remainingFireTicks = 0;
+        UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((org.bukkit.entity.Zombie) getBukkitEntity()).getEyeLocation(), 3);
         UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
         pet.getFollowTask().follow(pet.getPlayer());
-        setInvisible(true);
-        setBaby(true);
-        setSlot(EnumItemSlot.HEAD, new ItemStack(Blocks.PUMPKIN));
+        ((Entity)this).setInvisible(true);
+        ((Zombie)this).setBaby(true);
+        ((Mob)this).setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.PUMPKIN));
     }
 
     private boolean isCustomEntity() {

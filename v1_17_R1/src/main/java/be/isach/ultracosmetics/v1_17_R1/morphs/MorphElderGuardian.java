@@ -8,15 +8,17 @@ import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.v1_17_R1.customentities.CustomEntityFirework;
 import be.isach.ultracosmetics.v1_17_R1.customentities.CustomGuardian;
-import net.minecraft.server.v1_16_R3.Entity;
-import net.minecraft.server.v1_16_R3.EntityTypes;
-import net.minecraft.server.v1_16_R3.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelWriter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -105,16 +107,16 @@ public class MorphElderGuardian extends Morph {
     @Override
     public void onClear() {
         if (customGuardian != null)
-            customGuardian.dead = true;
+            ((Entity)customGuardian).discard();
         customEntities.remove(customGuardian);
     }
 
     @Override
     protected void onEquip() {
         super.onEquip();
-        World world = ((CraftWorld) getPlayer().getWorld()).getHandle();
+        Level world = ((CraftWorld) getPlayer().getWorld()).getHandle();
 
-        customGuardian = new CustomGuardian(EntityTypes.ELDER_GUARDIAN, world);
+        customGuardian = new CustomGuardian(EntityType.ELDER_GUARDIAN, world);
         customEntities.add(customGuardian);
         customGuardian.check();
 
@@ -122,15 +124,16 @@ public class MorphElderGuardian extends Morph {
         double x = location.getX();
         double y = location.getY();
         double z = location.getZ();
-        customGuardian.setLocation(x, y, z, 0, 0);
+        // the methods don't get properly re-obfuscated without casting like this
+        ((Entity)customGuardian).moveTo(x, y, z, 0, 0);
 
         EntitySpawningManager.setBypass(true);
-        world.addEntity(customGuardian);
+        ((LevelWriter)world).addFreshEntity(customGuardian);
         EntitySpawningManager.setBypass(false);
 
-        getPlayer().setPassenger(customGuardian.getBukkitEntity());
+        getPlayer().addPassenger(customGuardian.getBukkitEntity());
 
-        customGuardian.setInvisible(true);
+        ((Entity)customGuardian).setInvisible(true);
     }
 
     @Override

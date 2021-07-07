@@ -1,28 +1,31 @@
 package be.isach.ultracosmetics.v1_17_R1.customentities;
 
-import net.minecraft.server.v1_16_R3.EntityFireworks;
-import net.minecraft.server.v1_16_R3.EntityTypes;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntityStatus;
-import net.minecraft.server.v1_16_R3.World;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.level.Level;
+
 /**
  * @author RadBuilder
  */
-public class CustomEntityFirework extends EntityFireworks {
+public class CustomEntityFirework extends FireworkRocketEntity {
     Player[] players = null;
     boolean gone = false;
 
-    public CustomEntityFirework(World world, Player... p) {
-        super(EntityTypes.FIREWORK_ROCKET, world);
+    public CustomEntityFirework(Level world, Player... p) {
+        super(EntityType.FIREWORK_ROCKET, world);
         players = p;
-        this.a(0.25F, 0.25F);
+        // this doesn't seem right but it's the same method used in v1_16_R3
+        this.newFloatList(0.25F, 0.25F);
     }
 
     public static void spawn(Location location, FireworkEffect effect, Player... players) {
@@ -31,10 +34,10 @@ public class CustomEntityFirework extends EntityFireworks {
             FireworkMeta meta = ((Firework) firework.getBukkitEntity()).getFireworkMeta();
             meta.addEffect(effect);
             ((Firework) firework.getBukkitEntity()).setFireworkMeta(meta);
-            firework.setPosition(location.getX(), location.getY(), location.getZ());
+            ((Entity)firework).setPos(location.getX(), location.getY(), location.getZ());
 
-            if ((((CraftWorld) location.getWorld()).getHandle()).addEntity(firework)) {
-                firework.setInvisible(true);
+            if ((((CraftWorld) location.getWorld()).getHandle()).addFreshEntity(firework)) {
+                ((Entity)firework).setInvisible(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,16 +50,16 @@ public class CustomEntityFirework extends EntityFireworks {
             return;
         }
 
-        if (!this.world.isClientSide) {
+        if (!this.level.isClientSide) {
             gone = true;
 
             if (players != null)
                 if (players.length > 0)
                     for (Player player : players)
-                        (((CraftPlayer) player).getHandle()).playerConnection.sendPacket(new PacketPlayOutEntityStatus(this, (byte) 17));
+                        (((CraftPlayer) player).getHandle()).connection.send(new ClientboundEntityEventPacket(this, (byte) 17));
                 else
-                    world.broadcastEntityEffect(this, (byte) 17);
-            this.die();
+                    level.broadcastEntityEvent(this, (byte) 17);
+            ((Entity)this).discard();
         }
     }
 }

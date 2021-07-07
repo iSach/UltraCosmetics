@@ -1,19 +1,23 @@
 package be.isach.ultracosmetics.v1_17_R1.customentities;
 
-import net.minecraft.server.v1_16_R3.PathfinderGoal;
-
 import java.util.EnumSet;
 
-public class CustomSlimeJumpGoal extends PathfinderGoal {
-    private final CustomSlime slime;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
+
+public class CustomSlimeJumpGoal extends Goal {
+    //private final CustomSlime slime;
+	// there's no real reason it needs to be referenced as a custom slime internally
+	// so it's Entity type for lest casting
+	private final Entity slime;
 
     public CustomSlimeJumpGoal(CustomSlime slime) {
         this.slime = slime;
-        a(EnumSet.of(Type.MOVE));
+        ((Goal)this).setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
-    public boolean a() {
+    public boolean canUse() {
         if (slime.getPassengers().size() > 0 && slime.getPassengers().get(0) != null) {
             return false;
         }
@@ -21,8 +25,8 @@ public class CustomSlimeJumpGoal extends PathfinderGoal {
     }
 
     @Override
-    public boolean b() {
-        return a();
+    public boolean canContinueToUse() {
+        return canUse();
     }
 
 }

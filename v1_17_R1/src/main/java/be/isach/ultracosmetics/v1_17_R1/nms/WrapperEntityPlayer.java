@@ -1,22 +1,22 @@
 package be.isach.ultracosmetics.v1_17_R1.nms;
 
-import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * @author RadBuilder
  */
 public class WrapperEntityPlayer extends WrapperEntityHuman {
 
-    protected EntityPlayer handle;
+    protected ServerPlayer handle;
 
-    public WrapperEntityPlayer(EntityPlayer handle) {
+    public WrapperEntityPlayer(ServerPlayer handle) {
         super(handle);
 
         this.handle = handle;
     }
 
     @Override
-    public EntityPlayer getHandle() {
+    public ServerPlayer getHandle() {
         return handle;
     }
 

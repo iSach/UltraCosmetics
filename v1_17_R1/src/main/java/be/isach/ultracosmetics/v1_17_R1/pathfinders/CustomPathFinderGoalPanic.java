@@ -1,21 +1,26 @@
 package be.isach.ultracosmetics.v1_17_R1.pathfinders;
 
 
-import net.minecraft.server.v1_16_R3.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
+import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.phys.Vec3;
+
 /**
  * @author RadBuilder
  */
-public class CustomPathFinderGoalPanic extends PathfinderGoal {
+public class CustomPathFinderGoalPanic extends Goal {
 
     // speed
     protected double a;
     // NMS Entity
-    private EntityCreature b;
+    private PathfinderMob b;
     // random PosX
     private double c;
 
@@ -25,18 +30,18 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
     // random PosZ
     private double e;
 
-    public CustomPathFinderGoalPanic(EntityCreature entitycreature, double d0) {
+    public CustomPathFinderGoalPanic(PathfinderMob entitycreature, double d0) {
         this.b = entitycreature;
         this.a = d0;
-        EnumSet<Type> set = EnumSet.noneOf(PathfinderGoal.Type.class);
-        set.add(PathfinderGoal.Type.MOVE);
-        this.a(set);
+        EnumSet<Flag> set = EnumSet.noneOf(Goal.Flag.class);
+        set.add(Goal.Flag.MOVE);
+        this.setFlags(set);
     }
 
     @Override
-    public boolean a() {
-        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
-        if (vec3d == null) return false; //
+    public boolean canUse() {
+        Vec3 vec3d = LandRandomPos.getPos(this.b, 5, 4);
+        if (vec3d == null) return false;
         this.c = vec3d.x;
         this.d = vec3d.y;
         this.e = vec3d.z;
@@ -44,17 +49,17 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
     }
 
     @Override
-    public void c() {
-        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
+    public void start() {
+        Vec3 vec3d = LandRandomPos.getPos(this.b, 5, 4);
         if (vec3d == null) return; // IN AIR
-        this.b.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 3.0d);
+        this.b.getNavigation().moveTo(vec3d.x, vec3d.y, vec3d.z, 3.0d);
     }
 
     @Override
-    public boolean b() {
+    public boolean canContinueToUse() {
         // CraftBukkit start - introduce a temporary timeout hack until this is fixed properly
-        if ((this.b.ticksLived - this.b.hurtTimestamp) > 100) {
-            this.b.setLastDamager((EntityLiving) null);
+        if ((this.b.tickCount - this.b.lastHurtByMobTimestamp) > 100) {
+            this.b.setLastHurtByMob((LivingEntity) null);
             return false;
         }
         // CraftBukkit end
@@ -77,11 +82,10 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
             ex.printStackTrace();
         }
 
-        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
+        Vec3 vec3d = LandRandomPos.getPos(this.b, 5, 4);
         if (vec3d != null) {
-            this.b.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, 3.0d);
+            this.b.getNavigation().moveTo(vec3d.x, vec3d.y, vec3d.z, 3);
         }
-
         return !boo;
     }
 

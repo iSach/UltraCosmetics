@@ -3,12 +3,13 @@ package be.isach.ultracosmetics.v1_17_R1.pets;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
-import net.minecraft.server.v1_16_R3.Entity;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.PathEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.pathfinder.Path;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -55,15 +56,15 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
                 return;
             }
 
-            ((EntityInsentient) petEntity).getNavigation().a(2d);
+            ((Mob) petEntity).getNavigation().setSpeedModifier(2d);
             Location targetLocation = player.getLocation();
-            PathEntity path = ((EntityInsentient) petEntity).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
+            Path path = ((Mob) petEntity).getNavigation().createPath(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
 
             try {
                 int distance = (int) Bukkit.getPlayer(player.getName()).getLocation().distance(petEntity.getBukkitEntity().getLocation());
 
                 if (distance > 10 && petEntity.valid && player.isOnGround()) {
-                    petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
+                    petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
                 }
 
                 if (path != null && distance > 1.3) {
@@ -73,11 +74,11 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
                         speed *= 1.3;
                     }
 
-                    ((EntityInsentient) petEntity).getNavigation().a(path, speed);
-                    ((EntityInsentient) petEntity).getNavigation().a(speed);
+                    ((Mob) petEntity).getNavigation().moveTo(path, speed);
+                    ((Mob) petEntity).getNavigation().setSpeedModifier(speed);
                 }
             } catch (IllegalArgumentException exception) {
-                petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
+                petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
                 //exception.printStackTrace();
             }
         });

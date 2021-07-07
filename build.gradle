@@ -8,8 +8,11 @@ allprojects {
 
     compileJava.options.encoding = 'UTF-8'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(16)
+		}
+	}
 
     configurations {
         shaded
@@ -165,25 +168,25 @@ subprojects {
     }
 }
 
-task obfuscate(type: Exec) {
+task obfuscate {
+	dependsOn build
     description 'Generates an obfuscated version of the jar for use with Spigot.'
     group = 'jar preparation'
-    workingDir "${buildDir}"
     ext.toolingDir = System.getProperty("user.dir")
     ext.homeDir = project.gradle.gradleUserHomeDir.parent
-    commandLine 'java', '-jar', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar', '-i', 'libs/' + rootProject.name + '.jar',
-        '-o', 'libs/' + rootProject.name + '-obf.jar', '-m',
-        ext.homeDir + '/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt',
-        '--reverse'
-}
-
-task deobfuscate(type: Exec) {
-    description 'Generates a deobfuscated version of the jar for development purposes. Resulting jar cannot be used with Spigot.'
-    group = 'jar preparation'
-    workingDir "${buildDir}"
-    ext.toolingDir = System.getProperty("user.dir")
-    ext.homeDir = project.gradle.gradleUserHomeDir.parent
-    commandLine 'java', '-jar', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar', '-i', 'libs/' + rootProject.name + '-obf.jar',
-        '-o', 'libs/' + rootProject.name + '.jar', '-m',
-        ext.homeDir + '/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-spigot.csrg'
+	doLast {
+		exec {
+			workingDir "${buildDir}"
+			commandLine 'java', '-jar', ext.toolingDir + '\\tooling\\specialsource\\SpecialSource.jar', '-i', 'libs\\' + rootProject.name + '-' + rootProject.version + '.jar',
+				'-o', 'libs\\' + rootProject.name + '-' + rootProject.version + '-obf.jar', '-m',
+				ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\minecraft-server\\1.17-R0.1-SNAPSHOT\\minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt',
+				'--reverse'
+		}
+		exec {
+			workingDir "${buildDir}"
+			commandLine 'java', '-jar', ext.toolingDir + '\\tooling\\specialsource\\SpecialSource.jar', '-i', 'libs\\' + rootProject.name + '-' + rootProject.version + '-obf.jar',
+				'-o', 'libs\\' + rootProject.name + '-' + rootProject.version + '.jar', '-m',
+				ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\minecraft-server\\1.17-R0.1-SNAPSHOT\\minecraft-server-1.17-R0.1-SNAPSHOT-maps-spigot.csrg'
+		}
+	}
 }

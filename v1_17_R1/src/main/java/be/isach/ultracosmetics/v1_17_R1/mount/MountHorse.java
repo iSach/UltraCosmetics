@@ -51,7 +51,7 @@ public abstract class MountHorse<E extends AbstractHorse> extends Mount<E> {
         }
         entity.setCustomNameVisible(true);
         entity.setCustomName(getType().getName(getPlayer()));
-        entity.setPassenger(getPlayer());
+        entity.addPassenger(getPlayer());
         entity.setTamed(true);
         entity.setDomestication(1);
         if (entity instanceof Horse) {

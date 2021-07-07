@@ -10,13 +10,14 @@ import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_17_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_17_R1.customentities.CustomSlime;
 import be.isach.ultracosmetics.v1_17_R1.customentities.RideableSpider;
-import net.minecraft.server.v1_16_R3.Entity;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 
 /**
  * @author RadBuilder
@@ -36,16 +37,16 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
     public void onEquip() {
 
         if (getType() == MountType.valueOf("slime"))
-            customEntity = new CustomSlime(EntityTypes.SLIME, ((CraftPlayer) getPlayer()).getHandle().getWorld());
+            customEntity = new CustomSlime(EntityType.SLIME, ((CraftPlayer) getPlayer()).getHandle().getLevel());
         else if (getType() == MountType.valueOf("spider"))
-            customEntity = new RideableSpider(EntityTypes.SPIDER, ((CraftWorld) getPlayer().getWorld()).getHandle());
+            customEntity = new RideableSpider(EntityType.SPIDER, ((CraftWorld) getPlayer().getWorld()).getHandle());
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();
-        getCustomEntity().setLocation(x, y + 2, z, 0, 0);
+        getCustomEntity().moveTo(x, y + 2, z, 0, 0);
 
         EntitySpawningManager.setBypass(true);
-        ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
+        ((CraftWorld) getPlayer().getWorld()).getHandle().addFreshEntity(getCustomEntity());
         EntitySpawningManager.setBypass(false);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().setPassenger(getEntity(), getPlayer());
         CustomEntities.customEntities.add(getCustomEntity());
@@ -67,7 +68,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
     @Override
     public void onUpdate() {
         try {
-            if (getEntity().getPassenger() != getPlayer() && getCustomEntity().ticksLived > 10) {
+            if (getEntity().getPassenger() != getPlayer() && getCustomEntity().tickCount > 10) {
                 clear();
                 cancel();
                 return;
@@ -93,7 +94,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
 
     @Override
     protected void removeEntity() {
-        getCustomEntity().dead = true;
+        getCustomEntity().discard();
         CustomEntities.customEntities.remove(customEntity);
     }
 

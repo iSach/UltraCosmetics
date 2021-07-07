@@ -4,34 +4,45 @@ import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.v1_17_R1.EntityBase;
 import be.isach.ultracosmetics.v1_17_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_17_R1.nms.WrapperEntityInsentient;
-import net.minecraft.server.v1_16_R3.*;
-import org.bukkit.entity.Entity;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * @author iSach
  */
-public class CustomSlime extends EntitySlime implements IMountCustomEntity, EntityBase {
+public class CustomSlime extends Slime implements IMountCustomEntity, EntityBase {
 
-    public CustomSlime(EntityTypes<? extends EntitySlime> entitytypes, World world) {
+    public CustomSlime(EntityType<? extends Slime> entitytypes, Level world) {
         super(entitytypes, world);
     }
 
-    static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
-        if (!(entity instanceof EntityBase)) {
+    static void ride(float sideMot, float forMot, Player passenger, Mob mob) {
+    	if (!(mob instanceof EntityBase)) {
             throw new IllegalArgumentException("The entity field should implements EntityBase");
         }
 
-        EntityBase entityBase = (EntityBase) entity;
+        EntityBase entityBase = (EntityBase) mob;
+        Entity entity = mob;
 
-        WrapperEntityInsentient wEntity = new WrapperEntityInsentient(entity);
+        WrapperEntityInsentient wEntity = new WrapperEntityInsentient(mob);
         WrapperEntityHuman wPassenger = new WrapperEntityHuman(passenger);
 
         if (passenger != null) {
-            entity.lastYaw = entity.yaw = passenger.yaw % 360f;
-            entity.pitch = (passenger.pitch * 0.5F) % 360f;
+            entity.yRotO = ((Entity)passenger).getYRot() % 360f;
+            entity.setYRot(entity.yRotO);
+            entity.setXRot((((Entity)passenger).getXRot() * 0.5F) % 360f);
 
-            wEntity.setRenderYawOffset(entity.yaw);
-            wEntity.setRotationYawHead(entity.yaw);
+            wEntity.setRenderYawOffset(entity.getYRot());
+            wEntity.setRotationYawHead(entity.getYRot());
 
             sideMot = wPassenger.getMoveStrafing() * 0.25f;
             forMot = wPassenger.getMoveForward() * 0.5f;
@@ -43,9 +54,9 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
             wEntity.setJumping(wPassenger.isJumping());
 
             if (wPassenger.isJumping() && (entity.isOnGround() || entityBase.canFly())) {
-                Vec3D v = entity.getMot();
-                Vec3D v2 = new Vec3D(v.getX(), 0.4D, v.getZ());
-                entity.setMot(v2);
+                Vec3 v = entity.getDeltaMovement();
+                Vec3 v2 = new Vec3(v.x(), 0.4D, v.z());
+                entity.setDeltaMovement(v2);
 
 				/*float f2 = MathHelper.sin(entity.yaw * 0.017453292f);
 				float f3 = MathHelper.cos(entity.yaw * 0.017453292f);
@@ -55,7 +66,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
             wEntity.setStepHeight(1.0f);
             wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
 
-            wEntity.setRotationYawHead(entity.yaw);
+            wEntity.setRotationYawHead(entity.getYRot());
 
             wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
             entityBase.g_(sideMot, forMot);
@@ -63,10 +74,10 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
             wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
 
-            double dx = entity.locX() - entity.lastX;
-            double dz = entity.locZ() - entity.lastZ;
+            double dx = entity.getX() - entity.xo;
+            double dz = entity.getZ() - entity.zo;
 
-            float f4 = MathHelper.sqrt(dx * dx + dz * dz) * 4;
+            float f4 = Mth.sqrt((float) (dx * dx + dz * dz)) * 4;
 
             if (f4 > 1)
                 f4 = 1;
@@ -81,35 +92,33 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
         }
     }
 
-    // Corresponds to travel(Vec3D)
     @Override
     //public void a(float sideMot, float forMot, float f2) {
-    public void g(Vec3D vec3D) {
+    public void travel(Vec3 vec3D) {
         if (!CustomEntities.customEntities.contains(this)) {
-            // Corresponds to tickHeadTurn(float, float)
-            super.f((float) vec3D.x, (float) vec3D.y);
+            super.tickHeadTurn((float) vec3D.x, (float) vec3D.y);
             return;
         }
-        EntityHuman passenger = null;
+        Player passenger = null;
         if (!getPassengers().isEmpty()) {
-            passenger = (EntityHuman) getPassengers().get(0);
+            passenger = (Player) getPassengers().get(0);
         }
         ride((float) vec3D.x, (float) vec3D.y, passenger, this);
     }
 
     @Override
-    public String getName() {
-        return LocaleLanguage.a().a("entity.Slime.name");
+    public Component getName() {
+        return new TextComponent(Language.getInstance().getOrDefault("entity.Slime.name"));
     }
 
     @Override
-    protected void initPathfinder() {
-        goalSelector.a(5, new CustomSlimeJumpGoal(this));
+    protected void registerGoals() {
+        goalSelector.addGoal(5, new CustomSlimeJumpGoal(this));
     }
 
     @Override
     public void g_(float sideMot, float forMot) {
-        super.g(new Vec3D(sideMot, 0, forMot));
+        super.travel(new Vec3(sideMot, 0, forMot));
     }
 
     @Override
@@ -123,7 +132,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
     }
 
     @Override
-    public Entity getEntity() {
+    public org.bukkit.entity.Entity getEntity() {
         return getBukkitEntity();
     }
 
