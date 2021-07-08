@@ -177,16 +177,20 @@ task obfuscate {
 	doLast {
 		exec {
 			workingDir "${buildDir}"
-			commandLine 'java', '-jar', ext.toolingDir + '\\tooling\\specialsource\\SpecialSource.jar', '-i', 'libs\\' + rootProject.name + '-' + rootProject.version + '.jar',
-				'-o', 'libs\\' + rootProject.name + '-' + rootProject.version + '-obf.jar', '-m',
-				ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\minecraft-server\\1.17-R0.1-SNAPSHOT\\minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt',
+			commandLine 'java', '-cp', ext.toolingDir + '\\tooling\\specialsource\\SpecialSource.jar;' + ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\spigot\\1.17-R0.1-SNAPSHOT\\spigot-1.17-R0.1-SNAPSHOT-remapped-mojang.jar',
+                'net.md_5.specialsource.SpecialSource', '--live', '--only', 'be/isach/ultracosmetics/v1_17_R1', '-q',
+                '-i', 'libs\\' + rootProject.name + '-' + rootProject.version + '.jar',
+				'-o', 'libs\\' + rootProject.name + '-' + rootProject.version + '-obf.jar',
+                '-m', ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\minecraft-server\\1.17-R0.1-SNAPSHOT\\minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt',
 				'--reverse'
 		}
 		exec {
 			workingDir "${buildDir}"
-			commandLine 'java', '-jar', ext.toolingDir + '\\tooling\\specialsource\\SpecialSource.jar', '-i', 'libs\\' + rootProject.name + '-' + rootProject.version + '-obf.jar',
-				'-o', 'libs\\' + rootProject.name + '-' + rootProject.version + '.jar', '-m',
-				ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\minecraft-server\\1.17-R0.1-SNAPSHOT\\minecraft-server-1.17-R0.1-SNAPSHOT-maps-spigot.csrg'
+			commandLine 'java', '-cp', ext.toolingDir + '\\tooling\\specialsource\\SpecialSource.jar;' + ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\spigot\\1.17-R0.1-SNAPSHOT\\spigot-1.17-R0.1-SNAPSHOT-remapped-obf.jar',
+                'net.md_5.specialsource.SpecialSource', '--live', '--only', 'be/isach/ultracosmetics/v1_17_R1', '-q',
+				'-i', 'libs\\' + rootProject.name + '-' + rootProject.version + '-obf.jar',
+                '-o', 'libs\\' + rootProject.name + '-' + rootProject.version + '-remapped.jar',
+                '-m', ext.homeDir + '\\.m2\\repository\\org\\spigotmc\\minecraft-server\\1.17-R0.1-SNAPSHOT\\minecraft-server-1.17-R0.1-SNAPSHOT-maps-spigot.csrg'
 		}
 	}
 }

@@ -48,12 +48,13 @@ public class WrapperEntityLiving extends WrapperEntity {
     }
 
     public boolean isJumping() {
-    	// same name in Spigot and Mojang mappings
-        return getField("jumping", LivingEntity.class, Boolean.class);
+    	// corresponds to net.minecraft.world.entity.LivingEntity#jumping
+        return getField("bn", LivingEntity.class, Boolean.class);
     }
 
     public void setJumping(boolean jumping) {
-        setField("jumping", LivingEntity.class, jumping);
+    	// not sure why there's a setJumping method but no isJumping method
+        handle.setJumping(jumping);
     }
 
     public float getJumpMovementFactor() {

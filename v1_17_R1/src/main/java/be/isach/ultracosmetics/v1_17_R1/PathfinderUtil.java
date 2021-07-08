@@ -29,18 +29,19 @@ public class PathfinderUtil implements IPathfinderUtil {
         GoalSelector targetSelector = nmsEntity.targetSelector;
 
         Brain<?> brain = ((LivingEntity)nmsEntity).getBrain();
-        
+
         try {
-        	// these first two are identical in Spigot and Mojang mappings
-            Field memoriesField = Brain.class.getDeclaredField("memories");
+        	// corresponds to net.minecraft.world.entity.ai.Brain#memories
+            Field memoriesField = Brain.class.getDeclaredField("d");
             memoriesField.setAccessible(true);
             memoriesField.set(brain, new HashMap<>());
 
-            Field sensorsField = Brain.class.getDeclaredField("sensors");
+        	// corresponds to net.minecraft.world.entity.ai.Brain#sensors
+            Field sensorsField = Brain.class.getDeclaredField("e");
             sensorsField.setAccessible(true);
             sensorsField.set(brain, new LinkedHashMap<>());
 
-            // this method is annotated with VisibleForTesting but I'm not sure what else we can do here
+            // this method is annotated with VisibleForTesting but it seems like the easiest thing to do at the moment
             // this clears net.minecraft.world.entity.ai.Brain#availableBehaviorsByPriority
             brain.removeAllBehaviors();
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
