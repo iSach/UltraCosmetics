@@ -93,8 +93,7 @@ public class MorphElderGuardian extends Morph {
 
             for (int i = 0; i < 10; i++) {
                 for (org.bukkit.entity.Entity entity : current.getWorld().getNearbyEntities(current, 4.5, 4.5, 4.5))
-                    if (entity instanceof LivingEntity
-                            && entity != getPlayer())
+                    if (entity instanceof LivingEntity && entity != getPlayer()) 
                         MathUtils.applyVelocity(entity, new Vector(0, 0.5d, 0));
                 current.add(vector);
             }

@@ -33,7 +33,7 @@ public class CustomGuardian extends Guardian {
 
     public void target(ArmorStand armorStand) {
         try {
-            ((Entity)this).getEntityData().set(EntityDataSerializers.FLOAT.createAccessor(17), (float) (armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId()));
+            ((Entity)this).getEntityData().set(EntityDataSerializers.INT.createAccessor(17), armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId());
         } catch (Exception exc) {
 
         }
