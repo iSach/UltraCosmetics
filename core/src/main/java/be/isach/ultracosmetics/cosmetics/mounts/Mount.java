@@ -21,6 +21,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 /**
@@ -119,7 +120,13 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     @Override
     protected void onClear() {
         if (entity != null) {
-            entity.remove();
+        	// can't remove entities async
+        	new BukkitRunnable() {
+        		@Override
+        		public void run() {
+        			entity.remove();
+        		}
+        	}.runTask(getUltraCosmetics());
         }
 
         if (getOwner() != null)
