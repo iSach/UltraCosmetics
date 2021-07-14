@@ -66,6 +66,7 @@ public class CustomPathFinderGoalPanic extends Goal {
         Method method = null;
         boolean boo = false;
         try {
+            // corresponds to net.minecraft.world.entity.ai.navigation.PathNavigation#isInLiquid()
             method = this.b.getNavigation().getClass().getSuperclass().getDeclaredMethod("p");
         } catch (Exception e) {
             e.printStackTrace();

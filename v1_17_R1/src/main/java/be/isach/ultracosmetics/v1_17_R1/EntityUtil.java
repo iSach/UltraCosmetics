@@ -13,7 +13,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
@@ -123,7 +123,7 @@ public class EntityUtil implements IEntityUtil {
             UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
             Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
                 for (Player pl : player.getWorld().getPlayers())
-                    PacketSender.send(pl, new ClientboundRemoveEntityPacket(as.getId()));
+                    PacketSender.send(pl, new ClientboundRemoveEntitiesPacket(as.getId()));
                 fakeArmorStands.remove(as);
             }, 20);
             if (affectPlayers)
@@ -146,7 +146,7 @@ public class EntityUtil implements IEntityUtil {
                 continue;
             }
             for (Player pl : player.getWorld().getPlayers()) {
-                PacketSender.send(pl, new ClientboundRemoveEntityPacket(as.getId()));
+                PacketSender.send(pl, new ClientboundRemoveEntitiesPacket(as.getId()));
             }
         }
 
@@ -214,7 +214,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void sendDestroyPacket(Player player, org.bukkit.entity.Entity entity) {
-        ClientboundRemoveEntityPacket packet = new ClientboundRemoveEntityPacket(((CraftEntity) entity).getHandle().getId());
+        ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(((CraftEntity) entity).getHandle().getId());
         ((CraftPlayer) player).getHandle().connection.send(packet);
     }
 
