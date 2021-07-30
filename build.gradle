@@ -109,7 +109,7 @@ subprojects { subproj ->
 
         // PlayerPoints
         maven {
-            url 'https://repo.dakanilabs.com/repository/public/'
+            url 'https://repo.rosewooddev.io/repository/public/'
         }
         
         // Spigot for 1.16.4
