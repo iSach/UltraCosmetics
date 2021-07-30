@@ -87,9 +87,8 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
             // Not Scheduled yet. Ignore.
         }
 
-        // Call untask finally.
+        // Call untask finally. (in main thread)
         onClear();
-
         owner = null;
     }
 

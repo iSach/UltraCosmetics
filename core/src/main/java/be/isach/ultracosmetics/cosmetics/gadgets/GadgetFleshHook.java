@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.UCMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -81,14 +82,16 @@ public class GadgetFleshHook extends Gadget implements Listener {
 
     @Override
     public void onUpdate() {
-        Iterator<Item> it = items.iterator();
-        while (it.hasNext()) {
-            Object pair = it.next();
-            if (((Item) pair).isOnGround()) {
-                ((Item) pair).remove();
-                it.remove();
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+            Iterator<Item> it = items.iterator();
+            while (it.hasNext()) {
+                Object pair = it.next();
+                if (((Item) pair).isOnGround()) {
+                    ((Item) pair).remove();
+                    it.remove();
+                }
             }
-        }
+        });
     }
 
     @Override

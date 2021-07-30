@@ -12,6 +12,7 @@ import be.isach.ultracosmetics.version.IEntityUtil;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
@@ -141,16 +142,17 @@ public class EntityUtil implements IEntityUtil {
             as.absMoveTo(loc.getX() + MathUtils.randomDouble(-1.5, 1.5), loc.getY() + MathUtils.randomDouble(0, .5) - 0.75, loc.getZ() + MathUtils.randomDouble(-1.5, 1.5), 0, 0);
             fakeArmorStands.add(as);
             for (Player players : player.getWorld().getPlayers()) {
-                PacketSender.send(players, new ClientboundAddEntityPacket(as));
-                PacketSender.send(players, new ClientboundSetEntityDataPacket(as.getId(), as.getEntityData(), false));
+                sendPacket(player, new ClientboundAddEntityPacket(as));
+                sendPacket(players, new ClientboundSetEntityDataPacket(as.getId(), as.getEntityData(), false));
                 List<Pair<EquipmentSlot, ItemStack>> list = new ArrayList<>();
                 list.add(new Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
-                PacketSender.send(players, new ClientboundSetEquipmentPacket(as.getId(), list));
+                sendPacket(players, new ClientboundSetEquipmentPacket(as.getId(), list));
             }
             UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
             Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
-                for (Player pl : player.getWorld().getPlayers())
-                    PacketSender.send(pl, new ClientboundRemoveEntitiesPacket(as.getId()));
+                for (Player pl : player.getWorld().getPlayers()) {
+                    sendPacket(pl, new ClientboundRemoveEntitiesPacket(as.getId()));
+                }
                 fakeArmorStands.remove(as);
             }, 20);
             if (affectPlayers)
@@ -173,7 +175,7 @@ public class EntityUtil implements IEntityUtil {
                 continue;
             }
             for (Player pl : player.getWorld().getPlayers()) {
-                PacketSender.send(pl, new ClientboundRemoveEntitiesPacket(as.getId()));
+                sendPacket(pl, new ClientboundRemoveEntitiesPacket(as.getId()));
             }
         }
 
@@ -355,5 +357,9 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public byte[] getEncodedData(String url) {
         return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
+    }
+
+    private void sendPacket(Player player, Packet packet) {
+        ((CraftPlayer) player).getHandle().connection.send(packet);
     }
 }

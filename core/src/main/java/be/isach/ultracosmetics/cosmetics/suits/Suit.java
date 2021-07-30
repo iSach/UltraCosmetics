@@ -83,6 +83,45 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
             return;
         }
 
+        // Remove current equipped armor piece
+        getOwner().removeSuit(getArmorSlot());
+        switch (getArmorSlot()) {
+            case HELMET:
+                if (getOwner().getCurrentHat() != null) {
+                    getOwner().removeHat();
+                }
+                if (getOwner().getCurrentEmote() != null) {
+                    getOwner().removeEmote();
+                }
+                if (getPlayer().getInventory().getHelmet() != null) {
+                    ItemStack itemStack = getPlayer().getInventory().getHelmet();
+                    drop(itemStack);
+                    getPlayer().getInventory().setHelmet(null);
+                }
+                break;
+            case CHESTPLATE:
+                if (getPlayer().getInventory().getChestplate() != null) {
+                    ItemStack itemStack = getPlayer().getInventory().getChestplate();
+                    drop(itemStack);
+                    getPlayer().getInventory().setChestplate(null);
+                }
+                break;
+            case LEGGINGS:
+                if (getPlayer().getInventory().getLeggings() != null) {
+                    ItemStack itemStack = getPlayer().getInventory().getLeggings();
+                    drop(itemStack);
+                    getPlayer().getInventory().setLeggings(null);
+                }
+                break;
+            case BOOTS:
+                if (getPlayer().getInventory().getBoots() != null) {
+                    ItemStack itemStack = getPlayer().getInventory().getBoots();
+                    drop(itemStack);
+                    getPlayer().getInventory().setBoots(null);
+                }
+                break;
+        }
+
         getUltraCosmetics().getServer().getPluginManager().registerEvents(this, getUltraCosmetics());
 
         this.equipped = true;
@@ -107,44 +146,18 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
         switch (getArmorSlot()) {
             case HELMET:
-                if (getOwner().getCurrentHat() != null) {
-                    getOwner().removeHat();
-                }
-                if (getOwner().getCurrentEmote() != null) {
-                    getOwner().removeEmote();
-                }
-                if (getPlayer().getInventory().getHelmet() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getHelmet();
-                    drop(itemStack);
-                    getPlayer().getInventory().setHelmet(null);
-                }
                 getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getHelmet();
                 break;
             case CHESTPLATE:
-                if (getPlayer().getInventory().getChestplate() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getChestplate();
-                    drop(itemStack);
-                    getPlayer().getInventory().setChestplate(null);
-                }
                 getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getChestplate();
                 break;
             case LEGGINGS:
-                if (getPlayer().getInventory().getLeggings() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getLeggings();
-                    drop(itemStack);
-                    getPlayer().getInventory().setLeggings(null);
-                }
                 getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getLeggings();
                 break;
             case BOOTS:
-                if (getPlayer().getInventory().getBoots() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getBoots();
-                    drop(itemStack);
-                    getPlayer().getInventory().setBoots(null);
-                }
                 getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
                 itemStack = getPlayer().getInventory().getBoots();
                 break;

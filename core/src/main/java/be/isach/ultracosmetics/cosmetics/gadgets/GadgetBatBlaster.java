@@ -113,14 +113,16 @@ public class GadgetBatBlaster extends Gadget {
         playerVelocity = null;
         if (bats != null) {
             synchronized (bats) {
-                for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
-                    Bat bat = iterator.next();
-                    if (bat.isValid()) {
-                        UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+                Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                    for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
+                        Bat bat = iterator.next();
+                        if (bat.isValid()) {
+                            UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+                        }
+                        bat.remove();
+                        iterator.remove();
                     }
-                    bat.remove();
-                    iterator.remove();
-                }
+                });
             }
             bats.clear();
         }

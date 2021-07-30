@@ -88,6 +88,8 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         setEntity(getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType()));
         EntitySpawningManager.setBypass(false);
 
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
+
         if (entity instanceof Ageable) {
             if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) {
                 ((Ageable) entity).setBaby();

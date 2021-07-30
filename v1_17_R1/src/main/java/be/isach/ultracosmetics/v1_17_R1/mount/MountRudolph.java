@@ -79,7 +79,7 @@ public class MountRudolph extends MountHorse<Mule> {
             moveAntlers();
     }
 
-    private void moveAntlers() {
+    private synchronized void moveAntlers() {
         Location location = getEntity().getEyeLocation();
 
         Vector vectorLeft = getLeftVector(location).multiply(0.5).multiply(1.6);
@@ -108,7 +108,7 @@ public class MountRudolph extends MountHorse<Mule> {
     }
 
     @Override
-    public void onClear() {
+    public synchronized void onClear() {
         super.onClear();
 
         if (left != null)
