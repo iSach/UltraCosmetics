@@ -17,21 +17,21 @@ import net.minecraft.world.phys.Vec3;
 public class CustomPathFinderGoalPanic extends Goal {
 
     // speed
-    protected double a;
+    protected double speed;
     // NMS Entity
-    private PathfinderMob b;
+    private PathfinderMob entity;
     // random PosX
-    private double c;
+    private double posX;
 
     // random PosY
-    private double d;
+    private double posY;
 
     // random PosZ
-    private double e;
+    private double posZ;
 
     public CustomPathFinderGoalPanic(PathfinderMob entitycreature, double d0) {
-        this.b = entitycreature;
-        this.a = d0;
+        this.entity = entitycreature;
+        this.speed = d0;
         EnumSet<Flag> set = EnumSet.noneOf(Goal.Flag.class);
         set.add(Goal.Flag.MOVE);
         this.setFlags(set);
@@ -39,26 +39,26 @@ public class CustomPathFinderGoalPanic extends Goal {
 
     @Override
     public boolean canUse() {
-        Vec3 vec3d = LandRandomPos.getPos(this.b, 5, 4);
+        Vec3 vec3d = LandRandomPos.getPos(this.entity, 5, 4);
         if (vec3d == null) return false;
-        this.c = vec3d.x;
-        this.d = vec3d.y;
-        this.e = vec3d.z;
+        this.posX = vec3d.x;
+        this.posY = vec3d.y;
+        this.posZ = vec3d.z;
         return true;
     }
 
     @Override
     public void start() {
-        Vec3 vec3d = LandRandomPos.getPos(this.b, 5, 4);
+        Vec3 vec3d = LandRandomPos.getPos(this.entity, 5, 4);
         if (vec3d == null) return; // IN AIR
-        this.b.getNavigation().moveTo(vec3d.x, vec3d.y, vec3d.z, 3.0d);
+        this.entity.getNavigation().moveTo(vec3d.x, vec3d.y, vec3d.z, 3.0d);
     }
 
     @Override
     public boolean canContinueToUse() {
         // CraftBukkit start - introduce a temporary timeout hack until this is fixed properly
-        if ((this.b.tickCount - this.b.lastHurtByMobTimestamp) > 100) {
-            this.b.setLastHurtByMob((LivingEntity) null);
+        if ((this.entity.tickCount - this.entity.lastHurtByMobTimestamp) > 100) {
+            this.entity.setLastHurtByMob((LivingEntity) null);
             return false;
         }
         // CraftBukkit end
@@ -67,24 +67,24 @@ public class CustomPathFinderGoalPanic extends Goal {
         boolean boo = false;
         try {
             // corresponds to net.minecraft.world.entity.ai.navigation.PathNavigation#isInLiquid()
-            method = this.b.getNavigation().getClass().getSuperclass().getDeclaredMethod("p");
-        } catch (Exception e) {
-            e.printStackTrace();
+            method = this.entity.getNavigation().getClass().getSuperclass().getDeclaredMethod("isInLiquid");
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
         method.setAccessible(true);
 
         try {
-            boo = (Boolean) method.invoke((this.b.getNavigation()));
+            boo = (Boolean) method.invoke((this.entity.getNavigation()));
         } catch (IllegalAccessException ex) {
             ex.printStackTrace();
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }
 
-        Vec3 vec3d = LandRandomPos.getPos(this.b, 5, 4);
+        Vec3 vec3d = LandRandomPos.getPos(this.entity, 5, 4);
         if (vec3d != null) {
-            this.b.getNavigation().moveTo(vec3d.x, vec3d.y, vec3d.z, 3);
+            this.entity.getNavigation().moveTo(vec3d.x, vec3d.y, vec3d.z, 3);
         }
         return !boo;
     }

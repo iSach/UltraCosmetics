@@ -36,7 +36,7 @@ public class Emote extends Cosmetic<EmoteType> {
     }
 
     @Override
-    protected void onClear() {
+    protected synchronized void onClear() {
         animation.stop();
         getPlayer().getInventory().setHelmet(null);
     }

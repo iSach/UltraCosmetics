@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.pathfinder.Path;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
@@ -48,7 +47,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             return;
         }
 
-        // Run in sync... To enhance :S
         Bukkit.getScheduler().runTask(UltraCosmeticsData.get().getPlugin(), () -> {
 
             if (!player.getWorld().equals(petEntity.getBukkitEntity().getWorld())) {
@@ -58,7 +56,8 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
 
             ((Mob) petEntity).getNavigation().setSpeedModifier(2d);
             Location targetLocation = player.getLocation();
-            Path path = ((Mob) petEntity).getNavigation().createPath(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
+            Path path = ((Mob) petEntity).getNavigation().createPath(targetLocation.getX() + 1,
+                    targetLocation.getY(), targetLocation.getZ() + 1, 1);
 
             try {
                 int distance = (int) Bukkit.getPlayer(player.getName()).getLocation().distance(petEntity.getBukkitEntity().getLocation());
@@ -74,12 +73,14 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
                         speed *= 1.3;
                     }
 
-                    ((Mob) petEntity).getNavigation().moveTo(path, speed);
-                    ((Mob) petEntity).getNavigation().setSpeedModifier(speed);
+                    ((Mob) petEntity).getNavigation().moveTo(targetLocation.getX() + 1,
+                            targetLocation.getY(), targetLocation.getZ() + 1, 3);
+                 //   ((Mob) petEntity).getNavigation().moveTo(path, speed);
+                   // ((Mob) petEntity).getNavigation().setSpeedModifier(speed);
                 }
             } catch (IllegalArgumentException exception) {
                 petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                //exception.printStackTrace();
+                exception.printStackTrace();
             }
         });
     }
