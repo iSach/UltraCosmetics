@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.5.11-RELEASE'
+    version = '2.5.10-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -56,18 +56,16 @@ abstract class VersionedJarTask extends Jar {
     }
 }
 
-// redundant because of default jar task?
-tasks.register("fullJar", Jar) {
-    archiveBaseName = 'UltraCosmetics'
-    dependsOn(subprojects.collect { ":$it.name:compileJava" })
-    from files(subprojects.collect { it.sourceSets.main.output })
-}
-
 final MIN_MC_VERSION = 8
 final MAX_MC_VERSION = 17
 
 for (int i = MIN_MC_VERSION; i <= MAX_MC_VERSION; i++) {
     tasks.register("jar1" + i.toString(), VersionedJarTask, i)
+}
+
+subprojects.each {
+    if (!it.hasProperty("remapMcVersion")) return
+    tasks.register("obf" + it.name, VersionedObfTask, it)
 }
 
 dependencies {
@@ -78,15 +76,10 @@ dependencies {
     }
 }
 
-subprojects {
+subprojects { subproj ->
     repositories {
         mavenLocal()
         mavenCentral()
-
-        maven {
-            url 'https://repo.isach.be'
-        }
-
         // Vault
         maven {
             url 'https://nexus.hc.to/content/repositories/pub_releases'
@@ -98,6 +91,10 @@ subprojects {
 
         maven {
             url 'https://repo.aikar.co/nexus/content/groups/aikar'
+        }
+
+        maven {
+            url 'https://repo.isach.be'
         }
 
         // BungeeCord
@@ -112,7 +109,7 @@ subprojects {
 
         // PlayerPoints
         maven {
-            url 'https://repo.rosewooddev.io/repository/public/'
+            url 'https://repo.dakanilabs.com/repository/public/'
         }
         
         // Spigot for 1.16.4
@@ -123,32 +120,52 @@ subprojects {
             url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
         }
     }
+    def version = 8
+    if (subproj.hasProperty("javaVersion")) {
+        version = subproj.property("javaVersion")
+    }
+    subproj.tasks.withType(JavaCompile).configureEach {
+        javaCompiler = javaToolchains.compilerFor {
+            languageVersion = JavaLanguageVersion.of(version)
+        }
+    }
 }
 
-// TODO: make this into a more reusable task, potentially as an extension to VersionedJarTask
+abstract class VersionedObfTask extends DefaultTask {
+    private Project subproj;
+    @Inject
+    public VersionedObfTask(Project subproj) {
+        this.subproj = subproj
+        dependsOn 'jar'
+        description 'Generates an obfuscated version of the jar for use with Spigot.'
+        group = 'jar preparation'
+        ext.toolingDir = System.getProperty("user.dir")
+        ext.homeDir = project.gradle.gradleUserHomeDir.parent
+    }
+    @TaskAction
+    def go() {
+        def nms = subproj.name
+        def mcVer = subproj.getProperty("remapMcVersion")
+        project.exec {
+            workingDir project.buildDir
+            commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-mojang.jar",
+                'net.md_5.specialsource.SpecialSource', '--live', '--only', "be/isach/ultracosmetics/$nms", '-q',
+                '-i', 'libs/' + project.name + '-' + project.version + '.jar',
+                '-o', 'libs/' + project.name + '-' + project.version + '-obf.jar',
+                '-m', ext.homeDir + "/.m2/repository/org/spigotmc/minecraft-server/$mcVer-R0.1-SNAPSHOT/minecraft-server-$mcVer-R0.1-SNAPSHOT-maps-mojang.txt",
+                '--reverse'
+        }
+        project.exec {
+            workingDir project.buildDir
+            commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-obf.jar",
+                'net.md_5.specialsource.SpecialSource', '--live', '--only', "be/isach/ultracosmetics/$nms", '-q',
+                '-i', 'libs/' + project.name + '-' + project.version + '-obf.jar',
+                '-o', 'libs/' + project.name + '-' + project.version + '.jar',
+                '-m', ext.homeDir + "/.m2/repository/org/spigotmc/minecraft-server/$mcVer-R0.1-SNAPSHOT/minecraft-server-$mcVer-R0.1-SNAPSHOT-maps-spigot.csrg"
+        }
+    }
+}
 tasks.register("obfuscate") {
-    dependsOn jar
-    description 'Generates an obfuscated version of the jar for use with Spigot.'
+    dependsOn tasks.withType(VersionedObfTask)
     group = 'jar preparation'
-    ext.toolingDir = System.getProperty("user.dir")
-    ext.homeDir = project.gradle.gradleUserHomeDir.parent
-	doLast {
-		exec {
-			workingDir "${buildDir}"
-			commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar:' + ext.homeDir + '/.m2/repository/org/spigotmc/spigot/1.17.1-R0.1-SNAPSHOT/spigot-1.17.1-R0.1-SNAPSHOT-remapped-mojang.jar',
-                'net.md_5.specialsource.SpecialSource', '--live', '--only', 'be/isach/ultracosmetics/v1_17_R1', '-q',
-                '-i', 'libs/' + rootProject.name + '-' + rootProject.version + '.jar',
-				'-o', 'libs/' + rootProject.name + '-' + rootProject.version + '-obf.jar',
-                '-m', ext.homeDir + '/.m2/repository/org/spigotmc/minecraft-server/1.17.1-R0.1-SNAPSHOT/minecraft-server-1.17.1-R0.1-SNAPSHOT-maps-mojang.txt',
-				'--reverse'
-		}
-		exec {
-			workingDir "${buildDir}"
-			commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar:' + ext.homeDir + '/.m2/repository/org/spigotmc/spigot/1.17.1-R0.1-SNAPSHOT/spigot-1.17.1-R0.1-SNAPSHOT-remapped-obf.jar',
-                'net.md_5.specialsource.SpecialSource', '--live', '--only', 'be/isach/ultracosmetics/v1_17_R1', '-q',
-				'-i', 'libs/' + rootProject.name + '-' + rootProject.version + '-obf.jar',
-                '-o', 'libs/' + rootProject.name + '-' + rootProject.version + '-remapped.jar',
-                '-m', ext.homeDir + '/.m2/repository/org/spigotmc/minecraft-server/1.17.1-R0.1-SNAPSHOT/minecraft-server-1.17.1-R0.1-SNAPSHOT-maps-spigot.csrg'
-		}
-	}
 }

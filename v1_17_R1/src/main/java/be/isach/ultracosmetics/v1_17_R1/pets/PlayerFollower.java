@@ -5,7 +5,12 @@ import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
@@ -19,6 +24,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
 
     private final Pet pet;
     private final Player player;
+    private static Method pathMethod = null;
 
     public PlayerFollower(Pet pet, Player player) {
         this.pet = pet;
@@ -47,6 +53,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             return;
         }
 
+        // Run in sync... To enhance :S
         Bukkit.getScheduler().runTask(UltraCosmeticsData.get().getPlugin(), () -> {
 
             if (!player.getWorld().equals(petEntity.getBukkitEntity().getWorld())) {
@@ -56,8 +63,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
 
             ((Mob) petEntity).getNavigation().setSpeedModifier(2d);
             Location targetLocation = player.getLocation();
-            Path path = ((Mob) petEntity).getNavigation().createPath(targetLocation.getX() + 1,
-                    targetLocation.getY(), targetLocation.getZ() + 1, 1);
+            Path path = path((Mob)petEntity, targetLocation);
 
             try {
                 int distance = (int) Bukkit.getPlayer(player.getName()).getLocation().distance(petEntity.getBukkitEntity().getLocation());
@@ -73,14 +79,12 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
                         speed *= 1.3;
                     }
 
-                    ((Mob) petEntity).getNavigation().moveTo(targetLocation.getX() + 1,
-                            targetLocation.getY(), targetLocation.getZ() + 1, 3);
-                 //   ((Mob) petEntity).getNavigation().moveTo(path, speed);
-                   // ((Mob) petEntity).getNavigation().setSpeedModifier(speed);
+                    ((Mob) petEntity).getNavigation().moveTo(path, speed);
+                    ((Mob) petEntity).getNavigation().setSpeedModifier(speed);
                 }
             } catch (IllegalArgumentException exception) {
                 petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                exception.printStackTrace();
+                //exception.printStackTrace();
             }
         });
     }
@@ -93,5 +97,34 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
     @Override
     public Runnable getTask() {
         return this;
+    }
+    
+    private Path path(Mob mob, Location loc) {
+    	double x = loc.getX() + 1;
+    	double y = loc.getY();
+    	double z = loc.getZ() + 1;
+    	if (pathMethod == null) {
+    		try {
+    			// yes, this seems pretty weird when you're looking at the non-obfuscated version of this class
+    			// this whole method is for compatibility with Paper, because they don't reobfuscate some methods correctly
+    			// you should remove the reflection when this issue is closed:
+    			// https://github.com/PaperMC/paperweight/issues/24
+    			return mob.getNavigation().createPath(x, y, z, 1);
+    		} catch (NoSuchMethodError e) {
+    			try {
+					pathMethod = PathNavigation.class.getDeclaredMethod("createPath", double.class, double.class, double.class, int.class);
+				} catch (NoSuchMethodException | SecurityException e1) {
+					// idk man
+					e1.printStackTrace();
+					return null;
+				}
+    		}
+    	}
+    	try {
+			return (Path) pathMethod.invoke(mob.getNavigation(), x, y, z, 1);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 }

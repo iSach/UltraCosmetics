@@ -75,7 +75,34 @@ public class EntityUtil implements IEntityUtil {
     private final Random r = new Random();
     private Map<Player, List<ArmorStand>> fakeArmorStandsMap = new HashMap<>();
     private Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
-
+    
+    private static Field memoriesField;
+	private static Field sensorsField;
+	private static Field cField;
+	private static Field fField;
+	static {
+		try {
+			// corresponds to net.minecraft.world.entity.ai.Brain#memories
+			memoriesField = Brain.class.getDeclaredField("d");
+			memoriesField.setAccessible(true);
+			
+			// corresponds to net.minecraft.world.entity.ai.Brain#sensors
+            sensorsField = Brain.class.getDeclaredField("e");
+            sensorsField.setAccessible(true);
+            
+            // corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#lockedFlags
+            cField = GoalSelector.class.getDeclaredField("c");
+            cField.setAccessible(true);
+            
+            // corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#disabledFlags
+            fField = GoalSelector.class.getDeclaredField("f");
+            fField.setAccessible(true);
+		} catch (NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
     @Override
     public void setPassenger(org.bukkit.entity.Entity vehicle, org.bukkit.entity.Entity passenger) {
         vehicle.setPassenger(passenger);
@@ -156,6 +183,7 @@ public class EntityUtil implements IEntityUtil {
         cooldownJumpMap.remove(player);
     }
 
+    // TODO: either remove this method from here or remove PathfinderUtil completely so we don't have duplicate code
     @Override
     public void clearPathfinders(org.bukkit.entity.Entity entity) {
     	Mob nmsEntity = (Mob) ((CraftEntity) entity).getHandle();
@@ -165,20 +193,13 @@ public class EntityUtil implements IEntityUtil {
         Brain<?> brain = ((LivingEntity)nmsEntity).getBrain();
 
         try {
-        	// corresponds to net.minecraft.world.entity.ai.Brain#memories
-            Field memoriesField = Brain.class.getDeclaredField("d");
-            memoriesField.setAccessible(true);
             memoriesField.set(brain, new HashMap<>());
-
-        	// corresponds to net.minecraft.world.entity.ai.Brain#sensors
-            Field sensorsField = Brain.class.getDeclaredField("e");
-            sensorsField.setAccessible(true);
             sensorsField.set(brain, new LinkedHashMap<>());
 
             // this method is annotated with VisibleForTesting but it seems like the easiest thing to do at the moment
             // this clears net.minecraft.world.entity.ai.Brain#availableBehaviorsByPriority
             brain.removeAllBehaviors();
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
@@ -188,24 +209,15 @@ public class EntityUtil implements IEntityUtil {
             goalSelector.removeAllGoals();
             targetSelector.removeAllGoals();
 
-            Field cField;
-            // corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#lockedFlags
-            cField = GoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
             // I'm  not sure what this line is supposed to do? it's just repeated
             //dField.set(goalSelector, new LinkedHashSet<>());
             cField.set(targetSelector, new EnumMap<Goal.Flag,WrappedGoal>(Goal.Flag.class));
 
-            Field fField;
-            // corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#disabledFlags
-            fField = GoalSelector.class.getDeclaredField("f");
-            fField.setAccessible(true);
             //dField.set(goalSelector, new LinkedHashSet<>());
             fField.set(targetSelector, EnumSet.noneOf(Goal.Flag.class));
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
