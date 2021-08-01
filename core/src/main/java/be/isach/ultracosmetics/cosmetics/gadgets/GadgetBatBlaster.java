@@ -41,7 +41,7 @@ public class GadgetBatBlaster extends Gadget {
             this.bats.add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
         }
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), this::clean, 60);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 60);
     }
 
     public boolean hitPlayer(Location location, Player player) {
@@ -62,6 +62,10 @@ public class GadgetBatBlaster extends Gadget {
 
     @Override
     public void onUpdate() {
+        if (bats != null && bats.isEmpty()) {
+            return;
+        }
+
         try {
             if (active && bats != null && !bats.isEmpty()) {
                 bats.stream().filter(Entity::isValid).forEach(bat -> {
@@ -112,17 +116,13 @@ public class GadgetBatBlaster extends Gadget {
         active = false;
         playerVelocity = null;
         if (bats != null) {
-            synchronized (bats) {
-                Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                    for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
-                        Bat bat = iterator.next();
-                        if (bat.isValid()) {
-                            UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
-                        }
-                        bat.remove();
-                        iterator.remove();
-                    }
-                });
+            for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
+                Bat bat = iterator.next();
+                if (bat.isValid()) {
+                    UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+                }
+                bat.remove();
+                iterator.remove();
             }
             bats.clear();
         }

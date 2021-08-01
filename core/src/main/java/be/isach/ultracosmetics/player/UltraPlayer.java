@@ -474,7 +474,6 @@ public class UltraPlayer {
      * @param name    The new name.
      */
     public void setPetName(PetType petType, String name) {
-        name = ChatColor.translateAlternateColorCodes('&', name.replaceAll("[^A-Za-z0-9 &&[^&]]", "").replace(" ", ""));
         if (currentPet != null) {
             if (currentPet.armorStand != null) {
                 currentPet.armorStand.setCustomName(name);

@@ -73,7 +73,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             ((Horse) entity).setDomestication(1);
             ((Horse) entity).getInventory().setSaddle(new ItemStack(Material.SADDLE));
         }
-        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
+        runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
         getOwner().setCurrentMount(this);
     }

@@ -186,7 +186,6 @@ public class CosmeticsProfile {
         settingsManager.set("enabled.hat", enabledHat != null ? enabledHat.getConfigName() : "none");
         settingsManager.set("enabled.morph", enabledMorph != null ? enabledMorph.getConfigName() : "none");
         settingsManager.set("enabled.mount", enabledMount != null ? enabledMount.getConfigName() : "none");
-        Bukkit.broadcastMessage("");
         settingsManager.set("enabled.pet", enabledPet != null ? enabledPet.getConfigName() : "none");
         for (ArmorSlot slot : ArmorSlot.values()) {
             SuitType enabledSuitPart = enabledSuitParts.get(slot);

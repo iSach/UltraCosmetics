@@ -249,10 +249,8 @@ public class EntityUtil implements IEntityUtil {
         EntityPlayer ent = ((CraftPlayer) entity).getHandle();
         long time = System.currentTimeMillis() - ent.D();
         if (time > 0.001) {
-            Bukkit.broadcastMessage("MOVING");
             return true;
         }
-        Bukkit.broadcastMessage("NOT MOVING");
         return false;
     }
 

@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.5.10-RELEASE'
+    version = '2.5.11-RELEASE'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -80,6 +80,11 @@ subprojects { subproj ->
     repositories {
         mavenLocal()
         mavenCentral()
+
+        maven {
+            url 'https://repo.isach.be'
+        }
+
         // Vault
         maven {
             url 'https://nexus.hc.to/content/repositories/pub_releases'
@@ -91,10 +96,6 @@ subprojects { subproj ->
 
         maven {
             url 'https://repo.aikar.co/nexus/content/groups/aikar'
-        }
-
-        maven {
-            url 'https://repo.isach.be'
         }
 
         // BungeeCord

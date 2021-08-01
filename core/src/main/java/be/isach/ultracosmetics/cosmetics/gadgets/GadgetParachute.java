@@ -51,7 +51,7 @@ public class GadgetParachute extends Gadget {
             chickens.add(chicken);
             chicken.setLeashHolder(getPlayer());
         }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> active = true, 5);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> active = true, 5);
     }
 
     @Override

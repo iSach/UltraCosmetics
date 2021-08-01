@@ -199,7 +199,7 @@ public abstract class AAnvilGUI implements IAnvilGUI {
          * Creates a response to the user's input
          * @param text The text that is to be displayed to the user, which can be null to close the inventory
          */
-        private Response(String text) {
+        public Response(String text) {
             this.text = text;
         }
 

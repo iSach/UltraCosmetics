@@ -16,6 +16,7 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UCMaterial;
 import be.isach.ultracosmetics.version.AAnvilGUI;
 import be.isach.ultracosmetics.version.VersionManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -83,14 +84,21 @@ public class MenuPets extends CosmeticMenu<PetType> {
     public void renamePet(final UltraPlayer ultraPlayer) {
         Player p = ultraPlayer.getBukkitPlayer();
         if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
-            UltraCosmeticsData.get().getVersionManager().newAnvilGUI(p, "", (player1 -> {}), (player2, text) -> {
-                if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") && ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
-                    buyRenamePet(ultraPlayer, text);
-                } else {
-                    ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), text);
-                }
-                return AAnvilGUI.Response.close();
-            });
+            UltraCosmeticsData.get().getVersionManager().newAnvilGUI(p,
+                    "",
+                    (player1 -> {
+                    }),
+                    (player2, text) -> {
+                        if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") &&
+                                ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
+                            buyRenamePet(ultraPlayer, text.replaceAll("[^A-Za-z0-9 &éèêë]", "")
+                                    .replace("&", "§"));
+                            return new AAnvilGUI.Response("BUY");
+                        } else {
+                            ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), text);
+                            return AAnvilGUI.Response.close();
+                        }
+                    });
         } else {
             AAnvilGUI gui = newAnvilGUI(p, (AAnvilGUI.AnvilClickEvent event) -> {
                 if (event.getSlot() == AAnvilGUI.AnvilSlot.OUTPUT) {
@@ -100,7 +108,9 @@ public class MenuPets extends CosmeticMenu<PetType> {
                     if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") && ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
                         event.setWillClose(false);
                         event.setWillDestroy(false);
-                        buyRenamePet(ultraPlayer, event.getName());
+                        buyRenamePet(ultraPlayer, event.getName()
+                                .replaceAll("[^A-Za-z0-9 &éèêë]", "")
+                                .replace("&", "§"));
                     } else {
                         ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), event.getName());
                     }
@@ -126,7 +136,9 @@ public class MenuPets extends CosmeticMenu<PetType> {
         PurchaseData purchaseData = new PurchaseData();
         purchaseData.setPrice(SettingsManager.getConfig().getInt("Pets-Rename.Requires-Money.Price"));
         purchaseData.setShowcaseItem(showcaseItem);
-        purchaseData.setOnPurchase(() -> ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), name));
+        purchaseData.setOnPurchase(() -> {
+            ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), name);
+        });
 
         MenuPurchase menu = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menus.Rename-Pet"), purchaseData);
         menu.open(ultraPlayer);
