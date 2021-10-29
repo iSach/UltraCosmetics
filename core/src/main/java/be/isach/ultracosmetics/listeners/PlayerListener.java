@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
+import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
@@ -14,7 +15,6 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -122,9 +123,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event) {
-        if (event.getItemDrop().getItemStack().hasItemMeta()
-                && event.getItemDrop().getItemStack().getItemMeta().hasDisplayName()
-                && event.getItemDrop().getItemStack().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+        if (isMenuItem(event.getItemDrop().getItemStack())) {
             event.setCancelled(true);
             event.getItemDrop().remove();
             ItemStack chest = event.getPlayer().getItemInHand().clone();
@@ -147,10 +146,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (event.getItem() != null
-                && event.getItem().hasItemMeta()
-                && event.getItem().getItemMeta().hasDisplayName()
-                && event.getItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+        if (isMenuItem(event.getItem())) {
             event.setCancelled(true);
             ultraCosmetics.getMenus().getMainMenu().open(ultraPlayer);
         }
@@ -164,22 +160,12 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
-
-            if ((event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
-                    && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
-                event.setCancelled(true);
-                player.updateInventory();
-                return;
-            }
-
-            if (event.getCurrentItem() != null
-                    && event.getCurrentItem().hasItemMeta()
-                    && event.getCurrentItem().getItemMeta().hasDisplayName()
-                    && event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
-                event.setCancelled(true);
-                player.updateInventory();
-            }
+        if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(player.getWorld().getName())) return;
+        if (event.getView().getTopInventory().getHolder() instanceof CosmeticsInventoryHolder
+                || isMenuItem(event.getCurrentItem())
+                || (event.getClick() == ClickType.NUMBER_KEY && isMenuItem(player.getInventory().getItem(event.getHotbarButton())))) {
+            event.setCancelled(true);
+            player.updateInventory();
         }
     }
 
@@ -192,10 +178,7 @@ public class PlayerListener implements Listener {
     public void cancelMove(InventoryCreativeEvent event) {
         Player player = (Player) event.getWhoClicked();
         if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
-            if (event.getCurrentItem() != null
-                    && event.getCurrentItem().hasItemMeta()
-                    && event.getCurrentItem().getItemMeta().hasDisplayName()
-                    && event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+            if (isMenuItem(event.getCurrentItem())) {
                 event.setCancelled(true);
                 player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
             }
@@ -210,10 +193,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryDragEvent event) {
         for (ItemStack item : event.getNewItems().values()) {
-            if (item != null
-                    && item.hasItemMeta()
-                    && item.getItemMeta().hasDisplayName()
-                    && item.getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+            if (isMenuItem(item)) {
                 event.setCancelled(true);
                 ((Player) event.getWhoClicked()).updateInventory();
                 return;
@@ -254,10 +234,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDeath(PlayerDeathEvent event) {
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-        if (event.getEntity().getInventory().getItem(slot) != null
-                && event.getEntity().getInventory().getItem(slot).hasItemMeta()
-                && event.getEntity().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                && event.getEntity().getInventory().getItem(slot).getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+        if (isMenuItem(event.getEntity().getInventory().getItem(slot))) {
             event.getDrops().remove(event.getEntity().getInventory().getItem(slot));
             event.getEntity().getInventory().setItem(slot, null);
         }
@@ -293,10 +270,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerPickUpItem(PlayerPickupItemEvent event) {
-        if (event.getItem().getItemStack() != null
-                && event.getItem().getItemStack().hasItemMeta()
-                && event.getItem().getItemStack().getItemMeta().hasDisplayName()
-                && event.getItem().getItemStack().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+        if (isMenuItem(event.getItem().getItemStack())) {
             event.setCancelled(true);
             event.getItem().remove();
         }
@@ -321,5 +295,12 @@ public class PlayerListener implements Listener {
                 event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Holding-Message"));
             }
         }
+    }
+
+    private boolean isMenuItem(ItemStack item) {
+        return item != null
+                && item.hasItemMeta()
+                && item.getItemMeta().hasDisplayName()
+                && item.getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))));
     }
 }

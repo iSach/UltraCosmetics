@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
@@ -268,7 +269,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
      * Opens Ammo Purchase Menu.
      */
     public void openAmmoPurchaseMenu() {
-        Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Buy-Ammo"));
+        Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), 54, MessageManager.getMessage("Menus.Buy-Ammo"));
 
         inventory.setItem(13, ItemFactory.create(getType().getMaterial(),
                 MessageManager.getMessage("Buy-Ammo-Description").replace("%amount%", "" + getResultAmmoAmount())

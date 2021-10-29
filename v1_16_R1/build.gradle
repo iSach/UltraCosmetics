@@ -1,4 +1,4 @@
 dependencies {
-    compileOnly 'org.spigotmc:spigot116:1.16'
+    compileOnly 'org.spigotmc:spigot:1.16.1-R0.1-SNAPSHOT'
     compile project(':core')
 }
