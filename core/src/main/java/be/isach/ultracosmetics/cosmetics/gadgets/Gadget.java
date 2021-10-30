@@ -466,7 +466,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         Player player = (Player) event.getWhoClicked();
         if (player != getPlayer()) return;
         if ((event.getCurrentItem() != null && event.getCurrentItem().equals(getItemStack()))
-                || (event.getClick() == ClickType.NUMBER_KEY && player.getInventory().getItem(event.getHotbarButton()).equals(getItemStack()))) {
+                || (event.getClick() == ClickType.NUMBER_KEY && getItemStack().equals(player.getInventory().getItem(event.getHotbarButton())))) {
         	event.setCancelled(true);
             player.updateInventory();
         }
