@@ -105,7 +105,7 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        this.smartLogger = new SmartLogger();
+        this.smartLogger = new SmartLogger(getLogger());
 
         UltraCosmeticsData.init(this);
 

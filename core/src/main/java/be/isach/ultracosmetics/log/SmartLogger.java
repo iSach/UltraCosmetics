@@ -1,8 +1,7 @@
 package be.isach.ultracosmetics.log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a smart logger.
@@ -13,27 +12,27 @@ import java.util.Date;
 public class SmartLogger {
 
     public enum LogLevel {
-        INFO,
-        WARNING,
-        ERROR
+        INFO(Level.INFO),
+        WARNING(Level.WARNING),
+        ERROR(Level.SEVERE);
+    	private Level level;
+    	private LogLevel(Level level) {
+    		this.level = level;
+    	}
     }
-
-    private static final DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
-    public String format(String logRecord, LogLevel logLevel) {
-        StringBuilder builder = new StringBuilder(1000);
-        builder.append(df.format(new Date(System.currentTimeMillis()))).append(" - UltraCosmetics ");
-        builder.append("[").append(logLevel).append("]: ");
-        builder.append(logRecord);
-        return builder.toString();
+    private Logger logger;
+    public SmartLogger(Logger logger) {
+    	this.logger = logger;
     }
 
     public void write(LogLevel logLevel, Object... objects) {
+    	Level level = logLevel.level;
         if (objects.length == 0) {
-            System.out.println(format("", logLevel));
+            logger.log(level, "");
+            return;
         }
         for (Object object : objects) {
-            System.out.println(format(object.toString(), logLevel));
+            logger.log(level, object.toString());
         }
     }
 
