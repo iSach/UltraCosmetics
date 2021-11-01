@@ -371,10 +371,10 @@ public class UltraPlayer {
                 || currentEmote != null
                 || currentMorph != null;
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")
-        		// Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
-        		// If player is "quitting", remove the disguise anyway. Player is marked as quitting
-        		// when changing worlds, making sure morphs get correctly unset.
-        		&& (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName())) || isQuitting()) {
+                // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
+                // If player is "quitting", remove the disguise anyway. Player is marked as quitting
+                // when changing worlds, making sure morphs get correctly unset.
+                && (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName()) || isQuitting())) {
             removeMorph();
             try {
                 DisguiseAPI.undisguiseToAll(getBukkitPlayer());
