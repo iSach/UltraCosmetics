@@ -120,13 +120,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     @Override
     protected void onClear() {
         if (entity != null) {
-        	// can't remove entities async
-        	new BukkitRunnable() {
-        		@Override
-        		public void run() {
-        			entity.remove();
-        		}
-        	}.runTask(getUltraCosmetics());
+			entity.remove();
         }
 
         if (getOwner() != null)
