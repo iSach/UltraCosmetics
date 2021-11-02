@@ -255,7 +255,7 @@ public class BlockUtils {
             case 0x7:
                 return getBlockByColor(oldMaterialName, DyeColor.GRAY);
             case 0x8:
-                return getBlockByColor(oldMaterialName, DyeColor.LIGHT_GRAY);
+                return getBlockByColor(oldMaterialName, VersionManager.IS_VERSION_1_13 ? DyeColor.LIGHT_GRAY : DyeColor.valueOf("SILVER"));
             case 0x9:
                 return getBlockByColor(oldMaterialName, DyeColor.CYAN);
             case 0xA:
