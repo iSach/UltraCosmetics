@@ -22,7 +22,7 @@ public class ParticleEffectMusic extends ParticleEffect {
 
     @Override
     public void onUpdate() {
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < getModifiedAmount(12); i++) {
             Random random = new Random();
             int j = random.nextInt(25);
             Particles.ParticleColor particleColor = new Particles.NoteColor(j);

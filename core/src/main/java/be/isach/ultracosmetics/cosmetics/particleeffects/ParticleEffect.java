@@ -58,7 +58,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                         boolean c = getType() == ParticleEffectType.valueOf("angelwings");
                         if (getType().getEffect() == Particles.REDSTONE) {
                             if (!ignoreMove) {
-                                for (int i = 0; i < 15; i++) {
+                                for (int i = 0; i < getModifiedAmount(15); i++) {
                                     if (!c) {
                                         getType().getEffect().display(new Particles.OrdinaryColor(255, 0, 0), getPlayer().getLocation().add(MathUtils.randomDouble(-0.8, 0.8), 1 + MathUtils.randomDouble(-0.8, 0.8), MathUtils.randomDouble(-0.8, 0.8)), 128);
                                     } else {
@@ -68,23 +68,22 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                             }
                         } else if (getType().getEffect() == Particles.ITEM_CRACK) {
                             if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
-                                for (int i = 0; i < 15; i++) {
+                                for (int i = 0; i < getModifiedAmount(15); i++) {
                                     getPlayer().getLocation().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getLocation(), 1, 0.2, 0.2, 0.2, 0, UCMaterial.DYES.get(MathUtils.random(0, 14)).parseItem());
                                 }
                             } else {
-                                for (int i = 0; i < 15; i++) {
+                                for (int i = 0; i < getModifiedAmount(15); i++) {
                                     Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getDyeByColor(ParticleEffectCrushedCandyCane.getRandomColor()), ParticleEffectCrushedCandyCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
                                 }
                             }
                         } else
-                            UtilParticles.display(getType().getEffect(), .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), 3);
+                            UtilParticles.display(getType().getEffect(), .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), getModifiedAmount(3));
                     }
                 } else
                     onUpdate();
             } else
                 cancel();
-        } catch (
-                NullPointerException exc) {
+        } catch (NullPointerException exc) {
             exc.printStackTrace();
             clear();
             cancel();
@@ -98,5 +97,10 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 
     @Override
     protected void onClear() {
+    }
+    
+    protected int getModifiedAmount(int originalAmount) {
+        // always return at least 1 so the particles work
+        return Integer.max((int) (originalAmount * getType().getParticleMultiplier()), 1);
     }
 }

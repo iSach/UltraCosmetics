@@ -37,7 +37,7 @@ public class ParticleEffectSuperHero extends ParticleEffect {
     @Override
     public void onUpdate() {
         drawParticles(getPlayer().getLocation());
-        UtilParticles.display(Particles.CLOUD, 0.15F, 0.1f, 0.15f, getPlayer().getLocation(), 4);
+        UtilParticles.display(Particles.CLOUD, 0.15F, 0.1f, 0.15f, getPlayer().getLocation(), getModifiedAmount(4));
     }
 
 
@@ -70,7 +70,7 @@ public class ParticleEffectSuperHero extends ParticleEffect {
                         loc.setY(defY);
                     }
 
-                    for (int k = 0; k < 3; k++)
+                    for (int k = 0; k < getModifiedAmount(3); k++)
                         UtilParticles.display(255, 0, 0, loc);
                     loc.subtract(v2);
                     loc.subtract(v);

@@ -44,7 +44,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                 step = 0;
                 radius = 1.5f;
                 SoundUtil.playSound(getPlayer(), Sounds.DIG_SNOW, .5f, 1.5f);
-                UtilParticles.display(getType().getEffect(), location.clone().add(0, 3, 0), 48, 0.3f);
+                UtilParticles.display(getType().getEffect(), location.clone().add(0, 3, 0), getModifiedAmount(48), 0.3f);
             }
         }
     }
