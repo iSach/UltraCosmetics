@@ -142,6 +142,7 @@ public class TreasureChest implements Listener {
                                             BlockState blockState = b.getState();
                                             Directional data = (Directional) blockState.getData();
                                             data.setFacingDirection(blockFace);
+                                            blockState.setData((MaterialData)data);
                                             blockState.update(true, true);
 
                                             chests.add(b);
