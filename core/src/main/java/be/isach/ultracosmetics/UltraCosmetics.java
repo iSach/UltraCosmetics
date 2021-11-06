@@ -245,8 +245,6 @@ public class UltraCosmetics extends JavaPlugin {
             }
 
             UltraCosmeticsData.get().getVersionManager().getModule().disable();
-
-            BlockUtils.forceRestore();
         } catch (Exception exc) {
             // Can't do much if this happens.
         }
