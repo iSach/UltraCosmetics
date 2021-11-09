@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 /**
@@ -35,17 +37,21 @@ public class TexturedSkullFactory {
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         byte[] encodedData = UltraCosmeticsData.get().getVersionManager().getEntityUtil().getEncodedData(url);
         profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
-        Field profileField = null;
+        Method setProfileMethod = null;
         try {
-            profileField = skullMeta.getClass().getDeclaredField("profile");
-        } catch (NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
-        }
-        assert profileField != null;
-        profileField.setAccessible(true);
+            setProfileMethod = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+        } catch (NoSuchMethodException | SecurityException ignored) {}
+        // see ItemFactory#createSkull(String, String)
         try {
-            profileField.set(skullMeta, profile);
-        } catch (IllegalArgumentException | IllegalAccessException e) {
+            if (setProfileMethod == null) {
+                Field profileField = skullMeta.getClass().getDeclaredField("profile");
+                profileField.setAccessible(true);
+                profileField.set(skullMeta, profile);
+            } else {
+                setProfileMethod.setAccessible(true);
+                setProfileMethod.invoke(skullMeta, profile);
+            }
+        } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         skull.setItemMeta(skullMeta);

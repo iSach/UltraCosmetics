@@ -56,7 +56,7 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
             page = 1;
         }
 
-        Inventory inventory = Bukkit.createInventory(null, getSize(), getMaxPages() == 1 ? getName() : getName(page));
+        Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), getSize(), getMaxPages() == 1 ? getName() : getName(page));
 
         // Cosmetic items.
         int i = 0;

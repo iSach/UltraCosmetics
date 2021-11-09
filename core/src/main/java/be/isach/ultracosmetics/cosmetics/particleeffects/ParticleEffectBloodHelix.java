@@ -25,32 +25,21 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
     @Override
     public void onUpdate() {
         Location location = getPlayer().getLocation();
-        Location location2 = location.clone();
         double radius = 1.1d;
-        double radius2 = 1.1d;
-        double particles = 100;
-
-        for (int step = 0; step < 100; step += 4) {
-            double interval = (2 * Math.PI) / particles;
+        int steps = getModifiedAmount(100);
+        double interval = (2 * Math.PI) / steps;
+        for (int step = 0; step < steps; step += 4) {
             double angle = step * interval + i;
-            Vector v = new Vector();
-            v.setX(Math.cos(angle) * radius);
-            v.setZ(Math.sin(angle) * radius);
-            UtilParticles.display(Particles.REDSTONE, location.add(v));
-            location.subtract(v);
+            Vector v1 = new Vector();
+            Vector v2 = new Vector();
+            v1.setX(Math.cos(angle) * radius);
+            v1.setZ(Math.sin(angle) * radius);
+            v2.setX(Math.cos(angle + 3.5) * radius);
+            v2.setZ(Math.sin(angle + 3.5) * radius);
+            UtilParticles.display(Particles.REDSTONE, location.clone().add(v1));
+            UtilParticles.display(Particles.REDSTONE, location.clone().add(v2));
             location.add(0, 0.12d, 0);
-            radius -= 0.044f;
-        }
-        for (int step = 0; step < 100; step += 4) {
-            double interval = (2 * Math.PI) / particles;
-            double angle = step * interval + i + 3.5;
-            Vector v = new Vector();
-            v.setX(Math.cos(angle) * radius2);
-            v.setZ(Math.sin(angle) * radius2);
-            UtilParticles.display(Particles.REDSTONE, location2.add(v));
-            location2.subtract(v);
-            location2.add(0, 0.12d, 0);
-            radius2 -= 0.044f;
+            radius -= 4.4f / steps;
         }
         i += 0.05;
     }

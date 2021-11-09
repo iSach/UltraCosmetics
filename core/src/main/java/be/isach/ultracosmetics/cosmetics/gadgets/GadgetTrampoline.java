@@ -13,16 +13,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an instance of a trampoline gadget summoned by a player.
@@ -31,7 +31,7 @@ import java.util.Map;
  * @since 12-19-2015
  */
 public class GadgetTrampoline extends Gadget {
-    private Map<Block, MaterialData> trampoline = new HashMap<>();
+    private Set<Block> trampoline = new HashSet<>();
     private Cuboid cuboid;
     private Location center;
     private boolean running;
@@ -162,11 +162,11 @@ public class GadgetTrampoline extends Gadget {
 
     @SuppressWarnings("deprecation")
     private void setToRestore(Block block, Material material, byte data) {
-        MaterialData materialData = new MaterialData(material, data);
-        trampoline.put(block, materialData);
+        trampoline.add(block);
         block.setType(material);
-        block.getState().setRawData(data);
-        block.getState().update();
+        BlockState state = block.getState();
+        state.setRawData(data);
+        state.update();
     }
 
     @EventHandler
@@ -193,7 +193,7 @@ public class GadgetTrampoline extends Gadget {
             get(-3, 1, 0).setType(Material.AIR);
         }
         if (trampoline != null) {
-            for (Block block : trampoline.keySet())
+            for (Block block : trampoline)
                 block.setType(Material.AIR);
             trampoline.clear();
         }

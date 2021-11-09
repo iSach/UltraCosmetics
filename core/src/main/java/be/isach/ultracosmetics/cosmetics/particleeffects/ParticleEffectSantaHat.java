@@ -15,8 +15,6 @@ import org.bukkit.Location;
  */
 public class ParticleEffectSantaHat extends ParticleEffect {
 
-    public int particles = 12;
-
     public ParticleEffectSantaHat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, owner, ParticleEffectType.valueOf("santahat"));
         this.ignoreMove = true;
@@ -43,6 +41,7 @@ public class ParticleEffectSantaHat extends ParticleEffect {
     }
 
     private void drawCircle(float radius, float height, Location location, boolean red) {
+        int particles = getModifiedAmount(12);
         for (int i = 0; i < particles; i++) {
             double inc = (2 * Math.PI) / particles;
             float angle = (float) (i * inc);

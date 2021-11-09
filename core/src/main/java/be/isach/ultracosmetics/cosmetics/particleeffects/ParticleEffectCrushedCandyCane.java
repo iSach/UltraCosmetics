@@ -46,10 +46,10 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
             }
         } else {
             if (VersionManager.IS_VERSION_1_13) {
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i < getModifiedAmount(15); i++)
                     Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getDyeByColor(getRandomColor()), getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
             } else {
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i < getModifiedAmount(15); i++)
                     Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getOldMaterial("INK_SACK"), getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, center, 128);
             }
         }

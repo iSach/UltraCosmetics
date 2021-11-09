@@ -18,6 +18,7 @@ import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -367,8 +368,13 @@ public class UltraPlayer {
                 || currentMount != null
                 || currentTreasureChest != null
                 || currentHat != null
-                || currentEmote != null;
-        if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName())) { // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident
+                || currentEmote != null
+                || currentMorph != null;
+        if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")
+                // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
+                // If player is "quitting", remove the disguise anyway. Player is marked as quitting
+                // when changing worlds, making sure morphs get correctly unset.
+                && (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName()) || isQuitting())) {
             removeMorph();
             try {
                 DisguiseAPI.undisguiseToAll(getBukkitPlayer());
@@ -425,7 +431,7 @@ public class UltraPlayer {
         }
 
         try {
-            final Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Buy-Treasure-Key"));
+            final Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), 54, MessageManager.getMessage("Buy-Treasure-Key"));
             for (int i = 27; i < 30; i++) {
                 inventory.setItem(i, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
                 inventory.setItem(i + 9, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));

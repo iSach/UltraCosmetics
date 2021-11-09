@@ -17,6 +17,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -138,12 +140,23 @@ public class ItemFactory {
         headMeta.setOwner("Notch");
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", url));
-        Field profileField;
+        Method setProfileMethod = null;
         try {
-            profileField = headMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(headMeta, profile);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+            setProfileMethod = headMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+        } catch (NoSuchMethodException | SecurityException ignored) {}
+        try {
+            // if available, we use setProfile(GameProfile) so that it sets both the profile field and the
+            // serialized profile field for us. If the serialized profile field isn't set
+            // ItemStack#isSimilar() and ItemStack#equals() throw an error.
+            if (setProfileMethod == null) {
+                Field profileField = headMeta.getClass().getDeclaredField("profile");
+                profileField.setAccessible(true);
+                profileField.set(headMeta, profile);
+            } else {
+                setProfileMethod.setAccessible(true);
+                setProfileMethod.invoke(headMeta, profile);
+            }
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException | InvocationTargetException e1) {
             e1.printStackTrace();
         }
         head.setItemMeta(headMeta);

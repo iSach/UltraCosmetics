@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
@@ -268,7 +269,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
      * Opens Ammo Purchase Menu.
      */
     public void openAmmoPurchaseMenu() {
-        Inventory inventory = Bukkit.createInventory(null, 54, MessageManager.getMessage("Menus.Buy-Ammo"));
+        Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), 54, MessageManager.getMessage("Menus.Buy-Ammo"));
 
         inventory.setItem(13, ItemFactory.create(getType().getMaterial(),
                 MessageManager.getMessage("Buy-Ammo-Description").replace("%amount%", "" + getResultAmmoAmount())
@@ -463,20 +464,11 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     @EventHandler(priority = EventPriority.LOWEST)
     public void cancelMove(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (player == getPlayer() && ((event.getCurrentItem() != null && event.getCurrentItem().equals(getItemStack())))
-                || ((event.getCursor() != null && event.getCursor().equals(getItemStack())))) {
-            if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT
-                    || event.getClick() == ClickType.NUMBER_KEY || event.getClick() == ClickType.UNKNOWN) {
-                event.setCancelled(true);
-                player.updateInventory();
-                return;
-            }
-            if (event.getCurrentItem() != null) {
-                if (event.getCurrentItem().equals(getItemStack())) {
-                    event.setCancelled(true);
-                    player.updateInventory();
-                }
-            }
+        if (player != getPlayer()) return;
+        if ((event.getCurrentItem() != null && event.getCurrentItem().equals(getItemStack()))
+                || (event.getClick() == ClickType.NUMBER_KEY && getItemStack().equals(player.getInventory().getItem(event.getHotbarButton())))) {
+        	event.setCancelled(true);
+            player.updateInventory();
         }
     }
 
@@ -488,10 +480,11 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     @EventHandler
     public void cancelMove(InventoryDragEvent event) {
         Player player = (Player) event.getWhoClicked();
+        if (player != getPlayer()) return;
         for (ItemStack item : event.getNewItems().values()) {
-            if (item != null && player == getPlayer() && item.equals(itemStack)) {
+            if (item != null && item.equals(itemStack)) {
                 event.setCancelled(true);
-                ((Player) event.getWhoClicked()).updateInventory();
+                player.updateInventory();
                 player.closeInventory();
                 return;
             }

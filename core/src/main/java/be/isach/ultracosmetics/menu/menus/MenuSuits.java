@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
+import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -52,7 +53,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
             page = 1;
         }
 
-        Inventory inventory = Bukkit.createInventory(null, getSize(), getMaxPages() == 1 ? getName() : getName(page));
+        Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), getSize(), getMaxPages() == 1 ? getName() : getName(page));
 
         // Cosmetic items.
         int i = 0;
