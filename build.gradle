@@ -8,11 +8,12 @@ allprojects {
 
     compileJava.options.encoding = 'UTF-8'
 
-	java {
-		toolchain {
-			languageVersion = JavaLanguageVersion.of(16)
-		}
-	}
+    java {
+        toolchain {
+            // minimum Java version to compile all subprojects
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
 
     configurations {
         shaded
