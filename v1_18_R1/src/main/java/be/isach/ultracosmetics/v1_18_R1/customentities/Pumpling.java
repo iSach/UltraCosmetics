@@ -84,7 +84,7 @@ public class Pumpling extends Zombie implements IPetCustomEntity {
         if (!isCustomEntity()) return;
         ((Entity)this).remainingFireTicks = 0;
         UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((org.bukkit.entity.Zombie) getBukkitEntity()).getEyeLocation(), 3);
-        UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(getBukkitEntity());
         pet.getFollowTask().follow(pet.getPlayer());
         ((Entity)this).setInvisible(true);
         ((Zombie)this).setBaby(true);

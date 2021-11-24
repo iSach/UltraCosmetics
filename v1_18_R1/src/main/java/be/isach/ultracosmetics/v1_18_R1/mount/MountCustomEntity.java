@@ -53,7 +53,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         customEntity.removeAi();
 
         this.entity = (E) customEntity.getEntity();
-        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
+        runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
 
         getOwner().setCurrentMount(this);
 

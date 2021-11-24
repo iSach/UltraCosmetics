@@ -9,8 +9,13 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -35,7 +40,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @since 08-03-2015
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
-
+    private static final Map<String,Integer> WORLD_HEIGHTS = new HashMap<>();
     /**
      * The Entity, if it isn't a Custom Entity.
      */
@@ -95,7 +100,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             }
 
             // Prevents players on mounts from being able to fall in the void infinitely.
-            if (entity.getLocation().getY() <= -15) {
+            if (entity.getLocation().getY() <= getWorldHeight(entity.getWorld()) - 15) {
                 clear();
                 cancel();
                 return;
@@ -228,5 +233,15 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     public void setBeingRemoved(boolean beingRemoved) {
         this.beingRemoved = beingRemoved;
+    }
+
+    private int getWorldHeight(World world) {
+        return WORLD_HEIGHTS.computeIfAbsent(world.getName(), w -> {
+            try {
+                return world.getMinHeight();
+            } catch (NoSuchMethodError ex) {
+                return 0;
+            }
+        });
     }
 }

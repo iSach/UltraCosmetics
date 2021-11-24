@@ -58,7 +58,7 @@ public abstract class MountHorse<E extends AbstractHorse> extends Mount<E> {
             ((Horse) entity).getInventory().setSaddle(new ItemStack(Material.SADDLE));
             ((Horse) entity).setColor(getColor());
         }
-        runTaskTimerAsynchronously(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
+        runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
 
         getOwner().setCurrentMount(this);

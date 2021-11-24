@@ -28,7 +28,6 @@ public class VersionManager {
     private IMorphs morphs;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
     private Constructor<? extends IAnvilGUI> anvilGUIConstructor;
-    private IPathfinderUtil pathfinderUtil;
 
     public VersionManager(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
@@ -40,7 +39,6 @@ public class VersionManager {
         entityUtil = loadModule("EntityUtil");
         actionBarUtil = loadModule("ActionBar");
         itemGlower = loadModule("ItemGlower");
-        pathfinderUtil = loadModule("PathfinderUtil");
         fireworkFactory = loadModule("FireworkFactory");
         mounts = loadModule("Mounts");
         pets = loadModule("Pets");
@@ -105,10 +103,6 @@ public class VersionManager {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public IPathfinderUtil getPathfinderUtil() {
-        return pathfinderUtil;
     }
 
     public IPets getPets() {

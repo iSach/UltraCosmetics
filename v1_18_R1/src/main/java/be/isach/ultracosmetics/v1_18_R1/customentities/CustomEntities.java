@@ -10,6 +10,7 @@ import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityType.EntityFactory;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.monster.Guardian;
@@ -57,83 +58,22 @@ public enum CustomEntities {
     }
 
     public static void registerEntities() {
-        String customName = "ultracosmetics";
-
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataFixers.getDataFixer().getSchema(DataFixUtils.makeKey(SharedConstants.getCurrentVersion().getWorldVersion())).findChoiceType(References.ENTITY).types();
 
-        // Pumpling
-        types.put("minecraft:" + customName, types.get("minecraft:zombie"));
-        EntityType.Builder<Entity> a = EntityType.Builder.of(Pumpling::new, MobCategory.AMBIENT);
+        registerEntity("zombie", Pumpling::new, types);
+        registerEntity("slime", CustomSlime::new, types);
+        registerEntity("spider", RideableSpider::new, types);
+        registerEntity("guardian", CustomGuardian::new, types);
+    }
+    
+    private static void registerEntity(String type, EntityFactory customMob, Map<String,Type<?>> types) {
+        String customName = "minecraft:ultracosmetics_" + type;
+        types.put(customName, types.get("minecraft:" + type));
+        EntityType.Builder<Entity> a = EntityType.Builder.of(customMob, MobCategory.AMBIENT);
         typesLocA = Registry.register(Registry.ENTITY_TYPE, customName, a.build(customName));
-
-        // Slime
-        types.put("minecraft:" + customName, types.get("minecraft:slime"));
-        EntityType.Builder<Entity> b = EntityType.Builder.of(CustomSlime::new, MobCategory.AMBIENT);
-        typesLocB = Registry.register(Registry.ENTITY_TYPE, customName, b.build(customName));
-
-        // Spider
-        types.put("minecraft:" + customName, types.get("minecraft:spider"));
-        EntityType.Builder<Entity> c = EntityType.Builder.of(RideableSpider::new, MobCategory.AMBIENT);
-        typesLocC = Registry.register(Registry.ENTITY_TYPE, customName, c.build(customName));
-
-        // Guardian
-        types.put("minecraft:" + customName, types.get("minecraft:guardian"));
-        EntityType.Builder<Entity> d = EntityType.Builder.of(CustomGuardian::new, MobCategory.AMBIENT);
-        typesLocD = Registry.register(Registry.ENTITY_TYPE, customName, d.build(customName));
-
-        /**for (CustomEntities entity : values()) {
-         try {
-         // Use reflection to get the RegistryID of entities.
-         @SuppressWarnings("unchecked") RegistryID<EntityTypes < ?>> registryID = (RegistryID<EntityTypes<?>>) getPrivateField(RegistryMaterials.class, IRegistry.ENTITY_TYPE, "b");
-         Object[] idToClassMap = (Object[]) getPrivateField(RegistryID.class, registryID, "d");
-
-         // Save the the ID -> entity class mapping before the registration.
-         Object oldValue = idToClassMap[entity.getID()];
-
-         // Register the entity class.
-         //registryID.a(new EntityTypes<Entity>(entity.getCustomClass(), world -> null, true, true, null), entity.getID());
-         EntityTypes.b test = EntityTypes::a; // entity.getCustomClass ??? ^^^
-         registryID.a(new EntityTypes<Entity>(test, EnumCreatureType.AMBIENT, true, true, false, null, new EntitySize(0.5f, 0.5f, true)), entity.getID());
-
-         // Restore the ID -> entity class mapping.
-         idToClassMap[entity.getID()] = oldValue;
-         } catch (Exception e) {
-         e.printStackTrace();
-         }
-         }*/
-
-
-// Should no longer be needed with 1.13
-//		for (BiomeBase biomeBase : (Iterable<BiomeBase>) BiomeBase.i) {
-//			if (biomeBase == null)
-//				break;
-//			for (String field : new String[]{ "t", "u", "v", "w" })
-//				try {
-//					Field list = BiomeBase.class.getDeclaredField(field);
-//					list.setAccessible(true);
-//					@SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
-//							.get(biomeBase);
-//
-//					for (BiomeBase.BiomeMeta meta : mobList)
-//						for (CustomEntities entity : values())
-//							if (entity.getNMSClass().equals(meta.b))
-//								meta.b = entity.getCustomClass();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//		}
     }
 
-    public static void unregisterEntities() {
-// Should no longer be needed with 1.13
-//		for (CustomEntities entity : values()) {
-//			try {
-//				EntityTypes.b.a(entity.getID(), entity.getMinecraftKey(), entity.getNMSClass());
-//			} catch (Exception exc) {
-//				// ignore temporarily... TODO fix NMS problems... I hate Mojang
-//			}
-//		}
-    }
+    public static void unregisterEntities() {}
 
     public static Object getPrivateField(Class<?> clazz, Object handle, String fieldName) throws Exception {
         Field field = clazz.getDeclaredField(fieldName);

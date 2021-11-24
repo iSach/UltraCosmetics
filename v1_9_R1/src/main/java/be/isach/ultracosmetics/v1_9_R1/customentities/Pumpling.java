@@ -52,7 +52,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
         if (!CustomEntities.customEntities.contains(this)) return;
         fireTicks = 0;
         UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((Zombie) getBukkitEntity()).getEyeLocation(), 3);
-        UltraCosmeticsData.get().getVersionManager().getPathfinderUtil().removePathFinders(getBukkitEntity());
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(getBukkitEntity());
         setInvisible(true);
         setBaby(true);
         setSlot(EnumItemSlot.HEAD, new ItemStack(Blocks.PUMPKIN));
