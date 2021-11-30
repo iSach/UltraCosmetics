@@ -16,7 +16,7 @@ public class VersionManager {
      * If the version of Bukkit/Spigot is 1.13.
      */
     public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) >= 0;
-    private final String PACKAGE = "be.isach.ultracosmetics";
+    public static final String PACKAGE = "be.isach.ultracosmetics";
     private IModule module;
     private ServerVersion serverVersion;
     private IEntityUtil entityUtil;
@@ -26,6 +26,7 @@ public class VersionManager {
     private IMounts mounts;
     private IPets pets;
     private IMorphs morphs;
+    private AFlagManager flagManager;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
     private Constructor<? extends IAnvilGUI> anvilGUIConstructor;
 
@@ -115,5 +116,9 @@ public class VersionManager {
 
     public IModule getModule() {
         return module;
+    }
+
+    public AFlagManager getFlagManager() {
+        return flagManager;
     }
 }

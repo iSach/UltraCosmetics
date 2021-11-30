@@ -1,4 +1,6 @@
 dependencies {
     implementation 'org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT'
     implementation project(':core')
+    // WG 6.2.2 was the last version before major API changes
+    implementation 'com.sk89q.worldguard:worldguard-legacy:6.2'
 }

@@ -53,6 +53,7 @@ public class MessageManager {
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("Chest-Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
         addMessage("Too-Close-To-Other-Chest", "%prefix% &c&lYou are too close to another treasure chest!");
+        addMessage("Chest-Region-Disabled", "%prefix% &c&lYou can't open a chest here!");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
         addMessage("Clear-Cosmetics", "&c&lClear cosmetics");
         addMessage("Clear-Gadget", "&c&lClear current gadget");
@@ -455,6 +456,7 @@ public class MessageManager {
         addMessage("Disabled-Gadgets", "%prefix% &9you disabled gadgets!");
         addMessage("Not-Allowed-From-Console", "&c&lThis can't be executed from console!");
         addMessage("World-Disabled", "%prefix% &c&lCosmetics are disabled in this world!");
+        addMessage("Region-Disabled", "%prefix% &c&lCosmetics are disabled in this area!");
         addMessage("Disabled-Command-Holding-Message", "%prefix% &c&lYou can't use this command while holding cosmetics!");
         addMessage("Disabled-Command-Wearing-Message", "%prefix% &c&lYou can't use this command while wearing cosmetics!");
     }

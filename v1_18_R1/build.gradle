@@ -1,4 +1,4 @@
 dependencies {
-    implementation 'org.spigotmc:spigot:1.18-pre8-R0.1-SNAPSHOT:remapped-mojang'
+    implementation 'org.spigotmc:spigot:1.18-rc3-R0.1-SNAPSHOT:remapped-mojang'
     implementation project(':core')
 }

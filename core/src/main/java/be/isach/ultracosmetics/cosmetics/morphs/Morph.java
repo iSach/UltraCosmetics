@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.FlagWatcher;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 
 import java.util.UUID;
@@ -43,6 +44,9 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
         }
 
         disguise = new MobDisguise(getType().getDisguiseType());
+        FlagWatcher watcher = disguise.getWatcher();
+        watcher.setCustomName(getPlayer().getName());
+        watcher.setCustomNameVisible(true);
 
         if (!getOwner().canSeeSelfMorph()) {
             disguise.setViewSelfDisguise(false);

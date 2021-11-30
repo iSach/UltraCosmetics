@@ -56,37 +56,47 @@ public class TreasureChestManager implements Listener {
     }
 
     public static void tryOpenChest(Player player, Location preLoc) {
-        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).getKeys() > 0) {
-            Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
+        UltraCosmetics plugin = UltraCosmeticsData.get().getPlugin();
 
-            if (!c.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
-                player.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
-
-                if(preLoc != null) {
-                    player.teleport(preLoc);
-                }
-                return;
-            }
-
-            for (Entity ent : player.getNearbyEntities(5, 5, 5)) {
-                if (ent instanceof Player && UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent).getCurrentTreasureChest() != null) {
-                    player.closeInventory();
-                    player.sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
-                    return;
-                }
-            }
-            if (player.getLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR
-                    || !player.getLocation().getBlock().getType().isBlock()
-                    || player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                player.sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
-                return;
-            }
-            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).removeKey();
-            openTreasureChest(player, preLoc);
-        } else {
+        if (!plugin.areChestsAllowedInRegion(player)) {
             player.closeInventory();
-            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).openKeyPurchaseMenu();
+            player.sendMessage(MessageManager.getMessage("Chest-Region-Disabled"));
+            return;
         }
+
+        if (plugin.getPlayerManager().getUltraPlayer(player).getKeys() < 1) {
+            player.closeInventory();
+            plugin.getPlayerManager().getUltraPlayer(player).openKeyPurchaseMenu();
+            return;
+        }
+
+        Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
+
+        if (!c.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
+            player.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
+
+            if(preLoc != null) {
+                player.teleport(preLoc);
+            }
+            return;
+        }
+
+        for (Entity ent : player.getNearbyEntities(5, 5, 5)) {
+            if (ent instanceof Player && plugin.getPlayerManager().getUltraPlayer((Player) ent).getCurrentTreasureChest() != null) {
+                player.closeInventory();
+                player.sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
+                return;
+            }
+        }
+
+        if (player.getLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR
+                || !player.getLocation().getBlock().getType().isBlock()
+                || player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+            player.sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
+            return;
+        }
+        plugin.getPlayerManager().getUltraPlayer(player).removeKey();
+        openTreasureChest(player, preLoc);
     }
 
     @EventHandler

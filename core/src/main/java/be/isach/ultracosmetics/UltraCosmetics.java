@@ -22,14 +22,19 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
 import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.version.AFlagManager;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -99,12 +104,20 @@ public class UltraCosmetics extends JavaPlugin {
      * Manages cosmetics profiles.
      */
     private CosmeticsProfileManager cosmeticsProfileManager;
-
+    
     /**
-     * Called when plugin is enabled.
+     * Manages WorldGuard flags.
+     */
+    private AFlagManager flagManager = null;
+    
+    /**
+     * Called when plugin is loaded.
+     * Used for registering WorldGuard flags
+     * as recommended in API documentation.
      */
     @Override
-    public void onEnable() {
+    public void onLoad() {
+        // moved to onLoad so it's ready for WorldGuard support
         this.smartLogger = new SmartLogger(getLogger());
 
         UltraCosmeticsData.init(this);
@@ -112,7 +125,27 @@ public class UltraCosmetics extends JavaPlugin {
         if (!UltraCosmeticsData.get().checkServerVersion()) {
             return;
         }
+        
+        // Not using isPluginEnabled() because WorldGuard should be
+        // loaded but not yet enabled when registering flags
+        if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+            // does reflect-y things but isn't in VersionManager because of the load timing
+            // and because it should only happen if WorldGuard is present
+            String wgVersionPackage = VersionManager.IS_VERSION_1_13 ? "v1_13_R2" : "v1_12_R1";
+            try {
+                flagManager = (AFlagManager) ReflectionUtils.instantiateObject(Class.forName(VersionManager.PACKAGE + "." + wgVersionPackage + ".worldguard.FlagManager"));
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    /**
+     * Called when plugin is enabled.
+     */
+    @Override
+    public void onEnable() {
         // Create UltraPlayer Manager.
         this.playerManager = new UltraPlayerManager(this);
 
@@ -153,25 +186,32 @@ public class UltraCosmetics extends JavaPlugin {
         new CosmeticManager(this).setupCosmeticsConfigs();
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            getSmartLogger().write("");
+            getSmartLogger().write();
             getSmartLogger().write("Morphs require Lib's Disguises!");
-            getSmartLogger().write("");
+            getSmartLogger().write();
             getSmartLogger().write("Morphs disabled.");
-            getSmartLogger().write("");
+            getSmartLogger().write();
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            getSmartLogger().write("");
+            getSmartLogger().write();
             new PlaceholderHook(this).register();
             getSmartLogger().write("Hooked into PlaceholderAPI");
-            getSmartLogger().write("");
+            getSmartLogger().write();
+        }
+
+        if (flagManager != null) {
+            flagManager.registerPhase2();
+            getSmartLogger().write();
+            getSmartLogger().write("WorldGuard custom flags enabled");
+            getSmartLogger().write();
         }
 
         // Set up economy if needed.
         setupEconomy();
 
         if (!UltraCosmeticsData.get().usingFileStorage()) {
-            getSmartLogger().write("");
+            getSmartLogger().write();
             getSmartLogger().write("Connecting to MySQL database...");
 
             // Start MySQL.
@@ -179,7 +219,7 @@ public class UltraCosmetics extends JavaPlugin {
             mySqlConnectionManager.start();
 
             getSmartLogger().write("Connected to MySQL database.");
-            getSmartLogger().write("");
+            getSmartLogger().write();
         }
 
         // Initialize UltraPlayers and give chest (if needed).
@@ -483,5 +523,21 @@ public class UltraCosmetics extends JavaPlugin {
 
     public CosmeticsProfileManager getCosmeticsProfileManager() {
         return cosmeticsProfileManager;
+    }
+
+    public AFlagManager getFlagManager() {
+        return flagManager;
+    }
+
+    public boolean worldGuardHooked() {
+        return flagManager != null;
+    }
+
+    public boolean areCosmeticsAllowedInRegion(Player player) {
+        return !worldGuardHooked() || flagManager.areCosmeticsAllowedHere(player);
+    }
+
+    public boolean areChestsAllowedInRegion(Player player) {
+        return !worldGuardHooked() || flagManager.areChestsAllowedHere(player);
     }
 }

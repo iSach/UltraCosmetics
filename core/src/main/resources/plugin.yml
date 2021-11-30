@@ -4,7 +4,12 @@ author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
 api-version: 1.13
-softdepend: [LibsDisguises, Vault, PlaceholderAPI, PlayerPoints]
+softdepend:
+- LibsDisguises
+- Vault
+- PlaceholderAPI
+- PlayerPoints
+- WorldGuard
 commands:
   ultracosmetics:
     aliases: [uc, cosmetics]
