@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.manager.ArmorStandManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.menu.Menus;
@@ -135,8 +136,14 @@ public class UltraCosmetics extends JavaPlugin {
             try {
                 flagManager = (AFlagManager) ReflectionUtils.instantiateObject(Class.forName(VersionManager.PACKAGE + "." + wgVersionPackage + ".worldguard.FlagManager"));
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+                    | InvocationTargetException e) {
                 e.printStackTrace();
+            } catch (NoClassDefFoundError | NoSuchMethodError | NoSuchMethodException | ClassNotFoundException e) {
+                getSmartLogger().write(LogLevel.WARNING, "Couldn't find required classes for WorldGuard integration.");
+                getSmartLogger().write(LogLevel.WARNING, "Please make sure you are using the latest version of WorldGuard");
+                getSmartLogger().write(LogLevel.WARNING, "for your version of Minecraft. Debug info:");
+                e.printStackTrace();
+                getSmartLogger().write("WorldGuard support is disabled.");
             }
         }
     }
