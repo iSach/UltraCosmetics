@@ -339,7 +339,13 @@ public class UltraCosmetics extends JavaPlugin {
         disabledCommands.add("hat");
         config.addDefault("Disabled-Commands", disabledCommands, "List of commands that won't work when cosmetics are equipped.", "Command arguments are ignored, commands are blocked when base command matches.");
 
-        List<String> enabledWorlds = Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
+        // do not use Stream#map() for this, it won't work, for example:
+        // Bukkit.getWorlds().stream().map(World::getName)
+        // In 1.17 it's WorldInfo#getName but in some lower versions
+        // the method is World#getName. Referencing the method
+        // specifically using ::'s breaks it on said lower versions.
+        List<String> enabledWorlds = new ArrayList<>();
+        Bukkit.getWorlds().forEach(k -> enabledWorlds.add(k.getName()));
         config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");
 
         config.set("Disabled-Items", null);
