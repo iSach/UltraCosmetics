@@ -341,7 +341,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         // do not use Stream#map() for this, it won't work, for example:
         // Bukkit.getWorlds().stream().map(World::getName)
-        // In 1.17 it's WorldInfo#getName but in some lower versions
+        // In 1.17 it's WorldInfo#getName but in all lower versions
         // the method is World#getName. Referencing the method
         // specifically using ::'s breaks it on said lower versions.
         List<String> enabledWorlds = new ArrayList<>();

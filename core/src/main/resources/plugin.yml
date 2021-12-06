@@ -27,12 +27,15 @@ permissions:
       - ultracosmetics.openmenu
       - ultracosmetics.receivechest
       - ultracosmetics.treasurechests.buykey
+      - ultracosmetics.bypassdisabledcommands
   ultracosmetics.openmenu:
     default: true
   ultracosmetics.receivechest:
     default: true
   ultracosmetics.treasurechests.buykey:
     default: true
+  ultracosmetics.bypassdisabledcommands:
+    default: op
   ultracosmetics.command.*:
     children:
       - ultracosmetics.command.clear

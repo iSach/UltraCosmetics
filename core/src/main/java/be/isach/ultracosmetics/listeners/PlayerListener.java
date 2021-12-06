@@ -285,7 +285,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        // TODO: Add a permission check. If I'm an admin I want to be able to use commands regardless.
+        if (event.getPlayer().hasPermission("ultracosmetics.bypassdisabledcommands")) return;
         String strippedCommand = event.getMessage().split(" ")[0].replace("/", "").toLowerCase();
         if (!SettingsManager.getConfig().getList("Disabled-Commands").contains(strippedCommand)) return;
         UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
