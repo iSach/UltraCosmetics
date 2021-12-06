@@ -337,7 +337,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
-        config.addDefault("Disabled-Commands", disabledCommands, "List of commands that won't work when holding a cosmetic, wearing an emote, or wearing a hat.", "Type commands in lowercase without slashes.");
+        config.addDefault("Disabled-Commands", disabledCommands, "List of commands that won't work when cosmetics are equipped.", "Command arguments are ignored, commands are blocked when base command matches.");
 
         List<String> enabledWorlds = Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
         config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");

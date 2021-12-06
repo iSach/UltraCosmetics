@@ -359,22 +359,30 @@ public class UltraPlayer {
     }
 
     /**
-     * Clears all gadgets.
+     * Returns true if the player has any cosmetics equipped
      */
-    public boolean clear() {
-        boolean toReturn = currentGadget != null
+    public boolean hasCosmeticsEquipped() {
+        return currentGadget != null
                 || currentParticleEffect != null
                 || currentPet != null
                 || currentMount != null
                 || currentTreasureChest != null
                 || currentHat != null
                 || currentEmote != null
-                || currentMorph != null;
+                || currentMorph != null
+                || hasSuitOn();
+    }
+
+    /**
+     * Clears all gadgets.
+     */
+    public boolean clear() {
+        boolean toReturn = hasCosmeticsEquipped();
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")
                 // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
                 // If player is "quitting", remove the disguise anyway. Player is marked as quitting
                 // when changing worlds, making sure morphs get correctly unset.
-                && (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName()) || isQuitting())) {
+                && (isQuitting() || SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName()))) {
             removeMorph();
             try {
                 DisguiseAPI.undisguiseToAll(getBukkitPlayer());

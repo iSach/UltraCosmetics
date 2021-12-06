@@ -285,15 +285,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (SettingsManager.getConfig().getList("Disabled-Commands").contains(event.getMessage().split(" ")[0].replace("/", "").toLowerCase())) {
-            UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-            if (player.getCurrentEmote() != null || player.getCurrentHat() != null || player.hasSuitOn()) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Wearing-Message"));
-            } else if (player.getCurrentGadget() != null && player.getCurrentGadget().getItemStack().equals(event.getPlayer().getItemInHand())) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Holding-Message"));
-            }
+        // TODO: Add a permission check. If I'm an admin I want to be able to use commands regardless.
+        String strippedCommand = event.getMessage().split(" ")[0].replace("/", "").toLowerCase();
+        if (!SettingsManager.getConfig().getList("Disabled-Commands").contains(strippedCommand)) return;
+        UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        if (player.hasCosmeticsEquipped()) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Message"));
         }
     }
 
