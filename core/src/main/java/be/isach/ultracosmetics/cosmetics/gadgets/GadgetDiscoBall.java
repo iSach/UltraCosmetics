@@ -89,9 +89,7 @@ public class GadgetDiscoBall extends Gadget {
             x = Math.cos(angle) * 4;
             z = Math.sin(angle) * 4;
 
-            if (UltraCosmeticsData.get().isUsingSpigot()) {
-                drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), false, 20);
-            }
+            drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), false, 20);
 
             i += 6;
             angle2 = 2 * Math.PI * i2 / 100;
