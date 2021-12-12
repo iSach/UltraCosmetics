@@ -75,34 +75,34 @@ public class MorphType extends CosmeticMatType<Morph> {
     public static void register() {
         ServerVersion serverVersion = UltraCosmeticsData.get().getServerVersion();
 
-        new MorphType("ultracosmetics.morphs.bat", "Bat", UCMaterial.COAL, DisguiseType.BAT, "&7&oBecome a bat!", MorphBat.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.blaze", "Blaze", UCMaterial.BLAZE_POWDER, DisguiseType.BLAZE, "&7&oIt might be hot on there..", MorphBlaze.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.chicken", "Chicken", UCMaterial.EGG, DisguiseType.CHICKEN, "&7&oBecome a chicken!", MorphChicken.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.pig", "Pig", UCMaterial.PORKCHOP, DisguiseType.PIG, "&7&oMust hold your carrot!", MorphPig.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.enderman", "Enderman", UCMaterial.ENDER_PEARL, DisguiseType.ENDERMAN, "&7&oI go from there to\n" + "&7&othere, then you lost me..", MorphEnderman.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.slime", "Slime", UCMaterial.SLIME_BALL, DisguiseType.SLIME, "&7&oSplat splat!", MorphSlime.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.creeper", "Creeper", UCMaterial.GUNPOWDER, DisguiseType.CREEPER, "&7&oHey What'sssssss up?", MorphCreeper.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.snowman", "Snowman", UCMaterial.SNOWBALL, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.elderguardian", "ElderGuardian", UCMaterial.PRISMARINE_CRYSTALS, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", UltraCosmeticsData.get().getVersionManager().getMorphs().getElderGuardianClass(), ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.cow", "Cow", UCMaterial.MILK_BUCKET, DisguiseType.COW, "&7&oMoooo!", MorphCow.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.mooshroom", "Mooshroom", UCMaterial.RED_MUSHROOM, DisguiseType.MUSHROOM_COW, "&7&oMoooo!", MorphMooshroom.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.villager", "Villager", UCMaterial.EMERALD, DisguiseType.VILLAGER, "&7&oHmmmmmmmmm", MorphVillager.class, ServerVersion.v1_8_R1);
+        new MorphType("ultracosmetics.morphs.bat", "Bat", UCMaterial.COAL, DisguiseType.BAT, "&7&oBecome a bat!", MorphBat.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.blaze", "Blaze", UCMaterial.BLAZE_POWDER, DisguiseType.BLAZE, "&7&oIt might be hot on there..", MorphBlaze.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.chicken", "Chicken", UCMaterial.EGG, DisguiseType.CHICKEN, "&7&oBecome a chicken!", MorphChicken.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.pig", "Pig", UCMaterial.PORKCHOP, DisguiseType.PIG, "&7&oMust hold your carrot!", MorphPig.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.enderman", "Enderman", UCMaterial.ENDER_PEARL, DisguiseType.ENDERMAN, "&7&oI go from there to\n" + "&7&othere, then you lost me..", MorphEnderman.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.slime", "Slime", UCMaterial.SLIME_BALL, DisguiseType.SLIME, "&7&oSplat splat!", MorphSlime.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.creeper", "Creeper", UCMaterial.GUNPOWDER, DisguiseType.CREEPER, "&7&oHey What'sssssss up?", MorphCreeper.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.snowman", "Snowman", UCMaterial.SNOWBALL, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.elderguardian", "ElderGuardian", UCMaterial.PRISMARINE_CRYSTALS, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", UltraCosmeticsData.get().getVersionManager().getMorphs().getElderGuardianClass(), ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.cow", "Cow", UCMaterial.MILK_BUCKET, DisguiseType.COW, "&7&oMoooo!", MorphCow.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.mooshroom", "Mooshroom", UCMaterial.RED_MUSHROOM, DisguiseType.MUSHROOM_COW, "&7&oMoooo!", MorphMooshroom.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.villager", "Villager", UCMaterial.EMERALD, DisguiseType.VILLAGER, "&7&oHmmmmmmmmm", MorphVillager.class, ServerVersion.earliest());
 
-        if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0) {
+        if (serverVersion.isAtLeast(ServerVersion.v1_9_R1)) {
             new MorphType("ultracosmetics.morphs.witch", "Witch", UCMaterial.POISONOUS_POTATO, getDisguiseType("WITCH"), "&7&oMuahahahahaha", MorphWitch.class, ServerVersion.v1_9_R1);
         }
-        if (serverVersion.compareTo(ServerVersion.v1_10_R1) >= 0) {
+        if (serverVersion.isAtLeast(ServerVersion.v1_10_R1)) {
             new MorphType("ultracosmetics.morphs.polarbear", "PolarBear", UCMaterial.SNOW_BLOCK, getDisguiseType("POLAR_BEAR"), "&7&oI prefer cold areas", MorphPolarBear.class, ServerVersion.v1_10_R1);
         }
-        if (serverVersion.compareTo(ServerVersion.v1_11_R1) >= 0) {
+        if (serverVersion.isAtLeast(ServerVersion.v1_11_R1)) {
             new MorphType("ultracosmetics.morphs.llama", "Llama", UCMaterial.RED_WOOL, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_11_R1);
         }
-        if (serverVersion.compareTo(ServerVersion.v1_12_R1) >= 0) {
+        if (serverVersion.isAtLeast(ServerVersion.v1_12_R1)) {
             new MorphType("ultracosmetics.morphs.parrot", "Parrot", UCMaterial.COOKIE, getDisguiseType("PARROT"), "&7&oPolly want a cracker?", MorphParrot.class, ServerVersion.v1_12_R1);
         }
 
-        new MorphType("ultracosmetics.morphs.sheep", "Sheep", UCMaterial.WHITE_WOOL, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class, ServerVersion.v1_8_R1);
-        new MorphType("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", UCMaterial.WITHER_SKELETON_SKULL, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class, ServerVersion.v1_8_R1);
+        new MorphType("ultracosmetics.morphs.sheep", "Sheep", UCMaterial.WHITE_WOOL, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class, ServerVersion.earliest());
+        new MorphType("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", UCMaterial.WITHER_SKELETON_SKULL, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class, ServerVersion.earliest());
     }
 
     private static DisguiseType getDisguiseType(String type) {

@@ -44,4 +44,16 @@ public enum ServerVersion {
     public String getMappingsVersion() {
         return mappingsVersion;
     }
+
+    public static ServerVersion earliest() {
+        return values()[0];
+    }
+
+    public static ServerVersion latest() {
+        return values()[values().length - 1];
+    }
+
+    public boolean isAtLeast(ServerVersion version) {
+        return this.compareTo(version) >= 0;
+    }
 }

@@ -205,8 +205,8 @@ public class EmoteType extends CosmeticMatType<Emote> {
     private List<ItemStack> frames;
     private int ticksPerFrame;
 
-    public EmoteType(String permission, String configName, String defaultDesc, int ticksPerFrame) {
-        super(Category.EMOTES, configName, permission, defaultDesc, UCMaterial.PLAYER_HEAD, Emote.class, ServerVersion.v1_8_R1);
+    private EmoteType(String permission, String configName, String defaultDesc, int ticksPerFrame) {
+        super(Category.EMOTES, configName, permission, defaultDesc, UCMaterial.PLAYER_HEAD, Emote.class, ServerVersion.earliest());
         this.ticksPerFrame = ticksPerFrame;
         this.frames = new ArrayList<>();
 

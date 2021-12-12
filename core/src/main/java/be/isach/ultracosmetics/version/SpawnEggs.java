@@ -51,7 +51,7 @@ public class SpawnEggs {
                 case (byte) 56:
                     return new ItemStack(Material.GHAST_SPAWN_EGG);
                 case (byte) 57:
-                    return new ItemStack(UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_16_R1) >= 0 ? Material.ZOMBIFIED_PIGLIN_SPAWN_EGG : Material.valueOf("ZOMBIE_PIGMAN_SPAWN_EGG"));
+                    return new ItemStack(UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R1) ? Material.ZOMBIFIED_PIGLIN_SPAWN_EGG : Material.valueOf("ZOMBIE_PIGMAN_SPAWN_EGG"));
                 case (byte) 58:
                     return new ItemStack(Material.ENDERMAN_SPAWN_EGG);
                 case (byte) 59:

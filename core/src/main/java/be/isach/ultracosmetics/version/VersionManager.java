@@ -15,7 +15,7 @@ public class VersionManager {
     /**
      * If the version of Bukkit/Spigot is 1.13.
      */
-    public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) >= 0;
+    public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_13_R1);
     public static final String PACKAGE = "be.isach.ultracosmetics";
     private IModule module;
     private ServerVersion serverVersion;
@@ -44,7 +44,7 @@ public class VersionManager {
         mounts = loadModule("Mounts");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
-        if (serverVersion.compareTo(ServerVersion.v1_14_R1) >= 0)
+        if (serverVersion.isAtLeast(ServerVersion.v1_14_R1))
             anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, String.class, Boolean.class, Consumer.class, BiFunction.class);
         else
             anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, AAnvilGUI.AnvilClickEventHandler.class);

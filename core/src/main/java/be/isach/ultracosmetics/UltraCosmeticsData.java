@@ -143,12 +143,12 @@ public class UltraCosmeticsData {
         String mcVersion;
         try {
             mcVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        } catch (ArrayIndexOutOfBoundsException ignored) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             // TODO: maybe just disable the plugin if this happens? I'm not sure why selecting
-            // the 1.8.0 module when version can't be determined is a good outcome
+            // the earliest available module when version can't be determined is a good option
             ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Unable to determine server version. Please report this error.");
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "UC will attempt to continue using NMS v1_8_R1, but you will probably experience issues.");
-            setServerVersion(ServerVersion.v1_8_R1);
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "UC will attempt to continue using NMS " + ServerVersion.earliest().getName() + ", but you will probably experience issues.");
+            setServerVersion(ServerVersion.earliest());
             return true;
         }
 
@@ -158,9 +158,7 @@ public class UltraCosmeticsData {
             serverVersion = ServerVersion.valueOf(mcVersion);
         } catch (IllegalArgumentException exc) {
             ultraCosmetics.getSmartLogger().write("This NMS version isn't supported. (" + mcVersion + ")!");
-            String minVersion = ServerVersion.values()[0].getName();
-            String maxVersion = ServerVersion.values()[ServerVersion.values().length - 1].getName();
-            System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON " + minVersion + " through " + maxVersion + "!\n\n----------------------------");
+            System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON " + ServerVersion.earliest().getName() + " through " + ServerVersion.latest().getName() + "!\n\n----------------------------");
             Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
             return false;
         }

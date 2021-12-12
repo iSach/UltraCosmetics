@@ -38,7 +38,7 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
         double x = Math.cos(angle) * 1.1f;
         double z = Math.sin(angle) * 1.1f;
         center.add(x, 0, z);
-        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
             for (int i = 0; i < 15; i++) {
                 ItemStack randomDye = UCMaterial.DYES.get(MathUtils.random(0, 14)).parseItem();
                 getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 1, 0.2d, 0.2d, 0.2d,

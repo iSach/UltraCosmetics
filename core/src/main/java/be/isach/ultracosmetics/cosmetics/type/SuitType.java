@@ -58,9 +58,9 @@ public class SuitType extends CosmeticMatType<Suit> {
      * @param b                The Boots material.
      * @param clazz            The Suit Class
      */
-    SuitType(String configName, String permissionSuffix, String defaultDesc,
-             UCMaterial h, UCMaterial c, UCMaterial l, UCMaterial b, Class<? extends Suit> clazz, ServerVersion baseVersion) {
-        super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, clazz, baseVersion);
+    private SuitType(String configName, String permissionSuffix, String defaultDesc,
+             UCMaterial h, UCMaterial c, UCMaterial l, UCMaterial b, Class<? extends Suit> clazz) {
+        super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, clazz, ServerVersion.earliest());
         this.boots = b;
         this.helmet = h;
         this.chestplate = c;
@@ -159,11 +159,11 @@ public class SuitType extends CosmeticMatType<Suit> {
         return getPermission() + "." + armorSlot.toString().toLowerCase();
     }
 
-        public static void register() {
-        new SuitType("Rave", "rave", "&7&oSuch amazing colors!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitRave.class, ServerVersion.v1_8_R1);
-        new SuitType("Astronaut", "astronaut", "&7&oHouston?", UCMaterial.GLASS, UCMaterial.GOLDEN_CHESTPLATE, UCMaterial.GOLDEN_LEGGINGS, UCMaterial.GOLDEN_BOOTS, SuitAstronaut.class, ServerVersion.v1_8_R1);
-        new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", UCMaterial.DIAMOND_HELMET, UCMaterial.DIAMOND_CHESTPLATE, UCMaterial.DIAMOND_LEGGINGS, UCMaterial.DIAMOND_BOOTS, SuitDiamond.class, ServerVersion.v1_8_R1);
-        new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitSanta.class, ServerVersion.v1_8_R1);
-        new SuitType("Frozen", "frozen", "&7&oThis suit belongs to the\nLord of the Frozen Lands!", UCMaterial.PACKED_ICE, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitFrozen.class, ServerVersion.v1_8_R1);
+    public static void register() {
+        new SuitType("Rave", "rave", "&7&oSuch amazing colors!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitRave.class);
+        new SuitType("Astronaut", "astronaut", "&7&oHouston?", UCMaterial.GLASS, UCMaterial.GOLDEN_CHESTPLATE, UCMaterial.GOLDEN_LEGGINGS, UCMaterial.GOLDEN_BOOTS, SuitAstronaut.class);
+        new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", UCMaterial.DIAMOND_HELMET, UCMaterial.DIAMOND_CHESTPLATE, UCMaterial.DIAMOND_LEGGINGS, UCMaterial.DIAMOND_BOOTS, SuitDiamond.class);
+        new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitSanta.class);
+        new SuitType("Frozen", "frozen", "&7&oThis suit belongs to the\nLord of the Frozen Lands!", UCMaterial.PACKED_ICE, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitFrozen.class);
     }
 }
