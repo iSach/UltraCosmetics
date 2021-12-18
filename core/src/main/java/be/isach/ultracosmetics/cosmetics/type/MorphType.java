@@ -88,16 +88,10 @@ public class MorphType extends CosmeticMatType<Morph> {
         new MorphType("ultracosmetics.morphs.mooshroom", "Mooshroom", UCMaterial.RED_MUSHROOM, DisguiseType.MUSHROOM_COW, "&7&oMoooo!", MorphMooshroom.class, ServerVersion.earliest());
         new MorphType("ultracosmetics.morphs.villager", "Villager", UCMaterial.EMERALD, DisguiseType.VILLAGER, "&7&oHmmmmmmmmm", MorphVillager.class, ServerVersion.earliest());
 
-        if (serverVersion.isAtLeast(ServerVersion.v1_9_R1)) {
-            new MorphType("ultracosmetics.morphs.witch", "Witch", UCMaterial.POISONOUS_POTATO, getDisguiseType("WITCH"), "&7&oMuahahahahaha", MorphWitch.class, ServerVersion.v1_9_R1);
-        }
-        if (serverVersion.isAtLeast(ServerVersion.v1_10_R1)) {
-            new MorphType("ultracosmetics.morphs.polarbear", "PolarBear", UCMaterial.SNOW_BLOCK, getDisguiseType("POLAR_BEAR"), "&7&oI prefer cold areas", MorphPolarBear.class, ServerVersion.v1_10_R1);
-        }
-        if (serverVersion.isAtLeast(ServerVersion.v1_11_R1)) {
-            new MorphType("ultracosmetics.morphs.llama", "Llama", UCMaterial.RED_WOOL, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_11_R1);
-        }
         if (serverVersion.isAtLeast(ServerVersion.v1_12_R1)) {
+            new MorphType("ultracosmetics.morphs.witch", "Witch", UCMaterial.POISONOUS_POTATO, getDisguiseType("WITCH"), "&7&oMuahahahahaha", MorphWitch.class, ServerVersion.v1_12_R1);
+            new MorphType("ultracosmetics.morphs.polarbear", "PolarBear", UCMaterial.SNOW_BLOCK, getDisguiseType("POLAR_BEAR"), "&7&oI prefer cold areas", MorphPolarBear.class, ServerVersion.v1_12_R1);
+            new MorphType("ultracosmetics.morphs.llama", "Llama", UCMaterial.RED_WOOL, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class, ServerVersion.v1_12_R1);
             new MorphType("ultracosmetics.morphs.parrot", "Parrot", UCMaterial.COOKIE, getDisguiseType("PARROT"), "&7&oPolly want a cracker?", MorphParrot.class, ServerVersion.v1_12_R1);
         }
 

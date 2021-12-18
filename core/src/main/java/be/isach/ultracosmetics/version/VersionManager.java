@@ -15,7 +15,7 @@ public class VersionManager {
     /**
      * If the version of Bukkit/Spigot is 1.13.
      */
-    public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_13_R1);
+    public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().is113();
     public static final String PACKAGE = "be.isach.ultracosmetics";
     private IModule module;
     private ServerVersion serverVersion;

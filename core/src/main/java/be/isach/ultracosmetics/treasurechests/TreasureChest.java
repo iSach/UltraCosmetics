@@ -381,8 +381,7 @@ public class TreasureChest implements Listener {
                 this.items.add(entity);
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () ->
-                        spawnHologram(b.getLocation().clone().add(0.5D, UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_9_R1 ?
-                                -0.7 : 0.3D, 0.5D), nameas), 15L);
+                        spawnHologram(b.getLocation().clone().add(0.5D, 0.3D, 0.5D), nameas), 15L);
 
                 this.chestsLeft -= 1;
                 this.chestsToRemove.add(b);
@@ -427,10 +426,6 @@ public class TreasureChest implements Listener {
     }
 
     private void spawnHologram(Location location, String s) {
-        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) > 0
-                && UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_11_R1) < 0) {
-            location.setY(location.getY() - 1);
-        }
         ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.valueOf("ARMOR_STAND"));
         armorStand.setSmall(true);
         armorStand.setVisible(false);
@@ -466,8 +461,7 @@ public class TreasureChest implements Listener {
                 this.items.add(itemEntity);
                 final String nameas = this.randomGenerator.getName();
                 Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () ->
-                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_9_R1 ?
-                                -0.7 : 0.3D, 0.5D), nameas), 15L);
+                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, 0.3D, 0.5D), nameas), 15L);
 
                 this.chestsLeft -= 1;
                 this.chests.remove(event.getClickedBlock());

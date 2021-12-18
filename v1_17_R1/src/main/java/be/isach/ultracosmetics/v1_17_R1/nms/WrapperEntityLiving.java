@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.v1_17_R1.nms;
 
+import be.isach.ultracosmetics.v1_17_R1.ObfuscatedFields;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
@@ -48,8 +49,7 @@ public class WrapperEntityLiving extends WrapperEntity {
     }
 
     public boolean isJumping() {
-    	// corresponds to net.minecraft.world.entity.LivingEntity#jumping
-        return getField("bn", LivingEntity.class, Boolean.class);
+        return getField(ObfuscatedFields.JUMPING, LivingEntity.class, Boolean.class);
     }
 
     public void setJumping(boolean jumping) {

@@ -5,15 +5,8 @@ package be.isach.ultracosmetics.util;
  */
 public enum ServerVersion {
 
-    v1_8_R1("1.8", null),
-    v1_8_R2("1.8.3", null),
     v1_8_R3("1.8.8", null),
-    v1_9_R1("1.9.2", null),
-    v1_9_R2("1.9.4", null),
-    v1_10_R1("1.10.2", null),
-    v1_11_R1("1.11.2", null),
     v1_12_R1("1.12.2", null),
-    v1_13_R1("1.13", null),
     v1_13_R2("1.13.2", "7dd4b3ec31629620c41553e5c142e454"),
     v1_14_R1("1.14.4", "11ae498d9cf909730659b6357e7c2afa"),
     v1_15_R1("1.15.2", "5684afcc1835d966e1b6eb0ed3f72edb"),
@@ -55,5 +48,13 @@ public enum ServerVersion {
 
     public boolean isAtLeast(ServerVersion version) {
         return this.compareTo(version) >= 0;
+    }
+
+    public boolean offhandAvailable() {
+        return isAtLeast(v1_12_R1);
+    }
+
+    public boolean is113() {
+        return isAtLeast(v1_13_R2);
     }
 }

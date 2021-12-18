@@ -107,7 +107,7 @@ public class ItemFactory {
     }
 
     public static Material fromId(int id) {
-        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_13_R1)) {
+        if (UltraCosmeticsData.get().getServerVersion().is113()) {
             return UCMaterial.matchUCMaterial(id, (byte) 0).parseMaterial();
         } else {
             for (Material m : EnumSet.allOf(Material.class)) {

@@ -96,13 +96,9 @@ public final class PetType extends CosmeticMatType<Pet> {
         new PetType("ultracosmetics.pets.villager", "Villager", UCMaterial.EMERALD, "&7&oHmmmmmmmmm", EntityType.VILLAGER, PetVillager.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.bat", "Bat", UCMaterial.COAL, "&7&oI prefer dark areas", EntityType.BAT, PetBat.class, ServerVersion.earliest());
 
-        if (serverVersion.isAtLeast(ServerVersion.v1_10_R1)) {
-            new PetType("ultracosmetics.pets.polarbear", "PolarBear", UCMaterial.SNOW_BLOCK, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetPolarBear.class, ServerVersion.v1_10_R1);
-        }
-        if (serverVersion.isAtLeast(ServerVersion.v1_11_R1)) {
-            new PetType("ultracosmetics.pets.llama", "Llama", UCMaterial.RED_WOOL, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_11_R1);
-        }
         if (serverVersion.isAtLeast(ServerVersion.v1_12_R1)) {
+            new PetType("ultracosmetics.pets.polarbear", "PolarBear", UCMaterial.SNOW_BLOCK, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetPolarBear.class, ServerVersion.v1_12_R1);
+            new PetType("ultracosmetics.pets.llama", "Llama", UCMaterial.RED_WOOL, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_12_R1);
             new PetType("ultracosmetics.pets.parrot", "Parrot", UCMaterial.COOKIE, "&7&oPolly want a cracker?", GetForVersion.entityType("PARROT"), PetParrot.class, ServerVersion.v1_12_R1);
         }
 

@@ -76,7 +76,7 @@ public class GadgetDiscoBall extends Gadget {
         if (armorStand != null && armorStand.isValid() && running) {
             armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
 
-            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) < 0) {
+            if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_8_R3) {
                 armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) r.nextInt(15), " "));
             }
 

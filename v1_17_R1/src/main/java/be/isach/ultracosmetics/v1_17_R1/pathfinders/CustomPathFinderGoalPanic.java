@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
 
+import be.isach.ultracosmetics.v1_17_R1.ObfuscatedFields;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -66,8 +67,7 @@ public class CustomPathFinderGoalPanic extends Goal {
         Method method = null;
         boolean boo = false;
         try {
-            // corresponds to net.minecraft.world.entity.ai.navigation.PathNavigation#isInLiquid()
-            method = this.entity.getNavigation().getClass().getSuperclass().getDeclaredMethod("p");
+            method = this.entity.getNavigation().getClass().getSuperclass().getDeclaredMethod(ObfuscatedFields.IS_IN_LIQUID);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

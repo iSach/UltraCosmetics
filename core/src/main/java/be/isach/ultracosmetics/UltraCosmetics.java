@@ -307,7 +307,7 @@ public class UltraCosmetics extends JavaPlugin {
         pluginManager.registerEvents(new MainListener(), this);
         pluginManager.registerEvents(new EntitySpawningManager(), this);
 
-        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_9_R1)) {
+        if (UltraCosmeticsData.get().getServerVersion().offhandAvailable()) {
             pluginManager.registerEvents(new PlayerSwapItemListener(this), this);
         }
 
