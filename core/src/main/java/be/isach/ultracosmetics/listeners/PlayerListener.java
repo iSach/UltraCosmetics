@@ -136,6 +136,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onInteract(final PlayerInteractEvent event) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        // apparently can happen if a player disconnected while on a pressure plate
+        if (ultraPlayer == null) return;
         // Avoid triggering this when clicking in the inventory
         InventoryType t = event.getPlayer().getOpenInventory().getType();
         if (t != InventoryType.CRAFTING

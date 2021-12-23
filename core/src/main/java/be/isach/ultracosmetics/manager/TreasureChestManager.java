@@ -7,6 +7,8 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.Cuboid;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -82,7 +84,10 @@ public class TreasureChestManager implements Listener {
         }
 
         for (Entity ent : player.getNearbyEntities(5, 5, 5)) {
-            if (ent instanceof Player && plugin.getPlayerManager().getUltraPlayer((Player) ent).getCurrentTreasureChest() != null) {
+            if (!(ent instanceof Player)) continue;
+            Player loopPlayer = (Player) ent;
+            // check Bukkit.getPlayer(UUID) in case loopPlayer is really a player NPC
+            if (Bukkit.getPlayer(loopPlayer.getUniqueId()) != null && plugin.getPlayerManager().getUltraPlayer(loopPlayer).getCurrentTreasureChest() != null) {
                 player.closeInventory();
                 player.sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
                 return;

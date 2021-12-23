@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -185,8 +186,14 @@ public class EntityUtil implements IEntityUtil {
 
         Brain<?> brain = ((LivingEntity)nmsEntity).getBrain();
 
+        // deprecated and annotated VisibleForTesting but super convenient
+        @SuppressWarnings("deprecation")
+        Set<MemoryModuleType<?>> memoryTypes = brain.getMemories().keySet();
+        for (MemoryModuleType<?> type : memoryTypes) {
+            brain.eraseMemory(type);
+        }
+
         try {
-            memoriesField.set(brain, new HashMap<>());
             sensorsField.set(brain, new LinkedHashMap<>());
 
             // this method is annotated with VisibleForTesting but it seems like the easiest thing to do at the moment
