@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.treasurechests.ChestType;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.PacketSender;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_17_R1.pathfinders.CustomPathFinderGoalPanic;
@@ -78,25 +77,21 @@ public class EntityUtil implements IEntityUtil {
     
     private static Field memoriesField;
 	private static Field sensorsField;
-	private static Field cField;
-	private static Field fField;
+	private static Field lockedFlagsField;
+	private static Field disabledFlagsField;
 	static {
 		try {
-			// corresponds to net.minecraft.world.entity.ai.Brain#memories
-			memoriesField = Brain.class.getDeclaredField("d");
+			memoriesField = Brain.class.getDeclaredField(ObfuscatedFields.MEMORIES);
 			memoriesField.setAccessible(true);
 			
-			// corresponds to net.minecraft.world.entity.ai.Brain#sensors
-            sensorsField = Brain.class.getDeclaredField("e");
+            sensorsField = Brain.class.getDeclaredField(ObfuscatedFields.SENSORS);
             sensorsField.setAccessible(true);
             
-            // corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#lockedFlags
-            cField = GoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
+            lockedFlagsField = GoalSelector.class.getDeclaredField(ObfuscatedFields.LOCKED_FLAGS);
+            lockedFlagsField.setAccessible(true);
             
-            // corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#disabledFlags
-            fField = GoalSelector.class.getDeclaredField("f");
-            fField.setAccessible(true);
+            disabledFlagsField = GoalSelector.class.getDeclaredField(ObfuscatedFields.DISABLED_FLAGS);
+            disabledFlagsField.setAccessible(true);
 		} catch (NoSuchFieldException | SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -183,7 +178,6 @@ public class EntityUtil implements IEntityUtil {
         cooldownJumpMap.remove(player);
     }
 
-    // TODO: either remove this method from here or remove PathfinderUtil completely so we don't have duplicate code
     @Override
     public void clearPathfinders(org.bukkit.entity.Entity entity) {
     	Mob nmsEntity = (Mob) ((CraftEntity) entity).getHandle();
@@ -209,12 +203,9 @@ public class EntityUtil implements IEntityUtil {
             goalSelector.removeAllGoals();
             targetSelector.removeAllGoals();
 
-            // I'm  not sure what this line is supposed to do? it's just repeated
-            //dField.set(goalSelector, new LinkedHashSet<>());
-            cField.set(targetSelector, new EnumMap<Goal.Flag,WrappedGoal>(Goal.Flag.class));
+            lockedFlagsField.set(targetSelector, new EnumMap<Goal.Flag,WrappedGoal>(Goal.Flag.class));
 
-            //dField.set(goalSelector, new LinkedHashSet<>());
-            fField.set(targetSelector, EnumSet.noneOf(Goal.Flag.class));
+            disabledFlagsField.set(targetSelector, EnumSet.noneOf(Goal.Flag.class));
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }

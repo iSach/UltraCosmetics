@@ -29,7 +29,7 @@ public class GadgetPartyPopper extends Gadget {
             Vector rand = new Vector(Math.random() - 0.5D,
                     Math.random() - 0.5D, Math.random() - 0.5D);
 
-            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
+            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
                 ItemStack randomDye = UCMaterial.DYES.get(MathUtils.random(0, 14)).parseItem();
                 Vector v = getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(3.2);
                 getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 10, v.getX(), v.getY(), v.getZ(),

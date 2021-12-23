@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
 import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.manager.ArmorStandManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.menu.Menus;
@@ -22,14 +23,19 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
 import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.version.AFlagManager;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -99,12 +105,20 @@ public class UltraCosmetics extends JavaPlugin {
      * Manages cosmetics profiles.
      */
     private CosmeticsProfileManager cosmeticsProfileManager;
-
+    
     /**
-     * Called when plugin is enabled.
+     * Manages WorldGuard flags.
+     */
+    private AFlagManager flagManager = null;
+    
+    /**
+     * Called when plugin is loaded.
+     * Used for registering WorldGuard flags
+     * as recommended in API documentation.
      */
     @Override
-    public void onEnable() {
+    public void onLoad() {
+        // moved to onLoad so it's ready for WorldGuard support
         this.smartLogger = new SmartLogger(getLogger());
 
         UltraCosmeticsData.init(this);
@@ -112,7 +126,33 @@ public class UltraCosmetics extends JavaPlugin {
         if (!UltraCosmeticsData.get().checkServerVersion()) {
             return;
         }
+        
+        // Not using isPluginEnabled() because WorldGuard should be
+        // loaded but not yet enabled when registering flags
+        if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+            // does reflect-y things but isn't in VersionManager because of the load timing
+            // and because it should only happen if WorldGuard is present
+            String wgVersionPackage = VersionManager.IS_VERSION_1_13 ? "v1_13_R2" : "v1_12_R1";
+            try {
+                flagManager = (AFlagManager) ReflectionUtils.instantiateObject(Class.forName(VersionManager.PACKAGE + "." + wgVersionPackage + ".worldguard.FlagManager"));
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoClassDefFoundError | NoSuchMethodError | NoSuchMethodException | ClassNotFoundException e) {
+                getSmartLogger().write(LogLevel.WARNING, "Couldn't find required classes for WorldGuard integration.");
+                getSmartLogger().write(LogLevel.WARNING, "Please make sure you are using the latest version of WorldGuard");
+                getSmartLogger().write(LogLevel.WARNING, "for your version of Minecraft. Debug info:");
+                e.printStackTrace();
+                getSmartLogger().write("WorldGuard support is disabled.");
+            }
+        }
+    }
 
+    /**
+     * Called when plugin is enabled.
+     */
+    @Override
+    public void onEnable() {
         // Create UltraPlayer Manager.
         this.playerManager = new UltraPlayerManager(this);
 
@@ -153,25 +193,32 @@ public class UltraCosmetics extends JavaPlugin {
         new CosmeticManager(this).setupCosmeticsConfigs();
 
         if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            getSmartLogger().write("");
+            getSmartLogger().write();
             getSmartLogger().write("Morphs require Lib's Disguises!");
-            getSmartLogger().write("");
+            getSmartLogger().write();
             getSmartLogger().write("Morphs disabled.");
-            getSmartLogger().write("");
+            getSmartLogger().write();
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            getSmartLogger().write("");
+            getSmartLogger().write();
             new PlaceholderHook(this).register();
             getSmartLogger().write("Hooked into PlaceholderAPI");
-            getSmartLogger().write("");
+            getSmartLogger().write();
+        }
+
+        if (flagManager != null) {
+            flagManager.registerPhase2();
+            getSmartLogger().write();
+            getSmartLogger().write("WorldGuard custom flags enabled");
+            getSmartLogger().write();
         }
 
         // Set up economy if needed.
         setupEconomy();
 
         if (!UltraCosmeticsData.get().usingFileStorage()) {
-            getSmartLogger().write("");
+            getSmartLogger().write();
             getSmartLogger().write("Connecting to MySQL database...");
 
             // Start MySQL.
@@ -179,7 +226,7 @@ public class UltraCosmetics extends JavaPlugin {
             mySqlConnectionManager.start();
 
             getSmartLogger().write("Connected to MySQL database.");
-            getSmartLogger().write("");
+            getSmartLogger().write();
         }
 
         // Initialize UltraPlayers and give chest (if needed).
@@ -260,7 +307,7 @@ public class UltraCosmetics extends JavaPlugin {
         pluginManager.registerEvents(new MainListener(), this);
         pluginManager.registerEvents(new EntitySpawningManager(), this);
 
-        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_9_R1) >= 0) {
+        if (UltraCosmeticsData.get().getServerVersion().offhandAvailable()) {
             pluginManager.registerEvents(new PlayerSwapItemListener(this), this);
         }
 
@@ -290,9 +337,15 @@ public class UltraCosmetics extends JavaPlugin {
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
-        config.addDefault("Disabled-Commands", disabledCommands, "List of commands that won't work when holding a cosmetic, wearing an emote, or wearing a hat.", "Type commands in lowercase without slashes.");
+        config.addDefault("Disabled-Commands", disabledCommands, "List of commands that won't work when cosmetics are equipped.", "Command arguments are ignored, commands are blocked when base command matches.");
 
-        List<String> enabledWorlds = Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
+        // do not use Stream#map() for this, it won't work, for example:
+        // Bukkit.getWorlds().stream().map(World::getName)
+        // In 1.17 it's WorldInfo#getName but in all lower versions
+        // the method is World#getName. Referencing the method
+        // specifically using ::'s breaks it on said lower versions.
+        List<String> enabledWorlds = new ArrayList<>();
+        Bukkit.getWorlds().forEach(k -> enabledWorlds.add(k.getName()));
         config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");
 
         config.set("Disabled-Items", null);
@@ -483,5 +536,21 @@ public class UltraCosmetics extends JavaPlugin {
 
     public CosmeticsProfileManager getCosmeticsProfileManager() {
         return cosmeticsProfileManager;
+    }
+
+    public AFlagManager getFlagManager() {
+        return flagManager;
+    }
+
+    public boolean worldGuardHooked() {
+        return flagManager != null;
+    }
+
+    public boolean areCosmeticsAllowedInRegion(Player player) {
+        return !worldGuardHooked() || flagManager.areCosmeticsAllowedHere(player);
+    }
+
+    public boolean areChestsAllowedInRegion(Player player) {
+        return !worldGuardHooked() || flagManager.areChestsAllowedHere(player);
     }
 }

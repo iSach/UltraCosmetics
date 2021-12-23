@@ -32,7 +32,7 @@ public class ParticleEffectFrozenWalk extends ParticleEffect {
         Location locationRight = getPlayer().getLocation().add(vectorRight);
         locationLeft.setY(getPlayer().getLocation().getY());
         locationRight.setY(getPlayer().getLocation().getY());
-        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
             locationLeft.getWorld().spawnParticle(Particle.ITEM_CRACK, locationLeft, 0, 0, 0, 0, 0, UCMaterial.SNOW.parseItem());
             locationLeft.getWorld().spawnParticle(Particle.ITEM_CRACK, locationRight, 0, 0, 0, 0, 0, UCMaterial.SNOW.parseItem());
         } else {

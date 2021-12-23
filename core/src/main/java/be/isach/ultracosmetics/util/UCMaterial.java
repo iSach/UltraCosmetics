@@ -1616,7 +1616,7 @@ public enum UCMaterial {
     @Nullable
     public Material parseMaterial(boolean suggest) {
         if (name().contains("DYE")) {
-            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) < 0)
+            if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R2) < 0)
                 return Material.valueOf("INK_SACK");
             else if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R2) <= 0 && data == 15)
                 return Material.valueOf("BONE_MEAL");

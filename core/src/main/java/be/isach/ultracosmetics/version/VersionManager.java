@@ -15,8 +15,8 @@ public class VersionManager {
     /**
      * If the version of Bukkit/Spigot is 1.13.
      */
-    public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_13_R1) >= 0;
-    private final String PACKAGE = "be.isach.ultracosmetics";
+    public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().is113();
+    public static final String PACKAGE = "be.isach.ultracosmetics";
     private IModule module;
     private ServerVersion serverVersion;
     private IEntityUtil entityUtil;
@@ -26,9 +26,9 @@ public class VersionManager {
     private IMounts mounts;
     private IPets pets;
     private IMorphs morphs;
+    private AFlagManager flagManager;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
     private Constructor<? extends IAnvilGUI> anvilGUIConstructor;
-    private IPathfinderUtil pathfinderUtil;
 
     public VersionManager(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
@@ -40,12 +40,11 @@ public class VersionManager {
         entityUtil = loadModule("EntityUtil");
         actionBarUtil = loadModule("ActionBar");
         itemGlower = loadModule("ItemGlower");
-        pathfinderUtil = loadModule("PathfinderUtil");
         fireworkFactory = loadModule("FireworkFactory");
         mounts = loadModule("Mounts");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
-        if (serverVersion.compareTo(ServerVersion.v1_14_R1) >= 0)
+        if (serverVersion.isAtLeast(ServerVersion.v1_14_R1))
             anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, String.class, Boolean.class, Consumer.class, BiFunction.class);
         else
             anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, AAnvilGUI.AnvilClickEventHandler.class);
@@ -107,10 +106,6 @@ public class VersionManager {
         }
     }
 
-    public IPathfinderUtil getPathfinderUtil() {
-        return pathfinderUtil;
-    }
-
     public IPets getPets() {
         return pets;
     }
@@ -121,5 +116,9 @@ public class VersionManager {
 
     public IModule getModule() {
         return module;
+    }
+
+    public AFlagManager getFlagManager() {
+        return flagManager;
     }
 }

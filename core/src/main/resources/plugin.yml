@@ -4,7 +4,12 @@ author: iSach
 load: POSTWORLD
 main: be.isach.ultracosmetics.UltraCosmetics
 api-version: 1.13
-softdepend: [LibsDisguises, Vault, PlaceholderAPI, PlayerPoints]
+softdepend:
+- LibsDisguises
+- Vault
+- PlaceholderAPI
+- PlayerPoints
+- WorldGuard
 commands:
   ultracosmetics:
     aliases: [uc, cosmetics]
@@ -22,12 +27,15 @@ permissions:
       - ultracosmetics.openmenu
       - ultracosmetics.receivechest
       - ultracosmetics.treasurechests.buykey
+      - ultracosmetics.bypassdisabledcommands
   ultracosmetics.openmenu:
     default: true
   ultracosmetics.receivechest:
     default: true
   ultracosmetics.treasurechests.buykey:
     default: true
+  ultracosmetics.bypassdisabledcommands:
+    default: op
   ultracosmetics.command.*:
     children:
       - ultracosmetics.command.clear

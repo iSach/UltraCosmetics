@@ -153,21 +153,21 @@ public class EntityUtil implements IEntityUtil {
             // Corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#availableGoals
             dField = PathfinderGoalSelector.class.getDeclaredField("d");
             dField.setAccessible(true);
-            dField.set(goalSelector, new LinkedHashSet<>());
-            dField.set(targetSelector, new LinkedHashSet<>());
+            // Clear existing set instead of replacing it with a new one,
+            // maintaining Airplane compatibility.
+            ((AbstractCollection<?>)dField.get(goalSelector)).clear();
+            ((AbstractCollection<?>)dField.get(targetSelector)).clear();
 
             // Corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#lockedFlags
             Field cField;
             cField = PathfinderGoalSelector.class.getDeclaredField("c");
             cField.setAccessible(true);
-            dField.set(goalSelector, new LinkedHashSet<>());
             cField.set(targetSelector, new EnumMap<>(PathfinderGoal.Type.class));
 
             // Corresponds to net.minecraft.world.entity.ai.goal.GoalSelector#disabledFlags
             Field fField;
             fField = PathfinderGoalSelector.class.getDeclaredField("f");
             fField.setAccessible(true);
-            dField.set(goalSelector, new LinkedHashSet<>());
             fField.set(targetSelector, EnumSet.noneOf(PathfinderGoal.Type.class));
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();

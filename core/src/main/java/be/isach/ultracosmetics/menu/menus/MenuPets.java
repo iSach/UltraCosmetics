@@ -83,7 +83,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
 
     public void renamePet(final UltraPlayer ultraPlayer) {
         Player p = ultraPlayer.getBukkitPlayer();
-        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
             UltraCosmeticsData.get().getVersionManager().newAnvilGUI(p,
                     "",
                     (player1 -> {

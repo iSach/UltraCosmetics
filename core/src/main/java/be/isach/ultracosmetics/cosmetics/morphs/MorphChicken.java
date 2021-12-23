@@ -56,7 +56,7 @@ public class MorphChicken extends Morph {
                 public void run() {
                     chickens = new ArrayList<>();
                     for (Item i : items) {
-                        if (UltraCosmeticsData.get().getServerVersion().compareTo(ServerVersion.v1_14_R1) >= 0) {
+                        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
                             i.getWorld().spawnParticle(Particle.BLOCK_CRACK, i.getLocation(), 0, 0, 0, 0, 0, UCMaterial.WHITE_TERRACOTTA.parseMaterial().createBlockData());
                         } else {
                             Particles.BLOCK_CRACK.display(new Particles.BlockData(BlockUtils.getOldMaterial("STAINED_CLAY"), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);

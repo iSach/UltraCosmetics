@@ -208,7 +208,7 @@ public enum Sounds {
     private Sound resolvedSound = null;
     private static final ServerVersion serverVersion = UltraCosmeticsData.get().getServerVersion();
 
-    Sounds(String pre19sound, String post19sound, String v13sound) {
+    private Sounds(String pre19sound, String post19sound, String v13sound) {
         this.pre19sound = pre19sound;
         this.post19sound = post19sound;
         this.v13sound = v13sound;
@@ -218,9 +218,9 @@ public enum Sounds {
         if (resolvedSound != null) return resolvedSound;
 
         try {
-            if (serverVersion.compareTo(ServerVersion.v1_13_R1) >= 0) { // 1.13+
+            if (serverVersion.is113()) { // 1.13+
                 return resolvedSound = Sound.valueOf(v13sound);
-            } else if (serverVersion.compareTo(ServerVersion.v1_9_R1) >= 0) { // 1.9+
+            } else if (serverVersion.isAtLeast(ServerVersion.v1_12_R1)) { // 1.9+
                 return resolvedSound = Sound.valueOf(post19sound);
             } else { // All other versions (1.8)
                 return resolvedSound = Sound.valueOf(pre19sound);

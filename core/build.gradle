@@ -1,14 +1,16 @@
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT'
-    compileOnly 'org.bukkit:craftbukkit:1.14.4-R0.1-SNAPSHOT'
-    compile('LibsDisguises:LibsDisguises:9.5.2') {
+    // should we use "api" instead of "implementation" anywhere?
+    implementation 'org.spigotmc:spigot:1.17.1-R0.1-SNAPSHOT'
+    implementation('LibsDisguises:LibsDisguises:9.5.2') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
     }
-    compile('net.milkbowl.vault:VaultAPI:1.6') {
+    implementation('net.milkbowl.vault:VaultAPI:1.6') {
         exclude group: 'org.bukkit'
     }
-    compile 'me.clip:placeholderapi:2.10.3'
-    compile 'org.black_ixx:playerpoints:3.0.3'
-    compile 'com.google.code.gson:gson:2.2.4'
+    implementation 'me.clip:placeholderapi:2.10.3'
+    implementation 'org.black_ixx:playerpoints:3.1.0'
+    implementation 'com.google.code.gson:gson:2.2.4'
+    // WG 7.0.3 was last version to support Java <16
+    implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.3'
 }

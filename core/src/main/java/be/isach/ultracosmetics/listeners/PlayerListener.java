@@ -136,6 +136,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onInteract(final PlayerInteractEvent event) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        // apparently can happen if a player disconnected while on a pressure plate
+        if (ultraPlayer == null) return;
         // Avoid triggering this when clicking in the inventory
         InventoryType t = event.getPlayer().getOpenInventory().getType();
         if (t != InventoryType.CRAFTING
@@ -285,15 +287,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (SettingsManager.getConfig().getList("Disabled-Commands").contains(event.getMessage().split(" ")[0].replace("/", "").toLowerCase())) {
-            UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-            if (player.getCurrentEmote() != null || player.getCurrentHat() != null || player.hasSuitOn()) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Wearing-Message"));
-            } else if (player.getCurrentGadget() != null && player.getCurrentGadget().getItemStack().equals(event.getPlayer().getItemInHand())) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Holding-Message"));
-            }
+        if (event.getPlayer().hasPermission("ultracosmetics.bypassdisabledcommands")) return;
+        String strippedCommand = event.getMessage().split(" ")[0].replace("/", "").toLowerCase();
+        if (!SettingsManager.getConfig().getList("Disabled-Commands").contains(strippedCommand)) return;
+        UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        if (player.hasCosmeticsEquipped()) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(MessageManager.getMessage("Disabled-Command-Message"));
         }
     }
 

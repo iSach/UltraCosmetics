@@ -1,11 +1,14 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.stats.AbstractMetrics;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
-
+import org.bukkit.UnsafeValues;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,10 +25,6 @@ public class UltraCosmeticsData {
      * A String that items that shouldn't be picked up are given. Randomly generated each time the server starts.
      */
     private final String itemNoPickupString;
-    /**
-     * If true, the server is using Spigot and not CraftBukkit/Bukkit.
-     */
-    private boolean usingSpigot = false;
 
     /**
      * True -> should execute custom command when going back to main menu.
@@ -96,7 +95,6 @@ public class UltraCosmeticsData {
 
     public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        this.usingSpigot = ultraCosmetics.getServer().getVersion().contains("Spigot");
         this.itemNoPickupString = UUID.randomUUID().toString();
     }
 
@@ -123,6 +121,13 @@ public class UltraCosmeticsData {
 
     void initModule() {
         ultraCosmetics.getSmartLogger().write("Initializing module " + serverVersion);
+
+        // mappings check is here so it's grouped with other NMS log messages
+        if (!checkMappingsVersion(serverVersion)) {
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Server internals seem to have changed since this build was created.");
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Please check for a server update and an UltraCosmetics update or you will likely experience issues.");
+        }
+
         versionManager = new VersionManager(serverVersion);
         try {
             versionManager.load();
@@ -135,31 +140,46 @@ public class UltraCosmeticsData {
     }
 
     boolean checkServerVersion() {
-        String mcVersion = "1.8.0";
-
+        String versionString = Bukkit.getServer().getClass().getPackage().getName(); 
+        String mcVersion;
         try {
-            mcVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        } catch (ArrayIndexOutOfBoundsException ignored) {
+            mcVersion = versionString.split("\\.")[3];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Unable to determine server version. Please report this error.");
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Version string: " + versionString);
+            return false;
         }
 
         ServerVersion serverVersion;
 
-        if (mcVersion.startsWith("v")) {
-            try {
-                serverVersion = ServerVersion.valueOf(mcVersion);
-            } catch (Exception exc) {
-                ultraCosmetics.getSmartLogger().write("This NMS version isn't supported. (" + mcVersion + ")!");
-                String minVersion = ServerVersion.values()[0].getName();
-                String maxVersion = ServerVersion.values()[ServerVersion.values().length - 1].getName();
-                System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON " + minVersion + " through " + maxVersion + "!\n\n----------------------------");
-                Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
-                return false;
-            }
-        } else serverVersion = ServerVersion.v1_8_R1;
+        try {
+            serverVersion = ServerVersion.valueOf(mcVersion);
+        } catch (IllegalArgumentException exc) {
+            ultraCosmetics.getSmartLogger().write("This NMS version isn't supported. (" + mcVersion + ")!");
+            System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON " + ServerVersion.earliest().getName() + " or " + ServerVersion.v1_12_R1.getName() + " through " + ServerVersion.latest().getName() + "!\n\n----------------------------");
+            Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
+            return false;
+        }
 
-        UltraCosmeticsData.get().setServerVersion(serverVersion);
+        setServerVersion(serverVersion);
 
         return true;
+    }
+
+    boolean checkMappingsVersion(ServerVersion version) {
+        String currentMappingsVersion = null;
+        @SuppressWarnings("deprecation")
+        UnsafeValues magicNumbers = Bukkit.getUnsafe();
+        Class<?> magicNumbersClass = magicNumbers.getClass();
+        try {
+            Method mappingsVersionMethod = magicNumbersClass.getDeclaredMethod("getMappingsVersion");
+            currentMappingsVersion = (String) mappingsVersionMethod.invoke(magicNumbers);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException 
+                | IllegalArgumentException | InvocationTargetException ignored) {}
+        if (currentMappingsVersion == null) {
+            return version.getMappingsVersion() == null;
+        }
+        return currentMappingsVersion.equals(version.getMappingsVersion());
     }
 
     public void initConfigFields() {
@@ -204,10 +224,6 @@ public class UltraCosmeticsData {
 
     public boolean areTreasureChestsEnabled() {
         return treasureChests;
-    }
-
-    public boolean isUsingSpigot() {
-        return usingSpigot;
     }
 
     public String getCustomBackMenuCommand() {

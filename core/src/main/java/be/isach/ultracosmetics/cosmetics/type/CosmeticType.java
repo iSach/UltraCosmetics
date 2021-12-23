@@ -57,8 +57,8 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     public boolean isEnabled() {
-        return !(this == GadgetType.valueOf("etherealpearl") && (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_11_R1 || UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_12_R1))
-                && SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled") && UltraCosmeticsData.get().getServerVersion().compareTo(baseVersion) >= 0;
+        return !(this == GadgetType.valueOf("etherealpearl") && UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_12_R1)
+                && SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled") && UltraCosmeticsData.get().getServerVersion().isAtLeast(baseVersion);
     }
 
     public String getName() {

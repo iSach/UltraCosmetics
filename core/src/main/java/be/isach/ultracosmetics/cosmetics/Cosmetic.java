@@ -47,6 +47,11 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
             return;
         }
 
+        if (!ultraCosmetics.areCosmeticsAllowedInRegion(getPlayer())) {
+            getPlayer().sendMessage(MessageManager.getMessage("Region-Disabled"));
+            return;
+        }
+
         ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
 
         this.equipped = true;
