@@ -123,9 +123,13 @@ public class UltraCosmeticsData {
         ultraCosmetics.getSmartLogger().write("Initializing module " + serverVersion);
 
         // mappings check is here so it's grouped with other NMS log messages
+        // bigger message so server owners might see it
         if (!checkMappingsVersion(serverVersion)) {
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "!!!!!!!!!!!!!!!!!!!!!!!!!!!! HEY YOU !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Server internals seem to have changed since this build was created.");
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Please check for a server update and an UltraCosmetics update or you will likely experience issues.");
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Please check for a server update and an UltraCosmetics update.");
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "UltraCosmetics will continue running but you will likely experience issues!");
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
         versionManager = new VersionManager(serverVersion);

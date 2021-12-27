@@ -45,7 +45,7 @@ public class SubCommandTreasure extends SubCommand {
         }
         Player opener = Bukkit.getPlayer(args[1]);
         if (opener == null) {
-            sender.sendMessage("§c§lPlayer " + args[1] + " not found!");
+            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[1] + " not found!");
             return;
         }
 
