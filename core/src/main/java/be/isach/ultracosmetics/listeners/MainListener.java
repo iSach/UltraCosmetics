@@ -1,8 +1,11 @@
 package be.isach.ultracosmetics.listeners;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -40,5 +43,12 @@ public class MainListener implements Listener {
                 && stack.getItemMeta().getDisplayName().equals(UltraCosmeticsData.get().getItemNoPickupString()))) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onSnowmanTrail(EntityBlockFormEvent event) {
+        if (event.getEntity().getType() != EntityType.SNOWMAN) return;
+        if (!event.getEntity().hasMetadata("Pet")) return;
+        event.setCancelled(true);
     }
 }

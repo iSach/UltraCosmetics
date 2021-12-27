@@ -288,6 +288,11 @@ public class UltraCosmetics extends JavaPlugin {
             }
 
             if (playerManager != null) {
+                // make sure pets are properly removed on server shutdown
+                for (UltraPlayer player : playerManager.getUltraPlayers()) {
+                    player.clear();
+                }
+
                 playerManager.dispose();
             }
 
