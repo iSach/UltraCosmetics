@@ -153,6 +153,12 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        // if loading failed...
+        if (UltraCosmeticsData.get().getServerVersion() == null) {
+            getSmartLogger().write(LogLevel.ERROR, "Plugin load has failed, please check earlier in the log for details.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
         // Create UltraPlayer Manager.
         this.playerManager = new UltraPlayerManager(this);
 
@@ -279,27 +285,22 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        // when the plugin is disabled from onEnable, skip cleanup
+        if (UltraCosmeticsData.get().getServerVersion() == null) {
+            return;
+        }
         // TODO Purge Pet Names. (and Treasure Chests bugged holograms).
         // TODO Use Metadatas for that!
 
-        try {
+        if (cosmeticsProfileManager != null) {
             for (CosmeticsProfile cp : cosmeticsProfileManager.getCosmeticsProfiles().values()) {
                 cp.save();
             }
-
-            if (playerManager != null) {
-                // make sure pets are properly removed on server shutdown
-                for (UltraPlayer player : playerManager.getUltraPlayers()) {
-                    player.clear();
-                }
-
-                playerManager.dispose();
-            }
-
-            UltraCosmeticsData.get().getVersionManager().getModule().disable();
-        } catch (Exception exc) {
-            // Can't do much if this happens.
         }
+
+        playerManager.dispose();
+
+        UltraCosmeticsData.get().getVersionManager().getModule().disable();
     }
 
     /**

@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
@@ -20,7 +21,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents an instance of a rocket gadget summoned by a player.
@@ -30,11 +33,14 @@ import java.util.List;
  */
 public class GadgetRocket extends Gadget {
 
-    public static final List<Block> BLOCKS = new ArrayList<>();
+    private static final BlockFace[] CARDINAL = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
+    private static final Material FENCE = BlockUtils.getOldMaterial("FENCE");
+    public static final Set<GadgetRocket> ROCKETS_WITH_BLOCKS = new HashSet<>();
 
-    boolean launching;
-    ArmorStand armorStand;
-    List<FallingBlock> fallingBlocks = new ArrayList<>();
+    private boolean launching;
+    private ArmorStand armorStand;
+    private List<Block> blocks = new ArrayList<>();
+    private List<FallingBlock> fallingBlocks = new ArrayList<>();
 
     public GadgetRocket(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("rocket"), ultraCosmetics);
@@ -48,22 +54,17 @@ public class GadgetRocket extends Gadget {
         loc.setY(loc.getBlockY());
         loc.setZ(loc.getBlockZ() + 0.5);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            ROCKETS_WITH_BLOCKS.add(this);
             for (int i = 0; i < 2; i++) {
-                Block b1 = loc.clone().add(1, i, 0).getBlock();
-                Block b2 = loc.clone().add(-1, i, 0).getBlock();
-                Block b3 = loc.clone().add(0, i, 1).getBlock();
-                Block b4 = loc.clone().add(0, i, -1).getBlock();
-                Block b5 = loc.clone().add(0, i + 1, 0).getBlock();
-                b1.setType(BlockUtils.getOldMaterial("FENCE"));
-                b2.setType(BlockUtils.getOldMaterial("FENCE"));
-                b3.setType(BlockUtils.getOldMaterial("FENCE"));
-                b4.setType(BlockUtils.getOldMaterial("FENCE"));
-                b5.setType(Material.QUARTZ_BLOCK);
-                BLOCKS.add(b1);
-                BLOCKS.add(b2);
-                BLOCKS.add(b3);
-                BLOCKS.add(b4);
-                BLOCKS.add(b5);
+                Block center = loc.clone().add(0, i, 0).getBlock();
+                for (BlockFace face : CARDINAL) {
+                    Block side = center.getRelative(face);
+                    side.setType(FENCE);
+                    blocks.add(side);
+                }
+                Block quartz = center.getRelative(BlockFace.UP);
+                quartz.setType(Material.QUARTZ_BLOCK);
+                blocks.add(quartz);
             }
             armorStand = loc.getWorld().spawn(loc.add(0, 1.5, 0), ArmorStand.class);
             armorStand.setVisible(false);
@@ -71,22 +72,12 @@ public class GadgetRocket extends Gadget {
         }, 10);
         Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
             armorStand.setPassenger(getPlayer());
-            BukkitRunnable runnable = new BukkitRunnable() {
+            new BukkitRunnable() {
                 int i = 5;
 
                 @Override
                 public void run() {
-                    if (getOwner() == null) {
-                        cancel();
-                        return;
-                    }
-
-                    if (getPlayer() == null) {
-                        cancel();
-                        return;
-                    }
-
-                    if (!getPlayer().isOnline()) {
+                    if (getOwner() == null || getPlayer() == null || !getPlayer().isOnline()) {
                         cancel();
                         return;
                     }
@@ -99,61 +90,57 @@ public class GadgetRocket extends Gadget {
                         getPlayer().sendTitle(ChatColor.RED + "" + ChatColor.BOLD + i, "");
                         SoundUtil.playSound(getPlayer(), Sounds.NOTE_BASS_DRUM, 1.0f, 1.0f);
                         i--;
-                    } else {
+                        return;
+                    }
+                    if (!isStillCurrentGadget()) {
+                        cancel();
+                        return;
+                    }
+
+                    getPlayer().sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"), "");
+                    SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
+                    armorStand.remove();
+                    armorStand = null;
+
+
+                    for (Block block : blocks) {
+                        block.setType(Material.AIR);
+                    }
+
+                    blocks.clear();
+                    ROCKETS_WITH_BLOCKS.remove(GadgetRocket.this);
+
+                    final FallingBlock top = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 3, 0), Material.QUARTZ_BLOCK, (byte) 0);
+                    FallingBlock base = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 2, 0), Material.QUARTZ_BLOCK, (byte) 0);
+                    for (int i = 0; i < 2; i++) {
+                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, 1), FENCE, (byte) 0));
+                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, -1), FENCE, (byte) 0));
+                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(1, 1 + i, 0), FENCE, (byte) 0));
+                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(-1, 1 + i, 0), FENCE, (byte) 0));
+                    }
+
+                    fallingBlocks.add(top);
+                    fallingBlocks.add(base);
+                    if (fallingBlocks.get(8).getPassenger() == null) {
+                        fallingBlocks.get(8).setPassenger(getPlayer());
+                    }
+                    top.setPassenger(getPlayer());
+                    launching = true;
+                    Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                         if (!isStillCurrentGadget()) {
                             cancel();
                             return;
                         }
-
-                        getPlayer().sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"), "");
+                        fallingBlocks.forEach(Entity::remove);
+                        fallingBlocks.clear();
+                        FallDamageManager.addNoFall(getPlayer());
                         SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
-                        armorStand.remove();
-                        armorStand = null;
-
-
-                        for (Block block : BLOCKS) {
-                            block.setType(Material.AIR);
-                        }
-
-                        BLOCKS.clear();
-
-                        final FallingBlock top = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 3, 0), Material.QUARTZ_BLOCK, (byte) 0);
-                        FallingBlock base = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 2, 0), Material.QUARTZ_BLOCK, (byte) 0);
-                        for (int i = 0; i < 2; i++) {
-                            FallingBlock fence1 = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, 1), BlockUtils.getOldMaterial("FENCE"), (byte) 0);
-                            FallingBlock fence2 = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, -1), BlockUtils.getOldMaterial("FENCE"), (byte) 0);
-                            FallingBlock fence3 = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(1, 1 + i, 0), BlockUtils.getOldMaterial("FENCE"), (byte) 0);
-                            FallingBlock fence4 = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(-1, 1 + i, 0), BlockUtils.getOldMaterial("FENCE"), (byte) 0);
-                            fallingBlocks.add(fence1);
-                            fallingBlocks.add(fence2);
-                            fallingBlocks.add(fence3);
-                            fallingBlocks.add(fence4);
-                        }
-
-                        fallingBlocks.add(top);
-                        fallingBlocks.add(base);
-                        if (fallingBlocks.get(8).getPassenger() == null) {
-                            fallingBlocks.get(8).setPassenger(getPlayer());
-                        }
-                        top.setPassenger(getPlayer());
-                        launching = true;
-                        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-                            if (!isStillCurrentGadget()) {
-                                cancel();
-                                return;
-                            }
-                            fallingBlocks.forEach(Entity::remove);
-                            fallingBlocks.clear();
-                            FallDamageManager.addNoFall(getPlayer());
-                            SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
-                            UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
-                            launching = false;
-                        }, 80);
-                        cancel();
-                    }
+                        UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
+                        launching = false;
+                    }, 80);
+                    cancel();
                 }
-            };
-            runnable.runTaskTimer(getUltraCosmetics(), 0, 20);
+            }.runTaskTimer(getUltraCosmetics(), 0, 20);
         }, 12);
     }
 
@@ -206,13 +193,13 @@ public class GadgetRocket extends Gadget {
 
     @Override
     public void onClear() {
-        for (Block block : BLOCKS) {
+        for (Block block : blocks) {
             block.setType(Material.AIR);
         }
         for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.remove();
         }
-        BLOCKS.clear();
+        blocks.clear();
         fallingBlocks.clear();
         if (armorStand != null) {
             armorStand.remove();
@@ -225,6 +212,9 @@ public class GadgetRocket extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
+    void onLeftClick() {}
+
+    public List<Block> getBlocks() {
+        return blocks;
     }
 }

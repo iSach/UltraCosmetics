@@ -157,7 +157,7 @@ public class GadgetSmashDown extends Gadget {
             event.setCancelled(true);
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
-            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R1)) {
+            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R3)) {
                 BlockData data = fb.getBlockData();
                 fb.getWorld().spawnParticle(Particle.BLOCK_CRACK, fb.getLocation(), 50, 0, 0, 0, 0.4d, data);
             } else {
