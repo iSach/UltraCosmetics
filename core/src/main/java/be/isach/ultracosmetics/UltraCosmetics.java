@@ -8,9 +8,9 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.economy.EconomyHandler;
+import be.isach.ultracosmetics.listeners.Listener19;
 import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
-import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.manager.ArmorStandManager;
@@ -317,7 +317,7 @@ public class UltraCosmetics extends JavaPlugin {
         pluginManager.registerEvents(new EntitySpawningManager(), this);
 
         if (UltraCosmeticsData.get().getServerVersion().offhandAvailable()) {
-            pluginManager.registerEvents(new PlayerSwapItemListener(this), this);
+            pluginManager.registerEvents(new Listener19(this), this);
         }
 
         this.treasureChestManager = new TreasureChestManager(this);

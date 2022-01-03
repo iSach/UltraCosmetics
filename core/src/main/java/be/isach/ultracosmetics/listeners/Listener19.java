@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.listeners.v1_9;
+package be.isach.ultracosmetics.listeners;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -17,11 +17,11 @@ import org.bukkit.inventory.ItemStack;
  * @author iSach
  * @since 05-16-2016
  */
-public class PlayerSwapItemListener implements Listener {
+public class Listener19 implements Listener {
 
     private UltraCosmetics ultraCosmetics;
 
-    public PlayerSwapItemListener(UltraCosmetics ultraCosmetics) {
+    public Listener19(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
     }
 
