@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.util.CustomConfiguration;
+import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

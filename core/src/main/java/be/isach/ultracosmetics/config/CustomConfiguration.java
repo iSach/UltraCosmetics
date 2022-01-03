@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.util;
+package be.isach.ultracosmetics.config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
