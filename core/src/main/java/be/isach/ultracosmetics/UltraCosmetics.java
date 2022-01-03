@@ -1,6 +1,8 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.command.CommandManager;
+import be.isach.ultracosmetics.config.AutoCommentConfiguration;
+import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.ManualCommentConfiguration;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -28,21 +30,20 @@ import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Main class of the plugin.
@@ -59,7 +60,7 @@ public class UltraCosmetics extends JavaPlugin {
     /**
      * The Configuration. (config.yml)
      */
-    private ManualCommentConfiguration config;
+    private CustomConfiguration config;
 
     /**
      * Config File.
@@ -341,7 +342,7 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write("Creating Config File and loading it.");
         }
 
-        config = ManualCommentConfiguration.loadConfiguration(file);
+        config = loadConfiguration(file);
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
@@ -486,7 +487,7 @@ public class UltraCosmetics extends JavaPlugin {
      * @return Overwrites getConfig to return our own Custom Configuration.
      */
     @Override
-    public ManualCommentConfiguration getConfig() {
+    public CustomConfiguration getConfig() {
         return config;
     }
 
@@ -560,5 +561,22 @@ public class UltraCosmetics extends JavaPlugin {
 
     public boolean areChestsAllowedInRegion(Player player) {
         return !worldGuardHooked() || flagManager.areChestsAllowedHere(player);
+    }
+
+    public CustomConfiguration loadConfiguration(File file) {
+        CustomConfiguration config;
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_18_R1)) {
+            config = new AutoCommentConfiguration();
+        } else {
+            config = new ManualCommentConfiguration();
+        }
+
+        try {
+            config.load(file);
+        } catch (FileNotFoundException ignored) {
+        } catch (IOException | InvalidConfigurationException ex) {
+            getSmartLogger().write(LogLevel.ERROR, "Cannot load " + file, ex);
+        }
+        return config;
     }
 }
