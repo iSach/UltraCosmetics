@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.config;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,28 +9,17 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
-public class CustomConfiguration extends YamlConfiguration {
+// to be used in 1.17.1 and below, before Spigot supported comment preservation
+public class ManualCommentConfiguration extends YamlConfiguration {
 
     private Map<String, List<String>> comments = null;
     private boolean newLineAfterHeader = false;
     private boolean newLinePerKey = false;
 
-    private CustomConfiguration() {
+    private ManualCommentConfiguration() {
         super();
         this.comments = new LinkedHashMap<>();
-    }
-
-    public static CustomConfiguration loadConfiguration(File file) {
-        CustomConfiguration config = new CustomConfiguration();
-        try {
-            config.load(file);
-        } catch (FileNotFoundException ignored) {
-        } catch (IOException | InvalidConfigurationException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
-        }
-        return config;
     }
 
     private static String getPathToComment(List<String> configContents, int lineIndex, String configLine) {

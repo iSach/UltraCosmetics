@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.command.CommandManager;
-import be.isach.ultracosmetics.config.CustomConfiguration;
+import be.isach.ultracosmetics.config.ManualCommentConfiguration;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
@@ -29,6 +29,7 @@ import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -58,7 +59,7 @@ public class UltraCosmetics extends JavaPlugin {
     /**
      * The Configuration. (config.yml)
      */
-    private CustomConfiguration config;
+    private ManualCommentConfiguration config;
 
     /**
      * Config File.
@@ -340,7 +341,7 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write("Creating Config File and loading it.");
         }
 
-        config = CustomConfiguration.loadConfiguration(file);
+        config = ManualCommentConfiguration.loadConfiguration(file);
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
@@ -485,7 +486,7 @@ public class UltraCosmetics extends JavaPlugin {
      * @return Overwrites getConfig to return our own Custom Configuration.
      */
     @Override
-    public CustomConfiguration getConfig() {
+    public ManualCommentConfiguration getConfig() {
         return config;
     }
 

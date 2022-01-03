@@ -76,7 +76,7 @@ public class SettingsManager {
      *
      * @return the messages SettingsManager.
      */
-    public static CustomConfiguration getConfig() {
+    public static ManualCommentConfiguration getConfig() {
         return UltraCosmeticsData.get().getPlugin().getConfig();
     }
 

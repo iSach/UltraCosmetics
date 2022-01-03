@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.config.CustomConfiguration;
+import be.isach.ultracosmetics.config.ManualCommentConfiguration;
 import be.isach.ultracosmetics.util.UCMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -23,7 +23,7 @@ public class CommandReward {
     private List<String> commands;
 
     public CommandReward(String path) {
-        CustomConfiguration config = UltraCosmeticsData.get().getPlugin().getConfig();
+        ManualCommentConfiguration config = UltraCosmeticsData.get().getPlugin().getConfig();
         chance = config.getInt(path + ".Chance");
         messageEnabled = config.getBoolean(path + ".Message.enabled");
         message = config.getString(path + ".Message.message");

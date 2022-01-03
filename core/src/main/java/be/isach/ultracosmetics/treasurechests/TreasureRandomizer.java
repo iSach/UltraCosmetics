@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.config.CustomConfiguration;
+import be.isach.ultracosmetics.config.ManualCommentConfiguration;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
@@ -138,7 +138,7 @@ public class TreasureRandomizer {
                         && !player.hasPermission(emoteType.getPermission()))
                     emoteList.add(emoteType);
         if (commandRewardList.isEmpty()) {
-            CustomConfiguration config = UltraCosmeticsData.get().getPlugin().getConfig();
+            ManualCommentConfiguration config = UltraCosmeticsData.get().getPlugin().getConfig();
 
             for (String key : config.getConfigurationSection("TreasureChests.Loots.Commands").getKeys(false)) {
                 String path = "TreasureChests.Loots.Commands." + key;

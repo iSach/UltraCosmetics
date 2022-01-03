@@ -1,6 +1,6 @@
 dependencies {
     // should we use "api" instead of "implementation" anywhere?
-    implementation 'org.spigotmc:spigot:1.18.1-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
     implementation('LibsDisguises:LibsDisguises:9.5.2') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
@@ -13,4 +13,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.2.4'
     // WG 7.0.3 was last version to support Java <16
     implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.3'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    // same version used in 1.17.1
+    implementation 'com.mojang:authlib:2.3.31'
 }
