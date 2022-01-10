@@ -102,17 +102,13 @@ public class GadgetDiscoBall extends Gadget {
 
                 @Override
                 public void run() {
-                    try {
-                        for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
-                            if (ent == null) {
-                                break;
-                            }
-                            if (ent.isOnGround() && affectPlayers) {
-                                MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
-                            }
+                    for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
+                        if (ent == null) {
+                            break;
                         }
-                    } catch (Exception ignored) {
-                        // Sync async problem can happen, messy multithreading...
+                        if (ent.isOnGround() && affectPlayers) {
+                            MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
+                        }
                     }
                 }
             }.runTask(getUltraCosmetics());
@@ -174,9 +170,5 @@ public class GadgetDiscoBall extends Gadget {
             }
             // location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
         }
-    }
-
-    @Override
-    void onLeftClick() {
     }
 }

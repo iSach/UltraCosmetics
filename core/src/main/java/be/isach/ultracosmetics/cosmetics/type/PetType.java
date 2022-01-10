@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -41,11 +42,9 @@ public final class PetType extends CosmeticMatType<Pet> {
     }
 
     public static PetType getByName(String s) {
-        try {
-            return VALUES.stream().filter(value -> value.getConfigName().equalsIgnoreCase(s)).findFirst().get();
-        } catch (Exception exc) {
-            return null;
-        }
+        Optional<PetType> optional = VALUES.stream().filter(value -> value.getConfigName().equalsIgnoreCase(s)).findFirst();
+        if (!optional.isPresent()) return null;
+        return optional.get();
     }
 
     public static void checkEnabled() {

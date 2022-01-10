@@ -119,8 +119,4 @@ public class GadgetChristmasTree extends Gadget {
         active = false;
         lastLocation = null;
     }
-
-    @Override
-    public void onLeftClick() {
-    }
 }

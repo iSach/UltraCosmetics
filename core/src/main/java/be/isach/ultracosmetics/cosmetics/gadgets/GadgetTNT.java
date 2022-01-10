@@ -96,10 +96,6 @@ public class GadgetTNT extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
     }
 

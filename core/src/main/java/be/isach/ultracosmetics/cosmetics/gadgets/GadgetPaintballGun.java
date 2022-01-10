@@ -146,8 +146,4 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             }
         }
     }
-
-    @Override
-    void onLeftClick() {
-    }
 }

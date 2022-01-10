@@ -69,26 +69,20 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     public void clear() {
-        // Send unequip Message.
-        try {
-            String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-            if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null) {
-                mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics())
-                        + " " + ChatColor.GRAY + "(" + owner.getPetName((PetType) cosmeticType) + ChatColor.GRAY + ")");
-            } else {
-                mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
-            }
-            getPlayer().sendMessage(mess);
-        } catch (Exception ignored) {
+        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
+        if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null) {
+            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics())
+                    + " " + ChatColor.GRAY + "(" + owner.getPetName((PetType) cosmeticType) + ChatColor.GRAY + ")");
+        } else {
+            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
         }
+        getPlayer().sendMessage(mess);
 
-        // unregister listener.
         HandlerList.unregisterAll(this);
 
         try {
-            // Cancel task.
             cancel();
-        } catch (Exception ignored) {
+        } catch (IllegalStateException ignored) {
             // Not Scheduled yet. Ignore.
         }
 
@@ -108,11 +102,7 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     public final UltraPlayer getOwner() {
         if (owner == null) {
             // Try to fix.
-            try {
-                owner = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(getOwnerUniqueId()));
-            } catch (Exception exc) {
-
-            }
+            owner = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(getOwnerUniqueId()));
         }
         return owner;
     }

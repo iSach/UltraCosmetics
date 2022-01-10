@@ -66,49 +66,44 @@ public class GadgetBatBlaster extends Gadget {
             return;
         }
 
-        try {
-            if (active && bats != null && !bats.isEmpty()) {
-                bats.stream().filter(Entity::isValid).forEach(bat -> {
-                    Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
-                            (Math.random() - 0.5D) / 3.0D);
-                    if (bat != null && playerVelocity != null) {
-                        bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
-                    }
-                    getPlayer().getWorld().getPlayers().stream()
-                            .filter(other -> !other.equals(getPlayer()) && getOwner().hasGadgetsEnabled() && hitPlayer(
-                                    bat.getLocation(), other)).forEachOrdered(other -> {
-
-                        Vector v = bat.getLocation().getDirection();
-                        v.normalize();
-                        v.multiply(.4d);
-                        v.setY(v.getY() + 0.2d);
-
-                        if (v.getY() > 7.5) {
-                            v.setY(7.5);
-                        }
-
-                        if (other.isOnGround()) {
-                            v.setY(v.getY() + 0.4d);
-                        }
-
-                        other.setFallDistance(0);
-
-                        if (affectPlayers) {
-                            MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
-                        }
-
-                        SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
-                        UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
-
-                        bat.remove();
-                    });
-                });
-            } else {
-                playerVelocity = null;
-                clean();
+        if (!active || bats == null) {
+            playerVelocity = null;
+            clean();
+            return;
+        }
+        for (Bat bat : bats) {
+            if (!bat.isValid()) continue;
+            Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
+                    (Math.random() - 0.5D) / 3.0D);
+            if (bat != null && playerVelocity != null) {
+                bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
             }
-        } catch (Exception e) {
-            // TODO
+            for (Player other : getPlayer().getWorld().getPlayers()) {
+                if (other == getPlayer() || !hitPlayer(bat.getLocation(), other)) continue;
+                Vector v = bat.getLocation().getDirection();
+                v.normalize();
+                v.multiply(.4d);
+                v.setY(v.getY() + 0.2d);
+
+                if (v.getY() > 7.5) {
+                    v.setY(7.5);
+                }
+
+                if (other.isOnGround()) {
+                    v.setY(v.getY() + 0.4d);
+                }
+
+                other.setFallDistance(0);
+
+                if (affectPlayers) {
+                    MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
+                }
+
+                SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
+                UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
+
+                bat.remove();
+            }
         }
     }
 
@@ -116,13 +111,11 @@ public class GadgetBatBlaster extends Gadget {
         active = false;
         playerVelocity = null;
         if (bats != null) {
-            for (Iterator<Bat> iterator = bats.iterator(); iterator.hasNext(); ) {
-                Bat bat = iterator.next();
+            for (Bat bat : bats) {
                 if (bat.isValid()) {
                     UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
                 }
                 bat.remove();
-                iterator.remove();
             }
             bats.clear();
         }
@@ -131,9 +124,5 @@ public class GadgetBatBlaster extends Gadget {
     @Override
     public void onClear() {
         clean();
-    }
-
-    @Override
-    void onLeftClick() {
     }
 }

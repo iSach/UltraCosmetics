@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Represents an instance of a color bomb gadget summoned by a player.
@@ -53,54 +54,50 @@ public class GadgetColorBomb extends Gadget {
                 default:
                     effect = Particles.FIREWORKS_SPARK;
                     break;
-                case 1:
-                    effect = Particles.FIREWORKS_SPARK;
-                    break;
-                case 4:
+                case 3:
                     effect = Particles.FLAME;
                     break;
-                case 5:
+                case 4:
                     effect = Particles.SPELL_WITCH;
                     break;
             }
 
             UtilParticles.display(effect, bomb.getLocation(), 1, 0.2f);
 
-            try {
-                for (Item item : items) {
-                    if (item.getTicksLived() > 15) {
-                        item.remove();
-                        items.remove(item);
-                    }
+            Iterator<Item> iter = items.iterator();
+            while (iter.hasNext()) {
+                Item item = iter.next();
+                if (item.getTicksLived() > 15) {
+                    item.remove();
+                    iter.remove();
+                }
+            }
+
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                if (bomb == null) {
+                    return;
                 }
 
-                Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                    if (bomb == null) {
-                        return;
-                    }
+                ItemStack item = ItemFactory.createColored("WOOL", (byte) MathUtils.random.nextInt(15), UltraCosmeticsData.get().getItemNoPickupString());
+                Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
+                i.setPickupDelay(500000);
+                i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
+                items.add(i);
+                SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
 
-                    ItemStack item = ItemFactory.createColored("WOOL", (byte) MathUtils.random.nextInt(15), UltraCosmeticsData.get().getItemNoPickupString());
-                    Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
-                    i.setPickupDelay(500000);
-                    i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                    items.add(i);
-                    SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
+                for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
 
-                    for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
+                    if (entity instanceof Player) {
+                        if (entity.hasMetadata("NPC")) {
+                            continue;
+                        }
 
-                        if (entity instanceof Player) {
-                            if (entity.hasMetadata("NPC")) {
-                                continue;
-                            }
-
-                            if (affectPlayers) {
-                                MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                            }
+                        if (affectPlayers) {
+                            MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                         }
                     }
-                });
-            } catch (Exception exc) {
-            }
+                }
+            });
         }
     }
 
@@ -119,9 +116,5 @@ public class GadgetColorBomb extends Gadget {
         }
 
         running = false;
-    }
-
-    @Override
-    void onLeftClick() {
     }
 }

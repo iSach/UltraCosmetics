@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ public class SettingsManager {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -105,11 +106,7 @@ public class SettingsManager {
     }
 
     public void reload() {
-        try {
-            fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        fileConfiguration = YamlConfiguration.loadConfiguration(file);
     }
 
     /**
@@ -122,7 +119,7 @@ public class SettingsManager {
         fileConfiguration.set(path, value);
         try {
             fileConfiguration.save(file);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -178,7 +175,7 @@ public class SettingsManager {
         ConfigurationSection cs = fileConfiguration.createSection(path);
         try {
             fileConfiguration.save(file);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return cs;

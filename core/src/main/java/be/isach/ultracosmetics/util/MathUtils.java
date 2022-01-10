@@ -129,20 +129,20 @@ public class MathUtils {
         }
     }
 
-    public static boolean isInteger(Object object) {
+    public static boolean isInteger(String str) {
         try {
-            Integer.parseInt(object.toString());
+            Integer.parseInt(str);
             return true;
-        } catch (Exception exc) {
+        } catch (NumberFormatException ex) {
             return false;
         }
     }
 
-    public static boolean isDouble(Object object) {
+    public static boolean isDouble(String str) {
         try {
-            Double.parseDouble(object.toString());
+            Double.parseDouble(str.toString());
             return true;
-        } catch (Exception exc) {
+        } catch (NumberFormatException ex) {
             return false;
         }
     }

@@ -76,29 +76,27 @@ public class GadgetMelonThrower extends Gadget implements Listener {
 
     @Override
     public void onUpdate() {
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-            if (melon == null || !melon.isValid()) {
-                return;
-            }
-            if (melon.isOnGround()) {
-                melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
-                for (int i = 0; i < 8; i++) {
-                    final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(UCMaterial.MELON_SLICE, UltraCosmeticsData.get().getItemNoPickupString()));
-                    newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
-                    newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (newItem.isValid()) {
-                                newItem.remove();
-                            }
+        if (melon == null || !melon.isValid()) {
+            return;
+        }
+        if (melon.isOnGround()) {
+            melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
+            for (int i = 0; i < 8; i++) {
+                final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(UCMaterial.MELON_SLICE, UltraCosmeticsData.get().getItemNoPickupString()));
+                newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
+                newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (newItem.isValid()) {
+                            newItem.remove();
                         }
-                    }.runTaskLaterAsynchronously(getUltraCosmetics(), 100);
-                }
-                melon.remove();
-                melon = null;
+                    }
+                }.runTaskLater(getUltraCosmetics(), 100);
             }
-        });
+            melon.remove();
+            melon = null;
+        }
     }
 
     @Override
@@ -114,9 +112,5 @@ public class GadgetMelonThrower extends Gadget implements Listener {
                 }
             }
         }
-    }
-
-    @Override
-    void onLeftClick() {
     }
 }

@@ -225,7 +225,7 @@ public enum Sounds {
             } else { // All other versions (1.8)
                 return resolvedSound = Sound.valueOf(pre19sound);
             }
-        } catch (Exception e) { // Shouldn't happen unless sound doesn't exist
+        } catch (IllegalArgumentException e) { // Shouldn't happen unless sound doesn't exist
             e.printStackTrace();
             return resolvedSound = Sound.valueOf(pre19sound);
         }

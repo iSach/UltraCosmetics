@@ -62,18 +62,21 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        double x, y, z;
-        if (!MathUtils.isDouble(args[2])) {
+        int x, y, z;
+
+        if (!MathUtils.isInteger(args[2])) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[2] + " isn't a number!");
             return;
         }
         x = Integer.parseInt(args[2]);
-        if (!MathUtils.isDouble(args[3])) {
+
+        if (!MathUtils.isInteger(args[3])) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[3] + " isn't a number!");
             return;
         }
         y = Integer.parseInt(args[3]);
-        if (!MathUtils.isDouble(args[4])) {
+
+        if (!MathUtils.isInteger(args[4])) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[4] + " isn't a number!");
             return;
         }

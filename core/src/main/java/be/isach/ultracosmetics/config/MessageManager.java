@@ -128,6 +128,7 @@ public class MessageManager {
         addMessage("Gadgets.Rocket.Not-Enough-Space", "%prefix% &c&lNot enough space around and above you!");
         addMessage("Gadgets.Rocket.Not-On-Ground", "%prefix% &c&lYou must be on the ground!");
         addMessage("Gadgets.Rocket.Takeoff", "&4&lTAKEOFF!!");
+        addMessage("Gadgets.Rocket.LaunchAborted", "&c&lLaunch aborted!");
         addMessage("Gadgets.BlackHole.name", "&1&lBlack Hole");
         addMessage("Gadgets.TNT.name", "&4&lT&f&lN&4&lT");
         addMessage("Gadgets.FunGun.name", "&6&lFun Gun");

@@ -36,10 +36,6 @@ public class GadgetSnowball extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
     }
 

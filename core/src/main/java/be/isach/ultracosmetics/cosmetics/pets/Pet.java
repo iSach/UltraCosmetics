@@ -129,11 +129,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 items.forEach(Entity::remove);
                 items.clear();
 
-                try {
-                    HandlerList.unregisterAll(this);
-                } catch (Exception ignored) {
-                    // Ignored.
-                }
+                HandlerList.unregisterAll(this);
 
                 cancel();
                 return;

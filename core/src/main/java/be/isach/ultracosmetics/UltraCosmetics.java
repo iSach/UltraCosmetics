@@ -337,7 +337,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            FileUtils.copy(getResource("config.yml"), file);
+            saveResource("config.yml", false);
             getSmartLogger().write("Config file doesn't exist yet.");
             getSmartLogger().write("Creating Config File and loading it.");
         }
@@ -565,6 +565,8 @@ public class UltraCosmetics extends JavaPlugin {
 
     public CustomConfiguration loadConfiguration(File file) {
         CustomConfiguration config;
+        // In 1.18.1 and later, Spigot supports comment preservation and
+        // writing comments programmatically, so use built-in methods if we can.
         if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_18_R1)) {
             config = new AutoCommentConfiguration();
         } else {

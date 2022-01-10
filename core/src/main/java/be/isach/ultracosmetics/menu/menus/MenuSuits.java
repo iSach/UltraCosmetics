@@ -185,21 +185,6 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                     if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getDeactivateMenu())) {
                         toggleOff(ultraPlayer, armorSlot);
                     } else if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getActivateMenu())) {
-                        StringBuilder sb = new StringBuilder();
-                        String name = clicked.getItemMeta().getDisplayName().replaceFirst(CATEGORY.getActivateMenu(), "");
-                        int j = name.split(" ").length;
-                        if (name.contains("(")) {
-                            j--;
-                        }
-                        for (int k = 1; k < j; k++) {
-                            sb.append(name.split(" ")[k]);
-                            try {
-                                if (clicked.getItemMeta().getDisplayName().split(" ")[k + 1] != null) {
-                                    sb.append(" ");
-                                }
-                            } catch (Exception ignored) {
-                            }
-                        }
                         toggleOn(ultraPlayer, suitType, getUltraCosmetics(), armorSlot);
                     }
                     if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {

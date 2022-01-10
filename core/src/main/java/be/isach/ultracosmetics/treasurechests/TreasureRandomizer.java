@@ -248,11 +248,11 @@ public class TreasureRandomizer {
     }
 
     private String getMessage(String s) {
-        try {
-            return ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getConfig().get(s)).replace("%prefix%", MessageManager.getMessage("Prefix")));
-        } catch (Exception exc) {
-            return "§c§lError";
+        String message = SettingsManager.getConfig().getString(s);
+        if (message == null) {
+            return ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Error";
         }
+        return ChatColor.translateAlternateColorCodes('&', message.replace("%prefix%", MessageManager.getMessage("Prefix")));
     }
 
     public ItemStack getItemStack() {
@@ -363,12 +363,7 @@ public class TreasureRandomizer {
 
     public void giveNothing() {
         if (UltraCosmeticsData.get().getPlugin().getEconomyHandler().isUsingEconomy()) {
-            try {
-                giveMoney();
-            } catch (Exception e) {
-                name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
-                itemStack = new ItemStack(Material.BARRIER);
-            }
+            giveMoney();
         } else {
             name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
             itemStack = new ItemStack(Material.BARRIER);

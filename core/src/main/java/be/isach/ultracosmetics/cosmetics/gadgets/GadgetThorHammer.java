@@ -115,10 +115,6 @@ public class GadgetThorHammer extends Gadget implements Listener {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
     }
 
