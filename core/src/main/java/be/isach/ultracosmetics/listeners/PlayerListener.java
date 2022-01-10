@@ -287,7 +287,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (event.getPlayer().hasPermission("ultracosmetics.bypassdisabledcommands")) return;
+        if (event.getPlayer().hasPermission("ultracosmetics.bypass.disabledcommands")) return;
         String strippedCommand = event.getMessage().split(" ")[0].replace("/", "").toLowerCase();
         if (!SettingsManager.getConfig().getList("Disabled-Commands").contains(strippedCommand)) return;
         UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());

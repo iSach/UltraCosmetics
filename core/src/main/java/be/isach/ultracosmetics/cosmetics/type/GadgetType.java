@@ -91,7 +91,8 @@ public class GadgetType extends CosmeticMatType<Gadget> {
     }
 
     public double getCountdown() {
-        return countdown;
+        // cooldown should not be lower than runtime unless you enjoy bugs
+        return Math.max(countdown, runTime);
     }
 
     public int getRunTime() {
