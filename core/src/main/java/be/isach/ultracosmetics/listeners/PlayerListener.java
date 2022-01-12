@@ -168,15 +168,13 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryClickEvent event) {
-        //Bukkit.getLogger().info("click");
         Player player = (Player) event.getWhoClicked();
         if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(player.getWorld().getName())) return;
         if (event.getView().getTopInventory().getHolder() instanceof CosmeticsInventoryHolder
-                || isMenuItem(event.getCurrentItem())
+                || isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())
                 || (event.getClick() == ClickType.NUMBER_KEY && isMenuItem(player.getInventory().getItem(event.getHotbarButton())))) {
             event.setCancelled(true);
             player.updateInventory();
-            //Bukkit.getLogger().info("cancel click");
         }
     }
 
@@ -187,12 +185,9 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryCreativeEvent event) {
-        //Bukkit.getLogger().info("creative");
-        
         Player player = (Player) event.getWhoClicked();
         if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
-            if (isMenuItem(event.getCurrentItem())) {
-                //Bukkit.getLogger().info("cancel creative");
+            if (isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())) {
                 event.setCancelled(true);
                 player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
             }
