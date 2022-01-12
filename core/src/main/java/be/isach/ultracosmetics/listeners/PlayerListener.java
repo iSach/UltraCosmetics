@@ -168,7 +168,7 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryClickEvent event) {
-        Bukkit.getLogger().info("click");
+        //Bukkit.getLogger().info("click");
         Player player = (Player) event.getWhoClicked();
         if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(player.getWorld().getName())) return;
         if (event.getView().getTopInventory().getHolder() instanceof CosmeticsInventoryHolder
@@ -176,7 +176,7 @@ public class PlayerListener implements Listener {
                 || (event.getClick() == ClickType.NUMBER_KEY && isMenuItem(player.getInventory().getItem(event.getHotbarButton())))) {
             event.setCancelled(true);
             player.updateInventory();
-            Bukkit.getLogger().info("cancel click");
+            //Bukkit.getLogger().info("cancel click");
         }
     }
 
@@ -187,12 +187,12 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryCreativeEvent event) {
-        Bukkit.getLogger().info("creative");
+        //Bukkit.getLogger().info("creative");
         
         Player player = (Player) event.getWhoClicked();
         if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
             if (isMenuItem(event.getCurrentItem())) {
-                Bukkit.getLogger().info("cancel creative");
+                //Bukkit.getLogger().info("cancel creative");
                 event.setCancelled(true);
                 player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
             }
@@ -206,7 +206,6 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryDragEvent event) {
-        Bukkit.getLogger().info("drag");
         for (ItemStack item : event.getNewItems().values()) {
             if (isMenuItem(item)) {
                 event.setCancelled(true);
