@@ -275,6 +275,7 @@ permissions:
       - ultracosmetics.pets.christmaself
       - ultracosmetics.pets.mooshroom
       - ultracosmetics.pets.vex
+      - ultracosmetics.pets.panda
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -303,6 +304,8 @@ permissions:
   ultracosmetics.pets.mooshroom:
     default: op
   ultracosmetics.pets.vex:
+    default: op
+  ultracosmetics.pets.panda:
     default: op
   ultracosmetics.morphs.*:
     children:
