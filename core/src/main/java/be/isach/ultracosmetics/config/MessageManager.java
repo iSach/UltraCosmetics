@@ -245,6 +245,8 @@ public class MessageManager {
         addMessage("Pets.Llama.entity-displayname", "&l%playername%'s Llama");
         addMessage("Pets.Parrot.menu-name", "&a&lParrot");
         addMessage("Pets.Parrot.entity-displayname", "&l%playername%'s Parrot");
+        addMessage("Pets.Vex.menu-name", "&7&lVex");
+        addMessage("Pets.Vex.entity-displayname", "&l%playername%'s Vex");
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
