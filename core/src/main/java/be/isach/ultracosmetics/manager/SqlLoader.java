@@ -26,14 +26,13 @@ public class SqlLoader {
                 }
                 Iterator<String> iter = loadList.iterator();
                 while (iter.hasNext()) {
-                    UltraPlayer current;
                     try {
                         Player p = Bukkit.getPlayer(UUID.fromString(iter.next()));
                         if (p == null || !p.isOnline()) {
                             iter.remove();
                             continue;
                         }
-                        current = ultraCosmetics.getPlayerManager().getUltraPlayer(p);
+                        UltraPlayer current = ultraCosmetics.getPlayerManager().getUltraPlayer(p);
                         //pre load two value then cache into server's
                         current.hasGadgetsEnabled();
                         current.canSeeSelfMorph();

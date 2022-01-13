@@ -64,10 +64,6 @@ public class GadgetQuakeGun extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
     }
 

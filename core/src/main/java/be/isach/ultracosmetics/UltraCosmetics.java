@@ -1,13 +1,16 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.command.CommandManager;
+import be.isach.ultracosmetics.config.AutoCommentConfiguration;
+import be.isach.ultracosmetics.config.CustomConfiguration;
+import be.isach.ultracosmetics.config.ManualCommentConfiguration;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.economy.EconomyHandler;
+import be.isach.ultracosmetics.listeners.Listener19;
 import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
-import be.isach.ultracosmetics.listeners.v1_9.PlayerSwapItemListener;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.manager.ArmorStandManager;
@@ -27,20 +30,20 @@ import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Main class of the plugin.
@@ -153,6 +156,12 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        // if loading failed...
+        if (UltraCosmeticsData.get().getServerVersion() == null) {
+            getSmartLogger().write(LogLevel.ERROR, "Plugin load has failed, please check earlier in the log for details.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
         // Create UltraPlayer Manager.
         this.playerManager = new UltraPlayerManager(this);
 
@@ -279,27 +288,22 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        // when the plugin is disabled from onEnable, skip cleanup
+        if (UltraCosmeticsData.get().getServerVersion() == null) {
+            return;
+        }
         // TODO Purge Pet Names. (and Treasure Chests bugged holograms).
         // TODO Use Metadatas for that!
 
-        try {
+        if (cosmeticsProfileManager != null) {
             for (CosmeticsProfile cp : cosmeticsProfileManager.getCosmeticsProfiles().values()) {
                 cp.save();
             }
-
-            if (playerManager != null) {
-                // make sure pets are properly removed on server shutdown
-                for (UltraPlayer player : playerManager.getUltraPlayers()) {
-                    player.clear();
-                }
-
-                playerManager.dispose();
-            }
-
-            UltraCosmeticsData.get().getVersionManager().getModule().disable();
-        } catch (Exception exc) {
-            // Can't do much if this happens.
         }
+
+        playerManager.dispose();
+
+        UltraCosmeticsData.get().getVersionManager().getModule().disable();
     }
 
     /**
@@ -313,7 +317,7 @@ public class UltraCosmetics extends JavaPlugin {
         pluginManager.registerEvents(new EntitySpawningManager(), this);
 
         if (UltraCosmeticsData.get().getServerVersion().offhandAvailable()) {
-            pluginManager.registerEvents(new PlayerSwapItemListener(this), this);
+            pluginManager.registerEvents(new Listener19(this), this);
         }
 
         this.treasureChestManager = new TreasureChestManager(this);
@@ -333,12 +337,12 @@ public class UltraCosmetics extends JavaPlugin {
 
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            FileUtils.copy(getResource("config.yml"), file);
+            saveResource("config.yml", false);
             getSmartLogger().write("Config file doesn't exist yet.");
             getSmartLogger().write("Creating Config File and loading it.");
         }
 
-        config = CustomConfiguration.loadConfiguration(file);
+        config = loadConfiguration(file);
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
@@ -557,5 +561,24 @@ public class UltraCosmetics extends JavaPlugin {
 
     public boolean areChestsAllowedInRegion(Player player) {
         return !worldGuardHooked() || flagManager.areChestsAllowedHere(player);
+    }
+
+    public CustomConfiguration loadConfiguration(File file) {
+        CustomConfiguration config;
+        // In 1.18.1 and later, Spigot supports comment preservation and
+        // writing comments programmatically, so use built-in methods if we can.
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_18_R1)) {
+            config = new AutoCommentConfiguration();
+        } else {
+            config = new ManualCommentConfiguration();
+        }
+
+        try {
+            config.load(file);
+        } catch (FileNotFoundException ignored) {
+        } catch (IOException | InvalidConfigurationException ex) {
+            getSmartLogger().write(LogLevel.ERROR, "Cannot load " + file, ex);
+        }
+        return config;
     }
 }

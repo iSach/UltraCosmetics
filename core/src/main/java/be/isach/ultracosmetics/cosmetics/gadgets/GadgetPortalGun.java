@@ -25,13 +25,13 @@ import java.util.List;
  */
 public class GadgetPortalGun extends Gadget {
 
-    boolean teleported = false;
+    private boolean teleported = false;
 
-    Location locBlue;
-    BlockFace blueBlockFace;
+    private Location locBlue;
+    private BlockFace blueBlockFace;
 
-    Location locRed;
-    BlockFace redBlockFace;
+    private Location locRed;
+    private BlockFace redBlockFace;
 
     public GadgetPortalGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("portalgun"), ultraCosmetics);
@@ -134,6 +134,7 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     public void onUpdate() {
+        // TODO: clean this up
         try {
             if (locBlue != null) {
                 Location portalCenter = locBlue.clone();
@@ -162,16 +163,14 @@ public class GadgetPortalGun extends Gadget {
                     if (toDistance.distance(locBlue) < 1.01) {
                         teleported = true;
                         teleport(getPlayer(), locRed);
-                        getPlayer().setVelocity(getVectorFromBlockFace(redBlockFace));
+                        Location loc = locRed.clone();
                         if (redBlockFace == BlockFace.UP || redBlockFace == BlockFace.DOWN) {
-                            Location loc = locRed.clone();
                             loc.setPitch(getPitch(redBlockFace));
-                            teleport(getPlayer(), loc);
                         } else {
-                            Location loc = locRed.clone();
                             loc.setYaw(getYaw(redBlockFace));
-                            teleport(getPlayer(), loc);
                         }
+                        teleport(getPlayer(), loc);
+                        getPlayer().setVelocity(getVectorFromBlockFace(redBlockFace));
                         Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> teleported = false, 20);
                     }
                 }
@@ -216,16 +215,14 @@ public class GadgetPortalGun extends Gadget {
                     if (toDistance.distance(locRed) < 1.1) {
                         teleported = true;
                         teleport(getPlayer(), locBlue);
-                        getPlayer().setVelocity(getVectorFromBlockFace(blueBlockFace));
+                        Location loc = locBlue.clone();
                         if (blueBlockFace == BlockFace.UP || blueBlockFace == BlockFace.DOWN) {
-                            Location loc = locBlue.clone();
                             loc.setPitch(getPitch(blueBlockFace));
-                            teleport(getPlayer(), loc);
                         } else {
-                            Location loc = locBlue.clone();
                             loc.setYaw(getYaw(blueBlockFace));
-                            teleport(getPlayer(), loc);
                         }
+                        teleport(getPlayer(), loc);
+                        getPlayer().setVelocity(getVectorFromBlockFace(blueBlockFace));
                         Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> teleported = false, 20);
                     }
                 }

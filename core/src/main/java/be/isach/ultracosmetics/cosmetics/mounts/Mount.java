@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
+import be.isach.ultracosmetics.util.ServerVersion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,6 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
 /**
@@ -41,6 +41,8 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
     private static final Map<String,Integer> WORLD_HEIGHTS = new HashMap<>();
+    private static final Class<?> HORSE_CLASS = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1) 
+            ? AbstractHorse.class : Horse.class;
     /**
      * The Entity, if it isn't a Custom Entity.
      */
@@ -136,8 +138,8 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
         try {
             cancel();
-        } catch (Exception exc) {
-            //ignore.
+        } catch (IllegalStateException exc) {
+            // not scheduled yet
         }
     }
 
@@ -156,11 +158,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             return;
         }
 
-        String name = null;
-        try {
-            name = getType().getName(getPlayer());
-        } catch (Exception e) {
-        }
+        String name = getType().getName(getPlayer());;
 
         if (name != null
                 && getOwner() != null
@@ -214,20 +212,13 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     @EventHandler
     public void openInv(InventoryOpenEvent event) {
-        if (getType() == MountType.valueOf("druggedhorse")
-                || getType() == MountType.valueOf("ecologisthorse")
-                || getType() == MountType.valueOf("glacialsteed")
-                || getType() == MountType.valueOf("infernalhorror")
-                || getType() == MountType.valueOf("mountoffire")
-                || getType() == MountType.valueOf("mountofwater")
-                || getType() == MountType.valueOf("walkingdead")
-                || getType() == MountType.valueOf("rudolph")) {
-            if (getOwner() != null
-                    && getPlayer() != null
-                    && event.getPlayer() == getPlayer()
-                    && event.getInventory().equals(((InventoryHolder) entity).getInventory())) {
-                event.setCancelled(true);
-            }
+        // if it's not a horse, return
+        if (!HORSE_CLASS.isAssignableFrom(getType().getEntityType().getEntityClass())) return;
+        if (getOwner() != null
+                && getPlayer() != null
+                && event.getPlayer() == getPlayer()
+                && event.getInventory().equals(((InventoryHolder) entity).getInventory())) {
+            event.setCancelled(true);
         }
     }
 

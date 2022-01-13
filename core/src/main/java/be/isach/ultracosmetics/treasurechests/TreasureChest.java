@@ -116,44 +116,37 @@ public class TreasureChest implements Listener {
                                 RUNNABLES[1] = new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        try {
-
-                                            Block b = getChestLocation(i, center.clone()).getBlock();
-                                            b.setType(design.getChestType().getType());
-                                            SoundUtil.playSound(getPlayer(), Sounds.ANVIL_LAND, 1.4f, 1.5f);
-                                            UtilParticles.display(Particles.SMOKE_LARGE, b.getLocation(), 5);
-                                            UtilParticles.display(Particles.LAVA, b.getLocation(), 5);
-                                            BlockFace blockFace = BlockFace.SOUTH;
-                                            switch (i) {
-                                                case 4:
-                                                    blockFace = BlockFace.SOUTH;
-                                                    break;
-                                                case 3:
-                                                    blockFace = BlockFace.NORTH;
-                                                    break;
-                                                case 2:
-                                                    blockFace = BlockFace.EAST;
-                                                    break;
-                                                case 1:
-                                                    blockFace = BlockFace.WEST;
-                                                    break;
-                                            }
-
-                                            BlockState blockState = b.getState();
-                                            Directional data = (Directional) blockState.getData();
-                                            data.setFacingDirection(blockFace);
-                                            blockState.setData((MaterialData)data);
-                                            blockState.update(true, true);
-
-                                            chests.add(b);
-//                                            Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()),
-//                                                    0f, 0f, 0f, 0f, 1, getChestLocation(i, getPlayer().getLocation()), 128);
-                                            i--;
-                                        } catch (Exception exc) {
-                                            clear();
-                                            exc.printStackTrace();
-                                            cancel();
+                                        Block b = getChestLocation(i, center.clone()).getBlock();
+                                        b.setType(design.getChestType().getType());
+                                        SoundUtil.playSound(getPlayer(), Sounds.ANVIL_LAND, 1.4f, 1.5f);
+                                        UtilParticles.display(Particles.SMOKE_LARGE, b.getLocation(), 5);
+                                        UtilParticles.display(Particles.LAVA, b.getLocation(), 5);
+                                        BlockFace blockFace = BlockFace.SOUTH;
+                                        switch (i) {
+                                            case 4:
+                                                blockFace = BlockFace.SOUTH;
+                                                break;
+                                            case 3:
+                                                blockFace = BlockFace.NORTH;
+                                                break;
+                                            case 2:
+                                                blockFace = BlockFace.EAST;
+                                                break;
+                                            case 1:
+                                                blockFace = BlockFace.WEST;
+                                                break;
                                         }
+
+                                        BlockState blockState = b.getState();
+                                        Directional data = (Directional) blockState.getData();
+                                        data.setFacingDirection(blockFace);
+                                        blockState.setData((MaterialData)data);
+                                        blockState.update(true, true);
+
+                                        chests.add(b);
+//                                        Particles.BLOCK_CRACK.display(new Particles.BlockData(b.getType(), b.getData()),
+//                                                0f, 0f, 0f, 0f, 1, getChestLocation(i, getPlayer().getLocation()), 128);
+                                        i--;
                                     }
                                 };
                                 RUNNABLES[1].runTaskLater(uc, 30L);

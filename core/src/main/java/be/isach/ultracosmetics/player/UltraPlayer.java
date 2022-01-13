@@ -113,43 +113,31 @@ public class UltraPlayer {
      * @param uuid The player UUID.
      */
     public UltraPlayer(UUID uuid, UltraCosmetics ultraCosmetics) {
-        try {
-            this.uuid = uuid;
-            this.ultraCosmetics = ultraCosmetics;
+        this.uuid = uuid;
+        this.ultraCosmetics = ultraCosmetics;
 
-            gadgetCooldowns = new HashMap<>();
+        gadgetCooldowns = new HashMap<>();
 
-            if (UltraCosmeticsData.get().usingFileStorage())
-                SettingsManager.getData(getBukkitPlayer()).addDefault("Keys", 0);
+        if (UltraCosmeticsData.get().usingFileStorage())
+            SettingsManager.getData(getBukkitPlayer()).addDefault("Keys", 0);
 
-            if (UltraCosmeticsData.get().isAmmoEnabled()) {
-                if (!UltraCosmeticsData.get().usingFileStorage())
-                    ultraCosmetics.getMySqlConnectionManager().getSqlUtils().initStats(this);
-                else {
-                    GadgetType.values().stream().filter(GadgetType::isEnabled).forEachOrdered(type -> SettingsManager.getData(getBukkitPlayer()).addDefault("Ammo." + type.toString().toLowerCase(), 0));
-                }
+        if (UltraCosmeticsData.get().isAmmoEnabled()) {
+            if (!UltraCosmeticsData.get().usingFileStorage())
+                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().initStats(this);
+            else {
+                GadgetType.values().stream().filter(GadgetType::isEnabled).forEachOrdered(type -> SettingsManager.getData(getBukkitPlayer()).addDefault("Ammo." + type.toString().toLowerCase(), 0));
             }
-            if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getBukkitPlayer()).addDefault("Gadgets-Enabled", true);
-                SettingsManager.getData(getBukkitPlayer()).addDefault("Third-Person-Morph-View", true);
-            }
-
-            this.username = getBukkitPlayer().getDisplayName();
-
-        } catch (Exception exc) {
-            // Player couldn't be found.
-            ultraCosmetics.getSmartLogger().write("UltraCosmetics ERR -> " + "Couldn't find player with UUID: " + uuid);
-            isLoaded = false;
-            return;
         }
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            SettingsManager.getData(getBukkitPlayer()).addDefault("Gadgets-Enabled", true);
+            SettingsManager.getData(getBukkitPlayer()).addDefault("Third-Person-Morph-View", true);
+        }
+
+        this.username = getBukkitPlayer().getDisplayName();
 
         // sql loader thread add player to pre-load
         if (!UltraCosmeticsData.get().usingFileStorage()) {
-            try {
-                ultraCosmetics.getMySqlConnectionManager().getSqlLoader().addPreloadPlayer(uuid);
-            } catch (Exception e) {
-                ultraCosmetics.getSmartLogger().write("UltraCosmetics ERR -> " + "SQLLoader Fails to preload UUID: " + uuid);
-            }
+            ultraCosmetics.getMySqlConnectionManager().getSqlLoader().addPreloadPlayer(uuid);
         } else {
             isLoaded = true;
         }
@@ -178,8 +166,12 @@ public class UltraPlayer {
      * @param gadget    The gadget.
      * @param countdown The cooldown to set.
      */
-    public void setCoolDown(GadgetType gadget, double countdown) {
-        gadgetCooldowns.put(gadget, (long) (countdown * 1000 + System.currentTimeMillis()));
+    public void setCoolDown(GadgetType gadget) {
+        double cooldown = gadget.getCountdown();
+        if (isBypassingCooldown()) {
+            cooldown = gadget.getRunTime();
+        }
+        gadgetCooldowns.put(gadget, (long)(cooldown * 1000 + System.currentTimeMillis()));
     }
 
     /**
@@ -309,13 +301,8 @@ public class UltraPlayer {
     }
 
     public double getBalance() {
-        try {
-            if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
-                return ultraCosmetics.getEconomyHandler().balance(getBukkitPlayer());
-            }
-        } catch (Exception exc) {
-            ultraCosmetics.getSmartLogger().write("Error happened while getting a player's balance.");
-            return 0;
+        if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
+            return ultraCosmetics.getEconomyHandler().balance(getBukkitPlayer());
         }
         return 0;
     }
@@ -384,10 +371,7 @@ public class UltraPlayer {
                 // when changing worlds, making sure morphs get correctly unset.
                 && (isQuitting() || SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName()))) {
             removeMorph();
-            try {
-                DisguiseAPI.undisguiseToAll(getBukkitPlayer());
-            } catch (Exception ignored) {
-            }
+            DisguiseAPI.undisguiseToAll(getBukkitPlayer());
         }
         removeGadget();
         removeParticleEffect();
@@ -438,23 +422,19 @@ public class UltraPlayer {
             return;
         }
 
-        try {
-            final Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), 54, MessageManager.getMessage("Buy-Treasure-Key"));
-            for (int i = 27; i < 30; i++) {
-                inventory.setItem(i, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-                inventory.setItem(i + 9, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-                inventory.setItem(i + 18, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-                inventory.setItem(i + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-                inventory.setItem(i + 9 + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-                inventory.setItem(i + 18 + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-            }
-            ItemStack itemStack = ItemFactory.create(UCMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
-            inventory.setItem(13, itemStack);
-            ItemFactory.fillInventory(inventory);
-            Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(inventory), 3);
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        final Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), 54, MessageManager.getMessage("Buy-Treasure-Key"));
+        for (int i = 27; i < 30; i++) {
+            inventory.setItem(i, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 9, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 18, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i + 9 + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i + 18 + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
         }
+        ItemStack itemStack = ItemFactory.create(UCMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
+        inventory.setItem(13, itemStack);
+        ItemFactory.fillInventory(inventory);
+        Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(inventory), 3);
     }
 
     /**
@@ -697,12 +677,8 @@ public class UltraPlayer {
      * Gives the Menu Item.
      */
     public void giveMenuItem() {
-        if (getBukkitPlayer() == null)
-            return;
-        try {
-            removeMenuItem();
-        } catch (Exception e) {
-        }
+        if (getBukkitPlayer() == null) return;
+        removeMenuItem();
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (getBukkitPlayer().getInventory().getItem(slot) != null) {
             if (getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
@@ -905,5 +881,9 @@ public class UltraPlayer {
 
     public void setQuitting(boolean quitting) {
         this.quitting = quitting;
+    }
+
+    public boolean isBypassingCooldown() {
+        return getBukkitPlayer().hasPermission("ultracosmetics.bypass.cooldown");
     }
 }

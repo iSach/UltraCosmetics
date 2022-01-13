@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -44,24 +45,20 @@ public class GadgetSmashDown extends Gadget {
     void onRightClick() {
         SoundUtil.playSound(getPlayer().getLocation(), Sounds.FIREWORK_LAUNCH, 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
-        final int taskId = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
+        final BukkitTask task = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
             if (getOwner() != null && getPlayer() != null && isEquipped()) {
                 UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
             } else {
                 cancel();
             }
-        }, 0, 1).getTaskId();
+        }, 0, 1);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             if (getOwner() != null && getPlayer() != null && isEquipped()) {
-                Bukkit.getScheduler().cancelTask(taskId);
+                task.cancel();
                 getOwner().applyVelocity(new Vector(0, -3, 0));
                 active = true;
             }
         }, 25);
-    }
-
-    @Override
-    void onLeftClick() {
     }
 
     @EventHandler
@@ -157,7 +154,7 @@ public class GadgetSmashDown extends Gadget {
             event.setCancelled(true);
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
-            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R1)) {
+            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R3)) {
                 BlockData data = fb.getBlockData();
                 fb.getWorld().spawnParticle(Particle.BLOCK_CRACK, fb.getLocation(), 50, 0, 0, 0, 0.4d, data);
             } else {

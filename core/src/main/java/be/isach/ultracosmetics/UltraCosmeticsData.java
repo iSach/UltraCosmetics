@@ -10,6 +10,7 @@ import org.bukkit.UnsafeValues;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -160,8 +161,17 @@ public class UltraCosmeticsData {
             serverVersion = ServerVersion.valueOf(mcVersion);
         } catch (IllegalArgumentException exc) {
             ultraCosmetics.getSmartLogger().write("This NMS version isn't supported. (" + mcVersion + ")!");
-            System.out.println("----------------------------\n\nULTRACOSMETICS CAN ONLY RUN ON " + ServerVersion.earliest().getName() + " or " + ServerVersion.v1_12_R1.getName() + " through " + ServerVersion.latest().getName() + "!\n\n----------------------------");
-            Bukkit.getPluginManager().disablePlugin(ultraCosmetics);
+            StringJoiner sj = new StringJoiner(", ");
+            for (ServerVersion version : ServerVersion.values()) {
+                if (version == ServerVersion.latest()) continue;
+                sj.add(version.getName());
+            }
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "----------------------------");
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "");
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "ULTRACOSMETICS CAN ONLY RUN ON " + sj.toString() + ", OR " + ServerVersion.latest().getName() + "!");
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "");
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "----------------------------");
+            // plugin can't be disabled at load time since it hasn't been enabled yet?
             return false;
         }
 

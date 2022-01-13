@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.*;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
@@ -47,39 +46,32 @@ public class CosmeticsProfile {
                 return false;
             }
             ConfigurationSection s = sm.fileConfiguration.getConfigurationSection("enabled");
-            try {
+            if (s.isString("gadget")) {
                 setEnabledGadget(GadgetType.valueOf(s.getString("gadget")));
-            } catch (Exception exc) {
             }
-            try {
+            if (s.isString("effect")) {
                 setEnabledEffect(ParticleEffectType.valueOf(s.getString("effect")));
-            } catch (Exception exc) {
             }
-            try {
+            if (s.isString("emote")) {
                 setEnabledEmote(EmoteType.valueOf(s.getString("emote")));
-            } catch (Exception exc) {
             }
-            try {
+            if (s.isString("hat")) {
                 setEnabledHat(HatType.valueOf(s.getString("hat")));
-            } catch (Exception exc) {
             }
-            try {
+            if (s.isString("morph")) {
                 setEnabledMorph(MorphType.valueOf(s.getString("morph")));
-            } catch (Exception exc) {
             }
-            try {
+            if (s.isString("mount")) {
                 setEnabledMount(MountType.valueOf(s.getString("mount")));
-            } catch (Exception exc) {
             }
-            try {
+            if (s.isString("pet")) {
                 setEnabledPet(PetType.valueOf(s.getString("pet")));
-            } catch (Exception exc) {
             }
 
             for (ArmorSlot slot : ArmorSlot.values()) {
-                try {
-                    setEnabledSuitPart(slot, SuitType.valueOf(s.getString("suit." + slot.toString().toLowerCase())));
-                } catch (Exception exc) {
+                String key = "suit." + slot.toString().toLowerCase();
+                if (s.isString(key)) {
+                    setEnabledSuitPart(slot, SuitType.valueOf(s.getString(key)));
                 }
             }
 

@@ -55,10 +55,6 @@ public class GadgetExplosiveSheep extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
         if (GadgetExplosiveSheep.EXPLOSIVE_SHEEP.size() > 0) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ExplosiveSheep.Already-Active"));
@@ -85,28 +81,24 @@ public class GadgetExplosiveSheep extends Gadget {
 
     @Override
     public void onClear() {
-        try {
-            for (Sheep sheep : sheepArrayList) {
-                sheep.remove();
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        for (Sheep sheep : sheepArrayList) {
+            sheep.remove();
         }
         EXPLOSIVE_SHEEP.remove(this);
         HandlerList.unregisterAll(this);
     }
 
-    class SheepColorRunnable extends BukkitRunnable {
+    private class SheepColorRunnable extends BukkitRunnable {
         private boolean red;
         private double time;
         private Sheep s;
         private GadgetExplosiveSheep gadgetExplosiveSheep;
 
-        public SheepColorRunnable(double time, boolean red, Sheep s, GadgetExplosiveSheep gadgetExplosiveSheep) {
+        private SheepColorRunnable(double time, boolean red, Sheep s, GadgetExplosiveSheep gadgetExplosiveSheep) {
             this.red = red;
             this.time = time;
             this.s = s;
-            this.runTaskLater(UltraCosmeticsData.get().getPlugin(), (int) time);
+            this.runTaskLater(getUltraCosmetics(), (int) time);
             this.gadgetExplosiveSheep = gadgetExplosiveSheep;
         }
 
@@ -116,46 +108,39 @@ public class GadgetExplosiveSheep extends Gadget {
                 cancel();
                 return;
             }
-            if (red) s.setColor(DyeColor.RED);
-            else s.setColor(DyeColor.WHITE);
+            s.setColor(red ? DyeColor.RED : DyeColor.WHITE);
             SoundUtil.playSound(s.getLocation(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
             red = !red;
             time -= 0.2;
 
-            if (time < 0.5) {
-                SoundUtil.playSound(s.getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
-                UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
-                for (int i = 0; i < 50; i++) {
-                    if (getOwner() == null || getPlayer() == null) {
-                        return;
-                    }
-                    final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
-                    try {
-                        sheep.setColor(DyeColor.values()[MathUtils.randomRangeInt(0, 15)]);
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
-                    Random r = new Random();
-                    MathUtils.applyVelocity(sheep, new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
-                    sheep.setBaby();
-                    sheep.setAgeLock(true);
-                    sheep.setNoDamageTicks(120);
-                    sheepArrayList.add(sheep);
-                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
-                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
-                    Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-                        UtilParticles.display(Particles.LAVA, sheep.getLocation(), 5);
-                        sheep.remove();
-                        EXPLOSIVE_SHEEP.remove(gadgetExplosiveSheep);
-                    }, 110);
-                }
-                sheepArrayList.remove(s);
-                s.remove();
-                cancel();
-            } else {
-                Bukkit.getScheduler().cancelTask(getTaskId());
+            if (time >= 0.5) {
                 new SheepColorRunnable(time, red, s, gadgetExplosiveSheep);
+                return;
             }
+            SoundUtil.playSound(s.getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
+            UtilParticles.display(Particles.EXPLOSION_HUGE, s.getLocation());
+            for (int i = 0; i < 50; i++) {
+                if (getOwner() == null || getPlayer() == null) {
+                    return;
+                }
+                final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
+                sheep.setColor(DyeColor.values()[MathUtils.randomRangeInt(0, 15)]);
+                Random r = new Random();
+                MathUtils.applyVelocity(sheep, new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
+                sheep.setBaby();
+                sheep.setAgeLock(true);
+                sheep.setNoDamageTicks(120);
+                sheepArrayList.add(sheep);
+                UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
+                UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
+                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+                    UtilParticles.display(Particles.LAVA, sheep.getLocation(), 5);
+                    sheep.remove();
+                    EXPLOSIVE_SHEEP.remove(gadgetExplosiveSheep);
+                }, 110);
+            }
+            sheepArrayList.remove(s);
+            s.remove();
         }
     }
 }

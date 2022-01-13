@@ -76,8 +76,4 @@ public class GadgetFreezeCannon extends Gadget {
         items = null;
         queue = null;
     }
-
-    @Override
-    void onLeftClick() {
-    }
 }

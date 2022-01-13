@@ -135,15 +135,6 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                     ultraPlayer.getBukkitPlayer().closeInventory();
                 }
                 if (UltraCosmeticsData.get().isAmmoEnabled() && data.getAction() == InventoryAction.PICKUP_HALF) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int k = 1; k < clicked.getItemMeta().getDisplayName().split(" ").length; k++) {
-                        sb.append(clicked.getItemMeta().getDisplayName().split(" ")[k]);
-                        try {
-                            if (clicked.getItemMeta().getDisplayName().split(" ")[k + 1] != null)
-                                sb.append(" ");
-                        } catch (Exception ignored) {
-                        }
-                    }
                     if (getCosmetic(ultraPlayer) == null) {
                         toggleOff(ultraPlayer);
                     }
@@ -166,20 +157,6 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
                     }
                 } else if (clicked.getItemMeta().getDisplayName().startsWith(category.getActivateMenu())) {
                     toggleOff(ultraPlayer);
-                    StringBuilder sb = new StringBuilder();
-                    String name = clicked.getItemMeta().getDisplayName().replaceFirst(category.getActivateMenu(), "");
-                    int j = name.split(" ").length;
-                    if (name.contains("(")) {
-                        j--;
-                    }
-                    for (int k = 1; k < j; k++) {
-                        sb.append(name.split(" ")[k]);
-                        try {
-                            if (clicked.getItemMeta().getDisplayName().split(" ")[k + 1] != null)
-                                sb.append(" ");
-                        } catch (Exception ignored) {
-                        }
-                    }
                     toggleOn(ultraPlayer, cosmeticMatType, getUltraCosmetics());
                     if (category == Category.GADGETS &&
                             ultraPlayer.getCurrentGadget() != null &&

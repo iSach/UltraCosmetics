@@ -1,37 +1,22 @@
-package be.isach.ultracosmetics.util;
+package be.isach.ultracosmetics.config;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
-public class CustomConfiguration extends YamlConfiguration {
+// to be used in 1.17.1 and below, before Spigot supported comment preservation
+public class ManualCommentConfiguration extends CustomConfiguration {
 
     private Map<String, List<String>> comments = null;
     private boolean newLineAfterHeader = false;
     private boolean newLinePerKey = false;
 
-    private CustomConfiguration() {
-        super();
+    public ManualCommentConfiguration() {
         this.comments = new LinkedHashMap<>();
-    }
-
-    public static CustomConfiguration loadConfiguration(File file) {
-        CustomConfiguration config = new CustomConfiguration();
-        try {
-            config.load(file);
-        } catch (FileNotFoundException ignored) {
-        } catch (IOException | InvalidConfigurationException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
-        }
-        return config;
     }
 
     private static String getPathToComment(List<String> configContents, int lineIndex, String configLine) {
@@ -119,11 +104,7 @@ public class CustomConfiguration extends YamlConfiguration {
         return aString;
     }
 
-    public void addDefault(String path, Object defaultValue, String... comments) {
-        if (!contains(path))
-            set(path, defaultValue, comments);
-    }
-
+    @Override
     public ConfigurationSection createSection(String path, String... comments) {
         if (path != null && comments != null && comments.length > 0) {
             List<String> commentsList = new ArrayList<>();
@@ -134,12 +115,6 @@ public class CustomConfiguration extends YamlConfiguration {
             this.comments.put(path, commentsList);
         }
         return super.createSection(path);
-    }
-
-    @Override
-    public void addDefault(String path, Object value) {
-        if (!contains(path))
-            set(path, value);
     }
 
     @Override
@@ -174,11 +149,6 @@ public class CustomConfiguration extends YamlConfiguration {
             }
         }
         comments = configComments;
-    }
-
-    public void load(File file, boolean loadComments) throws IOException, InvalidConfigurationException {
-        if (loadComments) this.load(file);
-        else super.load(file);
     }
 
     @Override
@@ -235,6 +205,7 @@ public class CustomConfiguration extends YamlConfiguration {
         }
     }
 
+    @Override
     public void set(String key, Object value, String... comments) {
         if (value != null) {
             if (comments != null) {
@@ -257,5 +228,4 @@ public class CustomConfiguration extends YamlConfiguration {
         }
         super.set(key, value);
     }
-
 }

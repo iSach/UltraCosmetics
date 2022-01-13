@@ -78,12 +78,8 @@ public class MorphChicken extends Morph {
                             if (chickens.isEmpty()) {
                                 cancel();
                             }
-                            try {
-                                for (Chicken chicken : chickens) {
-                                    UltraCosmeticsData.get().getVersionManager().getEntityUtil().follow(getPlayer(), chicken);
-                                }
-                            } catch (Exception exc) {
-                                cancel();
+                            for (Chicken chicken : chickens) {
+                                UltraCosmeticsData.get().getVersionManager().getEntityUtil().follow(getPlayer(), chicken);
                             }
                         }
                     }.runTaskTimer(getUltraCosmetics(), 0, 4);

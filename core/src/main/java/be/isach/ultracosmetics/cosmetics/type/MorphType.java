@@ -100,10 +100,6 @@ public class MorphType extends CosmeticMatType<Morph> {
     }
 
     private static DisguiseType getDisguiseType(String type) {
-        try {
-            return DisguiseType.valueOf(type);
-        } catch (Exception e) {
-            return DisguiseType.values()[0];
-        }
+        return DisguiseType.valueOf(type);
     }
 }
