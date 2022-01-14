@@ -12,7 +12,7 @@ body:
             label: "When/how would it be used?"
         validations:
             required: true
-    -   type: input
+    -   type: textarea
         attributes:
             label: "Are there alternatives?"
         validations:
