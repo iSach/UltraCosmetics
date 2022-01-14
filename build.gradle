@@ -149,7 +149,7 @@ abstract class VersionedObfTask extends DefaultTask {
     @Inject
     public VersionedObfTask(Project subproj) {
         this.subproj = subproj
-        dependsOn 'jar'
+        //dependsOn 'jar'
         description 'Generates an obfuscated version of the jar for use with Spigot.'
         group = 'jar preparation'
         ext.toolingDir = System.getProperty("user.dir")
