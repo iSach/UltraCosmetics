@@ -167,6 +167,7 @@ abstract class VersionedObfTask extends DefaultTask {
                 '-o', 'libs/obfuscated-donotuse-' + project.name + '-' + project.version + '.jar',
                 '-m', ext.homeDir + "/.m2/repository/org/spigotmc/minecraft-server/$mcVer-R0.1-SNAPSHOT/minecraft-server-$mcVer-R0.1-SNAPSHOT-maps-mojang.txt",
                 '--reverse'
+            println commandLine
         }
         project.exec {
             workingDir project.buildDir
@@ -175,6 +176,7 @@ abstract class VersionedObfTask extends DefaultTask {
                 '-i', 'libs/obfuscated-donotuse-' + project.name + '-' + project.version + '.jar',
                 '-o', 'libs/' + project.name + '-' + project.version + '.jar',
                 '-m', ext.homeDir + "/.m2/repository/org/spigotmc/minecraft-server/$mcVer-R0.1-SNAPSHOT/minecraft-server-$mcVer-R0.1-SNAPSHOT-maps-spigot.csrg"
+            println commandLine
         }
     }
 }
