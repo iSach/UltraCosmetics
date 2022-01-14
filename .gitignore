@@ -136,4 +136,4 @@ testserver
 hts*
 
 # Don't ignore jars in tools
-!tooling/*
+!tooling/*/*.jar
