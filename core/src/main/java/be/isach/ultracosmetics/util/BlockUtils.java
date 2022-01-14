@@ -122,7 +122,12 @@ public class BlockUtils {
      * @return {@code true} if the block is part of a rocket, otherwise {@code false}.
      */
     public static boolean isRocketBlock(Block b) {
-        return GadgetRocket.BLOCKS.contains(b);
+        for (GadgetRocket rocket : GadgetRocket.ROCKETS_WITH_BLOCKS) {
+            if (rocket.getBlocks().contains(b)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -96,8 +96,4 @@ public class GadgetChickenator extends Gadget {
         if (fm.getDisplayName().equals("uc_firework"))
             event.setCancelled(true);
     }
-
-    @Override
-    void onLeftClick() {
-    }
 }

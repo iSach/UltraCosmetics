@@ -35,12 +35,12 @@ public class TreasureChestDesign {
         this.barriers = initMData(barriers);
         try {
             this.chestType = ChestType.valueOf(chestType.toUpperCase());
-        } catch (Exception exc) {
+        } catch (IllegalArgumentException exc) {
             this.chestType = ChestType.NORMAL;
         }
         try {
             this.effect = Particles.valueOf(effect);
-        } catch (Exception exc) {
+        } catch (IllegalArgumentException exc) {
             this.effect = Particles.FLAME;
         }
     }

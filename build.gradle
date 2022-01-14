@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.6-RELEASE'
+    version = '2.6-DEV-b6'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -126,6 +126,11 @@ subprojects { subproj ->
         // Vault
         maven {
             url 'https://jitpack.io'
+        }
+
+		// Mojang Authlib
+        maven {
+        	url 'https://libraries.minecraft.net'
         }
     }
     def version = 8

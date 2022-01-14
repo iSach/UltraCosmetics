@@ -3,7 +3,12 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.*;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -14,8 +19,10 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an instance of a ethereal pearl gadget summoned by a player.
@@ -51,9 +58,8 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
             getPlayer().eject();
         }
 
-        EnderPearl pearl = getPlayer().launchProjectile(EnderPearl.class);
+        pearl = getPlayer().launchProjectile(EnderPearl.class);
         pearl.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.53d));
-        pearl.setPassenger(getPlayer());
         getPlayer().teleport(getPlayer().getLocation().add(0, 5, 0));
         if (!getPlayer().getAllowFlight()) {
             getPlayer().setAllowFlight(true);
@@ -70,18 +76,18 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     }
 
     @EventHandler
-    public void onToggleSneak(PlayerToggleSneakEvent event) {
-        if (pearl != null && event.getPlayer() == getPlayer()) {
-            event.getPlayer().eject();
+    public void onEntityDismount(EntityDismountEvent event) {
+        if (event.getEntity() != getPlayer()) return;
+        if (pearl == null) return;
+        Player player = getPlayer();
 
-            if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-                event.getPlayer().setAllowFlight(false);
-            }
-
-            spawnRandomFirework(event.getPlayer().getLocation());
-            pearl.remove();
-            running = false;
+        if (player.getGameMode() != GameMode.CREATIVE) {
+            player.setAllowFlight(false);
         }
+
+        spawnRandomFirework(player.getLocation());
+        pearl.remove();
+        running = false;
     }
 
     public FireworkEffect getRandomFireworkEffect() {
@@ -90,24 +96,20 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     }
 
     public void spawnRandomFirework(Location location) {
-        // Temporary try/catch to avoid errors. //TODO fix NPE here (unknown reason yet)
-        try {
-            ArrayList<Firework> fireworks = new ArrayList<>();
-            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                for (int i = 0; i < 4; i++) {
-                    Firework f = location.getWorld().spawn(location, Firework.class);
-                    FireworkMeta fm = f.getFireworkMeta();
-                    fm.addEffect(getRandomFireworkEffect());
-                    f.setFireworkMeta(fm);
-                    fireworks.add(f);
-                }
-            });
-            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-                fireworks.forEach(Firework::detonate);
-                fireworks.clear();
-            }, 2);
-        } catch (Exception exc) {
-        }
+        Set<Firework> fireworks = new HashSet<>();
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+            for (int i = 0; i < 4; i++) {
+                Firework f = location.getWorld().spawn(location, Firework.class);
+                FireworkMeta fm = f.getFireworkMeta();
+                fm.addEffect(getRandomFireworkEffect());
+                f.setFireworkMeta(fm);
+                fireworks.add(f);
+            }
+        });
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            fireworks.forEach(Firework::detonate);
+            fireworks.clear();
+        }, 2);
     }
 
 
@@ -121,43 +123,29 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getEntity() instanceof EnderPearl) {
-            if (pearl == event.getEntity()) {
-                event.getEntity().remove();
-                pearl = null;
-            }
+        if (pearl == event.getEntity()) {
+            event.getEntity().remove();
+            pearl = null;
         }
     }
 
     @Override
     public void onUpdate() {
-        if (pearl != null && pearl.isValid()) {
-            getPlayer().eject();
-            pearl.setPassenger(getPlayer());
+        if (running && (pearl == null || !pearl.isValid())) {
+            Bukkit.getLogger().info("pearl no longer exists");
+            running = false;
 
-            if (getPlayer().isOnGround()) {
-                pearl.remove();
-                pearl = null;
-            }
-        } else {
-            if (running) {
-                running = false;
+            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+                Bukkit.getLogger().info("removing flight");
+                getPlayer().eject();
 
-                Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                    getPlayer().eject();
+                if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+                    getPlayer().setAllowFlight(false);
+                }
+            });
 
-                    if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-                        getPlayer().setAllowFlight(false);
-                    }
-                });
-
-                pearl = null;
-                spawnRandomFirework(getPlayer().getLocation());
-            }
+            pearl = null;
+            spawnRandomFirework(getPlayer().getLocation());
         }
-    }
-
-    @Override
-    void onLeftClick() {
     }
 }

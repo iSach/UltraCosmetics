@@ -66,7 +66,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     /**
      * If true, it will differentiate left and right click.
      */
-    protected boolean useTwoInteractMethods;
+    protected boolean useTwoInteractMethods = false;
 
     /**
      * Gadget ItemStack.
@@ -103,7 +103,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         super(ultraCosmetics, Category.GADGETS, owner, type);
 
         this.affectPlayers = type.affectPlayers();
-        this.useTwoInteractMethods = false;
     }
 
     @Override
@@ -143,6 +142,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 onUpdate();
                 try {
                     if (UltraCosmeticsData.get().displaysCooldownInBar()) {
+                        // TODO: this is ugly
                         if (getPlayer().getItemInHand() != null && itemStack != null && getPlayer().getItemInHand()
                                 .hasItemMeta() && getPlayer().getItemInHand().getType() == getItemStack().getType()
                                 && getPlayer().getItemInHand().getData().getData() == getItemStack().getData().getData()
@@ -161,7 +161,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 }
 
                 double left = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
-                if (left > -0.1) {
+                if (left >= 0) {
                     String leftRounded = DECIMAL_FORMAT.format(left);
                     double decimalRoundedValue = Double.parseDouble(leftRounded);
                     if (decimalRoundedValue == 0) {
@@ -200,7 +200,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         StringBuilder stringBuilder = new StringBuilder();
 
         double currentCooldown = getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType());
-        double maxCooldown = getType().getCountdown();
+        double maxCooldown = getOwner().isBypassingCooldown() ? getType().getRunTime() : getType().getCountdown();
 
         int res = (int) (currentCooldown / maxCooldown * 50);
         ChatColor color;
@@ -209,7 +209,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             if (i < 50 - res) {
                 color = ChatColor.GREEN;
             }
-            stringBuilder.append(color + "┃");
+            //stringBuilder.append(color + "┃");
+            stringBuilder.append(color + "|");
         }
 
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
@@ -230,12 +231,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
      */
     public void removeItem() {
         itemStack = null;
-
-        try {
-            getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
-        } catch (Exception exc) {
-
-        }
+        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
     }
 
     /**
@@ -404,7 +400,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                         .replace("%time%", timeLeft));
             return;
         } else {
-            ultraPlayer.setCoolDown(getType(), getType().getCountdown());
+            ultraPlayer.setCoolDown(getType());
         }
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             ultraPlayer.removeAmmo(getType().toString().toLowerCase());
@@ -527,11 +523,12 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
      * Called when a left click is done with gadget,
      * only called if useTwoInteractMethods is true.
      */
-    abstract void onLeftClick();
+    void onLeftClick() {};
 
     /**
      * Called when gadget is cleared.
      */
+    @Override
     public abstract void onClear();
 
 }

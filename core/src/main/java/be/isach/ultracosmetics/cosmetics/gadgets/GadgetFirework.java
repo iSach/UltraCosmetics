@@ -54,8 +54,4 @@ public class GadgetFirework extends Gadget {
     @Override
     public void onClear() {
     }
-
-    @Override
-    void onLeftClick() {
-    }
 }

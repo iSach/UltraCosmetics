@@ -62,10 +62,6 @@ public class GadgetBlizzardBlaster extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onClear() {
         if (getOwner() == null || getPlayer() == null) {
             return;

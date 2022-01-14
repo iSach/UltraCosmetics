@@ -9,6 +9,8 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,159 +26,72 @@ public class UCTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("uc") || cmd.getName().equalsIgnoreCase("ultracosmetics")) {
-            if (args.length == 1) {
-                List<String> commands = new ArrayList<>();
-                for (SubCommand sc : uc.getCommandManager().getCommands()) {
-                    commands.add(sc.aliases[0]);
+        if (!cmd.getName().equals("ultracosmetics")) return null;
+        List<String> options = new ArrayList<>();
+        // TODO: maybe flip conditions so we sort by subcommand first, then arg index?
+        // more intuitive that way
+        if (args.length == 1) {
+            for (SubCommand sc : uc.getCommandManager().getCommands()) {
+                options.add(sc.aliases[0]);
+            }
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("menu") || args[0].equalsIgnoreCase("toggle")) {
+                for (Category category : Category.enabled()) {
+                    options.add(category.toString());
                 }
-
-                Collections.sort(commands);
-
-                ArrayList<String> toReturn = new ArrayList<>();
-                for (String s : commands) {
-                    if (s.toLowerCase().startsWith(args[0].toLowerCase())) {
-                        toReturn.add(s);
-                    }
-                }
-
-                return toReturn;
-            } else if (args.length == 2) {
-                if (args[0].equalsIgnoreCase("menu")) {
-                    List<String> commands = new ArrayList<>();
-
-                    for (Category category : Category.enabled()) {
-                        commands.add(category.toString().toLowerCase());
-                    }
-
-                    commands.add("main");
-                    commands.add("buykey");
-                    commands.add("renamepet");
-                    commands.add("renamepet");
-
-                    Collections.sort(commands);
-
-                    ArrayList<String> toReturn = new ArrayList<>();
-                    for (String s : commands) {
-                        if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
-                            toReturn.add(s);
-                        }
-                    }
-
-                    return toReturn;
-                } else if (args[0].equalsIgnoreCase("give")) {
-                    List<String> commands = new ArrayList<>();
-
-                    commands.add("ammo");
-                    commands.add("key");
-
-                    ArrayList<String> toReturn = new ArrayList<>();
-                    for (String s : commands) {
-                        if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
-                            toReturn.add(s);
-                        }
-                    }
-
-                    return toReturn;
-                } else if (args[0].equalsIgnoreCase("toggle")) {
-                    List<String> commands = new ArrayList<>();
-
-                    for (Category category : Category.enabled()) {
-                        commands.add(category.toString().toLowerCase());
-                    }
-
-                    Collections.sort(commands);
-
-                    ArrayList<String> toReturn = new ArrayList<>();
-                    for (String s : commands) {
-                        if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
-                            toReturn.add(s);
-                        }
-                    }
-
-                    return toReturn;
-                }
-            } else if (args.length == 3) {
-                if (args[0].equalsIgnoreCase("toggle")) {
-                    String type = args[1].toUpperCase();
-                    try {
-                        Category cat = Category.valueOf(type);
-                        if (cat != null && cat.isEnabled()) {
-
-                            List<String> commands = new ArrayList<>();
-
-                            for (CosmeticType cosm : cat.getEnabled()) {
-                                commands.add(cosm.toString().toLowerCase());
-                            }
-
-                            Collections.sort(commands);
-
-                            ArrayList<String> toReturn = new ArrayList<>();
-                            for (String s : commands) {
-                                if (s.toLowerCase().startsWith(args[2].toLowerCase())) {
-                                    toReturn.add(s);
-                                }
-                            }
-
-                            return toReturn;
-                        }
-                    } catch (Exception exc) {
-                    }
-                } else if (args[0].equalsIgnoreCase("clear")) {
-                    List<String> commands = new ArrayList<>();
-
-                    for (Category category : Category.enabled()) {
-                        commands.add(category.toString().toLowerCase());
-                    }
-
-                    Collections.sort(commands);
-
-                    ArrayList<String> toReturn = new ArrayList<>();
-                    for (String s : commands) {
-                        if (s.toLowerCase().startsWith(args[2].toLowerCase())) {
-                            toReturn.add(s);
-                        }
-                    }
-
-                    return toReturn;
-                } else if (args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("ammo")) {
-                    List<String> commands = new ArrayList<>();
-
-                    for(GadgetType gadgetType : GadgetType.enabled()) {
-                        commands.add(gadgetType.getConfigName());
-                    }
-
-                    ArrayList<String> toReturn = new ArrayList<>();
-                    for (String s : commands) {
-                        if (s.toLowerCase().startsWith(args[2].toLowerCase())) {
-                            toReturn.add(s);
-                        }
-                    }
-
-                    return toReturn;
-                }
-            } else if (args.length == 6) {
-                if (args[0].equalsIgnoreCase("treasure")) {
-                    List<String> commands = new ArrayList<>();
-
-                    for (World world : Bukkit.getWorlds()) {
-                        commands.add(world.getName().toLowerCase());
-                    }
-
-                    Collections.sort(commands);
-
-                    ArrayList<String> toReturn = new ArrayList<>();
-                    for (String s : commands) {
-                        if (s.toLowerCase().startsWith(args[5].toLowerCase())) {
-                            toReturn.add(s);
-                        }
-                    }
-
-                    return toReturn;
+            } else if (args[0].equalsIgnoreCase("give")) {
+                options.add("ammo");
+                options.add("key");
+            } else if (args[0].equalsIgnoreCase("clear")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    options.add(player.getName());
                 }
             }
-        }
+        } else if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("toggle")) {
+                Category cat;
+                try {
+                    cat = Category.valueOf(args[1].toUpperCase());
+                } catch (IllegalArgumentException exc) {
+                    return options;
+                }
 
-        return null;
+                if (cat == null || !cat.isEnabled()) return options;
+
+                for (CosmeticType cosm : cat.getEnabled()) {
+                    options.add(cosm.toString());
+                }
+            } else if (args[0].equalsIgnoreCase("clear")) {
+                for (Category category : Category.enabled()) {
+                    options.add(category.toString());
+                }
+            } else if (args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("ammo")) {
+                for (GadgetType gadgetType : GadgetType.enabled()) {
+                    options.add(gadgetType.getConfigName());
+                }
+            }
+        } else if (args.length == 4) {
+            if ((args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("key")) || args[0].equalsIgnoreCase("toggle")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    options.add(player.getName());
+                }
+            }
+        } else if (args.length == 5) {
+            if (args[0].equalsIgnoreCase("give") && args[1].equalsIgnoreCase("ammo")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    options.add(player.getName());
+                }
+            }
+        } else if (args.length == 6) {
+            if (!args[0].equalsIgnoreCase("treasure")) return options;
+            for (World world : Bukkit.getWorlds()) {
+                options.add(world.getName());
+            }
+        }
+        List<String> results = new ArrayList<>();
+        options.replaceAll(String::toLowerCase);
+        Collections.sort(options);
+        StringUtil.copyPartialMatches(args[args.length - 1], options, results);
+        return results;
     }
 }

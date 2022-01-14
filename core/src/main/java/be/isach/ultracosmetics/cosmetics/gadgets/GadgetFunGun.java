@@ -54,10 +54,6 @@ public class GadgetFunGun extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
     }
 

@@ -129,20 +129,20 @@ public class MathUtils {
         }
     }
 
-    public static boolean isInteger(Object object) {
+    public static boolean isInteger(String str) {
         try {
-            Integer.parseInt(object.toString());
+            Integer.parseInt(str);
             return true;
-        } catch (Exception exc) {
+        } catch (NumberFormatException ex) {
             return false;
         }
     }
 
-    public static boolean isDouble(Object object) {
+    public static boolean isDouble(String str) {
         try {
-            Double.parseDouble(object.toString());
+            Double.parseDouble(str.toString());
             return true;
-        } catch (Exception exc) {
+        } catch (NumberFormatException ex) {
             return false;
         }
     }
@@ -425,25 +425,16 @@ public class MathUtils {
     }
 
     public static void applyVelocity(final Entity ent, Vector v) {
-        if (ent.hasMetadata("NPC"))
-            return;
-        if (ent instanceof Player) {
-            UltraPlayer customPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent);
-            if (!customPlayer.hasGadgetsEnabled())
-                return;
-        }
-        ent.setVelocity(v);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> FallDamageManager.addNoFall(ent), 5);
+        applyVelocity(ent, v, false);
     }
 
     public static void applyVelocity(final Entity ent, Vector v, boolean ignoreGadgetsEnabled) {
         if (ent.hasMetadata("NPC"))
             return;
-        if (!ignoreGadgetsEnabled) {
-            if (ent instanceof Player) {
-                UltraPlayer customPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent);
-                if (!customPlayer.hasGadgetsEnabled())
-                    return;
+        if (!ignoreGadgetsEnabled && ent instanceof Player) {
+            UltraPlayer customPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent);
+            if (!customPlayer.hasGadgetsEnabled()) {
+                return;
             }
         }
         ent.setVelocity(v);

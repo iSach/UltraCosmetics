@@ -92,8 +92,4 @@ public class GadgetBlackHole extends Gadget {
             item.remove();
         }
     }
-
-    @Override
-    void onLeftClick() {
-    }
 }

@@ -104,21 +104,12 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
     	double y = loc.getY();
     	double z = loc.getZ() + 1;
     	if (pathMethod == null) {
-    		try {
-    			// yes, this seems pretty weird when you're looking at the non-obfuscated version of this class
-    			// this whole method is for compatibility with Paper, because they don't reobfuscate some methods correctly
-    			// you should remove the reflection when this issue is closed:
-    			// https://github.com/PaperMC/paperweight/issues/24
-    			return mob.getNavigation().createPath(x, y, z, 1);
-    		} catch (NoSuchMethodError e) {
-    			try {
-					pathMethod = PathNavigation.class.getDeclaredMethod("createPath", double.class, double.class, double.class, int.class);
-				} catch (NoSuchMethodException | SecurityException e1) {
-					// idk man
-					e1.printStackTrace();
-					return null;
-				}
-    		}
+    	    try {
+                pathMethod = PathNavigation.class.getDeclaredMethod("createPath", double.class, double.class, double.class, int.class);
+            } catch (NoSuchMethodException | SecurityException e) {
+                e.printStackTrace();
+                return null;
+            }
     	}
     	try {
 			return (Path) pathMethod.invoke(mob.getNavigation(), x, y, z, 1);

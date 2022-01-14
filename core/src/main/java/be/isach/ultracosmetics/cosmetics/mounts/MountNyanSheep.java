@@ -8,7 +8,6 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.util.Vector;
@@ -62,17 +61,12 @@ public class MountNyanSheep extends Mount<Sheep> {
     }
 
     private void move() {
-        if (getPlayer() == null)
-            return;
-        try {
-            Player player = getPlayer();
-            Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
-            Location loc = player.getLocation().add(vel);
+        if (getPlayer() == null) return;
+        Player player = getPlayer();
+        Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
+        Location loc = player.getLocation().add(vel);
 
-            UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(entity, loc);
-        } catch (Exception exc) {
-            getOwner().removeMount();
-        }
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(entity, loc);
     }
 
     private class RGBColor {

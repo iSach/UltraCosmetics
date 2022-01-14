@@ -102,7 +102,6 @@ public class PlayerListener implements Listener {
                 @Override
                 public void run() {
                     if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
-
                         CosmeticsProfile cp = ultraCosmetics.getCosmeticsProfileManager().getProfile(event.getPlayer().getUniqueId());
                         if (cp == null) {
                             ultraCosmetics.getCosmeticsProfileManager().initForPlayer(ultraPlayer);
@@ -112,7 +111,15 @@ public class PlayerListener implements Listener {
                     }
                 }
             }.runTaskLater(ultraCosmetics, 5);
-        } else { // Disable cosmetics when joining a bad world.
+        }
+    }
+
+    // run this as early as possible for compatibility with MV-inventories?
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onWorldChangeEarly(final PlayerChangedWorldEvent event) {
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+        if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+            // Disable cosmetics when joining a bad world.
             ultraPlayer.removeMenuItem();
             ultraPlayer.setQuitting(true);
             if (ultraPlayer.clear())
@@ -164,7 +171,7 @@ public class PlayerListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(player.getWorld().getName())) return;
         if (event.getView().getTopInventory().getHolder() instanceof CosmeticsInventoryHolder
-                || isMenuItem(event.getCurrentItem())
+                || isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())
                 || (event.getClick() == ClickType.NUMBER_KEY && isMenuItem(player.getInventory().getItem(event.getHotbarButton())))) {
             event.setCancelled(true);
             player.updateInventory();
@@ -180,7 +187,7 @@ public class PlayerListener implements Listener {
     public void cancelMove(InventoryCreativeEvent event) {
         Player player = (Player) event.getWhoClicked();
         if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
-            if (isMenuItem(event.getCurrentItem())) {
+            if (isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())) {
                 event.setCancelled(true);
                 player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
             }
@@ -287,7 +294,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (event.getPlayer().hasPermission("ultracosmetics.bypassdisabledcommands")) return;
+        if (event.getPlayer().hasPermission("ultracosmetics.bypass.disabledcommands")) return;
         String strippedCommand = event.getMessage().split(" ")[0].replace("/", "").toLowerCase();
         if (!SettingsManager.getConfig().getList("Disabled-Commands").contains(strippedCommand)) return;
         UltraPlayer player = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());

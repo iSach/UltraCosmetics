@@ -251,9 +251,7 @@ public class AnvilGUI implements IAnvilGUI {
                             clicker,
                             clicked.hasItemMeta() ? clicked.getItemMeta().getDisplayName() : ""
                     );
-                    if (response.getText().equals("BUY")) {
-                        // ...
-                    } else if (response.getText() != null) {
+                    if (response.getText() != null) {
                         final ItemMeta meta = clicked.getItemMeta();
                         meta.setDisplayName(response.getText());
                         clicked.setItemMeta(meta);

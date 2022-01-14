@@ -16,7 +16,6 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UCMaterial;
 import be.isach.ultracosmetics.version.AAnvilGUI;
 import be.isach.ultracosmetics.version.VersionManager;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

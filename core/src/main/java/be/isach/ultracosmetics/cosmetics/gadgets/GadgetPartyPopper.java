@@ -46,10 +46,6 @@ public class GadgetPartyPopper extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
     }
 

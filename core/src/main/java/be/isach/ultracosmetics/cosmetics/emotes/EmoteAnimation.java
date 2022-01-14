@@ -47,8 +47,8 @@ class EmoteAnimation extends BukkitRunnable {
 
         try {
             cancel();
-        } catch (Exception exc) {
-            // ???
+        } catch (IllegalStateException ignored) {
+            // not scheduled yet
         }
     }
 

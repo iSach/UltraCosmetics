@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,7 +17,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 /**
@@ -26,6 +29,7 @@ import org.bukkit.util.Vector;
  */
 public class GadgetAntiGravity extends Gadget {
 
+    private static final boolean USE_LEVITATION = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1);
     private ArmorStand as;
     private boolean running;
 
@@ -46,29 +50,25 @@ public class GadgetAntiGravity extends Gadget {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
-        if (as != null && as.isValid()) {
-            if (running) {
-                as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
-                UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
-                UtilParticles.display(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
-                            if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
-                                MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
-                            }
-                        }
-                    }
-                }.runTask(getUltraCosmetics());
-            } else {
-                as.remove();
-                as = null;
+        if (as == null || !as.isValid()) return;
+        if (!running) {
+            as.remove();
+            as = null;
+            return;
+        }
+
+        as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
+        UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
+        UtilParticles.display(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
+        for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
+            if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
+                LivingEntity le = (LivingEntity) ent;
+                if (USE_LEVITATION) {
+                    le.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 5, 0));
+                } else {
+                    MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
+                }
             }
         }
     }
@@ -76,19 +76,13 @@ public class GadgetAntiGravity extends Gadget {
     // Find a fkn alternative to this shit :^)
     @EventHandler
     public void onKick(PlayerKickEvent event) {
-        try {
-            if (running) {
-                if (as != null && as.isValid() && event.getReason().contains("Fly")) {
-                    if (as.getLocation().distance(event.getPlayer().getLocation()) < 8) {
-                        event.setCancelled(true);
-                        getUltraCosmetics().getSmartLogger().write("UltraCosmetics >> Cancelling invalid Flight Kick.");
-                        return;
-                    }
-                }
+        if (!running || !USE_LEVITATION) return;
+        if (as != null && as.isValid() && event.getReason().equals("Flying is not enabled on this server")) {
+            if (as.getLocation().distanceSquared(event.getPlayer().getLocation()) < 6) {
                 event.setCancelled(true);
-                getUltraCosmetics().getSmartLogger().write("UltraCosmetics >> Cancelling invalid Flight Kick.");
+                getUltraCosmetics().getSmartLogger().write("UltraCosmetics >> Cancelling flight kick while using antigravity.");
+                return;
             }
-        } catch (Exception exc) {
         }
     }
 

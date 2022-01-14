@@ -54,10 +54,6 @@ public class GadgetParachute extends Gadget {
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> active = true, 5);
     }
 
-    @Override
-    void onLeftClick() {
-    }
-
     private void killParachute() {
         for (Chicken chicken : chickens) {
             chicken.setLeashHolder(null);
@@ -89,7 +85,6 @@ public class GadgetParachute extends Gadget {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onUpdate() {
         if (active) {

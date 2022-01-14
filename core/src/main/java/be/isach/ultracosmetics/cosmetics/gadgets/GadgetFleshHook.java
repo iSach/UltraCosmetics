@@ -77,10 +77,6 @@ public class GadgetFleshHook extends Gadget implements Listener {
     }
 
     @Override
-    void onLeftClick() {
-    }
-
-    @Override
     public void onUpdate() {
         Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
             Iterator<Item> it = items.iterator();

@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -35,7 +34,7 @@ public class ItemFactory {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(displayName);
         if (lore != null) {
-            List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList();
+            List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
             for (String s : lore)
                 if (s != null)
 
@@ -57,7 +56,7 @@ public class ItemFactory {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(displayName);
         if (lore != null) {
-            List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList();
+            List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
             for (String s : lore)
                 if (s != null)
                     finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
@@ -79,7 +78,7 @@ public class ItemFactory {
         ItemMeta meta = itemstack.getItemMeta();
         meta.setDisplayName(displayName);
         if (lore != null) {
-            List<String> finalLore = meta.hasLore() ? meta.getLore() : new ArrayList();
+            List<String> finalLore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
             for (String s : lore)
                 if (s != null)
                     finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
