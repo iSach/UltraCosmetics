@@ -4,7 +4,7 @@ labels: ["bug"]
 body:
     -   type: textarea
         attributes:
-            label: What steps will reproduce the issue?
+            label: "What steps will reproduce the issue?"
             value: |-
                 1. 
                 2. 
@@ -13,30 +13,30 @@ body:
             required: true
     -   type: textarea
         attributes:
-            label: What was supposed to happen?
+            label: "What was supposed to happen?"
         validations:
             required: true
     -   type: textarea
         attributes:
-            label: What happened instead?
+            label: "What happened instead?"
             placeholder: "ex. The gadget did nothing and this error appeared in console: ..."
         validations:
             required: true
     -   type: input
         attributes:
-            label: What version of UltraCosmetics are you using? Do not say "latest". Hint: check the filename of your jar
+            label: "What version of UltraCosmetics are you using? Do not say 'latest'. Hint: check the filename of your jar"
             placeholder: "ex. UltraCosmetics-2.6-DEV-b6"
         validations:
             required: true
     -   type: input
         attributes:
-            label: What server distribution (Spigot, Paper, etc.) and what version are you using? Do not say "latest". Paste the output of /version here
+            label: "What server distribution (Spigot, Paper, etc.) and what version are you using? Do not say 'latest'. Paste the output of /version here"
             placeholder: "This server is running Paper version git-Paper-150 (MC: 1.18.1) (Implementing API version 1.18.1-R0.1-SNAPSHOT) (Git: 0c64d40)"
         validations:
             required: true
     -   type: textarea
         attributes:
-            label: What plugins do you have installed? Paste the output of /plugins here
+            label: "What plugins do you have installed? Paste the output of /plugins here"
             placeholder: "ex. Plugins (5): Essentials, LuckPerms, UltraCosmetics, WorldEdit, WorldGuard"
         validations:
             required: true
