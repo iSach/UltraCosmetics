@@ -134,3 +134,6 @@ gradle-app.setting
 testserver
 
 hts*
+
+# Don't ignore jars in tools
+!tooling/*
