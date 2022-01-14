@@ -1,0 +1,48 @@
+name: Bug report
+description: Found a bug in UltraCosmetics? Report it here!
+labels: ["bug"]
+body:
+    -   type: textarea
+        attributes:
+            label: What steps will reproduce the issue?
+            value: |-
+                1. 
+                2. 
+                3. 
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: What was supposed to happen?
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: What happened instead?
+            placeholder: "ex. The gadget did nothing and this error appeared in console: ..."
+        validations:
+            required: true
+    -   type: input
+        attributes:
+            label: What version of UltraCosmetics are you using? Do not say "latest"
+            placeholder: "Hint: check the filename of your jar. ex. UltraCosmetics-2.6-DEV-b6"
+        validations:
+            required: true
+    -   type: input
+        attributes:
+            label: What server distribution (Spigot, Paper, etc.) and what version are you using? Do not say "latest"
+            placeholder: "Hint: use /version and paste the output here. ex. This server is running Paper version git-Paper-150 (MC: 1.18.1) (Implementing API version 1.18.1-R0.1-SNAPSHOT) (Git: 0c64d40)"
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: What plugins do you have installed? Paste the output of /plugins
+            placeholder: "ex. Plugins (5): Essentials, LuckPerms, UltraCosmetics, WorldEdit, WorldGuard"
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: Are there any errors in the console or in logs? Paste them here.
+    -   type: textarea
+        attributes:
+            label: Additional information that could be helpful in diagnosing the problem
