@@ -242,6 +242,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDeath(PlayerDeathEvent event) {
+        // Ignore NPC deaths as per #467
+        if (Bukkit.getPlayer(event.getEntity().getUniqueId()) == null) return;
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (isMenuItem(event.getEntity().getInventory().getItem(slot))) {
             event.getDrops().remove(event.getEntity().getInventory().getItem(slot));
