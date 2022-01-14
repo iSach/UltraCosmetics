@@ -161,7 +161,7 @@ abstract class VersionedObfTask extends DefaultTask {
         def mcVer = subproj.getProperty("remapMcVersion")
         project.exec {
             workingDir project.buildDir
-            commandLine 'java', '-cp', project.projectDir.getAbsolutePath() + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-mojang.jar",
+            commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-mojang.jar",
                 'net.md_5.specialsource.SpecialSource', '--live', '--only', "be/isach/ultracosmetics/$nms", '-q',
                 '-i', 'libs/' + project.name + '-' + project.version + '.jar',
                 '-o', 'libs/obfuscated-donotuse-' + project.name + '-' + project.version + '.jar',
@@ -171,7 +171,7 @@ abstract class VersionedObfTask extends DefaultTask {
         }
         project.exec {
             workingDir project.buildDir
-            commandLine 'java', '-cp', project.projectDir.getAbsolutePath() + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-obf.jar",
+            commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-obf.jar",
                 'net.md_5.specialsource.SpecialSource', '--live', '--only', "be/isach/ultracosmetics/$nms", '-q',
                 '-i', 'libs/obfuscated-donotuse-' + project.name + '-' + project.version + '.jar',
                 '-o', 'libs/' + project.name + '-' + project.version + '.jar',
