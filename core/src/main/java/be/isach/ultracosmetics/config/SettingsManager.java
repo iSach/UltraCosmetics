@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -156,6 +157,10 @@ public class SettingsManager {
 
     public String getString(String path) {
         return fileConfiguration.getString(path);
+    }
+
+    public List<String> getStringList(String path) {
+        return fileConfiguration.getStringList(path);
     }
 
     /**
