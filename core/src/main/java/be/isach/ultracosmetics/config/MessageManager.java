@@ -478,6 +478,6 @@ public class MessageManager {
      * @return a message from a config path.
      */
     public static String getMessage(String messagePath) {
-        return ChatColor.translateAlternateColorCodes('&', ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")));
+        return ChatColor.translateAlternateColorCodes('&', settingsManager.getString(messagePath).replace("%prefix%", settingsManager.getString("Prefix")));
     }
 }

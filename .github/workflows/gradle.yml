@@ -9,12 +9,41 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 17
-      uses: actions/setup-java@v1
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
       with:
+        distribution: temurin
+        java-version: 8
+    - name: Download BuildTools
+      run: wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+    - name: Build 1.8.8
+      run: java -jar BuildTools.jar --rev 1.8.8
+    - name: Build 1.12.2
+      run: java -jar BuildTools.jar --rev 1.12.2
+    - name: Build 1.13.2
+      run: java -jar BuildTools.jar --rev 1.13.2
+    - name: Build 1.14.4
+      run: java -jar BuildTools.jar --rev 1.14.4
+    - name: Build 1.15.2
+      run: java -jar BuildTools.jar --rev 1.15.2
+    - name: Build 1.16.5
+      run: java -jar BuildTools.jar --rev 1.16.5
+    - name: Set up JDK 16
+      uses: actions/setup-java@v2
+      with:
+        distribution: temurin
+        java-version: 16
+    - name: Build 1.17.1
+      run: java -jar BuildTools.jar --rev 1.17.1
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: temurin
         java-version: 17
+    - name: Build 1.18.1
+      run: java -jar BuildTools.jar --rev 1.18.1
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew obfuscate
     - uses: actions/upload-artifact@v2
       with:
-        path: target/*.jar
+        path: build/libs/UltraCosmetics-*.jar

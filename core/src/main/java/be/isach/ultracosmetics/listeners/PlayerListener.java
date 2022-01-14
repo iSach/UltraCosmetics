@@ -272,7 +272,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (TreasureRandomizer.fireworksList.contains(event.getDamager())) {
+        if (TreasureRandomizer.getFireworks().contains(event.getDamager())) {
             event.setCancelled(true);
         }
     }

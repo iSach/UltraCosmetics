@@ -491,7 +491,7 @@ public class UltraPlayer {
     public String getPetName(PetType petType) {
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).get("Pet-Names." + petType.getConfigName());
+                return SettingsManager.getData(getBukkitPlayer()).getString("Pet-Names." + petType.getConfigName());
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;
@@ -570,7 +570,7 @@ public class UltraPlayer {
 
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).get("Gadgets-Enabled");
+                return SettingsManager.getData(getBukkitPlayer()).getBoolean("Gadgets-Enabled");
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex())) {
                     gadgetsEnabledCache = CacheValue.ENABLED;
@@ -618,7 +618,7 @@ public class UltraPlayer {
             return false;
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).get("Third-Person-Morph-View");
+                return SettingsManager.getData(getBukkitPlayer()).getBoolean("Third-Person-Morph-View");
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex())) {
                     morphSelfViewCache = CacheValue.ENABLED;

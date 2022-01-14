@@ -131,7 +131,7 @@ public class SettingsManager {
      * @return The boolean found in config from the given path.
      */
     public boolean getBoolean(String path) {
-        return (boolean) get(path);
+        return fileConfiguration.getBoolean(path);
     }
 
     /**
@@ -141,7 +141,7 @@ public class SettingsManager {
      * @return The int found in config from the given path.
      */
     public int getInt(String path) {
-        return (int) get(path);
+        return fileConfiguration.getInt(path);
     }
 
     /**
@@ -151,7 +151,11 @@ public class SettingsManager {
      * @return The double found in config from the given path.
      */
     public double getDouble(String path) {
-        return (double) get(path);
+        return fileConfiguration.getDouble(path);
+    }
+
+    public String getString(String path) {
+        return fileConfiguration.getString(path);
     }
 
     /**
@@ -161,8 +165,9 @@ public class SettingsManager {
      * @param value The value for this path.
      */
     public void addDefault(String path, Object value) {
-        if (!fileConfiguration.contains(path))
+        if (!fileConfiguration.contains(path)) {
             set(path, value);
+        }
     }
 
     /**
@@ -181,9 +186,8 @@ public class SettingsManager {
         return cs;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T get(String path) {
-        return (T) fileConfiguration.get(path);
+    public Object get(String path) {
+        return fileConfiguration.get(path);
     }
 
     /**

@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.Cuboid;
@@ -11,6 +12,7 @@ import be.isach.ultracosmetics.util.Cuboid;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -66,9 +68,10 @@ public class TreasureChestManager implements Listener {
             return;
         }
 
-        if (plugin.getPlayerManager().getUltraPlayer(player).getKeys() < 1) {
+        UltraPlayer ultraPlayer = plugin.getPlayerManager().getUltraPlayer(player);
+        if (ultraPlayer.getKeys() < 1) {
             player.closeInventory();
-            plugin.getPlayerManager().getUltraPlayer(player).openKeyPurchaseMenu();
+            ultraPlayer.openKeyPurchaseMenu();
             return;
         }
 
@@ -87,20 +90,21 @@ public class TreasureChestManager implements Listener {
             if (!(ent instanceof Player)) continue;
             Player loopPlayer = (Player) ent;
             // check Bukkit.getPlayer(UUID) in case loopPlayer is really a player NPC
-            if (Bukkit.getPlayer(loopPlayer.getUniqueId()) != null && plugin.getPlayerManager().getUltraPlayer(loopPlayer).getCurrentTreasureChest() != null) {
+            if (Bukkit.getPlayer(loopPlayer.getUniqueId()) != null 
+                    && plugin.getPlayerManager().getUltraPlayer(loopPlayer).getCurrentTreasureChest() != null) {
                 player.closeInventory();
                 player.sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
                 return;
             }
         }
 
-        if (player.getLocation().getBlock().getRelative(BlockFace.UP).getType() != Material.AIR
-                || !player.getLocation().getBlock().getType().isBlock()
-                || player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+        Block block = player.getLocation().getBlock();
+        if (block.getRelative(BlockFace.UP).getType() != Material.AIR
+                || block.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
             player.sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
             return;
         }
-        plugin.getPlayerManager().getUltraPlayer(player).removeKey();
+        ultraPlayer.removeKey();
         openTreasureChest(player, preLoc);
     }
 
@@ -108,25 +112,30 @@ public class TreasureChestManager implements Listener {
     public void buyKeyConfirm(InventoryClickEvent event) {
         if (!event.getView().getTitle().equalsIgnoreCase(MessageManager.getMessage("Buy-Treasure-Key"))) return;
         event.setCancelled(true);
-        if (event.getCurrentItem() != null
-                && event.getCurrentItem().hasItemMeta()
-                && event.getCurrentItem().getItemMeta().hasDisplayName()) {
-            if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) {
-                if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).getBalance() >= (int) SettingsManager.getConfig().get("TreasureChests.Key-Price")) {
-                    ultraCosmetics.getEconomyHandler().withdraw((Player) event.getWhoClicked(), (int) SettingsManager.getConfig().get("TreasureChests.Key-Price"));
-                    UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()).addKey();
-                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
-                    event.getWhoClicked().closeInventory();
-                    UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()));
-                } else {
-                    event.getWhoClicked().sendMessage(MessageManager.getMessage("Not-Enough-Money"));
-                    event.getWhoClicked().closeInventory();
-                }
-            } else if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
-                event.getWhoClicked().closeInventory();
-                UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked()));
-            }
+
+        if (event.getCurrentItem() == null || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
+        Player player = (Player) event.getWhoClicked();
+        UltraPlayer ultraPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player);
+
+        if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
+            player.closeInventory();
+            UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(ultraPlayer);
+            return;
         }
+
+        if (!event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) return;
+
+        if (ultraPlayer.getBalance() < SettingsManager.getConfig().getInt("TreasureChests.Key-Price")) {
+            player.sendMessage(MessageManager.getMessage("Not-Enough-Money"));
+            player.closeInventory();
+            return;
+        }
+
+        ultraCosmetics.getEconomyHandler().withdraw(player, SettingsManager.getConfig().getInt("TreasureChests.Key-Price"));
+        ultraPlayer.addKey();
+        player.sendMessage(MessageManager.getMessage("Successful-Purchase"));
+        player.closeInventory();
+        UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(ultraPlayer);
     }
 
 }

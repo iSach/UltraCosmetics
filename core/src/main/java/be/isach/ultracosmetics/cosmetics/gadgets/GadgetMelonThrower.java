@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.UCMaterial;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.World;
 import org.bukkit.entity.Item;

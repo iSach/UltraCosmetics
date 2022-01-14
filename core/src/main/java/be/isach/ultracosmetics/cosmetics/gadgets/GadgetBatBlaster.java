@@ -7,12 +7,10 @@ import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bat;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
