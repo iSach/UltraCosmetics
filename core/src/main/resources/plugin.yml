@@ -279,6 +279,7 @@ permissions:
       - ultracosmetics.pets.vex
       - ultracosmetics.pets.panda
       - ultracosmetics.pets.fox
+      - ultracosmetics.pets.axolotl
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -311,6 +312,8 @@ permissions:
   ultracosmetics.pets.panda:
     default: op
   ultracosmetics.pets.fox:
+    default: op
+  ultracosmetics.pets.axolotl:
     default: op
   ultracosmetics.morphs.*:
     children:
