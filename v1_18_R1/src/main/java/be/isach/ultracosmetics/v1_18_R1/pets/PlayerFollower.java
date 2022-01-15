@@ -100,22 +100,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
     }
     
     private Path path(Mob mob, Location loc) {
-    	double x = loc.getX() + 1;
-    	double y = loc.getY();
-    	double z = loc.getZ() + 1;
-    	if (pathMethod == null) {
-    	    try {
-                pathMethod = PathNavigation.class.getDeclaredMethod("createPath", double.class, double.class, double.class, int.class);
-            } catch (NoSuchMethodException | SecurityException e) {
-                e.printStackTrace();
-                return null;
-            }
-    	}
-    	try {
-			return (Path) pathMethod.invoke(mob.getNavigation(), x, y, z, 1);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
+    	return mob.getNavigation().createPath(loc.getX() + 1, loc.getY(), loc.getZ() + 1, 1);
     }
 }

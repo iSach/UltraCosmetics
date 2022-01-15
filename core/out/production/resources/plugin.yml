@@ -436,7 +436,7 @@ permissions:
   ultracosmetics.suits.*:
     children:
       - ultracosmetics.suits.rave.*
-      - ultracosmetics.suits.astronaut*
+      - ultracosmetics.suits.astronaut.*
       - ultracosmetics.suits.diamond.*
       - ultracosmetics.suits.santa.*
   ultracosmetics.suits.rave.*:
