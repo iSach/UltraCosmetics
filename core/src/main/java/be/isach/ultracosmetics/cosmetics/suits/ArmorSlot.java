@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.EquipmentSlot;
 
 /**
  * Armor slot enum.
@@ -9,10 +10,19 @@ import org.bukkit.ChatColor;
  * @since 12-20-2015
  */
 public enum ArmorSlot {
-    HELMET,
-    CHESTPLATE,
-    LEGGINGS,
-    BOOTS;
+    HELMET(EquipmentSlot.HEAD),
+    CHESTPLATE(EquipmentSlot.CHEST),
+    LEGGINGS(EquipmentSlot.LEGS),
+    BOOTS(EquipmentSlot.FEET);
+
+    private EquipmentSlot bukkitSlot;
+    private ArmorSlot(EquipmentSlot bukkitSlot) {
+        this.bukkitSlot = bukkitSlot;
+    }
+
+    public EquipmentSlot toBukkit() {
+        return bukkitSlot;
+    }
 
     public static ArmorSlot getByName(String s) {
         for (ArmorSlot a : ArmorSlot.values()) {

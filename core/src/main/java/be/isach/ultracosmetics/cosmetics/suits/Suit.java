@@ -16,7 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -47,9 +47,8 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     public void onItemDrop(PlayerDropItemEvent event) {
         if (getOwner() == null || getPlayer() == null) {
             return;
-        }
-        ItemStack drop = event.getItemDrop().getItemStack();
-        if (event.getPlayer().equals(getPlayer()) && drop.hasItemMeta() && drop.getItemMeta().hasDisplayName() && drop.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+        } 
+        if (event.getPlayer() == getPlayer() && isItemThis(event.getItemDrop().getItemStack())) {
             event.getItemDrop().remove();
             if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
                 clear();
@@ -59,22 +58,33 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        handleClick(event);
+    }
+
+    // InventoryCreativeEvent is a subclass of InventoryClickEvent,
+    // so do we really need both listeners?
+    @EventHandler
+    public void onInventoryClick(InventoryCreativeEvent event) {
+        handleClick(event);
+    }
+
+    private void handleClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack current = event.getCurrentItem();
-        if (event.getSlotType().equals(InventoryType.SlotType.ARMOR) && getPlayer() != null && player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && itemStack != null && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
+        if (event.getSlotType().equals(SlotType.ARMOR) && player == getPlayer() && isItemThis(current)) {
             event.setCancelled(true);
-            player.updateInventory();
+            if (event instanceof InventoryCreativeEvent) {
+                // Close the inventory because clicking again results in the event being handled client side
+                player.closeInventory();
+            } else {
+                player.updateInventory();
+            }
         }
     }
 
-    @EventHandler
-    public void onInventoryClick(InventoryCreativeEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        ItemStack current = event.getCurrentItem();
-        if (event.getSlotType().equals(InventoryType.SlotType.ARMOR) && getPlayer() != null && player.equals(getPlayer()) && current != null && current.hasItemMeta() && current.getItemMeta().hasDisplayName() && itemStack != null && current.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName())) {
-            event.setCancelled(true);
-            player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
-        }
+    private boolean isItemThis(ItemStack is) {
+        return is != null && is.hasItemMeta() && is.getItemMeta().hasDisplayName()
+                && is.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName());
     }
 
     public void equip(ArmorSlot slot) {
@@ -85,41 +95,17 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
         // Remove current equipped armor piece
         getOwner().removeSuit(getArmorSlot());
-        switch (getArmorSlot()) {
-            case HELMET:
-                if (getOwner().getCurrentHat() != null) {
-                    getOwner().removeHat();
-                }
-                if (getOwner().getCurrentEmote() != null) {
-                    getOwner().removeEmote();
-                }
-                if (getPlayer().getInventory().getHelmet() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getHelmet();
-                    drop(itemStack);
-                    getPlayer().getInventory().setHelmet(null);
-                }
-                break;
-            case CHESTPLATE:
-                if (getPlayer().getInventory().getChestplate() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getChestplate();
-                    drop(itemStack);
-                    getPlayer().getInventory().setChestplate(null);
-                }
-                break;
-            case LEGGINGS:
-                if (getPlayer().getInventory().getLeggings() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getLeggings();
-                    drop(itemStack);
-                    getPlayer().getInventory().setLeggings(null);
-                }
-                break;
-            case BOOTS:
-                if (getPlayer().getInventory().getBoots() != null) {
-                    ItemStack itemStack = getPlayer().getInventory().getBoots();
-                    drop(itemStack);
-                    getPlayer().getInventory().setBoots(null);
-                }
-                break;
+
+        if (getArmorSlot() == ArmorSlot.HELMET) {
+            getOwner().removeHat();
+            getOwner().removeEmote();
+        }
+
+        // If the user's armor slot is still occupied after we've removed all related cosmetics,
+        // give up and ask the user to free up the slot.
+        if (getPlayer().getInventory().getItem(getArmorSlot().toBukkit()) != null) {
+            getOwner().sendMessage(MessageManager.getMessage("Suits.Must-Remove." + getArmorSlot().toString()));
+            return;
         }
 
         getUltraCosmetics().getServer().getPluginManager().registerEvents(this, getUltraCosmetics());
@@ -137,31 +123,8 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     @Override
     protected void onEquip() {
-        if (getOwner().getCurrentHat() != null
-                && armorSlot == ArmorSlot.HELMET) {
-            getOwner().removeHat();
-        }
-
-        getOwner().removeSuit(getArmorSlot());
-
-        switch (getArmorSlot()) {
-            case HELMET:
-                getPlayer().getInventory().setHelmet(ItemFactory.create(getType().getHelmet(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
-                itemStack = getPlayer().getInventory().getHelmet();
-                break;
-            case CHESTPLATE:
-                getPlayer().getInventory().setChestplate(ItemFactory.create(getType().getChestplate(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
-                itemStack = getPlayer().getInventory().getChestplate();
-                break;
-            case LEGGINGS:
-                getPlayer().getInventory().setLeggings(ItemFactory.create(getType().getLeggings(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
-                itemStack = getPlayer().getInventory().getLeggings();
-                break;
-            case BOOTS:
-                getPlayer().getInventory().setBoots(ItemFactory.create(getType().getBoots(), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore")));
-                itemStack = getPlayer().getInventory().getBoots();
-                break;
-        }
+        itemStack = ItemFactory.create(getType().getMaterial(getArmorSlot()), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore"));
+        getPlayer().getInventory().setItem(getArmorSlot().toBukkit(), itemStack);
 
         getOwner().setCurrentSuitPart(armorSlot, this);
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
@@ -179,29 +142,9 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     /**
      * Clears the Suit.
      */
+    @Override
     public void onClear() {
-        switch (getArmorSlot()) {
-            case HELMET:
-                if (getOwner().getCurrentHat() != null) {
-                    getOwner().removeHat();
-                }
-
-                if (getOwner().getCurrentEmote() != null) {
-                    getOwner().removeEmote();
-                }
-
-                getPlayer().getInventory().setHelmet(null);
-                break;
-            case CHESTPLATE:
-                getPlayer().getInventory().setChestplate(null);
-                break;
-            case LEGGINGS:
-                getPlayer().getInventory().setLeggings(null);
-                break;
-            case BOOTS:
-                getPlayer().getInventory().setBoots(null);
-                break;
-        }
+        getPlayer().getInventory().setItem(getArmorSlot().toBukkit(), null);
         getOwner().setCurrentSuitPart(getArmorSlot(), null);
         HandlerList.unregisterAll(this);
     }
@@ -222,15 +165,6 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
      */
     public ArmorSlot getArmorSlot() {
         return armorSlot;
-    }
-
-    /**
-     * Drops an Item.
-     *
-     * @param itemStack The item to drop.
-     */
-    private void drop(ItemStack itemStack) {
-        getPlayer().getWorld().dropItem(getPlayer().getLocation(), itemStack);
     }
 
     @Override

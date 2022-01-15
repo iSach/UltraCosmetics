@@ -77,6 +77,16 @@ Economy: 'Vault'
 TreasureChests:
   Enabled: false
   Key-Price: 1000
+  Location:
+    # Whether players should be moved to a certain
+    # location before opening a treasure chest.
+    # Does not override /uc treasure.
+    Enabled: true
+    # The location players should be moved to.
+    # Block coordinates only, like 104, not 103.63
+    X: 0
+    Y: 63
+    Z: 0
   Loots:
     Money:
       Enabled: true

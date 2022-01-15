@@ -30,6 +30,7 @@ import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -360,11 +361,15 @@ public class UltraCosmetics extends JavaPlugin {
         config.set("Disabled-Items", null);
         config.addDefault("Economy", "Vault");
 
+        // getInt() defaults to 0 if not found
+        if (config.getInt("TreasureChests.Count") < 1 || config.getInt("TreasureChests.Count") > 4) {
+            config.set("TreasureChests.Count", 4, "How many treasure chests should be opened per key? Min 1, max 4");
+        }
         // Add default values people could not have because of an old version of UC.
         if (!config.contains("TreasureChests.Location")) {
             config.createSection("TreasureChests.Location");
             config.set("TreasureChests.Location.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
-            config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Integer coordinates only, like 104, not 104.63");
+            config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63");
             config.set("TreasureChests.Location.Y", 63);
             config.set("TreasureChests.Location.Z", 0);
         }
@@ -575,10 +580,17 @@ public class UltraCosmetics extends JavaPlugin {
         CustomConfiguration config;
         // In 1.18.1 and later, Spigot supports comment preservation and
         // writing comments programmatically, so use built-in methods if we can.
-        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_18_R1)) {
+        // Check if the method exists before we load AutoCommentConfig
+        try {
+            ConfigurationSection.class.getDeclaredMethod("getComments", String.class);
             config = new AutoCommentConfiguration();
-        } else {
+        } catch (NoSuchMethodException ignored) {
+            // getComments() doesn't exist yet, load ManualCommentConfig
             config = new ManualCommentConfiguration();
+        } catch (SecurityException e) {
+            // ???
+            e.printStackTrace();
+            return null;
         }
 
         try {

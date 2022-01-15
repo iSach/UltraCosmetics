@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.treasurechests;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.util.*;
 
@@ -48,7 +49,7 @@ public class TreasureChest implements Listener {
     private TreasureRandomizer randomGenerator;
     private Location center;
     private Particles particleEffect;
-    private int chestsLeft = 4;
+    private int chestsLeft = SettingsManager.getConfig().getInt("TreasureChests.Count", 4);
     private Player player;
     private List<Entity> items = new ArrayList<>();
     private List<Entity> holograms = new ArrayList<>();
@@ -103,7 +104,7 @@ public class TreasureChest implements Listener {
                 try {
                     if (i == 0) {
                         RUNNABLES[0] = new BukkitRunnable() {
-                            int i = 4;
+                            int i = chestsLeft;
 
                             @Override
                             public void run() {
