@@ -1,0 +1,5 @@
+extraction:
+  java:
+    index:
+      build-command:
+      - ./gradlew core:compileJava --no-daemon
