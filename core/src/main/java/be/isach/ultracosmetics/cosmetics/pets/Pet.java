@@ -138,9 +138,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             if (Bukkit.getPlayer(getOwnerUniqueId()) != null
                     && getOwner().getCurrentPet() != null
                     && getOwner().getCurrentPet().getType() == getType()) {
-                if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items")) {
-                    onUpdate();
-                }
+                onUpdate();
 
                 pathUpdater.submit(followTask.getTask());
             } else {
@@ -213,6 +211,12 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
     @Override
     public void onUpdate() {
+        if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items")) {
+            dropItem();
+        }
+    }
+
+    public void dropItem() {
         final Item drop = entity.getWorld().dropItem(((LivingEntity) entity).getEyeLocation(), dropItem);
         drop.setPickupDelay(30000);
         drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
