@@ -45,7 +45,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
 
         // Run in sync... To enhance :S
         Bukkit.getScheduler().runTask(UltraCosmeticsData.get().getPlugin(), () -> {
-
+            if (!player.isOnline()) return;
             if (!player.getWorld().equals(petEntity.getBukkitEntity().getWorld())) {
                 petEntity.getBukkitEntity().teleport(player.getLocation());
                 return;
