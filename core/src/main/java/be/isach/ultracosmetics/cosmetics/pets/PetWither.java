@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Wither;
@@ -20,6 +21,7 @@ public class PetWither extends Pet {
 
     @Override
     public void onUpdate() {
+        if (!SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) return;
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().resetWitherSize((Wither) getEntity());
     }
 }

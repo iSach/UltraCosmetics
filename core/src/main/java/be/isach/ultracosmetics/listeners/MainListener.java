@@ -3,9 +3,11 @@ package be.isach.ultracosmetics.listeners;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -50,5 +52,14 @@ public class MainListener implements Listener {
         if (event.getEntity().getType() != EntityType.SNOWMAN) return;
         if (!event.getEntity().hasMetadata("Pet")) return;
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onWitherShoot(ProjectileLaunchEvent event) {
+        if (!(event.getEntity().getShooter() instanceof Wither)) return;
+        Wither wither = (Wither) event.getEntity().getShooter();
+        if (wither.hasMetadata("Pet")) {
+            event.setCancelled(true);
+        }
     }
 }
