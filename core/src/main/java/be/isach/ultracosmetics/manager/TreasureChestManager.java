@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,9 +55,21 @@ public class TreasureChestManager implements Listener {
         return list.get(random.nextInt(set.size()));
     }
 
-
     public static void tryOpenChest(Player player) {
-        tryOpenChest(player, null);
+        if (!SettingsManager.getConfig().getBoolean("TreasureChests.Location.Enabled")) {
+            tryOpenChest(player, null);
+            return;
+        }
+        ConfigurationSection location = SettingsManager.getConfig().getConfigurationSection("TreasureChests.Location");
+        Location originalLocation = player.getLocation().clone();
+        // just modify a copy of the player's original location so we preserve yaw and pitch
+        Location treasureChestLocation = player.getLocation().clone();
+        treasureChestLocation.setX(location.getInt("X", 0) + 0.5);
+        // add 0.5 to the Y too so it's less likely the player gets stuck in the ground
+        treasureChestLocation.setY(location.getInt("Y", 63) + 0.5);
+        treasureChestLocation.setZ(location.getInt("Z", 0) + 0.5);
+        player.teleport(treasureChestLocation);
+        tryOpenChest(player, originalLocation);
     }
 
     public static void tryOpenChest(Player player, Location preLoc) {

@@ -361,6 +361,14 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("Economy", "Vault");
 
         // Add default values people could not have because of an old version of UC.
+        if (!config.contains("TreasureChests.Location")) {
+            config.createSection("TreasureChests.Location");
+            config.set("TreasureChests.Location.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
+            config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Integer coordinates only, like 104, not 104.63");
+            config.set("TreasureChests.Location.Y", 63);
+            config.set("TreasureChests.Location.Z", 0);
+        }
+
         if (!config.contains("TreasureChests.Loots.Money.Min")) {
             int min = 15;
             int max = config.getInt("TreasureChests.Loots.Money.Max");

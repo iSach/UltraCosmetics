@@ -92,14 +92,6 @@ public class SubCommandTreasure extends SubCommand {
         Location preLoc = opener.getLocation();
         Location location = new Location(world, x + 0.5, y, z + 0.5);
 
-        Cuboid c = new Cuboid(location.add(-2, 0, -2), location.add(2, 1, 2));
-
-        if (!c.isEmptyExcept(location.getBlock().getLocation())) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "This isn't a valid location for teleporting.");
-            opener.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
-            return;
-        }
-
         opener.teleport(location);
 
         TreasureChestManager.tryOpenChest(opener, preLoc);
