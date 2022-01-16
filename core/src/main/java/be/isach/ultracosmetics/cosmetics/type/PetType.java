@@ -86,6 +86,10 @@ public final class PetType extends CosmeticMatType<Pet> {
             new PetType("ultracosmetics.pets.axolotl", "Axolotl", UCMaterial.BUCKET_OF_AXOLOTL, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class, ServerVersion.v1_17_R1);
         }
         
+        if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
+            new PetType("ultracosmetics.pets.piglin", "Piglin", UCMaterial.GOLD_INGOT, "&7&oDeals with Gold!", EntityType.PIGLIN, PetPiglin.class, ServerVersion.v1_16_R3);
+        }
+        
         if (serverVersion.isAtLeast(ServerVersion.v1_14_R1)) {
             new PetType("ultracosmetics.pets.panda", "Panda", UCMaterial.BAMBOO, "&7&oLikes Bamboo!", EntityType.PANDA, PetPanda.class, ServerVersion.v1_14_R1);
             new PetType("ultracosmetics.pets.fox", "Fox", UCMaterial.SWEET_BERRIES, "&7&oWhat does the fox say?", EntityType.FOX, PetFox.class, ServerVersion.v1_14_R1);
