@@ -9,7 +9,9 @@ import com.mojang.authlib.properties.Property;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -162,7 +164,11 @@ public class ItemFactory {
     }
 
     public static ItemStack addGlow(ItemStack item) {
-        return UltraCosmeticsData.get().getVersionManager().getItemGlower().glow(item);
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        item.setItemMeta(itemMeta);
+        return item;
     }
 
     public static boolean areSame(ItemStack a, ItemStack b) {

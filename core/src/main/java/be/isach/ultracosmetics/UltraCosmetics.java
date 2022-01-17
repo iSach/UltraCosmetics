@@ -254,6 +254,9 @@ public class UltraCosmetics extends JavaPlugin {
             new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
         }
 
+        // Start up bStats
+        new Metrics(this, 2629);
+
         this.menus = new Menus(this);
 
         try {

@@ -83,10 +83,6 @@ public class UltraCosmeticsData {
 
     private UltraCosmetics ultraCosmetics;
 
-    /**
-     * For bStats stuff
-     */
-    private AbstractMetrics metrics;
     private boolean cosmeticsProfilesEnabled;
 
     public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
@@ -261,10 +257,6 @@ public class UltraCosmeticsData {
 
     public final String getItemNoPickupString() {
         return this.itemNoPickupString;
-    }
-
-    public void setMetrics(AbstractMetrics metrics) {
-        this.metrics = metrics;
     }
 
     public boolean areCosmeticsProfilesEnabled() {

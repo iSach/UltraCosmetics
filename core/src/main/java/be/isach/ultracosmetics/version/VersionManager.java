@@ -21,7 +21,6 @@ public class VersionManager {
     private ServerVersion serverVersion;
     private IEntityUtil entityUtil;
     private IActionBar actionBarUtil;
-    private IItemGlower itemGlower;
     private IFireworkFactory fireworkFactory;
     private IMounts mounts;
     private IPets pets;
@@ -37,8 +36,11 @@ public class VersionManager {
     public void load() throws ReflectiveOperationException {
         module = loadModule("Module");
         entityUtil = loadModule("EntityUtil");
-        actionBarUtil = loadModule("ActionBar");
-        itemGlower = loadModule("ItemGlower");
+        if (serverVersion == ServerVersion.v1_8_R3) {
+            actionBarUtil = loadModule("ActionBar");
+        } else {
+            actionBarUtil = new APIActionBar();
+        }
         fireworkFactory = loadModule("FireworkFactory");
         mounts = loadModule("Mounts");
         pets = loadModule("Pets");
@@ -64,10 +66,6 @@ public class VersionManager {
 
     public IActionBar getActionBarUtil() {
         return actionBarUtil;
-    }
-
-    public IItemGlower getItemGlower() {
-        return itemGlower;
     }
 
     public IFireworkFactory getFireworkFactory() {
