@@ -39,7 +39,7 @@ public class CosmeticsProfileManager {
      * @param up
      */
     public void initForPlayer(UltraPlayer up) {
-        UUID uuid = up.getUuid();
+        UUID uuid = up.getUUID();
 
         // First, create the cosmetic profile.
         CosmeticsProfile cosmeticsProfile = new CosmeticsProfile(uuid);
@@ -66,6 +66,6 @@ public class CosmeticsProfileManager {
     }
 
     public void clearPlayerFromProfile(UltraPlayer up) {
-        cosmeticsProfiles.get(up.getUuid()).setUltraPlayer(null);
+        cosmeticsProfiles.get(up.getUUID()).setUltraPlayer(null);
     }
 }

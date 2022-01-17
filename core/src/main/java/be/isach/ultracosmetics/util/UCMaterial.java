@@ -953,7 +953,7 @@ public enum UCMaterial {
     WHITE_SHULKER_BOX(0),
     WHITE_STAINED_GLASS(0, "STAINED_GLASS"),
     WHITE_STAINED_GLASS_PANE(0, "THIN_GLASS", "STAINED_GLASS_PANE"),
-    WHITE_TERRACOTTA(0, "HARD_CLAY", "TERRACOTTA"),
+    WHITE_TERRACOTTA(0, "HARD_CLAY", "STAINED_CLAY"),
     WHITE_TULIP(6, "RED_ROSE"),
     WHITE_WALL_BANNER(15, "WALL_BANNER"),
     WHITE_WOOL(0, "WOOL"),
@@ -1238,27 +1238,6 @@ public enum UCMaterial {
     }
 
     /**
-     * Gets the UCMaterial based on the Material's ID and data.<br>
-     * You should avoid using this for performance reasons.
-     *
-     * @param id   the ID (Magic value) of the material.
-     * @param data the data of the material.
-     * @return some UCMaterial, or null.
-     */
-    @Nullable
-    public static UCMaterial matchUCMaterial(int id, byte data) {
-        if (id == 169) { // TODO fix that kind of issues. Temporary work around until I make a better UCMaterial class that covers IDs perfectly.
-            return UCMaterial.SEA_LANTERN;
-        } else if (id == 159) {
-            return CLAYS.get((int) data);
-        } else if (id == 160) {
-            return GLASS_PANELS.get((int) data);
-        }
-        // Looping through Material.values() will take longer.
-        return Arrays.stream(UCMaterial.VALUES).filter(mat -> mat.getId() == id && mat.data == data).findFirst().orElse(null);
-    }
-
-    /**
      * This method is temporary. Do not use this.<br>
      * Manually parses the duplicated materials to find the exact material based on the server version.
      *
@@ -1461,54 +1440,6 @@ public enum UCMaterial {
         return toWord(this.parseMaterial().name());
     }
 
-    /**
-     * Gets the ID (Magic value) of the material.
-     * If an {@link IllegalArgumentException} was thrown from this method,
-     * you should definitely report it.
-     *
-     * @return the ID of the material. -1 if it's a new block.
-     */
-    @SuppressWarnings("deprecation")
-    // TODO refactor because this is awful
-    public int getId() {
-        int id = -1;
-        try {
-            id = this.parseMaterial().getId();
-            if (id == -1 || id >= 1000) {
-                String s = legacy.length == 0 ? name() : (legacy[0].contains(".") ? (legacy.length > 1 ? legacy[1] : legacy[0]) : legacy[0]);
-                id = Material.valueOf("LEGACY_" + s).getId();
-            }
-        } catch (Exception exc) {
-            try {
-                String s = legacy.length == 0 ? name() : (legacy[0].contains(".") ? (legacy.length > 1 ? legacy[1] : legacy[0]) : legacy[0]);
-                Material m = null;
-                try {
-                    m = Material.getMaterial(s);
-                } catch (Exception excc) {
-
-                }
-                if (m != null) {
-                    try {
-                        id = m.getId();
-                    } catch (Exception excc) {
-
-                    }
-                }
-                if (m == null || id == -1 || id >= 1000) {
-                    Material m2 = null;
-                    try {
-                        m2 = Material.getMaterial("LEGACY_" + s);
-                    } catch (Exception excc) {
-
-                    }
-                    id = m2.getId();
-                }
-            } catch (Exception e) {
-            }
-        }
-        return id == -1 ? 7 : id; // Show bedrock if nothing's found.
-    }
-
     public boolean isDuplicated() {
         return DUPLICATED.containsKey(this);
     }
@@ -1551,7 +1482,6 @@ public enum UCMaterial {
      *
      * @return data of this material.
      */
-    @SuppressWarnings("deprecation")
     public byte getData() {
         return this.data;
     }

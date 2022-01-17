@@ -164,7 +164,6 @@ public class UltraPlayer {
      * Sets the cooldown of a gadget.
      *
      * @param gadget    The gadget.
-     * @param countdown The cooldown to set.
      */
     public void setCoolDown(GadgetType gadget) {
         double cooldown = gadget.getCountdown();
@@ -369,7 +368,7 @@ public class UltraPlayer {
                 // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
                 // If player is "quitting", remove the disguise anyway. Player is marked as quitting
                 // when changing worlds, making sure morphs get correctly unset.
-                && (isQuitting() || SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName()))) {
+                && (isQuitting() || SettingsManager.isAllowedWorld(getBukkitPlayer().getWorld()))) {
             removeMorph();
             DisguiseAPI.undisguiseToAll(getBukkitPlayer());
         }
@@ -721,7 +720,7 @@ public class UltraPlayer {
      *
      * @return The UUID.
      */
-    public UUID getUuid() {
+    public UUID getUUID() {
         return uuid;
     }
 

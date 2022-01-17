@@ -42,63 +42,64 @@ public class GadgetColorBomb extends Gadget {
 
     @Override
     public void onUpdate() {
-        if (bomb != null && bomb.isValid() && !running && bomb.isOnGround()) {
+        if (bomb == null || !bomb.isValid()) return;
+        if (!running && bomb.isOnGround()) {
             running = true;
             bomb.setVelocity(new Vector(0, 0, 0));
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::onClear, 100);
         }
 
-        if (running) {
-            Particles effect;
-            switch (MathUtils.random.nextInt(5)) {
-                default:
-                    effect = Particles.FIREWORKS_SPARK;
-                    break;
-                case 3:
-                    effect = Particles.FLAME;
-                    break;
-                case 4:
-                    effect = Particles.SPELL_WITCH;
-                    break;
+        if (!running) return;
+
+        Particles effect;
+        switch (MathUtils.random.nextInt(5)) {
+            default:
+                effect = Particles.FIREWORKS_SPARK;
+                break;
+            case 3:
+                effect = Particles.FLAME;
+                break;
+            case 4:
+                effect = Particles.SPELL_WITCH;
+                break;
+        }
+
+        UtilParticles.display(effect, bomb.getLocation(), 1, 0.2f);
+
+        Iterator<Item> iter = items.iterator();
+        while (iter.hasNext()) {
+            Item item = iter.next();
+            if (item.getTicksLived() > 15) {
+                item.remove();
+                iter.remove();
+            }
+        }
+
+        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
+            if (bomb == null) {
+                return;
             }
 
-            UtilParticles.display(effect, bomb.getLocation(), 1, 0.2f);
+            ItemStack item = ItemFactory.createColored("WOOL", (byte) MathUtils.random.nextInt(15), UltraCosmeticsData.get().getItemNoPickupString());
+            Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
+            i.setPickupDelay(500000);
+            i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
+            items.add(i);
+            SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
 
-            Iterator<Item> iter = items.iterator();
-            while (iter.hasNext()) {
-                Item item = iter.next();
-                if (item.getTicksLived() > 15) {
-                    item.remove();
-                    iter.remove();
-                }
-            }
+            for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
 
-            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                if (bomb == null) {
-                    return;
-                }
+                if (entity instanceof Player) {
+                    if (entity.hasMetadata("NPC")) {
+                        continue;
+                    }
 
-                ItemStack item = ItemFactory.createColored("WOOL", (byte) MathUtils.random.nextInt(15), UltraCosmeticsData.get().getItemNoPickupString());
-                Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
-                i.setPickupDelay(500000);
-                i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                items.add(i);
-                SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
-
-                for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
-
-                    if (entity instanceof Player) {
-                        if (entity.hasMetadata("NPC")) {
-                            continue;
-                        }
-
-                        if (affectPlayers) {
-                            MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                        }
+                    if (affectPlayers) {
+                        MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override

@@ -4,9 +4,9 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -57,7 +57,7 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        if (!UltraCosmeticsData.get().getEnabledWorlds().contains(opener.getWorld().getName())) {
+        if (!SettingsManager.isAllowedWorld(opener.getWorld())) {
             sender.sendMessage(MessageManager.getMessage("World-Disabled"));
             return;
         }

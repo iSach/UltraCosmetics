@@ -32,7 +32,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Player listeners.
@@ -54,7 +53,7 @@ public class PlayerListener implements Listener {
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             @Override
             public void run() {
-                if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+                if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
                     Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
                         if (cp != null && event.getPlayer() != null)
                             cp.giveMenuItem();
@@ -67,7 +66,7 @@ public class PlayerListener implements Listener {
                     }
                 }
 
-                if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())
+                if (SettingsManager.isAllowedWorld(event.getPlayer().getWorld())
                         && UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
                     // Cosmetics profile. TODO Add option to disable!!
                     CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
@@ -94,7 +93,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWorldChange(final PlayerChangedWorldEvent event) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-        if (SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+        if (SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
             if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest")) {
                 ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem();
             }
@@ -118,7 +117,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onWorldChangeEarly(final PlayerChangedWorldEvent event) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
-        if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+        if (!SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
             // Disable cosmetics when joining a bad world.
             ultraPlayer.removeMenuItem();
             ultraPlayer.setQuitting(true);
@@ -169,7 +168,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(player.getWorld().getName())) return;
+        if (!SettingsManager.isAllowedWorld(player.getWorld())) return;
         if (event.getView().getTopInventory().getHolder() instanceof CosmeticsInventoryHolder
                 || isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())
                 || (event.getClick() == ClickType.NUMBER_KEY && isMenuItem(player.getInventory().getItem(event.getHotbarButton())))) {
@@ -186,7 +185,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryCreativeEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if ((SettingsManager.getConfig().getStringList("Enabled-Worlds")).contains(player.getWorld().getName())) {
+        if (SettingsManager.isAllowedWorld(player.getWorld())) {
             if (isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())) {
                 event.setCancelled(true);
                 player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
@@ -212,7 +211,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
-        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(event.getPlayer().getWorld().getName())) {
+        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
             int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
             if (event.getPlayer().getInventory().getItem(slot) != null) {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));

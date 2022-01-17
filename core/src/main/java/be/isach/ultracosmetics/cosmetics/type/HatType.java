@@ -70,6 +70,7 @@ public class HatType extends CosmeticMatType<Hat> {
             cosmetic = getClazz().getDeclaredConstructor(UltraCosmetics.class, UltraPlayer.class, HatType.class).newInstance(ultraCosmetics, player, this);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
+            return null;
         }
         cosmetic.equip();
         return cosmetic;

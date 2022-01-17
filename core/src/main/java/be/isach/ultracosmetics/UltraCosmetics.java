@@ -114,6 +114,8 @@ public class UltraCosmetics extends JavaPlugin {
      * Manages WorldGuard flags.
      */
     private AFlagManager flagManager = null;
+
+    private boolean legacyMessagePrinted = false;
     
     /**
      * Called when plugin is loaded.
@@ -246,8 +248,11 @@ public class UltraCosmetics extends JavaPlugin {
         // Start the Fall Damage and Invalid World Check Runnables.
 
         new FallDamageManager().runTaskTimerAsynchronously(this, 0, 1);
-        new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
         new MovingChecker(this).runTaskTimerAsynchronously(this, 0, 1);
+        // No need to worry about the invalid world checker if all worlds are allowed
+        if (!config.getStringList("Enabled-Worlds").contains("*")) {
+            new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
+        }
 
         this.menus = new Menus(this);
 
@@ -349,14 +354,9 @@ public class UltraCosmetics extends JavaPlugin {
         disabledCommands.add("hat");
         config.addDefault("Disabled-Commands", disabledCommands, "List of commands that won't work when cosmetics are equipped.", "Command arguments are ignored, commands are blocked when base command matches.");
 
-        // do not use Stream#map() for this, it won't work, for example:
-        // Bukkit.getWorlds().stream().map(World::getName)
-        // In 1.17 it's WorldInfo#getName but in all lower versions
-        // the method is World#getName. Referencing the method
-        // specifically using ::'s breaks it on said lower versions.
         List<String> enabledWorlds = new ArrayList<>();
-        Bukkit.getWorlds().forEach(k -> enabledWorlds.add(k.getName()));
-        config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!");
+        enabledWorlds.add("*");
+        config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!", "If list contains '*',", "all worlds will be allowed.");
 
         config.set("Disabled-Items", null);
         config.addDefault("Economy", "Vault");
@@ -402,7 +402,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         if (!config.contains("Categories.Suits")) {
             config.createSection("Categories.Suits");
-            config.set("Categories.Suits.Main-Menu-Item", "299:0");
+            config.set("Categories.Suits.Main-Menu-Item", UCMaterial.LEATHER_CHESTPLATE.parseMaterial().toString());
             config.set("Categories.Suits.Go-Back-Arrow", true);
         }
 
@@ -428,15 +428,15 @@ public class UltraCosmetics extends JavaPlugin {
             config.set(section + ".Commands", Arrays.asList("give %name% yellow_flower 1", "pex user %name% add example.yellowflower"));
         }
 
-        config.addDefault("Categories.Clear-Cosmetic-Item", "152:0", "Item where user click to clear a cosmetic.");
-        config.addDefault("Categories.Previous-Page-Item", "368:0", "Previous Page Item");
-        config.addDefault("Categories.Next-Page-Item", "381:0", "Next Page Item");
-        config.addDefault("Categories.Back-Main-Menu-Item", "262:0", "Back to Main Menu Item");
-        config.addDefault("Categories.Self-View-Item.When-Enabled", "381:0", "Item in Morphs Menu when Self View enabled.");
-        config.addDefault("Categories.Self-View-Item.When-Disabled", "368:0", "Item in Morphs Menu when Self View disabled.");
-        config.addDefault("Categories.Gadgets-Item.When-Enabled", "351:10", "Item in Gadgets Menu when Gadgets enabled.");
-        config.addDefault("Categories.Gadgets-Item.When-Disabled", "351:8", "Item in Gadgets Menu when Gadgets disabled.");
-        config.addDefault("Categories.Rename-Pet-Item", "421:0", "Item in Pets Menu to rename current pet.");
+        config.addDefault("Categories.Clear-Cosmetic-Item", UCMaterial.REDSTONE_BLOCK.parseMaterial().toString(), "Item where user click to clear a cosmetic.");
+        config.addDefault("Categories.Previous-Page-Item", UCMaterial.ENDER_PEARL.parseMaterial().toString(), "Previous Page Item");
+        config.addDefault("Categories.Next-Page-Item", UCMaterial.ENDER_EYE.parseMaterial().toString(), "Next Page Item");
+        config.addDefault("Categories.Back-Main-Menu-Item", UCMaterial.ARROW.parseMaterial().toString(), "Back to Main Menu Item");
+        config.addDefault("Categories.Self-View-Item.When-Enabled", UCMaterial.ENDER_EYE.parseMaterial().toString(), "Item in Morphs Menu when Self View enabled.");
+        config.addDefault("Categories.Self-View-Item.When-Disabled", UCMaterial.ENDER_PEARL.parseMaterial().toString(), "Item in Morphs Menu when Self View disabled.");
+        config.addDefault("Categories.Gadgets-Item.When-Enabled", UCMaterial.LIGHT_GRAY_DYE.parseMaterial().toString(), "Item in Gadgets Menu when Gadgets enabled.");
+        config.addDefault("Categories.Gadgets-Item.When-Disabled", UCMaterial.GRAY_DYE.parseMaterial().toString(), "Item in Gadgets Menu when Gadgets disabled.");
+        config.addDefault("Categories.Rename-Pet-Item", UCMaterial.NAME_TAG.parseMaterial().toString(), "Item in Pets Menu to rename current pet.");
         config.addDefault("Categories.Close-GUI-After-Select", true, "Should GUI close after selecting a cosmetic?");
         config.addDefault("No-Permission.Custom-Item.Lore", Arrays.asList("", "&c&lYou do not have permission for this!", ""));
         config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Enabled", false);
@@ -464,6 +464,8 @@ public class UltraCosmetics extends JavaPlugin {
         if (!config.contains("allow-damage-to-players-on-mounts")) {
             config.set("allow-damage-to-players-on-mounts", false);
         }
+
+        upgradeIdsToMaterials();
 
         try {
             config.save(file);
@@ -545,7 +547,7 @@ public class UltraCosmetics extends JavaPlugin {
 
     public void openMainMenu(UltraPlayer ultraPlayer) {
         if (getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled")) {
-            String command = getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "").replace("{player}", ultraPlayer.getBukkitPlayer().getName()).replace("{playeruuid}", ultraPlayer.getUuid().toString());
+            String command = getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "").replace("{player}", ultraPlayer.getBukkitPlayer().getName()).replace("{playeruuid}", ultraPlayer.getUUID().toString());
             getServer().dispatchCommand(getServer().getConsoleSender(), command);
         } else {
             getMenus().getMainMenu().open(ultraPlayer);
@@ -600,5 +602,58 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write(LogLevel.ERROR, "Cannot load " + file, ex);
         }
         return config;
+    }
+
+    private void upgradeIdsToMaterials() {
+        upgradeKeyToMaterial("Categories.Gadgets.Main-Menu-Item", "409:0", UCMaterial.PRISMARINE_SHARD);
+        upgradeKeyToMaterial("Categories.Particle-Effects.Main-Menu-Item", "399:0", UCMaterial.NETHER_STAR);
+        upgradeKeyToMaterial("Categories.Mounts.Main-Menu-Item", "329:0", UCMaterial.SADDLE);
+        upgradeKeyToMaterial("Categories.Pets.Main-Menu-Item", "352:0", UCMaterial.BONE);
+        upgradeKeyToMaterial("Categories.Morphs.Main-Menu-Item", "334:0", UCMaterial.LEATHER);
+        upgradeKeyToMaterial("Categories.Hats.Main-Menu-Item", "314:0", UCMaterial.GOLDEN_HELMET);
+        upgradeKeyToMaterial("Categories.Suits.Main-Menu-Item", "299:0", UCMaterial.LEATHER_CHESTPLATE);
+        upgradeKeyToMaterial("Categories.Clear-Cosmetic-Item", "152:0", UCMaterial.REDSTONE_BLOCK);
+
+        upgradeKeyToMaterial("Categories.Previous-Page-Item", "368:0", UCMaterial.ENDER_PEARL);
+        upgradeKeyToMaterial("Categories.Next-Page-Item", "381:0", UCMaterial.ENDER_EYE);
+        upgradeKeyToMaterial("Categories.Back-Main-Menu-Item", "262:0", UCMaterial.ARROW);
+        upgradeKeyToMaterial("Categories.Self-View-Item.When-Enabled", "381:0", UCMaterial.ENDER_EYE);
+        upgradeKeyToMaterial("Categories.Self-View-Item.When-Disabled", "368:0", UCMaterial.ENDER_PEARL);
+        upgradeKeyToMaterial("Categories.Gadgets-Item.When-Enabled", "351:10", UCMaterial.LIGHT_GRAY_DYE);
+        upgradeKeyToMaterial("Categories.Gadgets-Item.When-Disabled", "351:8", UCMaterial.GRAY_DYE);
+        upgradeKeyToMaterial("Categories.Rename-Pet-Item", "421:0", UCMaterial.NAME_TAG);
+
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.center-block", "169:0", UCMaterial.SEA_LANTERN);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.around-center", "5:0", UCMaterial.OAK_PLANKS);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.third-blocks", "5:1", UCMaterial.SPRUCE_PLANKS);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.below-chests", "17:0", UCMaterial.OAK_LOG);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.barriers", "85:0", UCMaterial.OAK_FENCE);
+
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.center-block", "169:0", UCMaterial.SEA_LANTERN);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.around-center", "159:11", UCMaterial.BLUE_TERRACOTTA);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.third-blocks", "155:0", UCMaterial.WHITE_TERRACOTTA);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.below-chests", "159:11", UCMaterial.BLUE_TERRACOTTA);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.barriers", "160:3", UCMaterial.LIGHT_BLUE_STAINED_GLASS_PANE);
+
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.center-block", "89:0", UCMaterial.GLOWSTONE);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.around-center", "88:0", UCMaterial.SOUL_SAND);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.third-blocks", "87:0", UCMaterial.NETHERRACK);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.below-chests", "112:0", UCMaterial.NETHER_BRICKS);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.barriers", "113:0", UCMaterial.NETHER_BRICK_FENCE);
+    }
+
+    private void upgradeKeyToMaterial(String key, String oldValue, UCMaterial newValue) {
+        if (oldValue.equals(config.getString(key))) {
+            if (!legacyMessagePrinted) {
+                getSmartLogger().write(LogLevel.WARNING, "You seem to still have numeric IDs in your config, which UC no longer supports.");
+                getSmartLogger().write(LogLevel.WARNING, "I'll attempt to upgrade them, but only if the values haven't been touched.");
+                legacyMessagePrinted = true;
+            }
+            config.set(key, newValue.toString());
+            getSmartLogger().write(LogLevel.INFO, "Successfully upgraded key '" + key + "' from '" + oldValue + "' to '" + newValue + "'!");
+        // this code runs on every startup so don't print "failed to upgrade" message unless there's an actual issue
+        } else if (legacyMessagePrinted) {
+            getSmartLogger().write(LogLevel.WARNING, "Couldn't upgrade key '" + key + "' because it has been changed. Please upgrade it manually.");
+        }
     }
 }

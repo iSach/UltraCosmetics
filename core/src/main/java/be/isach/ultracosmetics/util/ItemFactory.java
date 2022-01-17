@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -19,7 +20,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,22 +27,11 @@ import java.util.UUID;
  * Created by sacha on 03/08/15.
  */
 public class ItemFactory {
+    private static boolean noticePrinted = false;
     public static ItemStack fillerItem;
 
     public static ItemStack create(UCMaterial material, String displayName, String... lore) {
-        ItemStack itemStack = material.parseItem();
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(displayName);
-        if (lore != null) {
-            List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
-            for (String s : lore)
-                if (s != null)
-
-                    finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
-            itemMeta.setLore(finalLore);
-        }
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
+        return rename(material.parseItem(), displayName, lore);
     }
 
     public static ItemStack createColored(String oldMaterialName, byte data, String displayName, String... lore) {
@@ -67,10 +56,7 @@ public class ItemFactory {
     }
 
     public static ItemStack rename(ItemStack itemstack, String displayName) {
-        ItemMeta meta = itemstack.getItemMeta();
-        meta.setDisplayName(displayName);
-        itemstack.setItemMeta(meta);
-        return itemstack;
+        return rename (itemstack, displayName, (String[])null);
     }
 
 
@@ -79,9 +65,11 @@ public class ItemFactory {
         meta.setDisplayName(displayName);
         if (lore != null) {
             List<String> finalLore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
-            for (String s : lore)
-                if (s != null)
+            for (String s : lore) {
+                if (s != null) {
                     finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
+                }
+            }
             meta.setLore(finalLore);
         }
         itemstack.setItemMeta(meta);
@@ -105,29 +93,32 @@ public class ItemFactory {
         }
     }
 
-    public static Material fromId(int id) {
-        if (UltraCosmeticsData.get().getServerVersion().is113()) {
-            return UCMaterial.matchUCMaterial(id, (byte) 0).parseMaterial();
-        } else {
-            for (Material m : EnumSet.allOf(Material.class)) {
-                if (m.getId() == id) {
-                    return m;
-                }
-            }
-            return Material.AIR;
-        }
+    public static ItemStack getItemStackFromConfig(String path) {
+        UCMaterial mat = getFromConfigInternal(path);
+        if (mat != null) return mat.parseItem();
+        return create(UCMaterial.BEDROCK, "&cError parsing material", "&cFailed to parse material");
     }
 
-    public static ItemStack getItemStackFromConfig(String path) {
+    public static UCMaterial getUCMaterialFromConfig(String path) {
+        UCMaterial mat = getFromConfigInternal(path);
+        return mat == null ? UCMaterial.BEDROCK : mat;
+    }
+
+    private static UCMaterial getFromConfigInternal(String path) {
         String fromConfig = UltraCosmeticsData.get().getPlugin().getConfig().getString(path);
-        if (MathUtils.isInteger(fromConfig) || fromConfig.contains(":")) {
-            int id = Integer.parseInt(fromConfig.split(":")[0]);
-            byte data = fromConfig.split(":").length > 1 ? (byte) Integer.parseInt(fromConfig.split(":")[1]) : (byte) 0;
-            UCMaterial m = UCMaterial.matchUCMaterial(id, data);
-            return m.parseItem();
-        } else {
-            return UCMaterial.matchUCMaterial(fromConfig.toUpperCase()).parseItem();
+        if (MathUtils.isInteger(fromConfig) || (fromConfig.contains(":") && MathUtils.isInteger(fromConfig.split(":")[0]))) {
+            if (!noticePrinted) {
+                UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.ERROR, "UltraCosmetics no longer supports numeric IDs, please replace it with a material name.");
+                noticePrinted = true;
+            }
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.ERROR, "Offending config path: " + path);
+            return null;
         }
+        String[] parts = fromConfig.split(":");
+        if (parts.length > 1 && MathUtils.isInteger(parts[1])) {
+            return UCMaterial.matchUCMaterial(parts[0], Byte.parseByte(parts[1]));
+        }
+        return UCMaterial.matchUCMaterial(parts[0].toUpperCase());
     }
 
     public static ItemStack createSkull(String url, String name) {

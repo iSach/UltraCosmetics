@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.config;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -201,5 +202,12 @@ public class SettingsManager {
      */
     public boolean contains(String path) {
         return fileConfiguration.contains(path);
+    }
+
+    public static boolean isAllowedWorld(World world) {
+        List<String> worlds = getConfig().getStringList("Enabled-Worlds");
+        if (worlds.contains("*")) return true;
+        if (worlds.contains(world.getName())) return true;
+        return false;
     }
 }

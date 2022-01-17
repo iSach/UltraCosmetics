@@ -26,7 +26,7 @@ public class ParticleEffectGreenSparks extends ParticleEffect {
     public void onUpdate() {
         if (up) {
             if (height < 2)
-                height += 0.05;
+                height += 0.05f;
             else
                 up = false;
         } else {

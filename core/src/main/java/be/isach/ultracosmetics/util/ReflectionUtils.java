@@ -557,7 +557,7 @@ public final class ReflectionUtils {
         /**
          * Returns the primitive class array of the given object array
          *
-         * @param object Given object array
+         * @param objects Given object array
          * @return The primitive class array
          */
         public static Class<?>[] getPrimitive(Object[] objects) {
@@ -572,7 +572,7 @@ public final class ReflectionUtils {
         /**
          * Returns the reference class array of the given object array
          *
-         * @param object Given object array
+         * @param objects Given object array
          * @return The reference class array
          */
         public static Class<?>[] getReference(Object[] objects) {

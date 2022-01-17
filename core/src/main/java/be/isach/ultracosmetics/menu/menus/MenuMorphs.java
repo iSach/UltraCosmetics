@@ -67,10 +67,8 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
             lore.add("");
             lore.addAll(cosmeticType.getDescription());
         }
-        if (lore != null) {
-            lore.add("");
-            lore.add(loreMsg);
-        }
+        lore.add("");
+        lore.add(loreMsg);
         lore.add("");
         lore.add(cosmeticType.getSkill());
         lore.add("");

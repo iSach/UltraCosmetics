@@ -26,7 +26,6 @@ public class VersionManager {
     private IMounts mounts;
     private IPets pets;
     private IMorphs morphs;
-    private AFlagManager flagManager;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
     private Constructor<? extends IAnvilGUI> anvilGUIConstructor;
 
@@ -116,9 +115,5 @@ public class VersionManager {
 
     public IModule getModule() {
         return module;
-    }
-
-    public AFlagManager getFlagManager() {
-        return flagManager;
     }
 }

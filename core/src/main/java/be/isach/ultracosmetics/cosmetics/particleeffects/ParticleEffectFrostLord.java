@@ -17,9 +17,9 @@ import org.bukkit.util.Vector;
  */
 public class ParticleEffectFrostLord extends ParticleEffect {
 
-    int step = 0;
-    float stepY = 0;
-    float radius = 1.5f;
+    private int step = 0;
+    private float stepY = 0;
+    private float radius = 1.5f;
 
     public ParticleEffectFrostLord(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, owner, ParticleEffectType.valueOf("frostlord"));
@@ -37,8 +37,8 @@ public class ParticleEffectFrostLord extends ParticleEffect {
             UtilParticles.display(getType().getEffect(), location.add(v).add(0, stepY, 0));
             location.subtract(v).subtract(0, stepY, 0);
             if (stepY < 3) {
-                radius -= 0.022;
-                stepY += 0.045;
+                radius -= 0.022f;
+                stepY += 0.045f;
             } else {
                 stepY = 0;
                 step = 0;

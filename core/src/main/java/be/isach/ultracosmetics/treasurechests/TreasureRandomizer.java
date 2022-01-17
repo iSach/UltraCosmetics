@@ -412,6 +412,7 @@ public class TreasureRandomizer {
             case HELMET:
                 list = helmetList;
                 break;
+            default:
             case CHESTPLATE:
                 list = chestplateList;
                 break;

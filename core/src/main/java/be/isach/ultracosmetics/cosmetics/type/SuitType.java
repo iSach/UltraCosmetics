@@ -82,6 +82,7 @@ public class SuitType extends CosmeticMatType<Suit> {
             suit = getClazz().getDeclaredConstructor(UltraPlayer.class, ArmorSlot.class, UltraCosmetics.class).newInstance(player, armorSlot, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
+            return null;
         }
         suit.equip(armorSlot);
         return suit;

@@ -228,6 +228,7 @@ public class EmoteType extends CosmeticMatType<Emote> {
             cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, EmoteType.class, UltraCosmetics.class).newInstance(ultraPlayer, this, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
+            return null;
         }
         cosmetic.equip();
         return cosmetic;

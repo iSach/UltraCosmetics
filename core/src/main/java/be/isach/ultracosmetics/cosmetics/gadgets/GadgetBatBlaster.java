@@ -60,7 +60,7 @@ public class GadgetBatBlaster extends Gadget {
 
     @Override
     public void onUpdate() {
-        if (bats != null && bats.isEmpty()) {
+        if (bats != null || bats.isEmpty()) {
             return;
         }
 
@@ -73,7 +73,7 @@ public class GadgetBatBlaster extends Gadget {
             if (!bat.isValid()) continue;
             Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
                     (Math.random() - 0.5D) / 3.0D);
-            if (bat != null && playerVelocity != null) {
+            if (playerVelocity != null) {
                 bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
             }
             for (Player other : getPlayer().getWorld().getPlayers()) {
