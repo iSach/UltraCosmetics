@@ -1,7 +1,13 @@
 package be.isach.ultracosmetics.version;
 
-public interface IModule {
-    void enable();
+import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 
-    void disable();
+public interface IModule {
+    public void enable();
+
+    public void disable();
+
+    public Class<? extends Mount> getSpiderClass();
+
+    public Class<? extends Mount> getSlimeClass();
 }

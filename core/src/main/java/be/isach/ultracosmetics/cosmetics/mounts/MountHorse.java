@@ -41,6 +41,7 @@ public abstract class MountHorse extends Mount<Horse> {
         entity.setTamed(true);
         entity.setDomestication(1);
         entity.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+        // no effect on non-horse horses (zombie horse, etc.)
         entity.setColor(getColor());
         runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));

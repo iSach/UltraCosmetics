@@ -7,16 +7,6 @@ import org.bukkit.entity.EntityType;
 
 public class Mounts implements IMounts {
     @Override
-    public Class<? extends Mount> getSpiderClass() {
-        return MountSpider.class;
-    }
-
-    @Override
-    public Class<? extends Mount> getSlimeClass() {
-        return MountSlime.class;
-    }
-
-    @Override
     public Class<? extends Mount> getHorrorClass() {
         return MountInfernalHorror.class;
     }

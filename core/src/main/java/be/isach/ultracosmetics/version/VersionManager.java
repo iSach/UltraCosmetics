@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.version;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.mounts.abstracthorse.AbstractHorseMounts;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ReflectionUtils;
@@ -38,11 +39,12 @@ public class VersionManager {
         entityUtil = loadModule("EntityUtil");
         if (serverVersion == ServerVersion.v1_8_R3) {
             actionBarUtil = loadModule("ActionBar");
+            mounts = loadModule("Mounts");
         } else {
             actionBarUtil = new APIActionBar();
+            mounts = new AbstractHorseMounts();
         }
         fireworkFactory = loadModule("FireworkFactory");
-        mounts = loadModule("Mounts");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
         if (serverVersion.isAtLeast(ServerVersion.v1_14_R1))

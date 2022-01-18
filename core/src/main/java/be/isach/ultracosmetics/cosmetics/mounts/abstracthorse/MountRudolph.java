@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_14_R1.mount;
+package be.isach.ultracosmetics.cosmetics.mounts.abstracthorse;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
@@ -21,7 +21,7 @@ import org.bukkit.util.Vector;
 /**
  * @author RadBuilder
  */
-public class MountRudolph extends MountHorse<Mule> {
+public class MountRudolph extends MountAbstractHorse<Mule> {
 
     private ArmorStand left, right;
 
@@ -32,11 +32,6 @@ public class MountRudolph extends MountHorse<Mule> {
     @Override
     public void onEquip() {
         super.onEquip();
-        entity.setJumpStrength(0.7);
-
-        entity.getInventory().setItem(0, new ItemStack(Material.SADDLE));
-
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
         left = spawnArmorStand(false);
         right = spawnArmorStand(true);
         moveAntlers();
@@ -115,15 +110,5 @@ public class MountRudolph extends MountHorse<Mule> {
         final float newZ = (float) (loc.getZ() + (-1 * Math.sin(Math.toRadians(loc.getYaw() + 0))));
 
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
-    }
-
-    @Override
-    protected Horse.Variant getVariant() {
-        return Horse.Variant.MULE;
-    }
-
-    @Override
-    protected Horse.Color getColor() {
-        return Horse.Color.DARK_BROWN;
     }
 }
