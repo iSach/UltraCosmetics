@@ -84,6 +84,8 @@ public final class PetType extends CosmeticMatType<Pet> {
         
         if (serverVersion.isAtLeast(ServerVersion.v1_17_R1)) {
             new PetType("ultracosmetics.pets.axolotl", "Axolotl", UCMaterial.AXOLOTL_BUCKET, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class, ServerVersion.v1_17_R1);
+            /*Temporarily using WHEAT as material for the Goat until https://minecraft.fandom.com/wiki/Goat_Horn comes to Java edition*/
+            new PetType("ultracosmetics.pets.goat", "Goat", UCMaterial.WHEAT, "&7&oBAAAA!", EntityType.GOAT, PetGoat.class, ServerVersion.v1_17_R1);
         }
         
         if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
@@ -91,7 +93,7 @@ public final class PetType extends CosmeticMatType<Pet> {
         }
         
         if (serverVersion.isAtLeast(ServerVersion.v1_15_R1)) {
-            new PetType("ultracosmetics.pets.bee", "Bee", UCMaterial.HONEYCOMB, "&7&oLoves Flowers!", EntityType.BEE, PetBee.class, ServerVersion.v1_15_R1);
+            new PetType("ultracosmetics.pets.bee", "Bee", UCMaterial.HONEYCOMB, "&7&o*bzzzz* *bzzzz*", EntityType.BEE, PetBee.class, ServerVersion.v1_15_R1);
         }
         
         if (serverVersion.isAtLeast(ServerVersion.v1_14_R1)) {
