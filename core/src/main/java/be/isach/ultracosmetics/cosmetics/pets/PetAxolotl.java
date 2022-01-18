@@ -15,6 +15,6 @@ import be.isach.ultracosmetics.util.UCMaterial;
  */
 public class PetAxolotl extends Pet {
     public PetAxolotl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("axolotl"), ItemFactory.create(UCMaterial.BUCKET_OF_AXOLOTL, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("axolotl"), ItemFactory.create(UCMaterial.AXOLOTL_BUCKET, UltraCosmeticsData.get().getItemNoPickupString()));
     }
 }
