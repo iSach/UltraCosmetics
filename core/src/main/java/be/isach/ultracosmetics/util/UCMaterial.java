@@ -153,6 +153,7 @@ public enum UCMaterial {
     BUBBLE_CORAL_FAN(0, "1.13"),
     BUBBLE_CORAL_WALL_FAN(0),
     BUCKET(0),
+    BUCKET_OF_AXOLOTL(0),
     CACTUS(0),
     CAKE(0, "CAKE_BLOCK"),
     CAMPFIRE(0, "1.14"),
