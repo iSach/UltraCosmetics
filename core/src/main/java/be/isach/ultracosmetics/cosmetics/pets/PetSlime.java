@@ -9,6 +9,13 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.UCMaterial;
 
+/**
+ * Represents an instance of a slime pet summoned by a player.
+ *
+ * @author datatags
+ * @since 18-01-2021
+ */
+
 public class PetSlime extends Pet {
     public PetSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.getByName("slime"), ItemFactory.create(UCMaterial.SLIME_BALL, UltraCosmeticsData.get().getItemNoPickupString()));
