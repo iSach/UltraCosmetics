@@ -60,7 +60,7 @@ public class GadgetBatBlaster extends Gadget {
 
     @Override
     public void onUpdate() {
-        if (bats != null || bats.isEmpty()) {
+        if (bats != null && bats.isEmpty()) {
             return;
         }
 
