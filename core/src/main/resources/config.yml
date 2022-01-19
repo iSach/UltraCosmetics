@@ -307,3 +307,7 @@ Remove-Gadget-With-Drop: false
 # are reset! Soon it will support shutdowns.
 Auto-Equip-Cosmetics:
   enabled: false
+
+# Whether WorldGuard should be hooked when loading UC
+# Disable this if UC has trouble loading WorldGuard
+WorldGuard-Integration: true

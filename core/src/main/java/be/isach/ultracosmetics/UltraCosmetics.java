@@ -132,10 +132,12 @@ public class UltraCosmetics extends JavaPlugin {
         if (!UltraCosmeticsData.get().checkServerVersion()) {
             return;
         }
-        
+
+        // Use super.getConfig() because CustomConfiguration doesn't load until onEnable
+        boolean worldGuardIntegration = super.getConfig().getBoolean("WorldGuard-Integration", true);
         // Not using isPluginEnabled() because WorldGuard should be
         // loaded but not yet enabled when registering flags
-        if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+        if (worldGuardIntegration && getServer().getPluginManager().getPlugin("WorldGuard") != null) {
             // does reflect-y things but isn't in VersionManager because of the load timing
             // and because it should only happen if WorldGuard is present
             String wgVersionPackage = VersionManager.IS_VERSION_1_13 ? "v1_13_R2" : "v1_12_R1";
@@ -209,22 +211,16 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write("Morphs require Lib's Disguises!");
             getSmartLogger().write();
             getSmartLogger().write("Morphs disabled.");
-            getSmartLogger().write();
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             getSmartLogger().write();
             new PlaceholderHook(this).register();
             getSmartLogger().write("Hooked into PlaceholderAPI");
-            getSmartLogger().write();
         }
 
-        if (flagManager != null) {
-            flagManager.registerPhase2();
-            getSmartLogger().write();
-            getSmartLogger().write("WorldGuard custom flags enabled");
-            getSmartLogger().write();
-        }
+        // Set up WorldGuard if needed.
+        setupWorldGuard();
 
         // Set up economy if needed.
         setupEconomy();
@@ -238,7 +234,6 @@ public class UltraCosmetics extends JavaPlugin {
             mySqlConnectionManager.start();
 
             getSmartLogger().write("Connected to MySQL database.");
-            getSmartLogger().write();
         }
 
         // Initialize UltraPlayers and give chest (if needed).
@@ -288,6 +283,7 @@ public class UltraCosmetics extends JavaPlugin {
         GeneralUtil.printPermissions(this, SettingsManager.getConfig().getBoolean("Check-For-Updates"));
 
         // Ended well :v
+        getSmartLogger().write();
         getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
         getSmartLogger().write("-------------------------------------------------------------------");
     }
@@ -339,6 +335,18 @@ public class UltraCosmetics extends JavaPlugin {
     private void setupEconomy() {
         economyHandler = new EconomyHandler(this, getConfig().getString("Economy"));
         UltraCosmeticsData.get().checkTreasureChests();
+    }
+
+    private void setupWorldGuard() {
+        if (flagManager != null) {
+            if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+                getSmartLogger().write(LogLevel.ERROR, "WorldGuard is not enabled yet! Is WorldGuard up to date? Is another plugin interfering with the load order?");
+                return;
+            }
+            flagManager.registerPhase2();
+            getSmartLogger().write();
+            getSmartLogger().write("WorldGuard custom flags enabled");
+        }
     }
 
     private void setUpConfig() {
@@ -467,6 +475,8 @@ public class UltraCosmetics extends JavaPlugin {
         if (!config.contains("allow-damage-to-players-on-mounts")) {
             config.set("allow-damage-to-players-on-mounts", false);
         }
+
+        config.addDefault("WorldGuard-Integration", true, "Whether WorldGuard should be hooked when loading UC", "Disable this if UC has trouble loading WorldGuard");
 
         upgradeIdsToMaterials();
 
