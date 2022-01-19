@@ -428,6 +428,7 @@ public enum UCMaterial {
     HAY_BLOCK(0),
     HEART_OF_THE_SEA(0, "1.13"),
     HEAVY_WEIGHTED_PRESSURE_PLATE(0, "IRON_PLATE"),
+    HONEYCOMB(0),
     HOPPER(0),
     HOPPER_MINECART(0),
     HORN_CORAL(0, "1.13"),
