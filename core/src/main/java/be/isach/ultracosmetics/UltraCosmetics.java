@@ -436,7 +436,7 @@ public class UltraCosmetics extends JavaPlugin {
             config.set(section + ".Message.enabled", false);
             config.set(section + ".Message.message", "%prefix% &6&l%name% found a flower!");
             config.set(section + ".Cancel-If-Permission", "example.yellowflower");
-            config.set(section + ".Commands", Arrays.asList("give %name% yellow_flower 1", "pex user %name% add example.yellowflower"));
+            config.set(section + ".Commands", Arrays.asList("give %name% yellow_flower 1", "lp user %name% permission set example.yellowflower true"));
         }
 
         config.addDefault("Categories.Clear-Cosmetic-Item", UCMaterial.REDSTONE_BLOCK.parseMaterial().toString(), "Item where user click to clear a cosmetic.");

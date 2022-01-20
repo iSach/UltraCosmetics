@@ -57,7 +57,7 @@ Economy: 'Vault'
 # About Treasure Chests designs:
 # For a list of effect: http://pastebin.com/CVKkufck
 # For the chest-types: NORMAL or ENDER
-# Material syntax: 'id:data'
+# Material syntax: The "item ID" from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 # You CAN make more designs just copy one, paste it and modify.
 # Not twice same name!
 #
@@ -72,7 +72,7 @@ Economy: 'Vault'
 #
 # For permission command:
 # Change it to correspond to your Permissions plugin!
-# Default one is Pex's.
+# Default one is LuckPerms.
 #
 TreasureChests:
   Enabled: true
@@ -177,7 +177,7 @@ TreasureChests:
         Cancel-If-Permission: 'example.yellowflower'
         Commands:
           - 'give %name% yellow_flower 1'
-          - 'pex user %name% add example.yellowflower'
+          - 'lp user %name% permission set example.yellowflower true'
   Designs:
     Classic:
       center-block: SEA_LANTERN
@@ -203,7 +203,7 @@ TreasureChests:
       barriers: NETHER_BRICK_FENCE
       chest-type: NORMAL
       effect: SMOKE_NORMAL
-  Permission-Add-Command: pex user %name% add %permission%
+  Permission-Add-Command: lp user %name% permission set %permission% true
 
 # This option will fill the blank slots of inventories
 # with a custom item!
