@@ -57,7 +57,7 @@ Economy: 'Vault'
 # About Treasure Chests designs:
 # For a list of effect: http://pastebin.com/CVKkufck
 # For the chest-types: NORMAL or ENDER
-# Material syntax: The "item ID" from https://minecraftitemids.com/ without the "minecraft:" and in Full Caps! (e.g. minecraft:stone -> STONE)
+# Material syntax: The "item ID" from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 # You CAN make more designs just copy one, paste it and modify.
 # Not twice same name!
 #
