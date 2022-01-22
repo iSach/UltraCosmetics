@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
+
 public class InsertQuery extends Query {
     private boolean firstValue;
     private final List<Object> values;
@@ -38,10 +41,14 @@ public class InsertQuery extends Query {
     public void execute() {
         PreparedStatement prest;
         try {
-            if (connection == null)
-                System.out.println("No Connection !");
-            if (sql == null)
-                System.out.println("Request is null !");
+            if (connection == null) {
+                UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.WARNING, "No Connection!");
+                return;
+            }
+            if (sql == null) {
+                UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.WARNING, "Request is null!");
+                return;
+            }
             prest = connection.prepareStatement(sql);
             int i = 1;
             for (Object object : values) {

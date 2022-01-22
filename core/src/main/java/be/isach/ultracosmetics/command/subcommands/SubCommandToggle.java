@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
@@ -68,7 +68,7 @@ public class SubCommandToggle extends SubCommand {
     }
 
     private void toggle(CommandSender sender, UltraPlayer target, String type, String cosm) {
-        if (!UltraCosmeticsData.get().getEnabledWorlds().contains(target.getBukkitPlayer().getWorld().getName())) {
+        if (!SettingsManager.isAllowedWorld(target.getBukkitPlayer().getWorld())) {
             sender.sendMessage(MessageManager.getMessage("World-Disabled"));
             return;
         }

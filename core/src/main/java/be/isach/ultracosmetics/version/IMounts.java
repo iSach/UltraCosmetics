@@ -4,10 +4,6 @@ import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import org.bukkit.entity.EntityType;
 
 public interface IMounts {
-    Class<? extends Mount> getSpiderClass();
-
-    Class<? extends Mount> getSlimeClass();
-
     Class<? extends Mount> getHorrorClass();
 
     Class<? extends Mount> getWalkingDeadClass();

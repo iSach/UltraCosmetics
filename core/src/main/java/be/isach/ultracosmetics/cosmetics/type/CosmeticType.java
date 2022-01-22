@@ -51,6 +51,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
             cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, UltraCosmetics.class).newInstance(player, ultraCosmetics);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
+            return null;
         }
         cosmetic.equip();
         return cosmetic;

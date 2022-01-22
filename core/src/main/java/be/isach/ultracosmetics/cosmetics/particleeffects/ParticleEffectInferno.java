@@ -27,12 +27,12 @@ public class ParticleEffectInferno extends ParticleEffect {
         for (int i = 0; i < 4; i++) {
             if (up[i]) {
                 if (height[i] < 2)
-                    height[i] += 0.05;
+                    height[i] += 0.05f;
                 else
                     up[i] = false;
             } else {
                 if (height[i] > 0)
-                    height[i] -= 0.05;
+                    height[i] -= 0.05f;
                 else
                     up[i] = true;
             }

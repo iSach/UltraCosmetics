@@ -10,6 +10,7 @@ softdepend:
 - PlaceholderAPI
 - PlayerPoints
 - WorldGuard
+- Essentials
 commands:
   ultracosmetics:
     aliases: [uc, cosmetics]

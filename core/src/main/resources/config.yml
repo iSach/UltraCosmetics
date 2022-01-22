@@ -17,31 +17,31 @@ Categories-Enabled:
 # - Do you want a BackToMainMenu Arrow in it?
 Categories:
   Gadgets:
-    Main-Menu-Item: '409:0'
+    Main-Menu-Item: PRISMARINE_SHARD
     Go-Back-Arrow: true
     # You wanna show the cooldown of current gadget in actionbar?
     Cooldown-In-ActionBar: true
   Particle-Effects:
-    Main-Menu-Item: '399:0'
+    Main-Menu-Item: NETHER_STAR
     Go-Back-Arrow: true
   Mounts:
-    Main-Menu-Item: '329:0'
+    Main-Menu-Item: SADDLE
     Go-Back-Arrow: true
   Pets:
-    Main-Menu-Item: '352:0'
+    Main-Menu-Item: BONE
     Go-Back-Arrow: true
   Morphs:
-    Main-Menu-Item: '334:0'
+    Main-Menu-Item: LEATHER
     Go-Back-Arrow: true
   Hats:
-    Main-Menu-Item: '314:0'
+    Main-Menu-Item: GOLDEN_HELMET
     Go-Back-Arrow: true
   Suits:
-    Main-Menu-Item: '299:0'
+    Main-Menu-Item: LEATHER_CHESTPLATE
     Go-Back-Arrow: true
   Emotes:
     Go-Back-Arrow: true
-  Clear-Cosmetic-Item: '152:0'
+  Clear-Cosmetic-Item: REDSTONE_BLOCK
 
 # The economy that should be used. Supports 'Vault' or 'PlayerPoints'
 Economy: 'Vault'
@@ -57,7 +57,7 @@ Economy: 'Vault'
 # About Treasure Chests designs:
 # For a list of effect: http://pastebin.com/CVKkufck
 # For the chest-types: NORMAL or ENDER
-# Material syntax: 'id:data'
+# Material syntax: The "item ID" from https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 # You CAN make more designs just copy one, paste it and modify.
 # Not twice same name!
 #
@@ -72,11 +72,23 @@ Economy: 'Vault'
 #
 # For permission command:
 # Change it to correspond to your Permissions plugin!
-# Default one is Pex's.
+# Default one is LuckPerms.
 #
 TreasureChests:
-  Enabled: false
+  Enabled: true
   Key-Price: 1000
+  # How many treasure chests should be opened per key? Min 1, max 4
+  Count: 4
+  Location:
+    # Whether players should be moved to a certain
+    # location before opening a treasure chest.
+    # Does not override /uc treasure.
+    Enabled: false
+    # The location players should be moved to.
+    # Block coordinates only, like 104, not 103.63
+    X: 0
+    Y: 63
+    Z: 0
   Loots:
     Money:
       Enabled: true
@@ -145,7 +157,7 @@ TreasureChests:
     Commands:
       shoutout:
         Name: '&d&lShoutout'
-        Material: 'NETHER_STAR'
+        Material: NETHER_STAR
         Enabled: false
         Chance: 100
         Message:
@@ -156,7 +168,7 @@ TreasureChests:
           - 'say %name% is awesome!'
       flower:
         Name: '&e&lFlower'
-        Material: 'YELLOW_FLOWER'
+        Material: YELLOW_FLOWER
         Enabled: false
         Chance: 100
         Message:
@@ -165,39 +177,39 @@ TreasureChests:
         Cancel-If-Permission: 'example.yellowflower'
         Commands:
           - 'give %name% yellow_flower 1'
-          - 'pex user %name% add example.yellowflower'
+          - 'lp user %name% permission set example.yellowflower true'
   Designs:
     Classic:
-      center-block: '169:0'
-      around-center: '5:0'
-      third-blocks: '5:1'
-      below-chests: '17:0'
-      barriers: '85:0'
+      center-block: SEA_LANTERN
+      around-center: OAK_PLANKS
+      third-blocks: SPRUCE_PLANKS
+      below-chests: OAK_LOG
+      barriers: OAK_FENCE
       chest-type: NORMAL
       effect: FLAME
     Modern:
-      center-block: '169:0'
-      around-center: '159:11'
-      third-blocks: '155:0'
-      below-chests: '159:11'
-      barriers: '160:3'
+      center-block: SEA_LANTERN
+      around-center: BLUE_TERRACOTTA
+      third-blocks: WHITE_TERRACOTTA
+      below-chests: BLUE_TERRACOTTA
+      barriers: LIGHT_BLUE_STAINED_GLASS_PANE
       chest-type: ENDER
       effect: REDSTONE
     Nether:
-      center-block: '89:0'
-      around-center: '88:0'
-      third-blocks: '87:0'
-      below-chests: '112:0'
-      barriers: '113:0'
+      center-block: GLOWSTONE
+      around-center: SOUL_SAND
+      third-blocks: NETHERRACK
+      below-chests: NETHER_BRICKS
+      barriers: NETHER_BRICK_FENCE
       chest-type: NORMAL
       effect: SMOKE_NORMAL
-  Permission-Add-Command: pex user %name% add %permission%
+  Permission-Add-Command: lp user %name% permission set %permission% true
 
 # This option will fill the blank slots of inventories
 # with a custom item!
 Fill-Blank-Slots-With-Item:
   Enabled: false
-  Item: '160:15'
+  Item: LIGHT_GRAY_STAINED_GLASS_PANE
 
 # Toggle this to allow players to rename pets.
 #
@@ -295,3 +307,7 @@ Remove-Gadget-With-Drop: false
 # are reset! Soon it will support shutdowns.
 Auto-Equip-Cosmetics:
   enabled: false
+
+# Whether WorldGuard should be hooked when loading UC
+# Disable this if UC has trouble loading WorldGuard
+WorldGuard-Integration: true

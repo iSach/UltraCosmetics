@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.6-DEV-b6'
+    version = '2.6-DEV-b10'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -164,7 +164,7 @@ abstract class VersionedObfTask extends DefaultTask {
             commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-mojang.jar",
                 'net.md_5.specialsource.SpecialSource', '--live', '--only', "be/isach/ultracosmetics/$nms", '-q',
                 '-i', 'libs/' + project.name + '-' + project.version + '.jar',
-                '-o', 'libs/' + project.name + '-' + project.version + '-obf.jar',
+                '-o', 'libs/obfuscated-donotuse-' + project.name + '-' + project.version + '.jar',
                 '-m', ext.homeDir + "/.m2/repository/org/spigotmc/minecraft-server/$mcVer-R0.1-SNAPSHOT/minecraft-server-$mcVer-R0.1-SNAPSHOT-maps-mojang.txt",
                 '--reverse'
         }
@@ -172,7 +172,7 @@ abstract class VersionedObfTask extends DefaultTask {
             workingDir project.buildDir
             commandLine 'java', '-cp', ext.toolingDir + '/tooling/specialsource/SpecialSource.jar' + File.pathSeparator + ext.homeDir + "/.m2/repository/org/spigotmc/spigot/$mcVer-R0.1-SNAPSHOT/spigot-$mcVer-R0.1-SNAPSHOT-remapped-obf.jar",
                 'net.md_5.specialsource.SpecialSource', '--live', '--only', "be/isach/ultracosmetics/$nms", '-q',
-                '-i', 'libs/' + project.name + '-' + project.version + '-obf.jar',
+                '-i', 'libs/obfuscated-donotuse-' + project.name + '-' + project.version + '.jar',
                 '-o', 'libs/' + project.name + '-' + project.version + '.jar',
                 '-m', ext.homeDir + "/.m2/repository/org/spigotmc/minecraft-server/$mcVer-R0.1-SNAPSHOT/minecraft-server-$mcVer-R0.1-SNAPSHOT-maps-spigot.csrg"
         }

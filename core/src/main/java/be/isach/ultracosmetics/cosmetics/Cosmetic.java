@@ -31,14 +31,14 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 
     public Cosmetic(UltraCosmetics ultraCosmetics, Category category, UltraPlayer owner, T type) {
         this.owner = owner;
-        this.ownerUniqueId = owner.getUuid();
+        if (owner == null
+                || Bukkit.getPlayer(owner.getUUID()) == null) {
+            throw new IllegalArgumentException("Invalid UltraPlayer.");
+        }
+        this.ownerUniqueId = owner.getUUID();
         this.category = category;
         this.ultraCosmetics = ultraCosmetics;
         this.cosmeticType = type;
-        if (owner == null
-                || Bukkit.getPlayer(owner.getUuid()) == null) {
-            throw new IllegalArgumentException("Invalid UltraPlayer.");
-        }
     }
 
     public void equip() {

@@ -7,12 +7,10 @@ import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bat;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -75,7 +73,7 @@ public class GadgetBatBlaster extends Gadget {
             if (!bat.isValid()) continue;
             Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
                     (Math.random() - 0.5D) / 3.0D);
-            if (bat != null && playerVelocity != null) {
+            if (playerVelocity != null) {
                 bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
             }
             for (Player other : getPlayer().getWorld().getPlayers()) {

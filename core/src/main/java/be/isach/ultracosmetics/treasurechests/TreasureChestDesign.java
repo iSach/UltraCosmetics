@@ -3,6 +3,8 @@ package be.isach.ultracosmetics.treasurechests;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.UCMaterial;
+
 import org.bukkit.material.MaterialData;
 
 /**
@@ -17,22 +19,14 @@ public class TreasureChestDesign {
     private MaterialData barriers;
     private ChestType chestType;
     private Particles effect;
-    private String path;
-
     public TreasureChestDesign(String path) {
-        this.path = path;
-        String center = g(path + ".center-block"),
-                blocks2 = g(path + ".around-center"),
-                blocks3 = g(path + ".third-blocks"),
-                belowChest = g(path + ".below-chests"),
-                barriers = g(path + ".barriers"),
-                chestType = g(path + ".chest-type"),
-                effect = g(path + ".effect");
-        this.center = initMData(center);
-        this.blocks2 = initMData(blocks2);
-        this.blocks3 = initMData(blocks3);
-        this.belowChests = initMData(belowChest);
-        this.barriers = initMData(barriers);
+        center = getMaterialData(path + ".center-block");
+        blocks2 = getMaterialData(path + ".around-center");
+        blocks3 = getMaterialData(path + ".third-blocks");
+        belowChests = getMaterialData(path + ".below-chests");
+        barriers = getMaterialData(path + ".barriers");
+        String chestType = UltraCosmeticsData.get().getPlugin().getConfig().getString("TreasureChests.Designs." + path + ".chest-type");
+        String effect = UltraCosmeticsData.get().getPlugin().getConfig().getString("TreasureChests.Designs." + path + ".effect");
         try {
             this.chestType = ChestType.valueOf(chestType.toUpperCase());
         } catch (IllegalArgumentException exc) {
@@ -45,13 +39,10 @@ public class TreasureChestDesign {
         }
     }
 
-    private MaterialData initMData(String name) {
-        return new MaterialData(ItemFactory.fromId(Integer.parseInt(name.split(":")[0])),
-                (name.split(":").length > 1 ? (byte) Integer.parseInt(name.split(":")[1]) : (byte) 0));
-    }
-
-    private String g(String s) {
-        return UltraCosmeticsData.get().getPlugin().getConfig().getString("TreasureChests.Designs." + s);
+    @SuppressWarnings("deprecation")
+    private MaterialData getMaterialData(String s) {
+        UCMaterial mat = ItemFactory.getUCMaterialFromConfig("TreasureChests.Designs." + s);
+        return new MaterialData(mat.parseMaterial(), mat.getData());
     }
 
     public ChestType getChestType() {

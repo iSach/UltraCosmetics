@@ -20,7 +20,7 @@ reward-name:
     enabled: false
     permission: ranks.legend
   reward-commands:
-    - "pex user {player-uuid} set rank titan"
+    - "lp user {player-uuid} parent set titan"
   sound:
     enabled: true
     sound-effect: EXPLODE

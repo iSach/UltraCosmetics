@@ -10,6 +10,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -78,6 +79,7 @@ public class UpdateManager extends Thread {
      * @return last version published on Spigot.
      */
     public synchronized String getLastVersion() {
+        InputStreamReader reader = null;
         try {
             URL url = new URL("https://api.spiget.org/v2/resources/10905/versions?size=1&sort=-id");
 
@@ -85,7 +87,7 @@ public class UpdateManager extends Thread {
             connection.addRequestProperty("User-Agent", "UltraCosmetics Update Checker"); // Sets the user-agent
 
             InputStream inputStream = connection.getInputStream();
-            InputStreamReader reader = new InputStreamReader(inputStream);
+            reader = new InputStreamReader(inputStream);
 
             JSONArray value = (JSONArray) JSONValue.parseWithException(reader);
 
@@ -97,6 +99,14 @@ public class UpdateManager extends Thread {
         } catch (Exception ex) {
             ex.printStackTrace();
             ultraCosmetics.getSmartLogger().write("[UltraCosmetics] Failed to check for an update on spigot. ");
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }

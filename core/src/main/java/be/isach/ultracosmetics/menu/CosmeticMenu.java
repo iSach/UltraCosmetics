@@ -216,8 +216,8 @@ public abstract class CosmeticMenu<T extends CosmeticMatType> extends Menu {
     }
 
     /**
-     * @param ultraPlayer The menu owner.
-     * @return The current page of the menu opened by ultraPlayer.
+     * @param ultraPlayer The menu owner
+     * @return The current page of the menu opened by ultraPlayer
      */
     protected int getCurrentPage(UltraPlayer ultraPlayer) {
         Player player = ultraPlayer.getBukkitPlayer();

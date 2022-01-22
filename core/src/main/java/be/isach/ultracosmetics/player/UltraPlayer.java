@@ -164,7 +164,6 @@ public class UltraPlayer {
      * Sets the cooldown of a gadget.
      *
      * @param gadget    The gadget.
-     * @param countdown The cooldown to set.
      */
     public void setCoolDown(GadgetType gadget) {
         double cooldown = gadget.getCountdown();
@@ -369,7 +368,7 @@ public class UltraPlayer {
                 // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
                 // If player is "quitting", remove the disguise anyway. Player is marked as quitting
                 // when changing worlds, making sure morphs get correctly unset.
-                && (isQuitting() || SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(getBukkitPlayer().getWorld().getName()))) {
+                && (isQuitting() || SettingsManager.isAllowedWorld(getBukkitPlayer().getWorld()))) {
             removeMorph();
             DisguiseAPI.undisguiseToAll(getBukkitPlayer());
         }
@@ -491,7 +490,7 @@ public class UltraPlayer {
     public String getPetName(PetType petType) {
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).get("Pet-Names." + petType.getConfigName());
+                return SettingsManager.getData(getBukkitPlayer()).getString("Pet-Names." + petType.getConfigName());
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;
@@ -570,7 +569,7 @@ public class UltraPlayer {
 
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).get("Gadgets-Enabled");
+                return SettingsManager.getData(getBukkitPlayer()).getBoolean("Gadgets-Enabled");
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex())) {
                     gadgetsEnabledCache = CacheValue.ENABLED;
@@ -618,7 +617,7 @@ public class UltraPlayer {
             return false;
         try {
             if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).get("Third-Person-Morph-View");
+                return SettingsManager.getData(getBukkitPlayer()).getBoolean("Third-Person-Morph-View");
             } else {
                 if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex())) {
                     morphSelfViewCache = CacheValue.ENABLED;
@@ -721,7 +720,7 @@ public class UltraPlayer {
      *
      * @return The UUID.
      */
-    public UUID getUuid() {
+    public UUID getUUID() {
         return uuid;
     }
 

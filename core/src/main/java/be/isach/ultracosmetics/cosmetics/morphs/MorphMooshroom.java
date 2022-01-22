@@ -48,9 +48,10 @@ public class MorphMooshroom extends Morph {
                 soup.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
                 items.add(soup);
             }
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> {
-                for (Entity soup : items)
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+                for (Entity soup : items) {
                     soup.remove();
+                }
                 items.clear();
             }, 50);
             SoundUtil.playSound(getPlayer(), Sounds.SHEEP_SHEAR, 0.4f, (float) Math.random() + 1f);

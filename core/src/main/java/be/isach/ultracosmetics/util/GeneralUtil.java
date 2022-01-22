@@ -26,6 +26,7 @@ public class GeneralUtil {
             writer = new PrintWriter(new File(ultraCosmetics.getDataFolder(), "permissions.yml"), "UTF-8");
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
+            return;
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -39,63 +40,65 @@ public class GeneralUtil {
         writer.println("Generated automatically on " + dateFormat.format(date));
         writer.println();
         writer.println();
-
-        writer.println("General permissions, enabled by default.");
+        writer.println("General permissions, enabled by default:");
         writer.println("  - ultracosmetics.receivechest");
         writer.println("  - ultracosmetics.openmenu");
-        writer.println("");
+        writer.println();
         writer.println("Treasure Chests:");
-        writer.println("  - ultracosmetics.treasurechests.buykey");
-        writer.println("");
+        writer.println("  - ultracosmetics.treasurechests.buykey (enabled by default)");
+        writer.println();
+        writer.println("Bypass perms:");
+        writer.println("  - ultracosmetics.bypass.disabledcommands");
+        writer.println("  - ultracosmetics.bypass.cooldown (granted to no one by default)");
+        writer.println();
         writer.println("Commands:");
         writer.println("  - ultracosmetics.command.*");
         for (SubCommand subCommand : ultraCosmetics.getCommandManager().getCommands())
             writer.println("  - " + subCommand.getPermission());
-        writer.println("");
+        writer.println();
         writer.println("Gadgets:");
         writer.println("  - ultracosmetics.gadgets.*");
         for (GadgetType gadgetType : GadgetType.values())
             writer.println("  - " + gadgetType.getPermission());
-        writer.println("");
+        writer.println();
         writer.println("Pets:");
         writer.println("  - ultracosmetics.pets.*");
         for (PetType petType : PetType.values())
             writer.println("  - " + petType.getPermission());
-        writer.println("");
+        writer.println();
         writer.println("Mounts:");
         writer.println("  - ultracosmetics.mounts.*");
         for (MountType mountType : MountType.values())
             writer.println("  - " + mountType.getPermission());
-        writer.println("");
+        writer.println();
         writer.println("Morphs:");
         writer.println("  - ultracosmetics.morphs.*");
         for (MorphType morphType : MorphType.values())
             writer.println("  - " + morphType.getPermission());
-        writer.println("");
+        writer.println();
         writer.println("Hats:");
         writer.println("  - ultracosmetics.hats.*");
         for (HatType hat : HatType.values())
             writer.println("  - " + hat.getPermission());
-        writer.println("");
+        writer.println();
         writer.println("Particle Effects:");
         writer.println("  - ultracosmetics.particleeffects.*");
         for (ParticleEffectType effect : ParticleEffectType.values())
             writer.println("  - " + effect.getPermission());
-        writer.println("");
+        writer.println();
         writer.println("Suits:");
         writer.println("  - ultracosmetics.suits.*");
-        for (CosmeticType cosmeticType : SuitType.values()) {
-            SuitType suit = ((SuitType) cosmeticType);
+        for (SuitType suit : SuitType.values()) {
             writer.println("  - ultracosmetics.suits." + suit.getConfigName().toLowerCase() + ".*");
             for (ArmorSlot armorSlot : ArmorSlot.values())
                 writer.println("  - " + suit.getPermission(armorSlot));
         }
-        writer.println("");
+        writer.println();
         writer.println("Emotes:");
         writer.println("  - ultracosmetics.emotes.*");
         for (EmoteType emoteType : EmoteType.values())
             writer.println("  - " + emoteType.getPermission());
-        writer.println("");
+        writer.println();
 
         writer.close();
     }

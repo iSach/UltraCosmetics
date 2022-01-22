@@ -9,7 +9,7 @@
 [![TravisCI Build Status](https://travis-ci.org/iSach/UltraCosmetics.svg?branch=master)][travis-link]
 [![GitHub last commit](https://img.shields.io/github/last-commit/iSach/UltraCosmetics.svg)](https://github.com/iSach/UltraCosmetics/commits/master)
 [![version](https://img.shields.io/github/release/iSach/UltraCosmetics.svg?colorB=1565C0)](https://github.com/iSach/UltraCosmetics/releases/latest)
-[![beta](https://img.shields.io/badge/dynamic/json.svg?label=beta&colorB=1565C0&query=version&uri=https%3A%2F%2Fapi.isach.be%2Fultracosmetics%2Fversion%2F)][jenkins-link]
+[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/iSach/UltraCosmetics.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/iSach/UltraCosmetics/context:java)
 [![discord](https://discordapp.com/api/guilds/185055040036143104/widget.png)][discord-invite]
 [![view on SpigotMC](https://img.shields.io/badge/view%20on-spigotmc-orange.svg)][spigotmc-link]
 [![wiki](https://img.shields.io/badge/go%20to-wiki-blue.svg)][wiki-link]

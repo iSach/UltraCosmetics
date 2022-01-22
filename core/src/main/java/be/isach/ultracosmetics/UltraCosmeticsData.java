@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.UnsafeValues;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -84,14 +83,6 @@ public class UltraCosmeticsData {
 
     private UltraCosmetics ultraCosmetics;
 
-    /**
-     * A list of worlds where cosmetics are enabled.
-     */
-    private List<String> enabledWorlds;
-    /**
-     * For bStats stuff
-     */
-    private AbstractMetrics metrics;
     private boolean cosmeticsProfilesEnabled;
 
     public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
@@ -204,7 +195,6 @@ public class UltraCosmeticsData {
         this.customCommandBackArrow = ultraCosmetics.getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled");
         this.customBackMenuCommand = ultraCosmetics.getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "");
         this.closeAfterSelect = ultraCosmetics.getConfig().getBoolean("Categories.Close-GUI-After-Select");
-        this.enabledWorlds = ultraCosmetics.getConfig().getStringList("Enabled-Worlds");
         this.cosmeticsProfilesEnabled = ultraCosmetics.getConfig().getBoolean("Auto-Equip-Cosmetics.is-enabled");
     }
 
@@ -267,14 +257,6 @@ public class UltraCosmeticsData {
 
     public final String getItemNoPickupString() {
         return this.itemNoPickupString;
-    }
-
-    public List<String> getEnabledWorlds() {
-        return this.enabledWorlds;
-    }
-
-    public void setMetrics(AbstractMetrics metrics) {
-        this.metrics = metrics;
     }
 
     public boolean areCosmeticsProfilesEnabled() {

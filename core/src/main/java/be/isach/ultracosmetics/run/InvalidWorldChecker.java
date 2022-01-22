@@ -26,7 +26,9 @@ public class InvalidWorldChecker extends BukkitRunnable {
     public void run() {
         for (UltraPlayer ultraPlayer : ultraCosmetics.getPlayerManager().getUltraPlayers()) {
             Player p = ultraPlayer.getBukkitPlayer();
-            if (!SettingsManager.getConfig().getStringList("Enabled-Worlds").contains(p.getWorld().getName())) {
+            // not sure what causes p to be null, but it happens in some circumstances apparently
+            // https://mcpaste.io/1bbcbf856c5e503b
+            if (p != null && !SettingsManager.isAllowedWorld(p.getWorld())) {
                 ultraPlayer.removeMenuItem();
                 ultraPlayer.setQuitting(true);
                 if (ultraPlayer.clear()) {

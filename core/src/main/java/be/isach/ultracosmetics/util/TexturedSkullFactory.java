@@ -23,15 +23,16 @@ import java.util.UUID;
 public class TexturedSkullFactory {
 
     public static ItemStack createSkull(String url) {
-        url = "http://textures.minecraft.net/texture/" + url;
         ItemStack skull;
         if (VersionManager.IS_VERSION_1_13) {
             skull = new ItemStack(Material.valueOf("PLAYER_HEAD"));
         } else {
             skull = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
         }
-        if (url == null || url.isEmpty())
+        if (url == null || url.isEmpty()) {
             return skull;
+        }
+        url = "http://textures.minecraft.net/texture/" + url;
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
         skullMeta.setDisplayName(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Emote");
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);

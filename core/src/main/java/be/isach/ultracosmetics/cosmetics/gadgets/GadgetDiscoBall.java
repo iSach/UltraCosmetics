@@ -15,7 +15,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -73,59 +72,48 @@ public class GadgetDiscoBall extends Gadget {
         if (armorStand == null) {
             return;
         }
-        if (armorStand != null && armorStand.isValid() && running) {
-            armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
-
-            if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_8_R3) {
-                armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) r.nextInt(15), " "));
-            }
-
-            UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
-            UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
-            Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
-            Particles.NOTE.display(new Particles.NoteColor(r.nextInt(25)), loc, 128);
-            double angle, angle2, x, x2, z, z2;
-            angle = 2 * Math.PI * i / 100;
-            x = Math.cos(angle) * 4;
-            z = Math.sin(angle) * 4;
-
-            drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), false, 20);
-
-            i += 6;
-            angle2 = 2 * Math.PI * i2 / 100;
-            x2 = Math.cos(angle2) * 4;
-            z2 = Math.sin(angle2) * 4;
-            drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), true, 50);
-            i2 += 0.4;
-
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
-                        if (ent == null) {
-                            break;
-                        }
-                        if (ent.isOnGround() && affectPlayers) {
-                            MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
-                        }
-                    }
-                }
-            }.runTask(getUltraCosmetics());
-
-            try {
-                for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
-                    if (b.getType().toString().contains("WOOL") || b.getType().toString().contains("CARPET")) {
-                        BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
-                    }
-                }
-            } catch (NullPointerException exc) {
-                //...
-            }
-        } else {
+        if (!armorStand.isValid() || !running) {
             i = 0;
             i2 = 0;
             clean();
+            return;
+        }
+        armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
+
+        if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_8_R3) {
+            armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) r.nextInt(15), " "));
+        }
+
+        UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
+        UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
+        Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
+        Particles.NOTE.display(new Particles.NoteColor(r.nextInt(25)), loc, 128);
+        double angle, angle2, x, x2, z, z2;
+        angle = 2 * Math.PI * i / 100;
+        x = Math.cos(angle) * 4;
+        z = Math.sin(angle) * 4;
+
+        drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).clone().add(x, 0, z), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), false, 20);
+
+        i += 6;
+        angle2 = 2 * Math.PI * i2 / 100;
+        x2 = Math.cos(angle2) * 4;
+        z2 = Math.sin(angle2) * 4;
+        drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), true, 50);
+        i2 += 0.4;
+
+        for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
+            if (b.getType().toString().contains("WOOL") || b.getType().toString().contains("CARPET")) {
+                BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
+            }
+        }
+
+        if (!affectPlayers) return;
+
+        for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
+            if (ent.isOnGround()) {
+                MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
+            }
         }
     }
 
@@ -168,7 +156,6 @@ public class GadgetDiscoBall extends Gadget {
             if (dust) {
                 UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
             }
-            // location.getWorld().spigot().playEffect(loc, Effect.POTION_SWIRL);
         }
     }
 }

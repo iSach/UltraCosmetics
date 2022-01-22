@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+
 public class CosmeticsProfileManager {
 
     private Map<UUID, CosmeticsProfile> cosmeticsProfiles;
@@ -37,7 +39,7 @@ public class CosmeticsProfileManager {
      * @param up
      */
     public void initForPlayer(UltraPlayer up) {
-        UUID uuid = up.getUuid();
+        UUID uuid = up.getUUID();
 
         // First, create the cosmetic profile.
         CosmeticsProfile cosmeticsProfile = new CosmeticsProfile(uuid);
@@ -51,7 +53,8 @@ public class CosmeticsProfileManager {
 
         // ultraCosmetics.getSmartLogger().write("Successfully created a cosmetics profile for " + up.getUsername());
 
-        cosmeticsProfile.loadToPlayer();
+        // run sync because cosmetics have to run sync
+        Bukkit.getScheduler().runTask(ultraCosmetics, () -> cosmeticsProfile.loadToPlayer());
     }
 
     public CosmeticsProfile getProfile(UltraPlayer ultraPlayer) {
@@ -63,6 +66,6 @@ public class CosmeticsProfileManager {
     }
 
     public void clearPlayerFromProfile(UltraPlayer up) {
-        cosmeticsProfiles.get(up.getUuid()).setUltraPlayer(null);
+        cosmeticsProfiles.get(up.getUUID()).setUltraPlayer(null);
     }
 }

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.version;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.mounts.abstracthorse.AbstractHorseMounts;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ReflectionUtils;
@@ -21,12 +22,10 @@ public class VersionManager {
     private ServerVersion serverVersion;
     private IEntityUtil entityUtil;
     private IActionBar actionBarUtil;
-    private IItemGlower itemGlower;
     private IFireworkFactory fireworkFactory;
     private IMounts mounts;
     private IPets pets;
     private IMorphs morphs;
-    private AFlagManager flagManager;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
     private Constructor<? extends IAnvilGUI> anvilGUIConstructor;
 
@@ -38,10 +37,14 @@ public class VersionManager {
     public void load() throws ReflectiveOperationException {
         module = loadModule("Module");
         entityUtil = loadModule("EntityUtil");
-        actionBarUtil = loadModule("ActionBar");
-        itemGlower = loadModule("ItemGlower");
+        if (serverVersion == ServerVersion.v1_8_R3) {
+            actionBarUtil = loadModule("ActionBar");
+            mounts = loadModule("Mounts");
+        } else {
+            actionBarUtil = new APIActionBar();
+            mounts = new AbstractHorseMounts();
+        }
         fireworkFactory = loadModule("FireworkFactory");
-        mounts = loadModule("Mounts");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
         if (serverVersion.isAtLeast(ServerVersion.v1_14_R1))
@@ -65,10 +68,6 @@ public class VersionManager {
 
     public IActionBar getActionBarUtil() {
         return actionBarUtil;
-    }
-
-    public IItemGlower getItemGlower() {
-        return itemGlower;
     }
 
     public IFireworkFactory getFireworkFactory() {
@@ -116,9 +115,5 @@ public class VersionManager {
 
     public IModule getModule() {
         return module;
-    }
-
-    public AFlagManager getFlagManager() {
-        return flagManager;
     }
 }

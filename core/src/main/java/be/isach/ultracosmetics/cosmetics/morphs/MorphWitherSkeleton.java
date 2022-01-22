@@ -49,9 +49,10 @@ public class MorphWitherSkeleton extends Morph {
                 bone.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
                 items.add(bone);
             }
-            Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> {
-                for (Entity bone : items)
+            Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+                for (Entity bone : items) {
                     bone.remove();
+                }
                 items.clear();
             }, 50);
             SoundUtil.playSound(getPlayer(), Sounds.SKELETON_HURT, 0.4f, (float) Math.random() + 1f);

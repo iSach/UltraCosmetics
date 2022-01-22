@@ -54,15 +54,14 @@ public class PetChristmasElf extends Pet {
     }
 
     private static ItemStack getSkull(String url) {
-        url = "http://textures.minecraft.net/texture/" + url;
         ItemStack skull;
         if (VersionManager.IS_VERSION_1_13) {
             skull = new ItemStack(Material.valueOf("PLAYER_HEAD"));
         } else {
             skull = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
         }
-        if (url == null || url.isEmpty())
-            return skull;
+        if (url == null || url.isEmpty()) return skull;
+        url = "http://textures.minecraft.net/texture/" + url;
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
         skullMeta.setDisplayName(UltraCosmeticsData.get().getItemNoPickupString());
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);

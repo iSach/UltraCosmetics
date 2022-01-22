@@ -1,25 +1,13 @@
-package be.isach.ultracosmetics.v1_15_R1;
+package be.isach.ultracosmetics.cosmetics.mounts.abstracthorse;
 
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
-import be.isach.ultracosmetics.v1_15_R1.mount.*;
-import be.isach.ultracosmetics.v1_15_R1.mount.*;
 import be.isach.ultracosmetics.version.IMounts;
 import org.bukkit.entity.EntityType;
 
 /**
  * @author RadBuilder
  */
-public class Mounts implements IMounts {
-    @Override
-    public Class<? extends Mount> getSpiderClass() {
-        return MountSpider.class;
-    }
-
-    @Override
-    public Class<? extends Mount> getSlimeClass() {
-        return MountSlime.class;
-    }
-
+public class AbstractHorseMounts implements IMounts {
     @Override
     public Class<? extends Mount> getHorrorClass() {
         return MountInfernalHorror.class;

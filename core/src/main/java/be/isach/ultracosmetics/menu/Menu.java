@@ -65,30 +65,21 @@ public abstract class Menu implements Listener {
         }
 
         inventory.setItem(slot, itemStack);
-        if (clickRunnableMap.containsKey(inventory)) {
-            Map<ItemStack, ClickRunnable> map = clickRunnableMap.get(inventory);
-            map.put(itemStack, clickRunnable);
-        } else {
-            Map<ItemStack, ClickRunnable> map = new HashMap<>();
-            map.put(itemStack, clickRunnable);
-            clickRunnableMap.put(inventory, map);
-        }
+        Map<ItemStack, ClickRunnable> map = clickRunnableMap.computeIfAbsent(inventory, f -> new HashMap<>());
+        map.put(itemStack, clickRunnable);
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-
-        // Check Inventory isn't null
         if (event.getInventory() == null) {
             return;
         }
 
-        // Check Item clicked isn't null
         if (event.getCurrentItem() == null) {
             return;
         }
 
-        // Check clicker is player
+
         if (!(event.getWhoClicked() instanceof Player)) {
             return;
         }
@@ -123,7 +114,6 @@ public abstract class Menu implements Listener {
 
         event.setCancelled(true);
 
-        // Check clickrunnable isn't null.
         if (clickRunnable == null) {
             return;
         }

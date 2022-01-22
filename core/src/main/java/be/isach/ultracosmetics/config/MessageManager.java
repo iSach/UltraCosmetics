@@ -432,6 +432,10 @@ public class MessageManager {
         addMessage("Suits.Unequip", "%prefix% &9You unequipped %suitname%!");
         addMessage("Suits.Suit-Part-Lore", "&9Suits Part");
         addMessage("Suits.Whole-Equip-Lore", "&7&oEquip the whole suit!");
+        addMessage("Suits.Must-Remove.HELMET", "%prefix% &c&lYou must remove your helmet to equip a suit helmet!");
+        addMessage("Suits.Must-Remove.CHESTPLATE", "%prefix% &c&lYou must remove your chestplate to equip a suit chestplate!");
+        addMessage("Suits.Must-Remove.LEGGINGS", "%prefix% &c&lYou must remove your leggings to equip suit leggings!");
+        addMessage("Suits.Must-Remove.BOOTS", "%prefix% &c&lYou must remove your boots to equip suit boots!");
 
         // EMOTES
         addMessage("Emotes.Equip", "%prefix% &9You equipped %emotename%");
@@ -497,6 +501,6 @@ public class MessageManager {
      * @return a message from a config path.
      */
     public static String getMessage(String messagePath) {
-        return ChatColor.translateAlternateColorCodes('&', ((String) settingsManager.get(messagePath)).replace("%prefix%", settingsManager.get("Prefix")));
+        return ChatColor.translateAlternateColorCodes('&', settingsManager.getString(messagePath).replace("%prefix%", settingsManager.getString("Prefix")));
     }
 }

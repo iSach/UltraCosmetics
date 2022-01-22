@@ -92,7 +92,8 @@ public class MySqlConnectionManager extends BukkitRunnable {
                     statement.executeUpdate();
                     statement.close();
                 }
-                rs.close();
+                // rs implicitly also closed
+                sql.close();
             }
             table = new Table(co, "UltraCosmeticsData");
             DatabaseMetaData md = co.getMetaData();
