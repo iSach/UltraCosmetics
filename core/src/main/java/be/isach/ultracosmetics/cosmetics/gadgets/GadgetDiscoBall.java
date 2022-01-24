@@ -48,7 +48,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setVisible(false);
         armorStand.setGravity(false);
         armorStand.setSmall(false);
-        armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) 3, " "));
+        armorStand.setHelmet(ItemFactory.rename(XMaterial.LIGHT_BLUE_STAINED_GLASS.parseItem(), " "));
         running = true;
         DISCO_BALLS.add(this);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 400);

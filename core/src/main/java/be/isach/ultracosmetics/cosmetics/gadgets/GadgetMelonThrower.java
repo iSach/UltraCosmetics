@@ -8,7 +8,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.Effect;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
@@ -66,7 +66,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
     void onRightClick() {
         this.world = getPlayer().getWorld();
         SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
-        Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(UCMaterial.MELON, UltraCosmeticsData.get().getItemNoPickupString()));
+        Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(XMaterial.MELON, UltraCosmeticsData.get().getItemNoPickupString()));
         item.setPickupDelay(0);
         item.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONBLOCK"));
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
@@ -81,7 +81,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
         if (melon.isOnGround()) {
             melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
             for (int i = 0; i < 8; i++) {
-                final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(UCMaterial.MELON_SLICE, UltraCosmeticsData.get().getItemNoPickupString()));
+                final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(XMaterial.MELON_SLICE, UltraCosmeticsData.get().getItemNoPickupString()));
                 newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
                 newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
                 new BukkitRunnable() {

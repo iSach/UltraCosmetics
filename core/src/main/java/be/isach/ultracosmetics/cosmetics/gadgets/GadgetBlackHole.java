@@ -8,6 +8,8 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.XMaterial;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -38,7 +40,7 @@ public class GadgetBlackHole extends Gadget {
             item = null;
         }
 
-        Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.createColored("STAINED_CLAY", (byte) 0xf, UltraCosmeticsData.get().getItemNoPickupString()));
+        Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.rename(XMaterial.BLACK_TERRACOTTA.parseItem(), UltraCosmeticsData.get().getItemNoPickupString()));
         newItem.setPickupDelay(Integer.MAX_VALUE);
         newItem.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
         this.item = newItem;

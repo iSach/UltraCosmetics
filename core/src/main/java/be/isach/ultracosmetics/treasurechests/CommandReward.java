@@ -2,9 +2,9 @@ package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.CustomConfiguration;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class CommandReward {
     private String name;
-    private Material material;
+    private ItemStack stack;
     private int chance;
     private boolean messageEnabled;
     private String message;
@@ -28,7 +28,7 @@ public class CommandReward {
         messageEnabled = config.getBoolean(path + ".Message.enabled");
         message = config.getString(path + ".Message.message");
         commands = config.getStringList(path + ".Commands");
-        material = UCMaterial.matchUCMaterial(config.getString(path + ".Material")).parseMaterial();
+        stack = ItemFactory.getItemStackFromConfig(path + ".Material");
         name = ChatColor.translateAlternateColorCodes('&', config.getString(path + ".Name"));
     }
 
@@ -52,7 +52,7 @@ public class CommandReward {
         return name;
     }
 
-    public Material getMaterial() {
-        return material;
+    public ItemStack getItemStack() {
+        return stack.clone();
     }
 }

@@ -8,7 +8,7 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.TexturedSkullFactory;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
@@ -207,7 +207,7 @@ public class EmoteType extends CosmeticMatType<Emote> {
     private int ticksPerFrame;
 
     private EmoteType(String permission, String configName, String defaultDesc, int ticksPerFrame) {
-        super(Category.EMOTES, configName, permission, defaultDesc, UCMaterial.PLAYER_HEAD, Emote.class, ServerVersion.earliest());
+        super(Category.EMOTES, configName, permission, defaultDesc, XMaterial.PLAYER_HEAD, Emote.class, ServerVersion.earliest());
         this.ticksPerFrame = ticksPerFrame;
         this.frames = new ArrayList<>();
 

@@ -6,7 +6,7 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.*;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class SuitType extends CosmeticMatType<Suit> {
     /**
      * The parts materials.
      */
-    private UCMaterial helmet, chestplate, leggings, boots;
+    private XMaterial helmet, chestplate, leggings, boots;
 
     /**
      * @param configName       The config path name.
@@ -59,7 +59,7 @@ public class SuitType extends CosmeticMatType<Suit> {
      * @param clazz            The Suit Class
      */
     private SuitType(String configName, String permissionSuffix, String defaultDesc,
-             UCMaterial h, UCMaterial c, UCMaterial l, UCMaterial b, Class<? extends Suit> clazz) {
+             XMaterial h, XMaterial c, XMaterial l, XMaterial b, Class<? extends Suit> clazz) {
         super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, clazz, ServerVersion.earliest());
         this.boots = b;
         this.helmet = h;
@@ -93,7 +93,7 @@ public class SuitType extends CosmeticMatType<Suit> {
      *
      * @return The Helmet material in menu
      */
-    public UCMaterial getHelmet() {
+    public XMaterial getHelmet() {
         return helmet;
     }
 
@@ -102,7 +102,7 @@ public class SuitType extends CosmeticMatType<Suit> {
      *
      * @return The Chestplate material in menu
      */
-    public UCMaterial getChestplate() {
+    public XMaterial getChestplate() {
         return chestplate;
     }
 
@@ -111,7 +111,7 @@ public class SuitType extends CosmeticMatType<Suit> {
      *
      * @return The Leggings material in menu
      */
-    public UCMaterial getLeggings() {
+    public XMaterial getLeggings() {
         return leggings;
     }
 
@@ -120,11 +120,11 @@ public class SuitType extends CosmeticMatType<Suit> {
      *
      * @return The Boots material in menu
      */
-    public UCMaterial getBoots() {
+    public XMaterial getBoots() {
         return boots;
     }
 
-    public UCMaterial getMaterial(ArmorSlot armorSlot) {
+    public XMaterial getMaterial(ArmorSlot armorSlot) {
         switch (armorSlot) {
             default:
                 return getChestplate();
@@ -161,10 +161,10 @@ public class SuitType extends CosmeticMatType<Suit> {
     }
 
     public static void register() {
-        new SuitType("Rave", "rave", "&7&oSuch amazing colors!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitRave.class);
-        new SuitType("Astronaut", "astronaut", "&7&oHouston?", UCMaterial.GLASS, UCMaterial.GOLDEN_CHESTPLATE, UCMaterial.GOLDEN_LEGGINGS, UCMaterial.GOLDEN_BOOTS, SuitAstronaut.class);
-        new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", UCMaterial.DIAMOND_HELMET, UCMaterial.DIAMOND_CHESTPLATE, UCMaterial.DIAMOND_LEGGINGS, UCMaterial.DIAMOND_BOOTS, SuitDiamond.class);
-        new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", UCMaterial.LEATHER_HELMET, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitSanta.class);
-        new SuitType("Frozen", "frozen", "&7&oThis suit belongs to the\nLord of the Frozen Lands!", UCMaterial.PACKED_ICE, UCMaterial.LEATHER_CHESTPLATE, UCMaterial.LEATHER_LEGGINGS, UCMaterial.LEATHER_BOOTS, SuitFrozen.class);
+        new SuitType("Rave", "rave", "&7&oSuch amazing colors!", XMaterial.LEATHER_HELMET, XMaterial.LEATHER_CHESTPLATE, XMaterial.LEATHER_LEGGINGS, XMaterial.LEATHER_BOOTS, SuitRave.class);
+        new SuitType("Astronaut", "astronaut", "&7&oHouston?", XMaterial.GLASS, XMaterial.GOLDEN_CHESTPLATE, XMaterial.GOLDEN_LEGGINGS, XMaterial.GOLDEN_BOOTS, SuitAstronaut.class);
+        new SuitType("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", XMaterial.DIAMOND_HELMET, XMaterial.DIAMOND_CHESTPLATE, XMaterial.DIAMOND_LEGGINGS, XMaterial.DIAMOND_BOOTS, SuitDiamond.class);
+        new SuitType("Santa", "santa", "&7&oBecome Santa and deliver presents!", XMaterial.LEATHER_HELMET, XMaterial.LEATHER_CHESTPLATE, XMaterial.LEATHER_LEGGINGS, XMaterial.LEATHER_BOOTS, SuitSanta.class);
+        new SuitType("Frozen", "frozen", "&7&oThis suit belongs to the\nLord of the Frozen Lands!", XMaterial.PACKED_ICE, XMaterial.LEATHER_CHESTPLATE, XMaterial.LEATHER_LEGGINGS, XMaterial.LEATHER_BOOTS, SuitFrozen.class);
     }
 }

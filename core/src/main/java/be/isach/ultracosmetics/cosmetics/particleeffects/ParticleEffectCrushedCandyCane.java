@@ -40,9 +40,8 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
         center.add(x, 0, z);
         if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
             for (int i = 0; i < 15; i++) {
-                ItemStack randomDye = UCMaterial.DYES.get(MathUtils.random(0, 14)).parseItem();
                 getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 1, 0.2d, 0.2d, 0.2d,
-                        0, randomDye);
+                        0, ItemFactory.getRandomDye());
             }
         } else {
             if (VersionManager.IS_VERSION_1_13) {

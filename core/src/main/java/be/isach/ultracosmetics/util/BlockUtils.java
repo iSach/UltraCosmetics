@@ -36,12 +36,12 @@ public class BlockUtils {
         badMaterials.add(Material.CHEST);
         badMaterials.add(getOldMaterial("STONE_PLATE"));
         badMaterials.add(getOldMaterial("WOOD_PLATE"));
-        badMaterials.add(UCMaterial.ACACIA_WALL_SIGN.parseMaterial());
-        badMaterials.add(UCMaterial.BIRCH_WALL_SIGN.parseMaterial());
-        badMaterials.add(UCMaterial.DARK_OAK_WALL_SIGN.parseMaterial());
-        badMaterials.add(UCMaterial.JUNGLE_WALL_SIGN.parseMaterial());
-        badMaterials.add(UCMaterial.OAK_WALL_SIGN.parseMaterial());
-        badMaterials.add(UCMaterial.DARK_OAK_WALL_SIGN.parseMaterial());
+        badMaterials.add(XMaterial.ACACIA_WALL_SIGN.parseMaterial());
+        badMaterials.add(XMaterial.BIRCH_WALL_SIGN.parseMaterial());
+        badMaterials.add(XMaterial.DARK_OAK_WALL_SIGN.parseMaterial());
+        badMaterials.add(XMaterial.JUNGLE_WALL_SIGN.parseMaterial());
+        badMaterials.add(XMaterial.OAK_WALL_SIGN.parseMaterial());
+        badMaterials.add(XMaterial.DARK_OAK_WALL_SIGN.parseMaterial());
         badMaterials.add(getOldMaterial("WALL_BANNER"));
         badMaterials.add(getOldMaterial("STANDING_BANNER"));
         badMaterials.add(getOldMaterial("CROPS"));
@@ -288,6 +288,6 @@ public class BlockUtils {
             oldMaterialName = oldMaterialName.replace("STAINED_CLAY", "CONCRETE");
             return Material.getMaterial(color.toString() + "_" + oldMaterialName);
         }
-        return UCMaterial.WHITE_WOOL.parseMaterial();
+        return XMaterial.WHITE_WOOL.parseMaterial();
     }
 }

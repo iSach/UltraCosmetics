@@ -10,7 +10,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Item;
@@ -45,7 +45,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
 
     @Override
     void onRightClick() {
-        final Item i = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(UCMaterial.IRON_AXE, MessageManager.getMessage("Gadgets.ThorHammer.name")));
+        final Item i = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(XMaterial.IRON_AXE, MessageManager.getMessage("Gadgets.ThorHammer.name")));
         i.setPickupDelay(0);
         i.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.4));
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);

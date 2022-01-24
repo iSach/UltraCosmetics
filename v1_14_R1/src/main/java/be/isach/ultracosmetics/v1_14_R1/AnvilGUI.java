@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.v1_14_R1;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import be.isach.ultracosmetics.version.AAnvilGUI;
 import be.isach.ultracosmetics.version.IAnvilGUI;
 import net.minecraft.server.v1_14_R1.*;
@@ -87,7 +87,7 @@ public class AnvilGUI implements IAnvilGUI {
     }
 
     private void openInventory() {
-        final ItemStack paper = UCMaterial.PAPER.parseItem();
+        final ItemStack paper = XMaterial.PAPER.parseItem();
         final ItemMeta paperMeta = paper.getItemMeta();
         paperMeta.setDisplayName("Pet name");
         paper.setItemMeta(paperMeta);
@@ -176,7 +176,7 @@ public class AnvilGUI implements IAnvilGUI {
                 final Player clicker = (Player) event.getWhoClicked();
                 if (event.getRawSlot() == Slot.OUTPUT) {
                     final ItemStack clicked = inventory.getItem(Slot.OUTPUT);
-                    if (clicked == null || (clicked.getType() == UCMaterial.AIR.parseMaterial())) return;
+                    if (clicked == null || (clicked.getType() == XMaterial.AIR.parseMaterial())) return;
 
                     final AAnvilGUI.Response response = completeFunction.apply(clicker, clicked.hasItemMeta() ? clicked.getItemMeta().getDisplayName() : "");
                     if (response.getText() != null) {

@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.mounts.*;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -45,7 +45,7 @@ public class MountType extends CosmeticEntType<Mount> {
 
     private int repeatDelay;
 
-    private MountType(String permission, String configName, UCMaterial material, EntityType entityType, String defaultDescription, int repeatDelay, Class<? extends Mount> mountClass) {
+    private MountType(String permission, String configName, XMaterial material, EntityType entityType, String defaultDescription, int repeatDelay, Class<? extends Mount> mountClass) {
         super(Category.MOUNTS, configName, permission, defaultDescription, material, entityType, mountClass, ServerVersion.earliest());
         this.repeatDelay = repeatDelay;
 
@@ -70,22 +70,22 @@ public class MountType extends CosmeticEntType<Mount> {
     }
 
     public static void register() {
-        new MountType("ultracosmetics.mounts.druggedhorse", "DruggedHorse", UCMaterial.SUGAR, EntityType.HORSE, "&7&oThat is just too much!", 2, MountDruggedHorse.class);
-        new MountType("ultracosmetics.mounts.glacialsteed", "GlacialSteed", UCMaterial.PACKED_ICE, EntityType.HORSE, "&7&oThis mount comes from North Pole!", 2, MountGlacialSteed.class);
-        new MountType("ultracosmetics.mounts.mountoffire", "MountOfFire", UCMaterial.BLAZE_POWDER, EntityType.HORSE, "&7&oThe mount of Hades!", 2, MountOfFire.class);
-        new MountType("ultracosmetics.mounts.snake", "Snake", UCMaterial.WHEAT_SEEDS, EntityType.SHEEP, "&7&oWatch out! It may bite..", 2, MountSnake.class);
-        new MountType("ultracosmetics.mounts.dragon", "Dragon", UCMaterial.DRAGON_EGG, EntityType.ENDER_DRAGON, "&7&oBecome a dragon rider!", 1, MountDragon.class);
-        new MountType("ultracosmetics.mounts.slime", "Slime", UCMaterial.SLIME_BALL, EntityType.SLIME, "&7&oSplat! Splat!", 2, UltraCosmeticsData.get().getVersionManager().getModule().getSlimeClass());
-        new MountType("ultracosmetics.mounts.hypecart", "HypeCart", UCMaterial.MINECART, EntityType.MINECART, "&7&oEver wanted to drive a F1?\n&7&oNow you can!", 1, MountHypeCart.class);
-        new MountType("ultracosmetics.mounts.spider", "Spider", UCMaterial.COBWEB, EntityType.SPIDER, "&7&oYOU are the spider jockey!", 2, UltraCosmeticsData.get().getVersionManager().getModule().getSpiderClass());
-        new MountType("ultracosmetics.mounts.moltensnake", "MoltenSnake", UCMaterial.MAGMA_CREAM, EntityType.MAGMA_CUBE, "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", 1, MountMoltenSnake.class);
+        new MountType("ultracosmetics.mounts.druggedhorse", "DruggedHorse", XMaterial.SUGAR, EntityType.HORSE, "&7&oThat is just too much!", 2, MountDruggedHorse.class);
+        new MountType("ultracosmetics.mounts.glacialsteed", "GlacialSteed", XMaterial.PACKED_ICE, EntityType.HORSE, "&7&oThis mount comes from North Pole!", 2, MountGlacialSteed.class);
+        new MountType("ultracosmetics.mounts.mountoffire", "MountOfFire", XMaterial.BLAZE_POWDER, EntityType.HORSE, "&7&oThe mount of Hades!", 2, MountOfFire.class);
+        new MountType("ultracosmetics.mounts.snake", "Snake", XMaterial.WHEAT_SEEDS, EntityType.SHEEP, "&7&oWatch out! It may bite..", 2, MountSnake.class);
+        new MountType("ultracosmetics.mounts.dragon", "Dragon", XMaterial.DRAGON_EGG, EntityType.ENDER_DRAGON, "&7&oBecome a dragon rider!", 1, MountDragon.class);
+        new MountType("ultracosmetics.mounts.slime", "Slime", XMaterial.SLIME_BALL, EntityType.SLIME, "&7&oSplat! Splat!", 2, UltraCosmeticsData.get().getVersionManager().getModule().getSlimeClass());
+        new MountType("ultracosmetics.mounts.hypecart", "HypeCart", XMaterial.MINECART, EntityType.MINECART, "&7&oEver wanted to drive a F1?\n&7&oNow you can!", 1, MountHypeCart.class);
+        new MountType("ultracosmetics.mounts.spider", "Spider", XMaterial.COBWEB, EntityType.SPIDER, "&7&oYOU are the spider jockey!", 2, UltraCosmeticsData.get().getVersionManager().getModule().getSpiderClass());
+        new MountType("ultracosmetics.mounts.moltensnake", "MoltenSnake", XMaterial.MAGMA_CREAM, EntityType.MAGMA_CUBE, "&7&oDeep under the Earth's surface, there\n&7&oexists a mythical species of Molten\n&7&oSnakes. This one will serve you eternally.", 1, MountMoltenSnake.class);
 
-        new MountType("ultracosmetics.mounts.mountofwater", "MountOfWater", UCMaterial.LIGHT_BLUE_DYE, EntityType.HORSE, "&7&oThe mount of Poseidon!", 2, MountOfWater.class);
-        new MountType("ultracosmetics.mounts.nyansheep", "NyanSheep", UCMaterial.CYAN_DYE, EntityType.SHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", 1, MountNyanSheep.class);
-        new MountType("ultracosmetics.mounts.ecologisthorse", "EcologistHorse", UCMaterial.GREEN_DYE, EntityType.HORSE, "&7&oBecome ecologist!", 2, MountEcologistHorse.class);
+        new MountType("ultracosmetics.mounts.mountofwater", "MountOfWater", XMaterial.LIGHT_BLUE_DYE, EntityType.HORSE, "&7&oThe mount of Poseidon!", 2, MountOfWater.class);
+        new MountType("ultracosmetics.mounts.nyansheep", "NyanSheep", XMaterial.CYAN_DYE, EntityType.SHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", 1, MountNyanSheep.class);
+        new MountType("ultracosmetics.mounts.ecologisthorse", "EcologistHorse", XMaterial.GREEN_DYE, EntityType.HORSE, "&7&oBecome ecologist!", 2, MountEcologistHorse.class);
         
-        new MountType("ultracosmetics.mounts.rudolph", "Rudolph", UCMaterial.DEAD_BUSH, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphType(), "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reindeer?", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphClass());
-        new MountType("ultracosmetics.mounts.walkingdead", "WalkingDead", UCMaterial.ROTTEN_FLESH, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadType(), "&7&oGraaaaw...", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadClass());
-        new MountType("ultracosmetics.mounts.infernalhorror", "InfernalHorror", UCMaterial.BONE, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorType(), "&7&oThis mount comes directly from... hell!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorClass());
+        new MountType("ultracosmetics.mounts.rudolph", "Rudolph", XMaterial.DEAD_BUSH, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphType(), "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reindeer?", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphClass());
+        new MountType("ultracosmetics.mounts.walkingdead", "WalkingDead", XMaterial.ROTTEN_FLESH, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadType(), "&7&oGraaaaw...", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadClass());
+        new MountType("ultracosmetics.mounts.infernalhorror", "InfernalHorror", XMaterial.BONE, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorType(), "&7&oThis mount comes directly from... hell!", 2, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorClass());
     }
 }

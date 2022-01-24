@@ -12,7 +12,7 @@ import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureRandomizer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -211,16 +211,15 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
-        if ((boolean) SettingsManager.getConfig().get("Menu-Item.Give-On-Respawn") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
+        if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Respawn") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
             int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
             if (event.getPlayer().getInventory().getItem(slot) != null) {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));
                 event.getPlayer().getInventory().setItem(slot, null);
             }
-            String name = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")));
-            UCMaterial material = UCMaterial.matchUCMaterial((String) SettingsManager.getConfig().get("Menu-Item.Type"));
-            // byte data = Byte.valueOf(String.valueOf(SettingsManager.getConfig().get("Menu-Item.Data"))); TODO
-            event.getPlayer().getInventory().setItem(slot, ItemFactory.create(material, name));
+            String name = ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("Menu-Item.Displayname"));
+            ItemStack stack = ItemFactory.getItemStackFromConfig("Menu-Item.Type");
+            event.getPlayer().getInventory().setItem(slot, ItemFactory.rename(stack, name));
         }
     }
 

@@ -51,7 +51,5 @@ public abstract class MountHorse extends Mount<Horse> {
     @Override
     public void onUpdate() {}
 
-    abstract protected Horse.Variant getVariant();
-
     abstract protected Horse.Color getColor();
 }

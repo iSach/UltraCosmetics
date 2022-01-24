@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Particle;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 /**
@@ -30,10 +29,9 @@ public class GadgetPartyPopper extends Gadget {
                     Math.random() - 0.5D, Math.random() - 0.5D);
 
             if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
-                ItemStack randomDye = UCMaterial.DYES.get(MathUtils.random(0, 14)).parseItem();
                 Vector v = getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(3.2);
                 getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 10, v.getX(), v.getY(), v.getZ(),
-                        0.2d, randomDye);
+                        0.2d, ItemFactory.getRandomDye());
 
             } else {
                 Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getDyeByColor(MathUtils.randomByte(15)),

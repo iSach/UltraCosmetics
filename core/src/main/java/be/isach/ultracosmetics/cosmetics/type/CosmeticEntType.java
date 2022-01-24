@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.entity.EntityType;
 
 /**
@@ -16,7 +16,7 @@ public abstract class CosmeticEntType<T extends Cosmetic> extends CosmeticMatTyp
 
     private EntityType entityType;
 
-    public CosmeticEntType(Category category, String configName, String permission, String description, UCMaterial material, EntityType entityType, Class clazz, ServerVersion baseVersion) {
+    public CosmeticEntType(Category category, String configName, String permission, String description, XMaterial material, EntityType entityType, Class clazz, ServerVersion baseVersion) {
         super(category, configName, permission, description, material, clazz, baseVersion);
         this.entityType = entityType;
     }

@@ -44,7 +44,7 @@ public class MorphWitherSkeleton extends Morph {
             }
             final List<Entity> items = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
-                Item bone = getPlayer().getWorld().dropItem(getPlayer().getLocation().add(Math.random() * 5.0D - 2.5D, Math.random() * 3.0D, Math.random() * 5.0D - 2.5D), ItemFactory.create(UCMaterial.BONE, UltraCosmeticsData.get().getItemNoPickupString()));
+                Item bone = getPlayer().getWorld().dropItem(getPlayer().getLocation().add(Math.random() * 5.0D - 2.5D, Math.random() * 3.0D, Math.random() * 5.0D - 2.5D), ItemFactory.create(XMaterial.BONE, UltraCosmeticsData.get().getItemNoPickupString()));
                 bone.setVelocity(MathUtils.getRandomVector());
                 bone.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
                 items.add(bone);

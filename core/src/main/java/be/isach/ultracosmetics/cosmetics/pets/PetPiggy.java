@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 
 /**
  * Represents an instance of a pig pet summoned by a player.
@@ -15,6 +15,6 @@ import be.isach.ultracosmetics.util.UCMaterial;
  */
 public class PetPiggy extends Pet {
     public PetPiggy(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("piggy"), ItemFactory.create(UCMaterial.PORKCHOP, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("piggy"), ItemFactory.create(XMaterial.PORKCHOP, UltraCosmeticsData.get().getItemNoPickupString()));
     }
 }

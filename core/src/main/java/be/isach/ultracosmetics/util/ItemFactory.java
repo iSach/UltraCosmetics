@@ -23,16 +23,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by sacha on 03/08/15.
  */
 public class ItemFactory {
+    private static final List<XMaterial> DYES = getDyes();
     private static boolean noticePrinted = false;
     public static ItemStack fillerItem;
 
-    public static ItemStack create(UCMaterial material, String displayName, String... lore) {
+    public static ItemStack create(XMaterial material, String displayName, String... lore) {
         return rename(material.parseItem(), displayName, lore);
     }
 
@@ -96,19 +99,19 @@ public class ItemFactory {
     }
 
     public static ItemStack getItemStackFromConfig(String path) {
-        UCMaterial mat = getFromConfigInternal(path);
+        XMaterial mat = getFromConfigInternal(path);
         if (mat != null) return mat.parseItem();
-        return create(UCMaterial.BEDROCK, "&cError parsing material", "&cFailed to parse material");
+        return create(XMaterial.BEDROCK, "&cError parsing material", "&cFailed to parse material");
     }
 
-    public static UCMaterial getUCMaterialFromConfig(String path) {
-        UCMaterial mat = getFromConfigInternal(path);
-        return mat == null ? UCMaterial.BEDROCK : mat;
+    public static XMaterial getXMaterialFromConfig(String path) {
+        XMaterial mat = getFromConfigInternal(path);
+        return mat == null ? XMaterial.BEDROCK : mat;
     }
 
-    private static UCMaterial getFromConfigInternal(String path) {
+    private static XMaterial getFromConfigInternal(String path) {
         String fromConfig = UltraCosmeticsData.get().getPlugin().getConfig().getString(path);
-        if (MathUtils.isInteger(fromConfig) || (fromConfig.contains(":") && MathUtils.isInteger(fromConfig.split(":")[0]))) {
+        if (MathUtils.isInteger(fromConfig) || fromConfig.contains(":")) {
             if (!noticePrinted) {
                 UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.ERROR, "UltraCosmetics no longer supports numeric IDs, please replace it with a material name.");
                 noticePrinted = true;
@@ -116,15 +119,12 @@ public class ItemFactory {
             UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.ERROR, "Offending config path: " + path);
             return null;
         }
-        String[] parts = fromConfig.split(":");
-        if (parts.length > 1 && MathUtils.isInteger(parts[1])) {
-            return UCMaterial.matchUCMaterial(parts[0], Byte.parseByte(parts[1]));
-        }
-        return UCMaterial.matchUCMaterial(parts[0].toUpperCase());
+        // null if not found
+        return XMaterial.matchXMaterial(fromConfig).orElse(null);
     }
 
     public static ItemStack createSkull(String url, String name) {
-        ItemStack head = create(UCMaterial.PLAYER_HEAD, name);
+        ItemStack head = create(XMaterial.PLAYER_HEAD, name);
 
         if (url.isEmpty()) return head;
 
@@ -199,5 +199,20 @@ public class ItemFactory {
             }
         }
         return false;
+    }
+
+    private static List<XMaterial> getDyes() {
+        // 16 dyes
+        List<XMaterial> dyes = new ArrayList<>(16);
+        for (XMaterial mat : XMaterial.VALUES) {
+            if (mat.toString().endsWith("_DYE")) {
+                dyes.add(mat);
+            }
+        }
+        return dyes;
+    }
+
+    public static ItemStack getRandomDye() {
+        return DYES.get(ThreadLocalRandom.current().nextInt(DYES.size())).parseItem();
     }
 }
