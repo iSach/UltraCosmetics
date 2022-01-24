@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 
 /**
  * Represents an instance of a bat pet summoned by a player.
@@ -15,6 +15,6 @@ import be.isach.ultracosmetics.util.UCMaterial;
  */
 public class PetBat extends Pet {
     public PetBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("bat"), ItemFactory.create(UCMaterial.COAL, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("bat"), ItemFactory.create(XMaterial.COAL, UltraCosmeticsData.get().getItemNoPickupString()));
     }
 }

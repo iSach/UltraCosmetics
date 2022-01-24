@@ -9,7 +9,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -97,12 +97,12 @@ public class MenuMain extends Menu {
 
             String msgChests = MessageManager.getMessage("Treasure-Chests");
             if (player.getKeys() == 0) {
-                chest = ItemFactory.create(UCMaterial.CHEST, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
+                chest = ItemFactory.create(XMaterial.CHEST, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
                         "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
             } else {
-                chest = ItemFactory.create(UCMaterial.CHEST, msgChests, "", MessageManager.getMessage("Click-Open-Chest"), "");
+                chest = ItemFactory.create(XMaterial.CHEST, msgChests, "", MessageManager.getMessage("Click-Open-Chest"), "");
             }
-            ItemStack keys = ItemFactory.create(UCMaterial.TRIPWIRE_HOOK, MessageManager.getMessage("Treasure-Keys"), "",
+            ItemStack keys = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, MessageManager.getMessage("Treasure-Keys"), "",
                     MessageManager.getMessage("Your-Keys").replace("%keys%", player.getKeys() + ""), getUltraCosmetics().getEconomyHandler().isUsingEconomy() ?
                             "" : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? MessageManager.getMessage("Click-Buy-Key") : null, getUltraCosmetics().getEconomyHandler().isUsingEconomy() ? "" : null);
 

@@ -69,7 +69,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                         } else if (getType().getEffect() == Particles.ITEM_CRACK) {
                             if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
                                 for (int i = 0; i < getModifiedAmount(15); i++) {
-                                    getPlayer().getLocation().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getLocation(), 1, 0.2, 0.2, 0.2, 0, UCMaterial.DYES.get(MathUtils.random(0, 14)).parseItem());
+                                    getPlayer().getLocation().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getLocation(), 1, 0.2, 0.2, 0.2, 0, ItemFactory.getRandomDye());
                                 }
                             } else {
                                 for (int i = 0; i < getModifiedAmount(15); i++) {

@@ -47,7 +47,7 @@ public class GadgetChickenator extends Gadget {
             SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_HURT, 1.4f, 1.5f);
             chicken.remove();
             for (int i = 0; i < 30; i++) {
-                final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(UCMaterial.COOKED_CHICKEN, UltraCosmeticsData.get().getItemNoPickupString()));
+                final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(XMaterial.COOKED_CHICKEN, UltraCosmeticsData.get().getItemNoPickupString()));
                 ITEM.setPickupDelay(30000);
                 ITEM.setVelocity(new Vector(MathUtils.random.nextDouble() - 0.5, MathUtils.random.nextDouble() / 2.0, MathUtils.random.nextDouble() - 0.5));
                 items.add(ITEM);

@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 
 /**
  * Represents an instance of a chick pet summoned by a player.
@@ -15,6 +15,6 @@ import be.isach.ultracosmetics.util.UCMaterial;
  */
 public class PetChick extends Pet {
     public PetChick(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("chick"), ItemFactory.create(UCMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("chick"), ItemFactory.create(XMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
     }
 }

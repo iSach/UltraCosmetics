@@ -546,7 +546,7 @@ public class TreasureRandomizer {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', command.replace("%name%", player.getName())));
         }
         name = reward.getName().replace("%name%", player.getName());
-        itemStack = new ItemStack(reward.getMaterial());
+        itemStack = reward.getItemStack();
         spawnRandomFirework(loc);
 
         if (reward.getMessageEnabled()) {

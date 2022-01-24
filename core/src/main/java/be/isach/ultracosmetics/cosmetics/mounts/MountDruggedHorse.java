@@ -63,11 +63,6 @@ public class MountDruggedHorse extends MountHorse {
     }
 
     @Override
-    protected Horse.Variant getVariant() {
-        return Horse.Variant.HORSE;
-    }
-
-    @Override
     protected Horse.Color getColor() {
         return Horse.Color.CHESTNUT;
     }

@@ -273,17 +273,17 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
         for (int i = 27; i < 30; i++) {
             inventory.setItem(i,
-                    ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+                    ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
             inventory.setItem(i + 9,
-                    ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+                    ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
             inventory.setItem(i + 18,
-                    ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+                    ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
             inventory.setItem(i + 6,
-                    ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+                    ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
             inventory.setItem(i + 9 + 6,
-                    ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+                    ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
             inventory.setItem(i + 18 + 6,
-                    ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+                    ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
         }
         ItemFactory.fillInventory(inventory);
         getPlayer().openInventory(inventory);

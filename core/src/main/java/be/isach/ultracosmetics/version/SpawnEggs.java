@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.version;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -104,7 +104,7 @@ public class SpawnEggs {
                     return new ItemStack(BlockUtils.getOldMaterial("SPAWN_EGG"));
             }
         } else {
-            return UCMaterial.PIG_SPAWN_EGG.parseItem();
+            return XMaterial.PIG_SPAWN_EGG.parseItem();
         }
     }
 }

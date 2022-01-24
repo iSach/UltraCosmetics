@@ -7,7 +7,7 @@ import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,7 +32,7 @@ public class MenuPurchase extends Menu {
         });
 
         // Purchase Item
-        ItemStack purchaseItem = ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase"));
+        ItemStack purchaseItem = ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase"));
         ClickRunnable purchaseClickRunnable = data -> {
             getUltraCosmetics().getEconomyHandler().withdraw(player.getBukkitPlayer(), purchaseData.getPrice());
             purchaseData.getOnPurchase().run();
@@ -45,7 +45,7 @@ public class MenuPurchase extends Menu {
         }
 
         // Cancel Item
-        ItemStack cancelItem = ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel"));
+        ItemStack cancelItem = ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel"));
         ClickRunnable cancelClickRunnable = data -> player.getBukkitPlayer().closeInventory();
         for (int i = 33; i < 36; i++) {
             for (int j = i; j <= i + 18; j += 9) {

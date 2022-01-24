@@ -42,7 +42,7 @@ public class MorphChicken extends Morph {
         if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
             items = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
-                final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(UCMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
+                final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(XMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
                 i.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
                 items.add(i);
                 Random r = new Random();
@@ -57,7 +57,7 @@ public class MorphChicken extends Morph {
                     chickens = new ArrayList<>();
                     for (Item i : items) {
                         if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
-                            i.getWorld().spawnParticle(Particle.BLOCK_CRACK, i.getLocation(), 0, 0, 0, 0, 0, UCMaterial.WHITE_TERRACOTTA.parseMaterial().createBlockData());
+                            i.getWorld().spawnParticle(Particle.BLOCK_CRACK, i.getLocation(), 0, 0, 0, 0, 0, XMaterial.WHITE_TERRACOTTA.parseMaterial().createBlockData());
                         } else {
                             Particles.BLOCK_CRACK.display(new Particles.BlockData(BlockUtils.getOldMaterial("STAINED_CLAY"), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
                         }

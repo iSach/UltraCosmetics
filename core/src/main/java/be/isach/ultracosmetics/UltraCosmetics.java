@@ -413,7 +413,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         if (!config.contains("Categories.Suits")) {
             config.createSection("Categories.Suits");
-            config.set("Categories.Suits.Main-Menu-Item", UCMaterial.LEATHER_CHESTPLATE.parseMaterial().toString());
+            config.set("Categories.Suits.Main-Menu-Item", XMaterial.LEATHER_CHESTPLATE.parseMaterial().toString());
             config.set("Categories.Suits.Go-Back-Arrow", true);
         }
 
@@ -439,15 +439,15 @@ public class UltraCosmetics extends JavaPlugin {
             config.set(section + ".Commands", Arrays.asList("give %name% yellow_flower 1", "lp user %name% permission set example.yellowflower true"));
         }
 
-        config.addDefault("Categories.Clear-Cosmetic-Item", UCMaterial.REDSTONE_BLOCK.parseMaterial().toString(), "Item where user click to clear a cosmetic.");
-        config.addDefault("Categories.Previous-Page-Item", UCMaterial.ENDER_PEARL.parseMaterial().toString(), "Previous Page Item");
-        config.addDefault("Categories.Next-Page-Item", UCMaterial.ENDER_EYE.parseMaterial().toString(), "Next Page Item");
-        config.addDefault("Categories.Back-Main-Menu-Item", UCMaterial.ARROW.parseMaterial().toString(), "Back to Main Menu Item");
-        config.addDefault("Categories.Self-View-Item.When-Enabled", UCMaterial.ENDER_EYE.parseMaterial().toString(), "Item in Morphs Menu when Self View enabled.");
-        config.addDefault("Categories.Self-View-Item.When-Disabled", UCMaterial.ENDER_PEARL.parseMaterial().toString(), "Item in Morphs Menu when Self View disabled.");
-        config.addDefault("Categories.Gadgets-Item.When-Enabled", UCMaterial.LIGHT_GRAY_DYE.parseMaterial().toString(), "Item in Gadgets Menu when Gadgets enabled.");
-        config.addDefault("Categories.Gadgets-Item.When-Disabled", UCMaterial.GRAY_DYE.parseMaterial().toString(), "Item in Gadgets Menu when Gadgets disabled.");
-        config.addDefault("Categories.Rename-Pet-Item", UCMaterial.NAME_TAG.parseMaterial().toString(), "Item in Pets Menu to rename current pet.");
+        config.addDefault("Categories.Clear-Cosmetic-Item", XMaterial.REDSTONE_BLOCK.parseMaterial().toString(), "Item where user click to clear a cosmetic.");
+        config.addDefault("Categories.Previous-Page-Item", XMaterial.ENDER_PEARL.parseMaterial().toString(), "Previous Page Item");
+        config.addDefault("Categories.Next-Page-Item", XMaterial.ENDER_EYE.parseMaterial().toString(), "Next Page Item");
+        config.addDefault("Categories.Back-Main-Menu-Item", XMaterial.ARROW.parseMaterial().toString(), "Back to Main Menu Item");
+        config.addDefault("Categories.Self-View-Item.When-Enabled", XMaterial.ENDER_EYE.parseMaterial().toString(), "Item in Morphs Menu when Self View enabled.");
+        config.addDefault("Categories.Self-View-Item.When-Disabled", XMaterial.ENDER_PEARL.parseMaterial().toString(), "Item in Morphs Menu when Self View disabled.");
+        config.addDefault("Categories.Gadgets-Item.When-Enabled", XMaterial.LIGHT_GRAY_DYE.parseMaterial().toString(), "Item in Gadgets Menu when Gadgets enabled.");
+        config.addDefault("Categories.Gadgets-Item.When-Disabled", XMaterial.GRAY_DYE.parseMaterial().toString(), "Item in Gadgets Menu when Gadgets disabled.");
+        config.addDefault("Categories.Rename-Pet-Item", XMaterial.NAME_TAG.parseMaterial().toString(), "Item in Pets Menu to rename current pet.");
         config.addDefault("Categories.Close-GUI-After-Select", true, "Should GUI close after selecting a cosmetic?");
         config.addDefault("No-Permission.Custom-Item.Lore", Arrays.asList("", "&c&lYou do not have permission for this!", ""));
         config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Enabled", false);
@@ -618,44 +618,44 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     private void upgradeIdsToMaterials() {
-        upgradeKeyToMaterial("Categories.Gadgets.Main-Menu-Item", "409:0", UCMaterial.PRISMARINE_SHARD);
-        upgradeKeyToMaterial("Categories.Particle-Effects.Main-Menu-Item", "399:0", UCMaterial.NETHER_STAR);
-        upgradeKeyToMaterial("Categories.Mounts.Main-Menu-Item", "329:0", UCMaterial.SADDLE);
-        upgradeKeyToMaterial("Categories.Pets.Main-Menu-Item", "352:0", UCMaterial.BONE);
-        upgradeKeyToMaterial("Categories.Morphs.Main-Menu-Item", "334:0", UCMaterial.LEATHER);
-        upgradeKeyToMaterial("Categories.Hats.Main-Menu-Item", "314:0", UCMaterial.GOLDEN_HELMET);
-        upgradeKeyToMaterial("Categories.Suits.Main-Menu-Item", "299:0", UCMaterial.LEATHER_CHESTPLATE);
-        upgradeKeyToMaterial("Categories.Clear-Cosmetic-Item", "152:0", UCMaterial.REDSTONE_BLOCK);
+        upgradeKeyToMaterial("Categories.Gadgets.Main-Menu-Item", "409:0", XMaterial.PRISMARINE_SHARD);
+        upgradeKeyToMaterial("Categories.Particle-Effects.Main-Menu-Item", "399:0", XMaterial.NETHER_STAR);
+        upgradeKeyToMaterial("Categories.Mounts.Main-Menu-Item", "329:0", XMaterial.SADDLE);
+        upgradeKeyToMaterial("Categories.Pets.Main-Menu-Item", "352:0", XMaterial.BONE);
+        upgradeKeyToMaterial("Categories.Morphs.Main-Menu-Item", "334:0", XMaterial.LEATHER);
+        upgradeKeyToMaterial("Categories.Hats.Main-Menu-Item", "314:0", XMaterial.GOLDEN_HELMET);
+        upgradeKeyToMaterial("Categories.Suits.Main-Menu-Item", "299:0", XMaterial.LEATHER_CHESTPLATE);
+        upgradeKeyToMaterial("Categories.Clear-Cosmetic-Item", "152:0", XMaterial.REDSTONE_BLOCK);
 
-        upgradeKeyToMaterial("Categories.Previous-Page-Item", "368:0", UCMaterial.ENDER_PEARL);
-        upgradeKeyToMaterial("Categories.Next-Page-Item", "381:0", UCMaterial.ENDER_EYE);
-        upgradeKeyToMaterial("Categories.Back-Main-Menu-Item", "262:0", UCMaterial.ARROW);
-        upgradeKeyToMaterial("Categories.Self-View-Item.When-Enabled", "381:0", UCMaterial.ENDER_EYE);
-        upgradeKeyToMaterial("Categories.Self-View-Item.When-Disabled", "368:0", UCMaterial.ENDER_PEARL);
-        upgradeKeyToMaterial("Categories.Gadgets-Item.When-Enabled", "351:10", UCMaterial.LIGHT_GRAY_DYE);
-        upgradeKeyToMaterial("Categories.Gadgets-Item.When-Disabled", "351:8", UCMaterial.GRAY_DYE);
-        upgradeKeyToMaterial("Categories.Rename-Pet-Item", "421:0", UCMaterial.NAME_TAG);
+        upgradeKeyToMaterial("Categories.Previous-Page-Item", "368:0", XMaterial.ENDER_PEARL);
+        upgradeKeyToMaterial("Categories.Next-Page-Item", "381:0", XMaterial.ENDER_EYE);
+        upgradeKeyToMaterial("Categories.Back-Main-Menu-Item", "262:0", XMaterial.ARROW);
+        upgradeKeyToMaterial("Categories.Self-View-Item.When-Enabled", "381:0", XMaterial.ENDER_EYE);
+        upgradeKeyToMaterial("Categories.Self-View-Item.When-Disabled", "368:0", XMaterial.ENDER_PEARL);
+        upgradeKeyToMaterial("Categories.Gadgets-Item.When-Enabled", "351:10", XMaterial.LIGHT_GRAY_DYE);
+        upgradeKeyToMaterial("Categories.Gadgets-Item.When-Disabled", "351:8", XMaterial.GRAY_DYE);
+        upgradeKeyToMaterial("Categories.Rename-Pet-Item", "421:0", XMaterial.NAME_TAG);
 
-        upgradeKeyToMaterial("TreasureChests.Designs.Classic.center-block", "169:0", UCMaterial.SEA_LANTERN);
-        upgradeKeyToMaterial("TreasureChests.Designs.Classic.around-center", "5:0", UCMaterial.OAK_PLANKS);
-        upgradeKeyToMaterial("TreasureChests.Designs.Classic.third-blocks", "5:1", UCMaterial.SPRUCE_PLANKS);
-        upgradeKeyToMaterial("TreasureChests.Designs.Classic.below-chests", "17:0", UCMaterial.OAK_LOG);
-        upgradeKeyToMaterial("TreasureChests.Designs.Classic.barriers", "85:0", UCMaterial.OAK_FENCE);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.center-block", "169:0", XMaterial.SEA_LANTERN);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.around-center", "5:0", XMaterial.OAK_PLANKS);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.third-blocks", "5:1", XMaterial.SPRUCE_PLANKS);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.below-chests", "17:0", XMaterial.OAK_LOG);
+        upgradeKeyToMaterial("TreasureChests.Designs.Classic.barriers", "85:0", XMaterial.OAK_FENCE);
 
-        upgradeKeyToMaterial("TreasureChests.Designs.Modern.center-block", "169:0", UCMaterial.SEA_LANTERN);
-        upgradeKeyToMaterial("TreasureChests.Designs.Modern.around-center", "159:11", UCMaterial.BLUE_TERRACOTTA);
-        upgradeKeyToMaterial("TreasureChests.Designs.Modern.third-blocks", "155:0", UCMaterial.WHITE_TERRACOTTA);
-        upgradeKeyToMaterial("TreasureChests.Designs.Modern.below-chests", "159:11", UCMaterial.BLUE_TERRACOTTA);
-        upgradeKeyToMaterial("TreasureChests.Designs.Modern.barriers", "160:3", UCMaterial.LIGHT_BLUE_STAINED_GLASS_PANE);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.center-block", "169:0", XMaterial.SEA_LANTERN);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.around-center", "159:11", XMaterial.BLUE_TERRACOTTA);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.third-blocks", "155:0", XMaterial.WHITE_TERRACOTTA);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.below-chests", "159:11", XMaterial.BLUE_TERRACOTTA);
+        upgradeKeyToMaterial("TreasureChests.Designs.Modern.barriers", "160:3", XMaterial.LIGHT_BLUE_STAINED_GLASS_PANE);
 
-        upgradeKeyToMaterial("TreasureChests.Designs.Nether.center-block", "89:0", UCMaterial.GLOWSTONE);
-        upgradeKeyToMaterial("TreasureChests.Designs.Nether.around-center", "88:0", UCMaterial.SOUL_SAND);
-        upgradeKeyToMaterial("TreasureChests.Designs.Nether.third-blocks", "87:0", UCMaterial.NETHERRACK);
-        upgradeKeyToMaterial("TreasureChests.Designs.Nether.below-chests", "112:0", UCMaterial.NETHER_BRICKS);
-        upgradeKeyToMaterial("TreasureChests.Designs.Nether.barriers", "113:0", UCMaterial.NETHER_BRICK_FENCE);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.center-block", "89:0", XMaterial.GLOWSTONE);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.around-center", "88:0", XMaterial.SOUL_SAND);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.third-blocks", "87:0", XMaterial.NETHERRACK);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.below-chests", "112:0", XMaterial.NETHER_BRICKS);
+        upgradeKeyToMaterial("TreasureChests.Designs.Nether.barriers", "113:0", XMaterial.NETHER_BRICK_FENCE);
     }
 
-    private void upgradeKeyToMaterial(String key, String oldValue, UCMaterial newValue) {
+    private void upgradeKeyToMaterial(String key, String oldValue, XMaterial newValue) {
         if (oldValue.equals(config.getString(key))) {
             if (!legacyMessagePrinted) {
                 getSmartLogger().write(LogLevel.WARNING, "You seem to still have numeric IDs in your config, which UC no longer supports.");

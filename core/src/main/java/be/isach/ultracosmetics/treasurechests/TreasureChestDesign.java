@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.treasurechests;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 
 import org.bukkit.material.MaterialData;
 
@@ -41,7 +41,7 @@ public class TreasureChestDesign {
 
     @SuppressWarnings("deprecation")
     private MaterialData getMaterialData(String s) {
-        UCMaterial mat = ItemFactory.getUCMaterialFromConfig("TreasureChests.Designs." + s);
+        XMaterial mat = ItemFactory.getXMaterialFromConfig("TreasureChests.Designs." + s);
         return new MaterialData(mat.parseMaterial(), mat.getData());
     }
 

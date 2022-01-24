@@ -63,9 +63,4 @@ public class MountOfFire extends MountHorse {
     protected Horse.Color getColor() {
         return Horse.Color.CREAMY;
     }
-
-    @Override
-    protected Horse.Variant getVariant() {
-        return Horse.Variant.HORSE;
-    }
 }

@@ -25,7 +25,7 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.UCMaterial;
+import be.isach.ultracosmetics.util.XMaterial;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -399,8 +399,9 @@ public class UltraPlayer {
                 return (T) getCurrentMount();
             case PETS:
                 return (T) getCurrentPet();
+            default:
+                return null;
         }
-        return null;
     }
 
     // TODO
@@ -423,14 +424,14 @@ public class UltraPlayer {
 
         final Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), 54, MessageManager.getMessage("Buy-Treasure-Key"));
         for (int i = 27; i < 30; i++) {
-            inventory.setItem(i, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 9, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 18, ItemFactory.create(UCMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-            inventory.setItem(i + 9 + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-            inventory.setItem(i + 18 + 6, ItemFactory.create(UCMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i, ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 9, ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 18, ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
+            inventory.setItem(i + 6, ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i + 9 + 6, ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
+            inventory.setItem(i + 18 + 6, ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
         }
-        ItemStack itemStack = ItemFactory.create(UCMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
+        ItemStack itemStack = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
         inventory.setItem(13, itemStack);
         ItemFactory.fillInventory(inventory);
         Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(inventory), 3);
@@ -691,9 +692,9 @@ public class UltraPlayer {
             getBukkitPlayer().getInventory().setItem(slot, null);
         }
         String name = ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("Menu-Item.Displayname"));
-        UCMaterial material = UCMaterial.matchUCMaterial(SettingsManager.getConfig().getString("Menu-Item.Type"));
+        ItemStack stack = ItemFactory.getItemStackFromConfig("Menu-Item.Type");
         // byte data = Byte.valueOf(SettingsManager.getConfig().getString("Menu-Item.Data"));
-        getBukkitPlayer().getInventory().setItem(slot, ItemFactory.create(material, name));
+        getBukkitPlayer().getInventory().setItem(slot, ItemFactory.rename(stack, name));
     }
 
     /**
@@ -854,6 +855,10 @@ public class UltraPlayer {
                 removeMount();
             case PETS:
                 removePet();
+            case SUITS:
+                removeSuit();
+            default:
+                return;
         }
     }
 

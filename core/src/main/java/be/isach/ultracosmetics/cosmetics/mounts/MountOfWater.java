@@ -68,9 +68,4 @@ public class MountOfWater extends MountHorse {
     protected Horse.Color getColor() {
         return Horse.Color.BLACK;
     }
-
-    @Override
-    protected Horse.Variant getVariant() {
-        return Horse.Variant.HORSE;
-    }
 }
