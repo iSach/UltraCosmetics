@@ -81,7 +81,7 @@ public class MessageManager {
         addMessage("Treasure-Chests-Loot.Emote", "%emote% emote");
         addMessage("Treasure-Chests-Loot.Nothing", "&c&lNothing");
 
-        //Menus
+        // MENUS
         addMessage("Menus.Main-Menu", "&lMain Menu");
         addMessage("Menus.Pets", "&lPets");
         addMessage("Menus.Gadgets", "&lGadgets");
@@ -99,7 +99,7 @@ public class MessageManager {
         addMessage("Enable-Third-Person-View", "&a&lEnable Morphs Third Person View");
         addMessage("Gadgets-Enabled-Needed", "%prefix% &c&lYou need to enable gadgets!");
 
-        // Gadgets
+        // GADGETS
         addMessage("Gadgets.Equip", "%prefix% &9You equipped %gadgetname%");
         addMessage("Gadgets.Unequip", "%prefix% &9You unequipped %gadgetname%");
         addMessage("Gadgets.Countdown-Message", "%prefix% &c&lYou can't use %gadgetname% &c&lfor %time%s!");
@@ -183,7 +183,7 @@ public class MessageManager {
         addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
         addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
 
-        // GADGETS
+        // PARTICLE-EFFECTS
         addMessage("Particle-Effects.Summon", "%prefix% &9You summoned %effectname%");
         addMessage("Particle-Effects.Unsummon", "%prefix% &9You unsummoned %effectname%");
         addMessage("Particle-Effects.RainCloud.name", "&9&lRain Cloud");
@@ -246,10 +246,28 @@ public class MessageManager {
         addMessage("Pets.Llama.entity-displayname", "&l%playername%'s Llama");
         addMessage("Pets.Parrot.menu-name", "&a&lParrot");
         addMessage("Pets.Parrot.entity-displayname", "&l%playername%'s Parrot");
+        addMessage("Pets.Vex.menu-name", "&7&lVex");
+        addMessage("Pets.Vex.entity-displayname", "&l%playername%'s Vex");
+        addMessage("Pets.Panda.menu-name", "&a&lPanda");
+        addMessage("Pets.Panda.entity-displayname", "&l%playername%'s Panda");
+        addMessage("Pets.Fox.menu-name", "&d&lFox");
+        addMessage("Pets.Fox.entity-displayname", "&l%playername%'s Fox");
+        addMessage("Pets.Axolotl.menu-name", "&5&lAxolotl");
+        addMessage("Pets.Axolotl.entity-displayname", "&l%playername%'s Axolotl");
+        addMessage("Pets.Piglin.menu-name", "&6&lGold Dealer");
+        addMessage("Pets.Piglin.entity-displayname", "&l%playername%'s Gold Dealer");
+        addMessage("Pets.Slime.menu-name", "&a&lSlime");
+        addMessage("Pets.Slime.entity-displayname", "&l%playername%'s Slime");
+        addMessage("Pets.Bee.menu-name", "&e&lBee");
+        addMessage("Pets.Bee.entity-displayname", "&l%playername%'s Bee");
+        addMessage("Pets.Goat.menu-name", "&f&lGoat");
+        addMessage("Pets.Goat.entity-displayname", "&l%playername%'s Goat");
+        addMessage("Pets.Silverfish.menu-name", "&7&lSilverfish");
+        addMessage("Pets.Silverfish.entity-displayname", "&l%playername%'s Silverfish");
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
-        //MORPHS
+        // MORPHS
         addMessage("Morphs.Blaze.name", "&6&lBlaze");
         addMessage("Morphs.Blaze.skill", "&eCrouch&7 to: &aFly");
         addMessage("Morphs.Chicken.name", "&f&lChicken");
@@ -291,7 +309,7 @@ public class MessageManager {
         addMessage("Morphs.Parrot.name", "&a&lParrot");
         addMessage("Morphs.Parrot.skill", "&eDouble Jump&7 to: &aFlap");
 
-        //HATS
+        // HATS
         addMessage("Hats.Equip", "%prefix% &9You equipped %hatname% &9hat!");
         addMessage("Hats.Unequip", "%prefix% &9You unequipped %hatname% &9hat!");
         addMessage("Hats.Astronaut.Name", "&7&lAstronaut");
@@ -384,7 +402,7 @@ public class MessageManager {
         addMessage("Hats.Z.Name", "&4&lZ");
         addMessage("Hats.Must-Remove-Hat", "%prefix% &c&lYou must remove your helmet to equip a hat!");
 
-        //SUITS
+        // SUITS
         addMessage("Suits.Rave.whole-equip", "&f&lwhole &b&lR&a&la&e&lv&6&le &f&lsuit");
         addMessage("Suits.Rave.helmet-name", "&b&lR&a&la&e&lv&6&le &f&lHelmet");
         addMessage("Suits.Rave.chestplate-name", "&b&lR&a&la&e&lv&6&le &f&lChestplate");
@@ -419,6 +437,7 @@ public class MessageManager {
         addMessage("Suits.Must-Remove.LEGGINGS", "%prefix% &c&lYou must remove your leggings to equip suit leggings!");
         addMessage("Suits.Must-Remove.BOOTS", "%prefix% &c&lYou must remove your boots to equip suit boots!");
 
+        // EMOTES
         addMessage("Emotes.Equip", "%prefix% &9You equipped %emotename%");
         addMessage("Emotes.Unequip", "%prefix% &9You unequipped %emotename%");
         addMessage("Emotes.Cry.Name", "&9&lCry");
@@ -432,7 +451,7 @@ public class MessageManager {
         addMessage("Emotes.Wink.Name", "&a&lWink");
         addMessage("Emotes.Must-Remove-Helmet", "%prefix% &c&lYou must remove your helmet to equip an emote!");
 
-        //MENU
+        // MENU
         addMessage("Menu.Gadgets", "&9&lGadgets");
         addMessage("Menu.Particle-Effects", "&b&lParticle Effects");
         addMessage("Menu.Mounts", "&6&lMounts");

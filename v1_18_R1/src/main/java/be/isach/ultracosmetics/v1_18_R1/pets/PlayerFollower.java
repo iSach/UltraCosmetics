@@ -100,6 +100,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
     }
     
     private Path path(Mob mob, Location loc) {
-    	return mob.getNavigation().createPath(loc.getX() + 1, loc.getY(), loc.getZ() + 1, 1);
+        return mob.getNavigation().createPath(loc.getX() + 1, loc.getY(), loc.getZ() + 1, 1);
     }
 }

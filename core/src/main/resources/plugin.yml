@@ -277,6 +277,15 @@ permissions:
       - ultracosmetics.pets.companioncube
       - ultracosmetics.pets.christmaself
       - ultracosmetics.pets.mooshroom
+      - ultracosmetics.pets.vex
+      - ultracosmetics.pets.panda
+      - ultracosmetics.pets.fox
+      - ultracosmetics.pets.axolotl
+      - ultracosmetics.pets.piglin
+      - ultracosmetics.pets.slime
+      - ultracosmetics.pets.bee
+      - ultracosmetics.pets.goat
+      - ultracosmetics.pets.silverfish
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -303,6 +312,24 @@ permissions:
   ultracosmetics.pets.christmaself:
     default: op
   ultracosmetics.pets.mooshroom:
+    default: op
+  ultracosmetics.pets.vex:
+    default: op
+  ultracosmetics.pets.panda:
+    default: op
+  ultracosmetics.pets.fox:
+    default: op
+  ultracosmetics.pets.axolotl:
+    default: op
+  ultracosmetics.pets.piglin:
+    default: op
+  ultracosmetics.pets.slime:
+    default: op
+  ultracosmetics.pets.bee:
+    default: op
+  ultracosmetics.pets.goat:
+    default: op
+  ultracosmetics.pets.silverfish:
     default: op
   ultracosmetics.morphs.*:
     children:
