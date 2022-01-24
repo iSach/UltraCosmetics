@@ -2,7 +2,6 @@ package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
-import be.isach.ultracosmetics.stats.AbstractMetrics;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;

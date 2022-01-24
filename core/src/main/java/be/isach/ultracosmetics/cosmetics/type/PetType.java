@@ -77,10 +77,28 @@ public final class PetType extends CosmeticMatType<Pet> {
         ServerVersion serverVersion = UltraCosmeticsData.get().getServerVersion();
 
         new PetType("ultracosmetics.pets.piggy", "Piggy", XMaterial.PORKCHOP, "&7&oOink! Oink!", EntityType.PIG, PetPiggy.class, ServerVersion.earliest());
-
         new PetType("ultracosmetics.pets.easterbunny", "EasterBunny", XMaterial.CARROT, "&7&oIs it Easter yet?", EntityType.RABBIT, PetEasterBunny.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.cow", "Cow", XMaterial.MILK_BUCKET, "&7&oMoooo!", EntityType.COW, PetCow.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.mooshroom", "Mooshroom", XMaterial.RED_MUSHROOM, "&7&oMoooo!", EntityType.MUSHROOM_COW, PetMooshroom.class, ServerVersion.earliest());
+        
+        if (serverVersion.isAtLeast(ServerVersion.v1_17_R1)) {
+            /*new PetType("ultracosmetics.pets.axolotl", "Axolotl", XMaterial.AXOLOTL_BUCKET, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class, ServerVersion.v1_17_R1);*/
+            /*Temporarily using WHEAT as material for the Goat until https://minecraft.fandom.com/wiki/Goat_Horn comes to Java edition*/
+            new PetType("ultracosmetics.pets.goat", "Goat", XMaterial.WHEAT, "&7&oBAAAA!", EntityType.GOAT, PetGoat.class, ServerVersion.v1_17_R1);
+        }
+        
+        /*if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
+            new PetType("ultracosmetics.pets.piglin", "Piglin", XMaterial.GOLD_INGOT, "&7&oDeals with Gold!", EntityType.PIGLIN, PetPiglin.class, ServerVersion.v1_16_R3);
+        }*/
+        
+        if (serverVersion.isAtLeast(ServerVersion.v1_15_R1)) {
+            new PetType("ultracosmetics.pets.bee", "Bee", XMaterial.HONEYCOMB, "&7&o*bzzzz* *bzzzz*", EntityType.BEE, PetBee.class, ServerVersion.v1_15_R1);
+        }
+        
+        if (serverVersion.isAtLeast(ServerVersion.v1_14_R1)) {
+            new PetType("ultracosmetics.pets.panda", "Panda", XMaterial.BAMBOO, "&7&oLikes Bamboo!", EntityType.PANDA, PetPanda.class, ServerVersion.v1_14_R1);
+            new PetType("ultracosmetics.pets.fox", "Fox", XMaterial.SWEET_BERRIES, "&7&oWhat does the fox say?", EntityType.FOX, PetFox.class, ServerVersion.v1_14_R1);
+        }
         if (serverVersion.isAtLeast(ServerVersion.v1_14_R1)) {
             new PetType("ultracosmetics.pets.kitty", "Kitty", XMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.CAT, PetKitty.class, ServerVersion.v1_14_R1);
         } else {
@@ -99,10 +117,12 @@ public final class PetType extends CosmeticMatType<Pet> {
             new PetType("ultracosmetics.pets.polarbear", "PolarBear", XMaterial.SNOW_BLOCK, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetPolarBear.class, ServerVersion.v1_12_R1);
             new PetType("ultracosmetics.pets.llama", "Llama", XMaterial.RED_WOOL, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_12_R1);
             new PetType("ultracosmetics.pets.parrot", "Parrot", XMaterial.COOKIE, "&7&oPolly want a cracker?", GetForVersion.entityType("PARROT"), PetParrot.class, ServerVersion.v1_12_R1);
+            /*new PetType("ultracosmetics.pets.vex", "Vex", XMaterial.IRON_SWORD, "&7&oYAAHH Ehehhehe!", GetForVersion.entityType("VEX"), PetVex.class, ServerVersion.v1_12_R1);*/
         }
 
         new PetType("ultracosmetics.pets.sheep", "Sheep", XMaterial.WHITE_WOOL, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.wither", "Wither", XMaterial.WITHER_SKELETON_SKULL, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.earliest());
-
+        /*new PetType("ultracosmetics.pets.slime", "Slime", XMaterial.SLIME_BALL, "&7&oSquish...", EntityType.SLIME, PetSlime.class, ServerVersion.earliest());*/
+        new PetType("ultracosmetics.pets.silverfish", "Silverfish", XMaterial.GRAY_DYE, "&7&oLurking in the walls...", EntityType.SILVERFISH, PetSilverfish.class, ServerVersion.earliest());
     }
 }

@@ -8,8 +8,6 @@ import be.isach.ultracosmetics.util.*;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.Random;
 
 /**
