@@ -33,9 +33,4 @@ public class MountInfernalHorror extends MountHorse {
     protected Horse.Variant getVariant() {
         return Horse.Variant.SKELETON_HORSE;
     }
-
-    @Override
-    protected Horse.Color getColor() {
-        return Horse.Color.WHITE;
-    }
 }

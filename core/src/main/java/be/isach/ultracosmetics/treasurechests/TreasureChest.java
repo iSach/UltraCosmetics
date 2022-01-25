@@ -235,7 +235,7 @@ public class TreasureChest implements Listener {
             b.setType(newData.getItemType());
             BlockState newState = b.getState();
             newState.setData(newData);
-            newState.update();
+            newState.update(true, true);
         }
     }
 

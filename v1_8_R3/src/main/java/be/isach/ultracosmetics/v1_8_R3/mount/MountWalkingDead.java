@@ -34,9 +34,4 @@ public class MountWalkingDead extends MountHorse {
     protected Horse.Variant getVariant() {
         return Horse.Variant.UNDEAD_HORSE;
     }
-
-    @Override
-    protected Horse.Color getColor() {
-        return Horse.Color.WHITE;
-    }
 }

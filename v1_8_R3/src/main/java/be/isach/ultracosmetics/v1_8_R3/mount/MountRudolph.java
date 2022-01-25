@@ -117,9 +117,4 @@ public class MountRudolph extends MountHorse {
     protected Horse.Variant getVariant() {
         return Horse.Variant.MULE;
     }
-
-    @Override
-    protected Horse.Color getColor() {
-        return Horse.Color.DARK_BROWN;
-    }
 }
