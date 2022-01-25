@@ -103,7 +103,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
         // If the user's armor slot is still occupied after we've removed all related cosmetics,
         // give up and ask the user to free up the slot.
-        if (getPlayer().getInventory().getItem(getArmorSlot().toBukkit()) != null) {
+        if (getPlayer().getEquipment().getItem(getArmorSlot().toBukkit()) != null) {
             getOwner().sendMessage(MessageManager.getMessage("Suits.Must-Remove." + getArmorSlot().toString()));
             return;
         }
@@ -124,7 +124,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     @Override
     protected void onEquip() {
         itemStack = ItemFactory.create(getType().getMaterial(getArmorSlot()), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore"));
-        getPlayer().getInventory().setItem(getArmorSlot().toBukkit(), itemStack);
+        getPlayer().getEquipment().setItem(getArmorSlot().toBukkit(), itemStack);
 
         getOwner().setCurrentSuitPart(armorSlot, this);
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
@@ -144,7 +144,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
      */
     @Override
     public void onClear() {
-        getPlayer().getInventory().setItem(getArmorSlot().toBukkit(), null);
+        getPlayer().getEquipment().setItem(getArmorSlot().toBukkit(), null);
         getOwner().setCurrentSuitPart(getArmorSlot(), null);
         HandlerList.unregisterAll(this);
     }
