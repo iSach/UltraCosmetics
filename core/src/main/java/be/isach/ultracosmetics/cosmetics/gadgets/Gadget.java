@@ -440,7 +440,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemDrop(PlayerDropItemEvent event) {
         if (event.getItemDrop().getItemStack().equals(getItemStack())) {
             if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
