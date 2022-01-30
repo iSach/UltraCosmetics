@@ -108,8 +108,13 @@ public class ItemFactory {
         return mat == null ? XMaterial.BEDROCK : mat;
     }
 
+    public static XMaterial getNullableXMaterialFromConfig(String path) {
+        return getFromConfigInternal(path);
+    }
+
     private static XMaterial getFromConfigInternal(String path) {
         String fromConfig = UltraCosmeticsData.get().getPlugin().getConfig().getString(path);
+        if (fromConfig == null) return null;
         if (MathUtils.isInteger(fromConfig) || fromConfig.contains(":")) {
             if (!noticePrinted) {
                 UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.ERROR, "UltraCosmetics no longer supports numeric IDs, please replace it with a material name.");

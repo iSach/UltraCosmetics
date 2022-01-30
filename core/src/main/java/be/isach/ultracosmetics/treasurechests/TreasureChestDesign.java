@@ -41,7 +41,8 @@ public class TreasureChestDesign {
 
     @SuppressWarnings("deprecation")
     private MaterialData getMaterialData(String s) {
-        XMaterial mat = ItemFactory.getXMaterialFromConfig("TreasureChests.Designs." + s);
+        XMaterial mat = ItemFactory.getNullableXMaterialFromConfig("TreasureChests.Designs." + s);
+        if (mat == null) return null;
         return new MaterialData(mat.parseMaterial(), mat.getData());
     }
 

@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.run.FallDamageManager;
+
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
@@ -44,6 +46,14 @@ public class MountDragon extends Mount<EnderDragon> {
         vector.setZ(h * Math.cos(Math.toRadians(rotX)));
 
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveDragon(getPlayer(), vector, entity);
+    }
+
+    @Override
+    public void onClear() {
+        super.onClear();
+        if (!getPlayer().isOnGround()) {
+            FallDamageManager.addNoFall(getPlayer());
+        }
     }
 
     @EventHandler

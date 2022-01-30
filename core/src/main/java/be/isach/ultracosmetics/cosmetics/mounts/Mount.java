@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
+import be.isach.ultracosmetics.run.MountRegionChecker;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.ServerVersion;
 
@@ -27,6 +28,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitTask;
 
 
 /**
@@ -43,6 +45,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     private static final Map<String,Integer> WORLD_HEIGHTS = new HashMap<>();
     private static final Class<?> HORSE_CLASS = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1) 
             ? AbstractHorse.class : Horse.class;
+    private BukkitTask mountRegionTask = null;
     /**
      * The Entity, if it isn't a Custom Entity.
      */
@@ -64,25 +67,24 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         }
 
         EntitySpawningManager.setBypass(true);
-        this.entity = (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
+        entity = (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
         EntitySpawningManager.setBypass(false);
         if (entity instanceof Ageable) {
             ((Ageable) entity).setAdult();
-        } else {
-            if (entity instanceof Slime) {
-                ((Slime) entity).setSize(4);
-            }
+        } else if (entity instanceof Slime) {
+            ((Slime) entity).setSize(4);
         }
         entity.setCustomNameVisible(true);
         entity.setCustomName(getType().getName(getPlayer()));
         entity.setPassenger(getPlayer());
-        if (entity instanceof Horse) {
-            ((Horse) entity).setDomestication(1);
-            ((Horse) entity).getInventory().setSaddle(new ItemStack(Material.SADDLE));
-        }
         runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
         getOwner().setCurrentMount(this);
+
+        if (!getUltraCosmetics().worldGuardHooked()) return;
+        // Horses trigger PlayerMoveEvent so the standard WG move handler will be sufficient
+        if (isHorse(entity.getType())) return;
+        mountRegionTask = new MountRegionChecker(getOwner(), getUltraCosmetics()).runTaskTimer(getUltraCosmetics(), 0, 1);
     }
 
     @Override
@@ -130,16 +132,12 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 			entity.remove();
         }
 
-        if (getOwner() != null)
+        if (getOwner() != null) {
             getOwner().setCurrentMount(null);
+        }
 
-        if (this instanceof MountDragon && !getPlayer().isOnGround())
-            FallDamageManager.addNoFall(getPlayer());
-
-        try {
-            cancel();
-        } catch (IllegalStateException exc) {
-            // not scheduled yet
+        if (mountRegionTask != null) {
+            mountRegionTask.cancel();
         }
     }
 
@@ -213,7 +211,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     @EventHandler
     public void openInv(InventoryOpenEvent event) {
         // if it's not a horse, return
-        if (!HORSE_CLASS.isAssignableFrom(getType().getEntityType().getEntityClass())) return;
+        if (!isHorse(getType().getEntityType())) return;
         if (getOwner() != null
                 && getPlayer() != null
                 && event.getPlayer() == getPlayer()
@@ -234,5 +232,9 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
                 return 0;
             }
         });
+    }
+
+    private boolean isHorse(EntityType type) {
+        return HORSE_CLASS.isAssignableFrom(type.getEntityClass());
     }
 }

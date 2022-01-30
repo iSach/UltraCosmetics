@@ -8,6 +8,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Created by sacha on 11/26/2016.
  */
+
+// Can the usage of this class be reduced or removed?
 public class MovingChecker extends BukkitRunnable {
 
     private UltraCosmetics ultraCosmetics;

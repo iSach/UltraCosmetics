@@ -22,7 +22,7 @@ import java.util.UUID;
  * @since 07-21-2016
  */
 public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable implements Listener {
-    private UltraPlayer owner;
+    private final UltraPlayer owner;
     private Category category;
     private UltraCosmetics ultraCosmetics;
     protected boolean equipped;
@@ -88,7 +88,6 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
 
         // Call untask finally. (in main thread)
         onClear();
-        owner = null;
     }
 
     @Override
@@ -100,10 +99,6 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     protected abstract void onClear();
 
     public final UltraPlayer getOwner() {
-        if (owner == null) {
-            // Try to fix.
-            owner = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(getOwnerUniqueId()));
-        }
         return owner;
     }
 
@@ -116,9 +111,6 @@ public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable im
     }
 
     public final Player getPlayer() {
-        if (owner == null) {
-            return null;
-        }
         return owner.getBukkitPlayer();
     }
 
