@@ -1,11 +1,13 @@
 package be.isach.ultracosmetics;
 
+import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Cosmetic manager.
@@ -22,19 +24,20 @@ public class CosmeticManager {
     }
 
     /**
-     * Setup default Cosmetics ultraCosmetics.getConfig().
+     * Setup default Cosmetics config.
      */
     public void setupCosmeticsConfigs() {
+        CustomConfiguration config = ultraCosmetics.getConfig();
         for (Category category : Category.values()) {
-            ultraCosmetics.getConfig().addDefault("Categories-Enabled." + category.getConfigPath(), true);
-            ultraCosmetics.getConfig().addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
+            config.addDefault("Categories-Enabled." + category.getConfigPath(), true);
+            config.addDefault("Categories." + category.getConfigPath() + ".Go-Back-Arrow", true, "Want Go back To Menu Item in that menu?");
         }
 
-        ultraCosmetics.getConfig().addDefault("TreasureChests.Loots.Emotes.Enabled", true);
-        ultraCosmetics.getConfig().addDefault("TreasureChests.Loots.Emotes.Chance", 5);
-        ultraCosmetics.getConfig().addDefault("TreasureChests.Loots.Emotes.Message.enabled", true);
-        ultraCosmetics.getConfig().addDefault("TreasureChests.Loots.Emotes.Message.message", "%prefix% &6&l%name% found rare %emote%");
-        ultraCosmetics.getConfig().addDefault("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount", true, "Do you want that in the gadgets menu", "each gadget item has an amount", "corresponding to your ammo.");
+        config.addDefault("TreasureChests.Loots.Emotes.Enabled", true);
+        config.addDefault("TreasureChests.Loots.Emotes.Chance", 5);
+        config.addDefault("TreasureChests.Loots.Emotes.Message.enabled", true);
+        config.addDefault("TreasureChests.Loots.Emotes.Message.message", "%prefix% &6&l%name% found rare %emote%");
+        config.addDefault("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount", true, "Do you want that in the gadgets menu", "each gadget item has an amount", "corresponding to your ammo.");
 
         // CALL STATIC BLOCK.
         GadgetType.register();
@@ -49,68 +52,72 @@ public class CosmeticManager {
         }
 
         for (GadgetType gadgetType : GadgetType.values()) {
-            ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
-            ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Enabled", true, "if true, the gadget will be enabled.");
-            ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Show-Description", true, "if true, the description of gadget will be showed.");
-            ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Enabled", true, "if true, the gadget will be enabled.");
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Show-Description", true, "if true, the description of gadget will be showed.");
+            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
             if (gadgetType == GadgetType.valueOf("paintballgun")) {
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Enabled", false, "Should it display particles?");
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Radius", 2, "The radius of painting.");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Block-Type", "STAINED_CLAY", "With what block will it paint?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Enabled", false, "Should it display particles?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Particle.Effect", "FIREWORKS_SPARK", "what particles? (List: http://pastebin.com/CVKkufck)");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Radius", 2, "The radius of painting.");
                 List<String> blackListedBlocks = new ArrayList<>();
                 blackListedBlocks.add("REDSTONE_BLOCK");
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".BlackList", blackListedBlocks, "A list of the BLOCKS that", "can't be painted.");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".BlackList", blackListedBlocks, "A list of the BLOCKS that", "can't be painted.");
             }
             if (UltraCosmeticsData.get().isAmmoEnabled()) {
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Enabled", true, "You want this gadget to need ammo?");
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Price", 500, "What price for the ammo?");
-                ultraCosmetics.getConfig().addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Result-Amount", 20, "And how much ammo is given", "when bought?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Enabled", true, "You want this gadget to need ammo?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Price", 500, "What price for the ammo?");
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Ammo.Result-Amount", 20, "And how much ammo is given", "when bought?");
             }
         }
 
         for (MountType mountType : MountType.values()) {
-            ultraCosmetics.getConfig().addDefault("Mounts." + mountType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
-            ultraCosmetics.getConfig().addDefault("Mounts." + mountType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            ultraCosmetics.getConfig().addDefault("Mounts." + mountType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            config.addDefault("Mounts." + mountType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
+            config.addDefault("Mounts." + mountType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Mounts." + mountType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            if (mountType.doesPlaceBlocks()) {
+                // Don't use Stream#toList(), it doesn't exist in Java 8
+                config.addDefault("Mounts." + mountType.getConfigName() + ".Blocks-To-Place", mountType.getDefaultBlocks().stream().map(m -> m.name()).collect(Collectors.toList()), "Blocks to choose from as this mount walks.");
+            }
         }
 
         for (ParticleEffectType particleEffect : ParticleEffectType.values()) {
-            ultraCosmetics.getConfig().addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Enabled", true, "if true, the effect will be enabled.");
-            ultraCosmetics.getConfig().addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            ultraCosmetics.getConfig().addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Enabled", true, "if true, the effect will be enabled.");
+            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
         for (PetType pet : PetType.values()) {
-            ultraCosmetics.getConfig().addDefault("Pets." + pet.getConfigName() + ".Enabled", true, "if true, the pet will be enabled.");
-            ultraCosmetics.getConfig().addDefault("Pets." + pet.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            ultraCosmetics.getConfig().addDefault("Pets." + pet.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            config.addDefault("Pets." + pet.getConfigName() + ".Enabled", true, "if true, the pet will be enabled.");
+            config.addDefault("Pets." + pet.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Pets." + pet.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
         if (Category.MORPHS.isEnabled())
             for (MorphType morphType : MorphType.values()) {
-                ultraCosmetics.getConfig().addDefault("Morphs." + morphType.getConfigName() + ".Enabled", true, "if true, the morph will be enabled.");
-                ultraCosmetics.getConfig().addDefault("Morphs." + morphType.getConfigName() + ".Show-Description", true, "if true, the description of this morph will be showed.");
-                ultraCosmetics.getConfig().addDefault("Morphs." + morphType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+                config.addDefault("Morphs." + morphType.getConfigName() + ".Enabled", true, "if true, the morph will be enabled.");
+                config.addDefault("Morphs." + morphType.getConfigName() + ".Show-Description", true, "if true, the description of this morph will be showed.");
+                config.addDefault("Morphs." + morphType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
             }
         for (HatType hat : HatType.values()) {
-            ultraCosmetics.getConfig().addDefault("Hats." + hat.getConfigName() + ".Enabled", true, "if true, the hat will be enabled.");
-            ultraCosmetics.getConfig().addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
-            ultraCosmetics.getConfig().addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            config.addDefault("Hats." + hat.getConfigName() + ".Enabled", true, "if true, the hat will be enabled.");
+            config.addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
+            config.addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
         for (SuitType suit : SuitType.values()) {
-            ultraCosmetics.getConfig().addDefault("Suits." + suit.getConfigName() + ".Enabled", true, "if true, the suit will be enabled.");
-            ultraCosmetics.getConfig().addDefault("Suits." + suit.getConfigName() + ".Show-Description", true, "if true, the description of this suit will be showed.");
-            ultraCosmetics.getConfig().addDefault("Suits." + suit.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            config.addDefault("Suits." + suit.getConfigName() + ".Enabled", true, "if true, the suit will be enabled.");
+            config.addDefault("Suits." + suit.getConfigName() + ".Show-Description", true, "if true, the description of this suit will be showed.");
+            config.addDefault("Suits." + suit.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
         for (EmoteType emoteType : EmoteType.values()) {
-            ultraCosmetics.getConfig().addDefault("Emotes." + emoteType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
-            ultraCosmetics.getConfig().addDefault("Emotes." + emoteType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            ultraCosmetics.getConfig().addDefault("Emotes." + emoteType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            config.addDefault("Emotes." + emoteType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
+            config.addDefault("Emotes." + emoteType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
+            config.addDefault("Emotes." + emoteType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
         }
 
         try {
-            ultraCosmetics.getConfig().save(ultraCosmetics.getFile());
+            config.save(ultraCosmetics.getFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,7 +134,7 @@ public class CosmeticManager {
         }
 
         try {
-            ultraCosmetics.getConfig().save(ultraCosmetics.getFile());
+            config.save(ultraCosmetics.getFile());
         } catch (IOException e) {
             e.printStackTrace();
         }

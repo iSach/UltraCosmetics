@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
  */
 public class SuitType extends CosmeticMatType<Suit> {
 
-    private final static List<SuitType> ENABLED = new ArrayList<>();
-    private final static List<SuitType> VALUES = new ArrayList<>();
+    private static final List<SuitType> ENABLED = new ArrayList<>();
+    private static final List<SuitType> VALUES = new ArrayList<>();
 
     public static List<SuitType> enabled() {
         return ENABLED;
@@ -46,25 +46,25 @@ public class SuitType extends CosmeticMatType<Suit> {
     /**
      * The parts materials.
      */
-    private XMaterial helmet, chestplate, leggings, boots;
+    private final XMaterial helmet, chestplate, leggings, boots;
 
     /**
      * @param configName       The config path name.
      * @param permissionSuffix The suffix of permission. (ultracosmetic.suits.{suffix}.{part})
      * @param defaultDesc      The default description.
-     * @param h                The Helmet material.
-     * @param c                The Chestplate material.
-     * @param l                The Leggings material.
-     * @param b                The Boots material.
+     * @param helmet           The Helmet material.
+     * @param chestplate       The Chestplate material.
+     * @param leggings         The Leggings material.
+     * @param boots            The Boots material.
      * @param clazz            The Suit Class
      */
     private SuitType(String configName, String permissionSuffix, String defaultDesc,
-             XMaterial h, XMaterial c, XMaterial l, XMaterial b, Class<? extends Suit> clazz) {
-        super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, h, clazz, ServerVersion.earliest());
-        this.boots = b;
-        this.helmet = h;
-        this.chestplate = c;
-        this.leggings = l;
+             XMaterial helmet, XMaterial chestplate, XMaterial leggings, XMaterial boots, Class<? extends Suit> clazz) {
+        super(Category.SUITS, configName, "ultracosmetics.suits." + permissionSuffix, defaultDesc, helmet, clazz, ServerVersion.earliest());
+        this.helmet = helmet;
+        this.chestplate = chestplate;
+        this.leggings = leggings;
+        this.boots = boots;
 
         VALUES.add(this);
     }

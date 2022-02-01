@@ -14,7 +14,7 @@ import org.bukkit.entity.EntityType;
  */
 public abstract class CosmeticEntType<T extends Cosmetic> extends CosmeticMatType<T> {
 
-    private EntityType entityType;
+    private final EntityType entityType;
 
     public CosmeticEntType(Category category, String configName, String permission, String description, XMaterial material, EntityType entityType, Class clazz, ServerVersion baseVersion) {
         super(category, configName, permission, description, material, clazz, baseVersion);

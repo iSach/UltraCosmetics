@@ -41,9 +41,9 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
 
-    private Particles effect;
-    private int repeatDelay;
-    private double particleMultiplier;
+    private final Particles effect;
+    private final int repeatDelay;
+    private final double particleMultiplier;
 
     private ParticleEffectType(String permission, String configName, int repeatDelay, Particles effect, XMaterial material, Class<? extends ParticleEffect> clazz, String defaultDesc, boolean supportsParticleMultiplier) {
         super(Category.EFFECTS, configName, permission, defaultDesc, material, clazz, ServerVersion.earliest());
@@ -57,6 +57,9 @@ public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
             } else {
                 particleMultiplier = SettingsManager.getConfig().getDouble(path);
             }
+        } else {
+            // particleMultiplier is final so we have to assign it a value no matter what
+            particleMultiplier = 1;
         }
 
         VALUES.add(this);

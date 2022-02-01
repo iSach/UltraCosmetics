@@ -54,7 +54,7 @@ public class HatType extends CosmeticMatType<Hat> {
     /**
      * The HatType ItemStack
      */
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     private HatType(String str, String configName, String defaultDesc) {
         super(Category.HATS, configName, "ultracosmetics.hats." + configName.toLowerCase(), defaultDesc, XMaterial.PLAYER_HEAD, Hat.class, ServerVersion.earliest());

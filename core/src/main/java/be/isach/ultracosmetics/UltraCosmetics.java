@@ -185,9 +185,6 @@ public class UltraCosmetics extends JavaPlugin {
         // Initialize NMS Module
         UltraCosmeticsData.get().initModule();
 
-        // Set up bStats.
-        // this.metrics = new Metrics(this, getSmartLogger());
-
         // Init Message manager.
         new MessageManager();
 
@@ -196,8 +193,8 @@ public class UltraCosmetics extends JavaPlugin {
 
         // Register Listeners.
         registerListeners();
-        // Register the command
 
+        // Register the command
         commandManager = new CommandManager(this);
         commandManager.registerCommands(this);
 

@@ -61,9 +61,9 @@ public class GadgetType extends CosmeticMatType<Gadget> {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
 
-    private double countdown;
-    private int runTime;
-    private boolean affectPlayers;
+    private final double countdown;
+    private final int runTime;
+    private final boolean affectPlayers;
 
     private GadgetType(XMaterial material, double defaultCountdown, int runTime, String permission, String configName, String defaultDesc, Class<? extends Gadget> clazz) {
         super(Category.GADGETS, configName, permission, defaultDesc, material, clazz, ServerVersion.earliest());

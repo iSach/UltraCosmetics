@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.version.VersionManager;
@@ -112,6 +113,15 @@ public class ItemFactory {
         return getFromConfigInternal(path);
     }
 
+    public static List<XMaterial> getXMaterialListFromConfig(String path) {
+        List<XMaterial> mats = new ArrayList<>();
+        CustomConfiguration cc = UltraCosmeticsData.get().getPlugin().getConfig();
+        for (String matString : cc.getStringList(path)) {
+            XMaterial.matchXMaterial(matString).ifPresent(m -> mats.add(m));
+        }
+        return mats;
+    }
+
     private static XMaterial getFromConfigInternal(String path) {
         String fromConfig = UltraCosmeticsData.get().getPlugin().getConfig().getString(path);
         if (fromConfig == null) return null;
@@ -209,7 +219,7 @@ public class ItemFactory {
         // 16 dyes
         List<XMaterial> dyes = new ArrayList<>(16);
         for (XMaterial mat : XMaterial.VALUES) {
-            if (mat.toString().endsWith("_DYE")) {
+            if (mat.name().endsWith("_DYE")) {
                 dyes.add(mat);
             }
         }

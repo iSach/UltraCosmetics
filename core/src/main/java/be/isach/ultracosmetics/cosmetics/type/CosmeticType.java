@@ -23,26 +23,26 @@ import java.util.List;
  */
 public abstract class CosmeticType<T extends Cosmetic> {
 
-    private String configName;
-    private String permission;
-    private String descriptionAsString;
-    private Class<? extends T> clazz;
-    private Category category;
-    private ServerVersion baseVersion;
+    private final String configName;
+    private final String permission;
+    private final String description;
+    private final Class<? extends T> clazz;
+    private final Category category;
+    private final ServerVersion baseVersion;
 
-    public CosmeticType(Category category, String configName, String permission, String description, Class clazz, ServerVersion baseVersion) {
+    public CosmeticType(Category category, String configName, String permission, String defaultDescription, Class clazz, ServerVersion baseVersion) {
         this.configName = configName;
         this.permission = permission;
-        this.descriptionAsString = description;
         this.clazz = clazz;
         this.category = category;
         this.baseVersion = baseVersion;
 
         if (SettingsManager.getConfig().get(getCategory().getConfigPath() + "." + configName + ".Description") == null) {
-            setDescriptionAsString(description);
+            description = defaultDescription;
             SettingsManager.getConfig().set(getCategory().getConfigPath() + "." + configName + ".Description", getDescriptionColored(), "Description of this cosmetic.");
-        } else
-            setDescriptionAsString(fromList(SettingsManager.getConfig().getStringList(category.getConfigPath() + "." + configName + ".Description")));
+        } else {
+            description = fromList(SettingsManager.getConfig().getStringList(category.getConfigPath() + "." + configName + ".Description"));
+        }
     }
 
     public T equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
@@ -75,7 +75,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     public String getDescriptionAsString() {
-        return descriptionAsString;
+        return description;
     }
 
     public Class<? extends T> getClazz() {
@@ -84,10 +84,6 @@ public abstract class CosmeticType<T extends Cosmetic> {
 
     public Category getCategory() {
         return category;
-    }
-
-    public void setDescriptionAsString(String descriptionAsString) {
-        this.descriptionAsString = descriptionAsString;
     }
 
     /**

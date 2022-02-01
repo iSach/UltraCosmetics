@@ -12,7 +12,7 @@ import be.isach.ultracosmetics.util.XMaterial;
  * @since 08-04-2016
  */
 public abstract class CosmeticMatType<T extends Cosmetic> extends CosmeticType<T> {
-    private XMaterial material;
+    private final XMaterial material;
 
     public CosmeticMatType(Category category, String configName, String permission, String description, XMaterial material, Class clazz, ServerVersion baseVersion) {
         super(category, configName, permission, description, clazz, baseVersion);

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author iSach
  * @since 12-20-2015
  */
-public final class PetType extends CosmeticMatType<Pet> {
+public final class PetType extends CosmeticEntType<Pet> {
 
     private final static List<PetType> ENABLED = new ArrayList<>();
     private final static List<PetType> VALUES = new ArrayList<>();
@@ -51,17 +51,10 @@ public final class PetType extends CosmeticMatType<Pet> {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
 
-    private EntityType entityType;
-
     private PetType(String permission, String configName, XMaterial material, String defaultDesc, EntityType entityType, Class<? extends Pet> clazz, ServerVersion baseVersion) {
-        super(Category.PETS, configName, permission, defaultDesc, material, clazz, baseVersion);
+        super(Category.PETS, configName, permission, defaultDesc, material, entityType, clazz, baseVersion);
 
-        this.entityType = entityType;
         VALUES.add(this);
-    }
-
-    public EntityType getEntityType() {
-        return this.entityType;
     }
 
     public String getEntityName(Player player) {

@@ -45,7 +45,7 @@ public class MorphType extends CosmeticMatType<Morph> {
     /**
      * Disguise Type of the morph.
      */
-    private DisguiseType disguiseType;
+    private final DisguiseType disguiseType;
 
     private MorphType(String permission, String configName, XMaterial material, DisguiseType disguiseType, String defaultDesc, Class<? extends Morph> clazz, ServerVersion baseVersion) {
         super(Category.MORPHS, configName, permission, defaultDesc, material, clazz, baseVersion);

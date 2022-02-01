@@ -2,31 +2,36 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.MountRegionChecker;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
+import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.XMaterial;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -42,6 +47,7 @@ import org.bukkit.scheduler.BukkitTask;
  * @since 08-03-2015
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
+    private static final Random RANDOM = new Random();
     private static final Map<String,Integer> WORLD_HEIGHTS = new HashMap<>();
     private static final Class<?> HORSE_CLASS = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1) 
             ? AbstractHorse.class : Horse.class;
@@ -49,9 +55,10 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     /**
      * The Entity, if it isn't a Custom Entity.
      */
-    public E entity;
+    protected E entity;
 
     protected boolean beingRemoved = false;
+    protected final boolean placesBlocks = getType().doesPlaceBlocks();
 
     public Mount(UltraPlayer ultraPlayer, MountType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MOUNTS, ultraPlayer, type);
@@ -236,5 +243,24 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     private boolean isHorse(EntityType type) {
         return HORSE_CLASS.isAssignableFrom(type.getEntityClass());
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (placesBlocks
+                && event.getPlayer() == getPlayer()
+                && getOwner().getCurrentMount() == this
+                && SettingsManager.getConfig().getBoolean("Mounts-Block-Trails")) {
+            List<XMaterial> mats = ItemFactory.getXMaterialListFromConfig("Mounts." + getType().getConfigName() + ".Blocks-To-Place");
+            if (mats.size() == 0) {
+                return;
+            }
+            for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
+                if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
+                    XMaterial mat = mats.get(RANDOM.nextInt(mats.size()));
+                    BlockUtils.setToRestore(b, mat.parseMaterial(), mat.getData(), 20);
+                }
+            }
+        }
     }
 }
