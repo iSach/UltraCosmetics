@@ -46,11 +46,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
     }
 
     @Override
-    public float getSpeed() {
-        return 1.75f;
-    }
-
-    @Override
     public boolean canFly() {
         return false;
     }
@@ -101,7 +96,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
             wEntity.setRotationYawHead(entity.yaw);
 
-            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
             entityBase.g_(sideMot, forMot);
 
 

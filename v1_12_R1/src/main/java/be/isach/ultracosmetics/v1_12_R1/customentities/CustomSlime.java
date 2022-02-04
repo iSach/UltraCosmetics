@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.v1_12_R1.customentities;
 
 import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.v1_12_R1.EntityBase;
 import be.isach.ultracosmetics.v1_12_R1.nms.WrapperEntityHuman;
 import be.isach.ultracosmetics.v1_12_R1.nms.WrapperEntityInsentient;
 import net.minecraft.server.v1_12_R1.*;
+
 import org.bukkit.entity.Entity;
 
 /**
@@ -34,15 +36,9 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
         return LocaleI18n.get("entity.Slime.name");
     }
 
-
     @Override
     public void g_(float sideMot, float forMot) {
         super.g(sideMot, forMot);
-    }
-
-    @Override
-    public float getSpeed() {
-        return 1.75f;
     }
 
     @Override
@@ -55,7 +51,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
         return getBukkitEntity();
     }
 
-    static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
+    private void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
         if (!(entity instanceof EntityBase))
             throw new IllegalArgumentException("The entity field should implements EntityBase");
 
@@ -92,8 +88,8 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
             wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
 
             wEntity.setRotationYawHead(entity.yaw);
+            wEntity.setMoveSpeed((float) MountType.valueOf("slime").getMovementSpeed());
 
-            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
             entityBase.g_(sideMot, forMot);
 
             wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());

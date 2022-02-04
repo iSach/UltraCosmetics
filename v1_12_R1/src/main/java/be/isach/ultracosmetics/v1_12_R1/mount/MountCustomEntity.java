@@ -30,6 +30,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         CustomEntities.customEntities.add(getCustomEntity());
         customEntity.removeAi();
+        //new WrapperEntityLiving((EntityLiving) customEntity).setMoveSpeed((float) getType().getMovementSpeed());
         return getEntity();
     }
 

@@ -69,7 +69,6 @@ public class RideableSpider extends Spider implements IMountCustomEntity, Entity
 
             wEntity.setRotationYawHead(entity.getYRot());
 
-            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed_());
             entityBase.travel_(sideMot, forMot);
 
 
@@ -94,7 +93,6 @@ public class RideableSpider extends Spider implements IMountCustomEntity, Entity
     }
 
     @Override
-    //public void a(float sideMot, float forMot, float f2) {
     public void travel(Vec3 vec3D) {
     	if (!CustomEntities.customEntities.contains(this)) {
             super.tickHeadTurn((float) vec3D.x, (float) vec3D.y);
@@ -115,16 +113,6 @@ public class RideableSpider extends Spider implements IMountCustomEntity, Entity
     @Override
     public void travel_(float sideMot, float forMot) {
         super.travel(new Vec3(sideMot, 0, forMot));
-    }
-    
-    @Override
-    public float getSpeed() {
-    	return getSpeed_();
-    }
-
-    @Override
-    public float getSpeed_() {
-        return 1;
     }
 
     @Override

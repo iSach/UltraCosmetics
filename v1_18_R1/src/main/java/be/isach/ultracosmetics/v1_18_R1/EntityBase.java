@@ -7,7 +7,5 @@ public interface EntityBase {
 
     void travel_(float sideMot, float forMot);
 
-    float getSpeed_();
-
     boolean canFly();
 }

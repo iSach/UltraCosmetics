@@ -45,11 +45,6 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
     }
 
     @Override
-    public float getSpeed() {
-        return 1;
-    }
-
-    @Override
     public boolean canFly() {
         return false;
     }
@@ -95,7 +90,6 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity, 
 
             wEntity.setRotationYawHead(entity.yaw);
 
-            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
             entityBase.g_(sideMot, forMot);
 
 

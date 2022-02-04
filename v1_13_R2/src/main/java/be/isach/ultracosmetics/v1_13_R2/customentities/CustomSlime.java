@@ -54,7 +54,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
             wEntity.setRotationYawHead(entity.yaw);
 
-            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
             entityBase.g_(sideMot, forMot);
 
 

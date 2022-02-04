@@ -7,6 +7,8 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_17_R1.customentities.CustomEntities;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 
 /**
@@ -30,6 +32,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         ((CraftWorld) getPlayer().getWorld()).getHandle().addFreshEntity(getCustomEntity());
         CustomEntities.customEntities.add(getCustomEntity());
         customEntity.removeAi();
+        ((LivingEntity)customEntity).setSpeed((float) getType().getMovementSpeed());
         return getEntity();
     }
 

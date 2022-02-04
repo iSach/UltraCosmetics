@@ -68,7 +68,6 @@ public class CustomSlime extends Slime implements IMountCustomEntity, EntityBase
 
             wEntity.setRotationYawHead(entity.getYRot());
 
-            //wEntity.setMoveSpeed(0.35f * entityBase.getSpeed_());
             entityBase.travel_(sideMot, forMot);
 
 
@@ -119,11 +118,6 @@ public class CustomSlime extends Slime implements IMountCustomEntity, EntityBase
     @Override
     public void travel_(float sideMot, float forMot) {
         super.travel(new Vec3(sideMot, 0, forMot));
-    }
-
-    @Override
-    public float getSpeed_() {
-    	return getSpeed();
     }
 
     @Override

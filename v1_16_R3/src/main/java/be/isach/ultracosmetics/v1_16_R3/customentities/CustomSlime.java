@@ -57,7 +57,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
 
             wEntity.setRotationYawHead(entity.yaw);
 
-            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed());
             entityBase.g_(sideMot, forMot);
 
 
@@ -110,11 +109,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
     @Override
     public void g_(float sideMot, float forMot) {
         super.g(new Vec3D(sideMot, 0, forMot));
-    }
-
-    @Override
-    public float getSpeed() {
-        return 1.75f;
     }
 
     @Override

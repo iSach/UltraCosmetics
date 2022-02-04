@@ -48,25 +48,22 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
     /**
      * WASD Control.
      *
-     * @param sideMot
-     * @param forMot
+     * @param f
+     * @param f1
      */
     @Override
-    public void g(float sideMot, float forMot) {
+    public void g(float f, float f1) {
         if (!CustomEntities.customEntities.contains(this)) {
-            super.g(sideMot, forMot);
+            super.g(f, f1);
             return;
         }
-        if (getSize() != 3)
-            setSize(3);
-        if (this.passenger != null && this.passenger instanceof EntityHuman
-                && CustomEntities.customEntities.contains(this)) {
+        if (this.passenger != null && this.passenger instanceof EntityHuman) {
             this.lastYaw = this.yaw = this.passenger.yaw;
             this.pitch = this.passenger.pitch * 0.5F;
             this.setYawPitch(this.yaw, this.pitch);//Update the pitch and yaw
             this.aI = this.aG = this.yaw;
-            sideMot = ((EntityLiving) this.passenger).aZ * 0.5F;
-            forMot = ((EntityLiving) this.passenger).ba;
+            f = ((EntityLiving) this.passenger).aZ * 0.5F;
+            f1 = ((EntityLiving) this.passenger).ba;
 
             Field jump = null; //Jumping
             try {
@@ -106,7 +103,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
                             f4 += (bI() * 1.0F - f4) * f2 / 3.0F;
                         }
 
-                        a(sideMot, forMot, f4);
+                        a(f, f1, f4);
                         move(motX, motY, motZ);
                         motX *= f3;
                         motY *= 0.800000011920929D;
@@ -116,7 +113,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
                             motY = 0.300000011920929D;
                     } else if (ab()) {
                         double d0 = locY;
-                        a(sideMot, forMot, 0.02F);
+                        a(f, f1, 0.02F);
                         move(motX, motY, motZ);
                         motX *= 0.5D;
                         motY *= 0.5D;
@@ -130,7 +127,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
                         float f6 = 0.1627714F / (f5 * f5 * f5);
                         float f3 = bI() * f6;
 
-                        a(sideMot, forMot, f3);
+                        a(f, f1, f3);
                         f5 = world.getType(new BlockPosition(MathHelper.floor(locX), MathHelper.floor(getBoundingBox().b) - 1, MathHelper.floor(locZ))).getBlock().frictionFactor * 0.91F;
 
                         if (k_()) {
@@ -179,7 +176,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
                 az += (f2 - az) * 0.4F;
                 aA += az;
 
-                super.g(sideMot, forMot);
+                super.g(f, f1);
             }
 
 
@@ -196,7 +193,7 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity {
         } else {
             this.S = 0.5F;
             this.aK = 0.02F;
-            super.g(sideMot, forMot);
+            super.g(f, f1);
         }
 
 
