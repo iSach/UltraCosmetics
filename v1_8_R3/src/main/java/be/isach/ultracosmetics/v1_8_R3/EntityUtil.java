@@ -9,8 +9,25 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_8_R3.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
-import net.minecraft.server.v1_8_R3.*;
-import org.apache.commons.codec.binary.Base64;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.EntityArmorStand;
+import net.minecraft.server.v1_8_R3.EntityBoat;
+import net.minecraft.server.v1_8_R3.EntityCreature;
+import net.minecraft.server.v1_8_R3.EntityEnderDragon;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
+import net.minecraft.server.v1_8_R3.EntityItem;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_8_R3.PathEntity;
+import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
+import net.minecraft.server.v1_8_R3.TileEntityChest;
+import net.minecraft.server.v1_8_R3.TileEntityEnderChest;
+import net.minecraft.server.v1_8_R3.Vector3f;
+import net.minecraft.server.v1_8_R3.World;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -28,31 +45,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Sacha on 14/03/16.
  */
 public class EntityUtil implements IEntityUtil {
-
-    @Override
-    public void setPassenger(Entity vehicle, Entity passenger) {
-        vehicle.setPassenger(passenger);
-    }
+    private final Random r = new Random();
+    private final Map<Player, List<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
+    private final Map<Player, List<Entity>> cooldownJumpMap = new HashMap<>();
 
     @Override
     public void resetWitherSize(Wither wither) {
         ((CraftWither) wither).getHandle().r(600);
     }
-
-    @Override
-    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
-        ((CraftHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
-    }
-
-    Random r = new Random();
-    Map<Player, List<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
-    Map<Player, List<Entity>> cooldownJumpMap = new HashMap<>();
 
     @Override
     public void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v) {
@@ -69,9 +79,7 @@ public class EntityUtil implements IEntityUtil {
         as.setSmall(true);
         as.setGravity(false);
         as.setArms(true);
-        as.setHeadPose(new Vector3f((float) (r.nextInt(360)),
-                (float) (r.nextInt(360)),
-                (float) (r.nextInt(360))));
+        as.setHeadPose(new Vector3f(r.nextInt(360), r.nextInt(360), r.nextInt(360)));
         as.setLocation(loc.getX() + MathUtils.randomDouble(-1.5, 1.5), loc.getY() + MathUtils.randomDouble(0, .5) - 0.75, loc.getZ() + MathUtils.randomDouble(-1.5, 1.5), 0, 0);
         fakeArmorStands.add(as);
         for (Player players : player.getWorld().getPlayers()) {
@@ -225,8 +233,7 @@ public class EntityUtil implements IEntityUtil {
         ((EntityInsentient) pett).getNavigation().a(2);
         Object petf = ((CraftEntity) follower).getHandle();
         Location targetLocation = toFollow.getLocation();
-        PathEntity path;
-        path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
+        PathEntity path = ((EntityInsentient) petf).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
         if (path != null) {
             ((EntityInsentient) petf).getNavigation().a(path, 1.05D);
             ((EntityInsentient) petf).getNavigation().a(1.05D);
@@ -256,11 +263,5 @@ public class EntityUtil implements IEntityUtil {
             return true;
         }
         return false;
-    }
-
-
-    @Override
-    public byte[] getEncodedData(String url) {
-        return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
     }
 }

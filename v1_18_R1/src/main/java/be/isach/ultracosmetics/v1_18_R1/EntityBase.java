@@ -5,7 +5,7 @@ package be.isach.ultracosmetics.v1_18_R1;
  */
 public interface EntityBase {
 
-    void g_(float sideMot, float forMot);
+    void travel_(float sideMot, float forMot);
 
     float getSpeed_();
 

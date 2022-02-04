@@ -1,21 +1,15 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.version.VersionManager;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import be.isach.ultracosmetics.util.TexturedSkullFactory;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Vector;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -54,33 +48,6 @@ public class PetChristmasElf extends Pet {
     }
 
     private static ItemStack getSkull(String url) {
-        ItemStack skull;
-        if (VersionManager.IS_VERSION_1_13) {
-            skull = new ItemStack(Material.valueOf("PLAYER_HEAD"));
-        } else {
-            skull = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
-        }
-        if (url == null || url.isEmpty()) return skull;
-        url = "http://textures.minecraft.net/texture/" + url;
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        skullMeta.setDisplayName(UltraCosmeticsData.get().getItemNoPickupString());
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        byte[] encodedData = UltraCosmeticsData.get().getVersionManager().getEntityUtil().getEncodedData(url);
-        profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
-        Field profileField = null;
-        try {
-            profileField = skullMeta.getClass().getDeclaredField("profile");
-        } catch (NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
-        }
-        assert profileField != null;
-        profileField.setAccessible(true);
-        try {
-            profileField.set(skullMeta, profile);
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        skull.setItemMeta(skullMeta);
-        return skull;
+        return TexturedSkullFactory.createSkull(url);
     }
 }

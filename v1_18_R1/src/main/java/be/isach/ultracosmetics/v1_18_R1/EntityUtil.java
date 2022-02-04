@@ -26,7 +26,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
@@ -46,7 +45,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftAbstractHorse;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftBoat;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEnderDragon;
@@ -97,21 +95,10 @@ public class EntityUtil implements IEntityUtil {
             e.printStackTrace();
         }
     }
-	
-    @Override
-    public void setPassenger(org.bukkit.entity.Entity vehicle, org.bukkit.entity.Entity passenger) {
-        vehicle.setPassenger(passenger);
-    }
 
     @Override
     public void resetWitherSize(Wither wither) {
         ((CraftWither) wither).getHandle().setInvulnerableTicks(600);
-    }
-
-
-    @Override
-    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
-        ((CraftAbstractHorse) horse).getHandle().getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed);
     }
 
     @Override
@@ -349,12 +336,6 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public boolean isMoving(Player entity) {
         return false;
-    }
-
-    @Override
-    public byte[] getEncodedData(String url) {
-        // I couldn't get the org.apache import to work
-        return Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
     }
 
     private void sendPacket(Player player, Packet packet) {

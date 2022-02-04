@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.entity.LivingEntity;
+
 /**
  * Cosmetic manager.
  *
@@ -76,6 +78,10 @@ public class CosmeticManager {
             config.addDefault("Mounts." + mountType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
             config.addDefault("Mounts." + mountType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
             config.addDefault("Mounts." + mountType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            // If the mount type has a movement speed (is LivingEntity)
+            if (LivingEntity.class.isAssignableFrom(mountType.getEntityType().getEntityClass())) {
+                config.addDefault("Mounts." + mountType.getConfigName() + ".Speed", mountType.getDefaultMovementSpeed(), "The movement speed of the mount, see:", "https://minecraft.fandom.com/wiki/Attribute#Attributes_available_on_all_living_entities");
+            }
             if (mountType.doesPlaceBlocks()) {
                 // Don't use Stream#toList(), it doesn't exist in Java 8
                 config.addDefault("Mounts." + mountType.getConfigName() + ".Blocks-To-Place", mountType.getDefaultBlocks().stream().map(m -> m.name()).collect(Collectors.toList()), "Blocks to choose from as this mount walks.");

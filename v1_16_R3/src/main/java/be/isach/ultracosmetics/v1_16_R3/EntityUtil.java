@@ -14,7 +14,6 @@ import net.minecraft.server.v1_16_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.*;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftInventory;
@@ -40,19 +39,8 @@ public class EntityUtil implements IEntityUtil {
     private Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
 
     @Override
-    public void setPassenger(org.bukkit.entity.Entity vehicle, org.bukkit.entity.Entity passenger) {
-        vehicle.setPassenger(passenger);
-    }
-
-    @Override
     public void resetWitherSize(Wither wither) {
         ((CraftWither) wither).getHandle().setInvul(600);
-    }
-
-
-    @Override
-    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
-        ((CraftAbstractHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
     @Override
@@ -306,10 +294,5 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public boolean isMoving(Player entity) {
         return false;
-    }
-
-    @Override
-    public byte[] getEncodedData(String url) {
-        return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
     }
 }

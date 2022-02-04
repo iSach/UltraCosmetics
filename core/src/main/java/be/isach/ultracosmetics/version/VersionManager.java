@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.version;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.mounts.abstracthorse.AbstractHorseMounts;
 import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ReflectionUtils;
@@ -13,17 +12,14 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class VersionManager {
-    /**
-     * If the version of Bukkit/Spigot is 1.13.
-     */
     public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().is113();
     public static final String PACKAGE = "be.isach.ultracosmetics";
     private IModule module;
     private ServerVersion serverVersion;
     private IEntityUtil entityUtil;
-    private IActionBar actionBarUtil;
+    private IAncientUtil ancientUtil;
     private IFireworkFactory fireworkFactory;
-    private IMounts mounts;
+    private Mounts mounts;
     private IPets pets;
     private IMorphs morphs;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
@@ -37,12 +33,11 @@ public class VersionManager {
     public void load() throws ReflectiveOperationException {
         module = loadModule("Module");
         entityUtil = loadModule("EntityUtil");
+        mounts = new Mounts();
         if (serverVersion == ServerVersion.v1_8_R3) {
-            actionBarUtil = loadModule("ActionBar");
-            mounts = loadModule("Mounts");
+            ancientUtil = loadModule("AncientUtil");
         } else {
-            actionBarUtil = new APIActionBar();
-            mounts = new AbstractHorseMounts();
+            ancientUtil = new APIAncientUtil();
         }
         fireworkFactory = loadModule("FireworkFactory");
         pets = loadModule("Pets");
@@ -66,15 +61,15 @@ public class VersionManager {
         return entityUtil;
     }
 
-    public IActionBar getActionBarUtil() {
-        return actionBarUtil;
+    public IAncientUtil getAncientUtil() {
+        return ancientUtil;
     }
 
     public IFireworkFactory getFireworkFactory() {
         return fireworkFactory;
     }
 
-    public IMounts getMounts() {
+    public Mounts getMounts() {
         return mounts;
     }
 

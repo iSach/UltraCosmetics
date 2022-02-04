@@ -168,7 +168,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                         String message = MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar");
                         message = message.replace("%gadgetname%",
                                 TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
-                        PlayerUtils.sendInActionBar(getPlayer(), message);
+                        UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), message);
                         SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
                     }
                 }
@@ -220,9 +220,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         final DecimalFormat decimalFormat = new DecimalFormat("0.0", otherSymbols);
         String timeLeft = decimalFormat.format(currentCooldown) + "s";
 
-        PlayerUtils.sendInActionBar(getPlayer(),
-                getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " "
-                        + timeLeft);
+        UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(),
+                getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " " + timeLeft);
 
     }
 

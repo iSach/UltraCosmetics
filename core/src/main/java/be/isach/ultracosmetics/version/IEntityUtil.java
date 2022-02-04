@@ -16,11 +16,7 @@ import org.bukkit.util.Vector;
  */
 public interface IEntityUtil {
 
-    void setPassenger(Entity vehicle, Entity passenger);
-
     void resetWitherSize(Wither wither);
-
-    void setHorseSpeed(Entity horse, double speed);
 
     void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v);
 
@@ -53,6 +49,4 @@ public interface IEntityUtil {
     void sendTeleportPacket(Player player, Entity entity);
 
     boolean isMoving(Player entity);
-
-    byte[] getEncodedData(String url);
 }

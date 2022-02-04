@@ -1,17 +1,16 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Base64;
 import java.util.UUID;
 
 /**
@@ -23,12 +22,7 @@ import java.util.UUID;
 public class TexturedSkullFactory {
 
     public static ItemStack createSkull(String url) {
-        ItemStack skull;
-        if (VersionManager.IS_VERSION_1_13) {
-            skull = new ItemStack(Material.valueOf("PLAYER_HEAD"));
-        } else {
-            skull = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
-        }
+        ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
         if (url == null || url.isEmpty()) {
             return skull;
         }
@@ -36,7 +30,7 @@ public class TexturedSkullFactory {
         SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
         skullMeta.setDisplayName(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Emote");
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        byte[] encodedData = UltraCosmeticsData.get().getVersionManager().getEntityUtil().getEncodedData(url);
+        byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
         profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
         Method setProfileMethod = null;
         try {

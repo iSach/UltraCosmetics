@@ -1,7 +1,8 @@
-package be.isach.ultracosmetics.v1_8_R3.mount;
+package be.isach.ultracosmetics.cosmetics.mounts.pretendhorse;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.mounts.MountHorse;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -11,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -32,7 +34,6 @@ public class MountRudolph extends MountHorse {
     public void onEquip() {
         super.onEquip();
         entity.setJumpStrength(0.7);
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().setHorseSpeed(entity, 0.4d);
         left = spawnArmorStand(false);
         right = spawnArmorStand(true);
         moveAntlers();
@@ -93,10 +94,12 @@ public class MountRudolph extends MountHorse {
     public void onClear() {
         super.onClear();
 
-        if (left != null)
+        if (left != null) {
             left.remove();
-        if (right != null)
+        }
+        if (right != null) {
             right.remove();
+        }
     }
 
     public static Vector getLeftVector(Location loc) {
@@ -113,8 +116,14 @@ public class MountRudolph extends MountHorse {
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected Horse.Variant getVariant() {
         return Horse.Variant.MULE;
+    }
+
+    @Override
+    protected Color getColor() {
+        return null;
     }
 }

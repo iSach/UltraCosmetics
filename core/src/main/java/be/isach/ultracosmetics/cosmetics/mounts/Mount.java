@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.mounts;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -38,10 +40,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Represents an instance of a mount summoned by a player.
- * <p/>
- * TODO:
- * - SubObjects:
- * - HorseMount
  *
  * @author iSach
  * @since 08-03-2015
@@ -49,8 +47,6 @@ import org.bukkit.scheduler.BukkitTask;
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
     private static final Random RANDOM = new Random();
     private static final Map<String,Integer> WORLD_HEIGHTS = new HashMap<>();
-    private static final Class<?> HORSE_CLASS = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1) 
-            ? AbstractHorse.class : Horse.class;
     private BukkitTask mountRegionTask = null;
     /**
      * The Entity, if it isn't a Custom Entity.
@@ -73,13 +69,25 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             getOwner().removeMount();
         }
 
+        // If the entity is a monster and the world is set to peaceful, we can't spawn it
+        if ((Monster.class.isAssignableFrom(getType().getEntityType().getEntityClass())
+                // no idea why Slime doesn't implement Monster but we have to check for it
+                || Slime.class.isAssignableFrom(getType().getEntityType().getEntityClass()))
+                && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+            getOwner().sendMessage(MessageManager.getMessage("Mounts.Cant-Spawn"));
+            return;
+        }
+
         EntitySpawningManager.setBypass(true);
-        entity = (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
+        entity = spawnEntity();
         EntitySpawningManager.setBypass(false);
-        if (entity instanceof Ageable) {
-            ((Ageable) entity).setAdult();
-        } else if (entity instanceof Slime) {
-            ((Slime) entity).setSize(4);
+        if (entity instanceof LivingEntity) {
+            UltraCosmeticsData.get().getVersionManager().getAncientUtil().setSpeed((LivingEntity)entity, getType().getMovementSpeed());
+            if (entity instanceof Ageable) {
+                ((Ageable) entity).setAdult();
+            } else if (entity instanceof Slime) {
+                ((Slime) entity).setSize(3);
+            }
         }
         entity.setCustomNameVisible(true);
         entity.setCustomName(getType().getName(getPlayer()));
@@ -156,6 +164,10 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         return entity;
     }
 
+    protected E spawnEntity() {
+        return (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
+    }
+
     @EventHandler
     public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
         if (event.getVehicle().getType() == EntityType.BOAT
@@ -196,8 +208,9 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getEntity() == getEntity())
+        if (event.getEntity() == getEntity() || event.getDamager() == getEntity()) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -217,7 +230,6 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     @EventHandler
     public void openInv(InventoryOpenEvent event) {
-        // if it's not a horse, return
         if (!isHorse(getType().getEntityType())) return;
         if (getOwner() != null
                 && getPlayer() != null
@@ -232,6 +244,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     }
 
     private int getWorldHeight(World world) {
+        // TODO: can this actually vary by world? something to do with datapacks?
         return WORLD_HEIGHTS.computeIfAbsent(world.getName(), w -> {
             try {
                 return world.getMinHeight();
@@ -242,7 +255,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     }
 
     private boolean isHorse(EntityType type) {
-        return HORSE_CLASS.isAssignableFrom(type.getEntityClass());
+        return UltraCosmeticsData.get().getVersionManager().getMounts().isAbstractHorse(type);
     }
 
     @EventHandler

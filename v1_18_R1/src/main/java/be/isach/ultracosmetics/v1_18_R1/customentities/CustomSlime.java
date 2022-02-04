@@ -68,8 +68,8 @@ public class CustomSlime extends Slime implements IMountCustomEntity, EntityBase
 
             wEntity.setRotationYawHead(entity.getYRot());
 
-            wEntity.setMoveSpeed(0.35f * entityBase.getSpeed_());
-            entityBase.g_(sideMot, forMot);
+            //wEntity.setMoveSpeed(0.35f * entityBase.getSpeed_());
+            entityBase.travel_(sideMot, forMot);
 
 
             wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
@@ -88,7 +88,7 @@ public class CustomSlime extends Slime implements IMountCustomEntity, EntityBase
             wEntity.setStepHeight(0.5f);
             wEntity.setJumpMovementFactor(0.02f);
 
-            entityBase.g_(sideMot, forMot);
+            entityBase.travel_(sideMot, forMot);
         }
     }
 
@@ -117,19 +117,13 @@ public class CustomSlime extends Slime implements IMountCustomEntity, EntityBase
     }
 
     @Override
-    public void g_(float sideMot, float forMot) {
+    public void travel_(float sideMot, float forMot) {
         super.travel(new Vec3(sideMot, 0, forMot));
-    }
-    
-    // two methods here because getSpeed() belongs to NMS and will be remapped
-    @Override
-    public float getSpeed() {
-    	return getSpeed_();
     }
 
     @Override
     public float getSpeed_() {
-    	return 1.75f;
+    	return getSpeed();
     }
 
     @Override

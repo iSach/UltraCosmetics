@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.util;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -18,10 +17,6 @@ public class PlayerUtils {
         vector.setX((-xz * Math.sin(Math.toRadians(rotX))) * mult);
         vector.setZ((xz * Math.cos(Math.toRadians(rotX))) * mult);
         return vector;
-    }
-
-    public static void sendInActionBar(Player player, String message) {
-        UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(player, message);
     }
 
 }

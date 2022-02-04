@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.EntityInsentient;
 import net.minecraft.server.v1_12_R1.PathEntity;
-import net.minecraft.server.v1_12_R1.PathfinderGoalFollowParent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;

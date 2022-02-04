@@ -62,7 +62,7 @@ public class MorphCreeper extends Morph {
                         MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
                     }
                 }
-                UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), "");
+                UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), "");
                 charge = 0;
                 return;
             }
@@ -71,11 +71,11 @@ public class MorphCreeper extends Morph {
         }
         if (charge > 0 && charge < 100) {
             if (charge < 5) {
-                UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), "");
+                UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), "");
             } else
-                UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
+                UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
         } else if (charge == 100)
-            UltraCosmeticsData.get().getVersionManager().getActionBarUtil().sendActionMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
+            UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
     }
 
     @Override

@@ -11,7 +11,6 @@ import be.isach.ultracosmetics.v1_13_R2.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_13_R2.*;
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -40,19 +39,8 @@ public class EntityUtil implements IEntityUtil {
     private Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
 
     @Override
-    public void setPassenger(org.bukkit.entity.Entity vehicle, org.bukkit.entity.Entity passenger) {
-        vehicle.setPassenger(passenger);
-    }
-
-    @Override
     public void resetWitherSize(Wither wither) {
         ((CraftWither) wither).getHandle().d(600);
-    }
-
-
-    @Override
-    public void setHorseSpeed(org.bukkit.entity.Entity horse, double speed) {
-        ((CraftAbstractHorse) horse).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
     @Override
@@ -71,9 +59,7 @@ public class EntityUtil implements IEntityUtil {
             as.setSmall(true);
             as.setNoGravity(true);
             as.setArms(true);
-            as.setHeadPose(new Vector3f((float) (r.nextInt(360)),
-                    (float) (r.nextInt(360)),
-                    (float) (r.nextInt(360))));
+            as.setHeadPose(new Vector3f(r.nextInt(360), r.nextInt(360), r.nextInt(360)));
             as.setLocation(loc.getX() + MathUtils.randomDouble(-1.5, 1.5), loc.getY() + MathUtils.randomDouble(0, .5) - 0.75, loc.getZ() + MathUtils.randomDouble(-1.5, 1.5), 0, 0);
             fakeArmorStands.add(as);
             for (Player players : player.getWorld().getPlayers()) {
@@ -261,11 +247,4 @@ public class EntityUtil implements IEntityUtil {
     public boolean isMoving(Player entity) {
         return false;
     }
-
-    @Override
-    public byte[] getEncodedData(String url) {
-        return Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
-    }
-
-
 }

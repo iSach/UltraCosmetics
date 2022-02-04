@@ -70,7 +70,7 @@ public class RideableSpider extends Spider implements IMountCustomEntity, Entity
             wEntity.setRotationYawHead(entity.getYRot());
 
             wEntity.setMoveSpeed(0.35f * entityBase.getSpeed_());
-            entityBase.g_(sideMot, forMot);
+            entityBase.travel_(sideMot, forMot);
 
 
             wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
@@ -89,7 +89,7 @@ public class RideableSpider extends Spider implements IMountCustomEntity, Entity
             wEntity.setStepHeight(0.5f);
             wEntity.setJumpMovementFactor(0.02f);
 
-            entityBase.g_(sideMot, forMot);
+            entityBase.travel_(sideMot, forMot);
         }
     }
 
@@ -113,7 +113,7 @@ public class RideableSpider extends Spider implements IMountCustomEntity, Entity
     }
 
     @Override
-    public void g_(float sideMot, float forMot) {
+    public void travel_(float sideMot, float forMot) {
         super.travel(new Vec3(sideMot, 0, forMot));
     }
     
