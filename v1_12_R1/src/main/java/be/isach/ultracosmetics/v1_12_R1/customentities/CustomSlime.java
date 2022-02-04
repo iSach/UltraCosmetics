@@ -88,7 +88,6 @@ public class CustomSlime extends EntitySlime implements IMountCustomEntity, Enti
             wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
 
             wEntity.setRotationYawHead(entity.yaw);
-            wEntity.setMoveSpeed((float) MountType.valueOf("slime").getMovementSpeed());
 
             entityBase.g_(sideMot, forMot);
 
