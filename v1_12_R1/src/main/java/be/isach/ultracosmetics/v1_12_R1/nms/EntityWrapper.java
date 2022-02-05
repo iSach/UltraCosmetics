@@ -1,18 +1,56 @@
 package be.isach.ultracosmetics.v1_12_R1.nms;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.server.v1_12_R1.EntityLiving;
 
 /**
  * @author RadBuilder
  */
-public class WrapperEntityLiving extends WrapperEntity {
+public class EntityWrapper {
 
     protected EntityLiving handle;
 
-    public WrapperEntityLiving(EntityLiving handle) {
-        super(handle);
-
+    public EntityWrapper(EntityLiving handle) {
         this.handle = handle;
+    }
+
+    public <T> T getField(String name, Class<?> fieldClass, Class<T> clazz) {
+        T value = null;
+
+        try {
+            Field field = fieldClass.getDeclaredField(name);
+            field.setAccessible(true);
+
+            return clazz.cast(field.get(handle));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return value;
+    }
+
+    public <T> void setField(String name, Class<?> fieldClass, T value) {
+        try {
+            Field field = fieldClass.getDeclaredField(name);
+            field.setAccessible(true);
+
+            field.set(handle, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public float getStepHeight() {
+        return handle.P;
+    }
+
+    public void setStepHeight(float stepHeight) {
+        handle.P = stepHeight;
+    }
+
+    public boolean canPassengerSteer() {
+        return handle.bI();
     }
 
     public float getRotationYawHead() {
@@ -95,7 +133,6 @@ public class WrapperEntityLiving extends WrapperEntity {
         handle.k(moveSpeed);
     }
 
-    @Override
     public EntityLiving getHandle() {
         return handle;
     }

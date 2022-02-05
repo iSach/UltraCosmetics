@@ -3,6 +3,9 @@ package be.isach.ultracosmetics.v1_13_R2.customentities;
 import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.entity.EntityType;
 
+import be.isach.ultracosmetics.v1_13_R2.EntityBase;
+import be.isach.ultracosmetics.v1_13_R2.nms.EntityWrapper;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +28,7 @@ public enum CustomEntities {
     private Class<? extends EntityInsentient> nmsClass;
     private Class<? extends Entity> customClass;
 
-    CustomEntities(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
+    private CustomEntities(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
                    Class<? extends Entity> customClass) {
         this.name = name;
         this.id = id;
@@ -59,6 +62,64 @@ public enum CustomEntities {
         return customClass;
     }
 
+    public static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
+        if (!(entity instanceof EntityBase)) {
+            throw new IllegalArgumentException("The entity field should implements EntityBase");
+        }
+
+        EntityBase entityBase = (EntityBase) entity;
+
+        EntityWrapper wEntity = new EntityWrapper(entity);
+        EntityWrapper wPassenger = new EntityWrapper(passenger);
+
+        if (passenger != null) {
+            entity.lastYaw = entity.yaw = passenger.yaw % 360f;
+            entity.pitch = (passenger.pitch * 0.5F) % 360f;
+
+            wEntity.setRenderYawOffset(entity.yaw);
+            wEntity.setRotationYawHead(entity.yaw);
+
+            sideMot = wPassenger.getMoveStrafing() * 0.25f;
+            forMot = wPassenger.getMoveForward() * 0.5f;
+
+            if (forMot <= 0.0F) {
+                forMot *= 0.25F;
+            }
+
+            wEntity.setJumping(wPassenger.isJumping());
+
+            if (wPassenger.isJumping() && entity.onGround) {
+                entity.motY = 0.4d;
+            }
+
+            wEntity.setStepHeight(1.0f);
+            wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
+
+            wEntity.setRotationYawHead(entity.yaw);
+
+            entityBase.g_(sideMot, forMot);
+
+
+            wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
+
+            double dx = entity.locX - entity.lastX;
+            double dz = entity.locZ - entity.lastZ;
+
+            float f4 = MathHelper.sqrt(dx * dx + dz * dz) * 4;
+
+            if (f4 > 1)
+                f4 = 1;
+
+            wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
+            wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
+        } else {
+            wEntity.setStepHeight(0.5f);
+            wEntity.setJumpMovementFactor(0.02f);
+
+            entityBase.g_(sideMot, forMot);
+        }
+    }
+
     public static void registerEntities() {
         for (CustomEntities entity : values()) {
             try {
@@ -78,37 +139,9 @@ public enum CustomEntities {
                 e.printStackTrace();
             }
         }
-// Should no longer be needed with 1.13
-//		for (BiomeBase biomeBase : (Iterable<BiomeBase>) BiomeBase.i) {
-//			if (biomeBase == null)
-//				break;
-//			for (String field : new String[]{ "t", "u", "v", "w" })
-//				try {
-//					Field list = BiomeBase.class.getDeclaredField(field);
-//					list.setAccessible(true);
-//					@SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
-//							.get(biomeBase);
-//
-//					for (BiomeBase.BiomeMeta meta : mobList)
-//						for (CustomEntities entity : values())
-//							if (entity.getNMSClass().equals(meta.b))
-//								meta.b = entity.getCustomClass();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//		}
     }
 
-    public static void unregisterEntities() {
-// Should no longer be needed with 1.13
-//		for (CustomEntities entity : values()) {
-//			try {
-//				EntityTypes.b.a(entity.getID(), entity.getMinecraftKey(), entity.getNMSClass());
-//			} catch (Exception exc) {
-//				// ignore temporarily... TODO fix NMS problems... I hate Mojang
-//			}
-//		}
-    }
+    public static void unregisterEntities() {}
 
     public static Object getPrivateField(Class<?> clazz, Object handle, String fieldName) throws Exception {
         Field field = clazz.getDeclaredField(fieldName);

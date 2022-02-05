@@ -1,42 +1,16 @@
 package be.isach.ultracosmetics.v1_8_R3.customentities;
 
-import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.util.BlockUtils;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
-import org.bukkit.entity.Entity;
-
 import java.lang.reflect.Field;
 
 /**
  * Created by Sacha on 18/10/15.
  */
-public class RideableSpider extends EntitySpider implements IMountCustomEntity {
-
-    boolean isOnGround;
+public class RideableSpider extends EntitySpider {
 
     public RideableSpider(World world) {
         super(world);
-    }
-
-    @Override
-    public void removeAi() {
-        removeSelectors();
-    }
-
-    private void removeSelectors() {
-        try {
-            Field bField = PathfinderGoalSelector.class.getDeclaredField("b");
-            bField.setAccessible(true);
-            Field cField = PathfinderGoalSelector.class.getDeclaredField("c");
-            cField.setAccessible(true);
-            bField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            bField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(goalSelector, new UnsafeList<PathfinderGoalSelector>());
-            cField.set(targetSelector, new UnsafeList<PathfinderGoalSelector>());
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
     }
 
     /**
@@ -195,10 +169,5 @@ public class RideableSpider extends EntitySpider implements IMountCustomEntity {
     @Override
     public String getName() {
         return LocaleI18n.get("entity.Spider.name");
-    }
-
-    @Override
-    public Entity getEntity() {
-        return getBukkitEntity();
     }
 }

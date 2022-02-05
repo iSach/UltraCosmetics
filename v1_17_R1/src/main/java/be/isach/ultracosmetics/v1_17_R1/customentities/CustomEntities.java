@@ -3,9 +3,12 @@ package be.isach.ultracosmetics.v1_17_R1.customentities;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
+import be.isach.ultracosmetics.v1_17_R1.EntityBase;
+import be.isach.ultracosmetics.v1_17_R1.nms.EntityWrapper;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +19,8 @@ import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,7 +51,7 @@ public enum CustomEntities {
     private Class<? extends Mob> nmsClass;
     private Class<? extends Entity> customClass;
 
-    CustomEntities(String name, int id, EntityType entityType, Class<? extends Mob> nmsClass,
+    private CustomEntities(String name, int id, EntityType entityType, Class<? extends Mob> nmsClass,
                    Class<? extends Entity> customClass) {
         this.name = name;
         this.id = id;
@@ -80,60 +85,9 @@ public enum CustomEntities {
         types.put("minecraft:" + customName, types.get("minecraft:guardian"));
         EntityType.Builder<Entity> d = EntityType.Builder.of(CustomGuardian::new, MobCategory.AMBIENT);
         typesLocD = Registry.register(Registry.ENTITY_TYPE, customName, d.build(customName));
-
-        /**for (CustomEntities entity : values()) {
-         try {
-         // Use reflection to get the RegistryID of entities.
-         @SuppressWarnings("unchecked") RegistryID<EntityTypes < ?>> registryID = (RegistryID<EntityTypes<?>>) getPrivateField(RegistryMaterials.class, IRegistry.ENTITY_TYPE, "b");
-         Object[] idToClassMap = (Object[]) getPrivateField(RegistryID.class, registryID, "d");
-
-         // Save the the ID -> entity class mapping before the registration.
-         Object oldValue = idToClassMap[entity.getID()];
-
-         // Register the entity class.
-         //registryID.a(new EntityTypes<Entity>(entity.getCustomClass(), world -> null, true, true, null), entity.getID());
-         EntityTypes.b test = EntityTypes::a; // entity.getCustomClass ??? ^^^
-         registryID.a(new EntityTypes<Entity>(test, EnumCreatureType.AMBIENT, true, true, false, null, new EntitySize(0.5f, 0.5f, true)), entity.getID());
-
-         // Restore the ID -> entity class mapping.
-         idToClassMap[entity.getID()] = oldValue;
-         } catch (Exception e) {
-         e.printStackTrace();
-         }
-         }*/
-
-
-// Should no longer be needed with 1.13
-//		for (BiomeBase biomeBase : (Iterable<BiomeBase>) BiomeBase.i) {
-//			if (biomeBase == null)
-//				break;
-//			for (String field : new String[]{ "t", "u", "v", "w" })
-//				try {
-//					Field list = BiomeBase.class.getDeclaredField(field);
-//					list.setAccessible(true);
-//					@SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
-//							.get(biomeBase);
-//
-//					for (BiomeBase.BiomeMeta meta : mobList)
-//						for (CustomEntities entity : values())
-//							if (entity.getNMSClass().equals(meta.b))
-//								meta.b = entity.getCustomClass();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//		}
     }
 
-    public static void unregisterEntities() {
-// Should no longer be needed with 1.13
-//		for (CustomEntities entity : values()) {
-//			try {
-//				EntityTypes.b.a(entity.getID(), entity.getMinecraftKey(), entity.getNMSClass());
-//			} catch (Exception exc) {
-//				// ignore temporarily... TODO fix NMS problems... I hate Mojang
-//			}
-//		}
-    }
+    public static void unregisterEntities() {}
 
     public static Object getPrivateField(Class<?> clazz, Object handle, String fieldName) throws Exception {
         Field field = clazz.getDeclaredField(fieldName);
@@ -163,5 +117,71 @@ public enum CustomEntities {
 
     public Class<? extends Entity> getCustomClass() {
         return customClass;
+    }
+
+    public static void ride(float sideMot, float forMot, Player passenger, Mob mob) {
+        if (!(mob instanceof EntityBase)) {
+            throw new IllegalArgumentException("The entity field should implements EntityBase");
+        }
+
+        EntityBase entityBase = (EntityBase) mob;
+        Entity entity = mob;
+
+        EntityWrapper wEntity = new EntityWrapper(mob);
+        EntityWrapper wPassenger = new EntityWrapper(passenger);
+
+        if (passenger != null) {
+            entity.yRotO = ((Entity)passenger).getYRot() % 360f;
+            entity.setYRot(entity.yRotO);
+            entity.setXRot((((Entity)passenger).getXRot() * 0.5F) % 360f);
+
+            wEntity.setRenderYawOffset(entity.getYRot());
+            wEntity.setRotationYawHead(entity.getYRot());
+
+            sideMot = wPassenger.getMoveStrafing() * 0.25f;
+            forMot = wPassenger.getMoveForward() * 0.5f;
+
+            if (forMot <= 0.0F) {
+                forMot *= 0.25F;
+            }
+
+            wEntity.setJumping(wPassenger.isJumping());
+
+            if (wPassenger.isJumping() && entity.isOnGround()) {
+                Vec3 v = entity.getDeltaMovement();
+                Vec3 v2 = new Vec3(v.x(), 0.4D, v.z());
+                entity.setDeltaMovement(v2);
+
+                /*float f2 = MathHelper.sin(entity.yaw * 0.017453292f);
+                float f3 = MathHelper.cos(entity.yaw * 0.017453292f);
+                entity.setMot(entity.getMot().add(-0.4f * f2, upMot, 0.4f * f3));*/
+            }
+
+            wEntity.setStepHeight(1.0f);
+            wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
+
+            wEntity.setRotationYawHead(entity.getYRot());
+
+            entityBase.g_(sideMot, forMot);
+
+
+            wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
+
+            double dx = entity.getX() - entity.xo;
+            double dz = entity.getZ() - entity.zo;
+
+            float f4 = Mth.sqrt((float) (dx * dx + dz * dz)) * 4;
+
+            if (f4 > 1)
+                f4 = 1;
+
+            wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
+            wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
+        } else {
+            wEntity.setStepHeight(0.5f);
+            wEntity.setJumpMovementFactor(0.02f);
+
+            entityBase.g_(sideMot, forMot);
+        }
     }
 }

@@ -3,9 +3,12 @@ package be.isach.ultracosmetics.v1_18_R1.customentities;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
+import be.isach.ultracosmetics.v1_18_R1.EntityBase;
+import be.isach.ultracosmetics.v1_18_R1.nms.EntityWrapper;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +20,8 @@ import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -47,7 +52,7 @@ public enum CustomEntities {
     private Class<? extends Mob> nmsClass;
     private Class<? extends Entity> customClass;
 
-    CustomEntities(String name, int id, EntityType entityType, Class<? extends Mob> nmsClass,
+    private CustomEntities(String name, int id, EntityType entityType, Class<? extends Mob> nmsClass,
                    Class<? extends Entity> customClass) {
         this.name = name;
         this.id = id;
@@ -103,5 +108,68 @@ public enum CustomEntities {
 
     public Class<? extends Entity> getCustomClass() {
         return customClass;
+    }
+
+    public static void ride(float sideMot, float forMot, Player passenger, Mob mob) {
+        if (!(mob instanceof EntityBase)) {
+            throw new IllegalArgumentException("The entity parameter should implement EntityBase");
+        }
+
+        EntityBase entityBase = (EntityBase) mob;
+        Entity entity = mob;
+
+        EntityWrapper wEntity = new EntityWrapper(mob);
+        EntityWrapper wPassenger = new EntityWrapper(passenger);
+
+        if (passenger == null) {
+            wEntity.setStepHeight(0.5f);
+            wEntity.setJumpMovementFactor(0.02f);
+
+            entityBase.travel_(sideMot, forMot);
+            return;
+        }
+
+        entity.yRotO = ((Entity)passenger).getYRot() % 360f;
+        entity.setYRot(entity.yRotO);
+        entity.setXRot((((Entity)passenger).getXRot() * 0.5F) % 360f);
+
+        wEntity.setRenderYawOffset(entity.getYRot());
+        wEntity.setRotationYawHead(entity.getYRot());
+
+        sideMot = wPassenger.getMoveStrafing() * 0.25f;
+        forMot = wPassenger.getMoveForward() * 0.5f;
+
+        if (forMot <= 0.0F) {
+            forMot *= 0.25F;
+        }
+
+        wEntity.setJumping(wPassenger.isJumping());
+
+        if (wPassenger.isJumping() && entity.isOnGround()) {
+            Vec3 v = entity.getDeltaMovement();
+            Vec3 v2 = new Vec3(v.x(), 0.4D, v.z());
+            entity.setDeltaMovement(v2);
+        }
+
+        wEntity.setStepHeight(1.0f);
+        wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
+
+        wEntity.setRotationYawHead(entity.getYRot());
+
+        entityBase.travel_(sideMot, forMot);
+
+
+        wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
+
+        double dx = entity.getX() - entity.xo;
+        double dz = entity.getZ() - entity.zo;
+
+        float f4 = Mth.sqrt((float) (dx * dx + dz * dz)) * 4;
+
+        if (f4 > 1)
+            f4 = 1;
+
+        wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
+        wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
     }
 }

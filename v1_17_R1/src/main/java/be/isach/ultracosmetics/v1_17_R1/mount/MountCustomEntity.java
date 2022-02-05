@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.v1_17_R1.mount;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -16,7 +15,7 @@ import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
  */
 public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> extends Mount<E> {
 
-    protected IMountCustomEntity customEntity;
+    protected LivingEntity customEntity;
 
     public MountCustomEntity(UltraPlayer owner, MountType type, UltraCosmetics ultraCosmetics) {
         super(owner, type, ultraCosmetics);
@@ -31,8 +30,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         getCustomEntity().moveTo(x, y + 2, z, 0, 0);
         ((CraftWorld) getPlayer().getWorld()).getHandle().addFreshEntity(getCustomEntity());
         CustomEntities.customEntities.add(getCustomEntity());
-        customEntity.removeAi();
-        ((LivingEntity)customEntity).setSpeed((float) getType().getMovementSpeed());
+        customEntity.setSpeed((float) getType().getMovementSpeed());
         return getEntity();
     }
 
@@ -42,14 +40,15 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         CustomEntities.customEntities.remove(customEntity);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E getEntity() {
-        return (E) customEntity.getEntity();
+        return (E) customEntity.getBukkitEntity();
     }
 
     public Entity getCustomEntity() {
-        return (Entity) customEntity;
+        return customEntity;
     }
 
-    public abstract IMountCustomEntity getNewEntity();
+    public abstract LivingEntity getNewEntity();
 }

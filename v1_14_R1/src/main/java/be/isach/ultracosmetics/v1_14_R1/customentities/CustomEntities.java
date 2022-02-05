@@ -2,6 +2,9 @@ package be.isach.ultracosmetics.v1_14_R1.customentities;
 
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
+
+import be.isach.ultracosmetics.v1_14_R1.EntityBase;
+import be.isach.ultracosmetics.v1_14_R1.nms.EntityWrapper;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.entity.EntityType;
 
@@ -34,7 +37,7 @@ public enum CustomEntities {
     private Class<? extends EntityInsentient> nmsClass;
     private Class<? extends Entity> customClass;
 
-    CustomEntities(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
+    private CustomEntities(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
                    Class<? extends Entity> customClass) {
         this.name = name;
         this.id = id;
@@ -92,64 +95,73 @@ public enum CustomEntities {
         types.put("minecraft:" + customName, types.get("minecraft:guardian"));
         EntityTypes.a<Entity> d = EntityTypes.a.a(CustomGuardian::new, EnumCreatureType.AMBIENT);
         typesLocD = IRegistry.a(IRegistry.ENTITY_TYPE, customName, d.a(customName));
-
-        /**for (CustomEntities entity : values()) {
-         try {
-         // Use reflection to get the RegistryID of entities.
-         @SuppressWarnings("unchecked") RegistryID<EntityTypes < ?>> registryID = (RegistryID<EntityTypes<?>>) getPrivateField(RegistryMaterials.class, IRegistry.ENTITY_TYPE, "b");
-         Object[] idToClassMap = (Object[]) getPrivateField(RegistryID.class, registryID, "d");
-
-         // Save the the ID -> entity class mapping before the registration.
-         Object oldValue = idToClassMap[entity.getID()];
-
-         // Register the entity class.
-         //registryID.a(new EntityTypes<Entity>(entity.getCustomClass(), world -> null, true, true, null), entity.getID());
-         EntityTypes.b test = EntityTypes::a; // entity.getCustomClass ??? ^^^
-         registryID.a(new EntityTypes<Entity>(test, EnumCreatureType.AMBIENT, true, true, false, null, new EntitySize(0.5f, 0.5f, true)), entity.getID());
-
-         // Restore the ID -> entity class mapping.
-         idToClassMap[entity.getID()] = oldValue;
-         } catch (Exception e) {
-         e.printStackTrace();
-         }
-         }*/
-
-
-// Should no longer be needed with 1.13
-//		for (BiomeBase biomeBase : (Iterable<BiomeBase>) BiomeBase.i) {
-//			if (biomeBase == null)
-//				break;
-//			for (String field : new String[]{ "t", "u", "v", "w" })
-//				try {
-//					Field list = BiomeBase.class.getDeclaredField(field);
-//					list.setAccessible(true);
-//					@SuppressWarnings("unchecked") List<BiomeBase.BiomeMeta> mobList = (List<BiomeBase.BiomeMeta>) list
-//							.get(biomeBase);
-//
-//					for (BiomeBase.BiomeMeta meta : mobList)
-//						for (CustomEntities entity : values())
-//							if (entity.getNMSClass().equals(meta.b))
-//								meta.b = entity.getCustomClass();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//		}
     }
 
-    public static void unregisterEntities() {
-// Should no longer be needed with 1.13
-//		for (CustomEntities entity : values()) {
-//			try {
-//				EntityTypes.b.a(entity.getID(), entity.getMinecraftKey(), entity.getNMSClass());
-//			} catch (Exception exc) {
-//				// ignore temporarily... TODO fix NMS problems... I hate Mojang
-//			}
-//		}
-    }
+    public static void unregisterEntities() {}
 
     public static Object getPrivateField(Class<?> clazz, Object handle, String fieldName) throws Exception {
         Field field = clazz.getDeclaredField(fieldName);
         field.setAccessible(true);
         return field.get(handle);
+    }
+
+    public static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
+        if (!(entity instanceof EntityBase)) {
+            throw new IllegalArgumentException("The entity field should implements EntityBase");
+        }
+
+        EntityBase entityBase = (EntityBase) entity;
+
+        EntityWrapper wEntity = new EntityWrapper(entity);
+        EntityWrapper wPassenger = new EntityWrapper(passenger);
+
+        if (passenger != null) {
+            entity.lastYaw = entity.yaw = passenger.yaw % 360f;
+            entity.pitch = (passenger.pitch * 0.5F) % 360f;
+
+            wEntity.setRenderYawOffset(entity.yaw);
+            wEntity.setRotationYawHead(entity.yaw);
+
+            sideMot = wPassenger.getMoveStrafing() * 0.25f;
+            forMot = wPassenger.getMoveForward() * 0.5f;
+
+            if (forMot <= 0.0F) {
+                forMot *= 0.25F;
+            }
+
+            wEntity.setJumping(wPassenger.isJumping());
+
+            if (wPassenger.isJumping() && entity.onGround) {
+                Vec3D v = entity.getMot();
+                Vec3D v2 = new Vec3D(v.getX(), 0.4D, v.getZ());
+                entity.setMot(v2);
+            }
+
+            wEntity.setStepHeight(1.0f);
+            wEntity.setJumpMovementFactor(wEntity.getMoveSpeed() * 0.1f);
+
+            wEntity.setRotationYawHead(entity.yaw);
+
+            entityBase.g_(sideMot, forMot);
+
+
+            wEntity.setPrevLimbSwingAmount(wEntity.getLimbSwingAmount());
+
+            double dx = entity.locX - entity.lastX;
+            double dz = entity.locZ - entity.lastZ;
+
+            float f4 = MathHelper.sqrt(dx * dx + dz * dz) * 4;
+
+            if (f4 > 1)
+                f4 = 1;
+
+            wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
+            wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
+        } else {
+            wEntity.setStepHeight(0.5f);
+            wEntity.setJumpMovementFactor(0.02f);
+
+            entityBase.g_(sideMot, forMot);
+        }
     }
 }

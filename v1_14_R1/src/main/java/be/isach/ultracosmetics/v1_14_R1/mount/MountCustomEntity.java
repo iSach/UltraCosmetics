@@ -1,12 +1,11 @@
 package be.isach.ultracosmetics.v1_14_R1.mount;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_14_R1.customentities.CustomEntities;
-import be.isach.ultracosmetics.v1_14_R1.nms.WrapperEntityLiving;
+import be.isach.ultracosmetics.v1_14_R1.nms.EntityWrapper;
 import net.minecraft.server.v1_14_R1.Entity;
 import net.minecraft.server.v1_14_R1.EntityLiving;
 
@@ -17,7 +16,7 @@ import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
  */
 public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> extends Mount<E> {
 
-    protected IMountCustomEntity customEntity;
+    protected EntityLiving customEntity;
 
     public MountCustomEntity(UltraPlayer owner, MountType type, UltraCosmetics ultraCosmetics) {
         super(owner, type, ultraCosmetics);
@@ -32,8 +31,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         getCustomEntity().setLocation(x, y + 2, z, 0, 0);
         ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         CustomEntities.customEntities.add(getCustomEntity());
-        customEntity.removeAi();
-        new WrapperEntityLiving((EntityLiving) customEntity).setMoveSpeed((float) getType().getMovementSpeed());
+        new EntityWrapper(customEntity).setMoveSpeed((float) getType().getMovementSpeed());
         return getEntity();
     }
 
@@ -45,12 +43,12 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
 
     @Override
     public E getEntity() {
-        return (E) customEntity.getEntity();
+        return (E) customEntity.getBukkitEntity();
     }
 
     public Entity getCustomEntity() {
-        return (Entity)customEntity;
+        return customEntity;
     }
 
-    public abstract IMountCustomEntity getNewEntity();
+    public abstract EntityLiving getNewEntity();
 }

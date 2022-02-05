@@ -1,19 +1,58 @@
 package be.isach.ultracosmetics.v1_17_R1.nms;
 
+import java.lang.reflect.Field;
+
 import be.isach.ultracosmetics.v1_17_R1.ObfuscatedFields;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
  * @author RadBuilder
  */
-public class WrapperEntityLiving extends WrapperEntity {
+public class EntityWrapper {
 
     protected LivingEntity handle;
 
-    public WrapperEntityLiving(LivingEntity handle) {
-        super(handle);
-
+    public EntityWrapper(LivingEntity handle) {
         this.handle = handle;
+    }
+
+    public <T> T getField(String name, Class<?> fieldClass, Class<T> clazz) {
+        T value = null;
+
+        try {
+            Field field = fieldClass.getDeclaredField(name);
+            field.setAccessible(true);
+
+            return clazz.cast(field.get(handle));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return value;
+    }
+
+    public <T> void setField(String name, Class<?> fieldClass, T value) {
+        try {
+            Field field = fieldClass.getDeclaredField(name);
+            field.setAccessible(true);
+
+            field.set(handle, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public float getStepHeight() {
+        return ((Entity)handle).maxUpStep;
+    }
+
+    public void setStepHeight(float stepHeight) {
+        ((Entity)handle).maxUpStep = stepHeight;
+    }
+
+    public boolean canPassengerSteer() {
+        return ((Entity)handle).onlyOpCanSetNbt();
     }
 
     public float getRotationYawHead() {
@@ -97,7 +136,6 @@ public class WrapperEntityLiving extends WrapperEntity {
         handle.setSpeed(moveSpeed);
     }
 
-    @Override
     public LivingEntity getHandle() {
         return handle;
     }

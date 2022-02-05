@@ -1,11 +1,12 @@
 package be.isach.ultracosmetics.v1_18_R1.mount;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_18_R1.customentities.CustomSlime;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Slime;
 
@@ -23,7 +24,7 @@ public class MountSlime extends MountCustomEntity<Slime> {
     }
 
     @Override
-    public IMountCustomEntity getNewEntity() {
+    public LivingEntity getNewEntity() {
         return new CustomSlime(EntityType.SLIME, ((CraftPlayer) getPlayer()).getHandle().getLevel());
     }
 }

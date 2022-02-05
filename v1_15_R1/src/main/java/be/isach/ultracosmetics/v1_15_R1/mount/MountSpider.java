@@ -4,10 +4,10 @@ import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.entity.Spider;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.mounts.IMountCustomEntity;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_15_R1.customentities.RideableSpider;
+import net.minecraft.server.v1_15_R1.EntityLiving;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 
 /**
@@ -23,7 +23,7 @@ public class MountSpider extends MountCustomEntity<Spider> {
     }
 
     @Override
-    public IMountCustomEntity getNewEntity() {
+    public EntityLiving getNewEntity() {
         return new RideableSpider(EntityTypes.SPIDER, ((CraftWorld) getPlayer().getWorld()).getHandle());
     }
 }

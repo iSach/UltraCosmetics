@@ -96,7 +96,7 @@ public class MountType extends CosmeticEntType<Mount> {
         new MountType("ultracosmetics.mounts.druggedhorse", "DruggedHorse", XMaterial.SUGAR, EntityType.HORSE, "&7&oThat is just too much!", 2, null, 1.1, MountDruggedHorse.class);
         new MountType("ultracosmetics.mounts.glacialsteed", "GlacialSteed", XMaterial.PACKED_ICE, EntityType.HORSE, "&7&oThis mount comes from North Pole!", 2, Arrays.asList(XMaterial.SNOW_BLOCK), 0.4, MountGlacialSteed.class);
         new MountType("ultracosmetics.mounts.mountoffire", "MountOfFire", XMaterial.BLAZE_POWDER, EntityType.HORSE, "&7&oThe mount of Hades!", 2, Arrays.asList(XMaterial.ORANGE_TERRACOTTA, XMaterial.YELLOW_TERRACOTTA, XMaterial.RED_TERRACOTTA), 0.4, MountOfFire.class);
-        new MountType("ultracosmetics.mounts.snake", "Snake", XMaterial.WHEAT_SEEDS, EntityType.SHEEP, "&7&oWatch out! It may bite..", 2, null, 0.4, MountSnake.class);
+        new MountType("ultracosmetics.mounts.snake", "Snake", XMaterial.WHEAT_SEEDS, EntityType.SHEEP, "&7&oWatch out! It may bite..", 2, null, 0.3, MountSnake.class);
         new MountType("ultracosmetics.mounts.dragon", "Dragon", XMaterial.DRAGON_EGG, EntityType.ENDER_DRAGON, "&7&oBecome a dragon rider!", 1, null, 0.7, MountDragon.class);
         new MountType("ultracosmetics.mounts.slime", "Slime", XMaterial.SLIME_BALL, EntityType.SLIME, "&7&oSplat! Splat!", 2, null, 0.8, UltraCosmeticsData.get().getVersionManager().getModule().getSlimeClass());
         new MountType("ultracosmetics.mounts.hypecart", "HypeCart", XMaterial.MINECART, EntityType.MINECART, "&7&oEver wanted to drive a F1?\n&7&oNow you can!", 1, null, 0, MountHypeCart.class);

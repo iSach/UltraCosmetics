@@ -30,6 +30,9 @@ import java.util.function.Consumer;
  * @author Wesley Smith
  * @since 1.0
  */
+
+// TODO: This class is ENTIRELY API, move it to core and remove duplicates
+
 public class AnvilGUI implements IAnvilGUI {
 
     /**

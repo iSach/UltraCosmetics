@@ -7,6 +7,9 @@ import be.isach.ultracosmetics.version.IPets;
 /**
  * @author RadBuilder
  */
+
+// TODO: do we need a whole class for this?
+
 public class Pets implements IPets {
     @Override
     public Class<? extends Pet> getPumplingClass() {

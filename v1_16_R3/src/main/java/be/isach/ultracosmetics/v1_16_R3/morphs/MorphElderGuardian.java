@@ -6,7 +6,7 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.v1_16_R3.customentities.CustomEntityFirework;
+import be.isach.ultracosmetics.v1_16_R3.FireworkFactory;
 import be.isach.ultracosmetics.v1_16_R3.customentities.CustomGuardian;
 import net.minecraft.server.v1_16_R3.Entity;
 import net.minecraft.server.v1_16_R3.EntityTypes;
@@ -83,7 +83,7 @@ public class MorphElderGuardian extends Morph {
             FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                     .withColor(Color.TEAL).withFade(Color.TEAL).build();
 
-            CustomEntityFirework.spawn(TO, effect);
+            new FireworkFactory().spawn(TO, effect);
 
             Vector vector = TO.toVector().subtract(FROM.toVector());
 

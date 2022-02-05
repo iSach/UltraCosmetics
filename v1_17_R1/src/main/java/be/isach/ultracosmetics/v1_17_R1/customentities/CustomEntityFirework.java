@@ -1,13 +1,7 @@
 package be.isach.ultracosmetics.v1_17_R1.customentities;
 
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.FireworkMeta;
-
 import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -26,22 +20,6 @@ public class CustomEntityFirework extends FireworkRocketEntity {
         players = p;
         // this doesn't seem right but it's the same method used in v1_16_R3
         this.newFloatList(0.25F, 0.25F);
-    }
-
-    public static void spawn(Location location, FireworkEffect effect, Player... players) {
-        try {
-            CustomEntityFirework firework = new CustomEntityFirework(((CraftWorld) location.getWorld()).getHandle(), players);
-            FireworkMeta meta = ((Firework) firework.getBukkitEntity()).getFireworkMeta();
-            meta.addEffect(effect);
-            ((Firework) firework.getBukkitEntity()).setFireworkMeta(meta);
-            ((Entity)firework).setPos(location.getX(), location.getY(), location.getZ());
-
-            if ((((CraftWorld) location.getWorld()).getHandle()).addFreshEntity(firework)) {
-                ((Entity)firework).setInvisible(true);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
