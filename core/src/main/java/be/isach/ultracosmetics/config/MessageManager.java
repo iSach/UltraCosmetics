@@ -51,9 +51,6 @@ public class MessageManager {
         addMessage("Your-Keys", "&7&oYour keys: &f&l%keys%");
         addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor %price%$");
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
-        addMessage("Chest-Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
-        addMessage("Too-Close-To-Other-Chest", "%prefix% &c&lYou are too close to another treasure chest!");
-        addMessage("Chest-Region-Disabled", "%prefix% &c&lYou can't open a chest here!");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
         addMessage("Clear-Cosmetics", "&c&lClear cosmetics");
         addMessage("Clear-Gadget", "&c&lClear current gadget");
@@ -65,6 +62,14 @@ public class MessageManager {
         addMessage("Clear-Suit", "&c&lClear current suit");
         addMessage("Clear-Emote", "&c&lClear current emote");
         addMessage("Rename-Pet-Purchase", "&c&lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
+
+        addMessage("Chest-Location.Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
+        addMessage("Chest-Location.Too-Close", "%prefix% &c&lYou are too close to another treasure chest!");
+        addMessage("Chest-Location.Region-Disabled", "%prefix% &c&lYou can't open a chest here!");
+        addMessage("Chest-Location.Invalid", "%prefix% &c&lThat's not a valid location.");
+        addMessage("Chest-Location.In-Air", "%prefix% &c&lThat location is not on the ground!");
+        addMessage("Chest-Location.In-Ground", "%prefix% &c&lThat location is in the ground!");
+        addMessage("Chest-Location.Suggestion", "%prefix% &aMaybe you meant %location%?");
 
         addMessage("Active-Pet-Needed", "&c&lYou need to spawn a pet to rename it");
         addMessage("Rename-Pet", "&c&lClick to rename: %petname%");

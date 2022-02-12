@@ -103,7 +103,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
         // If the user's armor slot is still occupied after we've removed all related cosmetics,
         // give up and ask the user to free up the slot.
-        if (getPlayer().getEquipment().getItem(getArmorSlot().toBukkit()) != null) {
+        if (getArmorItem(getArmorSlot()) != null) {
             getOwner().sendMessage(MessageManager.getMessage("Suits.Must-Remove." + getArmorSlot().toString()));
             return;
         }
@@ -124,7 +124,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     @Override
     protected void onEquip() {
         itemStack = ItemFactory.create(getType().getMaterial(getArmorSlot()), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore"));
-        getPlayer().getEquipment().setItem(getArmorSlot().toBukkit(), itemStack);
+        setArmorItem(getArmorSlot(), itemStack);
 
         getOwner().setCurrentSuitPart(armorSlot, this);
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
@@ -144,7 +144,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
      */
     @Override
     public void onClear() {
-        getPlayer().getEquipment().setItem(getArmorSlot().toBukkit(), null);
+        setArmorItem(getArmorSlot(), null);
         getOwner().setCurrentSuitPart(getArmorSlot(), null);
         HandlerList.unregisterAll(this);
     }
@@ -170,5 +170,35 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     @Override
     protected String getTypeName() {
         return getType().getName(getArmorSlot());
+    }
+
+    private ItemStack getArmorItem(ArmorSlot slot) {
+        switch (slot) {
+        case BOOTS:
+            return getPlayer().getInventory().getBoots();
+        case LEGGINGS:
+            return getPlayer().getInventory().getLeggings();
+        case CHESTPLATE:
+            return getPlayer().getInventory().getChestplate();
+        case HELMET:
+            return getPlayer().getInventory().getHelmet();
+        default:
+            return null;
+        }
+    }
+
+    private void setArmorItem(ArmorSlot slot, ItemStack item) {
+        switch (slot) {
+        case BOOTS:
+            getPlayer().getInventory().setBoots(item);
+        case LEGGINGS:
+            getPlayer().getInventory().setLeggings(item);
+        case CHESTPLATE:
+            getPlayer().getInventory().setChestplate(item);
+        case HELMET:
+            getPlayer().getInventory().setHelmet(item);
+        default:
+            break;
+        }
     }
 }

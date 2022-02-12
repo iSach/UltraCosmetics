@@ -48,10 +48,14 @@ public abstract class Menu implements Listener {
     }
 
     public void open(UltraPlayer player) {
+        player.getBukkitPlayer().openInventory(getInventory(player));
+    }
+
+    public Inventory getInventory(UltraPlayer player) {
         Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), getSize(), getName());
         putItems(inventory, player);
         ItemFactory.fillInventory(inventory);
-        player.getBukkitPlayer().openInventory(inventory);
+        return inventory;
     }
 
     protected void putItem(Inventory inventory, int slot, ItemStack itemStack, ClickRunnable clickRunnable) {

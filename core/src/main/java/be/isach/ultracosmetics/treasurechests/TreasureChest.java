@@ -48,7 +48,7 @@ public class TreasureChest implements Listener {
     private Map<Block, BlockState> blocksToRestore = new HashMap<>();
     private List<Block> chests = new ArrayList<>();
     private List<Block> chestsToRemove = new ArrayList<>();
-    public UUID owner;
+    private UUID owner;
     private BukkitRunnable chestParticleRunnable = null;
     private BukkitRunnable placeChestRunnable = null;
     private TreasureRandomizer randomGenerator;
@@ -121,8 +121,12 @@ public class TreasureChest implements Listener {
                                     cancel();
                                     return;
                                 }
-                                UtilParticles.playHelix(getChestLocation(i, center.clone()), 0.0F, particleEffect);
-                                UtilParticles.playHelix(getChestLocation(i, center.clone()), 3.5F, particleEffect);
+                                int animationTime = 0;
+                                if (particleEffect != null) {
+                                    UtilParticles.playHelix(getChestLocation(i, center.clone()), 0.0F, particleEffect);
+                                    UtilParticles.playHelix(getChestLocation(i, center.clone()), 3.5F, particleEffect);
+                                    animationTime = 30;
+                                }
                                 placeChestRunnable = new BukkitRunnable() {
                                     @Override
                                     public void run() {
@@ -157,7 +161,7 @@ public class TreasureChest implements Listener {
                                         i--;
                                     }
                                 };
-                                placeChestRunnable.runTaskLater(uc, 30L);
+                                placeChestRunnable.runTaskLater(uc, animationTime);
                             }
                         };
                         chestParticleRunnable.runTaskTimer(uc, 0L, 50L);
@@ -196,32 +200,37 @@ public class TreasureChest implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if ((getPlayer() == null) ||
-                        (pm.getUltraPlayer(TreasureChest.this
-                                .getPlayer()) == null) ||
-                        (pm.getUltraPlayer(TreasureChest.this
-                                .getPlayer()).getCurrentTreasureChest() != TreasureChest.this)) {
-                    for (Entity entity : holograms)
+                UltraPlayer ultraPlayer = pm.getUltraPlayer(getPlayer());
+                if (ultraPlayer == null || ultraPlayer.getCurrentTreasureChest() != TreasureChest.this)  {
+                    for (Entity entity : holograms) {
                         entity.remove();
+                    }
                     cancel();
                     return;
                 }
-                if (!getPlayer().getWorld().getName().equals(center.getWorld().getName()))
+                if (!getPlayer().getWorld().getName().equals(center.getWorld().getName())) {
                     getPlayer().teleport(center);
-                if (getPlayer().getLocation().distance(center) > 1.5D)
+                }
+                //                            distance(center) > 1.5D
+                if (getPlayer().getLocation().distanceSquared(center) > 2.25D) {
                     getPlayer().teleport(center);
-                for (Entity ent : player.getNearbyEntities(2.0D, 2.0D, 2.0D))
-                    if ((pm.getUltraPlayer(player).getCurrentPet() == null) || (
-                            (ent != pm.getUltraPlayer(player).getCurrentPet()) &&
-                                    (!pm.getUltraPlayer(player).getCurrentPet().items
-                                            .contains(ent)))) {
-                        if (!items.contains(ent) && ent != TreasureChest.this.getPlayer() && !holograms.contains(ent)) {
-                            Vector v = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).multiply(0.5D).add(new Vector(0.0D, 1.5D, 0.0D));
-                            v.setY(0);
-                            v.add(new Vector(0, 1, 0));
-                            MathUtils.applyVelocity(ent, v.add(MathUtils.getRandomCircleVector().multiply(0.2D)));
-                        }
+                }
+                for (Entity ent : player.getNearbyEntities(2.0D, 2.0D, 2.0D)) {
+                    if (ent == TreasureChest.this.getPlayer()) continue;
+                    if (items.contains(ent)) continue;
+                    if (holograms.contains(ent)) continue;
+                    UltraPlayer up = pm.getUltraPlayer(player);
+                    // if player has a pet and the loop entity is either the pet or one of its items, skip it
+                    if (up.getCurrentPet() != null) {
+                        if (ent == up.getCurrentPet()) continue;
+                        if (up.getCurrentPet().getItems().contains(ent)) continue;
                     }
+                    // Passed all checks!
+                    Vector v = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).multiply(0.5D).add(new Vector(0.0D, 1.5D, 0.0D));
+                    v.setY(0);
+                    v.add(new Vector(0, 1, 0));
+                    MathUtils.applyVelocity(ent, v.add(MathUtils.getRandomCircleVector().multiply(0.2D)));
+                }
             }
         }.runTaskTimer(uc, 0L, 1L);
     }

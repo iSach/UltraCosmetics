@@ -12,11 +12,11 @@ import org.bukkit.material.MaterialData;
  */
 public class TreasureChestDesign {
 
-    private MaterialData center;
-    private MaterialData blocks2;
-    private MaterialData blocks3;
-    private MaterialData belowChests;
-    private MaterialData barriers;
+    private final MaterialData center;
+    private final MaterialData blocks2;
+    private final MaterialData blocks3;
+    private final MaterialData belowChests;
+    private final MaterialData barriers;
     private ChestType chestType;
     private Particles effect;
     public TreasureChestDesign(String path) {
@@ -32,10 +32,12 @@ public class TreasureChestDesign {
         } catch (IllegalArgumentException exc) {
             this.chestType = ChestType.NORMAL;
         }
-        try {
-            this.effect = Particles.valueOf(effect);
-        } catch (IllegalArgumentException exc) {
-            this.effect = Particles.FLAME;
+        if (effect != null) {
+            try {
+                this.effect = Particles.valueOf(effect);
+            } catch (IllegalArgumentException exc) {
+                this.effect = Particles.FLAME;
+            }
         }
     }
 

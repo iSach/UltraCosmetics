@@ -45,7 +45,6 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
     private static final Random RANDOM = new Random();
-    private static final Map<String,Integer> WORLD_HEIGHTS = new HashMap<>();
     private BukkitTask mountRegionTask = null;
     /**
      * The Entity, if it isn't a Custom Entity.
@@ -118,7 +117,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             }
 
             // Prevents players on mounts from being able to fall in the void infinitely.
-            if (entity.getLocation().getY() <= getWorldHeight(entity.getWorld()) - 15) {
+            if (entity.getLocation().getY() <= UltraCosmeticsData.get().getVersionManager().getWorldMinHeight(entity.getWorld()) - 15) {
                 clear();
                 cancel();
                 return;
@@ -240,17 +239,6 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
 
     public void setBeingRemoved(boolean beingRemoved) {
         this.beingRemoved = beingRemoved;
-    }
-
-    private int getWorldHeight(World world) {
-        // TODO: can this actually vary by world? something to do with datapacks?
-        return WORLD_HEIGHTS.computeIfAbsent(world.getName(), w -> {
-            try {
-                return world.getMinHeight();
-            } catch (NoSuchMethodError ex) {
-                return 0;
-            }
-        });
     }
 
     private boolean isHorse(EntityType type) {

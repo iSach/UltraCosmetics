@@ -5,15 +5,20 @@ import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ReflectionUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
+
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VersionManager {
     public static boolean IS_VERSION_1_13 = UltraCosmeticsData.get().getServerVersion().is113();
     public static final String PACKAGE = "be.isach.ultracosmetics";
+    // TODO: value as Pair or something?
+    private static final Map<String,Integer> WORLD_MIN_HEIGHTS = new HashMap<>();
+    private static final Map<String,Integer> WORLD_MAX_HEIGHTS = new HashMap<>();
     private IModule module;
     private ServerVersion serverVersion;
     private IEntityUtil entityUtil;
@@ -23,7 +28,6 @@ public class VersionManager {
     private IPets pets;
     private IMorphs morphs;
     private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
-    private Constructor<? extends IAnvilGUI> anvilGUIConstructor;
 
     public VersionManager(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
@@ -42,11 +46,6 @@ public class VersionManager {
         fireworkFactory = loadModule("FireworkFactory");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
-        if (serverVersion.isAtLeast(ServerVersion.v1_14_R1))
-            anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, String.class, Boolean.class, Consumer.class, BiFunction.class);
-        else
-            anvilGUIConstructor = (Constructor<IAnvilGUI>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".AnvilGUI"), Player.class, AAnvilGUI.AnvilClickEventHandler.class);
-        anvilGUIConstructor.setAccessible(true);
         playerFollowerConstructor = (Constructor<? extends IPlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pets.PlayerFollower"), Pet.class, Player.class);
         playerFollowerConstructor.setAccessible(true);
     }
@@ -73,24 +72,6 @@ public class VersionManager {
         return mounts;
     }
 
-    public AAnvilGUI newAnvilGUI(Player player, AAnvilGUI.AnvilClickEventHandler handler) {
-        try {
-            return (AAnvilGUI) anvilGUIConstructor.newInstance(player, handler);
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public IAnvilGUI newAnvilGUI(Player player, String text, Consumer<Player> closeListener, BiFunction<Player, String, AAnvilGUI.Response> completeFunction) {
-        try {
-            return anvilGUIConstructor.newInstance(player, text, true, closeListener, completeFunction);
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public IPlayerFollower newPlayerFollower(Pet pet, Player player) {
         try {
             return playerFollowerConstructor.newInstance(pet, player);
@@ -110,5 +91,35 @@ public class VersionManager {
 
     public IModule getModule() {
         return module;
+    }
+
+    public IAnvilWrapper getAnvilWrapper() {
+        try {
+            return loadModule("AnvilWrapper");
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public int getWorldMinHeight(World world) {
+        // TODO: can this actually vary by world? something to do with datapacks?
+        return WORLD_MIN_HEIGHTS.computeIfAbsent(world.getName(), w -> {
+            try {
+                return world.getMinHeight();
+            } catch (NoSuchMethodError ex) {
+                return 0;
+            }
+        });
+    }
+
+    public int getWorldMaxHeight(World world) {
+        return WORLD_MAX_HEIGHTS.computeIfAbsent(world.getName(), w -> {
+            try {
+                return world.getMaxHeight();
+            } catch (NoSuchMethodError ex) {
+                return 255;
+            }
+        });
     }
 }

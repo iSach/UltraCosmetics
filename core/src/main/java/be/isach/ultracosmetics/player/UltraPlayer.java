@@ -469,8 +469,8 @@ public class UltraPlayer {
      */
     public void setPetName(PetType petType, String name) {
         if (currentPet != null) {
-            if (currentPet.armorStand != null) {
-                currentPet.armorStand.setCustomName(name);
+            if (currentPet.hasArmorStand()) {
+                currentPet.getArmorStand().setCustomName(name);
             } else {
                 currentPet.getEntity().setCustomName(name);
             }

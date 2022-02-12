@@ -77,7 +77,7 @@ public class TreasureChestManager implements Listener {
 
         if (!plugin.areChestsAllowedInRegion(player)) {
             player.closeInventory();
-            player.sendMessage(MessageManager.getMessage("Chest-Region-Disabled"));
+            player.sendMessage(MessageManager.getMessage("Chest-Location.Region-Disabled"));
             return;
         }
 
@@ -91,7 +91,7 @@ public class TreasureChestManager implements Listener {
         Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
 
         if (!c.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
-            player.sendMessage(MessageManager.getMessage("Chest-Not-Enough-Space"));
+            player.sendMessage(MessageManager.getMessage("Chest-Location.Not-Enough-Space"));
 
             if(preLoc != null) {
                 player.teleport(preLoc);
@@ -106,7 +106,7 @@ public class TreasureChestManager implements Listener {
             if (Bukkit.getPlayer(loopPlayer.getUniqueId()) != null 
                     && plugin.getPlayerManager().getUltraPlayer(loopPlayer).getCurrentTreasureChest() != null) {
                 player.closeInventory();
-                player.sendMessage(MessageManager.getMessage("Too-Close-To-Other-Chest"));
+                player.sendMessage(MessageManager.getMessage("Chest-Location.Too-Close"));
                 return;
             }
         }

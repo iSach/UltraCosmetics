@@ -44,7 +44,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
         if (pet.isCustomEntity()) {
             petEntity = ((CustomEntityPet) pet).getCustomEntity();
         } else {
-            petEntity = ((CraftEntity) pet.entity).getHandle();
+            petEntity = ((CraftEntity) pet.getEntity()).getHandle();
         }
 
         if (petEntity == null) {

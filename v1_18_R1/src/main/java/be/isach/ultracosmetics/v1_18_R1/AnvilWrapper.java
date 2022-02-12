@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_17_R1.nms;
+package be.isach.ultracosmetics.v1_18_R1;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
@@ -10,11 +10,13 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_17_R1.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.event.CraftEventFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+
+import be.isach.ultracosmetics.version.IAnvilWrapper;
 
 /**
  * AUTHOR: WesJD (Thanks!)
@@ -23,7 +25,7 @@ import org.bukkit.inventory.Inventory;
  * I just modified it to fit Mojang remapping.
  */
 
-public class AnvilGUIWrapper implements VersionWrapper {
+public class AnvilWrapper implements IAnvilWrapper {
     private int getRealNextContainerId(Player player) {
         return toNMS(player).nextContainerCounter();
     }
@@ -124,7 +126,7 @@ public class AnvilGUIWrapper implements VersionWrapper {
      */
     private class AnvilContainer extends AnvilMenu {
         public AnvilContainer(Player player, String guiTitle) {
-            super(AnvilGUIWrapper.this.getRealNextContainerId(player), ((CraftPlayer) player).getHandle().getInventory(),
+            super(AnvilWrapper.this.getRealNextContainerId(player), ((CraftPlayer) player).getHandle().getInventory(),
                     ContainerLevelAccess.create(((CraftWorld) player.getWorld()).getHandle(), new BlockPos(0, 0, 0)));
             this.checkReachable = false;
             setTitle(new TranslatableComponent(guiTitle));

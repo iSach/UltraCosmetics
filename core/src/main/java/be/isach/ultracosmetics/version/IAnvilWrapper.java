@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_17_R1.nms;
+package be.isach.ultracosmetics.version;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
  * @author Wesley Smith
  * @since 1.0
  */
-public interface VersionWrapper {
+public interface IAnvilWrapper {
 
     /**
      * Gets the next available NMS container id for the player
@@ -93,3 +93,4 @@ public interface VersionWrapper {
     Object newContainerAnvil(Player player, String title);
 
 }
+

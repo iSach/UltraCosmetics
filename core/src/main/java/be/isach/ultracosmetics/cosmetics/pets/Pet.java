@@ -20,6 +20,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,15 +35,15 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     /**
      * List of items popping out from Pet.
      */
-    public ArrayList<Item> items = new ArrayList<>();
+    protected List<Item> items = new ArrayList<>();
 
     /**
-     * ArmorStand for nametags. Most pets don't use this.
+     * ArmorStand for nametags. Only custom entity pets use this.
      */
-    public ArmorStand armorStand;
+    protected ArmorStand armorStand;
 
     /**
-     * Runs the task for pets following players |: Problems with async??
+     * Runs the task for pets following players
      */
     protected ExecutorService pathUpdater;
     //protected int followTaskId;
@@ -55,7 +56,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     /**
      * If Pet is a normal entity, it will be stored here.
      */
-    public Entity entity;
+    protected Entity entity;
 
     /**
      * The {@link org.bukkit.inventory.ItemStack ItemStack} this pet drops, null if none.
@@ -85,18 +86,19 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
         // Bypass WorldGuard protection.
         EntitySpawningManager.setBypass(true);
-        setEntity(getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType()));
+        entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
         EntitySpawningManager.setBypass(false);
 
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
 
         if (entity instanceof Ageable) {
+            Ageable ageable = (Ageable) entity;
             if (SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) {
-                ((Ageable) entity).setBaby();
+                ageable.setBaby();
             } else {
-                ((Ageable) entity).setAdult();
+                ageable.setAdult();
             }
-            ((Ageable) entity).setAgeLock(true);
+            ageable.setAgeLock(true);
         }
 
         getEntity().setCustomNameVisible(true);
@@ -209,6 +211,18 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         return entity;
     }
 
+    public ArmorStand getArmorStand() {
+        return armorStand;
+    }
+
+    public boolean hasArmorStand() {
+        return armorStand != null;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
     @Override
     public void onUpdate() {
         if (SettingsManager.getConfig().getBoolean("Pets-Drop-Items")) {
@@ -237,9 +251,5 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (event.getPlayer() == getPlayer())
             getEntity().teleport(getPlayer());
-    }
-
-    protected final void setEntity(Entity entity) {
-        this.entity = entity;
     }
 }

@@ -1,10 +1,5 @@
-package be.isach.ultracosmetics.v1_17_R1;
+package be.isach.ultracosmetics.version;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.v1_17_R1.nms.AnvilGUIWrapper;
-import be.isach.ultracosmetics.v1_17_R1.nms.VersionWrapper;
-import be.isach.ultracosmetics.version.AAnvilGUI;
-import be.isach.ultracosmetics.version.IAnvilGUI;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
+
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -30,12 +27,12 @@ import java.util.function.Consumer;
  * @author Wesley Smith
  * @since 1.0
  */
-public class AnvilGUI implements IAnvilGUI {
+public class AnvilGUI {
 
     /**
      * The local {@link VersionWrapper} object for the server's version
      */
-    private static VersionWrapper WRAPPER = new AnvilGUIWrapper();
+    private static IAnvilWrapper WRAPPER = UltraCosmeticsData.get().getVersionManager().getAnvilWrapper();
 
     /**
      * The {@link Plugin} that this anvil GUI is associated with
@@ -60,7 +57,7 @@ public class AnvilGUI implements IAnvilGUI {
     /**
      * A state that decides where the anvil GUI is able to be closed by the user
      */
-    private boolean preventClose;
+    private final boolean preventClose;
     /**
      * An {@link Consumer} that is called when the anvil GUI is closed
      */
@@ -68,7 +65,7 @@ public class AnvilGUI implements IAnvilGUI {
     /**
      * An {@link BiFunction} that is called when the {@link Slot#OUTPUT} slot has been clicked
      */
-    private final BiFunction<Player, String, AAnvilGUI.Response> completeFunction;
+    private final BiFunction<Player, String, Response> completeFunction;
 
     /**
      * An {@link Consumer} that is called when the {@link Slot#INPUT_LEFT} slot has been clicked
@@ -97,20 +94,26 @@ public class AnvilGUI implements IAnvilGUI {
      */
     private boolean open;
 
-    public AnvilGUI(Player player, String text, Boolean preventClose, Consumer<Player> closeListener,
-                    BiFunction<Player, String, AAnvilGUI.Response> completeFunction) {
-        this(UltraCosmeticsData.get().getPlugin(),
-                player,
-                "Rename pet",
-                "Pet Name",
-                null,
-                null,
-                preventClose,
-                closeListener,
-                null,
-                null,
-                completeFunction);
-
+    /**
+     * Create an AnvilGUI and open it for the player.
+     *
+     * @param plugin     A {@link org.bukkit.plugin.java.JavaPlugin} instance
+     * @param holder     The {@link Player} to open the inventory for
+     * @param insert  What to have the text already set to
+     * @param biFunction A {@link BiFunction} that is called when the player clicks the {@link Slot#OUTPUT} slot
+     * @throws NullPointerException If the server version isn't supported
+     * @deprecated As of version 1.2.3, use {@link AnvilGUI.Builder}
+     */
+    @Deprecated
+    public AnvilGUI(Plugin plugin, Player holder, String insert, BiFunction<Player, String, String> biFunction) {
+        this(plugin, holder, "Repair & Name", insert, null, null, false, null, null, null, (player, text) -> {
+            String response = biFunction.apply(player, text);
+            if (response != null) {
+                return Response.text(response);
+            } else {
+                return Response.close();
+            }
+        });
     }
 
     /**
@@ -136,7 +139,7 @@ public class AnvilGUI implements IAnvilGUI {
             Consumer<Player> closeListener,
             Consumer<Player> inputLeftClickListener,
             Consumer<Player> inputRightClickListener,
-            BiFunction<Player, String, AAnvilGUI.Response> completeFunction
+            BiFunction<Player, String, Response> completeFunction
     ) {
         this.plugin = plugin;
         this.player = player;
@@ -236,7 +239,7 @@ public class AnvilGUI implements IAnvilGUI {
         public void onInventoryClick(InventoryClickEvent event) {
             if (
                     event.getInventory().equals(inventory) &&
-                            (event.getRawSlot() < 3 || event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY))
+                    (event.getRawSlot() < 3 || event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY))
             ) {
                 event.setCancelled(true);
                 final Player clicker = (Player) event.getWhoClicked();
@@ -244,10 +247,7 @@ public class AnvilGUI implements IAnvilGUI {
                     final ItemStack clicked = inventory.getItem(Slot.OUTPUT);
                     if (clicked == null || clicked.getType() == Material.AIR) return;
 
-                    // Make the inventory close at the end..........
-                    preventClose = false;
-
-                    final AAnvilGUI.Response response = completeFunction.apply(
+                    final Response response = completeFunction.apply(
                             clicker,
                             clicked.hasItemMeta() ? clicked.getItemMeta().getDisplayName() : ""
                     );
@@ -256,6 +256,8 @@ public class AnvilGUI implements IAnvilGUI {
                         meta.setDisplayName(response.getText());
                         clicked.setItemMeta(meta);
                         inventory.setItem(Slot.INPUT_LEFT, clicked);
+                    } else if (response.getInventoryToOpen() != null) {
+                        clicker.openInventory(response.getInventoryToOpen());
                     } else {
                         closeInventory();
                     }
@@ -292,6 +294,7 @@ public class AnvilGUI implements IAnvilGUI {
                 }
             }
         }
+
     }
 
     /**
@@ -318,7 +321,7 @@ public class AnvilGUI implements IAnvilGUI {
         /**
          * An {@link BiFunction} that is called when the anvil output slot has been clicked
          */
-        private BiFunction<Player, String, AAnvilGUI.Response> completeFunction;
+        private BiFunction<Player, String, Response> completeFunction;
         /**
          * The {@link Plugin} that this anvil GUI is associated with
          */
@@ -392,7 +395,7 @@ public class AnvilGUI implements IAnvilGUI {
          * @return The {@link Builder} instance
          * @throws IllegalArgumentException when the completeFunction is null
          */
-        public Builder onComplete(BiFunction<Player, String, AAnvilGUI.Response> completeFunction) {
+        public Builder onComplete(BiFunction<Player, String, Response> completeFunction) {
             Validate.notNull(completeFunction, "Complete function cannot be null");
             this.completeFunction = completeFunction;
             return this;
@@ -491,6 +494,76 @@ public class AnvilGUI implements IAnvilGUI {
     }
 
     /**
+     * Represents a response when the player clicks the output item in the anvil GUI
+     */
+    public static class Response {
+
+        /**
+         * The text that is to be displayed to the user
+         */
+        private final String text;
+        private final Inventory openInventory;
+
+        /**
+         * Creates a response to the user's input
+         *
+         * @param text The text that is to be displayed to the user, which can be null to close the inventory
+         */
+        private Response(String text, Inventory openInventory) {
+            this.text = text;
+            this.openInventory = openInventory;
+        }
+
+        /**
+         * Gets the text that is to be displayed to the user
+         *
+         * @return The text that is to be displayed to the user
+         */
+        public String getText() {
+            return text;
+        }
+
+        /**
+         * Gets the inventory that should be opened
+         *
+         * @return The inventory that should be opened
+         */
+        public Inventory getInventoryToOpen() {
+            return openInventory;
+        }
+
+        /**
+         * Returns an {@link Response} object for when the anvil GUI is to close
+         *
+         * @return An {@link Response} object for when the anvil GUI is to close
+         */
+        public static Response close() {
+            return new Response(null, null);
+        }
+
+        /**
+         * Returns an {@link Response} object for when the anvil GUI is to display text to the user
+         *
+         * @param text The text that is to be displayed to the user
+         * @return An {@link Response} object for when the anvil GUI is to display text to the user
+         */
+        public static Response text(String text) {
+            return new Response(text, null);
+        }
+
+        /**
+         * Returns an {@link Response} object for when the GUI should open the provided inventory
+         *
+         * @param inventory The inventory to open
+         * @return The {@link Response} to return
+         */
+        public static Response openInventory(Inventory inventory) {
+            return new Response(null, inventory);
+        }
+
+    }
+
+    /**
      * Class wrapping the magic constants of slot numbers in an anvil GUI
      */
     public static class Slot {
@@ -523,3 +596,4 @@ public class AnvilGUI implements IAnvilGUI {
     }
 
 }
+

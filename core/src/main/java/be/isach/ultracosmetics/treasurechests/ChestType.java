@@ -12,7 +12,7 @@ public enum ChestType {
 
     private Material type;
 
-    ChestType(Material type) {
+    private ChestType(Material type) {
         this.type = type;
     }
 

@@ -33,8 +33,11 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             return;
 
         Entity petEntity;
-        if (pet.isCustomEntity()) petEntity = ((CustomEntityPet) pet).getCustomEntity();
-        else petEntity = ((CraftEntity) pet.entity).getHandle();
+        if (pet.isCustomEntity())  {
+            petEntity = ((CustomEntityPet) pet).getCustomEntity();
+        } else {
+            petEntity = ((CraftEntity) pet.getEntity()).getHandle();
+        }
         ((EntityInsentient) petEntity).getNavigation().a(2);
         Location targetLocation = player.getLocation();
         PathEntity path;

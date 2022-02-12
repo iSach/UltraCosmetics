@@ -8,10 +8,15 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -35,18 +40,30 @@ public class SubCommandTreasure extends SubCommand {
 
     @Override
     protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+        if (args.length < 2) {
+            sender.sendMessage(ChatColor.RED + "You must specify a player.");
+            return;
+        }
         common(sender, args);
     }
 
     private void common(CommandSender sender, String... args) {
-        if (args.length < 6) {
+        if (args.length > 6) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage! " + getUsage());
             return;
         }
-        Player opener = Bukkit.getPlayer(args[1]);
-        if (opener == null) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[1] + " not found!");
-            return;
+
+        Player opener;
+        // form: /uc treasure
+        if (args.length == 1) {
+            opener = (Player)sender;
+        // form: /uc treasure (player) [...]
+        } else {
+            opener = Bukkit.getPlayer(args[1]);
+            if (opener == null) {
+                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[1] + " not found!");
+                return;
+            }
         }
 
         UltraPlayer ultraPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(opener);
@@ -57,43 +74,82 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        if (!SettingsManager.isAllowedWorld(opener.getWorld())) {
-            sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+        // form: /uc treasure (player)
+        if (args.length < 3) {
+            if (!checkWorld(sender, opener.getWorld())) return;
+            TreasureChestManager.tryOpenChest(opener);
             return;
         }
 
         int x, y, z;
 
-        if (!MathUtils.isInteger(args[2])) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[2] + " isn't a number!");
+        try {
+            x = Integer.parseInt(args[2]);
+            y = Integer.parseInt(args[3]);
+            z = Integer.parseInt(args[4]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Invalid coordinates!");
             return;
         }
-        x = Integer.parseInt(args[2]);
 
-        if (!MathUtils.isInteger(args[3])) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[3] + " isn't a number!");
-            return;
+        World world;
+        // form: /uc treasure (player) (x) (y) (z) (world)
+        if (args.length > 5) {
+            world = Bukkit.getWorld(args[5]);
+            if (world == null) {
+                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "World " + args[5] + " doesn't exist!");
+                return;
+            }
+        // form: /uc treasure (player) (x) (y) (z)
+        } else {
+            world = opener.getWorld();
         }
-        y = Integer.parseInt(args[3]);
 
-        if (!MathUtils.isInteger(args[4])) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[4] + " isn't a number!");
-            return;
-        }
-        z = Integer.parseInt(args[4]);
-
-        World world = Bukkit.getWorld(args[5]);
-
-        if (world == null) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "World " + args[5] + " doesn't exist!");
+        VersionManager vm = UltraCosmeticsData.get().getVersionManager();
+        // Don't accept equal to world boundaries because treasure chests have to place blocks on player Y-1 through Y+1
+        if (y >= vm.getWorldMaxHeight(world) || y <= vm.getWorldMinHeight(world)) {
+            sender.sendMessage(MessageManager.getMessage("Chest-Location.Invalid"));
             return;
         }
 
         Location preLoc = opener.getLocation();
         Location location = new Location(world, x + 0.5, y, z + 0.5);
+        Block block = location.getBlock();
+        if (block.getType() != Material.AIR) {
+            sender.sendMessage(MessageManager.getMessage("Chest-Location.In-Ground"));
+            for (int i = y; i < vm.getWorldMaxHeight(world); i++) {
+                if (block.getWorld().getBlockAt(x, i, z).getType() == Material.AIR) {
+                    suggest(x, i, z, sender);
+                    break;
+                }
+            }
+            return;
+        }
+
+        if (block.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+            sender.sendMessage(MessageManager.getMessage("Chest-Location.In-Air"));
+            for (int i = y; i > vm.getWorldMinHeight(world); i--) {
+                if (block.getWorld().getBlockAt(x, i, z).getType() != Material.AIR) {
+                    // we found the ground, back up 1
+                    suggest(x, i + 1, z, sender);
+                    break;
+                }
+            }
+            return;
+        }
 
         opener.teleport(location);
 
         TreasureChestManager.tryOpenChest(opener, preLoc);
+    }
+
+    private boolean checkWorld(CommandSender sender, World world) {
+        if (SettingsManager.isAllowedWorld(world)) return true;
+        sender.sendMessage(MessageManager.getMessage("World-Disabled"));
+        return false;
+    }
+
+    private void suggest(int x, int y, int z, CommandSender sender) {
+        sender.sendMessage(MessageManager.getMessage("Chest-Location.Suggestion").replace("%location%", x + "," + y + "," + z));
     }
 }
