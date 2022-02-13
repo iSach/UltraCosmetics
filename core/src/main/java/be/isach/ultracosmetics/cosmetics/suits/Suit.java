@@ -13,7 +13,6 @@ import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
@@ -146,7 +145,6 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     public void onClear() {
         setArmorItem(getArmorSlot(), null);
         getOwner().setCurrentSuitPart(getArmorSlot(), null);
-        HandlerList.unregisterAll(this);
     }
 
     /**
@@ -191,13 +189,15 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
         switch (slot) {
         case BOOTS:
             getPlayer().getInventory().setBoots(item);
+            break;
         case LEGGINGS:
             getPlayer().getInventory().setLeggings(item);
+            break;
         case CHESTPLATE:
             getPlayer().getInventory().setChestplate(item);
+            break;
         case HELMET:
             getPlayer().getInventory().setHelmet(item);
-        default:
             break;
         }
     }

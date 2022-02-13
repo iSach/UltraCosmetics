@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
  * @author iSach
  * @since 03-06-2016
  */
+// TODO: remove this, it doesn't need to exist
 public interface IPetCustomEntity {
 
     Entity getEntity();

@@ -2,16 +2,15 @@ package be.isach.ultracosmetics.listeners;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Wither;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.EntityBlockFormEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -30,18 +29,19 @@ public class MainListener implements Listener {
 
     @EventHandler
     public void onHopperPickup(InventoryPickupItemEvent event) {
-        ItemStack stack = event.getItem().getItemStack();
-        if (event.getItem().hasMetadata("UNPICKABLEUP")
-                || (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()
-                && stack.getItemMeta().getDisplayName().equals(UltraCosmeticsData.get().getItemNoPickupString()))) {
-            event.setCancelled(true);
-        }
+        processPickup(event.getItem(), event);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlayerPickup(PlayerPickupItemEvent event) {
-        ItemStack stack = event.getItem().getItemStack();
-        if (event.getItem().hasMetadata("UNPICKABLEUP")
+        processPickup(event.getItem(), event);
+    }
+
+    public void processPickup(Item item, Cancellable event) {
+        ItemStack stack = item.getItemStack();
+        // TODO: just switch to UNPICKABLEUP meta entirely and remove getItemNoPickupString?
+        if (item.hasMetadata("UNPICKABLEUP")
                 || (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()
                 && stack.getItemMeta().getDisplayName().equals(UltraCosmeticsData.get().getItemNoPickupString()))) {
             event.setCancelled(true);
@@ -49,18 +49,11 @@ public class MainListener implements Listener {
     }
 
     @EventHandler
-    public void onSnowmanTrail(EntityBlockFormEvent event) {
-        if (event.getEntity().getType() != EntityType.SNOWMAN) return;
-        if (!event.getEntity().hasMetadata("Pet")) return;
-        event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onWitherShoot(ProjectileLaunchEvent event) {
-        if (!(event.getEntity().getShooter() instanceof Wither)) return;
-        Wither wither = (Wither) event.getEntity().getShooter();
-        if (wither.hasMetadata("Pet")) {
-            event.setCancelled(true);
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        for (Entity entity : event.getChunk().getEntities()) {
+            if (entity.hasMetadata("Pet")) {
+                entity.remove();
+            }
         }
     }
 }

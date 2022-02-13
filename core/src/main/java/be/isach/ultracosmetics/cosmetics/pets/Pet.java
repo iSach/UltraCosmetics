@@ -12,7 +12,6 @@ import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -116,54 +115,18 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
     @Override
     public void run() {
-        try {
-            if (entity != null && !entity.isValid()) {
-                if (armorStand != null) {
-                    armorStand.remove();
-                }
+        if (entity != null && !entity.isValid()) {
+            clear();
+            return;
+        }
 
-                entity.remove();
+        if (Bukkit.getPlayer(getOwnerUniqueId()) != null
+                && getOwner().getCurrentPet() != null
+                && getOwner().getCurrentPet().getType() == getType()) {
+            onUpdate();
 
-                if (getPlayer() != null) {
-                    getOwner().setCurrentPet(null);
-                }
-
-                items.forEach(Entity::remove);
-                items.clear();
-
-                HandlerList.unregisterAll(this);
-
-                cancel();
-                return;
-            }
-
-            if (Bukkit.getPlayer(getOwnerUniqueId()) != null
-                    && getOwner().getCurrentPet() != null
-                    && getOwner().getCurrentPet().getType() == getType()) {
-                onUpdate();
-
-                pathUpdater.submit(followTask.getTask());
-            } else {
-                cancel();
-
-                if (armorStand != null) {
-                    armorStand.remove();
-                }
-
-                items.forEach(Entity::remove);
-                items.clear();
-                clear();
-            }
-        } catch (NullPointerException exc) {
-            exc.printStackTrace();
-            cancel();
-
-            if (armorStand != null) {
-                armorStand.remove();
-            }
-
-            items.forEach(Entity::remove);
-            items.clear();
+            pathUpdater.submit(followTask.getTask());
+        } else {
             clear();
         }
     }

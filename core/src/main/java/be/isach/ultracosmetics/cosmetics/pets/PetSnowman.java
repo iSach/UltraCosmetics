@@ -9,6 +9,8 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Snowman;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.EntityBlockFormEvent;
 
 /**
  * Represents an instance of a snowman pet summoned by a player.
@@ -27,5 +29,12 @@ public class PetSnowman extends Pet {
                 snowman.setDerp(false);
             }
         }, 30);
+    }
+
+    @EventHandler
+    public void onTrail(EntityBlockFormEvent event) {
+        if (event.getEntity() == entity) {
+            event.setCancelled(true);
+        }
     }
 }

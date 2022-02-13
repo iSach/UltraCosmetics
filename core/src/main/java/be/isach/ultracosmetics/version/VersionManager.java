@@ -103,7 +103,6 @@ public class VersionManager {
     }
 
     public int getWorldMinHeight(World world) {
-        // TODO: can this actually vary by world? something to do with datapacks?
         return WORLD_MIN_HEIGHTS.computeIfAbsent(world.getName(), w -> {
             try {
                 return world.getMinHeight();
