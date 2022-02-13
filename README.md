@@ -25,4 +25,18 @@ In order for everyone to have the best experience possible, we have a few guidel
 
 If you're looking to compile the project yourself, please check out the [compiling documentation](COMPILING.md).
 
-*The UltraCosmetics source is provided as is at no monetary cost for personal use only. Any commercial distribution/use of the UltraCosmetics source is strictly prohibited.*
+    UltraCosmetics - Lightweight, Fun and Easy-to-Use Spigot Cosmetics plugin.
+    Copyright (C) 2022 Sacha "iSach" Lewin
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
