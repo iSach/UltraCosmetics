@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 public class SubCommandClear extends SubCommand {
 
     public SubCommandClear(UltraCosmetics ultraCosmetics) {
-        super("Clears a Cosmetic.", "ultracosmetics.command.clear", "/uc clear <player> [type]", ultraCosmetics, "clear");
+        super("clear", "Clears a Cosmetic.", "ultracosmetics.command.clear", "/uc clear <player> [type]", ultraCosmetics);
     }
 
     @Override
@@ -47,11 +47,11 @@ public class SubCommandClear extends SubCommand {
             return;
         }
         if (args.length < 3) {
-            getUltraCosmetics().getPlayerManager().getUltraPlayer(receiver).clear();
+            ultraCosmetics.getPlayerManager().getUltraPlayer(receiver).clear();
             return;
         }
 
-        UltraPlayer up = getUltraCosmetics().getPlayerManager().getUltraPlayer(receiver);
+        UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(receiver);
         String s = args[2].toLowerCase();
 
         if (s.startsWith("g")) up.removeGadget();

@@ -20,7 +20,7 @@ import java.io.File;
 public class SubCommandPurge extends SubCommand {
 	
 	public SubCommandPurge(UltraCosmetics ultraCosmetics) {
-		super("Purges old data files.", "ultracosmetics.command.purge", "/uc purge <confirm>", ultraCosmetics, "purge");
+		super("purge", "Purges old data files.", "ultracosmetics.command.purge", "/uc purge <confirm>", ultraCosmetics);
 	}
 	
 	@Override
@@ -40,8 +40,8 @@ public class SubCommandPurge extends SubCommand {
 			return;
 		}
 		sender.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Starting deletion now, this may take a while. Please wait...");
-		Bukkit.getScheduler().runTaskAsynchronously(getUltraCosmetics(), () -> {
-			File dataFolder = new File(getUltraCosmetics().getDataFolder(), "data");
+		Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
+			File dataFolder = new File(ultraCosmetics.getDataFolder(), "data");
 			int deletedFiles = 0;
 			int savedFiles = 0;
 			if (!dataFolder.isDirectory()) {

@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
@@ -30,7 +29,7 @@ import org.bukkit.entity.Player;
 public class SubCommandTreasure extends SubCommand {
 
     public SubCommandTreasure(UltraCosmetics ultraCosmetics) {
-        super("Starts Treasure Chest.", "ultracosmetics.command.treasure", "/uc treasure <player> <x> <y> <z> <world>", ultraCosmetics, "treasure");
+        super("treasure", "Starts Treasure Chest.", "ultracosmetics.command.treasure", "/uc treasure <player> <x> <y> <z> <world>", ultraCosmetics);
     }
 
     @Override

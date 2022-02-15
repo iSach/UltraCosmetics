@@ -29,10 +29,11 @@ public class UCTabCompleter implements TabCompleter {
         if (!cmd.getName().equals("ultracosmetics")) return null;
         List<String> options = new ArrayList<>();
         // TODO: maybe flip conditions so we sort by subcommand first, then arg index?
-        // more intuitive that way
+        // more intuitive that way.
+        // or even just have the subcommands handle tab completion themselves?
         if (args.length == 1) {
             for (SubCommand sc : uc.getCommandManager().getCommands()) {
-                options.add(sc.aliases[0]);
+                options.add(sc.getName());
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("menu") || args[0].equalsIgnoreCase("toggle")) {

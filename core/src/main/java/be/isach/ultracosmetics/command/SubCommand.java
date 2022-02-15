@@ -6,8 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-
 /**
  * A subcommand.
  *
@@ -16,12 +14,11 @@ import java.util.Arrays;
  */
 public abstract class SubCommand {
 
-    String[] aliases;
-    String description, permission, usage;
-    private UltraCosmetics ultraCosmetics;
+    private final String name, description, permission, usage;
+    protected final UltraCosmetics ultraCosmetics;
 
-    public SubCommand(String description, String permission, String usage, UltraCosmetics ultraCosmetics, String... aliases) {
-        this.aliases = aliases;
+    public SubCommand(String name, String description, String permission, String usage, UltraCosmetics ultraCosmetics) {
+        this.name = name;
         this.description = description;
         this.permission = permission;
         this.usage = usage;
@@ -35,7 +32,16 @@ public abstract class SubCommand {
      * @return {@code true} if the String is an alias.
      */
     public boolean is(String arg) {
-        return Arrays.asList(aliases).contains(arg.toLowerCase());
+        return name.equalsIgnoreCase(arg);
+    }
+
+    /**
+     * Get the name of the command
+     * 
+     * @return The name of the command
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -88,9 +94,5 @@ public abstract class SubCommand {
      */
     protected void notAllowed(CommandSender commandSender) {
         commandSender.sendMessage(MessageManager.getMessage("Not-Allowed-From-Console"));
-    }
-
-    public UltraCosmetics getUltraCosmetics() {
-        return ultraCosmetics;
     }
 }

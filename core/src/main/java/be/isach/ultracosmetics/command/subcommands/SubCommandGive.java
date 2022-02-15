@@ -26,7 +26,7 @@ import java.util.UUID;
 public class SubCommandGive extends SubCommand {
 
     public SubCommandGive(UltraCosmetics ultraCosmetics) {
-        super("Gives Ammo/Key.", "ultracosmetics.command.give", "/uc give <key|ammo> <amount> [player]", ultraCosmetics, "give");
+        super("give", "Gives Ammo/Key.", "ultracosmetics.command.give", "/uc give <key|ammo> <amount> [player]", ultraCosmetics);
     }
 
     @Override
@@ -234,12 +234,12 @@ public class SubCommandGive extends SubCommand {
         if (offlinePlayer == null || offlinePlayer.getUniqueId() == null)
             return;
         if (offlinePlayer instanceof Player)
-            getUltraCosmetics().getPlayerManager().getUltraPlayer((Player) offlinePlayer).addKey();
+            ultraCosmetics.getPlayerManager().getUltraPlayer((Player) offlinePlayer).addKey();
         else {
             if (UltraCosmeticsData.get().usingFileStorage())
                 SettingsManager.getData(offlinePlayer.getUniqueId()).set("Keys", getKeys(offlinePlayer.getUniqueId()) + 1);
             else
-                getUltraCosmetics().getMySqlConnectionManager().getSqlUtils().addKey(MySqlConnectionManager.INDEXS.get(offlinePlayer.getUniqueId()));
+                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(MySqlConnectionManager.INDEXS.get(offlinePlayer.getUniqueId()));
         }
     }
 
@@ -247,17 +247,17 @@ public class SubCommandGive extends SubCommand {
         if (receiver == null || receiver.getUniqueId() == null)
             return;
         if (receiver instanceof Player)
-            getUltraCosmetics().getPlayerManager().getUltraPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
+            ultraCosmetics.getPlayerManager().getUltraPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
         else {
             if (UltraCosmeticsData.get().usingFileStorage())
                 SettingsManager.getData(receiver.getUniqueId()).set("Ammo." + gadgetType.toString().toLowerCase(),
                         ((int) SettingsManager.getData(receiver.getUniqueId()).get("Ammo." + gadgetType.toString().toLowerCase())) + ammo);
             else
-                getUltraCosmetics().getMySqlConnectionManager().getSqlUtils().addAmmo(MySqlConnectionManager.INDEXS.get(receiver.getUniqueId()), gadgetType.toString().toLowerCase(), ammo);
+                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(MySqlConnectionManager.INDEXS.get(receiver.getUniqueId()), gadgetType.toString().toLowerCase(), ammo);
         }
     }
 
     private int getKeys(UUID uuid) {
-        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : getUltraCosmetics().getMySqlConnectionManager().getSqlUtils().getKeys(MySqlConnectionManager.INDEXS.get(uuid));
+        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getKeys(MySqlConnectionManager.INDEXS.get(uuid));
     }
 }

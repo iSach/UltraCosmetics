@@ -1,11 +1,12 @@
 package be.isach.ultracosmetics.cosmetics;
 
-import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.*;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
+import be.isach.ultracosmetics.menu.Menus;
+import be.isach.ultracosmetics.menu.menus.*;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,89 +27,89 @@ public enum Category {
 
     PETS("Pets", "Spawn", "Despawn", "Clear-Pet", "%petname%", "Spawn", "Despawn") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getPetsMenu();
+        public MenuPets getMenu(Menus menus) {
+            return menus.getPetsMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<PetType> getEnabled() {
             return PetType.enabled();
         }
     },
     GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget", "%gadgetname%", "Equip", "Unequip") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getGadgetsMenu();
+        public MenuGadgets getMenu(Menus menus) {
+            return menus.getGadgetsMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<GadgetType> getEnabled() {
             return GadgetType.enabled();
         }
     },
     EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect", "%effectname%", "Summon", "Unsummon") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getEffectsMenu();
+        public MenuParticleEffects getMenu(Menus menus) {
+            return menus.getEffectsMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<ParticleEffectType> getEnabled() {
             return ParticleEffectType.enabled();
         }
     },
     MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount", "%mountname%", "Spawn", "Despawn") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getMountsMenu();
+        public MenuMounts getMenu(Menus menus) {
+            return menus.getMountsMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<MountType> getEnabled() {
             return MountType.enabled();
         }
     },
     MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph", "%morphname%", "Morph", "Unmorph") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getMorphsMenu();
+        public MenuMorphs getMenu(Menus menus) {
+            return menus.getMorphsMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<MorphType> getEnabled() {
             return MorphType.enabled();
         }
     },
     HATS("Hats", "Equip", "Unequip", "Clear-Hat", "%hatname%", "Equip", "Unequip") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getHatsMenu();
+        public MenuHats getMenu(Menus menus) {
+            return menus.getHatsMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<HatType> getEnabled() {
             return HatType.enabled();
         }
     },
     SUITS("Suits", "Equip", "Unequip", "Clear-Suit", "%suitname%", "Equip", "Unequip") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getSuitsMenu();
+        public MenuSuits getMenu(Menus menus) {
+            return menus.getSuitsMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<SuitType> getEnabled() {
             return SuitType.enabled();
         }
     },
     EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote", "%emotename%", "Equip", "Unequip") {
         @Override
-        public CosmeticMenu getMenu(UltraCosmetics ultraCosmetics) {
-            return ultraCosmetics.getMenus().getEmotesMenu();
+        public MenuEmotes getMenu(Menus menus) {
+            return menus.getEmotesMenu();
         }
 
         @Override
-        public List<? extends CosmeticType> getEnabled() {
+        public List<EmoteType> getEnabled() {
             return EmoteType.enabled();
         }
     };
@@ -163,7 +164,7 @@ public enum Category {
      * @param activateConfig
      * @param deactivateConfig
      */
-    Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath, String chatPlaceholder, String activateConfig, String deactivateConfig) {
+    private Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath, String chatPlaceholder, String activateConfig, String deactivateConfig) {
         this.configPath = configPath;
         this.activateMenu = activateMenu;
         this.deactivateMenu = deactivateMenu;
@@ -245,7 +246,7 @@ public enum Category {
         return deactivateConfig;
     }
 
-    public abstract CosmeticMenu getMenu(UltraCosmetics ultraCosmetics);
+    public abstract CosmeticMenu<?> getMenu(Menus menus);
 
-    public abstract List<? extends CosmeticType> getEnabled();
+    public abstract List<? extends CosmeticType<?>> getEnabled();
 }

@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.menu.Menus;
-import be.isach.ultracosmetics.menu.menus.MenuGadgets;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.ChatColor;
@@ -23,11 +22,8 @@ import org.bukkit.entity.Player;
 public class SubCommandMenu extends SubCommand {
 
     public SubCommandMenu(UltraCosmetics ultraCosmetics) {
-        super("Opens Specified Menu", "ultracosmetics.command.menu", "/uc menu <menu> [page]", ultraCosmetics, "menu");
-        //this.menuGadgets = new MenuGadgets(getUltraCosmetics());
+        super("menu", "Opens Specified Menu", "ultracosmetics.command.menu", "/uc menu <menu> [page]", ultraCosmetics);
     }
-
-    private MenuGadgets menuGadgets;
 
     @Override
     protected void onExePlayer(Player sender, String... args) {
@@ -49,9 +45,9 @@ public class SubCommandMenu extends SubCommand {
 
         String s = args[1].toLowerCase();
 
-        Menus menus = getUltraCosmetics().getMenus();
+        Menus menus = ultraCosmetics.getMenus();
 
-        UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(sender);
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(sender);
 
         if (s.startsWith("g") && Category.GADGETS.isEnabled()) {
             menus.getGadgetsMenu().open(ultraPlayer, page);
@@ -73,7 +69,7 @@ public class SubCommandMenu extends SubCommand {
             menus.getEmotesMenu().open(ultraPlayer, page);
         } else if (s.startsWith("b") && UltraCosmeticsData.get().areTreasureChestsEnabled()) {
             sender.closeInventory();
-            getUltraCosmetics().getPlayerManager().getUltraPlayer(sender).openKeyPurchaseMenu();
+            ultraCosmetics.getPlayerManager().getUltraPlayer(sender).openKeyPurchaseMenu();
         } else if (s.startsWith("r") && SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
             if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
                 if (sender.hasPermission("ultracosmetics.pets.rename")) {

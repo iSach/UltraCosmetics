@@ -9,10 +9,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,14 +27,10 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private List<SubCommand> commands = new ArrayList<>();
 	
-	private UltraCosmetics ultraCosmetics;
-	
 	public CommandManager(UltraCosmetics ultraCosmetics) {
-		this.ultraCosmetics = ultraCosmetics;
-		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setExecutor(this);
-		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setTabCompleter(new UCTabCompleter(ultraCosmetics));
-		String[] aliases = { "uc", "cosmetics" };
-		this.ultraCosmetics.getServer().getPluginCommand("ultracosmetics").setAliases(Arrays.asList(aliases));
+		PluginCommand cmd = ultraCosmetics.getCommand("ultracosmetics");
+		cmd.setExecutor(this);
+		cmd.setTabCompleter(new UCTabCompleter(ultraCosmetics));
 	}
 	
 	/**
@@ -68,22 +64,16 @@ public class CommandManager implements CommandExecutor {
 	 */
 	private int getMaxPages() {
 		int max = 8;
-		int i = commands.size();
-		if (i % max == 0) return i / max;
-		double j = i / 8;
-		int h = (int) Math.floor(j * 100) / 100;
-		return h + 1;
+		// test cases:
+		// 8 commands: cmds - 1 = 7, 7 / 8 = 0, 0 + 1 = 1
+		// 9 commands: cmds - 1 = 8, 8 / 8 = 1, 1 + 1 = 2
+		// 0 commands: cmds - 1 = -1, -1 / 8 = 0, 0 + 1 = 1
+		return ((commands.size() - 1) / max) + 1;
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] arguments) {
-		
-		if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender)) {
-			return false;
-		}
-		
-		if (arguments == null
-		    || arguments.length == 0) {
+		if (arguments.length == 0) {
 			showHelp(sender, 1);
 			return true;
 		}

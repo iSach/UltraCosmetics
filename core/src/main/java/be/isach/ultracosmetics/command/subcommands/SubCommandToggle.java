@@ -29,12 +29,12 @@ public class SubCommandToggle extends SubCommand {
     private static final String ERROR_PREFIX = " " + ChatColor.RED + ChatColor.BOLD;
 
     public SubCommandToggle(UltraCosmetics ultraCosmetics) {
-        super("Toggles a cosmetic.", "ultracosmetics.command.toggle", "/uc toggle <type> <cosmetic> [player]", ultraCosmetics, "toggle");
+        super("toggle", "Toggles a cosmetic.", "ultracosmetics.command.toggle", "/uc toggle <type> <cosmetic> [player]", ultraCosmetics);
     }
 
     @Override
     protected void onExePlayer(Player sender, String... args) {
-        UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(sender);
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(sender);
 
         if (args.length < 3 || args.length > 4) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + getUsage());
@@ -43,11 +43,8 @@ public class SubCommandToggle extends SubCommand {
 
         UltraPlayer target;
         if (args.length > 3) {
-            target = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-            if (target == null) {
-                sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "Invalid player.");
-                return;
-            }
+            // null check later
+            target = ultraCosmetics.getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
         } else {
             target = ultraPlayer;
         }
@@ -62,12 +59,17 @@ public class SubCommandToggle extends SubCommand {
             return;
         }
 
-        UltraPlayer target = getUltraCosmetics().getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
+        UltraPlayer target = ultraCosmetics.getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
 
         toggle(sender, target, args[1].toLowerCase(), args[2].toLowerCase());
     }
 
     private void toggle(CommandSender sender, UltraPlayer target, String type, String cosm) {
+        if (target == null) {
+            sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "Invalid player.");
+            return;
+        }
+
         if (!SettingsManager.isAllowedWorld(target.getBukkitPlayer().getWorld())) {
             sender.sendMessage(MessageManager.getMessage("World-Disabled"));
             return;
@@ -101,7 +103,7 @@ public class SubCommandToggle extends SubCommand {
         }
 
         if (!suits) {
-            matchingType.get().equip(target, getUltraCosmetics());
+            matchingType.get().equip(target, ultraCosmetics);
             return;
         }
 
@@ -114,6 +116,6 @@ public class SubCommandToggle extends SubCommand {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "/uc toggle suit <suit type:suit piece> <player>.");
             return;
         }
-        suitType.equip(target, getUltraCosmetics(), armorSlot);
+        suitType.equip(target, ultraCosmetics, armorSlot);
     }
 }
