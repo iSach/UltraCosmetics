@@ -10,40 +10,27 @@ import java.util.*;
 
 public class SqlLoader {
 
-    List<String> loadList = Collections.synchronizedList(new ArrayList<String>());
-
-    private UltraCosmetics ultraCosmetics;
+    private final List<UUID> loadList = Collections.synchronizedList(new ArrayList<UUID>());
 
     public SqlLoader(UltraCosmetics ultraCosmetics) {
-        this.ultraCosmetics = ultraCosmetics;
-
         // Single "thread pool"
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (loadList.size() <= 0) {
-                    return;
-                }
-                Iterator<String> iter = loadList.iterator();
+                Iterator<UUID> iter = loadList.iterator();
                 while (iter.hasNext()) {
-                    try {
-                        Player p = Bukkit.getPlayer(UUID.fromString(iter.next()));
-                        if (p == null || !p.isOnline()) {
-                            iter.remove();
-                            continue;
-                        }
-                        UltraPlayer current = ultraCosmetics.getPlayerManager().getUltraPlayer(p);
-                        //pre load two value then cache into server's
-                        current.hasGadgetsEnabled();
-                        current.canSeeSelfMorph();
-                        current.isLoaded = true;
+                    Player p = Bukkit.getPlayer(iter.next());
+                    if (p == null || !p.isOnline()) {
                         iter.remove();
-                    } catch (Exception e) {
-                        iter.remove();
-                        // exception or not, just remove it.
+                        continue;
                     }
+                    UltraPlayer current = ultraCosmetics.getPlayerManager().getUltraPlayer(p);
+                    //pre load two value then cache into server's
+                    current.loadSQLValues();
+                    iter.remove();
                 }
             }
+            // TODO: do we need a repeating task?
         }.runTaskTimerAsynchronously(ultraCosmetics, 0, 10);
     }
 
@@ -51,7 +38,7 @@ public class SqlLoader {
     public void addPreloadPlayer(UUID uuid) {
         Player p = Bukkit.getPlayer(uuid);
         if (p != null && p.isOnline()) {
-            loadList.add(uuid.toString());
+            loadList.add(uuid);
         }
     }
 }

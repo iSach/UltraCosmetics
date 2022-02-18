@@ -258,9 +258,8 @@ public class UltraCosmetics extends JavaPlugin {
         }
 
         if (SettingsManager.getConfig().getBoolean("Check-For-Updates")) {
-            this.updateChecker = new UpdateManager(this);
-            updateChecker.start();
-            updateChecker.checkForUpdate();
+            updateChecker = new UpdateManager(this);
+            updateChecker.runTaskAsynchronously(this);
         }
 
         if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
@@ -338,6 +337,8 @@ public class UltraCosmetics extends JavaPlugin {
         if (flagManager != null) {
             if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
                 getSmartLogger().write(LogLevel.ERROR, "WorldGuard is not enabled yet! Is WorldGuard up to date? Is another plugin interfering with the load order?");
+                getSmartLogger().write(LogLevel.ERROR, "WorldGuard support will be disabled.");
+                flagManager = null;
                 return;
             }
             flagManager.registerPhase2();
@@ -374,15 +375,15 @@ public class UltraCosmetics extends JavaPlugin {
             config.set("TreasureChests.Count", 4, "How many treasure chests should be opened per key? Min 1, max 4");
         }
         // Add default values people could not have because of an old version of UC.
-        if (!config.contains("TreasureChests.Location")) {
-            config.createSection("TreasureChests.Location");
+        if (!config.isConfigurationSection("TreasureChests.Location")) {
+            ConfigurationSection section = config.createSection("TreasureChests.Location");
             config.set("TreasureChests.Location.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
             config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63");
-            config.set("TreasureChests.Location.Y", 63);
-            config.set("TreasureChests.Location.Z", 0);
+            section.set("Y", 63);
+            section.set("Z", 0);
         }
 
-        if (!config.contains("TreasureChests.Loots.Money.Min")) {
+        if (!config.isInt("TreasureChests.Loots.Money.Min")) {
             int min = 15;
             int max = config.getInt("TreasureChests.Loots.Money.Max");
             if (max < 5)
@@ -392,15 +393,15 @@ public class UltraCosmetics extends JavaPlugin {
             config.set("TreasureChests.Loots.Money.Min", min);
         }
 
-        if (!config.contains("TreasureChests.Loots.Gadgets")) {
-            config.createSection("TreasureChests.Loots.Gadgets", "Chance of getting a GADGET", "This is different from ammo!");
-            config.set("TreasureChests.Loots.Gadgets.Enabled", true);
-            config.set("TreasureChests.Loots.Gadgets.Chance", 20);
-            config.set("TreasureChests.Loots.Gadgets.Message.enabled", false);
-            config.set("TreasureChests.Loots.Gadgets.Message.message", "%prefix% &6&l%name% found gadget %gadget%");
+        if (!config.isConfigurationSection("TreasureChests.Loots.Gadgets")) {
+            ConfigurationSection section = config.createSection("TreasureChests.Loots.Gadgets", "Chance of getting a GADGET", "This is different from ammo!");
+            section.set("Enabled", true);
+            section.set("Chance", 20);
+            section.set("Message.enabled", false);
+            section.set("Message.message", "%prefix% &6&l%name% found gadget %gadget%");
         }
 
-        if (!config.contains("TreasureChests.Loots.Suits")) {
+        if (!config.isConfigurationSection("TreasureChests.Loots.Suits")) {
             config.createSection("TreasureChests.Loots.Suits");
             config.set("TreasureChests.Loots.Suits.Enabled", true);
             config.set("TreasureChests.Loots.Suits.Chance", 10);
@@ -408,32 +409,32 @@ public class UltraCosmetics extends JavaPlugin {
             config.set("TreasureChests.Loots.Suits.Message.message", "%prefix% &6&l%name% found suit part: %suitw%");
         }
 
-        if (!config.contains("Categories.Suits")) {
-            config.createSection("Categories.Suits");
-            config.set("Categories.Suits.Main-Menu-Item", XMaterial.LEATHER_CHESTPLATE.parseMaterial().toString());
-            config.set("Categories.Suits.Go-Back-Arrow", true);
+        if (!config.isConfigurationSection("Categories.Suits")) {
+            ConfigurationSection suits = config.createSection("Categories.Suits");
+            suits.set("Main-Menu-Item", XMaterial.LEATHER_CHESTPLATE.parseMaterial().toString());
+            suits.set("Go-Back-Arrow", true);
         }
 
-        if (!config.contains("TreasureChests.Loots.Commands")) {
-            config.createSection("TreasureChests.Loots.Commands");
-            String section = "TreasureChests.Loots.Commands.shoutout";
-            config.set(section + ".Name", "&d&lShoutout");
-            config.set(section + ".Material", "NETHER_STAR");
-            config.set(section + ".Enabled", false);
-            config.set(section + ".Chance", 100);
-            config.set(section + ".Message.enabled", false);
-            config.set(section + ".Message.message", "%prefix% &6&l%name% found a rare shoutout!");
-            config.set(section + ".Cancel-If-Permission", "no");
-            config.set(section + ".Commands", Collections.singletonList("say %name% is awesome!"));
-            section = "TreasureChests.Loots.Commands.flower";
-            config.set(section + ".Name", "&e&lFlower");
-            config.set(section + ".Material", "YELLOW_FLOWER");
-            config.set(section + ".Enabled", false);
-            config.set(section + ".Chance", 100);
-            config.set(section + ".Message.enabled", false);
-            config.set(section + ".Message.message", "%prefix% &6&l%name% found a flower!");
-            config.set(section + ".Cancel-If-Permission", "example.yellowflower");
-            config.set(section + ".Commands", Arrays.asList("give %name% yellow_flower 1", "lp user %name% permission set example.yellowflower true"));
+        if (!config.isConfigurationSection("TreasureChests.Loots.Commands")) {
+            ConfigurationSection section = config.createSection("TreasureChests.Loots.Commands.shoutout");
+            section.set("Name", "&d&lShoutout");
+            section.set("Material", "NETHER_STAR");
+            section.set("Enabled", false);
+            section.set("Chance", 100);
+            section.set("Message.enabled", false);
+            section.set("Message.message", "%prefix% &6&l%name% found a rare shoutout!");
+            section.set("Cancel-If-Permission", "no");
+            section.set("Commands", Collections.singletonList("say %name% is awesome!"));
+
+            section = config.createSection("TreasureChests.Loots.Commands.flower");
+            section.set("Name", "&e&lFlower");
+            section.set("Material", "YELLOW_FLOWER");
+            section.set("Enabled", false);
+            section.set("Chance", 100);
+            section.set("Message.enabled", false);
+            section.set("Message.message", "%prefix% &6&l%name% found a flower!");
+            section.set("Cancel-If-Permission", "example.yellowflower");
+            section.set("Commands", Arrays.asList("give %name% yellow_flower 1", "lp user %name% permission set example.yellowflower true"));
         }
 
         config.addDefault("Categories.Clear-Cosmetic-Item", XMaterial.REDSTONE_BLOCK.parseMaterial().toString(), "Item where user click to clear a cosmetic.");
@@ -474,6 +475,7 @@ public class UltraCosmetics extends JavaPlugin {
         }
 
         config.addDefault("WorldGuard-Integration", true, "Whether WorldGuard should be hooked when loading UC", "Disable this if UC has trouble loading WorldGuard");
+        config.addDefault("Pets-Are-Silent", false, "Are pets prevented from making sounds?");
 
         upgradeIdsToMaterials();
 
@@ -524,7 +526,7 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     /**
-     * @return The Update CheckerC.
+     * @return The Update Checker.
      */
     public UpdateManager getUpdateChecker() {
         return updateChecker;

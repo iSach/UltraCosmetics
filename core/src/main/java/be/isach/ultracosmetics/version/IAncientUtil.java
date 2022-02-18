@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.version;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -10,4 +11,5 @@ import org.bukkit.entity.Player;
 public interface IAncientUtil {
     public void setSpeed(LivingEntity entity, double speed);
     public void sendActionBarMessage(Player player, String message);
+    public void setSilent(Entity entity, boolean silent);
 }

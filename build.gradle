@@ -24,7 +24,7 @@ allprojects {
         inputs.property("version", project.version)
 
         filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                'VERSION': project.version.split('-')[0]
+                'VERSION': project.version //.split('-')[0]
         ]
     }
 

@@ -109,6 +109,9 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
+        if (SettingsManager.getConfig().getBoolean("Pets-Are-Silent", false)) {
+            UltraCosmeticsData.get().getVersionManager().getAncientUtil().setSilent(entity, true);
+        }
 
         this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
     }

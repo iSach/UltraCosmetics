@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.version;
 
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -16,5 +17,10 @@ public class APIAncientUtil implements IAncientUtil {
     @Override
     public void sendActionBarMessage(Player player, String message) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+    }
+
+    @Override
+    public void setSilent(Entity entity, boolean silent) {
+        entity.setSilent(silent);
     }
 }

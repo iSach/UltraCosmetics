@@ -234,6 +234,9 @@ Pets-Drop-Items: true
 # Are pets babies?
 Pets-Are-Babies: true
 
+# Are pets prevented from making sounds?
+Pets-Are-Silent: false
+
 # Do you want the mounts
 # that normally make block trails
 # to do so?

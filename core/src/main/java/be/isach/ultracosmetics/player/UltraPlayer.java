@@ -16,14 +16,12 @@ import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
-import be.isach.ultracosmetics.util.CacheValue;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.XMaterial;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -50,15 +48,7 @@ public class UltraPlayer {
     /**
      * Player UUID.
      */
-    public UUID uuid;
-    /**
-     * boolean to identify if player is loaded correctly
-     */
-    public boolean isLoaded = false;
-    /**
-     * MySql Index.
-     */
-    public int mySqlIndex = -1;
+    private UUID uuid;
     /**
      * Saves the username for logging usage.
      */
@@ -67,7 +57,7 @@ public class UltraPlayer {
      * Current Cosmetics.
      */
     private Gadget currentGadget;
-    private Mount currentMount;
+    private Mount<?> currentMount;
     private ParticleEffect currentParticleEffect;
     private Pet currentPet;
     private TreasureChest currentTreasureChest;
@@ -87,12 +77,12 @@ public class UltraPlayer {
     /**
      * Cooldown map storing all the current cooldowns for gadgets.
      */
-    private HashMap<GadgetType, Long> gadgetCooldowns = null;
+    private Map<GadgetType, Long> gadgetCooldowns = null;
     /**
      * MySql Cache.
      */
-    private CacheValue gadgetsEnabledCache = CacheValue.UNLOADED;
-    private CacheValue morphSelfViewCache = CacheValue.UNLOADED;
+    private boolean gadgetsEnabledCache;
+    private boolean morphSelfViewCache;
     private UltraCosmetics ultraCosmetics;
 
     private volatile boolean moving;
@@ -138,8 +128,6 @@ public class UltraPlayer {
         // sql loader thread add player to pre-load
         if (!UltraCosmeticsData.get().usingFileStorage()) {
             ultraCosmetics.getMySqlConnectionManager().getSqlLoader().addPreloadPlayer(uuid);
-        } else {
-            isLoaded = true;
         }
     }
 
@@ -150,13 +138,13 @@ public class UltraPlayer {
      * @return -1 if player can use, otherwise the time left (in seconds).
      */
     public double canUse(GadgetType gadget) {
-        Object count = gadgetCooldowns.get(gadget);
+        Long count = gadgetCooldowns.get(gadget);
 
-        if (count == null || System.currentTimeMillis() > (long) count) {
+        if (count == null || System.currentTimeMillis() > count) {
             return -1;
         }
 
-        double valueMillis = (long) count - System.currentTimeMillis();
+        double valueMillis = count - System.currentTimeMillis();
         return valueMillis / 1000d;
     }
 
@@ -383,7 +371,8 @@ public class UltraPlayer {
         return toReturn;
     }
 
-    public <T extends Cosmetic> T getCosmetic(Category category) {
+    @SuppressWarnings("unchecked")
+    public <T extends Cosmetic<?>> T getCosmetic(Category category) {
         switch (category) {
             case EFFECTS:
                 return (T) getCurrentParticleEffect();
@@ -404,15 +393,10 @@ public class UltraPlayer {
         }
     }
 
-    // TODO
-    public void openKeyPurchaseMenu() {
-        openKeyPurchaseMenu(true);
-    }
-
     /**
      * Opens the Key Purchase Menu.
      */
-    public void openKeyPurchaseMenu(boolean openMenuAfter) {
+    public void openKeyPurchaseMenu() {
         if (!ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
             return;
         }
@@ -537,22 +521,19 @@ public class UltraPlayer {
      *
      * @param enabled if player has gadgets enabled.
      */
-    public void setGadgetsEnabled(Boolean enabled) {
-        try {
-            if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getBukkitPlayer()).set("Gadgets-Enabled", enabled);
-            } else {
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setGadgetsEnabled(getMySqlIndex(), enabled);
-            }
+    public void setGadgetsEnabled(boolean enabled) {
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            SettingsManager.getData(getBukkitPlayer()).set("Gadgets-Enabled", enabled);
+        } else {
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setGadgetsEnabled(getMySqlIndex(), enabled);
+        }
 
-            if (enabled) {
-                getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
-                this.gadgetsEnabledCache = CacheValue.ENABLED;
-            } else {
-                getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
-                this.gadgetsEnabledCache = CacheValue.DISABLED;
-            }
-        } catch (NullPointerException e) {
+        if (enabled) {
+            getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
+            gadgetsEnabledCache = true;
+        } else {
+            getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
+            gadgetsEnabledCache = false;
         }
     }
 
@@ -560,29 +541,7 @@ public class UltraPlayer {
      * @return if the player has gadgets enabled or not.
      */
     public boolean hasGadgetsEnabled() {
-        if (this.gadgetsEnabledCache != CacheValue.UNLOADED) {
-            return gadgetsEnabledCache != CacheValue.DISABLED;
-        }
-
-        if (!isLoaded) {
-            return false;
-        }
-
-        try {
-            if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).getBoolean("Gadgets-Enabled");
-            } else {
-                if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex())) {
-                    gadgetsEnabledCache = CacheValue.ENABLED;
-                    return true;
-                } else {
-                    gadgetsEnabledCache = CacheValue.DISABLED;
-                    return false;
-                }
-            }
-        } catch (NullPointerException e) {
-            return true;
-        }
+        return gadgetsEnabledCache;
     }
 
     /**
@@ -590,7 +549,7 @@ public class UltraPlayer {
      *
      * @param enabled if player should be able to see his own morph.
      */
-    public void setSeeSelfMorph(Boolean enabled) {
+    public void setSeeSelfMorph(boolean enabled) {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Third-Person-Morph-View", enabled);
         } else {
@@ -598,40 +557,23 @@ public class UltraPlayer {
         }
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
-            this.morphSelfViewCache = CacheValue.ENABLED;
-            DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), true);
         } else {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
-            this.morphSelfViewCache = CacheValue.DISABLED;
-            DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), false);
         }
+        DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), enabled);
+        morphSelfViewCache = enabled;
     }
 
     /**
      * @return if player should be able to see his own morph or not.
      */
     public boolean canSeeSelfMorph() {
-        if (morphSelfViewCache != CacheValue.UNLOADED)
-            return this.morphSelfViewCache != CacheValue.DISABLED;
-        // Make sure it won't be affected before load finished, especially for SQL
-        if (!isLoaded)
-            return false;
-        try {
-            if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).getBoolean("Third-Person-Morph-View");
-            } else {
-                if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex())) {
-                    morphSelfViewCache = CacheValue.ENABLED;
-                    return true;
-                } else {
-                    morphSelfViewCache = CacheValue.DISABLED;
-                    return false;
-                }
+        return morphSelfViewCache;
+    }
 
-            }
-        } catch (NullPointerException e) {
-            return false;
-        }
+    public void loadSQLValues() {
+        gadgetsEnabledCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex());
+        morphSelfViewCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex());
     }
 
     /**
@@ -726,7 +668,7 @@ public class UltraPlayer {
     }
 
     public int getMySqlIndex() {
-        return MySqlConnectionManager.INDEXS.get(uuid) == null ? -1 : MySqlConnectionManager.INDEXS.get(uuid);
+        return MySqlConnectionManager.INDEXS.getOrDefault(uuid, -1);
     }
 
     public Emote getCurrentEmote() {
@@ -749,7 +691,7 @@ public class UltraPlayer {
             cosmeticsProfile.setEnabledGadget(currentGadget == null ? null : currentGadget.getType());
     }
 
-    public HashMap<GadgetType, Long> getGadgetCooldowns() {
+    public Map<GadgetType, Long> getGadgetCooldowns() {
         return gadgetCooldowns;
     }
 
@@ -777,14 +719,14 @@ public class UltraPlayer {
             cosmeticsProfile.setEnabledMorph(currentMorph == null ? null : currentMorph.getType());
     }
 
-    public Mount getCurrentMount() {
+    public Mount<?> getCurrentMount() {
         return currentMount;
     }
 
-    public void setCurrentMount(Mount currentMount) {
+    public void setCurrentMount(Mount<?> currentMount) {
         this.currentMount = currentMount;
         if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledMount((MountType) (currentMount == null ? null : currentMount.getType()));
+            cosmeticsProfile.setEnabledMount(currentMount == null ? null : currentMount.getType());
     }
 
     public ParticleEffect getCurrentParticleEffect() {

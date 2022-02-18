@@ -2,10 +2,9 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.Version;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.ServerOperator;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
+
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -15,7 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Manages update checking.
@@ -25,51 +25,51 @@ import java.util.function.Predicate;
  * Date: 5/08/16
  * Project: UltraCosmetics
  */
-public class UpdateManager extends Thread {
+public class UpdateManager extends BukkitRunnable {
 
     /**
      * Current UC version.
      */
-    private String currentVersion;
+    private final String currentVersion;
+
+    private final UltraCosmetics ultraCosmetics;
+
+    // Searches version string for something like "d.d" or "d.d.d" and so on where d is one or more digits
+    private final Pattern versionPattern = Pattern.compile("(?:\\d+\\.)+\\d+");
 
     /**
      * Whether the plugin is outdated or not.
      */
-    private boolean outdated;
+    private boolean outdated = false;
 
     /**
      * Last Version published on spigotmc.org.
      */
-    private String lastVersion;
-
-    public UltraCosmetics ultraCosmetics;
+    private String spigotVersion;
 
     public UpdateManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        this.currentVersion = ultraCosmetics.getDescription().getVersion()
-                .replace("Beta ", "")
-                .replace("Pre-", "")
-                .replace("Release ", "")
-                .replace("Hype Update (", "")
-                .replace(")", "");
+        String versionString = ultraCosmetics.getDescription().getVersion();
+        Matcher matcher = versionPattern.matcher(versionString);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("Could not parse version string: '" + versionString + "'");
+        }
+        this.currentVersion = matcher.group();
     }
 
     /**
      * Checks for new update.
      */
-    public void checkForUpdate() {
-        lastVersion = getLastVersion();
-        if (lastVersion != null) {
-            int i = new Version(currentVersion).compareTo(new Version(lastVersion));
-            outdated = i == -1;
-            if (lastVersion.equalsIgnoreCase("1.7.1") && currentVersion.startsWith("1.1"))
-                outdated = false;
-        } else
-            outdated = false;
-
-
-        if (outdated) {
-            Bukkit.getOnlinePlayers().stream().filter((Predicate<Player>) ServerOperator::isOp).forEachOrdered(p -> p.sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics >" + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + lastVersion));
+    @Override
+    public void run() {
+        spigotVersion = getLastVersion();
+        if (spigotVersion != null) {
+            if (new Version(currentVersion).compareTo(new Version(spigotVersion)) < 0) {
+                outdated = true;
+                ultraCosmetics.getSmartLogger().write("New version available on Spigot: " + spigotVersion);
+            } else {
+                ultraCosmetics.getSmartLogger().write("No new version available.");
+            }
         }
     }
 
@@ -78,7 +78,7 @@ public class UpdateManager extends Thread {
      *
      * @return last version published on Spigot.
      */
-    public synchronized String getLastVersion() {
+    public String getLastVersion() {
         InputStreamReader reader = null;
         try {
             URL url = new URL("https://api.spiget.org/v2/resources/10905/versions?size=1&sort=-id");
@@ -98,7 +98,7 @@ public class UpdateManager extends Thread {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            ultraCosmetics.getSmartLogger().write("[UltraCosmetics] Failed to check for an update on spigot. ");
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "[UltraCosmetics] Failed to check for an update on spigot.");
         } finally {
             if (reader != null) {
                 try {
@@ -111,11 +111,11 @@ public class UpdateManager extends Thread {
         return null;
     }
 
-    public synchronized boolean isOutdated() {
+    public boolean isOutdated() {
         return outdated;
     }
 
-    public synchronized String getCurrentVersion() {
+    public String getCurrentVersion() {
         return currentVersion;
     }
 }
