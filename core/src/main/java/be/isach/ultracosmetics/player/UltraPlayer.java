@@ -81,8 +81,8 @@ public class UltraPlayer {
     /**
      * MySql Cache.
      */
-    private boolean gadgetsEnabledCache;
-    private boolean morphSelfViewCache;
+    private boolean gadgetsEnabled;
+    private boolean morphSelfView;
     private UltraCosmetics ultraCosmetics;
 
     private volatile boolean moving;
@@ -121,6 +121,8 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).addDefault("Gadgets-Enabled", true);
             SettingsManager.getData(getBukkitPlayer()).addDefault("Third-Person-Morph-View", true);
+            gadgetsEnabled = SettingsManager.getData(getBukkitPlayer()).getBoolean("Gadgets-Enabled");
+            morphSelfView = SettingsManager.getData(getBukkitPlayer()).getBoolean("Third-Person-Morph-View");
         }
 
         this.username = getBukkitPlayer().getDisplayName();
@@ -530,10 +532,10 @@ public class UltraPlayer {
 
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
-            gadgetsEnabledCache = true;
+            gadgetsEnabled = true;
         } else {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
-            gadgetsEnabledCache = false;
+            gadgetsEnabled = false;
         }
     }
 
@@ -541,7 +543,7 @@ public class UltraPlayer {
      * @return if the player has gadgets enabled or not.
      */
     public boolean hasGadgetsEnabled() {
-        return gadgetsEnabledCache;
+        return gadgetsEnabled;
     }
 
     /**
@@ -561,19 +563,19 @@ public class UltraPlayer {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
         }
         DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), enabled);
-        morphSelfViewCache = enabled;
+        morphSelfView = enabled;
     }
 
     /**
      * @return if player should be able to see his own morph or not.
      */
     public boolean canSeeSelfMorph() {
-        return morphSelfViewCache;
+        return morphSelfView;
     }
 
     public void loadSQLValues() {
-        gadgetsEnabledCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex());
-        morphSelfViewCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex());
+        gadgetsEnabled = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex());
+        morphSelfView = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex());
     }
 
     /**
