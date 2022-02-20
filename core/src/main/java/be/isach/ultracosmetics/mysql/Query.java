@@ -11,6 +11,7 @@ public class Query {
         this.sql = sql;
     }
 
+    @Override
     public String toString() {
         return sql;
     }

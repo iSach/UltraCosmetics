@@ -1,13 +1,16 @@
 package be.isach.ultracosmetics.mysql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
 
 public class Table {
-    private final Connection connection;
+    private final DataSource dataSource;
     private final String table;
 
-    public Table(Connection connection, String table) {
-        this.connection = connection;
+    public Table(DataSource dataSource, String table) {
+        this.dataSource = dataSource;
         this.table = table;
     }
 
@@ -15,27 +18,36 @@ public class Table {
         return table;
     }
 
-    public SelectQuery select() {
+    public SelectQuery selectAll() {
         return select("*");
     }
 
     public SelectQuery select(String selection) {
-        return new SelectQuery(connection, "SELECT " + selection + " FROM " + table);
+        return new SelectQuery(getConnection(), "SELECT " + selection + " FROM " + table);
     }
 
     public CreateQuery create() {
-        return new CreateQuery(connection, "CREATE TABLE IF NOT EXISTS " + table + " (");
+        return new CreateQuery(getConnection(), "CREATE TABLE IF NOT EXISTS " + table);
     }
 
     public UpdateQuery update() {
-        return new UpdateQuery(connection, "UPDATE " + table + " SET");
+        return new UpdateQuery(getConnection(), "UPDATE " + table + " SET");
     }
 
     public InsertQuery insert() {
-        return new InsertQuery(connection, "INSERT INTO " + table + " (");
+        return new InsertQuery(getConnection(), "INSERT INTO " + table + " (");
     }
 
     public DeleteQuery delete() {
-        return new DeleteQuery(connection, "DELETE FROM " + table);
+        return new DeleteQuery(getConnection(), "DELETE FROM " + table);
+    }
+
+    private Connection getConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

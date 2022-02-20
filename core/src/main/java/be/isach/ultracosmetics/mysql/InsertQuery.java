@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 
 public class InsertQuery extends Query {
     private boolean firstValue;
-    private final List<Object> values;
+    private final List<String> values;
 
     public InsertQuery(Connection connection, String sql) {
         super(connection, sql);
@@ -25,7 +25,7 @@ public class InsertQuery extends Query {
     }
 
     public InsertQuery value(Object value) {
-        values.add(value);
+        values.add(value.toString());
         sql = sql.substring(0, sql.length() - 1);
 
         if (firstValue) {
@@ -51,8 +51,8 @@ public class InsertQuery extends Query {
             }
             prest = connection.prepareStatement(sql);
             int i = 1;
-            for (Object object : values) {
-                prest.setObject(i, object);
+            for (String string : values) {
+                prest.setString(i, string);
                 i++;
             }
             prest.executeUpdate();

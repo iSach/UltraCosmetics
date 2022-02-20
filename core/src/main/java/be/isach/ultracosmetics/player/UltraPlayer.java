@@ -223,7 +223,7 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + 1);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(getMySqlIndex());
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(getUUID());
         }
     }
 
@@ -234,14 +234,14 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage())
             SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() - 1);
         else
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeKey(getMySqlIndex());
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeKey(getUUID());
     }
 
     /**
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getBukkitPlayer()).get("Keys") : ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getKeys(getMySqlIndex());
+        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getBukkitPlayer()).get("Keys") : ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getKeys(getUUID());
     }
 
     public void saveCosmeticsProfile() {
@@ -462,7 +462,7 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petType.getConfigName(), name);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getMySqlIndex(), petType.getConfigName(), name);
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getUUID(), petType.getConfigName(), name);
         }
     }
 
@@ -477,10 +477,10 @@ public class UltraPlayer {
             if (UltraCosmeticsData.get().usingFileStorage()) {
                 return SettingsManager.getData(getBukkitPlayer()).getString("Pet-Names." + petType.getConfigName());
             } else {
-                if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
+                if (ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getUUID(), petType.getConfigName()).equalsIgnoreCase("Unknown")) {
                     return null;
                 }
-                return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getMySqlIndex(), petType.getConfigName());
+                return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getPetName(getUUID(), petType.getConfigName());
             }
         } catch (NullPointerException e) {
             return null;
@@ -498,7 +498,7 @@ public class UltraPlayer {
             if (UltraCosmeticsData.get().usingFileStorage()) {
                 SettingsManager.getData(getBukkitPlayer()).set("Ammo." + name, getAmmo(name) + amount);
             } else {
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(getMySqlIndex(), name, amount);
+                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(getUUID(), name, amount);
             }
 
             if (currentGadget != null) {
@@ -525,7 +525,7 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Gadgets-Enabled", enabled);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setGadgetsEnabled(getMySqlIndex(), enabled);
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setGadgetsEnabled(getUUID(), enabled);
         }
 
         if (enabled) {
@@ -553,7 +553,7 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Third-Person-Morph-View", enabled);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setSeeSelfMorph(getMySqlIndex(), enabled);
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setSeeSelfMorph(getUUID(), enabled);
         }
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
@@ -572,8 +572,8 @@ public class UltraPlayer {
     }
 
     public void loadSQLValues() {
-        gadgetsEnabledCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getMySqlIndex());
-        morphSelfViewCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getMySqlIndex());
+        gadgetsEnabledCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().hasGadgetsEnabled(getUUID());
+        morphSelfViewCache = ultraCosmetics.getMySqlConnectionManager().getSqlUtils().canSeeSelfMorph(getUUID());
     }
 
     /**
@@ -587,7 +587,7 @@ public class UltraPlayer {
             if (UltraCosmeticsData.get().usingFileStorage())
                 return (int) SettingsManager.getData(getBukkitPlayer()).get("Ammo." + name);
             else
-                return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getAmmo(getMySqlIndex(), name);
+                return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getAmmo(getUUID(), name);
         return 0;
     }
 
@@ -610,7 +610,7 @@ public class UltraPlayer {
             if (UltraCosmeticsData.get().usingFileStorage()) {
                 SettingsManager.getData(getBukkitPlayer()).set("Ammo." + name, getAmmo(name) - 1);
             } else {
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeAmmo(getMySqlIndex(), name);
+                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeAmmo(getUUID(), name);
             }
         }
     }
@@ -665,10 +665,6 @@ public class UltraPlayer {
      */
     public UUID getUUID() {
         return uuid;
-    }
-
-    public int getMySqlIndex() {
-        return MySqlConnectionManager.INDEXS.getOrDefault(uuid, -1);
     }
 
     public Emote getCurrentEmote() {

@@ -3,23 +3,17 @@ package be.isach.ultracosmetics.mysql;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.StringJoiner;
 
 public class CreateQuery extends Query {
-    private boolean firstValue;
+    protected StringJoiner values = new StringJoiner(" (", ", ", ")");
 
     public CreateQuery(Connection connection, String sql) {
         super(connection, sql);
-        firstValue = true;
     }
 
     public CreateQuery create(String value) {
-        if (!firstValue) {
-            sql = sql.substring(0, sql.length() - 1);
-            sql += ", ";
-        } else {
-            firstValue = false;
-        }
-        sql += value + ")";
+        values.add(value);
         return this;
     }
 
@@ -27,7 +21,7 @@ public class CreateQuery extends Query {
         Statement statement;
         try {
             statement = connection.createStatement();
-            statement.execute(sql);
+            statement.execute(sql + values.toString());
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
