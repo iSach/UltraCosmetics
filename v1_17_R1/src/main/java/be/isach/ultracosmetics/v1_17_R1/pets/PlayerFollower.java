@@ -5,11 +5,7 @@ import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +20,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
 
     private final Pet pet;
     private final Player player;
-    private static Method pathMethod = null;
 
     public PlayerFollower(Pet pet, Player player) {
         this.pet = pet;
@@ -100,22 +95,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
     }
     
     private Path path(Mob mob, Location loc) {
-    	double x = loc.getX() + 1;
-    	double y = loc.getY();
-    	double z = loc.getZ() + 1;
-    	if (pathMethod == null) {
-    	    try {
-                pathMethod = PathNavigation.class.getDeclaredMethod("createPath", double.class, double.class, double.class, int.class);
-            } catch (NoSuchMethodException | SecurityException e) {
-                e.printStackTrace();
-                return null;
-            }
-    	}
-    	try {
-			return (Path) pathMethod.invoke(mob.getNavigation(), x, y, z, 1);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
+        return mob.getNavigation().createPath(loc.getX() + 1, loc.getY(), loc.getZ() + 1, 1);
     }
 }

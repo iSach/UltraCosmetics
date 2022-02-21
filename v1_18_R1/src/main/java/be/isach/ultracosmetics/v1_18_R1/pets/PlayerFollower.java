@@ -7,8 +7,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.pathfinder.Path;
 
-import java.lang.reflect.Method;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
@@ -22,7 +20,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
 
     private final Pet pet;
     private final Player player;
-    private static Method pathMethod = null;
 
     public PlayerFollower(Pet pet, Player player) {
         this.pet = pet;
