@@ -168,11 +168,18 @@ public class PlayerListener implements Listener {
     public void cancelMove(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (!SettingsManager.isAllowedWorld(player.getWorld())) return;
+        boolean isMenuItem = isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor()) || (event.getClick() == ClickType.NUMBER_KEY && isMenuItem(player.getInventory().getItem(event.getHotbarButton())));
+        // TODO: redundant check? see be.isach.ultracosmetics.menu.Menu#onClick
         if (event.getView().getTopInventory().getHolder() instanceof CosmeticsInventoryHolder
-                || isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())
-                || (event.getClick() == ClickType.NUMBER_KEY && isMenuItem(player.getInventory().getItem(event.getHotbarButton())))) {
+                || isMenuItem) {
             event.setCancelled(true);
             player.updateInventory();
+            if (isMenuItem && SettingsManager.getConfig().getBoolean("Menu-Item.Open-Menu-On-Inventory-Click", false)) {
+                // if it's not delayed by one tick, the client holds the item in cursor slot until they open their inventory again
+                Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> 
+                    ultraCosmetics.getMenus().getMainMenu().open(ultraCosmetics.getPlayerManager().getUltraPlayer(player))
+                , 1);
+            }
         }
     }
 
@@ -184,10 +191,14 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void cancelMove(InventoryCreativeEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (SettingsManager.isAllowedWorld(player.getWorld())) {
-            if (isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())) {
-                event.setCancelled(true);
-                player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
+        if (!SettingsManager.isAllowedWorld(player.getWorld())) return;
+        if (isMenuItem(event.getCurrentItem()) || isMenuItem(event.getCursor())) {
+            event.setCancelled(true);
+            player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
+            if (SettingsManager.getConfig().getBoolean("Menu-Item.Open-Menu-On-Inventory-Click", false)) {
+                Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> 
+                    ultraCosmetics.getMenus().getMainMenu().open(ultraCosmetics.getPlayerManager().getUltraPlayer(player))
+                , 1);
             }
         }
     }

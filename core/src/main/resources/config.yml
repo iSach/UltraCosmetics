@@ -89,6 +89,7 @@ TreasureChests:
     X: 0
     Y: 63
     Z: 0
+    World: world
   Loots:
     Money:
       Enabled: true
@@ -267,12 +268,15 @@ Menu-Item:
   Give-On-Respawn: true
   Slot: 3
   Type: ENDER_CHEST
-  Data: 0
   Displayname: '&6&lCosmetics'
+  # Custom model data for the menu item. Only supported on MC >= 1.14.4 (when it was added)
+  Custom-Model-Data: 0
+  # Whether to open cosmetics menu when the menu item is clicked from the player's inventory
+  Open-Menu-On-Inventory-Click: false
 
 # Settings related to permissions.
 #
-# List for "Type" https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+# List for type: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 No-Permission:
   Show-In-Lore: true
   Lore-Message-Yes: '&o&7Permission: &a&lYes!'

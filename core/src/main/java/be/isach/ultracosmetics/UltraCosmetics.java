@@ -378,10 +378,12 @@ public class UltraCosmetics extends JavaPlugin {
         if (!config.isConfigurationSection("TreasureChests.Location")) {
             ConfigurationSection section = config.createSection("TreasureChests.Location");
             config.set("TreasureChests.Location.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
-            config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63");
+            config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63", "To use the world the player is in, set World to 'none'");
             section.set("Y", 63);
             section.set("Z", 0);
         }
+
+        config.addDefault("TreasureChests.Location.World", Bukkit.getWorlds().get(0).getName());
 
         if (!config.isInt("TreasureChests.Loots.Money.Min")) {
             int min = 15;
@@ -476,6 +478,10 @@ public class UltraCosmetics extends JavaPlugin {
 
         config.addDefault("WorldGuard-Integration", true, "Whether WorldGuard should be hooked when loading UC", "Disable this if UC has trouble loading WorldGuard");
         config.addDefault("Pets-Are-Silent", false, "Are pets prevented from making sounds?");
+
+        config.addDefault("Menu-Item.Custom-Model-Data", 0, "Custom model data for the menu item. Only supported on MC >= 1.14.4 (when it was added)");
+        config.addDefault("Menu-Item.Open-Menu-On-Inventory-Click", false, "Whether to open cosmetics menu when the menu item is clicked from the player's inventory");
+        config.set("Menu-Item.Data", null);
 
         upgradeIdsToMaterials();
 

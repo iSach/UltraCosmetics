@@ -23,6 +23,7 @@ public class PetWither extends Pet {
 
     @Override
     public void onUpdate() {
+        // do not call super.onUpdate(), wither does not drop items.
         if (!SettingsManager.getConfig().getBoolean("Pets-Are-Babies")) return;
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().resetWitherSize((Wither) getEntity());
     }

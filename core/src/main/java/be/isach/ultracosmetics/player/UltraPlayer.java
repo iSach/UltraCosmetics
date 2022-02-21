@@ -23,6 +23,7 @@ import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.XMaterial;
 import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
@@ -31,6 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -636,9 +638,16 @@ public class UltraPlayer {
             getBukkitPlayer().getInventory().setItem(slot, null);
         }
         String name = ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("Menu-Item.Displayname"));
-        ItemStack stack = ItemFactory.getItemStackFromConfig("Menu-Item.Type");
-        // byte data = Byte.valueOf(SettingsManager.getConfig().getString("Menu-Item.Data"));
-        getBukkitPlayer().getInventory().setItem(slot, ItemFactory.rename(stack, name));
+        int model = SettingsManager.getConfig().getInt("Menu-Item.Custom-Model-Data");
+        ItemStack stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Menu-Item.Type"), name);
+
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1) && model != 0) {
+            ItemMeta meta = stack.getItemMeta();
+            meta.setCustomModelData(model);
+            stack.setItemMeta(meta);
+        }
+
+        getBukkitPlayer().getInventory().setItem(slot, stack);
     }
 
     /**

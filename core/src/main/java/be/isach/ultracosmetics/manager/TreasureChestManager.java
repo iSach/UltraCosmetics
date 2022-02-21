@@ -10,8 +10,10 @@ import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.Cuboid;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
@@ -64,6 +66,15 @@ public class TreasureChestManager implements Listener {
         Location originalLocation = player.getLocation().clone();
         // just modify a copy of the player's original location so we preserve yaw and pitch
         Location treasureChestLocation = player.getLocation().clone();
+        String worldName = location.getString("World", "none");
+        if (worldName != null && !worldName.equals("none")) {
+            World world = Bukkit.getWorld(location.getString("World"));
+            if (world == null) {
+                player.sendMessage(ChatColor.RED + "Invalid world set in config.yml!");
+            } else {
+                treasureChestLocation.setWorld(world);
+            }
+        }
         treasureChestLocation.setX(location.getInt("X", 0) + 0.5);
         // add 0.5 to the Y too so it's less likely the player gets stuck in the ground
         treasureChestLocation.setY(location.getInt("Y", 63) + 0.5);

@@ -7,12 +7,8 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.XMaterial;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Sheep;
-import org.bukkit.util.Vector;
-
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents an instance of a sheep pet summoned by a player.
@@ -21,23 +17,19 @@ import java.util.Random;
  * @since 08-12-2015
  */
 public class PetSheep extends Pet {
-
-    Random r = new Random();
-
+    private final List<XMaterial> woolColors = new ArrayList<>();
     public PetSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.getByName("sheep"), ItemFactory.rename(XMaterial.WHITE_WOOL.parseItem(), UltraCosmeticsData.get().getItemNoPickupString()));
+        for (XMaterial mat : XMaterial.VALUES) {
+            if (mat.name().endsWith("_WOOL")) {
+                woolColors.add(mat);
+            }
+        }
     }
 
     @Override
     public void onUpdate() {
-        Sheep sheep = (Sheep) entity;
-        Item drop = entity.getWorld().dropItem(sheep.getEyeLocation(), ItemFactory.createColored("WOOL", (byte) r.nextInt(16), UltraCosmeticsData.get().getItemNoPickupString()));
-        drop.setPickupDelay(30000);
-        drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-        items.add(drop);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-            drop.remove();
-            items.remove(drop);
-        }, 5);
+        dropItem = woolColors.get(random.nextInt(woolColors.size())).parseItem();
+        super.onUpdate();
     }
 }

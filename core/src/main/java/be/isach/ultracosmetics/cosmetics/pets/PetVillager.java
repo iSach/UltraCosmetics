@@ -15,7 +15,6 @@ import be.isach.ultracosmetics.util.XMaterial;
  */
 public class PetVillager extends Pet {
     public PetVillager(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("villager"),
-                ItemFactory.create(XMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("villager"), ItemFactory.create(XMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
     }
 }

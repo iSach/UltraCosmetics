@@ -60,9 +60,9 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     /**
      * The {@link org.bukkit.inventory.ItemStack ItemStack} this pet drops, null if none.
      */
-    private ItemStack dropItem;
+    protected ItemStack dropItem;
 
-    private Random r = new Random();
+    protected Random random = new Random();
 
     public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
         super(ultraCosmetics, Category.PETS, owner, petType);
@@ -98,6 +98,10 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
                 ageable.setAdult();
             }
             ageable.setAgeLock(true);
+        }
+
+        if (entity instanceof Tameable) {
+            ((Tameable)entity).setTamed(true);
         }
 
         getEntity().setCustomNameVisible(true);
@@ -199,7 +203,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     public void dropItem() {
         final Item drop = entity.getWorld().dropItem(((LivingEntity) entity).getEyeLocation(), dropItem);
         drop.setPickupDelay(30000);
-        drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
+        drop.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0 + 0.3, random.nextDouble() - 0.5).multiply(0.4));
         items.add(drop);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             drop.remove();

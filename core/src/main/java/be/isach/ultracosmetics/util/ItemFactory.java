@@ -64,7 +64,6 @@ public class ItemFactory {
         return rename (itemstack, displayName, (String[])null);
     }
 
-
     public static ItemStack rename(ItemStack itemstack, String displayName, String... lore) {
         ItemMeta meta = itemstack.getItemMeta();
         meta.setDisplayName(displayName);

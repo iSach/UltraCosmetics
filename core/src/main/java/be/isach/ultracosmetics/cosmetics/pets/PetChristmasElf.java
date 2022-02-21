@@ -4,12 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TexturedSkullFactory;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
-
 import java.util.*;
 
 /**
@@ -19,7 +14,7 @@ import java.util.*;
  * @since 11-29-2015
  */
 public class PetChristmasElf extends Pet {
-    private static List<ItemStack> presents = new ArrayList<>(Arrays.asList(
+    private static final List<ItemStack> PRESENTS = Arrays.asList(
             getSkull("f5612dc7b86d71afc1197301c15fd979e9f39e7b1f41d8f1ebdf8115576e2e"),
             getSkull("6b4cde16a4014de0a7651f6067f12695bb5fed6feaec1e9413ca4271e7c819"),
             getSkull("d08ce7deba56b726a832b61115ca163361359c30434f7d5e3c3faa6fe4052"),
@@ -27,24 +22,16 @@ public class PetChristmasElf extends Pet {
             getSkull("1b6730de7e5b941efc6e8cbaf5755f9421a20de871759682cd888cc4a81282"),
             getSkull("1ac1163f54dcbb0e8e31ac675696f2409299c5abbf6c3fe73bf1cfe91422e1"),
             getSkull("6cef9aa14e884773eac134a4ee8972063f466de678363cf7b1a21a85b7"),
-            getSkull("aa074845885202e17ed5c4be4103733121235c5440ae3a1c49fbd39317b04d")));
-
-    private Random r = new Random();
+            getSkull("aa074845885202e17ed5c4be4103733121235c5440ae3a1c49fbd39317b04d"));
 
     public PetChristmasElf(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("christmaself"), presents.get(0));
+        super(owner, ultraCosmetics, PetType.getByName("christmaself"), PRESENTS.get(0));
     }
 
     @Override
     public void onUpdate() {
-        final Item drop = entity.getWorld().dropItem(((Villager) entity).getEyeLocation(), presents.get(r.nextInt(presents.size())));
-        drop.setPickupDelay(30000);
-        drop.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2.0 + 0.3, r.nextDouble() - 0.5).multiply(0.4));
-        items.add(drop);
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-            drop.remove();
-            items.remove(drop);
-        }, 5);
+        dropItem = PRESENTS.get(random.nextInt(PRESENTS.size()));
+        super.onUpdate();
     }
 
     private static ItemStack getSkull(String url) {

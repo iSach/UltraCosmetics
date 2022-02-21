@@ -14,8 +14,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Manages update checking.
@@ -34,9 +32,6 @@ public class UpdateManager extends BukkitRunnable {
 
     private final UltraCosmetics ultraCosmetics;
 
-    // Searches version string for something like "d.d" or "d.d.d" and so on where d is one or more digits
-    private final Pattern versionPattern = Pattern.compile("(?:\\d+\\.)+\\d+");
-
     /**
      * Whether the plugin is outdated or not.
      */
@@ -49,12 +44,7 @@ public class UpdateManager extends BukkitRunnable {
 
     public UpdateManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        String versionString = ultraCosmetics.getDescription().getVersion();
-        Matcher matcher = versionPattern.matcher(versionString);
-        if (!matcher.find()) {
-            throw new IllegalArgumentException("Could not parse version string: '" + versionString + "'");
-        }
-        this.currentVersion = matcher.group();
+        this.currentVersion = ultraCosmetics.getDescription().getVersion();
     }
 
     /**
@@ -93,6 +83,7 @@ public class UpdateManager extends BukkitRunnable {
 
             String version = ((JSONObject) value.get(value.size() - 1)).get("name").toString();
 
+            // why are we limiting the length?
             if (version.length() <= 7) {
                 return version;
             }

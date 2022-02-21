@@ -1,5 +1,8 @@
 package be.isach.ultracosmetics;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Version.
  *
@@ -8,7 +11,13 @@ package be.isach.ultracosmetics;
  */
 public class Version implements Comparable<Version> {
 
-    private String version;
+    // Searches version string for something like "d.d" or "d.d.d" and so on where d is one or more digits
+    private static final Pattern VERSION_PATTERN = Pattern.compile("(?:\\d+\\.)+\\d+");
+
+    // only numbers (ex. 2.6.1)
+    private final String version;
+    // full version (ex. 2.6.1-RELEASE)
+    private final String versionString;
 
     public final String get() {
         return this.version;
@@ -17,9 +26,12 @@ public class Version implements Comparable<Version> {
     public Version(String version) {
         if (version == null)
             throw new IllegalArgumentException("Version can not be null");
-        if (!version.matches("[0-9]+(\\.[0-9]+)*"))
-            throw new IllegalArgumentException("Invalid version format");
-        this.version = version;
+        Matcher matcher = VERSION_PATTERN.matcher(version);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("Could not parse version string: '" + version + "'");
+        }
+        this.version = matcher.group();
+        this.versionString = version;
     }
 
     @Override
@@ -32,21 +44,25 @@ public class Version implements Comparable<Version> {
                     Integer.parseInt(thisParts[i]) : 0;
             int thatPart = i < thatParts.length ?
                     Integer.parseInt(thatParts[i]) : 0;
-            if (thisPart < thatPart)
-                return -1;
-            if (thisPart > thatPart)
-                return 1;
+            int cmp = Integer.compare(thisPart, thatPart);
+            if (cmp != 0) {
+                return cmp;
+            }
         }
-        return 0;
+        // release > dev build of same version
+        return Boolean.compare(this.isRelease(), otherVersion.isRelease());
+    }
+
+    public boolean isDev() {
+        return versionString.toLowerCase().contains("dev");
+    }
+
+    public boolean isRelease() {
+        return versionString.toLowerCase().contains("release");
     }
 
     @Override
     public boolean equals(Object that) {
         return this == that || that != null && this.getClass() == that.getClass() && this.compareTo((Version) that) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 }
