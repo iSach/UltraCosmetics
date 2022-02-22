@@ -14,6 +14,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityUnleashEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
@@ -72,6 +73,15 @@ public class GadgetParachute extends Gadget {
             event.setDroppedExp(0);
             event.getDrops().clear();
             event.getEntity().setLeashHolder(null);
+        }
+    }
+
+    @EventHandler
+    public void onChickenUnleash(EntityUnleashEvent event) {
+        // can't cancel this either, but setting the leash holder to null prevents the lead from dropping
+        if (chickens.contains(event.getEntity())) {
+            ((Chicken)event.getEntity()).setLeashHolder(null);
+            event.getEntity().remove();
         }
     }
 
