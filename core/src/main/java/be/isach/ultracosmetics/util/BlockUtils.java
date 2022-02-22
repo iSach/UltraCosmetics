@@ -22,58 +22,70 @@ public class BlockUtils {
     /**
      * List of all the current Treasure Blocks.
      */
-    public static List<Block> treasureBlocks = new ArrayList<>();
+    public static final List<Block> treasureBlocks = new ArrayList<>();
 
     /**
      * Set containing all materials that shouldn't
      * be used with player.sendBlockChange
      */
-    public static Set<Material> badMaterials = new HashSet<>();
+    private static final Set<Material> badMaterials = new HashSet<>();
 
     static {
-        badMaterials.add(Material.AIR);
-        badMaterials.add(getOldMaterial("SIGN_POST"));
-        badMaterials.add(Material.CHEST);
-        badMaterials.add(getOldMaterial("STONE_PLATE"));
-        badMaterials.add(getOldMaterial("WOOD_PLATE"));
-        badMaterials.add(XMaterial.ACACIA_WALL_SIGN.parseMaterial());
-        badMaterials.add(XMaterial.BIRCH_WALL_SIGN.parseMaterial());
-        badMaterials.add(XMaterial.DARK_OAK_WALL_SIGN.parseMaterial());
-        badMaterials.add(XMaterial.JUNGLE_WALL_SIGN.parseMaterial());
-        badMaterials.add(XMaterial.OAK_WALL_SIGN.parseMaterial());
-        badMaterials.add(XMaterial.DARK_OAK_WALL_SIGN.parseMaterial());
-        badMaterials.add(getOldMaterial("WALL_BANNER"));
-        badMaterials.add(getOldMaterial("STANDING_BANNER"));
-        badMaterials.add(getOldMaterial("CROPS"));
-        badMaterials.add(getOldMaterial("LONG_GRASS"));
-        badMaterials.add(getOldMaterial("SAPLING"));
-        badMaterials.add(Material.DEAD_BUSH);
-        badMaterials.add(getOldMaterial("RED_ROSE"));
-        badMaterials.add(Material.RED_MUSHROOM);
-        badMaterials.add(Material.BROWN_MUSHROOM);
-        badMaterials.add(Material.TORCH);
-        badMaterials.add(Material.LADDER);
-        badMaterials.add(Material.VINE);
-        badMaterials.add(getOldMaterial("DOUBLE_PLANT"));
-        badMaterials.add(getOldMaterial("PORTAL"));
-        badMaterials.add(Material.CACTUS);
-        badMaterials.add(Material.WATER);
-        badMaterials.add(getOldMaterial("STATIONARY_WATER"));
-        badMaterials.add(Material.LAVA);
-        badMaterials.add(getOldMaterial("STATIONARY_LAVA"));
-        badMaterials.add(getOldMaterial("PORTAL"));
-        badMaterials.add(getOldMaterial("ENDER_PORTAL"));
-        badMaterials.add(getOldMaterial("SOIL"));
-        badMaterials.add(Material.BARRIER);
-        badMaterials.add(getOldMaterial("COMMAND"));
-        badMaterials.add(Material.DROPPER);
-        badMaterials.add(Material.DISPENSER);
-        badMaterials.add(getOldMaterial("BED"));
-        badMaterials.add(getOldMaterial("BED_BLOCK"));
+        Set<XMaterial> badXMaterials = new HashSet<>();
+        badXMaterials.add(XMaterial.AIR);
+        badXMaterials.add(XMaterial.CHEST);
+        badXMaterials.add(XMaterial.ACACIA_WALL_SIGN);
+        badXMaterials.add(XMaterial.BIRCH_WALL_SIGN);
+        badXMaterials.add(XMaterial.DARK_OAK_WALL_SIGN);
+        badXMaterials.add(XMaterial.JUNGLE_WALL_SIGN);
+        badXMaterials.add(XMaterial.OAK_WALL_SIGN);
+        badXMaterials.add(XMaterial.DARK_OAK_WALL_SIGN);
+        badXMaterials.add(XMaterial.WHEAT);
+        badXMaterials.add(XMaterial.GRASS);
+        badXMaterials.add(XMaterial.DEAD_BUSH);
+        badXMaterials.add(XMaterial.POPPY);
+        badXMaterials.add(XMaterial.RED_MUSHROOM);
+        badXMaterials.add(XMaterial.BROWN_MUSHROOM);
+        badXMaterials.add(XMaterial.TORCH);
+        badXMaterials.add(XMaterial.LADDER);
+        badXMaterials.add(XMaterial.VINE);
+        badXMaterials.add(XMaterial.LARGE_FERN);
+        badXMaterials.add(XMaterial.LILAC);
+        badXMaterials.add(XMaterial.PEONY);
+        badXMaterials.add(XMaterial.ROSE_BUSH);
+        badXMaterials.add(XMaterial.SUNFLOWER);
+        badXMaterials.add(XMaterial.NETHER_PORTAL);
+        badXMaterials.add(XMaterial.CACTUS);
+        // I don't think we need to check FLOWING_ variants separately
+        badXMaterials.add(XMaterial.WATER);
+        badXMaterials.add(XMaterial.LAVA);
+        badXMaterials.add(XMaterial.END_PORTAL);
+        badXMaterials.add(XMaterial.FARMLAND);
+        badXMaterials.add(XMaterial.BARRIER);
+        badXMaterials.add(XMaterial.COMMAND_BLOCK);
+        badXMaterials.add(XMaterial.DROPPER);
+        badXMaterials.add(XMaterial.DISPENSER);
 
-        for (Material mat : Material.values()) {
-            if (mat.name().endsWith("_SLAB")) badMaterials.add(mat);
-            if (mat.name().endsWith("_DOOR")) badMaterials.add(mat);
+        Set<String> badEndings = new HashSet<>();
+        badEndings.add("SLAB");
+        badEndings.add("DOOR");
+        badEndings.add("SIGN");
+        badEndings.add("BED");
+        badEndings.add("PRESSURE_PLATE");
+        badEndings.add("BANNER");
+        badEndings.add("SAPLING");
+
+        for (XMaterial mat : XMaterial.VALUES) {
+            for (String ending : badEndings) {
+                if (mat.name().endsWith("_" + ending)) {
+                    badXMaterials.add(mat);
+                    break;
+                }
+            }
+        }
+
+        for (XMaterial mat : badXMaterials) {
+            badMaterials.add(mat.parseMaterial());
         }
     }
 
@@ -188,56 +200,16 @@ public class BlockUtils {
      * @return {@code true} if a block is part of a Nether Portal, otherwise {@code false}.
      */
     public static boolean isPortalBlock(Block b) {
-        for (BlockFace face : BlockFace.values())
-            if (b.getRelative(face).getType() == getOldMaterial("PORTAL"))
+        for (BlockFace face : BlockFace.values()) {
+            if (b.getRelative(face).getType() == XMaterial.NETHER_PORTAL.parseMaterial()) {
                 return true;
+            }
+        }
         return false;
     }
 
-    public static Material getOldMaterial(String material) {
-        if (VersionManager.IS_VERSION_1_13) {
-            return Material.getMaterial(material, true);
-        }
-        return Material.getMaterial(material);
-    }
-
     public static Material getBlockByColor(String oldMaterialName, byte color) {
-        switch (color) {
-            case 0x0:
-                return getBlockByColor(oldMaterialName, DyeColor.WHITE);
-            case 0x1:
-                return getBlockByColor(oldMaterialName, DyeColor.ORANGE);
-            case 0x2:
-                return getBlockByColor(oldMaterialName, DyeColor.MAGENTA);
-            case 0x3:
-                return getBlockByColor(oldMaterialName, DyeColor.LIGHT_BLUE);
-            case 0x4:
-                return getBlockByColor(oldMaterialName, DyeColor.YELLOW);
-            case 0x5:
-                return getBlockByColor(oldMaterialName, DyeColor.LIME);
-            case 0x6:
-                return getBlockByColor(oldMaterialName, DyeColor.PINK);
-            case 0x7:
-                return getBlockByColor(oldMaterialName, DyeColor.GRAY);
-            case 0x8:
-                return getBlockByColor(oldMaterialName, VersionManager.IS_VERSION_1_13 ? DyeColor.LIGHT_GRAY : DyeColor.valueOf("SILVER"));
-            case 0x9:
-                return getBlockByColor(oldMaterialName, DyeColor.CYAN);
-            case 0xA:
-                return getBlockByColor(oldMaterialName, DyeColor.PURPLE);
-            case 0xB:
-                return getBlockByColor(oldMaterialName, DyeColor.BLUE);
-            case 0xC:
-                return getBlockByColor(oldMaterialName, DyeColor.BROWN);
-            case 0xD:
-                return getBlockByColor(oldMaterialName, DyeColor.GREEN);
-            case 0xE:
-                return getBlockByColor(oldMaterialName, DyeColor.RED);
-            case 0xF:
-                return getBlockByColor(oldMaterialName, DyeColor.BLACK);
-            default:
-                return getBlockByColor(oldMaterialName, DyeColor.WHITE);
-        }
+        return getBlockByColor(oldMaterialName, DyeColor.values()[color]);
     }
 
     public static Material getDyeByColor(byte color) {
@@ -245,42 +217,6 @@ public class BlockUtils {
             return Material.getMaterial("INK_SACK");
         }
         return Material.getMaterial("INK_SACK");
-        /*switch (color) {
-            case 0x0:
-                return Material.valueOf("INK_SAC");
-            case 0x1:
-                return Material.valueOf("ROSE_RED");
-            case 0x2:
-                return Material.valueOf("CACTUS_GREEN");
-            case 0x3:
-                return Material.valueOf("COCOA_BEANS");
-            case 0x4:
-                return Material.valueOf("LAPIS_LAZULI");
-            case 0x5:
-                return Material.valueOf("PURPLE_DYE");
-            case 0x6:
-                return Material.valueOf("CYAN_DYE");
-            case 0x7:
-                return Material.valueOf("LIGHT_GRAY_DYE");
-            case 0x8:
-                return Material.valueOf("GRAY_DYE");
-            case 0x9:
-                return Material.valueOf("PINK_DYE");
-            case 0xA:
-                return Material.valueOf("LIME_DYE");
-            case 0xB:
-                return Material.valueOf("DANDELION_YELLOW");
-            case 0xC:
-                return Material.valueOf("LIGHT_BLUE_DYE");
-            case 0xD:
-                return Material.valueOf("MAGENTA_DYE");
-            case 0xE:
-                return Material.valueOf("ORANGE_DYE");
-            case 0xF:
-                return Material.valueOf("BONE_MEAL");
-            default:
-                return Material.valueOf("BONE_MEAL");
-        }*/
     }
 
     public static Material getBlockByColor(String oldMaterialName, DyeColor color) {
@@ -289,5 +225,10 @@ public class BlockUtils {
             return Material.getMaterial(color.toString() + "_" + oldMaterialName);
         }
         return XMaterial.WHITE_WOOL.parseMaterial();
+    }
+
+    // Returns true if mat should not be used with player.sendBlockChange per badMaterials Set
+    public static boolean isBadMaterial(Material mat) {
+        return badMaterials.contains(mat);
     }
 }

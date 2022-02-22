@@ -59,7 +59,7 @@ public class MorphChicken extends Morph {
                         if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
                             i.getWorld().spawnParticle(Particle.BLOCK_CRACK, i.getLocation(), 0, 0, 0, 0, 0, XMaterial.WHITE_TERRACOTTA.parseMaterial().createBlockData());
                         } else {
-                            Particles.BLOCK_CRACK.display(new Particles.BlockData(BlockUtils.getOldMaterial("STAINED_CLAY"), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
+                            Particles.BLOCK_CRACK.display(new Particles.BlockData(XMaterial.WHITE_TERRACOTTA.parseMaterial(), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
                         }
                         SoundUtil.playSound(i.getLocation(), Sounds.ZOMBIE_WOOD, .05f, 1f);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);

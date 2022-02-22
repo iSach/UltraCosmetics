@@ -44,7 +44,7 @@ public class ItemFactory {
         if (VersionManager.IS_VERSION_1_13) {
             itemStack = new ItemStack(BlockUtils.getBlockByColor(oldMaterialName, data), 1);
         } else {
-            itemStack = new MaterialData(BlockUtils.getOldMaterial(oldMaterialName), data).toItemStack(1);
+            itemStack = new MaterialData(Material.getMaterial(oldMaterialName), data).toItemStack(1);
         }
 
         ItemMeta itemMeta = itemStack.getItemMeta();

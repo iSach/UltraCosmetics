@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.XMaterial;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -131,7 +132,7 @@ public class GadgetTrampoline extends Gadget {
     }
 
     private void genBarr(Block block) {
-        setToRestore(block, BlockUtils.getOldMaterial("FENCE"), (byte) 0);
+        setToRestore(block, XMaterial.OAK_FENCE.parseMaterial(), (byte) 0);
     }
 
     private void genBlue(Block block) {

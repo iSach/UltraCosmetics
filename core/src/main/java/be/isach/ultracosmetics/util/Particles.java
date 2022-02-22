@@ -499,7 +499,7 @@ public enum Particles {
      */
     private static boolean isWater(Location location) {
         Material material = location.getBlock().getType();
-        return material == Material.WATER || material == BlockUtils.getOldMaterial("STATIONARY_WATER");
+        return material.name().endsWith("WATER"); // matches WATER and STATIONARY_WATER
     }
 
     /**

@@ -320,13 +320,13 @@ public class TreasureRandomizer {
             }
 
         } catch (IndexOutOfBoundsException | IllegalArgumentException exception) {
-            if ((!d("Gadgets") || gadgetList.isEmpty())
-                    && (!d("Gadgets-Ammo") || ammoList.isEmpty())
-                    && (!d("Pets") || petList.isEmpty())
-                    && (!d("Morphs") || morphList.isEmpty())
-                    && (!d("Mounts") || mountList.isEmpty())
-                    && (!d("Hats") || hatList.isEmpty())
-                    && (!d("Effects") || particleEffectList.isEmpty())
+            if ((!isEnabled("Gadgets") || gadgetList.isEmpty())
+                    && (!isEnabled("Gadgets-Ammo") || ammoList.isEmpty())
+                    && (!isEnabled("Pets") || petList.isEmpty())
+                    && (!isEnabled("Morphs") || morphList.isEmpty())
+                    && (!isEnabled("Mounts") || mountList.isEmpty())
+                    && (!isEnabled("Hats") || hatList.isEmpty())
+                    && (!isEnabled("Effects") || particleEffectList.isEmpty())
                     || RESULT_TYPES.isEmpty())
                 giveNothing();
             else
@@ -335,7 +335,7 @@ public class TreasureRandomizer {
         SoundUtil.playSound(loc, Sounds.CHEST_OPEN, 1.4f, 1.5f);
     }
 
-    private boolean d(String s) {
+    private boolean isEnabled(String s) {
         return (boolean) SettingsManager.getConfig().get("TreasureChests.Loots." + s + ".Enabled");
     }
 
@@ -380,7 +380,7 @@ public class TreasureRandomizer {
         int money = MathUtils.randomRangeInt(min, max);
         name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
         UltraCosmeticsData.get().getPlugin().getEconomyHandler().deposit(player, money);
-        itemStack = new ItemStack(BlockUtils.getOldMaterial("DOUBLE_PLANT"));
+        itemStack = XMaterial.SUNFLOWER.parseItem();
         if (money > 3 * (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max") / 4) {
             spawnRandomFirework(loc);
         }

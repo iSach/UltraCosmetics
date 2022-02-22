@@ -96,40 +96,10 @@ public class GadgetSmashDown extends Gadget {
         }
         for (Block b : BlockUtils.getBlocksInRadius(loc.clone().add(0, -1, 0), i, true)) {
             if (b.getLocation().getBlockY() == loc.getBlockY() - 1) {
-                if (b.getType() != Material.AIR
-                        && b.getType() != BlockUtils.getOldMaterial("SIGN_POST")
-                        && b.getType() != Material.CHEST
-                        && b.getType() != BlockUtils.getOldMaterial("Material.STONE_PLATE")
-                        && b.getType() != BlockUtils.getOldMaterial("Material.WOOD_PLATE")
-                        && b.getType() != XMaterial.ACACIA_WALL_SIGN.parseMaterial()
-                        && b.getType() != XMaterial.BIRCH_WALL_SIGN.parseMaterial()
-                        && b.getType() != XMaterial.DARK_OAK_WALL_SIGN.parseMaterial()
-                        && b.getType() != XMaterial.JUNGLE_WALL_SIGN.parseMaterial()
-                        && b.getType() != XMaterial.OAK_WALL_SIGN.parseMaterial()
-                        && b.getType() != XMaterial.DARK_OAK_WALL_SIGN.parseMaterial()
-                        && b.getType() != BlockUtils.getOldMaterial("Material.WALL_BANNER")
-                        && b.getType() != BlockUtils.getOldMaterial("Material.STANDING_BANNER")
-                        && b.getType() != BlockUtils.getOldMaterial("Material.CROPS")
-                        && b.getType() != BlockUtils.getOldMaterial("Material.LONG_GRASS")
-                        && b.getType() != BlockUtils.getOldMaterial("Material.SAPLING")
-                        && b.getType() != Material.DEAD_BUSH
-                        && b.getType() != BlockUtils.getOldMaterial("Material.RED_ROSE")
-                        && b.getType() != Material.RED_MUSHROOM
-                        && b.getType() != Material.BROWN_MUSHROOM
-                        && b.getType() != Material.TORCH
-                        && b.getType() != Material.LADDER
-                        && b.getType() != Material.VINE
-                        && b.getType() != BlockUtils.getOldMaterial("Material.DOUBLE_PLANT")
-                        && b.getType() != BlockUtils.getOldMaterial("Material.PORTAL")
-                        && b.getType() != Material.CACTUS
-                        && b.getType() != Material.WATER
-                        && b.getType() != BlockUtils.getOldMaterial("Material.STATIONARY_WATER")
-                        && b.getType() != Material.LAVA
-                        && b.getType() != BlockUtils.getOldMaterial("Material.STATIONARY_LAVA")
+                if (!BlockUtils.isBadMaterial(b.getType())
                         && !BlockUtils.isRocketBlock(b)
                         && !BlockUtils.isTreasureChestBlock(b)
                         && b.getType().isSolid()
-                        && !b.getType().toString().toLowerCase().contains("slab")
                         && b.getRelative(BlockFace.UP).getType() == Material.AIR) {
                     Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                         FallingBlock fb = loc.getWorld().spawnFallingBlock(b.getLocation().clone().add(0, 1.1f, 0),
