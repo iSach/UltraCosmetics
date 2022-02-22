@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Cuboid;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
@@ -14,12 +13,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.EntityUnleashEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an instance of a parachute gadget summoned by a player.
@@ -29,8 +28,8 @@ import java.util.List;
  */
 public class GadgetParachute extends Gadget {
 
-    List<Chicken> chickens = new ArrayList<>();
-    boolean active;
+    private Set<Chicken> chickens = new HashSet<>();
+    private boolean active;
 
     public GadgetParachute(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("parachute"), ultraCosmetics);
@@ -38,7 +37,7 @@ public class GadgetParachute extends Gadget {
 
 
     @Override
-    void onRightClick() {
+    public void onRightClick() {
         Location loc = getPlayer().getLocation();
 
         getPlayer().teleport(loc.clone().add(0, 35, 0));
@@ -47,7 +46,9 @@ public class GadgetParachute extends Gadget {
         getOwner().setCanBeHitByOtherGadgets(false);
 
         for (int i = 0; i < 20; i++) {
-            Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(MathUtils.randomDouble(0, 0.5), 3, MathUtils.randomDouble(0, 0.5)), EntityType.CHICKEN);
+            int x = i % 5 - 2;
+            int z = i / 4 - 2;
+            Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(x, 3, z), EntityType.CHICKEN);
             chickens.add(chicken);
             chicken.setLeashHolder(getPlayer());
         }
@@ -65,10 +66,12 @@ public class GadgetParachute extends Gadget {
     }
 
     @EventHandler
-    public void onLeashBreak(EntityUnleashEvent event) {
+    public void onChickenDeath(EntityDeathEvent event) {
+        // can't just cancel the event for some reason, so just eliminate the effects
         if (chickens.contains(event.getEntity())) {
-            event.getEntity().getNearbyEntities(1, 1, 1).stream().filter(ent -> ent instanceof Item
-                    && ((Item) ent).getItemStack().getType() == BlockUtils.getOldMaterial("LEASH")).forEachOrdered(Entity::remove);
+            event.setDroppedExp(0);
+            event.getDrops().clear();
+            event.getEntity().setLeashHolder(null);
         }
     }
 
