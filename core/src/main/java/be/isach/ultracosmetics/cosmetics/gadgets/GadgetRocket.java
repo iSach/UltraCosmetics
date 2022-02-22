@@ -105,7 +105,7 @@ public class GadgetRocket extends Gadget {
                         return;
                     }
 
-                    if (currentTask != null && !currentTask.isCancelled()) {
+                    if (isTaskRunning()) {
                         // if the player is refusing to be on the rocket (by holding sneak), abort the launch
                         onClear();
                         getPlayer().sendTitle(MessageManager.getMessage("Gadgets.Rocket.LaunchAborted"), "");
@@ -224,7 +224,7 @@ public class GadgetRocket extends Gadget {
     public void onDismount(EntityDismountEvent event) {
         if (event.getEntity() != getPlayer()) return;
         if (event.getDismounted() != playerVehicle) return;
-        if (currentTask != null && !currentTask.isCancelled()) return;
+        if (isTaskRunning()) return;
         if (DISMOUNT_CANCELLABLE) {
             event.setCancelled(true);
             return;
@@ -263,5 +263,9 @@ public class GadgetRocket extends Gadget {
         if (getPlayer().getGameMode() != GameMode.CREATIVE) {
             getPlayer().setAllowFlight(false);
         }
+    }
+
+    private boolean isTaskRunning() {
+        return currentTask != null && Bukkit.getScheduler().isQueued(currentTask.getTaskId());
     }
 }
