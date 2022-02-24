@@ -14,6 +14,7 @@ import be.isach.ultracosmetics.treasurechests.TreasureRandomizer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -282,7 +283,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (TreasureRandomizer.getFireworks().contains(event.getDamager())) {
+        if (event.getDamager() instanceof Firework && event.getDamager().hasMetadata("UCFirework")) {
             event.setCancelled(true);
         }
     }

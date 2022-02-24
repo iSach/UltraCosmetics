@@ -254,4 +254,9 @@ public class EmoteType extends CosmeticMatType<Emote> {
     public int getTicksPerFrame() {
         return ticksPerFrame;
     }
+
+    @Override
+    public ItemStack getItemStack() {
+        return frames.get(frames.size() - 1).clone();
+    }
 }

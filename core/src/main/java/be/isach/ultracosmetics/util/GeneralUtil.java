@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.*;
 
 import java.io.File;
@@ -88,10 +87,10 @@ public class GeneralUtil {
         writer.println();
         writer.println("Suits:");
         writer.println("  - ultracosmetics.suits.*");
-        for (SuitType suit : SuitType.values()) {
-            writer.println("  - ultracosmetics.suits." + suit.getConfigName().toLowerCase() + ".*");
-            for (ArmorSlot armorSlot : ArmorSlot.values())
-                writer.println("  - " + suit.getPermission(armorSlot));
+        for (SuitCategory cat : SuitCategory.values()) {
+            writer.println("  - ultracosmetics.suits." + cat.getConfigName().toLowerCase() + ".*");
+            for (SuitType suitType : cat.getPieces())
+                writer.println("  - " + suitType.getPermission());
         }
         writer.println();
         writer.println("Emotes:");

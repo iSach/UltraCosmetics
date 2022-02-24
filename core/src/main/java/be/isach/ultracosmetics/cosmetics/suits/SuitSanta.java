@@ -13,20 +13,16 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  * @since 12-20-2015
  */
 public class SuitSanta extends Suit {
-    public SuitSanta(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
-        super(owner, armorSlot, SuitType.valueOf("santa"), ultraCosmetics);
+    public SuitSanta(UltraPlayer owner, SuitType suitType, UltraCosmetics ultraCosmetics) {
+        super(owner, suitType, ultraCosmetics);
     }
 
     @Override
-    protected void onEquip() {
-        super.onEquip();
+    protected void setupItemStack() {
+        super.setupItemStack();
 
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         itemMeta.setColor(Color.fromRGB(255, 0, 0));
         itemStack.setItemMeta(itemMeta);
-    }
-
-    @Override
-    public void onUpdate() {
     }
 }

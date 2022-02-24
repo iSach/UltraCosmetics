@@ -96,7 +96,7 @@ public class SubCommandToggle extends SubCommand {
                 target.removeCosmetic(category);
             }
         }
-        Optional<? extends CosmeticType> matchingType = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().contains(cosm.split(":")[0])).findFirst();
+        Optional<? extends CosmeticType<?>> matchingType = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().contains(cosm.split(":")[0])).findFirst();
         if (!matchingType.isPresent()) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "Invalid cosmetic.");
             return;
@@ -110,12 +110,12 @@ public class SubCommandToggle extends SubCommand {
         SuitType suitType;
         ArmorSlot armorSlot;
         try {
-            suitType = SuitType.valueOf(cosm.split(":")[0]);
             armorSlot = ArmorSlot.valueOf(cosm.split(":")[1]);
+            suitType = SuitType.getSuitPart(cosm.split(":")[0], armorSlot);
         } catch (IllegalArgumentException e) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "/uc toggle suit <suit type:suit piece> <player>.");
             return;
         }
-        suitType.equip(target, ultraCosmetics, armorSlot);
+        suitType.equip(target, ultraCosmetics);
     }
 }

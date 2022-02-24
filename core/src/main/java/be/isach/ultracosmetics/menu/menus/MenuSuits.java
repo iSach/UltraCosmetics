@@ -5,9 +5,9 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
+import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
@@ -61,13 +61,13 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
         int to = page * 7 - 1;
         superLoop:
         for (int h = from; h <= to; h++) {
-            if (h >= enabled().size()) {
+            if (h >= SuitCategory.enabled().size()) {
                 break;
             }
 
-            SuitType suitType = enabled().get(h);
+            SuitCategory suitCategory = SuitCategory.enabled().get(h);
 
-            if (!suitType.isEnabled()) {
+            if (!suitCategory.isEnabled()) {
                 continue;
             }
 
@@ -75,17 +75,18 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
             ItemStack wholeEquipStack = XMaterial.HOPPER.parseItem();
             ItemMeta wholeEquipMeta = wholeEquipStack.getItemMeta();
-            wholeEquipMeta.setDisplayName(CATEGORY.getActivateMenu() + " " + MessageManager.getMessage("Suits." + suitType.getConfigName() + ".whole-equip"));
+            wholeEquipMeta.setDisplayName(CATEGORY.getActivateMenu() + " " + MessageManager.getMessage("Suits." + suitCategory.getConfigName() + ".whole-equip"));
             wholeEquipMeta.setLore(Arrays.asList("", MessageManager.getMessage("Suits.Whole-Equip-Lore"), ""));
             wholeEquipStack.setItemMeta(wholeEquipMeta);
             putItem(inventory, SLOTS[i] - 9, wholeEquipStack, clickData -> {
                 for (ArmorSlot armorSlot : ArmorSlot.values()) {
-                    if (player.hasPermission(suitType.getPermission(armorSlot))) {
+                    SuitType type = suitCategory.getPiece(armorSlot);
+                    if (player.hasPermission(type.getPermission())) {
                         if (player.getSuit(armorSlot) != null
-                                && player.getSuit(armorSlot).getType() == suitType) {
+                                && player.getSuit(armorSlot).getType() == type) {
                             continue;
                         }
-                        toggleOn(clickData.getClicker(), suitType, getUltraCosmetics(), armorSlot);
+                        toggleOn(clickData.getClicker(), type, getUltraCosmetics());
                     }
                 }
                 if (UltraCosmeticsData.get().shouldCloseAfterSelect()) {
@@ -99,16 +100,17 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
             for (int l = 0; l < 4; l++) {
                 ArmorSlot armorSlot = ArmorSlot.values()[l];
                 Suit suit = player.getSuit(armorSlot);
+                SuitType suitType = suitCategory.getPiece(armorSlot);
                 int slot = SLOTS[i] + l * 9;
 
                 if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")) {
-                    if (!player.hasPermission(suitType.getPermission(armorSlot))) {
+                    if (!player.hasPermission(suitType.getPermission())) {
                         continue;
                     }
                 }
 
                 if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
-                        && !player.hasPermission(suitType.getPermission(armorSlot))) {
+                        && !player.hasPermission(suitType.getPermission())) {
                     ItemStack stack = ItemFactory.getItemStackFromConfig("No-Permission.Custom-Item.Type");
                     // Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
                     String name = SettingsManager.getConfig().getString("No-Permission.Custom-Item.Name");
@@ -126,7 +128,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 }
 
                 String toggle = (suit != null && suit.getType() == suitType) ? CATEGORY.getDeactivateMenu() : CATEGORY.getActivateMenu();
-                ItemStack is = ItemFactory.create(suitType.getMaterial(armorSlot), toggle + " " + suitType.getName(armorSlot));
+                ItemStack is = ItemFactory.create(suitType.getMaterial(), toggle + " " + suitType.getName());
 
                 if (suit != null && suit.getType() == suitType) {
                     is = ItemFactory.addGlow(is);
@@ -134,14 +136,14 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
                 ItemMeta itemMeta = is.getItemMeta();
 
-                if (suitType == SuitType.valueOf("santa")
-                        || suitType == SuitType.valueOf("rave")
-                        || (suitType == SuitType.valueOf("frozen") && l != 0)) {
+                SuitCategory cat = suitType.getSuitCategory();
+                if (cat == SuitCategory.SANTA || cat == SuitCategory.RAVE
+                        || (cat == SuitCategory.FROZEN && l != 0)) {
                     LeatherArmorMeta laMeta = (LeatherArmorMeta) itemMeta;
 
                     Color color = Color.RED;
 
-                    if (suitType == SuitType.valueOf("rave")) {
+                    if (cat == SuitCategory.RAVE) {
                         int r = MathUtils.random(255);
                         int g = MathUtils.random(255);
                         int b = MathUtils.random(255);
@@ -149,7 +151,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                         color = Color.fromRGB(r, g, b);
                     }
 
-                    if (suitType == SuitType.valueOf("frozen")) {
+                    if (cat == SuitCategory.FROZEN) {
                         color = Color.AQUA;
                     }
 
@@ -165,7 +167,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 }
 
                 if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore")) {
-                    String yesOrNo = player.hasPermission(suitType.getPermission(armorSlot)) ? "Yes" : "No";
+                    String yesOrNo = player.hasPermission(suitType.getPermission()) ? "Yes" : "No";
                     String s = SettingsManager.getConfig().getString("No-Permission.Lore-Message-" + yesOrNo);
                     loreList.add(ChatColor.translateAlternateColorCodes('&', s));
                 }
@@ -185,7 +187,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                     if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getDeactivateMenu())) {
                         toggleOff(ultraPlayer, armorSlot);
                     } else if (clicked.getItemMeta().getDisplayName().startsWith(CATEGORY.getActivateMenu())) {
-                        toggleOn(ultraPlayer, suitType, getUltraCosmetics(), armorSlot);
+                        toggleOn(ultraPlayer, suitType, getUltraCosmetics());
                     }
                     if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {
                         open(ultraPlayer, currentPage);
@@ -253,11 +255,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
 
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, SuitType suitType, UltraCosmetics ultraCosmetics) {
-        suitType.equip(ultraPlayer, ultraCosmetics, ArmorSlot.CHESTPLATE);
-    }
-
-    protected void toggleOn(UltraPlayer ultraPlayer, SuitType suitType, UltraCosmetics ultraCosmetics, ArmorSlot armorSlot) {
-        suitType.equip(ultraPlayer, ultraCosmetics, armorSlot);
+        suitType.equip(ultraPlayer, ultraCosmetics);
     }
 
     protected void toggleOff(UltraPlayer ultraPlayer, ArmorSlot armorSlot) {
@@ -270,7 +268,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
     }
 
     @Override
-    protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
+    protected Suit getCosmetic(UltraPlayer ultraPlayer) {
         return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE);
     }
 

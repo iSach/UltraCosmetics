@@ -11,11 +11,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
  * @since 12-20-2015
  */
 public class SuitAstronaut extends Suit {
-    public SuitAstronaut(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
-        super(owner, armorSlot, SuitType.valueOf("astronaut"), ultraCosmetics);
-    }
-
-    @Override
-    public void onUpdate() {
+    public SuitAstronaut(UltraPlayer owner, SuitType suitType, UltraCosmetics ultraCosmetics) {
+        super(owner, suitType, ultraCosmetics);
     }
 }

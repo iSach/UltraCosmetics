@@ -71,7 +71,7 @@ public class CosmeticsProfile {
             for (ArmorSlot slot : ArmorSlot.values()) {
                 String key = "suit." + slot.toString().toLowerCase();
                 if (s.isString(key)) {
-                    setEnabledSuitPart(slot, SuitType.valueOf(s.getString(key)));
+                    setEnabledSuitPart(slot, SuitType.getSuitPart(s.getString(key), slot));
                 }
             }
 
@@ -154,7 +154,7 @@ public class CosmeticsProfile {
             if (suitPart != null
                     && suitPart.getCategory().isEnabled()
                     && suitPart.isEnabled())
-                suitPart.equip(ultraPlayer, ultraCosmetics, armorSlot);
+                suitPart.equip(ultraPlayer, ultraCosmetics);
         }
     }
 

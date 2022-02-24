@@ -40,13 +40,13 @@ public class PlaceholderHook extends PlaceholderExpansion {
             case "current_emote":
                 return ultraPlayer.getCurrentEmote() == null ? "None" : ultraPlayer.getCurrentEmote().getType().getName();
             case "current_suit_helmet":
-                return ultraPlayer.getSuit(ArmorSlot.HELMET) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.HELMET).getType().getName(ArmorSlot.HELMET);
+                return ultraPlayer.getSuit(ArmorSlot.HELMET) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.HELMET).getType().getName();
             case "current_suit_chestplate":
-                return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.CHESTPLATE).getType().getName(ArmorSlot.CHESTPLATE);
+                return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.CHESTPLATE).getType().getName();
             case "current_suit_leggings":
-                return ultraPlayer.getSuit(ArmorSlot.LEGGINGS) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.LEGGINGS).getType().getName(ArmorSlot.LEGGINGS);
+                return ultraPlayer.getSuit(ArmorSlot.LEGGINGS) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.LEGGINGS).getType().getName();
             case "current_suit_boots":
-                return ultraPlayer.getSuit(ArmorSlot.BOOTS) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.BOOTS).getType().getName(ArmorSlot.BOOTS);
+                return ultraPlayer.getSuit(ArmorSlot.BOOTS) == null ? "None" : ultraPlayer.getSuit(ArmorSlot.BOOTS).getType().getName();
 
             // Balance, keys, and user-specific settings
             case "balance":

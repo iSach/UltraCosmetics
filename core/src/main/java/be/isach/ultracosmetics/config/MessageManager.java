@@ -81,7 +81,14 @@ public class MessageManager {
         addMessage("Treasure-Chests-Loot.Morph", "%morph% morph");
         addMessage("Treasure-Chests-Loot.Hat", "%hat% hat");
         addMessage("Treasure-Chests-Loot.Money", "&e&l%money%$");
-        addMessage("Treasure-Chests-Loot.gadget", "%gadget% gadget");
+        String oldGadgetKey = "Treasure-Chests-Loot.gadget";
+        String newGadgetKey = "Treasure-Chests-Loot.Gadget";
+        String gadgetMessage = settingsManager.getString(oldGadgetKey);
+        if (gadgetMessage != null) {
+            settingsManager.set(newGadgetKey, gadgetMessage);
+            settingsManager.set(oldGadgetKey, null);
+        }
+        addMessage("Treasure-Chests-Loot.Gadget", "%gadget% gadget");
         addMessage("Treasure-Chests-Loot.Suit", "%suit%");
         addMessage("Treasure-Chests-Loot.Emote", "%emote% emote");
         addMessage("Treasure-Chests-Loot.Nothing", "&c&lNothing");

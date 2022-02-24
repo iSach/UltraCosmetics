@@ -15,8 +15,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public class SuitRave extends Suit {
     private int[] colors = new int[]{255, 0, 0};
 
-    public SuitRave(UltraPlayer owner, ArmorSlot armorSlot, UltraCosmetics ultraCosmetics) {
-        super(owner, armorSlot, SuitType.valueOf("rave"), ultraCosmetics);
+    public SuitRave(UltraPlayer owner, SuitType suitType, UltraCosmetics ultraCosmetics) {
+        super(owner, suitType, ultraCosmetics);
     }
 
     @Override
@@ -41,20 +41,6 @@ public class SuitRave extends Suit {
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         itemMeta.setColor(Color.fromRGB(colors[0], colors[1], colors[2]));
         itemStack.setItemMeta(itemMeta);
-
-        switch (getArmorSlot()) {
-            case HELMET:
-                getPlayer().getInventory().setHelmet(itemStack);
-                break;
-            case CHESTPLATE:
-                getPlayer().getInventory().setChestplate(itemStack);
-                break;
-            case LEGGINGS:
-                getPlayer().getInventory().setLeggings(itemStack);
-                break;
-            case BOOTS:
-                getPlayer().getInventory().setBoots(itemStack);
-                break;
-        }
+        setArmorItem(itemStack);
     }
 }

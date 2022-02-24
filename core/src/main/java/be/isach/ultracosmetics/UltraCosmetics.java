@@ -30,6 +30,7 @@ import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -126,6 +127,11 @@ public class UltraCosmetics extends JavaPlugin {
     public void onLoad() {
         // moved to onLoad so it's ready for WorldGuard support
         this.smartLogger = new SmartLogger(getLogger());
+
+        // trigger legacy material loading during startup so we don't hang the server at some point when players are online.
+        // TODO: completely remove the parts that require legacy materials
+        smartLogger.write("UltraCosmetics still contains some legacy material code, so 'Legacy Material Support' is still required.");
+        Material.getMaterial("", true);
 
         UltraCosmeticsData.init(this);
 

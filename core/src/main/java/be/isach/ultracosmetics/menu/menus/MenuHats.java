@@ -2,7 +2,7 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -36,8 +36,8 @@ public class MenuHats extends CosmeticMenu<HatType> {
     @Override
     protected ItemStack filterItem(ItemStack itemStack, HatType cosmeticType, UltraPlayer player) {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemStack = cosmeticType.getItemStack().clone();
-        ItemMeta other = itemStack.getItemMeta().clone();
+        itemStack = cosmeticType.getItemStack();
+        ItemMeta other = itemStack.getItemMeta();
         other.setDisplayName(itemMeta.getDisplayName());
         other.setLore(itemMeta.getLore());
         itemStack.setItemMeta(other);
@@ -55,7 +55,7 @@ public class MenuHats extends CosmeticMenu<HatType> {
     }
 
     @Override
-    protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
+    protected Hat getCosmetic(UltraPlayer ultraPlayer) {
         return ultraPlayer.getCurrentHat();
     }
 }

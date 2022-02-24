@@ -1,5 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
+import org.bukkit.inventory.ItemStack;
+
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.util.ServerVersion;
@@ -21,5 +23,9 @@ public abstract class CosmeticMatType<T extends Cosmetic> extends CosmeticType<T
 
     public XMaterial getMaterial() {
         return material;
+    }
+
+    public ItemStack getItemStack() {
+        return material.parseItem();
     }
 }

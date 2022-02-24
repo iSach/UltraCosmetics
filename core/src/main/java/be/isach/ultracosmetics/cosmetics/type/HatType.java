@@ -81,8 +81,9 @@ public class HatType extends CosmeticMatType<Hat> {
      *
      * @return the HatType ItemStack.
      */
+    @Override
     public ItemStack getItemStack() {
-        return itemStack;
+        return itemStack.clone();
     }
 
     /**

@@ -21,13 +21,13 @@ import java.util.UUID;
  * @author iSach
  * @since 07-21-2016
  */
-public abstract class Cosmetic<T extends CosmeticType> extends BukkitRunnable implements Listener {
+public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable implements Listener {
     private final UltraPlayer owner;
-    private Category category;
-    private UltraCosmetics ultraCosmetics;
+    private final Category category;
+    private final UltraCosmetics ultraCosmetics;
     protected boolean equipped;
-    private T cosmeticType;
-    private UUID ownerUniqueId;
+    protected final T cosmeticType;
+    private final UUID ownerUniqueId;
 
     public Cosmetic(UltraCosmetics ultraCosmetics, Category category, UltraPlayer owner, T type) {
         this.owner = owner;

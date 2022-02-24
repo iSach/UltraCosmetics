@@ -27,18 +27,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     /**
-     * Armor Slot of the Suit.
-     */
-    private ArmorSlot armorSlot;
-
-    /**
      * ItemStack of the Suit.
      */
     protected ItemStack itemStack;
 
-    public Suit(UltraPlayer ultraPlayer, ArmorSlot armorSlot, SuitType suitType, UltraCosmetics ultraCosmetics) {
+    public Suit(UltraPlayer ultraPlayer, SuitType suitType, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.SUITS, ultraPlayer, suitType);
-        this.armorSlot = armorSlot;
         Bukkit.getPluginManager().registerEvents(this, ultraCosmetics);
     }
 
@@ -87,7 +81,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
     }
 
     public void equip(ArmorSlot slot) {
-        if (!getOwner().getBukkitPlayer().hasPermission(getType().getPermission(slot))) {
+        if (!getOwner().getBukkitPlayer().hasPermission(getType().getPermission())) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
         }
@@ -102,7 +96,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
         // If the user's armor slot is still occupied after we've removed all related cosmetics,
         // give up and ask the user to free up the slot.
-        if (getArmorItem(getArmorSlot()) != null) {
+        if (getArmorItem() != null) {
             getOwner().sendMessage(MessageManager.getMessage("Suits.Must-Remove." + getArmorSlot().toString()));
             return;
         }
@@ -115,18 +109,20 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
         mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
         getPlayer().sendMessage(mess);
 
-        this.armorSlot = slot;
-
         onEquip();
     }
 
     @Override
     protected void onEquip() {
-        itemStack = ItemFactory.create(getType().getMaterial(getArmorSlot()), getType().getName(getArmorSlot()), "", MessageManager.getMessage("Suits.Suit-Part-Lore"));
-        setArmorItem(getArmorSlot(), itemStack);
+        setupItemStack();
+        setArmorItem(itemStack);
 
-        getOwner().setCurrentSuitPart(armorSlot, this);
+        getOwner().setCurrentSuitPart(cosmeticType.getSlot(), this);
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
+    }
+
+    protected void setupItemStack() {
+        itemStack = ItemFactory.create(getType().getMaterial(), getType().getName(), "", MessageManager.getMessage("Suits.Suit-Part-Lore"));
     }
 
     @Override
@@ -143,7 +139,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
      */
     @Override
     public void onClear() {
-        setArmorItem(getArmorSlot(), null);
+        setArmorItem(null);
         getOwner().setCurrentSuitPart(getArmorSlot(), null);
     }
 
@@ -162,16 +158,15 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
      * @return Suit Armor Slot.
      */
     public ArmorSlot getArmorSlot() {
-        return armorSlot;
+        return cosmeticType.getSlot();
     }
 
     @Override
-    protected String getTypeName() {
-        return getType().getName(getArmorSlot());
+    public void onUpdate() {
     }
 
-    private ItemStack getArmorItem(ArmorSlot slot) {
-        switch (slot) {
+    protected ItemStack getArmorItem() {
+        switch (getArmorSlot()) {
         case BOOTS:
             return getPlayer().getInventory().getBoots();
         case LEGGINGS:
@@ -185,8 +180,8 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
         }
     }
 
-    private void setArmorItem(ArmorSlot slot, ItemStack item) {
-        switch (slot) {
+    protected void setArmorItem(ItemStack item) {
+        switch (getArmorSlot()) {
         case BOOTS:
             getPlayer().getInventory().setBoots(item);
             break;

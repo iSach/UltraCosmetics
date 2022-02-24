@@ -30,7 +30,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
     private final Category category;
     private final ServerVersion baseVersion;
 
-    public CosmeticType(Category category, String configName, String permission, String defaultDescription, Class clazz, ServerVersion baseVersion) {
+    public CosmeticType(Category category, String configName, String permission, String defaultDescription, Class<? extends T> clazz, ServerVersion baseVersion) {
         this.configName = configName;
         this.permission = permission;
         this.clazz = clazz;
