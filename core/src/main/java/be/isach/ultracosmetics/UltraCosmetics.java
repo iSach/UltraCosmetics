@@ -282,7 +282,7 @@ public class UltraCosmetics extends JavaPlugin {
             }.runTaskLater(this, 20L);
         }
 
-        GeneralUtil.printPermissions(this, SettingsManager.getConfig().getBoolean("Check-For-Updates"));
+        GeneralUtil.printPermissions(this);
 
         // Ended well :v
         getSmartLogger().write();

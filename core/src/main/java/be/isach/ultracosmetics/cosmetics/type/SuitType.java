@@ -46,10 +46,9 @@ public class SuitType extends CosmeticMatType<Suit> {
     private final SuitCategory category;
 
     /**
-     * @param configName       The config path name.
-     * @param permissionSuffix The suffix of permission. (ultracosmetic.suits.{suffix}.{part})
-     * @param defaultDesc      The default description.
-     * @param clazz            The Suit Class
+     * @param material         The suit part material
+     * @param slot             The slot this suit part should occupy
+     * @param category         The Suit category this part belongs to
      */
     protected SuitType(XMaterial material, ArmorSlot slot, SuitCategory category) {
         super(Category.SUITS, category.getConfigName(), "ultracosmetics.suits." + category.getPermissionSuffix(), category.getDefaultDesc(), material, category.getSuitClass(), ServerVersion.earliest());
