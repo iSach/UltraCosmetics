@@ -130,8 +130,10 @@ public class UltraCosmetics extends JavaPlugin {
 
         // trigger legacy material loading during startup so we don't hang the server at some point when players are online.
         // TODO: completely remove the parts that require legacy materials
-        smartLogger.write("UltraCosmetics still contains some legacy material code, so 'Legacy Material Support' is still required.");
-        Material.getMaterial("", true);
+        try {
+            Material.getMaterial("", true);
+            smartLogger.write("UltraCosmetics still contains some legacy material code, so 'Legacy Material Support' is still required.");
+        } catch (NoSuchMethodError ignored) {}
 
         UltraCosmeticsData.init(this);
 
