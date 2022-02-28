@@ -4,8 +4,11 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
 import be.isach.ultracosmetics.v1_18_R2.EntityBase;
+import be.isach.ultracosmetics.v1_18_R2.ObfuscatedFields;
 import be.isach.ultracosmetics.v1_18_R2.nms.EntityWrapper;
 import net.minecraft.SharedConstants;
+import net.minecraft.core.Holder;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -25,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +44,9 @@ public enum CustomEntities {
 
     public static List<Entity> customEntities = new ArrayList<>();
 
-    public static EntityType<Entity> typesLocA;
-    public static EntityType<Entity> typesLocB;
-    public static EntityType<Entity> typesLocC;
-    public static EntityType<Entity> typesLocD;
-
     private String name;
     private int id;
-    private EntityType entityType;
+    private EntityType<?> entityType;
     private ResourceLocation minecraftKey;
     private Class<? extends Mob> nmsClass;
     private Class<? extends Entity> customClass;
@@ -65,17 +64,50 @@ public enum CustomEntities {
     public static void registerEntities() {
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataFixers.getDataFixer().getSchema(DataFixUtils.makeKey(SharedConstants.getCurrentVersion().getWorldVersion())).findChoiceType(References.ENTITY).types();
 
+        unfreezeRegistry();
         registerEntity("zombie", Pumpling::new, types);
         registerEntity("slime", CustomSlime::new, types);
         registerEntity("spider", RideableSpider::new, types);
         registerEntity("guardian", CustomGuardian::new, types);
+        Registry.ENTITY_TYPE.freeze();
+    }
+
+    private static void unfreezeRegistry() {
+        /* As of 1.18.2, registries are frozen once NMS is done adding to them,
+           so we have to do some super hacky things to add custom entities now.
+           Basically, when the registry is frozen, the "frozen" field is set to prevent new entries,
+           and a map "intrusiveHolderCache" is set to null (don't really know what it does.)
+           If frozen is true or "intrusiveHolderCache" is null, it will refuse to add entries,
+           so we just have to fix both of those things and it'll let us add entries again.
+           The registry being frozen may be vital to how the registry works (idk), so it is refrozen after adding our entries.
+           
+           Partial stack trace produced when trying to add entities when the registry is frozen:
+           [Server thread/ERROR]: Registry is already frozen initializing UltraCosmetics v2.6.1-DEV-b5 (Is it up to date?)
+            java.lang.IllegalStateException: Registry is already frozen
+                    at net.minecraft.core.RegistryMaterials.e(SourceFile:343) ~[spigot-1.18.2-R0.1-SNAPSHOT.jar:3445-Spigot-fb0dd5f-05a38da]
+                    at net.minecraft.world.entity.EntityTypes.<init>(EntityTypes.java:300) ~[spigot-1.18.2-R0.1-SNAPSHOT.jar:3445-Spigot-fb0dd5f-05a38da]
+                    at net.minecraft.world.entity.EntityTypes$Builder.a(EntityTypes.java:669) ~[spigot-1.18.2-R0.1-SNAPSHOT.jar:3445-Spigot-fb0dd5f-05a38da]
+                    at be.isach.ultracosmetics.v1_18_R2.customentities.CustomEntities.registerEntity(CustomEntities.java:78) ~[?:?]
+        */
+        Class<MappedRegistry> registryClass = MappedRegistry.class;
+        try {
+            Field intrusiveHolderCache = registryClass.getDeclaredField(ObfuscatedFields.INTRUSIVE_HOLDER_CACHE);
+            intrusiveHolderCache.setAccessible(true);
+            intrusiveHolderCache.set(Registry.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
+            Field frozen = registryClass.getDeclaredField(ObfuscatedFields.FROZEN);
+            frozen.setAccessible(true);
+            frozen.set(Registry.ENTITY_TYPE, false);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+            return;
+        }
     }
     
     private static void registerEntity(String type, EntityFactory customMob, Map<String,Type<?>> types) {
         String customName = "minecraft:ultracosmetics_" + type;
         types.put(customName, types.get("minecraft:" + type));
         EntityType.Builder<Entity> a = EntityType.Builder.of(customMob, MobCategory.AMBIENT);
-        typesLocA = Registry.register(Registry.ENTITY_TYPE, customName, a.build(customName));
+        Registry.register(Registry.ENTITY_TYPE, customName, a.build(customName));
     }
 
     public static void unregisterEntities() {}
