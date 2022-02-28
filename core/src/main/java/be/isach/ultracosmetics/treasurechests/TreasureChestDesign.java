@@ -5,26 +5,24 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.XMaterial;
 
-import org.bukkit.material.MaterialData;
-
 /**
  * Created by Sacha on 11/11/15.
  */
 public class TreasureChestDesign {
 
-    private final MaterialData center;
-    private final MaterialData blocks2;
-    private final MaterialData blocks3;
-    private final MaterialData belowChests;
-    private final MaterialData barriers;
+    private final XMaterial center;
+    private final XMaterial blocks2;
+    private final XMaterial blocks3;
+    private final XMaterial belowChests;
+    private final XMaterial barriers;
     private ChestType chestType;
     private Particles effect;
     public TreasureChestDesign(String path) {
-        center = getMaterialData(path + ".center-block");
-        blocks2 = getMaterialData(path + ".around-center");
-        blocks3 = getMaterialData(path + ".third-blocks");
-        belowChests = getMaterialData(path + ".below-chests");
-        barriers = getMaterialData(path + ".barriers");
+        center = getXMaterial(path + ".center-block");
+        blocks2 = getXMaterial(path + ".around-center");
+        blocks3 = getXMaterial(path + ".third-blocks");
+        belowChests = getXMaterial(path + ".below-chests");
+        barriers = getXMaterial(path + ".barriers");
         String chestType = UltraCosmeticsData.get().getPlugin().getConfig().getString("TreasureChests.Designs." + path + ".chest-type");
         String effect = UltraCosmeticsData.get().getPlugin().getConfig().getString("TreasureChests.Designs." + path + ".effect");
         try {
@@ -41,34 +39,31 @@ public class TreasureChestDesign {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private MaterialData getMaterialData(String s) {
-        XMaterial mat = ItemFactory.getNullableXMaterialFromConfig("TreasureChests.Designs." + s);
-        if (mat == null) return null;
-        return new MaterialData(mat.parseMaterial(), mat.getData());
+    private XMaterial getXMaterial(String s) {
+        return ItemFactory.getNullableXMaterialFromConfig("TreasureChests.Designs." + s);
     }
 
     public ChestType getChestType() {
         return chestType;
     }
 
-    public MaterialData getCenter() {
+    public XMaterial getCenter() {
         return center;
     }
 
-    public MaterialData getBlocks2() {
+    public XMaterial getBlocks2() {
         return blocks2;
     }
 
-    public MaterialData getBlocks3() {
+    public XMaterial getBlocks3() {
         return blocks3;
     }
 
-    public MaterialData getBarriers() {
+    public XMaterial getBarriers() {
         return barriers;
     }
 
-    public MaterialData getBelowChests() {
+    public XMaterial getBelowChests() {
         return belowChests;
     }
 

@@ -165,8 +165,8 @@ public class GadgetRocket extends Gadget {
 
     @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
-        Cuboid c = new Cuboid(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
-        if (!c.isEmpty()) {
+        Area area = new Area(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
+        if (!area.isEmpty()) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
             return false;
         }
@@ -181,6 +181,7 @@ public class GadgetRocket extends Gadget {
         return getOwner() != null;
     }
 
+    @Override
     public void onUpdate() {
         for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.setVelocity(new Vector(0, 0.8, 0));

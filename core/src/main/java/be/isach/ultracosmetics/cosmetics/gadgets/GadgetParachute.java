@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.Cuboid;
+import be.isach.ultracosmetics.util.Area;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -89,9 +89,9 @@ public class GadgetParachute extends Gadget {
     protected boolean checkRequirements(PlayerInteractEvent event) {
         Location loc1 = getPlayer().getLocation().add(2, 28, 2);
         Location loc2 = getPlayer().getLocation().clone().add(-2, 40, -2);
-        Cuboid checkCuboid = new Cuboid(loc1, loc2);
+        Area checkArea = new Area(loc1, loc2);
 
-        if (!checkCuboid.isEmpty()) {
+        if (!checkArea.isEmpty()) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
             return false;
         }

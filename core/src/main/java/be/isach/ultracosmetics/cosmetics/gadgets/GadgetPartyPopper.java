@@ -34,7 +34,7 @@ public class GadgetPartyPopper extends Gadget {
                         0.2d, ItemFactory.getRandomDye());
 
             } else {
-                Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getDyeByColor(MathUtils.randomByte(15)),
+                Particles.ITEM_CRACK.display(new Particles.ItemData(XMaterial.INK_SAC.parseMaterial(),
                                 MathUtils.randomByte(15)), getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(1.2),
                         0.6f, getPlayer().getEyeLocation(), 128);
             }

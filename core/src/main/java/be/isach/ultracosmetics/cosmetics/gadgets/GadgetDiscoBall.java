@@ -17,9 +17,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an instance of a discoball gadget summoned by a player.
@@ -29,9 +28,8 @@ import java.util.Random;
  */
 public class GadgetDiscoBall extends Gadget {
 
-    public static final List<GadgetDiscoBall> DISCO_BALLS = new ArrayList<>();
+    private static final Set<GadgetDiscoBall> DISCO_BALLS = new HashSet<>();
 
-    private Random r = new Random();
     private int i = 0;
     private double i2 = 0;
     private ArmorStand armorStand;
@@ -81,13 +79,14 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setHeadPose(armorStand.getHeadPose().add(0, 0.2, 0));
 
         if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_8_R3) {
-            armorStand.setHelmet(ItemFactory.createColored("STAINED_GLASS", (byte) r.nextInt(15), " "));
+            // TODO: why only on 1.8.8? does it work on other versions?
+            armorStand.setHelmet(ItemFactory.getRandomStainedGlass());
         }
 
         UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
         UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
         Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
-        Particles.NOTE.display(new Particles.NoteColor(r.nextInt(25)), loc, 128);
+        Particles.NOTE.display(new Particles.NoteColor(RANDOM.nextInt(25)), loc, 128);
         double angle, angle2, x, x2, z, z2;
         angle = 2 * Math.PI * i / 100;
         x = Math.cos(angle) * 4;
@@ -102,9 +101,18 @@ public class GadgetDiscoBall extends Gadget {
         drawParticleLine(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5), armorStand.getEyeLocation().add(-.5d, -.5d, -.5d).clone().add(0.5, 0.5, 0.5).add(x2, 0, z2), true, 50);
         i2 += 0.4;
 
+        XTag<XMaterial> tag = null;
         for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
-            if (b.getType().toString().contains("WOOL") || b.getType().toString().contains("CARPET")) {
-                BlockUtils.setToRestore(b, b.getType(), (byte) r.nextInt(15), 4);
+            XMaterial mat = XMaterial.matchXMaterial(b.getType());
+            if (XTag.WOOL.isTagged(mat)) {
+                tag = XTag.WOOL;
+            } else if (XTag.CARPETS.isTagged(mat)) {
+                tag = XTag.CARPETS;
+            }
+            
+            if (tag != null) {
+                BlockUtils.setToRestore(b, ItemFactory.randomFromTag(tag), 4);
+                tag = null;
             }
         }
 

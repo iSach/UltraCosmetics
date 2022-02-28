@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
-import be.isach.ultracosmetics.version.VersionManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.ChatColor;
@@ -17,8 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.material.MaterialData;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,33 +28,25 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by sacha on 03/08/15.
  */
 public class ItemFactory {
-    private static final List<XMaterial> DYES = getDyes();
+    // for some reason I don't understand, there's no Tag or XTag for dyes
+    private static final List<XMaterial> DYES = new ArrayList<>(16);
+    private static final List<XMaterial> STAINED_GLASS = new ArrayList<>(16);
+
+    static {
+        for (XMaterial mat : XMaterial.VALUES) {
+            if (mat.name().endsWith("_DYE")) {
+                DYES.add(mat);
+            } else if (mat.name().endsWith("_STAINED_GLASS")) {
+                STAINED_GLASS.add(mat);
+            }
+        }
+    }
+
     private static boolean noticePrinted = false;
     public static ItemStack fillerItem;
 
     public static ItemStack create(XMaterial material, String displayName, String... lore) {
         return rename(material.parseItem(), displayName, lore);
-    }
-
-    public static ItemStack createColored(String oldMaterialName, byte data, String displayName, String... lore) {
-        ItemStack itemStack;
-        if (VersionManager.IS_VERSION_1_13) {
-            itemStack = new ItemStack(BlockUtils.getBlockByColor(oldMaterialName, data), 1);
-        } else {
-            itemStack = new MaterialData(Material.getMaterial(oldMaterialName), data).toItemStack(1);
-        }
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(displayName);
-        if (lore != null) {
-            List<String> finalLore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
-            for (String s : lore)
-                if (s != null)
-                    finalLore.add(ChatColor.translateAlternateColorCodes('&', s));
-            itemMeta.setLore(finalLore);
-        }
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
     }
 
     public static ItemStack rename(ItemStack itemstack, String displayName) {
@@ -214,18 +203,28 @@ public class ItemFactory {
         return false;
     }
 
-    private static List<XMaterial> getDyes() {
-        // 16 dyes
-        List<XMaterial> dyes = new ArrayList<>(16);
-        for (XMaterial mat : XMaterial.VALUES) {
-            if (mat.name().endsWith("_DYE")) {
-                dyes.add(mat);
-            }
-        }
-        return dyes;
+    private static XMaterial randomXMaterial(List<XMaterial> mats) {
+        return mats.get(ThreadLocalRandom.current().nextInt(mats.size()));
+    }
+
+    private static ItemStack randomStack(List<XMaterial> mats) {
+        return randomXMaterial(mats).parseItem();
     }
 
     public static ItemStack getRandomDye() {
-        return DYES.get(ThreadLocalRandom.current().nextInt(DYES.size())).parseItem();
+        return randomStack(DYES);
+    }
+
+    public static ItemStack getRandomStainedGlass() {
+        return randomStack(STAINED_GLASS);
+    }
+
+    public static ItemStack randomItemFromTag(XTag<XMaterial> tag) {
+        return randomFromTag(tag).parseItem();
+    }
+
+    public static XMaterial randomFromTag(XTag<XMaterial> tag) {
+        // copy tag values into temporary ArrayList because getting random values from a Set is hard
+        return randomXMaterial(new ArrayList<XMaterial>(tag.getValues()));
     }
 }

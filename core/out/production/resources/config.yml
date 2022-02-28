@@ -266,7 +266,7 @@ Menu-Item:
 
 # Settings related to permissions.
 #
-# List for "Type" https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+# List for type https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 No-Permission:
   Show-In-Lore: true
   Lore-Message-Yes: '&o&7Permission: &a&lYes!'

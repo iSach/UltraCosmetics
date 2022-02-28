@@ -20,7 +20,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Represents an instance of a explosive sheep gadget summoned by a player.
@@ -125,8 +124,7 @@ public class GadgetExplosiveSheep extends Gadget {
                 }
                 final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
                 sheep.setColor(DyeColor.values()[MathUtils.randomRangeInt(0, 15)]);
-                Random r = new Random();
-                MathUtils.applyVelocity(sheep, new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
+                MathUtils.applyVelocity(sheep, new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2, RANDOM.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
                 sheep.setBaby();
                 sheep.setAgeLock(true);
                 sheep.setNoDamageTicks(120);

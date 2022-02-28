@@ -8,8 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.Random;
-
 /**
  * Represents an instance of a witch morph summoned by a player.
  *
@@ -18,7 +16,6 @@ import java.util.Random;
  */
 public class MorphWitch extends Morph {
     private long coolDown = 0;
-    private Random r = new Random();
 
     public MorphWitch(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.valueOf("witch"), ultraCosmetics);

@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -66,23 +65,14 @@ public class BlockUtils {
         badXMaterials.add(XMaterial.DROPPER);
         badXMaterials.add(XMaterial.DISPENSER);
 
-        Set<String> badEndings = new HashSet<>();
-        badEndings.add("SLAB");
-        badEndings.add("DOOR");
-        badEndings.add("SIGN");
-        badEndings.add("BED");
-        badEndings.add("PRESSURE_PLATE");
-        badEndings.add("BANNER");
-        badEndings.add("SAPLING");
-
-        for (XMaterial mat : XMaterial.VALUES) {
-            for (String ending : badEndings) {
-                if (mat.name().endsWith("_" + ending)) {
-                    badXMaterials.add(mat);
-                    break;
-                }
-            }
-        }
+        badXMaterials.addAll(XTag.WOODEN_SLABS.getValues());
+        badXMaterials.addAll(XTag.NON_WOODEN_SLABS.getValues());
+        badXMaterials.addAll(XTag.DOORS.getValues());
+        badXMaterials.addAll(XTag.SIGNS.getValues());
+        badXMaterials.addAll(XTag.BEDS.getValues());
+        badXMaterials.addAll(XTag.PRESSURE_PLATES.getValues());
+        badXMaterials.addAll(XTag.BANNERS.getValues());
+        badXMaterials.addAll(XTag.SAPLINGS.getValues());
 
         for (XMaterial mat : badXMaterials) {
             badMaterials.add(mat.parseMaterial());
@@ -145,17 +135,23 @@ public class BlockUtils {
     /**
      * Replaces a block with a new material and data, and after delay, restore it.
      *
-     * @param BLOCK      The block.
-     * @param NEW_TYPE   The new material.
-     * @param NEW_DATA   The new data.
-     * @param TICK_DELAY The delay after which the block is restored.
+     * @param block      The block.
+     * @param newType   The new material.
+     * @param tickDelay The delay after which the block is restored.
      */
-    public static void setToRestoreIgnoring(final Block BLOCK, final Material NEW_TYPE, final byte NEW_DATA, final int TICK_DELAY) {
+    @SuppressWarnings("deprecation")
+    public static void setToRestoreIgnoring(final Block block, final XMaterial newType, final int tickDelay) {
         Bukkit.getScheduler().runTaskAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
-            if (BlockViewUpdater.isUpdating(BLOCK.getLocation())) return;
-            for (Player player : BLOCK.getLocation().getWorld().getPlayers())
-                player.sendBlockChange(BLOCK.getLocation(), NEW_TYPE, NEW_DATA);
-            new BlockViewUpdater(BLOCK).runTaskLater(UltraCosmeticsData.get().getPlugin(), TICK_DELAY);
+            if (BlockViewUpdater.isUpdating(block.getLocation())) return;
+            for (Player player : block.getLocation().getWorld().getPlayers()) {
+                if (VersionManager.IS_VERSION_1_13) {
+                    // we have to do this when we can or we enable legacy material support which is evil sometimes
+                    player.sendBlockChange(block.getLocation(), Bukkit.createBlockData(newType.parseMaterial()));
+                } else {
+                    player.sendBlockChange(block.getLocation(), newType.parseMaterial(), newType.getData());
+                }
+            }
+            new BlockViewUpdater(block).runTaskLater(UltraCosmeticsData.get().getPlugin(), tickDelay);
         });
     }
 
@@ -164,10 +160,9 @@ public class BlockUtils {
      *
      * @param block     The block.
      * @param newType   The new material.
-     * @param newData   The new data.
      * @param tickDelay The delay after which the block is restored.
      */
-    public static void setToRestore(final Block block, final Material newType, final byte newData, final int tickDelay) {
+    public static void setToRestore(final Block block, final XMaterial newType, final int tickDelay) {
         if (badMaterials.contains(block.getType())
                 || SettingsManager.getConfig().getStringList("Gadgets.PaintballGun.BlackList").contains(block.getType().name())
                 || isPortalBlock(block)
@@ -176,7 +171,7 @@ public class BlockUtils {
                 || !block.getType().isSolid()
                 || !okAboveBlock(block.getRelative(BlockFace.UP).getType()))
             return;
-        setToRestoreIgnoring(block, newType, newData, tickDelay);
+        setToRestoreIgnoring(block, newType, tickDelay);
     }
 
     /**
@@ -206,25 +201,6 @@ public class BlockUtils {
             }
         }
         return false;
-    }
-
-    public static Material getBlockByColor(String oldMaterialName, byte color) {
-        return getBlockByColor(oldMaterialName, DyeColor.values()[color]);
-    }
-
-    public static Material getDyeByColor(byte color) {
-        if (!VersionManager.IS_VERSION_1_13) {
-            return Material.getMaterial("INK_SACK");
-        }
-        return Material.getMaterial("INK_SACK");
-    }
-
-    public static Material getBlockByColor(String oldMaterialName, DyeColor color) {
-        if (VersionManager.IS_VERSION_1_13) {
-            oldMaterialName = oldMaterialName.replace("STAINED_CLAY", "CONCRETE");
-            return Material.getMaterial(color.toString() + "_" + oldMaterialName);
-        }
-        return XMaterial.WHITE_WOOL.parseMaterial();
     }
 
     // Returns true if mat should not be used with player.sendBlockChange per badMaterials Set

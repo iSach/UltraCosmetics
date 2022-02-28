@@ -10,12 +10,10 @@ import org.bukkit.entity.Player;
  * @since 2.5
  */
 public class EconomyHandler {
-    private UltraCosmetics ultraCosmetics;
     private EconomyHook economyHook;
     private boolean usingEconomy;
 
     public EconomyHandler(UltraCosmetics ultraCosmetics, String economy) {
-        this.ultraCosmetics = ultraCosmetics;
         if (economy == null || economy.equalsIgnoreCase("")) {
             ultraCosmetics.getSmartLogger().write("Economy not specified in the config, disabling economy features.");
             usingEconomy = false;

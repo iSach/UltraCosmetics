@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.gadgets.*;
@@ -80,6 +81,11 @@ public class GadgetType extends CosmeticMatType<Gadget> {
         this.runTime = runTime;
 
         VALUES.add(this);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return !(this == GadgetType.valueOf("etherealpearl") && UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_12_R1) && super.isEnabled();
     }
 
     public boolean requiresAmmo() {

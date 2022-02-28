@@ -6,9 +6,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.XMaterial;
-
-import java.util.ArrayList;
-import java.util.List;
+import be.isach.ultracosmetics.util.XTag;
 
 /**
  * Represents an instance of a sheep pet summoned by a player.
@@ -17,19 +15,13 @@ import java.util.List;
  * @since 08-12-2015
  */
 public class PetSheep extends Pet {
-    private final List<XMaterial> woolColors = new ArrayList<>();
     public PetSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.getByName("sheep"), ItemFactory.rename(XMaterial.WHITE_WOOL.parseItem(), UltraCosmeticsData.get().getItemNoPickupString()));
-        for (XMaterial mat : XMaterial.VALUES) {
-            if (mat.name().endsWith("_WOOL")) {
-                woolColors.add(mat);
-            }
-        }
     }
 
     @Override
     public void onUpdate() {
-        dropItem = woolColors.get(random.nextInt(woolColors.size())).parseItem();
+        dropItem = ItemFactory.randomItemFromTag(XTag.WOOL);
         super.onUpdate();
     }
 }

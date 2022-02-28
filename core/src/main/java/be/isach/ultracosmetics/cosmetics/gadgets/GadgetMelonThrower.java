@@ -22,8 +22,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.Random;
-
 /**
  * Represents an instance of a melon thrower gadget summoned by a player.
  *
@@ -31,8 +29,6 @@ import java.util.Random;
  * @since 08-03-2015
  */
 public class GadgetMelonThrower extends Gadget implements Listener {
-
-    private Random random = new Random();
     private Item melon = null;
     private World world = null;
 
@@ -82,7 +78,7 @@ public class GadgetMelonThrower extends Gadget implements Listener {
             melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
             for (int i = 0; i < 8; i++) {
                 final Item newItem = getPlayer().getWorld().dropItem(melon.getLocation(), ItemFactory.create(XMaterial.MELON_SLICE, UltraCosmeticsData.get().getItemNoPickupString()));
-                newItem.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(0.75D));
+                newItem.setVelocity(new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2.0, RANDOM.nextDouble() - 0.5).multiply(0.75D));
                 newItem.setMetadata("UC#MELONITEM", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONTHROWER"));
                 new BukkitRunnable() {
                     @Override

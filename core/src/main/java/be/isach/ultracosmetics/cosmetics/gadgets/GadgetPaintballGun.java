@@ -1,8 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Location;
@@ -15,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
@@ -29,45 +32,43 @@ import java.util.*;
  */
 public class GadgetPaintballGun extends Gadget implements Listener {
 
-    Map<UUID, ArrayList<Projectile>> projectiles = new HashMap<>();
+    private static final List<XMaterial> PAINT_BLOCKS = new ArrayList<>();
 
-    int radius = 2;
+    static {
+        String ending = SettingsManager.getConfig().getString("Gadgets." + GadgetType.valueOf("paintballgun").getConfigName() + ".Block-Type", "_TERRACOTTA").toUpperCase();
+        for (XMaterial mat : XMaterial.VALUES) {
+            if (mat.name().endsWith(ending)) {
+                PAINT_BLOCKS.add(mat);
+            }
+        }
+        if (PAINT_BLOCKS.isEmpty()) {
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.ERROR, "Paintball Gun setting 'Block-Type' does not match any known blocks.");
+            PAINT_BLOCKS.add(XMaterial.BEDROCK);
+        }
+    }
+
+    private final Set<Projectile> projectiles = new HashSet<>();
+    private final int radius;
 
     public GadgetPaintballGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("paintballgun"), ultraCosmetics);
-        if (owner != null) {
-            radius = SettingsManager.getConfig().getInt("Gadgets." + getType().getConfigName() + ".Radius");
-        }
+        radius = SettingsManager.getConfig().getInt("Gadgets." + getType().getConfigName() + ".Radius", 2);
         displayCooldownMessage = false;
     }
 
     @Override
     void onRightClick() {
         Projectile projectile = getPlayer().launchProjectile(EnderPearl.class, getPlayer().getLocation().getDirection().multiply(2));
-        if (projectiles.containsKey(getOwnerUniqueId()))
-            projectiles.get(getOwnerUniqueId()).add(projectile);
-        else {
-            ArrayList<Projectile> projectilesList = new ArrayList<>();
-            projectilesList.add(projectile);
-            projectiles.put(getOwnerUniqueId(), projectilesList);
-        }
+        projectiles.add(projectile);
         SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, 1.5f, 1.2f);
-    }
-
-    public boolean mapContainsProjectile(Projectile projectile) {
-        for (ArrayList<Projectile> plist : projectiles.values()) {
-            if (plist.contains(projectile)) return true;
-        }
-        return false;
     }
 
     @EventHandler
     public void onVehicleDestroy(VehicleDestroyEvent event) {
-        for (ArrayList<Projectile> projectile : projectiles.values()) {
-            for (Projectile proj : projectile) {
-                if (proj.getLocation().distance(event.getVehicle().getLocation()) < 10) {
-                    event.setCancelled(true);
-                }
+        for (Projectile proj : projectiles) {
+            // equivalent to distance(vehicleLocation) < 10 but more performant
+            if (proj.getLocation().distanceSquared(event.getVehicle().getLocation()) < 100) {
+                event.setCancelled(true);
             }
         }
     }
@@ -75,35 +76,23 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     @EventHandler
     public void onItemFrameBreak(HangingBreakByEntityEvent event) {
         if (event.getRemover() instanceof Projectile) {
-            if (mapContainsProjectile((Projectile) event.getRemover())) {
+            if (projectiles.contains(event.getRemover())) {
                 event.setCancelled(true);
             }
+            // TODO: do we really want to prevent players from breaking hanging things while this gadget is equipped??
+            // or is this required to prevent ender pearls from breaking things?
         } else if (event.getRemover() == getPlayer())
             event.setCancelled(true);
-    }
-
-    public void removeProjectile(Projectile projectile) {
-        for (UUID uuid : projectiles.keySet()) {
-            ArrayList<Projectile> plist = projectiles.get(uuid);
-            if (plist.contains(projectile)) {
-                plist.remove(projectile);
-                if (plist.isEmpty())
-                    projectiles.remove(uuid);
-                return;
-            }
-        }
     }
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity().getType() != EntityType.ENDER_PEARL) return;
-        if (mapContainsProjectile(event.getEntity())) {
-            removeProjectile(event.getEntity());
-            Random r = new Random();
-            byte b = (byte) r.nextInt(15);
+        // if successfully removed (in other words, if it was there to begin with)
+        if (projectiles.remove(event.getEntity())) {
             Location center = event.getEntity().getLocation().add(event.getEntity().getVelocity());
             for (Block block : BlockUtils.getBlocksInRadius(center.getBlock().getLocation(), radius, false)) {
-                BlockUtils.setToRestore(block, BlockUtils.getBlockByColor((String) SettingsManager.getConfig().get("Gadgets." + getType().getConfigName() + ".Block-Type"), b), b, 20 * 3);
+                BlockUtils.setToRestore(block, PAINT_BLOCKS.get(RANDOM.nextInt(PAINT_BLOCKS.size())), 20 * 3);
             }
             if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().getConfigName() + ".Particle.Enabled")) {
                 Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().getConfigName() + ".Particle.Effect")).replace("_", ""));
@@ -116,14 +105,14 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager().getType() != EntityType.ENDER_PEARL) return;
-        if (mapContainsProjectile((Projectile) event.getDamager()))
+        if (projectiles.contains(event.getDamager())) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onEntityTeleport(PlayerTeleportEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
-        if (projectiles.containsKey(uuid)) {
+        if (event.getPlayer().getUniqueId().equals(getOwnerUniqueId())) {
             event.setCancelled(true);
         }
     }
@@ -134,16 +123,16 @@ public class GadgetPaintballGun extends Gadget implements Listener {
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        if (event.getEntity().getType() == EntityType.ENDERMITE)
+        // TODO: can we check if the pearl that caused the spawn is the pearl thrown by this gadget?
+        if (event.getSpawnReason() == SpawnReason.ENDER_PEARL)
             event.setCancelled(true);
     }
 
     @Override
     public void onClear() {
-        for (ArrayList<Projectile> list : projectiles.values()) {
-            for (Projectile projectile : list) {
-                projectile.remove();
-            }
+        for (Projectile projectile : projectiles) {
+            projectile.remove();
         }
+        projectiles.clear();
     }
 }

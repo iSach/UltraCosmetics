@@ -13,6 +13,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -22,6 +23,7 @@ import java.util.UUID;
  * @since 07-21-2016
  */
 public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable implements Listener {
+    protected static final Random RANDOM = new Random();
     private final UltraPlayer owner;
     private final Category category;
     private final UltraCosmetics ultraCosmetics;

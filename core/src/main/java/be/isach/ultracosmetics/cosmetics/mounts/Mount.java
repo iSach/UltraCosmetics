@@ -15,14 +15,9 @@ import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.XMaterial;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -44,7 +39,6 @@ import org.bukkit.scheduler.BukkitTask;
  * @since 08-03-2015
  */
 public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
-    private static final Random RANDOM = new Random();
     private BukkitTask mountRegionTask = null;
     /**
      * The Entity, if it isn't a Custom Entity.
@@ -258,7 +252,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
                 if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
                     XMaterial mat = mats.get(RANDOM.nextInt(mats.size()));
-                    BlockUtils.setToRestore(b, mat.parseMaterial(), mat.getData(), 20);
+                    BlockUtils.setToRestore(b, mat, 20);
                 }
             }
         }

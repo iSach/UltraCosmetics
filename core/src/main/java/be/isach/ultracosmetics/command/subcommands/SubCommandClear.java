@@ -23,12 +23,12 @@ public class SubCommandClear extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String... args) {
+    protected void onExePlayer(Player sender, String[] args) {
         common(sender, args);
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
         common(sender, args);
     }
 

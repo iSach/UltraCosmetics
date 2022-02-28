@@ -4,17 +4,15 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.BlockUtils;
-import be.isach.ultracosmetics.util.Cuboid;
+import be.isach.ultracosmetics.util.Area;
 import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.XBlock;
 import be.isach.ultracosmetics.util.XMaterial;
-import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -33,7 +31,7 @@ import java.util.Set;
  */
 public class GadgetTrampoline extends Gadget {
     private Set<Block> trampoline = new HashSet<>();
-    private Cuboid cuboid;
+    private Area cuboid;
     private Location center;
     private boolean running;
 
@@ -49,7 +47,7 @@ public class GadgetTrampoline extends Gadget {
         clearBlocks();
 
         center = getPlayer().getLocation();
-        cuboid = new Cuboid(loc1, loc2);
+        cuboid = new Area(loc1, loc2);
 
         generateStructure();
 
@@ -64,9 +62,9 @@ public class GadgetTrampoline extends Gadget {
         Location loc2 = event.getPlayer().getLocation().clone().add(-3, 0, -2);
         Block block = loc1.getBlock().getRelative(3, 0, 0);
         Block block2 = loc1.getBlock().getRelative(3, 1, 0);
-        Cuboid checkCuboid = new Cuboid(loc1, loc2);
+        Area checkArea = new Area(loc1, loc2);
 
-        if (!checkCuboid.isEmpty() || block.getType() != Material.AIR || block2.getType() != Material.AIR) {
+        if (!checkArea.isEmpty() || block.getType() != Material.AIR || block2.getType() != Material.AIR) {
             event.getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
             return false;
         }
@@ -132,36 +130,25 @@ public class GadgetTrampoline extends Gadget {
     }
 
     private void genBarr(Block block) {
-        setToRestore(block, XMaterial.OAK_FENCE.parseMaterial(), (byte) 0);
+        setToRestore(block, XMaterial.OAK_FENCE);
     }
 
     private void genBlue(Block block) {
-        if (VersionManager.IS_VERSION_1_13) {
-            setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 11), (byte) 11);
-        } else {
-            setToRestore(block, Material.valueOf("WOOL"), (byte) 11);
-        }
+        setToRestore(block, XMaterial.BLUE_WOOL);
     }
 
     private void genBlack(Block block) {
-        if (VersionManager.IS_VERSION_1_13) {
-            setToRestore(block, BlockUtils.getBlockByColor("WOOL", (byte) 15), (byte) 15);
-        } else {
-            setToRestore(block, Material.valueOf("WOOL"), (byte) 15);
-        }
+        setToRestore(block, XMaterial.BLACK_WOOL);
     }
 
     private void genLadder(Block block) {
-        setToRestore(block, Material.LADDER, (byte) 4);
+        setToRestore(block, XMaterial.LADDER);
+        XBlock.setDirection(block, BlockFace.WEST);
     }
 
-    @SuppressWarnings("deprecation")
-    private void setToRestore(Block block, Material material, byte data) {
+    private void setToRestore(Block block, XMaterial material) {
         trampoline.add(block);
-        block.setType(material);
-        BlockState state = block.getState();
-        state.setRawData(data);
-        state.update();
+        XBlock.setType(block, material);
     }
 
     @EventHandler

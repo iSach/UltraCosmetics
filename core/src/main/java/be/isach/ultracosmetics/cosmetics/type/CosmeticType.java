@@ -11,7 +11,6 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.ChatColor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,8 +57,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
     }
 
     public boolean isEnabled() {
-        return !(this == GadgetType.valueOf("etherealpearl") && UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_12_R1)
-                && SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled") && UltraCosmeticsData.get().getServerVersion().isAtLeast(baseVersion);
+        return SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled") && UltraCosmeticsData.get().getServerVersion().isAtLeast(baseVersion);
     }
 
     public String getName() {
@@ -93,10 +91,7 @@ public abstract class CosmeticType<T extends Cosmetic> {
      * @return The description as a list.
      */
     public List<String> getDescription() {
-        List<String> desc = new ArrayList<>();
-        for (String string : getDescriptionAsString().split("\n"))
-            desc.add(ChatColor.translateAlternateColorCodes('&', string));
-        return desc;
+        return Arrays.asList(ChatColor.translateAlternateColorCodes('&', getDescriptionAsString()).split("\n"));
     }
 
     /**

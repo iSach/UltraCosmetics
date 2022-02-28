@@ -112,7 +112,6 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
                         && !player.hasPermission(suitType.getPermission())) {
                     ItemStack stack = ItemFactory.getItemStackFromConfig("No-Permission.Custom-Item.Type");
-                    // Byte data = Byte.valueOf(SettingsManager.getConfig().getString("No-Permission.Custom-Item.Data"));
                     String name = SettingsManager.getConfig().getString("No-Permission.Custom-Item.Name");
                     name = ChatColor.translateAlternateColorCodes('&', name.replace("{cosmetic-name}", suitType.getName()));
                     List<String> npLore = SettingsManager.getConfig().getStringList("No-Permission.Custom-Item.Lore");

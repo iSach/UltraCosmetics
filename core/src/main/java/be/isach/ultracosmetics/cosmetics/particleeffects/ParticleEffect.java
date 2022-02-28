@@ -73,7 +73,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                                 }
                             } else {
                                 for (int i = 0; i < getModifiedAmount(15); i++) {
-                                    Particles.ITEM_CRACK.display(new Particles.ItemData(BlockUtils.getDyeByColor(ParticleEffectCrushedCandyCane.getRandomColor()), ParticleEffectCrushedCandyCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
+                                    Particles.ITEM_CRACK.display(new Particles.ItemData(XMaterial.INK_SAC.parseMaterial(), ParticleEffectCrushedCandyCane.getRandomColor()), 0.2f, 0.2f, 0.2f, 0, 1, getPlayer().getLocation(), 128);
                                 }
                             }
                         } else

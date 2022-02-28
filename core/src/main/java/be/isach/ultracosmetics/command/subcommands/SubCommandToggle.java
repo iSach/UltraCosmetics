@@ -33,7 +33,7 @@ public class SubCommandToggle extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String... args) {
+    protected void onExePlayer(Player sender, String[] args) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(sender);
 
         if (args.length < 3 || args.length > 4) {
@@ -53,7 +53,7 @@ public class SubCommandToggle extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
         if (args.length != 4) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "/uc toggle <type> <cosmetic> <player>");
             return;

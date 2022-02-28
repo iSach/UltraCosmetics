@@ -7,8 +7,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.util.Cuboid;
-
+import be.isach.ultracosmetics.util.Area;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -38,10 +37,6 @@ public class TreasureChestManager implements Listener {
 
     public TreasureChestManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-    }
-
-    private static void openTreasureChest(Player player) {
-        openTreasureChest(player, null);
     }
 
     private static void openTreasureChest(Player player, Location preLoc) {
@@ -99,9 +94,9 @@ public class TreasureChestManager implements Listener {
             return;
         }
 
-        Cuboid c = new Cuboid(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
+        Area area = new Area(player.getLocation().add(-2, 0, -2), player.getLocation().add(2, 1, 2));
 
-        if (!c.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
+        if (!area.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
             player.sendMessage(MessageManager.getMessage("Chest-Location.Not-Enough-Space"));
 
             if(preLoc != null) {

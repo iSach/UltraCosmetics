@@ -25,7 +25,6 @@ import java.util.List;
 public class MountMoltenSnake extends Mount<MagmaCube> {
 
     private List<Entity> entities = new ArrayList<>();
-    private Entity last;
     private Location lastLocation;
     private float lastYaw;
     private float lastPitch;
@@ -62,7 +61,6 @@ public class MountMoltenSnake extends Mount<MagmaCube> {
                 ArmorStand as = ((ArmorStand) entity);
                 as.setHeadPose(new EulerAngle(Math.toRadians(lastPitch), Math.toRadians(lastYaw), 0));
             }
-            last = entity;
             lastLocation = loc;
             lastYaw = getPlayer().getLocation().getYaw();
             lastPitch = getPlayer().getLocation().getPitch();

@@ -6,7 +6,8 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import org.bukkit.Bukkit;
+import be.isach.ultracosmetics.util.XMaterial;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
@@ -14,9 +15,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author iSach
@@ -24,21 +25,17 @@ import java.util.List;
  */
 public class GadgetFreezeCannon extends Gadget {
 
-    private List<Item> items;
-    private List<Item> queue;
+    private Set<Item> items = new HashSet<>();
 
     public GadgetFreezeCannon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("freezecannon"), ultraCosmetics);
-        if (owner == null) return;
-        items = new ArrayList<>();
-        queue = new ArrayList<>();
     }
 
     @Override
     void onRightClick() {
         Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), new ItemStack(Material.ICE));
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(0.9));
-        queue.add(item);
+        items.add(item);
     }
 
     @EventHandler
@@ -48,32 +45,25 @@ public class GadgetFreezeCannon extends Gadget {
 
     @Override
     public void onUpdate() {
-        items.addAll(queue);
-        queue.clear();
-        Iterator<Item> itemIterator = items.iterator();
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-            while (itemIterator.hasNext()) {
-                Item i = itemIterator.next();
-                if (i.isOnGround()) {
-                    for (Block b : BlockUtils.getBlocksInRadius(i.getLocation(), 4, false))
-                        BlockUtils.setToRestore(b, Material.PACKED_ICE, (byte) 0, 50);
-                    UtilParticles.display(Particles.FIREWORKS_SPARK, 4d, 3d, 4d, i.getLocation(), 80);
-                    i.remove();
-                    itemIterator.remove();
+        Iterator<Item> iter = items.iterator();
+        while (iter.hasNext()) {
+            Item item = iter.next();
+            if (item.isOnGround()) {
+                for (Block b : BlockUtils.getBlocksInRadius(item.getLocation(), 4, false)) {
+                    BlockUtils.setToRestore(b, XMaterial.PACKED_ICE, 50);
                 }
+                UtilParticles.display(Particles.FIREWORKS_SPARK, 4d, 3d, 4d, item.getLocation(), 80);
+                item.remove();
+                iter.remove();
             }
-        });
+        }
     }
 
     @Override
     public void onClear() {
-        for (Item item : items)
+        for (Item item : items) {
             item.remove();
-        for (Item item : queue)
-            item.remove();
-        queue.clear();
+        }
         items.clear();
-        items = null;
-        queue = null;
     }
 }

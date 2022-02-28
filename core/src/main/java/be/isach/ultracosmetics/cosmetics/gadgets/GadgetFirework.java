@@ -9,8 +9,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import java.util.Random;
-
 /**
  * Represents an instance of a firework gadget summoned by a player.
  *
@@ -18,8 +16,6 @@ import java.util.Random;
  * @since 11-11-2015
  */
 public class GadgetFirework extends Gadget {
-
-    private static Random random = new Random();
 
     public GadgetFirework(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("firework"), ultraCosmetics);
@@ -30,19 +26,19 @@ public class GadgetFirework extends Gadget {
         Firework fw = (Firework) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
         FireworkMeta fwm = fw.getFireworkMeta();
 
-        int rt = random.nextInt(5);
+        int rt = RANDOM.nextInt(5);
         FireworkEffect.Type type = FireworkEffect.Type.values()[rt];
 
-        Color c1 = Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-        Color c2 = Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+        Color c1 = Color.fromRGB(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256));
+        Color c2 = Color.fromRGB(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256));
 
-        FireworkEffect effect = FireworkEffect.builder().flicker(random.nextBoolean())
+        FireworkEffect effect = FireworkEffect.builder().flicker(RANDOM.nextBoolean())
                 .withColor(c1).withFade(c2).with(type)
-                .trail(random.nextBoolean()).build();
+                .trail(RANDOM.nextBoolean()).build();
 
         fwm.addEffect(effect);
 
-        fwm.setPower(random.nextInt(3));
+        fwm.setPower(RANDOM.nextInt(3));
 
         fw.setFireworkMeta(fwm);
     }

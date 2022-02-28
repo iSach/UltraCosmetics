@@ -30,7 +30,7 @@ public class SubCommandGive extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String... args) {
+    protected void onExePlayer(Player sender, String[] args) {
         if (args.length < 3) {
             if (args.length == 2) {
                 if (args[1].startsWith("k"))
@@ -132,7 +132,7 @@ public class SubCommandGive extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
         if (args.length < 4) {
             if (args.length == 2) {
                 if (args[1].startsWith("k"))

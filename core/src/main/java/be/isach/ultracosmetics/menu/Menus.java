@@ -21,11 +21,7 @@ public class Menus {
     private final MenuSuits suitsMenu;
     private final MenuMain mainMenu;
 
-    private UltraCosmetics ultraCosmetics;
-
     public Menus(UltraCosmetics ultraCosmetics) {
-        this.ultraCosmetics = ultraCosmetics;
-
         this.emotesMenu = new MenuEmotes(ultraCosmetics);
         this.gadgetsMenu = new MenuGadgets(ultraCosmetics);
         this.effectsMenu = new MenuParticleEffects(ultraCosmetics);

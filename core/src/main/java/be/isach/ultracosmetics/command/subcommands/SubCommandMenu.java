@@ -26,7 +26,7 @@ public class SubCommandMenu extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String... args) {
+    protected void onExePlayer(Player sender, String[] args) {
         if (!SettingsManager.isAllowedWorld(sender.getWorld())) {
             sender.sendMessage(MessageManager.getMessage("World-Disabled"));
             return;
@@ -90,7 +90,7 @@ public class SubCommandMenu extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String... args) {
+    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
         notAllowed(sender);
     }
 

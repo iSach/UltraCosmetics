@@ -36,8 +36,6 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Directional;
-import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -151,11 +149,7 @@ public class TreasureChest implements Listener {
                                                 break;
                                         }
 
-                                        BlockState blockState = b.getState();
-                                        Directional data = (Directional) blockState.getData();
-                                        data.setFacingDirection(blockFace);
-                                        blockState.setData((MaterialData)data);
-                                        blockState.update(true, true);
+                                        XBlock.setDirection(b, blockFace);
 
                                         chests.add(b);
                                         i--;
@@ -235,15 +229,12 @@ public class TreasureChest implements Listener {
         }.runTaskTimer(uc, 0L, 1L);
     }
     
-    private void doChestStage(Iterable<Block> blocks, MaterialData newData) {
+    private void doChestStage(Iterable<Block> blocks, XMaterial newData) {
         if (newData == null) return;
         for (Block b : blocks) {
             blocksToRestore.put(b, b.getState());
             BlockUtils.treasureBlocks.add(b);
-            b.setType(newData.getItemType());
-            BlockState newState = b.getState();
-            newState.setData(newData);
-            newState.update(true, true);
+            XBlock.setType(b, newData);
         }
     }
 
