@@ -2,7 +2,7 @@ package be.isach.ultracosmetics.v1_18_R2;
 
 public class ObfuscatedFields {
     // corresponds to net.minecraft.world.entity.LivingEntity#jumping
-    public static final String JUMPING = "bo";
+    public static final String JUMPING = "bn";
     // corresponds to net.minecraft.world.entity.ai.navigation.PathNavigation#isInLiquid()
     public static final String IS_IN_LIQUID = "o";
     // corresponds to net.minecraft.world.entity.ai.Brain#memories
