@@ -145,7 +145,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                         // TODO: this is ugly
                         if (getPlayer().getItemInHand() != null && itemStack != null && getPlayer().getItemInHand()
                                 .hasItemMeta() && getPlayer().getItemInHand().getType() == getItemStack().getType()
-                                && getPlayer().getItemInHand().getData().getData() == getItemStack().getData().getData()
                                 && getPlayer().getItemInHand().getItemMeta().hasDisplayName() && getPlayer()
                                 .getItemInHand().getItemMeta().getDisplayName().endsWith(getType().getName())
                                 && getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).canUse(getType())
@@ -341,8 +340,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         if (getOwner() == null || getPlayer() == null || event.getPlayer() != getPlayer() || !(event
                 .getRightClicked() instanceof ItemFrame) || getItemStack() == null || itemStack == null || !itemStack
                 .hasItemMeta() || itemStack.getType() != getItemStack().getType()
-                || itemStack.getData().getData() != getItemStack().getData().getData() || !itemStack.getItemMeta()
-                .getDisplayName().endsWith(getType().getName())) {
+                || !itemStack.getItemMeta().getDisplayName().endsWith(getType().getName())) {
             return;
         }
 

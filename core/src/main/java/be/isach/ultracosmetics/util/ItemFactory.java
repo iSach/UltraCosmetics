@@ -173,27 +173,6 @@ public class ItemFactory {
         return item;
     }
 
-    public static boolean areSame(ItemStack a, ItemStack b) {
-        if (a.getType() != b.getType()) {
-            return false;
-        }
-
-        if (a.getData().getData() != b.getData().getData()) {
-            return false;
-        }
-        if ((a.hasItemMeta() && !b.hasItemMeta())
-                || (!a.hasItemMeta() && b.hasItemMeta())) {
-            return false;
-        }
-        if (!a.hasItemMeta() && !b.hasItemMeta()) {
-            return true;
-        }
-        ItemMeta am = a.getItemMeta();
-        ItemMeta bm = b.getItemMeta();
-
-        return am.getDisplayName().equalsIgnoreCase(bm.getDisplayName());
-    }
-
     public static boolean haveSameName(ItemStack a, ItemStack b) {
         if (a.hasItemMeta() && b.hasItemMeta()) {
             if (a.getItemMeta().hasDisplayName() && b.getItemMeta().hasDisplayName()) {
