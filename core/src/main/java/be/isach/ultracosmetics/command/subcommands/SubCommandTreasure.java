@@ -111,7 +111,6 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        Location preLoc = opener.getLocation();
         Location location = new Location(world, x + 0.5, y, z + 0.5);
         Block block = location.getBlock();
         if (block.getType() != Material.AIR) {
@@ -137,9 +136,7 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        opener.teleport(location);
-
-        TreasureChestManager.tryOpenChest(opener, preLoc);
+        TreasureChestManager.tryOpenChest(opener, location);
     }
 
     private boolean checkWorld(CommandSender sender, World world) {

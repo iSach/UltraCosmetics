@@ -2,7 +2,7 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -29,14 +29,12 @@ public class MenuEmotes extends CosmeticMenu<EmoteType> {
     }
 
     @Override
-    protected ItemStack filterItem(ItemStack itemStack, EmoteType cosmeticType, UltraPlayer player) {
-        ItemMeta itemMeta = itemStack.getItemMeta().clone();
-        itemStack = cosmeticType.getFrames().get(cosmeticType.getMaxFrames() - 1).clone();
-        ItemMeta other = itemStack.getItemMeta().clone();
-        other.setDisplayName(itemMeta.getDisplayName());
-        other.setLore(itemMeta.getLore());
-        itemStack.setItemMeta(other);
-        return itemStack;
+    protected void filterItem(ItemStack itemStack, EmoteType cosmeticType, UltraPlayer player) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        ItemMeta emoteMeta = cosmeticType.getFrames().get(cosmeticType.getMaxFrames() - 1).getItemMeta();
+        emoteMeta.setDisplayName(itemMeta.getDisplayName());
+        emoteMeta.setLore(itemMeta.getLore());
+        itemStack.setItemMeta(emoteMeta);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class MenuEmotes extends CosmeticMenu<EmoteType> {
     }
 
     @Override
-    protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
+    protected Emote getCosmetic(UltraPlayer ultraPlayer) {
         return ultraPlayer.getCurrentEmote();
     }
 }

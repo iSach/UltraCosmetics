@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author iSach
  * @since 12-18-2015
  */
-public class ParticleEffectType extends CosmeticMatType<ParticleEffect> {
+public class ParticleEffectType extends CosmeticType<ParticleEffect> {
 
     private final static List<ParticleEffectType> ENABLED = new ArrayList<>();
     private final static List<ParticleEffectType> VALUES = new ArrayList<>();

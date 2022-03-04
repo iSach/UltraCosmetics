@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author iSach
  * @since 07-17-2016
  */
-public class EmoteType extends CosmeticMatType<Emote> {
+public class EmoteType extends CosmeticType<Emote> {
 
     private static final List<EmoteType> ENABLED = new ArrayList<>();
     private static final List<EmoteType> VALUES = new ArrayList<>();

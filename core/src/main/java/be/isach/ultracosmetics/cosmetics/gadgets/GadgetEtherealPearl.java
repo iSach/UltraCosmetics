@@ -15,9 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.HashSet;
@@ -69,7 +71,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && event.getEntity() == getPlayer()) {
+        if (running && event.getCause() == DamageCause.FALL && event.getEntity() == getPlayer()) {
             event.setCancelled(true);
         }
     }
@@ -103,6 +105,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
                 fm.addEffect(getRandomFireworkEffect());
                 f.setFireworkMeta(fm);
                 fireworks.add(f);
+                f.setMetadata("UCFirework", new FixedMetadataValue(getUltraCosmetics(), 1));
             }
         });
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
@@ -131,20 +134,16 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     @Override
     public void onUpdate() {
         if (running && (pearl == null || !pearl.isValid())) {
-            Bukkit.getLogger().info("pearl no longer exists");
             running = false;
+            pearl = null;
+            spawnRandomFirework(getPlayer().getLocation());
 
             Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                Bukkit.getLogger().info("removing flight");
                 getPlayer().eject();
-
                 if (getPlayer().getGameMode() != GameMode.CREATIVE) {
                     getPlayer().setAllowFlight(false);
                 }
             });
-
-            pearl = null;
-            spawnRandomFirework(getPlayer().getLocation());
         }
     }
 }

@@ -47,6 +47,10 @@ public enum SuitCategory {
         return configName;
     }
 
+    public String getConfigPath() {
+        return helmet.getConfigPath();
+    }
+
     public String getPermissionSuffix() {
         return permissionSuffix;
     }

@@ -73,6 +73,10 @@ public abstract class Menu implements Listener {
         map.put(itemStack, clickRunnable);
     }
 
+    protected void putItem(Inventory inventory, int slot, ItemStack itemStack) {
+        putItem(inventory, slot, itemStack, data -> {});
+    }
+
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (event.getInventory() == null) {
@@ -124,7 +128,7 @@ public abstract class Menu implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(player);
-        clickRunnable.run(new ClickData(event.getInventory(), ultraPlayer, event.getAction(), event.getCurrentItem(), event.getSlot()));
+        clickRunnable.run(new ClickData(event.getInventory(), ultraPlayer, event.getClick(), event.getCurrentItem(), event.getSlot()));
         player.updateInventory();
     }
 

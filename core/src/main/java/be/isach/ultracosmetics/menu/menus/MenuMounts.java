@@ -2,7 +2,7 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.mounts.Mount;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -51,7 +51,7 @@ public class MenuMounts extends CosmeticMenu<MountType> {
     }
 
     @Override
-    protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
+    protected Mount<?> getCosmetic(UltraPlayer ultraPlayer) {
         return ultraPlayer.getCurrentMount();
     }
 }

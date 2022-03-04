@@ -8,7 +8,10 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.XMaterial;
+
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -20,7 +23,7 @@ import java.util.List;
  * @author iSach
  * @since 07-05-2016
  */
-public abstract class CosmeticType<T extends Cosmetic> {
+public abstract class CosmeticType<T extends Cosmetic<?>> {
 
     private final String configName;
     private final String permission;
@@ -28,13 +31,15 @@ public abstract class CosmeticType<T extends Cosmetic> {
     private final Class<? extends T> clazz;
     private final Category category;
     private final ServerVersion baseVersion;
+    private final XMaterial material;
 
-    public CosmeticType(Category category, String configName, String permission, String defaultDescription, Class<? extends T> clazz, ServerVersion baseVersion) {
+    public CosmeticType(Category category, String configName, String permission, String defaultDescription, XMaterial material, Class<? extends T> clazz, ServerVersion baseVersion) {
         this.configName = configName;
         this.permission = permission;
         this.clazz = clazz;
         this.category = category;
         this.baseVersion = baseVersion;
+        this.material = material;
 
         if (SettingsManager.getConfig().get(getCategory().getConfigPath() + "." + configName + ".Description") == null) {
             description = defaultDescription;
@@ -82,6 +87,18 @@ public abstract class CosmeticType<T extends Cosmetic> {
 
     public Category getCategory() {
         return category;
+    }
+
+    public XMaterial getMaterial() {
+        return material;
+    }
+
+    public ItemStack getItemStack() {
+        return material.parseItem();
+    }
+
+    public String getConfigPath() {
+        return getCategory().getConfigPath() + "." + getConfigName();
     }
 
     /**

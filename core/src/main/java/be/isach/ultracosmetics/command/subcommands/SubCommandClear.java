@@ -2,10 +2,10 @@ package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -32,39 +32,69 @@ public class SubCommandClear extends SubCommand {
         common(sender, args);
     }
 
-    private void common(CommandSender sender, String... args) {
-        Player receiver;
+    private void common(CommandSender sender, String[] args) {
+        Player target;
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + getUsage());
+            if (sender instanceof Player) {
+                target = (Player) sender;
+            } else {
+                error(sender, "You must specify a player.");
+                return;
+            }
+        } else {
+            target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                error(sender, "Player " + args[1] + " not found!");
+                return;
+            }
+        }
+
+        if (target != sender && !sender.hasPermission(getPermission() + ".others")) {
+            error(sender, "You do not have permission to clear others.");
             return;
         }
 
-        if (!sender.hasPermission(getPermission() + ".others")) return;
-        receiver = Bukkit.getPlayer(args[1]);
-
-        if (receiver == null) {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[1] + " not found!");
-            return;
-        }
         if (args.length < 3) {
-            ultraCosmetics.getPlayerManager().getUltraPlayer(receiver).clear();
+            ultraCosmetics.getPlayerManager().getUltraPlayer(target).clear();
             return;
         }
 
-        UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(receiver);
-        String s = args[2].toLowerCase();
+        UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(target);
 
-        if (s.startsWith("g")) up.removeGadget();
-        else if (s.startsWith("pa") || s.startsWith("ef")) up.removeParticleEffect();
-        else if (s.startsWith("pe")) up.removePet();
-        else if (s.startsWith("h")) up.removeHat();
-        else if (s.startsWith("s") && !s.contains(":")) up.removeSuit();
-        else if (s.startsWith("s") && s.contains(":")) up.removeSuit(ArmorSlot.getByName(s.split(":")[1]));
-        else if (s.startsWith("mor")) up.removeMorph();
-        else if (s.startsWith("mou")) up.removeMount();
-        else if (s.startsWith("e")) up.removeEmote();
-        else {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "/uc clear <player> <type>\n" + ChatColor.RED + "" + ChatColor.BOLD + "Invalid Type.\n" + ChatColor.RED + "" + ChatColor.BOLD + "Available types: gadgets, particleeffects, pets, mounts, suits, hats, morphs");
+        Category cat = Category.fromString(args[2]);
+        switch(cat) {
+        case EFFECTS:
+            up.removeParticleEffect();
+            break;
+        case EMOTES:
+            up.removeEmote();
+            break;
+        case GADGETS:
+            up.removeGadget();
+            break;
+        case HATS:
+            up.removeHat();
+            break;
+        case MORPHS:
+            up.removeMorph();
+            break;
+        case MOUNTS:
+            up.removeMount();
+            break;
+        case PETS:
+            up.removePet();
+            break;
+        case SUITS:
+            String[] parts = args[2].split(":");
+            if (parts.length < 2) {
+                up.removeSuit();
+                break;
+            }
+            up.removeSuit(ArmorSlot.getByName(parts[1]));
+            break;
+        default: // null
+            error(sender, "Invalid cosmetic type.");
+            break;
         }
     }
 }

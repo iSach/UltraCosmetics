@@ -12,11 +12,11 @@ import org.bukkit.entity.EntityType;
  * @author iSach
  * @since 08-04-2016
  */
-public abstract class CosmeticEntType<T extends Cosmetic> extends CosmeticMatType<T> {
+public abstract class CosmeticEntType<T extends Cosmetic<?>> extends CosmeticType<T> {
 
     private final EntityType entityType;
 
-    public CosmeticEntType(Category category, String configName, String permission, String description, XMaterial material, EntityType entityType, Class clazz, ServerVersion baseVersion) {
+    public CosmeticEntType(Category category, String configName, String permission, String description, XMaterial material, EntityType entityType, Class<? extends T> clazz, ServerVersion baseVersion) {
         super(category, configName, permission, description, material, clazz, baseVersion);
         this.entityType = entityType;
     }

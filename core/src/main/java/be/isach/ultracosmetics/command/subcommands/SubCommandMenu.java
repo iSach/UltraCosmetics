@@ -9,7 +9,10 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.menu.Menus;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import org.bukkit.ChatColor;
+
+import java.util.StringJoiner;
+
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,7 +36,7 @@ public class SubCommandMenu extends SubCommand {
         }
 
         if (args.length < 2) {
-            sender.sendMessage(getMenuList());
+            sendMenuList(sender);
             return;
         }
 
@@ -49,43 +52,59 @@ public class SubCommandMenu extends SubCommand {
 
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(sender);
 
-        if (s.startsWith("g") && Category.GADGETS.isEnabled()) {
-            menus.getGadgetsMenu().open(ultraPlayer, page);
-        } else if ((s.startsWith("pa") || s.startsWith("ef")) && Category.EFFECTS.isEnabled()) {
-            menus.getEffectsMenu().open(ultraPlayer, page);
-        } else if (s.startsWith("pe") && Category.PETS.isEnabled()) {
-            menus.getPetsMenu().open(ultraPlayer, page);
-        } else if (s.startsWith("h") && Category.HATS.isEnabled()) {
-            menus.getHatsMenu().open(ultraPlayer, page);
-        } else if (s.startsWith("s") && Category.SUITS.isEnabled()) {
-            menus.getSuitsMenu().open(ultraPlayer, page);
-        } else if (s.startsWith("mor") && Category.MORPHS.isEnabled()) {
-            menus.getMorphsMenu().open(ultraPlayer, page);
-        } else if (s.startsWith("mou") && Category.MOUNTS.isEnabled()) {
-            menus.getMountsMenu().open(ultraPlayer, page);
-        } else if (s.startsWith("ma")) {
+        if (s.startsWith("ma")) {
             menus.getMainMenu().open(ultraPlayer);
-        } else if (s.startsWith("e") && Category.EMOTES.isEnabled()) {
-            menus.getEmotesMenu().open(ultraPlayer, page);
+            return;
+        } else if (s.startsWith("r") && SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
+            if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required") && !sender.hasPermission("ultracosmetics.pets.rename")) {
+                error(sender, "You don't have permission.");
+                return;
+            }
+            if (ultraPlayer.getCurrentPet() == null) {
+                sender.sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
+                return;
+            }
+            menus.getPetsMenu().renamePet(ultraPlayer);
+            return;
         } else if (s.startsWith("b") && UltraCosmeticsData.get().areTreasureChestsEnabled()) {
             sender.closeInventory();
             ultraCosmetics.getPlayerManager().getUltraPlayer(sender).openKeyPurchaseMenu();
-        } else if (s.startsWith("r") && SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
-            if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
-                if (sender.hasPermission("ultracosmetics.pets.rename")) {
-                    if (ultraPlayer.getCurrentPet() != null) {
-                        menus.getPetsMenu().renamePet(ultraPlayer);
-                    } else {
-                        sender.sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
-                    }
-                }
-            } else if (ultraPlayer.getCurrentPet() != null) {
-                menus.getPetsMenu().renamePet(ultraPlayer);
-            } else {
-                sender.sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
-            }
-        } else {
-            sender.sendMessage(getMenuList());
+            return;
+        }
+        Category cat = Category.fromString(s);
+        if (cat == null) {
+            sendMenuList(sender);
+            return;
+        }
+        if (!cat.isEnabled()) {
+            error(sender, "That menu is disabled.");
+            return;
+        }
+        switch(cat) {
+        case EFFECTS:
+            menus.getEffectsMenu().open(ultraPlayer, page);
+            break;
+        case EMOTES:
+            menus.getEmotesMenu().open(ultraPlayer, page);
+            break;
+        case GADGETS:
+            menus.getGadgetsMenu().open(ultraPlayer, page);
+            break;
+        case HATS:
+            menus.getHatsMenu().open(ultraPlayer, page);
+            break;
+        case MORPHS:
+            menus.getMorphsMenu().open(ultraPlayer, page);
+            break;
+        case MOUNTS:
+            menus.getMountsMenu().open(ultraPlayer, page);
+            break;
+        case PETS:
+            menus.getPetsMenu().open(ultraPlayer, page);
+            break;
+        case SUITS:
+            menus.getSuitsMenu().open(ultraPlayer, page);
+            break;
         }
     }
 
@@ -94,14 +113,20 @@ public class SubCommandMenu extends SubCommand {
         notAllowed(sender);
     }
 
-    private String getMenuList() {
-        StringBuilder menuList = new StringBuilder(ChatColor.RED + "" + ChatColor.BOLD + "/uc menu <menu>\n" + ChatColor.RED + "" + ChatColor.BOLD + "Invalid Menu\n"
-                + ChatColor.RED + "" + ChatColor.BOLD + "Available Menus: main," + (UltraCosmeticsData.get().areTreasureChestsEnabled() ? " buykey," : "")
-                + (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled") ? " renamepet," : ""));
-        for (Category category : Category.enabled()) {
-            menuList.append(" ").append(category.name().toLowerCase()).append(",");
+    private void sendMenuList(CommandSender sender) {
+        error(sender, "Invalid menu, available menus are:");
+        StringJoiner menuList = new StringJoiner(", ");
+        menuList.add("main");
+        if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
+            menuList.add("buykey");
         }
-        return menuList.substring(0, menuList.length() - 1);
+        if (SettingsManager.getConfig().getBoolean("Pets-Rename.Enabled")) {
+            menuList.add("renamepet");
+        }
+        for (Category category : Category.enabled()) {
+            menuList.add(category.name().toLowerCase());
+        }
+        error(sender, menuList.toString());
     }
 }
 

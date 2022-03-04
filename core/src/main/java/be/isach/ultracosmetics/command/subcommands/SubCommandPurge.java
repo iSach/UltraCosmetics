@@ -51,7 +51,7 @@ public class SubCommandPurge extends SubCommand {
 			for (File file : dataFolder.listFiles()) {
 				if (file.lastModified() < System.currentTimeMillis() + 86400000) { // File old enough to check for config values set
 					YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-					if ((config.contains("Keys") && config.getInt("Keys") > 0) || config.contains("Pet-Names")) {
+					if (config.getInt("Keys") > 0 || config.contains("Pet-Names")) {
 						savedFiles++;
 					} else {
 						deletedFiles++;

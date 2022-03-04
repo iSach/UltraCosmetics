@@ -153,12 +153,8 @@ public class SqlUtils {
         }
     }
 
-    public void removeKey(int index) {
-        MySqlConnectionManager.getTable().update().set("treasureKeys", getKeys(index) - 1).where("id", index).execute();
-    }
-
-    public void addKey(int index) {
-        MySqlConnectionManager.getTable().update().set("treasureKeys", getKeys(index) + 1).where("id", index).execute();
+    public void addKeys(int index, int keys) {
+        MySqlConnectionManager.getTable().update().set("treasureKeys", getKeys(index) + keys).where("id", index).execute();
     }
 
     public void removeAmmo(int index, String name) {

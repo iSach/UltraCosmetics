@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public enum Category {
 
-    PETS("Pets", "Spawn", "Despawn", "Clear-Pet", "%petname%", "Spawn", "Despawn") {
+    PETS("Pets", "Spawn", "Despawn", "Clear-Pet", "%petname%", "Spawn", "Despawn", "pe") {
         @Override
         public MenuPets getMenu(Menus menus) {
             return menus.getPetsMenu();
@@ -36,7 +36,7 @@ public enum Category {
             return PetType.enabled();
         }
     },
-    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget", "%gadgetname%", "Equip", "Unequip") {
+    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget", "%gadgetname%", "Equip", "Unequip", "g") {
         @Override
         public MenuGadgets getMenu(Menus menus) {
             return menus.getGadgetsMenu();
@@ -47,7 +47,7 @@ public enum Category {
             return GadgetType.enabled();
         }
     },
-    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect", "%effectname%", "Summon", "Unsummon") {
+    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect", "%effectname%", "Summon", "Unsummon", "ef") {
         @Override
         public MenuParticleEffects getMenu(Menus menus) {
             return menus.getEffectsMenu();
@@ -58,7 +58,7 @@ public enum Category {
             return ParticleEffectType.enabled();
         }
     },
-    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount", "%mountname%", "Spawn", "Despawn") {
+    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount", "%mountname%", "Spawn", "Despawn", "mou") {
         @Override
         public MenuMounts getMenu(Menus menus) {
             return menus.getMountsMenu();
@@ -69,7 +69,7 @@ public enum Category {
             return MountType.enabled();
         }
     },
-    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph", "%morphname%", "Morph", "Unmorph") {
+    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph", "%morphname%", "Morph", "Unmorph", "mor") {
         @Override
         public MenuMorphs getMenu(Menus menus) {
             return menus.getMorphsMenu();
@@ -80,7 +80,7 @@ public enum Category {
             return MorphType.enabled();
         }
     },
-    HATS("Hats", "Equip", "Unequip", "Clear-Hat", "%hatname%", "Equip", "Unequip") {
+    HATS("Hats", "Equip", "Unequip", "Clear-Hat", "%hatname%", "Equip", "Unequip", "h") {
         @Override
         public MenuHats getMenu(Menus menus) {
             return menus.getHatsMenu();
@@ -91,7 +91,7 @@ public enum Category {
             return HatType.enabled();
         }
     },
-    SUITS("Suits", "Equip", "Unequip", "Clear-Suit", "%suitname%", "Equip", "Unequip") {
+    SUITS("Suits", "Equip", "Unequip", "Clear-Suit", "%suitname%", "Equip", "Unequip", "s") {
         @Override
         public MenuSuits getMenu(Menus menus) {
             return menus.getSuitsMenu();
@@ -102,7 +102,7 @@ public enum Category {
             return SuitType.enabled();
         }
     },
-    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote", "%emotename%", "Equip", "Unequip") {
+    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote", "%emotename%", "Equip", "Unequip", "e") {
         @Override
         public MenuEmotes getMenu(Menus menus) {
             return menus.getEmotesMenu();
@@ -122,36 +122,44 @@ public enum Category {
         return Arrays.stream(values()).filter(Category::isEnabled).collect(Collectors.toList());
     }
 
+    public static Category fromString(String name) {
+        String lowerName = name.toLowerCase();
+        for (Category cat : values()) {
+            if (lowerName.endsWith(cat.prefix)) {
+                return cat;
+            }
+        }
+        return null;
+    }
+
     /**
      * The config path name.
      */
-    private String configPath;
+    private final String configPath;
 
     /**
      * The ItemStack in Main Menu.
      */
-    private ItemStack is;
+    private final ItemStack is;
 
     /**
      * Message on menu to activate a cosmetic of this category.
      */
-    private String activateMenu;
+    private final String activateMenu;
 
     /**
      * Message on menu to deactivate a cosmetic of this category.
      */
-    private String deactivateMenu;
+    private final String deactivateMenu;
 
     /**
      * Path of the clear message.
      */
-    private String clearConfigPath;
-
-    private String chatPlaceholder;
-
-    private String activateConfig;
-
-    private String deactivateConfig;
+    private final String clearConfigPath;
+    private final String chatPlaceholder;
+    private final String activateConfig;
+    private final String deactivateConfig;
+    private final String prefix;
 
     /**
      * Category of Cosmetic.
@@ -163,8 +171,9 @@ public enum Category {
      * @param chatPlaceholder
      * @param activateConfig
      * @param deactivateConfig
+     * @param prefix TODO
      */
-    private Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath, String chatPlaceholder, String activateConfig, String deactivateConfig) {
+    private Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath, String chatPlaceholder, String activateConfig, String deactivateConfig, String prefix) {
         this.configPath = configPath;
         this.activateMenu = activateMenu;
         this.deactivateMenu = deactivateMenu;
@@ -172,6 +181,7 @@ public enum Category {
         this.chatPlaceholder = chatPlaceholder;
         this.activateConfig = activateConfig;
         this.deactivateConfig = deactivateConfig;
+        this.prefix = prefix;
         if (SettingsManager.getConfig().contains("Categories." + configPath + ".Main-Menu-Item")) {
             this.is = ItemFactory.getItemStackFromConfig("Categories." + configPath + ".Main-Menu-Item");
         } else {

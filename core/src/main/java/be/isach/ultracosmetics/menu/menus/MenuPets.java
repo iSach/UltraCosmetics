@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
@@ -106,15 +106,12 @@ public class MenuPets extends CosmeticMenu<PetType> {
     }
 
     @Override
-    protected ItemStack filterItem(ItemStack itemStack, PetType cosmeticType, UltraPlayer player) {
+    protected void filterItem(ItemStack itemStack, PetType cosmeticType, UltraPlayer player) {
         if (player.getPetName(cosmeticType) != null) {
-            ItemStack item = itemStack.clone();
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(itemMeta.getDisplayName() + ChatColor.GRAY + " (" + player.getPetName(cosmeticType) + ChatColor.GRAY + ")");
-            item.setItemMeta(itemMeta);
-            return item;
+            itemStack.setItemMeta(itemMeta);
         }
-        return super.filterItem(itemStack, cosmeticType, player);
     }
 
     @Override
@@ -133,7 +130,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
     }
 
     @Override
-    protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
+    protected Pet getCosmetic(UltraPlayer ultraPlayer) {
         return ultraPlayer.getCurrentPet();
     }
 }

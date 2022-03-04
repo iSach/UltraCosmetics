@@ -34,14 +34,12 @@ public class MenuHats extends CosmeticMenu<HatType> {
     }
 
     @Override
-    protected ItemStack filterItem(ItemStack itemStack, HatType cosmeticType, UltraPlayer player) {
+    protected void filterItem(ItemStack itemStack, HatType cosmeticType, UltraPlayer player) {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemStack = cosmeticType.getItemStack();
-        ItemMeta other = itemStack.getItemMeta();
-        other.setDisplayName(itemMeta.getDisplayName());
-        other.setLore(itemMeta.getLore());
-        itemStack.setItemMeta(other);
-        return itemStack;
+        ItemMeta hatMeta = cosmeticType.getItemStack().getItemMeta();
+        hatMeta.setDisplayName(itemMeta.getDisplayName());
+        hatMeta.setLore(itemMeta.getLore());
+        itemStack.setItemMeta(hatMeta);
     }
 
     @Override

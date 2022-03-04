@@ -18,10 +18,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,17 +30,8 @@ import java.util.Set;
 public class TreasureChestManager implements Listener {
 
     private static Random random = new Random();
-    private UltraCosmetics ultraCosmetics;
 
-    public TreasureChestManager(UltraCosmetics ultraCosmetics) {
-        this.ultraCosmetics = ultraCosmetics;
-    }
-
-    private static void openTreasureChest(Player player, Location preLoc) {
-        String designPath = getRandomDesign();
-        player.closeInventory();
-        new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath), preLoc);
-    }
+    private TreasureChestManager() {}
 
     private static String getRandomDesign() {
         Set<String> set = UltraCosmeticsData.get().getPlugin().getConfig().getConfigurationSection("TreasureChests.Designs").getKeys(false);
@@ -58,11 +46,10 @@ public class TreasureChestManager implements Listener {
             return;
         }
         ConfigurationSection location = SettingsManager.getConfig().getConfigurationSection("TreasureChests.Location");
-        Location originalLocation = player.getLocation().clone();
         // just modify a copy of the player's original location so we preserve yaw and pitch
         Location treasureChestLocation = player.getLocation().clone();
         String worldName = location.getString("World", "none");
-        if (worldName != null && !worldName.equals("none")) {
+        if (!worldName.equals("none")) {
             World world = Bukkit.getWorld(location.getString("World"));
             if (world == null) {
                 player.sendMessage(ChatColor.RED + "Invalid world set in config.yml!");
@@ -74,11 +61,10 @@ public class TreasureChestManager implements Listener {
         // add 0.5 to the Y too so it's less likely the player gets stuck in the ground
         treasureChestLocation.setY(location.getInt("Y", 63) + 0.5);
         treasureChestLocation.setZ(location.getInt("Z", 0) + 0.5);
-        player.teleport(treasureChestLocation);
-        tryOpenChest(player, originalLocation);
+        tryOpenChest(player, treasureChestLocation);
     }
 
-    public static void tryOpenChest(Player player, Location preLoc) {
+    public static void tryOpenChest(Player player, Location tpTo) {
         UltraCosmetics plugin = UltraCosmeticsData.get().getPlugin();
 
         if (!plugin.areChestsAllowedInRegion(player)) {
@@ -98,10 +84,6 @@ public class TreasureChestManager implements Listener {
 
         if (!area.isEmptyExcept(player.getLocation().getBlock().getLocation())) {
             player.sendMessage(MessageManager.getMessage("Chest-Location.Not-Enough-Space"));
-
-            if(preLoc != null) {
-                player.teleport(preLoc);
-            }
             return;
         }
 
@@ -124,37 +106,14 @@ public class TreasureChestManager implements Listener {
             return;
         }
         ultraPlayer.removeKey();
-        openTreasureChest(player, preLoc);
-    }
-
-    @EventHandler
-    public void buyKeyConfirm(InventoryClickEvent event) {
-        if (!event.getView().getTitle().equalsIgnoreCase(MessageManager.getMessage("Buy-Treasure-Key"))) return;
-        event.setCancelled(true);
-
-        if (event.getCurrentItem() == null || !event.getCurrentItem().getItemMeta().hasDisplayName()) return;
-        Player player = (Player) event.getWhoClicked();
-        UltraPlayer ultraPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player);
-
-        if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Cancel"))) {
-            player.closeInventory();
-            UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(ultraPlayer);
-            return;
-        }
-
-        if (!event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(MessageManager.getMessage("Purchase"))) return;
-
-        if (ultraPlayer.getBalance() < SettingsManager.getConfig().getInt("TreasureChests.Key-Price")) {
-            player.sendMessage(MessageManager.getMessage("Not-Enough-Money"));
-            player.closeInventory();
-            return;
-        }
-
-        ultraCosmetics.getEconomyHandler().withdraw(player, SettingsManager.getConfig().getInt("TreasureChests.Key-Price"));
-        ultraPlayer.addKey();
-        player.sendMessage(MessageManager.getMessage("Successful-Purchase"));
+        String designPath = getRandomDesign();
         player.closeInventory();
-        UltraCosmeticsData.get().getPlugin().getMenus().getMainMenu().open(ultraPlayer);
+        Location preLoc = null;
+        if (tpTo != null) {
+            preLoc = player.getLocation();
+            player.teleport(tpTo);
+        }
+        new TreasureChest(player.getUniqueId(), new TreasureChestDesign(designPath), preLoc);
     }
 
 }

@@ -156,6 +156,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         return entity;
     }
 
+    @SuppressWarnings("unchecked")
     protected E spawnEntity() {
         return (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
     }

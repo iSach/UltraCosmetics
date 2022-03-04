@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author iSach
  * @since 10-15-2015
  */
-public class HatType extends CosmeticMatType<Hat> {
+public class HatType extends CosmeticType<Hat> {
 
     private final static List<HatType> ENABLED = new ArrayList<>();
     private final static List<HatType> VALUES = new ArrayList<>();

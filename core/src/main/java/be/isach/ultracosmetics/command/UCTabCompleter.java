@@ -59,7 +59,7 @@ public class UCTabCompleter implements TabCompleter {
 
                 if (cat == null || !cat.isEnabled()) return options;
 
-                for (CosmeticType cosm : cat.getEnabled()) {
+                for (CosmeticType<?> cosm : cat.getEnabled()) {
                     options.add(cosm.toString());
                 }
             } else if (args[0].equalsIgnoreCase("clear")) {

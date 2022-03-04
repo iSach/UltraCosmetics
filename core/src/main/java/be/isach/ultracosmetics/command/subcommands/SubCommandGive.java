@@ -1,20 +1,15 @@
  package be.isach.ultracosmetics.command.subcommands;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 /**
  * Give {@link be.isach.ultracosmetics.command.SubCommand SubCommand}.
@@ -22,242 +17,105 @@ import java.util.UUID;
  * @author iSach
  * @since 12-21-2015
  */
-@SuppressWarnings("deprecation")
 public class SubCommandGive extends SubCommand {
 
     public SubCommandGive(UltraCosmetics ultraCosmetics) {
-        super("give", "Gives Ammo/Key.", "ultracosmetics.command.give", "/uc give <key|ammo> <amount> [player]", ultraCosmetics);
+        super("give", "Gives Ammo/Keys", "ultracosmetics.command.give", "/uc give key [amount] [player] OR /uc give ammo <type> <amount> [player]", ultraCosmetics);
     }
 
     @Override
     protected void onExePlayer(Player sender, String[] args) {
-        if (args.length < 3) {
-            if (args.length == 2) {
-                if (args[1].startsWith("k"))
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give key <amount> [player]");
-                else if (args[1].startsWith("a"))
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give ammo <gadget> <amount> [player]");
-            } else
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + getUsage());
-            return;
-        }
-
-        OfflinePlayer receiver = sender;
-
-        String arg1 = args[1].toLowerCase();
-        if (arg1.startsWith("k")) { // Giving key.
-            if (args.length > 3) {
-                receiver = Bukkit.getPlayer(args[3]);
-                if (receiver == null
-                        && Bukkit.getOfflinePlayer(args[3]) == null) {
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " not found!");
-                    return;
-                }
-                if (Bukkit.getOfflinePlayer(args[3]) != null
-                        && Bukkit.getOfflinePlayer(args[3]).hasPlayedBefore()
-                        && Bukkit.getPlayer(args[3]) == null) {
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " is offline.");
-
-                    receiver = Bukkit.getOfflinePlayer(args[3]);
-                }
-
-                if (receiver == null) {
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " not found!");
-                    return;
-                }
-            }
-            if (!MathUtils.isInteger(args[2])) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[2] + " isn't a number!");
-                return;
-            }
-
-            int keys = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[2])));
-
-            for (int i = 0; i < keys; i++)
-                addKey(receiver);
-
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + keys + " treasure keys given to " + receiver.getName());
-
-        } else if (arg1.startsWith("a")) { // Giving ammo. /uc give ammo <type> <amount> [player]
-            if (args.length < 4) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give ammo <gadget> <amount> [player]");
-                return;
-            }
-            if (args.length > 4) {
-                receiver = Bukkit.getPlayer(args[4]);
-                if (receiver == null
-                        && Bukkit.getOfflinePlayer(args[4]) == null) {
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " not found and has never come!");
-                    return;
-                }
-                if (Bukkit.getOfflinePlayer(args[4]) != null
-                        && Bukkit.getOfflinePlayer(args[4]).hasPlayedBefore()
-                        && Bukkit.getPlayer(args[4]) == null) {
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " is offline.");
-
-                    receiver = Bukkit.getOfflinePlayer(args[4]);
-                }
-
-                if (receiver == null) {
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " not found and has never come!");
-                    return;
-                }
-            }
-            GadgetType gadgetType;
-            try {
-                gadgetType = GadgetType.valueOf(args[2].toUpperCase());
-            } catch (IllegalArgumentException exc) {
-                sender.sendMessage(MessageManager.getMessage("Invalid-Gadget"));
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < GadgetType.enabled().size(); i++)
-                    sb.append(GadgetType.enabled().get(i).toString().toLowerCase() + ((i != GadgetType.enabled().size() - 1) ? ChatColor.WHITE + "" + ChatColor.BOLD + ", " + ChatColor.RED : ""));
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Gadget Types: " + ChatColor.RED + sb.toString());
-                return;
-            }
-
-            if (!gadgetType.isEnabled()) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "This gadget isn't enabled!");
-                return;
-            }
-            if (!MathUtils.isInteger(args[3])) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[3] + " isn't a number!");
-                return;
-            }
-            int ammo = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[3])));
-            addAmmo(gadgetType, receiver, ammo);
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + ammo + " " + gadgetType.toString().toLowerCase() + " ammo given to " + receiver.getName());
-        } else {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + getUsage());
-        }
+        common(sender, args);
     }
 
     @Override
     protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
-        if (args.length < 4) {
-            if (args.length == 2) {
-                if (args[1].startsWith("k"))
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give key <amount> <player>");
-                else if (args[1].startsWith("a"))
-                    sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give ammo <gadget> <amount> <player>");
-            } else
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. " + getUsage());
+        common(sender, args);
+    }
+
+    private void common(CommandSender sender, String[] args) {
+        if (args.length < 2 || (!args[1].toLowerCase().startsWith("k") && !args[1].toLowerCase().startsWith("a"))) {
+            badUsage(sender);
             return;
         }
 
-        OfflinePlayer receiver;
+        boolean givingKey = args[1].toLowerCase().startsWith("k");
+        if (!givingKey && args.length < 4) {
+            badUsage(sender);
+            return;
+        }
 
-        String arg1 = args[1].toLowerCase();
-        if (arg1.startsWith("k")) {
-            receiver = Bukkit.getPlayer(args[3]);
-            if (receiver == null
-                    && Bukkit.getOfflinePlayer(args[3]) == null) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " not found and has never come!");
+        // TODO: support offline players? Maybe with OfflineUltraPlayer?
+        Player target;
+
+        int targetArg = givingKey ? 3 : 4;
+        if (args.length <= targetArg) {
+            if (sender instanceof Player) {
+                target = (Player) sender;
+            } else {
+                error(sender, "You must specify a player.");
                 return;
             }
-            if (Bukkit.getPlayer(args[3]) == null || (!Bukkit.getPlayer(args[3]).isOnline() && Bukkit.getOfflinePlayer(args[3]) != null)) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " is offline.");
-
-                receiver = Bukkit.getOfflinePlayer(args[3]);
-            }
-
-            if (receiver == null) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[3] + " not found and has never come!");
-                return;
-            }
-
-            if (!MathUtils.isInteger(args[2])) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[2] + " isn't a number!");
-                return;
-            }
-
-            int keys = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[2])));
-
-            for (int i = 0; i < keys; i++)
-                addKey(receiver);
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + keys + " treasure keys given to " + receiver.getName());
-
-        } else if (arg1.startsWith("a")) {
-            if (args.length < 5) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give ammo <gadget> <amount> <player>");
-                return;
-            }
-            receiver = Bukkit.getPlayer(args[4]);
-            if (receiver == null
-                    && Bukkit.getOfflinePlayer(args[4]) == null) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " not found!");
-                return;
-            }
-            if (Bukkit.getPlayer(args[4]) == null || (!Bukkit.getPlayer(args[4]).isOnline() && Bukkit.getOfflinePlayer(args[4]) != null)) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " is offline.");
-
-                receiver = Bukkit.getOfflinePlayer(args[4]);
-            }
-
-            if (receiver == null) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Player " + args[4] + " not found!");
-                return;
-            }
-            GadgetType gadgetType;
-            try {
-                gadgetType = GadgetType.valueOf(args[2].toUpperCase());
-            } catch (IllegalArgumentException exc) {
-                sender.sendMessage(MessageManager.getMessage("Invalid-Gadget"));
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < GadgetType.enabled().size(); i++)
-                    sb.append(GadgetType.enabled().get(i).toString().toLowerCase() + ((i != GadgetType.enabled().size() - 1) ? ChatColor.WHITE + "" + ChatColor.BOLD + ", " + ChatColor.RED : ""));
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Gadget Types: " + ChatColor.RED + sb.toString());
-                return;
-            }
-
-            if(gadgetType == null) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "No gadget with this name!");
-                return;
-            }
-
-            if (!gadgetType.isEnabled()) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "This gadget isn't enabled!");
-                return;
-            }
-            if (!MathUtils.isInteger(args[3])) {
-                sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + args[3] + " isn't a number!");
-                return;
-            }
-            int ammo = Math.max(0, Math.min(Integer.MAX_VALUE, Integer.parseInt(args[3])));
-            addAmmo(gadgetType, receiver, ammo);
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + ammo + " " + gadgetType.toString().toLowerCase() + " ammo given to " + receiver.getName());
         } else {
-            sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage. /uc give <key|ammo> <amount> <player>");
+            target = Bukkit.getPlayer(args[targetArg]);
+            if (target == null) {
+                error(sender, "Player " + args[3] + " not found!");
+                return;
+            }
         }
-    }
+        
+        if (givingKey) {
+            int keys = 1;
+            if (args.length > 2) { // if amount arg supplied
+                if (!MathUtils.isInteger(args[2])) {
+                    error(sender, args[2] + " isn't a number!");
+                    return;
+                }
+                keys = Integer.parseInt(args[2]);
+            }
 
-    private void addKey(OfflinePlayer offlinePlayer) {
-        if (offlinePlayer == null || offlinePlayer.getUniqueId() == null)
+            // negative keys is fine, see comment on addAmmo
+            addKeys(target, keys);
+
+            sender.sendMessage(ChatColor.GREEN.toString() + keys + " treasure keys given to " + target.getName());
             return;
-        if (offlinePlayer instanceof Player)
-            ultraCosmetics.getPlayerManager().getUltraPlayer((Player) offlinePlayer).addKey();
-        else {
-            if (UltraCosmeticsData.get().usingFileStorage())
-                SettingsManager.getData(offlinePlayer.getUniqueId()).set("Keys", getKeys(offlinePlayer.getUniqueId()) + 1);
-            else
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(MySqlConnectionManager.INDEXS.get(offlinePlayer.getUniqueId()));
         }
-    }
-
-    private void addAmmo(GadgetType gadgetType, OfflinePlayer receiver, int ammo) {
-        if (receiver == null || receiver.getUniqueId() == null)
+        
+        // Giving ammo. /uc give ammo <type> <amount> [player]
+        if (args.length < 4) {
+            badUsage(sender, "/uc give ammo <gadget> <amount> [player]");
             return;
-        if (receiver instanceof Player)
-            ultraCosmetics.getPlayerManager().getUltraPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
-        else {
-            if (UltraCosmeticsData.get().usingFileStorage())
-                SettingsManager.getData(receiver.getUniqueId()).set("Ammo." + gadgetType.toString().toLowerCase(),
-                        ((int) SettingsManager.getData(receiver.getUniqueId()).get("Ammo." + gadgetType.toString().toLowerCase())) + ammo);
-            else
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(MySqlConnectionManager.INDEXS.get(receiver.getUniqueId()), gadgetType.toString().toLowerCase(), ammo);
         }
+        GadgetType gadgetType = GadgetType.valueOf(args[2].toUpperCase());
+        if (gadgetType == null) {
+            sender.sendMessage(MessageManager.getMessage("Invalid-Gadget"));
+            return;
+        }
+
+        if (!gadgetType.isEnabled()) {
+            error(sender, "This gadget isn't enabled!");
+            return;
+        }
+
+        if (!MathUtils.isInteger(args[3])) {
+            error(sender, args[3] + " isn't a number!");
+            return;
+        }
+
+        // I don't think there's anything wrong with allowing giving of negative ammo,
+        // otherwise there's no way to take ammo. If someone takes more ammo than
+        // a user has, that's on them I guess...
+        int ammo = Integer.parseInt(args[3]);
+
+        addAmmo(gadgetType, target, ammo);
+        sender.sendMessage(ChatColor.GREEN.toString() + ammo + " " + gadgetType.toString().toLowerCase() + " ammo given to " + target.getName());
     }
 
-    private int getKeys(UUID uuid) {
-        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(uuid).get("Keys") : ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getKeys(MySqlConnectionManager.INDEXS.get(uuid));
+    private void addKeys(Player player, int amount) {
+        ultraCosmetics.getPlayerManager().getUltraPlayer(player).addKeys(amount);
+    }
+
+    private void addAmmo(GadgetType gadgetType, Player player, int ammo) {
+        ultraCosmetics.getPlayerManager().getUltraPlayer(player).addAmmo(gadgetType, ammo);
     }
 }

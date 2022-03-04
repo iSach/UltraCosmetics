@@ -165,12 +165,11 @@ public class ItemFactory {
         return itemStack;
     }
 
-    public static ItemStack addGlow(ItemStack item) {
+    public static void addGlow(ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(itemMeta);
-        return item;
     }
 
     public static boolean haveSameName(ItemStack a, ItemStack b) {

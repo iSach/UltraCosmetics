@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics;
 
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
@@ -110,17 +111,18 @@ public class UltraCosmeticsData {
         }
     }
 
-    void initModule() {
-        ultraCosmetics.getSmartLogger().write("Initializing module " + serverVersion);
+    boolean initModule() {
+        SmartLogger logger = ultraCosmetics.getSmartLogger();
+        logger.write("Initializing module " + serverVersion);
 
         // mappings check is here so it's grouped with other NMS log messages
         // bigger message so server owners might see it
         if (!checkMappingsVersion(serverVersion)) {
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "!!!!!!!!!!!!!!!!!!!!!!!!!!!! HEY YOU !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Server internals seem to have changed since this build was created.");
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Please check for a server update and an UltraCosmetics update.");
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "UltraCosmetics will continue running but you will likely experience issues!");
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            logger.write(LogLevel.WARNING, "!!!!!!!!!!!!!!!!!!!!!!!!!!!! HEY YOU !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            logger.write(LogLevel.WARNING, "Server internals seem to have changed since this build was created.");
+            logger.write(LogLevel.WARNING, "Please check for a server update and an UltraCosmetics update.");
+            logger.write(LogLevel.WARNING, "UltraCosmetics will continue running but you will likely experience issues!");
+            logger.write(LogLevel.WARNING, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
         versionManager = new VersionManager(serverVersion);
@@ -128,10 +130,15 @@ public class UltraCosmeticsData {
             versionManager.load();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
-            ultraCosmetics.getSmartLogger().write("No module found for " + serverVersion + "! UC Disabling...");
+            logger.write("No module found for " + serverVersion + "! UC will now be disabled.");
+            return false;
         }
-        versionManager.getModule().enable();
-        ultraCosmetics.getSmartLogger().write("Module initialized");
+        if (versionManager.getModule().enable()) {
+            logger.write("Module initialized");
+            return true;
+        }
+        logger.write(LogLevel.ERROR, "Failed to start NMS module, UC will now be disabled.");
+        return false;
     }
 
     boolean checkServerVersion() {

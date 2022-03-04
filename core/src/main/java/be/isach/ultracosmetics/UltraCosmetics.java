@@ -30,7 +30,6 @@ import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -184,7 +183,10 @@ public class UltraCosmetics extends JavaPlugin {
         setUpConfig();
 
         // Initialize NMS Module
-        UltraCosmeticsData.get().initModule();
+        if (!UltraCosmeticsData.get().initModule()) {
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // Init Message manager.
         new MessageManager();
@@ -321,9 +323,6 @@ public class UltraCosmetics extends JavaPlugin {
         if (UltraCosmeticsData.get().getServerVersion().offhandAvailable()) {
             pluginManager.registerEvents(new Listener19(this), this);
         }
-
-        this.treasureChestManager = new TreasureChestManager(this);
-        pluginManager.registerEvents(treasureChestManager, this);
     }
 
     /**
@@ -451,6 +450,7 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("Categories.Rename-Pet-Item", XMaterial.NAME_TAG.parseMaterial().toString(), "Item in Pets Menu to rename current pet.");
         config.addDefault("Categories.Close-GUI-After-Select", true, "Should GUI close after selecting a cosmetic?");
         config.addDefault("No-Permission.Custom-Item.Lore", Arrays.asList("", "&c&lYou do not have permission for this!", ""));
+        config.addDefault("No-Permission.Allow-Purchase", false, "Requires Dont-Show-Item to be false");
         config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Enabled", false);
         config.addDefault("Categories.Back-To-Main-Menu-Custom-Command.Command", "cc open custommenu.yml {player}");
 

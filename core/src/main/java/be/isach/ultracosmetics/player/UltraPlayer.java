@@ -17,12 +17,13 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
-import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
+import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.PurchaseData;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.XMaterial;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -30,7 +31,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
@@ -139,17 +139,21 @@ public class UltraPlayer {
      * Checks if a player can use a given gadget type.
      *
      * @param gadget The gadget type.
-     * @return -1 if player can use, otherwise the time left (in seconds).
+     * @return 0 if player can use, otherwise the time left (in seconds).
      */
-    public double canUse(GadgetType gadget) {
+    public double getCooldown(GadgetType gadget) {
         Long count = gadgetCooldowns.get(gadget);
 
         if (count == null || System.currentTimeMillis() > count) {
-            return -1;
+            return 0;
         }
 
         double valueMillis = count - System.currentTimeMillis();
         return valueMillis / 1000d;
+    }
+
+    public boolean canUse(GadgetType gadget) {
+        return getCooldown(gadget) == 0;
     }
 
     /**
@@ -220,25 +224,26 @@ public class UltraPlayer {
         setCurrentPet(null);
     }
 
+    public void addKeys(int keys) {
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + keys);
+        } else {
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKeys(getMySqlIndex(), keys);
+        }
+    }
+
     /**
      * Gives a key to the player.
      */
     public void addKey() {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + 1);
-        } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(getMySqlIndex());
-        }
+        addKeys(1);
     }
 
     /**
      * Removes a key to the player.
      */
     public void removeKey() {
-        if (UltraCosmeticsData.get().usingFileStorage())
-            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() - 1);
-        else
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeKey(getMySqlIndex());
+        addKeys(-1);
     }
 
     /**
@@ -410,19 +415,18 @@ public class UltraPlayer {
             return;
         }
 
-        final Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), 54, MessageManager.getMessage("Buy-Treasure-Key"));
-        for (int i = 27; i < 30; i++) {
-            inventory.setItem(i, ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 9, ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 18, ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase")));
-            inventory.setItem(i + 6, ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-            inventory.setItem(i + 9 + 6, ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-            inventory.setItem(i + 18 + 6, ItemFactory.create(XMaterial.REDSTONE_BLOCK, MessageManager.getMessage("Cancel")));
-        }
         ItemStack itemStack = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
-        inventory.setItem(13, itemStack);
-        ItemFactory.fillInventory(inventory);
-        Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(inventory), 3);
+
+        PurchaseData pd = new PurchaseData();
+        pd.setPrice(SettingsManager.getConfig().getInt("TreasureChests.Key-Price"));
+        pd.setShowcaseItem(itemStack);
+        pd.setOnPurchase(() -> {
+            addKey();
+            getBukkitPlayer().closeInventory();
+            ultraCosmetics.getMenus().getMainMenu().open(this);
+        });
+        MenuPurchase mp = new MenuPurchase(ultraCosmetics, MessageManager.getMessage("Buy-Treasure-Key"), pd);
+        Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(mp.getInventory(this)), 1);
     }
 
     /**
@@ -491,13 +495,7 @@ public class UltraPlayer {
         }
     }
 
-    /**
-     * Gives ammo to player.
-     *
-     * @param name   The gadget.
-     * @param amount The ammo amount to give.
-     */
-    public void addAmmo(String name, int amount) {
+    private void addAmmo(String name, int amount) {
         if (UltraCosmeticsData.get().isAmmoEnabled()) {
             if (UltraCosmeticsData.get().usingFileStorage()) {
                 SettingsManager.getData(getBukkitPlayer()).set("Ammo." + name, getAmmo(name) + amount);
@@ -512,6 +510,16 @@ public class UltraPlayer {
                                         .toLowerCase()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
             }
         }
+    }
+
+    /**
+     * Gives ammo to player.
+     *
+     * @param type   The gadget type
+     * @param amount The ammo amount to give.
+     */
+    public void addAmmo(GadgetType type, int amount) {
+        addAmmo(type.toString().toLowerCase(), amount);
     }
 
     public void applyVelocity(Vector vector) {
@@ -586,13 +594,19 @@ public class UltraPlayer {
      * @param name The gadget.
      * @return The ammo of the given gadget.
      */
-    public int getAmmo(String name) {
-        if (UltraCosmeticsData.get().isAmmoEnabled())
-            if (UltraCosmeticsData.get().usingFileStorage())
-                return (int) SettingsManager.getData(getBukkitPlayer()).get("Ammo." + name);
-            else
+    private int getAmmo(String name) {
+        if (UltraCosmeticsData.get().isAmmoEnabled()) {
+            if (UltraCosmeticsData.get().usingFileStorage()) {
+                return SettingsManager.getData(getBukkitPlayer()).getInt("Ammo." + name);
+            } else {
                 return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getAmmo(getMySqlIndex(), name);
+            }
+        }
         return 0;
+    }
+
+    public int getAmmo(GadgetType type) {
+        return getAmmo(type.toString().toLowerCase());
     }
 
     /**
@@ -824,8 +838,7 @@ public class UltraPlayer {
     }
 
     public boolean isOnline() {
-        Player p = Bukkit.getServer().getPlayer(uuid);
-        return p != null && p.isOnline();
+        return Bukkit.getServer().getPlayer(uuid) != null;
     }
 
     public String getUsername() {

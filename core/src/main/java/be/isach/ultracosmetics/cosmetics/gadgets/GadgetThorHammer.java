@@ -58,7 +58,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
                 if (i.isValid()) {
                     ItemStack is;
                     if (UltraCosmeticsData.get().isAmmoEnabled()) {
-                        is = ItemFactory.create(getType().getMaterial(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
+                        is = ItemFactory.create(getType().getMaterial(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
                     } else {
                         is = ItemFactory.create(getType().getMaterial(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
                     }
@@ -94,7 +94,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
 
         ItemStack is;
         if (UltraCosmeticsData.get().isAmmoEnabled()) {
-            is = ItemFactory.create(getType().getMaterial(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
+            is = ItemFactory.create(getType().getMaterial(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
         } else {
             is = ItemFactory.create(getType().getMaterial(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
         }

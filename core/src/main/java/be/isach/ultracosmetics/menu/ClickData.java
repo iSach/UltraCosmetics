@@ -1,7 +1,8 @@
 package be.isach.ultracosmetics.menu;
 
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.event.inventory.InventoryAction;
+
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,16 +14,16 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ClickData {
 
-    private Inventory inventory;
-    private UltraPlayer clicker;
-    private InventoryAction action;
-    private ItemStack clicked;
-    private int slot;
+    private final Inventory inventory;
+    private final UltraPlayer clicker;
+    private final ClickType click;
+    private final ItemStack clicked;
+    private final int slot;
 
-    public ClickData(Inventory inventory, UltraPlayer clicker, InventoryAction action, ItemStack clicked, int slot) {
+    public ClickData(Inventory inventory, UltraPlayer clicker, ClickType click, ItemStack clicked, int slot) {
         this.inventory = inventory;
         this.clicker = clicker;
-        this.action = action;
+        this.click = click;
         this.clicked = clicked;
         this.slot = slot;
     }
@@ -39,8 +40,8 @@ public class ClickData {
         return slot;
     }
 
-    public InventoryAction getAction() {
-        return action;
+    public ClickType getClick() {
+        return click;
     }
 
     public UltraPlayer getClicker() {

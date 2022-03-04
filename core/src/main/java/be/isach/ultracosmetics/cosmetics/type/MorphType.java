@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author iSach
  * @since 12-19-2015
  */
-public class MorphType extends CosmeticMatType<Morph> {
+public class MorphType extends CosmeticType<Morph> {
 
     private final static List<MorphType> ENABLED = new ArrayList<>();
     private final static List<MorphType> VALUES = new ArrayList<>();

@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.economy.EconomyHandler;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -28,15 +29,20 @@ public class MenuPurchase extends Menu {
     @Override
     protected void putItems(Inventory inventory, UltraPlayer player) {
         // Showcase Item
-        putItem(inventory, 13, purchaseData.getShowcaseItem(), data -> {
-        });
+        putItem(inventory, 13, purchaseData.getShowcaseItem());
 
         // Purchase Item
         ItemStack purchaseItem = ItemFactory.create(XMaterial.EMERALD_BLOCK, MessageManager.getMessage("Purchase"));
         ClickRunnable purchaseClickRunnable = data -> {
-            getUltraCosmetics().getEconomyHandler().withdraw(player.getBukkitPlayer(), purchaseData.getPrice());
-            purchaseData.getOnPurchase().run();
             player.getBukkitPlayer().closeInventory();
+            EconomyHandler eh = getUltraCosmetics().getEconomyHandler();
+            if (eh.balance(player.getBukkitPlayer()) < purchaseData.getPrice()) {
+                player.sendMessage(MessageManager.getMessage("Not-Enough-Money"));
+                return;
+            }
+            eh.withdraw(player.getBukkitPlayer(), purchaseData.getPrice());
+            player.sendMessage(MessageManager.getMessage("Successful-Purchase"));
+            purchaseData.getOnPurchase().run();
         };
         for (int i = 27; i < 30; i++) {
             for (int j = i; j <= i + 18; j += 9) {

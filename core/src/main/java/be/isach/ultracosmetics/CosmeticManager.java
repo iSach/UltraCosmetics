@@ -47,15 +47,16 @@ public class CosmeticManager {
         ParticleEffectType.register();
         PetType.register();
         HatType.register();
+        // SuitType uses a static block
         if (Category.MORPHS.isEnabled()) {
             MorphType.register();
         }
 
         for (GadgetType gadgetType : GadgetType.values()) {
-            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
-            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Enabled", true, "if true, the gadget will be enabled.");
-            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Show-Description", true, "if true, the description of gadget will be showed.");
-            config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            setupCosmetic(config, gadgetType);
+            if (gadgetType.affectPlayersPossible()) {
+                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
+            }
             if (gadgetType == GadgetType.valueOf("paintballgun")) {
                 // default "" so we don't have to deal with null
                 if (config.getString("Gadgets." + gadgetType.getConfigName() + ".Block-Type", "").equals("STAINED_CLAY")) {
@@ -77,9 +78,7 @@ public class CosmeticManager {
         }
 
         for (MountType mountType : MountType.values()) {
-            config.addDefault("Mounts." + mountType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
-            config.addDefault("Mounts." + mountType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            config.addDefault("Mounts." + mountType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+            setupCosmetic(config, mountType);
             // If the mount type has a movement speed (is LivingEntity)
             if (LivingEntity.class.isAssignableFrom(mountType.getEntityType().getEntityClass())) {
                 config.addDefault("Mounts." + mountType.getConfigName() + ".Speed", mountType.getDefaultMovementSpeed(), "The movement speed of the mount, see:", "https://minecraft.fandom.com/wiki/Attribute#Attributes_available_on_all_living_entities");
@@ -89,40 +88,17 @@ public class CosmeticManager {
                 config.addDefault("Mounts." + mountType.getConfigName() + ".Blocks-To-Place", mountType.getDefaultBlocks().stream().map(m -> m.name()).collect(Collectors.toList()), "Blocks to choose from as this mount walks.");
             }
         }
-
-        for (ParticleEffectType particleEffect : ParticleEffectType.values()) {
-            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Enabled", true, "if true, the effect will be enabled.");
-            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            config.addDefault("Particle-Effects." + particleEffect.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+        for (SuitCategory suit : SuitCategory.values()) {
+            setupCosmetic(config, suit.getConfigPath());
         }
 
-        for (PetType pet : PetType.values()) {
-            config.addDefault("Pets." + pet.getConfigName() + ".Enabled", true, "if true, the pet will be enabled.");
-            config.addDefault("Pets." + pet.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            config.addDefault("Pets." + pet.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
+        if (Category.MORPHS.isEnabled()) {
+            setupCategory(config, MorphType.values());
         }
-        if (Category.MORPHS.isEnabled())
-            for (MorphType morphType : MorphType.values()) {
-                config.addDefault("Morphs." + morphType.getConfigName() + ".Enabled", true, "if true, the morph will be enabled.");
-                config.addDefault("Morphs." + morphType.getConfigName() + ".Show-Description", true, "if true, the description of this morph will be showed.");
-                config.addDefault("Morphs." + morphType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-            }
-        for (HatType hat : HatType.values()) {
-            config.addDefault("Hats." + hat.getConfigName() + ".Enabled", true, "if true, the hat will be enabled.");
-            config.addDefault("Hats." + hat.getConfigName() + ".Show-Description", true, "if true, the description of this hat will be showed.");
-            config.addDefault("Hats." + hat.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-        }
-        for (SuitType suit : SuitType.values()) {
-            config.addDefault("Suits." + suit.getConfigName() + ".Enabled", true, "if true, the suit will be enabled.");
-            config.addDefault("Suits." + suit.getConfigName() + ".Show-Description", true, "if true, the description of this suit will be showed.");
-            config.addDefault("Suits." + suit.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-        }
-
-        for (EmoteType emoteType : EmoteType.values()) {
-            config.addDefault("Emotes." + emoteType.getConfigName() + ".Enabled", true, "if true, the mount will be enabled.");
-            config.addDefault("Emotes." + emoteType.getConfigName() + ".Show-Description", true, "if true, the description will be showed.");
-            config.addDefault("Emotes." + emoteType.getConfigName() + ".Can-Be-Found-In-Treasure-Chests", true, "if true, it'll be possible to find", "it in treasure chests");
-        }
+        setupCategory(config, PetType.values());
+        setupCategory(config, HatType.values());
+        setupCategory(config, EmoteType.values());
+        setupCategory(config, ParticleEffectType.values());
 
         try {
             config.save(ultraCosmetics.getFile());
@@ -148,4 +124,21 @@ public class CosmeticManager {
         }
     }
 
+    private void setupCategory(CustomConfiguration config, List<? extends CosmeticType<?>> types) {
+        for (CosmeticType<?> type : types) {
+            setupCosmetic(config, type);
+        }
+    }
+
+    private void setupCosmetic(CustomConfiguration config, CosmeticType<?> type) {
+        setupCosmetic(config, type.getConfigPath());
+    }
+
+    private void setupCosmetic(CustomConfiguration config, String path) {
+        // If someone can come up with better comments for these please do, but they're pretty self-explanatory
+        config.addDefault(path + ".Enabled", true);
+        config.addDefault(path + ".Show-Description", true, "Whether to show description when hovering in GUI");
+        config.addDefault(path + ".Can-Be-Found-In-Treasure-Chests", true);
+        config.addDefault(path + ".Purchase-Price", 500, "Price to buy individually in GUI", "Only works if No-Permission.Allow-Purchase is true and this setting > 0");
+    }
 }

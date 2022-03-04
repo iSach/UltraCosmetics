@@ -282,6 +282,7 @@ No-Permission:
   Lore-Message-Yes: '&o&7Permission: &a&lYes!'
   Lore-Message-No: '&o&7Permission: &4&lNo!'
   Dont-Show-Item: false
+  Allow-Purchase: false
   Custom-Item:
     enabled: false
     Type: INK_SACK

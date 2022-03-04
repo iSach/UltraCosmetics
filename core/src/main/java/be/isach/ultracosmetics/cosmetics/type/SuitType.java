@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.*;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.XMaterial;
 
@@ -12,13 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.Color;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+
 /**
  * Suit types.
  *
  * @author iSach
  * @since 12-20-2015
  */
-public class SuitType extends CosmeticMatType<Suit> {
+public class SuitType extends CosmeticType<Suit> {
 
     private static final List<SuitType> ENABLED = new ArrayList<>();
     private static final List<SuitType> VALUES = new ArrayList<>();
@@ -91,5 +96,28 @@ public class SuitType extends CosmeticMatType<Suit> {
 
     public SuitCategory getSuitCategory() {
         return category;
+    }
+
+    @Override
+    public ItemStack getItemStack() {
+        ItemStack is = super.getItemStack();
+        Color color = null;
+        if (category == SuitCategory.RAVE) {
+            int r = MathUtils.random(255);
+            int g = MathUtils.random(255);
+            int b = MathUtils.random(255);
+
+            color = Color.fromRGB(r, g, b);            
+        } else if (category == SuitCategory.SANTA) {
+            color = Color.RED;
+        } else if (category == SuitCategory.FROZEN && slot != ArmorSlot.HELMET) {
+            color = Color.AQUA;
+        }
+        if (color != null) {
+            LeatherArmorMeta meta = (LeatherArmorMeta) is.getItemMeta();
+            meta.setColor(color);
+            is.setItemMeta(meta);
+        }
+        return is;
     }
 }

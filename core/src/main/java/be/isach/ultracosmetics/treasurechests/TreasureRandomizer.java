@@ -215,7 +215,7 @@ public class TreasureRandomizer {
         int ammo = MathUtils.randomRangeInt((int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Min"), (int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Max"));
         name = MessageManager.getMessage("Treasure-Chests-Loot.Ammo").replace("%name%", g.getName()).replace("%ammo%", ammo + "");
         ammoList.remove(i);
-        UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).addAmmo(g.toString().toLowerCase(), ammo);
+        UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).addAmmo(g, ammo);
         itemStack = g.getMaterial().parseItem();
         if (ammo > 50) {
             spawnRandomFirework(loc);
@@ -226,10 +226,10 @@ public class TreasureRandomizer {
 
     }
 
-    public void giveRandomCosmetic(List<? extends CosmeticMatType<?>> cosmetics, String lang, String configName) {
-        List<? extends CosmeticMatType<?>> filtered = new ArrayList<>(cosmetics);
+    public void giveRandomCosmetic(List<? extends CosmeticType<?>> cosmetics, String lang, String configName) {
+        List<? extends CosmeticType<?>> filtered = new ArrayList<>(cosmetics);
         filtered.removeIf(c -> !c.canBeFound() || player.hasPermission(c.getPermission()));
-        CosmeticMatType<?> cosmetic = filtered.get(random.nextInt(filtered.size()));
+        CosmeticType<?> cosmetic = filtered.get(random.nextInt(filtered.size()));
         name = MessageManager.getMessage("Treasure-Chests-Loot." + lang).replace("%" + lang.toLowerCase() + "%", cosmetic.getName());
         givePermission(cosmetic.getPermission());
         spawnRandomFirework(loc);
@@ -260,7 +260,7 @@ public class TreasureRandomizer {
     }
 
     public void givePermission(String permission) {
-        String command = getConfigMessage("TreasureChests.Permission-Add-Command").replace("%name%", player.getName()).replace("%permission%", permission);
+        String command = SettingsManager.getConfig().getString("TreasureChests.Permission-Add-Command").replace("%name%", player.getName()).replace("%permission%", permission);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 

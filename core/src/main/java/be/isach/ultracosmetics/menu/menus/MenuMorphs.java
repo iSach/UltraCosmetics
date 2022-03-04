@@ -2,20 +2,17 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
-import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,26 +52,14 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
     }
 
     @Override
-    protected ItemStack filterItem(ItemStack itemStack, MorphType cosmeticType, UltraPlayer player) {
+    protected void filterItem(ItemStack itemStack, MorphType cosmeticType, UltraPlayer player) {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        String loreMsg = null;
-        if (SettingsManager.getConfig().getBoolean("No-Permission.Show-In-Lore")) {
-            loreMsg = ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig()
-                    .get("No-Permission.Lore-Message-" + ((player.hasPermission(cosmeticType.getPermission()) ? "Yes" : "No")))));
-        }
-        List<String> lore = new ArrayList<>();
-        if (cosmeticType.showsDescription()) {
-            lore.add("");
-            lore.addAll(cosmeticType.getDescription());
-        }
-        lore.add("");
-        lore.add(loreMsg);
+        List<String> lore = itemMeta.getLore();
         lore.add("");
         lore.add(cosmeticType.getSkill());
         lore.add("");
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
-        return itemStack;
     }
 
     @Override
@@ -93,7 +78,7 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
     }
 
     @Override
-    protected Cosmetic getCosmetic(UltraPlayer ultraPlayer) {
+    protected Morph getCosmetic(UltraPlayer ultraPlayer) {
         return ultraPlayer.getCurrentMorph();
     }
 }

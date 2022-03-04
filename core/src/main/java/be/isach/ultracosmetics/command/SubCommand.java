@@ -2,6 +2,8 @@ package be.isach.ultracosmetics.command;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -94,5 +96,17 @@ public abstract class SubCommand {
      */
     protected void notAllowed(CommandSender commandSender) {
         commandSender.sendMessage(MessageManager.getMessage("Not-Allowed-From-Console"));
+    }
+
+    protected void badUsage(CommandSender sender) {
+        badUsage(sender, getUsage());
+    }
+
+    protected void badUsage(CommandSender sender, String usage) {
+        error(sender, "Incorrect Usage. " + usage);
+    }
+
+    protected void error(CommandSender sender, String error) {
+        sender.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + error);
     }
 }

@@ -38,8 +38,10 @@ public class MessageManager {
         addMessage("Ammo", "&7Your ammo: &e%ammo%");
         addMessage("Purchase", "&a&lPURCHASE");
         addMessage("Cancel", "&c&lCANCEL");
-        addMessage("Buy-Ammo-Description", "&e&lBuy %amount% %gadgetname% ammo &e&lfor %price%$");
+        addMessage("Buy-Ammo-Description", "&e&lBuy %amount% %gadgetname% ammo &e&lfor $%price%");
+        addMessage("Buy-Cosmetic-Description", "&e&lBuy %gadgetname% &e&lfor $%price%");
         addMessage("Right-Click-Buy-Ammo", "&7Right Click to Buy Ammo");
+        addMessage("Right-Click-Purchase", "&eRight Click to purchase for $%price%");
         addMessage("Not-Enough-Money", "%prefix% &c&lYou don't have enough money!");
         addMessage("Successful-Purchase", "%prefix% &a&lSuccessful purchase!");
         addMessage("Buy-Treasure-Key", "&lBuy a Treasure Key");
@@ -49,7 +51,7 @@ public class MessageManager {
         addMessage("Click-Open-Chest", "&aClick to open a chest");
         addMessage("Click-Buy-Key", "&aClick to buy a key");
         addMessage("Your-Keys", "&7&oYour keys: &f&l%keys%");
-        addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor %price%$");
+        addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor $%price%");
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
         addMessage("Clear-Cosmetics", "&c&lClear cosmetics");
@@ -61,7 +63,7 @@ public class MessageManager {
         addMessage("Clear-Hat", "&c&lClear current hat");
         addMessage("Clear-Suit", "&c&lClear current suit");
         addMessage("Clear-Emote", "&c&lClear current emote");
-        addMessage("Rename-Pet-Purchase", "&c&lRename the pet to &f&l%name% &c&lfor &e&l%price%$");
+        addMessage("Rename-Pet-Purchase", "&c&lRename the pet to &f&l%name% &c&lfor &e&l$%price%");
 
         addMessage("Chest-Location.Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
         addMessage("Chest-Location.Too-Close", "%prefix% &c&lYou are too close to another treasure chest!");
