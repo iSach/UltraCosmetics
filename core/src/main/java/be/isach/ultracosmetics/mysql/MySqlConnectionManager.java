@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.mysql;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.manager.SqlLoader;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -17,6 +18,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
 import javax.sql.DataSource;
@@ -54,6 +57,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
      */
     private final HikariDataSource dataSource;
     private final String CREATE_TABLE;
+    private final List<Column> columns = new ArrayList<>();
 
     public MySqlConnectionManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -75,17 +79,26 @@ public class MySqlConnectionManager extends BukkitRunnable {
         dataSource.addDataSourceProperty("cachePrepStmts", true);
         dataSource.addDataSourceProperty("useServerPrepStmts", true);
 
-        StringJoiner columns = new StringJoiner("(", ", ", ")");
+        StringJoiner columnJoiner = new StringJoiner("(", ", ", ")");
         // "PRIMARY KEY" implies UNIQUE NOT NULL
-        columns.add("uuid CHAR(36) PRIMARY KEY");
-        columns.add("gadgetsEnabled BOOLEAN DEFAULT TRUE NOT NULL");
-        columns.add("selfmorphview BOOLEAN DEFAULT TRUE NOT NULL");
-        columns.add("treasureKeys INTEGER DEFAULT 0 NOT NULL");
-        CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + columns.toString();
+        columns.add(new Column("uuid", "CHAR(36) PRIMARY KEY"));
+        columns.add(new Column("gadgetsEnabled", "BOOLEAN DEFAULT TRUE NOT NULL"));
+        columns.add(new Column("selfmorphview", "BOOLEAN DEFAULT TRUE NOT NULL"));
+        columns.add(new Column("treasureKeys", "INTEGER DEFAULT 0 NOT NULL"));
+        for (GadgetType gadgetType : GadgetType.values()) {
+            columns.add(new Column(gadgetType.getConfigName().toLowerCase(), "INTEGER DEFAULT 0 NOT NULL"));
+        }
+        for (PetType petType : PetType.values()) {
+            columns.add(new Column(petType.getConfigName().toLowerCase(), "VARCHAR(255) DEFAULT 0 NOT NULL"));
+        }
+        for (Column column : columns) {
+            columnJoiner.add(column.toString());
+        }
+        CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + columnJoiner.toString();
     }
 
     public void start() {
-        runTaskTimerAsynchronously(ultraCosmetics, 0, 24000);
+        runTaskAsynchronously(ultraCosmetics);
     }
 
     @Override
@@ -94,36 +107,21 @@ public class MySqlConnectionManager extends BukkitRunnable {
         try {
             co = dataSource.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            reportFailure(e);
             return;
         }
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + "UltraCosmetics -> Successfully connected to MySQL server! :)");
         try (PreparedStatement sql = co.prepareStatement(CREATE_TABLE)) {
             sql.executeUpdate();
-            DatabaseMetaData md = co.getMetaData();
-            for (GadgetType gadgetType : GadgetType.values()) {
-                String gadgetName = gadgetType.toString().replace("_", "").toLowerCase();
-                ResultSet rs = md.getColumns(null, null, TABLE_NAME, gadgetName);
-                if (!rs.next()) {
-                    PreparedStatement statement = co.prepareStatement("ALTER TABLE " + TABLE_NAME + " ADD " + gadgetName + " INTEGER DEFAULT 0 not NULL");
-                    statement.executeUpdate();
-                    statement.close();
-                }
-                rs.close();
-            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            reportFailure(e);
+            return;
         }
+
+        fixTable(co);
 
         table = new Table(dataSource, TABLE_NAME);
-
-        ultraCosmetics.getSmartLogger().write("initial SQLLoader to reduce lag when table is large");
         sqlLoader = new SqlLoader(ultraCosmetics);
-        try {
-            
-        } catch (Exception e) {
-            reportFailure(e);
-        }
     }
 
     private void reportFailure(Exception e) {
@@ -148,5 +146,40 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
     public DataSource getDataSource() {
         return dataSource;
+    }
+
+    /**
+     * Based on the field 'columns', adds any missing columns to the database (in order).
+     * 
+     * @param co Connection to work with.
+     */
+    private void fixTable(Connection co) {
+        DatabaseMetaData md;
+        try {
+            md = co.getMetaData();
+        } catch (SQLException e) {
+            reportFailure(e);
+            return;
+        }
+
+        for (int i = 0; i < columns.size(); i++) {
+            Column col = columns.get(i);
+            try (ResultSet rs = md.getColumns(null, null, TABLE_NAME, col.getName())) {
+                if (!rs.next()) {
+                    String afterPrevious;
+                    if (i == 0) {
+                        afterPrevious = "FIRST";
+                    } else {
+                        afterPrevious = "AFTER " + columns.get(i - 1).getName();
+                    }
+                    PreparedStatement ps = co.prepareStatement("ALTER TABLE " + TABLE_NAME + " ADD " + col.toString() + " " + afterPrevious);
+                    ps.execute();
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                reportFailure(e);
+                return;
+            }
+        }
     }
 }

@@ -18,28 +18,24 @@ public class Table {
         return table;
     }
 
-    public SelectQuery selectAll() {
-        return select("*");
+    public StandardQuery select(String columns) {
+        return new StandardQuery(getConnection(), "SELECT " + columns + " FROM " + table);
     }
 
-    public SelectQuery select(String selection) {
-        return new SelectQuery(getConnection(), "SELECT " + selection + " FROM " + table);
+    public StandardQuery update() {
+        return new StandardQuery(getConnection(), "UPDATE " + table);
     }
 
-    public CreateQuery create() {
-        return new CreateQuery(getConnection(), "CREATE TABLE IF NOT EXISTS " + table);
-    }
-
-    public UpdateQuery update() {
-        return new UpdateQuery(getConnection(), "UPDATE " + table + " SET");
+    public StandardQuery delete() {
+        return new StandardQuery(getConnection(), "DELETE FROM " + table);
     }
 
     public InsertQuery insert() {
-        return new InsertQuery(getConnection(), "INSERT INTO " + table + " (");
+        return new InsertQuery(getConnection(), table);
     }
 
-    public DeleteQuery delete() {
-        return new DeleteQuery(getConnection(), "DELETE FROM " + table);
+    public InsertQuery insertIgnore() {
+        return new InsertQuery(getConnection(), table, true);
     }
 
     private Connection getConnection() {

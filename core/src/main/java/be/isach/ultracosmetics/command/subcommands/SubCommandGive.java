@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -239,7 +238,7 @@ public class SubCommandGive extends SubCommand {
             if (UltraCosmeticsData.get().usingFileStorage())
                 SettingsManager.getData(offlinePlayer.getUniqueId()).set("Keys", getKeys(offlinePlayer.getUniqueId()) + 1);
             else
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(offlinePlayer.getUniqueId());
+                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKeys(offlinePlayer.getUniqueId(), 1);
         }
     }
 

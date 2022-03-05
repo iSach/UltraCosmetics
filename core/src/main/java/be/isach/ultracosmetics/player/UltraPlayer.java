@@ -18,7 +18,6 @@ import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
-import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
@@ -216,25 +215,26 @@ public class UltraPlayer {
         setCurrentPet(null);
     }
 
-    /**
-     * Gives a key to the player.
-     */
-    public void addKey() {
+    public void addKeys(int amount) {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + 1);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKey(getUUID());
+            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKeys(getUUID(), 1);
         }
     }
 
     /**
-     * Removes a key to the player.
+     * Gives a key to the player.
+     */
+    public void addKey() {
+        addKeys(1);
+    }
+
+    /**
+     * Removes a key from the player.
      */
     public void removeKey() {
-        if (UltraCosmeticsData.get().usingFileStorage())
-            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() - 1);
-        else
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeKey(getUUID());
+        addKeys(-1);
     }
 
     /**
@@ -606,13 +606,7 @@ public class UltraPlayer {
      * @param name The gadget.
      */
     public void removeAmmo(String name) {
-        if (UltraCosmeticsData.get().isAmmoEnabled()) {
-            if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getBukkitPlayer()).set("Ammo." + name, getAmmo(name) - 1);
-            } else {
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().removeAmmo(getUUID(), name);
-            }
-        }
+        addAmmo(name, -1);
     }
 
     /**
