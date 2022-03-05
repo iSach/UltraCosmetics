@@ -227,9 +227,12 @@ public class TreasureRandomizer {
     }
 
     public void giveRandomCosmetic(List<? extends CosmeticType<?>> cosmetics, String lang, String configName) {
-        List<? extends CosmeticType<?>> filtered = new ArrayList<>(cosmetics);
-        filtered.removeIf(c -> !c.canBeFound() || player.hasPermission(c.getPermission()));
-        CosmeticType<?> cosmetic = filtered.get(random.nextInt(filtered.size()));
+        WeightedSet<CosmeticType<?>> weightedCosmetics = new WeightedSet<>();
+        for (CosmeticType<?> cosmetic : cosmetics) {
+            if (player.hasPermission(cosmetic.getPermission())) continue;
+            weightedCosmetics.add(cosmetic, cosmetic.getChestWeight());
+        }
+        CosmeticType<?> cosmetic = weightedCosmetics.getRandom();
         name = MessageManager.getMessage("Treasure-Chests-Loot." + lang).replace("%" + lang.toLowerCase() + "%", cosmetic.getName());
         givePermission(cosmetic.getPermission());
         spawnRandomFirework(loc);

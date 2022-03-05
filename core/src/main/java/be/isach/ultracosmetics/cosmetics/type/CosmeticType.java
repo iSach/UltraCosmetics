@@ -13,7 +13,6 @@ import be.isach.ultracosmetics.util.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
         T cosmetic = null;
         try {
             cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, UltraCosmetics.class).newInstance(player, ultraCosmetics);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (ReflectiveOperationException e) {
             e.printStackTrace();
             return null;
         }
@@ -122,7 +121,7 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
     }
 
     /**
-     * Check if the SuitType should show a description.
+     * Check if the cosmetic should show a description.
      *
      * @return {@code true} if it should show a description, otherwise {@code false}.
      */
@@ -131,12 +130,22 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
     }
 
     /**
-     * Check if the SuitType can be found in Treasure Chests.
+     * Check if the cosmetic can be found in Treasure Chests.
      *
      * @return {@code true} if it can be found in treasure chests, otherwise {@code false}.
      */
     public boolean canBeFound() {
-        return SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + getConfigName() + ".Can-Be-Found-In-Treasure-Chests");
+        return getChestWeight() > 0;
+    }
+
+    /**
+     * Gets the weight of getting this cosmetic in its category.
+     * The absolute chance of getting this cosmetic is also affected by the category weight.
+     * 
+     * @return its weight
+     */
+    public int getChestWeight() {
+        return SettingsManager.getConfig().getInt(category.getConfigPath() + "." + getConfigName() + ".Treasure-Chest-Weight");
     }
 
     /**

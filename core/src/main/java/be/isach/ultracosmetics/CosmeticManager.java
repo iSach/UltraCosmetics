@@ -138,7 +138,13 @@ public class CosmeticManager {
         // If someone can come up with better comments for these please do, but they're pretty self-explanatory
         config.addDefault(path + ".Enabled", true);
         config.addDefault(path + ".Show-Description", true, "Whether to show description when hovering in GUI");
-        config.addDefault(path + ".Can-Be-Found-In-Treasure-Chests", true);
+        String findableKey = path + ".Can-Be-Found-In-Treasure-Chests";
+        int weight = 1;
+        if (config.isBoolean(findableKey)) {
+            weight = config.getBoolean(findableKey) ? 1 : 0;
+            config.set(findableKey, null);
+        }
+        config.addDefault(path + ".Treasure-Chest-Weight", weight, "The higher the weight, the better the chance of", "finding this cosmetic when this category is picked.", "Fractional values are not allowed.", "Set to 0 to disable finding in chests.");
         config.addDefault(path + ".Purchase-Price", 500, "Price to buy individually in GUI", "Only works if No-Permission.Allow-Purchase is true and this setting > 0");
     }
 }
