@@ -1,20 +1,27 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
 dependencies {
     // should we use "api" instead of "implementation" anywhere?
-    implementation 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
-    implementation('LibsDisguises:LibsDisguises:9.5.2') {
+    compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+    compileOnly('LibsDisguises:LibsDisguises:9.5.2') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
     }
-    implementation('net.milkbowl.vault:VaultAPI:1.6') {
+    compileOnly('net.milkbowl.vault:VaultAPI:1.6') {
         exclude group: 'org.bukkit'
     }
-    implementation 'me.clip:placeholderapi:2.10.3'
-    implementation 'org.black_ixx:playerpoints:3.1.0'
-    implementation 'com.google.code.gson:gson:2.2.4'
+    compileOnly 'me.clip:placeholderapi:2.10.3'
+    compileOnly 'org.black_ixx:playerpoints:3.1.0'
+    compileOnly 'com.google.code.gson:gson:2.2.4'
     // WG 7.0.3 was last version to support Java <16
-    implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.3'
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.3'
+    compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
     // same version used in 1.17.1
-    implementation 'com.mojang:authlib:2.3.31'
+    compileOnly 'com.mojang:authlib:2.3.31'
     implementation 'com.zaxxer:HikariCP:4.0.3'
+}
+shadowJar {
+    relocate ('com.zaxxer', 'b')
 }

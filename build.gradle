@@ -29,6 +29,10 @@ allprojects {
     }
 
     afterEvaluate {
+        configurations.shaded.forEach { k ->
+            println(k.class) 
+            println(k)
+        }
         jar {
             dependsOn configurations.shaded
             from configurations.shaded.collect {
@@ -40,30 +44,6 @@ allprojects {
     }
 }
 
-// Useful for local testing, with a testserver folder containing your testing server
-boolean local = false
-if (local) libsDirName = '../testserver/plugins'
-
-
-abstract class VersionedJarTask extends Jar {
-    @Inject
-    public VersionedJarTask(int mcVersion) {
-        archiveBaseName = project.objects.property(String.class).value('UltraCosmetics-1.' + mcVersion.toString())
-        def versionProjects = project.subprojects.findAll { it.name.startsWith("v1_" + mcVersion.toString() + "_") || it.name.equals("core") }
-        versionProjects.each {
-            dependsOn(":$it.name:compileJava")
-        }
-        from (project.files(versionProjects.collect { it.sourceSets.main.output }))
-    }
-}
-
-final MIN_MC_VERSION = 8
-final MAX_MC_VERSION = 17
-
-for (int i = MIN_MC_VERSION; i <= MAX_MC_VERSION; i++) {
-    tasks.register("jar1" + i.toString(), VersionedJarTask, i)
-}
-
 subprojects.each {
     if (!it.hasProperty("remapMcVersion")) return
     tasks.register("obf" + it.name, VersionedObfTask, it)
@@ -71,6 +51,10 @@ subprojects.each {
 
 dependencies {
     subprojects.each { p ->
+        if (p.name.equals("core")) {
+            shaded(project(path: ':core', configuration: 'shadow'))
+            return;
+    	}
         shaded(p) {
             transitive false
         }
