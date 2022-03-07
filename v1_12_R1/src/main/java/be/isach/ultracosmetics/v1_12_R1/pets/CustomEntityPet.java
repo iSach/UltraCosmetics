@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.v1_12_R1.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_12_R1.customentities.Pumpling;
 import net.minecraft.server.v1_12_R1.Entity;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
@@ -54,18 +55,14 @@ public abstract class CustomEntityPet extends Pet {
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
-        armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
         FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
         armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
-
-        if (getOwner().getPetName(getType()) != null) {
-            armorStand.setCustomName(getOwner().getPetName(getType()));
-        }
+        updateName();
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);
-        ((org.bukkit.craftbukkit.v1_12_R1.CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
+        ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         EntitySpawningManager.setBypass(false);
     }
 

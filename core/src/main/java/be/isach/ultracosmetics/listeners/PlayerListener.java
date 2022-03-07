@@ -67,7 +67,6 @@ public class PlayerListener implements Listener {
 
                 if (SettingsManager.isAllowedWorld(event.getPlayer().getWorld())
                         && UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
-                    // Cosmetics profile. TODO Add option to disable!!
                     CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
                     if (cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId()) == null) {
                         // ultraCosmetics.getSmartLogger().write("Creating cosmetics profile for " + event.getPlayer().getName());
@@ -112,7 +111,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    // run this as early as possible for compatibility with MV-inventories?
+    // run this as early as possible for compatibility with MV-inventories
     @EventHandler(priority = EventPriority.LOWEST)
     public void onWorldChangeEarly(final PlayerChangedWorldEvent event) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());

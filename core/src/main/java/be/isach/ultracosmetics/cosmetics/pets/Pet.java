@@ -105,11 +105,8 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         }
 
         getEntity().setCustomNameVisible(true);
-        getEntity().setCustomName(getType().getEntityName(getPlayer()));
 
-        if (getOwner().getPetName(getType()) != null) {
-            getEntity().setCustomName(getOwner().getPetName(getType()));
-        }
+        updateName();
 
         ((LivingEntity) entity).setRemoveWhenFarAway(false);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
@@ -191,6 +188,28 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
 
     public List<Item> getItems() {
         return items;
+    }
+
+    public void updateName() {
+        Entity rename;
+        if (armorStand == null) {
+            rename = entity;
+        } else {
+            rename = armorStand;
+        }
+        if (getOwner().getPetName(getType()) != null) {
+            rename.setCustomName(getOwner().getPetName(getType()));
+        } else {
+            rename.setCustomName(getType().getEntityName(getPlayer()));
+        }
+    }
+
+    /**
+     * This method is overridden by custom entity mobs that don't use the mobs own name tag for the hologram.
+     * @return the entity that should be renamed
+     */
+    protected Entity getNamedEntity() {
+        return entity;
     }
 
     @Override

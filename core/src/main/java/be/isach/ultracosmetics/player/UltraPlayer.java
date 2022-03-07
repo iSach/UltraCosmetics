@@ -18,7 +18,7 @@ import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
-import be.isach.ultracosmetics.mysql.SqlUtils;
+import be.isach.ultracosmetics.mysql.SqlCache;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
@@ -83,10 +83,7 @@ public class UltraPlayer {
     /**
      * MySql Cache.
      */
-    private boolean gadgetsEnabled;
-    private boolean morphSelfView;
-    private Map<PetType,String> petNames = new HashMap<>();
-    private int keys;
+    private SqlCache sqlCache;
 
     private UltraCosmetics ultraCosmetics;
 
@@ -113,28 +110,16 @@ public class UltraPlayer {
 
         gadgetCooldowns = new HashMap<>();
 
-        if (UltraCosmeticsData.get().usingFileStorage())
-            SettingsManager.getData(getBukkitPlayer()).addDefault("Keys", 0);
-
-        if (UltraCosmeticsData.get().isAmmoEnabled()) {
-            if (!UltraCosmeticsData.get().usingFileStorage())
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().initStats(this);
-            else {
-                GadgetType.values().stream().filter(GadgetType::isEnabled).forEachOrdered(type -> SettingsManager.getData(getBukkitPlayer()).addDefault("Ammo." + type.toString().toLowerCase(), 0));
-            }
-        }
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).addDefault("Gadgets-Enabled", true);
             SettingsManager.getData(getBukkitPlayer()).addDefault("Third-Person-Morph-View", true);
-            gadgetsEnabled = SettingsManager.getData(getBukkitPlayer()).getBoolean("Gadgets-Enabled");
-            morphSelfView = SettingsManager.getData(getBukkitPlayer()).getBoolean("Third-Person-Morph-View");
         }
 
         this.username = getBukkitPlayer().getDisplayName();
 
         // sql loader thread add player to pre-load
         if (!UltraCosmeticsData.get().usingFileStorage()) {
-            ultraCosmetics.getMySqlConnectionManager().getSqlLoader().addPreloadPlayer(uuid);
+            sqlCache = new SqlCache(uuid, ultraCosmetics);
         }
     }
 
@@ -227,11 +212,11 @@ public class UltraPlayer {
         setCurrentPet(null);
     }
 
-    public void addKeys(int keys) {
+    public void addKeys(int amount) {
         if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + keys);
+            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + amount);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addKeys(getUUID(), keys);
+            sqlCache.addKeys(amount);
         }
     }
 
@@ -253,7 +238,7 @@ public class UltraPlayer {
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getBukkitPlayer()).get("Keys") : keys;
+        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getBukkitPlayer()).get("Keys") : sqlCache.getKeys();
     }
 
     public void saveCosmeticsProfile() {
@@ -466,18 +451,13 @@ public class UltraPlayer {
         if (name.isEmpty()) {
             name = null;
         }
-        if (currentPet != null) {
-            if (currentPet.hasArmorStand()) {
-                currentPet.getArmorStand().setCustomName(name);
-            } else {
-                currentPet.getEntity().setCustomName(name);
-            }
-        }
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petType.getConfigName(), name);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setName(getUUID(), petType, name);
-            petNames.put(petType, name);
+            sqlCache.setName(petType, name);
+        }
+        if (currentPet != null) {
+            currentPet.updateName();
         }
     }
 
@@ -488,14 +468,10 @@ public class UltraPlayer {
      * @return The pet name.
      */
     public String getPetName(PetType petType) {
-        try {
-            if (UltraCosmeticsData.get().usingFileStorage()) {
-                return SettingsManager.getData(getBukkitPlayer()).getString("Pet-Names." + petType.getConfigName());
-            } else {
-                return petNames.get(petType);
-            }
-        } catch (NullPointerException e) {
-            return null;
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            return SettingsManager.getData(getBukkitPlayer()).getString("Pet-Names." + petType.getConfigName());
+        } else {
+            return sqlCache.getPetName(petType);
         }
     }
 
@@ -510,7 +486,7 @@ public class UltraPlayer {
             if (UltraCosmeticsData.get().usingFileStorage()) {
                 SettingsManager.getData(getBukkitPlayer()).set("Ammo." + type.toString().toLowerCase(), getAmmo(type) + amount);
             } else {
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(getUUID(), type, amount);
+                sqlCache.addAmmo(type, amount);
             }
 
             if (currentGadget != null) {
@@ -536,15 +512,13 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Gadgets-Enabled", enabled);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setGadgetsEnabled(getUUID(), enabled);
+            sqlCache.setGadgetsEnabled(enabled);
         }
 
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
-            gadgetsEnabled = true;
         } else {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-Gadgets"));
-            gadgetsEnabled = false;
         }
     }
 
@@ -552,7 +526,11 @@ public class UltraPlayer {
      * @return if the player has gadgets enabled or not.
      */
     public boolean hasGadgetsEnabled() {
-        return gadgetsEnabled;
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            return SettingsManager.getData(getBukkitPlayer()).getBoolean("Gadgets-Enabled");
+        } else {
+            return sqlCache.hasGadgetsEnabled();
+        }
     }
 
     /**
@@ -564,7 +542,7 @@ public class UltraPlayer {
         if (UltraCosmeticsData.get().usingFileStorage()) {
             SettingsManager.getData(getBukkitPlayer()).set("Third-Person-Morph-View", enabled);
         } else {
-            ultraCosmetics.getMySqlConnectionManager().getSqlUtils().setSeeSelfMorph(getUUID(), enabled);
+            sqlCache.setSeeSelfMorph(enabled);
         }
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
@@ -572,24 +550,17 @@ public class UltraPlayer {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
         }
         DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), enabled);
-        morphSelfView = enabled;
     }
 
     /**
      * @return if player should be able to see his own morph or not.
      */
     public boolean canSeeSelfMorph() {
-        return morphSelfView;
-    }
-
-    public void loadSQLValues() {
-        SqlUtils sql = ultraCosmetics.getMySqlConnectionManager().getSqlUtils();
-        gadgetsEnabled = sql.hasGadgetsEnabled(getUUID());
-        morphSelfView = sql.canSeeSelfMorph(getUUID());
-        for (PetType type : PetType.enabled()) {
-            petNames.put(type, sql.getPetName(getUUID(), type));
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            return SettingsManager.getData(getBukkitPlayer()).getBoolean("Third-Person-Morph-View");
+        } else {
+            return sqlCache.canSeeSelfMorph();
         }
-        keys = sql.getKeys(getUUID());
     }
 
     /**
@@ -599,12 +570,12 @@ public class UltraPlayer {
      * @return The ammo of the given gadget.
      */
     public int getAmmo(GadgetType type) {
-        if (UltraCosmeticsData.get().isAmmoEnabled())
-            if (UltraCosmeticsData.get().usingFileStorage())
-                return (int) SettingsManager.getData(getBukkitPlayer()).get("Ammo." + type.toString().toLowerCase());
-            else
-                return ultraCosmetics.getMySqlConnectionManager().getSqlUtils().getAmmo(getUUID(), type);
-        return 0;
+        if (!UltraCosmeticsData.get().isAmmoEnabled()) return 0;
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            return (int) SettingsManager.getData(getBukkitPlayer()).get("Ammo." + type.toString().toLowerCase());
+        } else {
+            return sqlCache.getAmmo(type);
+        }
     }
 
     /**

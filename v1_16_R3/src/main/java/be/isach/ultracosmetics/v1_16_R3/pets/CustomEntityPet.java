@@ -10,7 +10,6 @@ import be.isach.ultracosmetics.v1_16_R3.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_16_R3.customentities.Pumpling;
 import net.minecraft.server.v1_16_R3.Entity;
 import net.minecraft.server.v1_16_R3.EntityTypes;
-import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
@@ -61,27 +60,21 @@ public abstract class CustomEntityPet extends Pet {
             customEntity = new Pumpling(EntityTypes.ZOMBIE, ((CraftPlayer) getPlayer()).getHandle().getWorld(), this);
             EntitySpawningManager.setBypass(false);
         }
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-            CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
-            getCustomEntity().setLocation(x, y, z, 0, 0);
-            Location spawnLoc = customEntity.getEntity().getLocation();
-            armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
-            armorStand.setVisible(false);
-            armorStand.setSmall(true);
-            armorStand.setCustomName(getType().getEntityName(getPlayer()));
-            armorStand.setCustomNameVisible(true);
-            FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
-            armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
+        CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
+        getCustomEntity().setLocation(x, y, z, 0, 0);
+        Location spawnLoc = customEntity.getEntity().getLocation();
+        armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
+        armorStand.setVisible(false);
+        armorStand.setSmall(true);
+        armorStand.setCustomNameVisible(true);
+        FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
+        armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
+        updateName();
 
-            if (getOwner().getPetName(getType()) != null) {
-                armorStand.setCustomName(getOwner().getPetName(getType()));
-            }
-
-            customEntity.getEntity().setPassenger(armorStand);
-            EntitySpawningManager.setBypass(true);
-            ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
-            EntitySpawningManager.setBypass(false);
-        });
+        customEntity.getEntity().setPassenger(armorStand);
+        EntitySpawningManager.setBypass(true);
+        ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
+        EntitySpawningManager.setBypass(false);
 
         if (getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             getOwner().sendMessage("§c§lUltraCosmetics > Monsters can't spawn here!");

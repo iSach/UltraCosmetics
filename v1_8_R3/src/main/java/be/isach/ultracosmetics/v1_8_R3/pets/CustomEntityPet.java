@@ -54,14 +54,10 @@ public abstract class CustomEntityPet extends Pet {
         armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
-        armorStand.setCustomName(getType().getEntityName(getPlayer()));
         armorStand.setCustomNameVisible(true);
         FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
         armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
-
-        if (getOwner().getPetName(getType()) != null) {
-            armorStand.setCustomName(getOwner().getPetName(getType()));
-        }
+        updateName();
 
         customEntity.getEntity().setPassenger(armorStand);
         EntitySpawningManager.setBypass(true);

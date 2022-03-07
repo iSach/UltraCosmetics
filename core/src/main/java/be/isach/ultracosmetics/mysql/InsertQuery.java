@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.bukkit.Bukkit;
+
+import be.isach.ultracosmetics.UltraCosmeticsData;
+
 import java.util.StringJoiner;
 
 public class InsertQuery {
@@ -41,6 +46,13 @@ public class InsertQuery {
             objects.add(entry.getValue());
         }
         sql += columns.toString() + " VALUES " + values.toString();
+        if (UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().isDebug()) {
+            String plaintext = sql.toString();
+            for (Object obj : objects) {
+                plaintext = plaintext.replaceFirst("\\?", obj.toString());
+            }
+            Bukkit.getLogger().info("Executing SQL: " + plaintext);
+        }
         try (Connection connection = table.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             for (int i = 0; i < objects.size(); i++) {
                 statement.setString(i + 1, objects.get(i));

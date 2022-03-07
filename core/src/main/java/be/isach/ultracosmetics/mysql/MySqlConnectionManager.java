@@ -6,13 +6,13 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
-import be.isach.ultracosmetics.manager.SqlLoader;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
@@ -45,14 +45,9 @@ public class MySqlConnectionManager extends BukkitRunnable {
     private Table table;
 
     /**
-     * SQLLoader Manager instance
-     */
-    private SqlLoader sqlLoader;
-
-    /**
      * Sql Utils instance.
      */
-    private SqlUtils sqlUtils;
+    private SqlCache sqlUtils;
 
     /**
      * Connecting pooling.
@@ -60,15 +55,17 @@ public class MySqlConnectionManager extends BukkitRunnable {
     private final HikariDataSource dataSource;
     private final String CREATE_TABLE;
     private final List<Column> columns = new ArrayList<>();
+    private final boolean debug;
 
     public MySqlConnectionManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        this.sqlUtils = new SqlUtils(this);
-        String hostname = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.hostname");
-        String port = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.port");
-        String database = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.database");
-        String username = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.username");
-        String password = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.MySQL.password");
+        ConfigurationSection section = SettingsManager.getConfig().getConfigurationSection("Ammo-System-For-Gadgets.MySQL");
+        this.debug = section.getBoolean("debug", false);
+        String hostname = section.getString("hostname");
+        String port = section.getString("port");
+        String database = section.getString("database");
+        String username = section.getString("username");
+        String password = section.getString("password");
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
         config.setUsername(username);
@@ -118,7 +115,6 @@ public class MySqlConnectionManager extends BukkitRunnable {
             fixTable(co);
 
             table = new Table(dataSource, TABLE_NAME);
-            sqlLoader = new SqlLoader(ultraCosmetics);
         } catch (SQLException e) {
             reportFailure(e);
             return;
@@ -136,16 +132,16 @@ public class MySqlConnectionManager extends BukkitRunnable {
         return table;
     }
 
-    public SqlUtils getSqlUtils() {
+    public SqlCache getSqlUtils() {
         return sqlUtils;
-    }
-
-    public SqlLoader getSqlLoader() {
-        return sqlLoader;
     }
 
     public DataSource getDataSource() {
         return dataSource;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
     public void shutdown() {
@@ -169,10 +165,11 @@ public class MySqlConnectionManager extends BukkitRunnable {
                 commands.add("ADD PRIMARY KEY (uuid)");
                 commands.add("MODIFY uuid CHAR(36)");
                 for (String command : commands) {
-                    co.prepareStatement("ALTER TABLE " + TABLE_NAME + " " + command).execute();
+                    alter(co, command);
                 }
             }
         }
+
         for (int i = 0; i < columns.size(); i++) {
             Column col = columns.get(i);
             try (ResultSet rs = md.getColumns(null, null, TABLE_NAME, col.getName())) {
@@ -187,14 +184,18 @@ public class MySqlConnectionManager extends BukkitRunnable {
                     } else {
                         afterPrevious = "AFTER " + columns.get(i - 1).getName();
                     }
-                    PreparedStatement ps = co.prepareStatement("ALTER TABLE " + TABLE_NAME + " ADD " + col.toString() + " " + afterPrevious);
-                    ps.execute();
-                    ps.close();
+                    alter(co, "ADD " + col.toString() + " " + afterPrevious);
                 }
             }
         }
         if (upgradeAnnounced) {
             ultraCosmetics.getSmartLogger().write("Upgrade finished.");
         }
+    }
+
+    private void alter(Connection co, String command) throws SQLException {
+        PreparedStatement ps = co.prepareStatement("ALTER TABLE " + TABLE_NAME + " " + command);
+        ps.execute();
+        ps.close();
     }
 }

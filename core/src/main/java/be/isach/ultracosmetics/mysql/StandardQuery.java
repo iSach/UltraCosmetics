@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.mysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,8 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.bukkit.Bukkit;
+
+import be.isach.ultracosmetics.UltraCosmeticsData;
 
 public class StandardQuery {
     protected final Table table;
@@ -57,19 +60,25 @@ public class StandardQuery {
         }
         StringBuilder sql = new StringBuilder(command);
         List<Object> objects = new ArrayList<>();
-        loadSet(sql, "SET", ", ", setItems, objects);
-        loadSet(sql, "WHERE", " AND ", whereItems, objects);
+        addClause(sql, "SET", ", ", setItems, objects);
+        addClause(sql, "WHERE", " AND ", whereItems, objects);
+        if (UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().isDebug()) {
+            String plaintext = sql.toString();
+            for (Object obj : objects) {
+                plaintext = plaintext.replaceFirst("\\?", obj.toString());
+            }
+            Bukkit.getLogger().info("Executing SQL: " + plaintext);
+        }
         try (Connection connection = table.getConnection(); PreparedStatement statement = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < objects.size(); i++) {
                 statement.setObject(i + 1, objects.get(i));
             }
-            Bukkit.getLogger().info("Executing SQL: " + statement.toString());
             if (processResult == null) {
                 statement.executeUpdate();
                 return null;
             }
             ResultSet result = statement.executeQuery();
-            // required
+            // yes, this is required
             result.next();
             return processResult.apply(result);
         } catch (SQLException e) {
@@ -78,7 +87,6 @@ public class StandardQuery {
         }
     }
 
-    // explicitly discards results
     public void execute() {
         getResults(null);
     }
@@ -129,7 +137,24 @@ public class StandardQuery {
         });
     }
 
-    private void loadSet(StringBuilder sb, String clause, String joiner, Map<String,Object> items, List<Object> objects) {
+    public Map<String,Object> getAll() {
+        return getResults(r -> {
+            try {
+                Map<String,Object> columns = new HashMap<>();
+                ResultSetMetaData meta = r.getMetaData();
+                int columnCount = meta.getColumnCount();
+                for (int i = 1; i <= columnCount; i++) {
+                    columns.put(meta.getColumnName(i), r.getObject(i));
+                }
+                return columns;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        });
+    }
+
+    private void addClause(StringBuilder sb, String clause, String joiner, Map<String,Object> items, List<Object> objects) {
         if (items.size() == 0) return;
         sb.append(" " + clause + " ");
         StringJoiner sj = new StringJoiner(joiner);

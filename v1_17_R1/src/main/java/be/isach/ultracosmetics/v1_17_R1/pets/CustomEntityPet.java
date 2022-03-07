@@ -61,27 +61,21 @@ public abstract class CustomEntityPet extends Pet {
             customEntity = new Pumpling(EntityType.ZOMBIE, ((CraftPlayer) getPlayer()).getHandle().getLevel(), this);
             EntitySpawningManager.setBypass(false);
         }
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-            CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
-            getCustomEntity().moveTo(x, y, z, 0, 0);
-            Location spawnLoc = customEntity.getEntity().getLocation();
-            armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, org.bukkit.entity.EntityType.ARMOR_STAND);
-            armorStand.setVisible(false);
-            armorStand.setSmall(true);
-            armorStand.setCustomName(getType().getEntityName(getPlayer()));
-            armorStand.setCustomNameVisible(true);
-            FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
-            armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
+        CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
+        getCustomEntity().moveTo(x, y, z, 0, 0);
+        Location spawnLoc = customEntity.getEntity().getLocation();
+        armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, org.bukkit.entity.EntityType.ARMOR_STAND);
+        armorStand.setVisible(false);
+        armorStand.setSmall(true);
+        armorStand.setCustomNameVisible(true);
+        FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
+        armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
+        updateName();
 
-            if (getOwner().getPetName(getType()) != null) {
-                armorStand.setCustomName(getOwner().getPetName(getType()));
-            }
-
-            customEntity.getEntity().addPassenger(armorStand);
-            EntitySpawningManager.setBypass(true);
-            ((CraftWorld) getPlayer().getWorld()).getHandle().addFreshEntity(getCustomEntity());
-            EntitySpawningManager.setBypass(false);
-        });
+        customEntity.getEntity().addPassenger(armorStand);
+        EntitySpawningManager.setBypass(true);
+        ((CraftWorld) getPlayer().getWorld()).getHandle().addFreshEntity(getCustomEntity());
+        EntitySpawningManager.setBypass(false);
 
         if (getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             getOwner().sendMessage("§c§lUltraCosmetics > Monsters can't spawn here!");
