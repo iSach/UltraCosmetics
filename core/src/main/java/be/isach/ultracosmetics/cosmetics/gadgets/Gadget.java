@@ -333,7 +333,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
         ultraPlayer.setCoolDown(getType());
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
-            ultraPlayer.removeAmmo(getType().toString().toLowerCase());
+            ultraPlayer.removeAmmo(getType());
             itemStack = ItemFactory.create(getType().getMaterial(),
                     ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType())
                             + " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
