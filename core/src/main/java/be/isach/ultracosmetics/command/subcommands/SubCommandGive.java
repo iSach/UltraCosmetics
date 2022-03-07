@@ -246,13 +246,13 @@ public class SubCommandGive extends SubCommand {
         if (receiver == null || receiver.getUniqueId() == null)
             return;
         if (receiver instanceof Player)
-            ultraCosmetics.getPlayerManager().getUltraPlayer((Player) receiver).addAmmo(gadgetType.toString().toLowerCase(), ammo);
+            ultraCosmetics.getPlayerManager().getUltraPlayer((Player) receiver).addAmmo(gadgetType, ammo);
         else {
             if (UltraCosmeticsData.get().usingFileStorage())
                 SettingsManager.getData(receiver.getUniqueId()).set("Ammo." + gadgetType.toString().toLowerCase(),
                         ((int) SettingsManager.getData(receiver.getUniqueId()).get("Ammo." + gadgetType.toString().toLowerCase())) + ammo);
             else
-                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(receiver.getUniqueId(), gadgetType.toString().toLowerCase(), ammo);
+                ultraCosmetics.getMySqlConnectionManager().getSqlUtils().addAmmo(receiver.getUniqueId(), gadgetType, ammo);
         }
     }
 

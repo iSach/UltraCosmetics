@@ -29,10 +29,6 @@ allprojects {
     }
 
     afterEvaluate {
-        configurations.shaded.forEach { k ->
-            println(k.class) 
-            println(k)
-        }
         jar {
             dependsOn configurations.shaded
             from configurations.shaded.collect {
@@ -43,6 +39,8 @@ allprojects {
         }
     }
 }
+
+defaultTasks 'obfuscate'
 
 subprojects.each {
     if (!it.hasProperty("remapMcVersion")) return

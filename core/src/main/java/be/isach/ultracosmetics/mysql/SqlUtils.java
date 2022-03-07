@@ -1,5 +1,7 @@
 package be.isach.ultracosmetics.mysql;
 
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Player;
 
@@ -23,16 +25,16 @@ public class SqlUtils {
         connectionManager.getTable().insertIgnore().insert("uuid", p.getUniqueId().toString()).execute();
     }
 
-    public int getAmmo(UUID uuid, String name) {
-        return connectionManager.getTable().select(name.replace("_", "")).uuid(uuid).asInt();
+    public int getAmmo(UUID uuid, GadgetType gadget) {
+        return connectionManager.getTable().select(gadget.toString().toLowerCase().replace("_", "")).uuid(uuid).asInt();
     }
 
-    public String getPetName(UUID uuid, String pet) {
-        return connectionManager.getTable().select("name" + pet).uuid(uuid).asString();
+    public String getPetName(UUID uuid, PetType pet) {
+        return connectionManager.getTable().select(pet.getConfigName().toLowerCase()).uuid(uuid).asString();
     }
 
-    public void setName(UUID uuid, String pet, String name) {
-        connectionManager.getTable().update().set("name" + pet, name).uuid(uuid).execute();
+    public void setName(UUID uuid, PetType pet, String name) {
+        connectionManager.getTable().update().set(pet.getConfigName().toLowerCase(), name).uuid(uuid).execute();
     }
 
     public int getKeys(UUID uuid) {
@@ -40,13 +42,14 @@ public class SqlUtils {
     }
 
     public void addKeys(UUID uuid, int amount) {
-        connectionManager.getTable().update().set("treasureKeys", "treasureKeys+" + amount).uuid(uuid).execute();
+        // it's possible to add one to an existing value in one statement,
+        // but it's less complicated to do it in two.
+        connectionManager.getTable().update().set("treasureKeys", getKeys(uuid) + amount).uuid(uuid).execute();
     }
 
-    public void addAmmo(UUID uuid, String name, int amount) {
-        String column = name.replace("_", "");
-        // fancy logic along the lines of "UPDATE X SET COLUMN = COLUMN+AMOUNT" so that MySQL will check the current amount for us
-        connectionManager.getTable().update().set(column, column + "+" + amount).uuid(uuid).execute();
+    public void addAmmo(UUID uuid, GadgetType type, int amount) {
+        String column = type.toString().toLowerCase().replace("_", "");
+        connectionManager.getTable().update().set(column, getAmmo(uuid, type) + amount).uuid(uuid).execute();
     }
 
     public void setGadgetsEnabled(UUID uuid, boolean enabled) {

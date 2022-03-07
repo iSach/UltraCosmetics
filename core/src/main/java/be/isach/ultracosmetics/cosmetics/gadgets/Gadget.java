@@ -121,7 +121,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
         String ammo = "";
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
-            ammo = ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType().toString().toLowerCase()) + " ";
+            ammo = ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType()) + " ";
         }
 
         itemStack = ItemFactory.create(getType().getMaterial(), ammo + getType().getName(),
@@ -317,7 +317,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                             .getBalance() >= getPrice()) {
                         getUltraCosmetics().getEconomyHandler().withdraw((Player) event.getWhoClicked(), getPrice());
                         getUltraCosmetics().getPlayerManager().getUltraPlayer((Player) event.getWhoClicked())
-                                .addAmmo(getType().toString().toLowerCase(), getResultAmmoAmount());
+                                .addAmmo(getType(), getResultAmmoAmount());
                         event.getWhoClicked().sendMessage(MessageManager.getMessage("Successful-Purchase"));
                         if (openGadgetsInvAfterAmmo)
                             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
@@ -381,7 +381,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         }
 
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
-            if (ultraPlayer.getAmmo(getType().toString().toLowerCase()) < 1) {
+            if (ultraPlayer.getAmmo(getType()) < 1) {
                 openAmmoPurchaseMenu();
                 return;
             }
@@ -402,9 +402,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             ultraPlayer.setCoolDown(getType());
         }
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
-            ultraPlayer.removeAmmo(getType().toString().toLowerCase());
+            ultraPlayer.removeAmmo(getType());
             itemStack = ItemFactory.create(getType().getMaterial(),
-                    ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType().toString().toLowerCase())
+                    ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType())
                             + " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
             this.itemStack = itemStack;
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);

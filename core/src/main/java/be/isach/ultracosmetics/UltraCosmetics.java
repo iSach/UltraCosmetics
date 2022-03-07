@@ -293,6 +293,11 @@ public class UltraCosmetics extends JavaPlugin {
         if (UltraCosmeticsData.get().getServerVersion() == null) {
             return;
         }
+
+        if (mySqlConnectionManager != null) {
+            mySqlConnectionManager.shutdown();
+        }
+
         // TODO Purge Pet Names. (and Treasure Chests bugged holograms).
         // TODO Use Metadatas for that!
 

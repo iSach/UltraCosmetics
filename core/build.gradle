@@ -20,8 +20,10 @@ dependencies {
     compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
     // same version used in 1.17.1
     compileOnly 'com.mojang:authlib:2.3.31'
-    implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation ('com.zaxxer:HikariCP:4.0.3') {
+        exclude group: 'org.slf4j'
+    }
 }
 shadowJar {
-    relocate ('com.zaxxer', 'b')
+    relocate ('com.zaxxer.hikari', 'be.isach.ultracosmetics.shaded.hikari')
 }

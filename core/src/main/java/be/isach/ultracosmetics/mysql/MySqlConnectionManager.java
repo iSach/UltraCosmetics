@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.log.SmartLogger;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.manager.SqlLoader;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -71,16 +73,16 @@ public class MySqlConnectionManager extends BukkitRunnable {
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
         config.setUsername(username);
         config.setPassword(password);
+        // performance tips from https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
+        config.addDataSourceProperty("prepStmtCacheSize", 250);
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+        config.addDataSourceProperty("cachePrepStmts", true);
+        config.addDataSourceProperty("useServerPrepStmts", true);
 
         dataSource = new HikariDataSource(config);
-        // performance tips from https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-        dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
-        dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-        dataSource.addDataSourceProperty("cachePrepStmts", true);
-        dataSource.addDataSourceProperty("useServerPrepStmts", true);
 
-        StringJoiner columnJoiner = new StringJoiner("(", ", ", ")");
-        // "PRIMARY KEY" implies UNIQUE NOT NULL
+        // "PRIMARY KEY" implies UNIQUE NOT NULL.
+        // String form of UUID is always exactly 36 chars so just store it that way.
         columns.add(new Column("uuid", "CHAR(36) PRIMARY KEY"));
         columns.add(new Column("gadgetsEnabled", "BOOLEAN DEFAULT TRUE NOT NULL"));
         columns.add(new Column("selfmorphview", "BOOLEAN DEFAULT TRUE NOT NULL"));
@@ -89,8 +91,12 @@ public class MySqlConnectionManager extends BukkitRunnable {
             columns.add(new Column(gadgetType.getConfigName().toLowerCase(), "INTEGER DEFAULT 0 NOT NULL"));
         }
         for (PetType petType : PetType.values()) {
-            columns.add(new Column(petType.getConfigName().toLowerCase(), "VARCHAR(255) DEFAULT 0 NOT NULL"));
+            // Anvil can only hold 50 characters on 1.18, but there's no extra overhead between 50 and 255.
+            // This way if they extend the anvil size again we'll be fine.
+            columns.add(new Column(petType.getConfigName().toLowerCase(), "VARCHAR(255)"));
         }
+
+        StringJoiner columnJoiner = new StringJoiner(", ", "(", ")");
         for (Column column : columns) {
             columnJoiner.add(column.toString());
         }
@@ -103,32 +109,26 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
     @Override
     public void run() {
-        Connection co;
-        try {
-            co = dataSource.getConnection();
+        try (Connection co = dataSource.getConnection()) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + "UltraCosmetics -> Successfully connected to MySQL server! :)");
+            try (PreparedStatement sql = co.prepareStatement(CREATE_TABLE)) {
+                sql.executeUpdate();
+            }
+
+            fixTable(co);
+
+            table = new Table(dataSource, TABLE_NAME);
+            sqlLoader = new SqlLoader(ultraCosmetics);
         } catch (SQLException e) {
             reportFailure(e);
             return;
         }
-        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + "UltraCosmetics -> Successfully connected to MySQL server! :)");
-        try (PreparedStatement sql = co.prepareStatement(CREATE_TABLE)) {
-            sql.executeUpdate();
-        } catch (SQLException e) {
-            reportFailure(e);
-            return;
-        }
-
-        fixTable(co);
-
-        table = new Table(dataSource, TABLE_NAME);
-        sqlLoader = new SqlLoader(ultraCosmetics);
     }
 
     private void reportFailure(Exception e) {
-        Bukkit.getLogger().info("");
-        Bukkit.getConsoleSender().sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Ultra Cosmetics >>> Could not connect to MySQL server!");
-        Bukkit.getLogger().info("");
-        Bukkit.getConsoleSender().sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Error:");
+        SmartLogger log = ultraCosmetics.getSmartLogger();
+        log.write(LogLevel.ERROR, "Could not connect to MySQL server!");
+        log.write(LogLevel.ERROR, "Error:");
         e.printStackTrace();
     }
 
@@ -148,24 +148,39 @@ public class MySqlConnectionManager extends BukkitRunnable {
         return dataSource;
     }
 
+    public void shutdown() {
+        dataSource.close();
+    }
+
     /**
      * Based on the field 'columns', adds any missing columns to the database (in order).
      * 
      * @param co Connection to work with.
      */
-    private void fixTable(Connection co) {
-        DatabaseMetaData md;
-        try {
-            md = co.getMetaData();
-        } catch (SQLException e) {
-            reportFailure(e);
-            return;
+    private void fixTable(Connection co) throws SQLException {
+        DatabaseMetaData md = co.getMetaData();
+        boolean upgradeAnnounced = false;
+        try (ResultSet rs = md.getColumns(null, null, TABLE_NAME, "id")) {
+            if (rs.next()) {
+                ultraCosmetics.getSmartLogger().write("You have an old database. UC will attempt to upgrade it...");
+                List<String> commands = new ArrayList<>();
+                commands.add("DROP COLUMN id");
+                commands.add("DROP COLUMN username");
+                commands.add("ADD PRIMARY KEY (uuid)");
+                commands.add("MODIFY uuid CHAR(36)");
+                for (String command : commands) {
+                    co.prepareStatement("ALTER TABLE " + TABLE_NAME + " " + command).execute();
+                }
+            }
         }
-
         for (int i = 0; i < columns.size(); i++) {
             Column col = columns.get(i);
             try (ResultSet rs = md.getColumns(null, null, TABLE_NAME, col.getName())) {
                 if (!rs.next()) {
+                    if (!upgradeAnnounced) {
+                        ultraCosmetics.getSmartLogger().write("Upgrading database...");
+                        upgradeAnnounced = true;
+                    }
                     String afterPrevious;
                     if (i == 0) {
                         afterPrevious = "FIRST";
@@ -176,10 +191,10 @@ public class MySqlConnectionManager extends BukkitRunnable {
                     ps.execute();
                     ps.close();
                 }
-            } catch (SQLException e) {
-                reportFailure(e);
-                return;
             }
+        }
+        if (upgradeAnnounced) {
+            ultraCosmetics.getSmartLogger().write("Upgrade finished.");
         }
     }
 }

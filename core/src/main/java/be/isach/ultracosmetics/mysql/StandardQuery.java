@@ -13,15 +13,17 @@ import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Function;
 
+import org.bukkit.Bukkit;
+
 public class StandardQuery {
-    protected final Connection connection;
+    protected final Table table;
     protected final String command;
     protected final Map<String,Object> whereItems = new HashMap<>();
     protected final Map<String,Object> setItems = new HashMap<>();
 
-    protected StandardQuery(Connection connection, String command) {
-        this.connection = connection;
-        this.command = command;
+    protected StandardQuery(Table table, String command) {
+        this.table = table;
+        this.command = command + " " + table.getName();
     }
 
     public StandardQuery where(String key, Object value) {
@@ -57,11 +59,18 @@ public class StandardQuery {
         List<Object> objects = new ArrayList<>();
         loadSet(sql, "SET", ", ", setItems, objects);
         loadSet(sql, "WHERE", " AND ", whereItems, objects);
-        try (PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+        try (Connection connection = table.getConnection(); PreparedStatement statement = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < objects.size(); i++) {
                 statement.setObject(i + 1, objects.get(i));
             }
+            Bukkit.getLogger().info("Executing SQL: " + statement.toString());
+            if (processResult == null) {
+                statement.executeUpdate();
+                return null;
+            }
             ResultSet result = statement.executeQuery();
+            // required
+            result.next();
             return processResult.apply(result);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,7 +80,7 @@ public class StandardQuery {
 
     // explicitly discards results
     public void execute() {
-        getResults(r -> null);
+        getResults(null);
     }
 
     public boolean exists() {
@@ -115,14 +124,14 @@ public class StandardQuery {
                 return r.getString(1);
             } catch (SQLException e) {
                 e.printStackTrace();
-                return "Unknown";
+                return null;
             }
         });
     }
 
     private void loadSet(StringBuilder sb, String clause, String joiner, Map<String,Object> items, List<Object> objects) {
         if (items.size() == 0) return;
-        sb.append(" " + clause);
+        sb.append(" " + clause + " ");
         StringJoiner sj = new StringJoiner(joiner);
         for (Entry<String,Object> entry : items.entrySet()) {
             sj.add(entry.getKey() + " = ?");

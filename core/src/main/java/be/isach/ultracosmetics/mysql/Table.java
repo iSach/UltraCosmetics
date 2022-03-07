@@ -14,31 +14,31 @@ public class Table {
         this.table = table;
     }
 
-    public String getTableName() {
+    public String getName() {
         return table;
     }
 
     public StandardQuery select(String columns) {
-        return new StandardQuery(getConnection(), "SELECT " + columns + " FROM " + table);
+        return new StandardQuery(this, "SELECT " + columns + " FROM");
     }
 
     public StandardQuery update() {
-        return new StandardQuery(getConnection(), "UPDATE " + table);
+        return new StandardQuery(this, "UPDATE");
     }
 
     public StandardQuery delete() {
-        return new StandardQuery(getConnection(), "DELETE FROM " + table);
+        return new StandardQuery(this, "DELETE FROM");
     }
 
     public InsertQuery insert() {
-        return new InsertQuery(getConnection(), table);
+        return new InsertQuery(this);
     }
 
     public InsertQuery insertIgnore() {
-        return new InsertQuery(getConnection(), table, true);
+        return new InsertQuery(this, true);
     }
 
-    private Connection getConnection() {
+    protected Connection getConnection() {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
