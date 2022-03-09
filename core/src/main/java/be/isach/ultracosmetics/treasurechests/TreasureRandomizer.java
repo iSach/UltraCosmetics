@@ -289,8 +289,8 @@ public class TreasureRandomizer {
     private void broadcast(String message) {
         message = message.replace("%name%", player.getName());
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (SettingsManager.isAllowedWorld(player.getWorld())
-                    && UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).isTreasureNotifying()) {
+            if (player == this.player || (SettingsManager.isAllowedWorld(player.getWorld())
+                    && UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).isTreasureNotifying())) {
                 player.sendMessage(message);
             }
         }
