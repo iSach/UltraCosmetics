@@ -48,7 +48,7 @@ public class MenuHats extends CosmeticMenu<HatType> {
     }
 
     @Override
-    protected void toggleOff(UltraPlayer ultraPlayer) {
+    protected void toggleOff(UltraPlayer ultraPlayer, HatType type) {
         ultraPlayer.removeHat();
     }
 

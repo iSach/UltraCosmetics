@@ -2,6 +2,8 @@ package be.isach.ultracosmetics.mysql;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.log.SmartLogger;
@@ -10,8 +12,6 @@ import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -33,21 +33,16 @@ import javax.sql.DataSource;
  * Project: UltraCosmetics
  */
 public class MySqlConnectionManager extends BukkitRunnable {
-    public static final String TABLE_NAME = "UltraCosmeticsData";
+    private final String tableName;
     /**
      * UltraCosmetics instance.
      */
-    private UltraCosmetics ultraCosmetics;
+    private final UltraCosmetics ultraCosmetics;
 
     /**
      * MySQL Connection & Table.
      */
     private Table table;
-
-    /**
-     * Sql Utils instance.
-     */
-    private SqlCache sqlUtils;
 
     /**
      * Connecting pooling.
@@ -59,13 +54,15 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
     public MySqlConnectionManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        ConfigurationSection section = SettingsManager.getConfig().getConfigurationSection("Ammo-System-For-Gadgets.MySQL");
+        ConfigurationSection section = SettingsManager.getConfig().getConfigurationSection("MySQL");
         this.debug = section.getBoolean("debug", false);
         String hostname = section.getString("hostname");
         String port = section.getString("port");
         String database = section.getString("database");
         String username = section.getString("username");
         String password = section.getString("password");
+        tableName = section.getString("table");
+        
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
         config.setUsername(username);
@@ -83,6 +80,8 @@ public class MySqlConnectionManager extends BukkitRunnable {
         columns.add(new Column("uuid", "CHAR(36) PRIMARY KEY"));
         columns.add(new Column("gadgetsEnabled", "BOOLEAN DEFAULT TRUE NOT NULL"));
         columns.add(new Column("selfmorphview", "BOOLEAN DEFAULT TRUE NOT NULL"));
+        columns.add(new Column("treasureNotifications", "BOOLEAN DEFAULT TRUE NOT NULL"));
+        columns.add(new Column("filterByOwned", "BOOLEAN DEFAULT FALSE NOT NULL"));
         columns.add(new Column("treasureKeys", "INTEGER DEFAULT 0 NOT NULL"));
         for (GadgetType gadgetType : GadgetType.values()) {
             columns.add(new Column(gadgetType.getConfigName().toLowerCase(), "INTEGER DEFAULT 0 NOT NULL"));
@@ -93,11 +92,23 @@ public class MySqlConnectionManager extends BukkitRunnable {
             columns.add(new Column(petType.getConfigName().toLowerCase(), "VARCHAR(255)"));
         }
 
+        for (Category cat : Category.values()) {
+            // it's a varchar anyway so might as well make it 255 for expansion purposes
+            if (cat == Category.SUITS) {
+                for (ArmorSlot slot : ArmorSlot.values()) {
+                    columns.add(new Column(cat.toString().toLowerCase() + "_" + slot.toString().toLowerCase(), "VARCHAR(255)"));
+                }
+                continue;
+            }
+            
+            columns.add(new Column(cat.toString().toLowerCase(), "VARCHAR(255)"));
+        }
+
         StringJoiner columnJoiner = new StringJoiner(", ", "(", ")");
         for (Column column : columns) {
             columnJoiner.add(column.toString());
         }
-        CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + columnJoiner.toString();
+        CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + tableName + columnJoiner.toString();
     }
 
     public void start() {
@@ -107,14 +118,13 @@ public class MySqlConnectionManager extends BukkitRunnable {
     @Override
     public void run() {
         try (Connection co = dataSource.getConnection()) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + "UltraCosmetics -> Successfully connected to MySQL server! :)");
             try (PreparedStatement sql = co.prepareStatement(CREATE_TABLE)) {
                 sql.executeUpdate();
             }
 
             fixTable(co);
 
-            table = new Table(dataSource, TABLE_NAME);
+            table = new Table(dataSource, tableName);
         } catch (SQLException e) {
             reportFailure(e);
             return;
@@ -130,10 +140,6 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
     public Table getTable() {
         return table;
-    }
-
-    public SqlCache getSqlUtils() {
-        return sqlUtils;
     }
 
     public DataSource getDataSource() {
@@ -156,7 +162,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
     private void fixTable(Connection co) throws SQLException {
         DatabaseMetaData md = co.getMetaData();
         boolean upgradeAnnounced = false;
-        try (ResultSet rs = md.getColumns(null, null, TABLE_NAME, "id")) {
+        try (ResultSet rs = md.getColumns(null, null, tableName, "id")) {
             if (rs.next()) {
                 ultraCosmetics.getSmartLogger().write("You have an old database. UC will attempt to upgrade it...");
                 List<String> commands = new ArrayList<>();
@@ -172,7 +178,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
         for (int i = 0; i < columns.size(); i++) {
             Column col = columns.get(i);
-            try (ResultSet rs = md.getColumns(null, null, TABLE_NAME, col.getName())) {
+            try (ResultSet rs = md.getColumns(null, null, tableName, col.getName())) {
                 if (!rs.next()) {
                     if (!upgradeAnnounced) {
                         ultraCosmetics.getSmartLogger().write("Upgrading database...");
@@ -194,7 +200,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
     }
 
     private void alter(Connection co, String command) throws SQLException {
-        PreparedStatement ps = co.prepareStatement("ALTER TABLE " + TABLE_NAME + " " + command);
+        PreparedStatement ps = co.prepareStatement("ALTER TABLE " + tableName + " " + command);
         ps.execute();
         ps.close();
     }

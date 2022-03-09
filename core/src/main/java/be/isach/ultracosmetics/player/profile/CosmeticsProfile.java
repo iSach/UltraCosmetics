@@ -1,289 +1,152 @@
 package be.isach.ultracosmetics.player.profile;
 
-import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.type.*;
-import be.isach.ultracosmetics.log.SmartLogger;
-import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.configuration.ConfigurationSection;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
-/**
- * Used to save what cosmetics a player toggled.
- */
-public class CosmeticsProfile {
+import org.bukkit.Bukkit;
 
-    // Player infos
-    private UltraPlayer ultraPlayer;
-    private UUID uuid;
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
+import be.isach.ultracosmetics.player.UltraPlayer;
 
-    // Saved cosmetics
-    private GadgetType enabledGadget;
-    private PetType enabledPet;
-    private EmoteType enabledEmote;
-    private HatType enabledHat;
-    private MorphType enabledMorph;
-    private MountType enabledMount;
-    private ParticleEffectType enabledEffect;
-    private Map<ArmorSlot, SuitType> enabledSuitParts = new HashMap<>();
-
-    public CosmeticsProfile(UUID uuid) {
-        this.uuid = uuid;
+public abstract class CosmeticsProfile {
+    protected final UltraPlayer ultraPlayer;
+    protected final UUID uuid;
+    protected final UltraCosmetics ultraCosmetics;
+    protected Map<Category,CosmeticType<?>> enabled = new HashMap<>();
+    protected Map<ArmorSlot, SuitType> enabledSuitParts = new HashMap<>();
+    protected int keys;
+    protected boolean gadgetsEnabled;
+    protected boolean morphSelfView;
+    protected boolean treasureNotifications;
+    protected boolean filterByOwned;
+    protected Map<PetType,String> petNames = new HashMap<>();
+    protected Map<GadgetType,Integer> ammo = new HashMap<>();
+    public CosmeticsProfile(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
+        this.ultraPlayer = ultraPlayer;
+        this.uuid = ultraPlayer.getUUID();
+        this.ultraCosmetics = ultraCosmetics;
+        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
+            load();
+            if (!UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) return;
+            if (!ultraPlayer.isOnline()) {
+                UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.WARNING, "Player " + ultraPlayer.getUsername() + " is no longer online, cancelling load");
+                return;
+            }
+            Bukkit.getScheduler().runTask(ultraCosmetics, () -> equip());
+        });
     }
 
-    /**
-     * Loads the profile from the player file/mysql data.
-     */
-    public boolean loadFromData() {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager sm = SettingsManager.getData(uuid);
-            if (!sm.contains("enabled")) {
-                return false;
-            }
-            ConfigurationSection s = sm.fileConfiguration.getConfigurationSection("enabled");
-            if (s.isString("gadget")) {
-                setEnabledGadget(GadgetType.valueOf(s.getString("gadget")));
-            }
-            if (s.isString("effect")) {
-                setEnabledEffect(ParticleEffectType.valueOf(s.getString("effect")));
-            }
-            if (s.isString("emote")) {
-                setEnabledEmote(EmoteType.valueOf(s.getString("emote")));
-            }
-            if (s.isString("hat")) {
-                setEnabledHat(HatType.valueOf(s.getString("hat")));
-            }
-            if (s.isString("morph")) {
-                setEnabledMorph(MorphType.valueOf(s.getString("morph")));
-            }
-            if (s.isString("mount")) {
-                setEnabledMount(MountType.valueOf(s.getString("mount")));
-            }
-            if (s.isString("pet")) {
-                setEnabledPet(PetType.valueOf(s.getString("pet")));
-            }
+    protected abstract void load();
+    public abstract void save();
 
-            for (ArmorSlot slot : ArmorSlot.values()) {
-                String key = "suit." + slot.toString().toLowerCase();
-                if (s.isString(key)) {
-                    setEnabledSuitPart(slot, SuitType.getSuitPart(s.getString(key), slot));
-                }
-            }
+    public void equip() {
+        if (!SettingsManager.isAllowedWorld(ultraPlayer.getBukkitPlayer().getWorld())) return;
+        for (Entry<Category,CosmeticType<?>> type : enabled.entrySet()) {
+            if (type.getValue() == null || !type.getKey().isEnabled() || !type.getValue().isEnabled()) continue;
+            type.getValue().equip(ultraPlayer, ultraCosmetics);
+        }
 
-            return true;
-        } else {
-            // TODO MySQL
-            return false;
+        if (Category.SUITS.isEnabled()) {
+            for (SuitType type : enabledSuitParts.values()) {
+                if (type == null || !type.isEnabled()) continue;
+                type.equip(ultraPlayer, ultraCosmetics);
+            }
         }
     }
 
-    public void loadToPlayer(UltraPlayer ultraPlayer) {
-        if (!UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
+    public void setEnabledCosmetic(Category cat, Cosmetic<?> cosmetic) {
+        setEnabledCosmetic(cat, cosmetic == null ? null : cosmetic.getType());
+    }
+
+    public void setEnabledCosmetic(Category cat, CosmeticType<?> type) {
+        if (cat == Category.SUITS) {
+            if (type == null) {
+                throw new IllegalArgumentException("Updating Suit state requires a slot parameter");
+            }
+            SuitType suit = (SuitType) type;
+            setEnabledSuitPart(suit.getSlot(), suit);
             return;
         }
-
-        this.ultraPlayer = ultraPlayer;
-
-        if (ultraPlayer.getCosmeticsProfile() != this)
-            ultraPlayer.setCosmeticsProfile(this);
-
-        loadToPlayer();
+        enabled.put(cat, type);
     }
 
-    /**
-     * Loads the profile and enabled the cosmetics.
-     */
-    public void loadToPlayer() {
-        if (!ultraPlayer.isOnline()) {
-            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(SmartLogger.LogLevel.ERROR, "Failed to load profile for " + ultraPlayer.getUsername() + "!");
-            return;
-        }
-
-        UltraCosmetics ultraCosmetics = UltraCosmeticsData.get().getPlugin();
-
-        // Gadget
-        if (enabledGadget != null
-                && enabledGadget.getCategory().isEnabled()
-                && enabledGadget.isEnabled())
-            enabledGadget.equip(ultraPlayer, ultraCosmetics);
-
-        // Pet
-        if (enabledPet != null
-                && enabledPet.getCategory().isEnabled()
-                && enabledPet.isEnabled())
-            enabledPet.equip(ultraPlayer, ultraCosmetics);
-
-        // Emote
-        if (enabledEmote != null
-                && enabledEmote.getCategory().isEnabled()
-                && enabledEmote.isEnabled())
-            enabledEmote.equip(ultraPlayer, ultraCosmetics);
-
-        // Hat
-        if (enabledHat != null
-                && enabledHat.getCategory().isEnabled()
-                && enabledHat.isEnabled())
-            enabledHat.equip(ultraPlayer, ultraCosmetics);
-
-        // Morph
-        if (enabledMorph != null
-                && enabledMorph.getCategory().isEnabled()
-                && enabledMorph.isEnabled())
-            enabledMorph.equip(ultraPlayer, ultraCosmetics);
-
-        // Mount
-        if (enabledMount != null
-                && enabledMount.getCategory().isEnabled()
-                && enabledMount.isEnabled())
-            enabledMount.equip(ultraPlayer, ultraCosmetics);
-
-        // Particle Effect
-        if (enabledEffect != null
-                && enabledEffect.getCategory().isEnabled()
-                && enabledEffect.isEnabled())
-            enabledEffect.equip(ultraPlayer, ultraCosmetics);
-
-        // Suit
-        for (ArmorSlot armorSlot : ArmorSlot.values()) {
-            SuitType suitPart = enabledSuitParts.get(armorSlot);
-            if (suitPart != null
-                    && suitPart.getCategory().isEnabled()
-                    && suitPart.isEnabled())
-                suitPart.equip(ultraPlayer, ultraCosmetics);
-        }
+    public void setEnabledSuitPart(ArmorSlot slot, SuitType suitType) {
+        this.enabledSuitParts.put(slot, suitType);
     }
 
-    public void save() {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            saveToFile();
-        } else {
-            // TODO SQL Save
-        }
+    public int getAmmo(GadgetType gadget) {
+        return ammo.getOrDefault(gadget, 0);
     }
 
-    /**
-     * Saves the profile to file.
-     */
-    public void saveToFile() {
-        SettingsManager settingsManager = SettingsManager.getData(uuid);
-
-        settingsManager.set("enabled.gadget", enabledGadget != null ? enabledGadget.getConfigName() : "none");
-        settingsManager.set("enabled.effect", enabledEffect != null ? enabledEffect.getConfigName() : "none");
-        settingsManager.set("enabled.emote", enabledEmote != null ? enabledEmote.getConfigName() : "none");
-        settingsManager.set("enabled.hat", enabledHat != null ? enabledHat.getConfigName() : "none");
-        settingsManager.set("enabled.morph", enabledMorph != null ? enabledMorph.getConfigName() : "none");
-        settingsManager.set("enabled.mount", enabledMount != null ? enabledMount.getConfigName() : "none");
-        settingsManager.set("enabled.pet", enabledPet != null ? enabledPet.getConfigName() : "none");
-        for (ArmorSlot slot : ArmorSlot.values()) {
-            SuitType enabledSuitPart = enabledSuitParts.get(slot);
-            settingsManager.set("enabled.suit." + slot.toString().toLowerCase(), enabledSuitPart != null ? enabledSuitPart.getConfigName() : "none");
-        }
+    public void setAmmo(GadgetType type, int amount) {
+        ammo.put(type, amount);
     }
 
-    /**
-     * Saves the profile to mysql.
-     */
-    public void saveToMySQL() {
-        // TODO
+    public void addAmmo(GadgetType type, int amount) {
+        setAmmo(type, getAmmo(type) + amount);
     }
 
-    /**
-     * @return The corresponding UltraPlayer.
-     * If the UltraPlayer is offline, returns null as
-     * the UltraPlayer is unusable anymore.
-     */
-    public UltraPlayer getUltraPlayer() {
-        if (ultraPlayer.isOnline())
-            return ultraPlayer;
-        ultraPlayer = null;
-        return null;
+    public String getPetName(PetType pet) {
+        return petNames.get(pet);
     }
 
-    public void setUltraPlayer(UltraPlayer ultraPlayer) {
-        this.ultraPlayer = ultraPlayer;
+    public void setPetName(PetType pet, String name) {
+        petNames.put(pet, name);
     }
 
-    /**
-     * @return whether the player this profile belongs to is online or not.
-     */
-    public boolean isPlayerOnline() {
-        return getUltraPlayer() != null;
+    public int getKeys() {
+        return keys;
     }
 
-    public void setEnabledSuitPart(ArmorSlot armorSlot, SuitType suitType) {
-        this.enabledSuitParts.put(armorSlot, suitType);
+    public void setKeys(int amount) {
+        keys = amount;
     }
 
-    public SuitType getEnabledSuitParts(ArmorSlot armorSlot) {
-        return enabledSuitParts.get(armorSlot);
+    public void addKeys(int amount) {
+        setKeys(getKeys() + amount);
     }
 
-    public EmoteType getEnabledEmote() {
-        return enabledEmote;
+    public void setGadgetsEnabled(boolean enabled) {
+        gadgetsEnabled = enabled;
     }
 
-    public void setEnabledEmote(EmoteType enabledEmote) {
-        this.enabledEmote = enabledEmote;
+    public boolean hasGadgetsEnabled() {
+        return gadgetsEnabled;
     }
 
-    public GadgetType getEnabledGadget() {
-        return enabledGadget;
+    public void setSeeSelfMorph(boolean enabled) {
+        morphSelfView = enabled;
     }
 
-    public void setEnabledGadget(GadgetType enabledGadget) {
-        this.enabledGadget = enabledGadget;
+    public boolean canSeeSelfMorph() {
+        return morphSelfView;
     }
 
-    public HatType getEnabledHat() {
-        return enabledHat;
+    public boolean isTreasureNotifications() {
+        return treasureNotifications;
     }
 
-    public void setEnabledHat(HatType enabledHat) {
-        this.enabledHat = enabledHat;
+    public void setTreasureNotifications(boolean treasureNotifications) {
+        this.treasureNotifications = treasureNotifications;
     }
 
-    public MorphType getEnabledMorph() {
-        return enabledMorph;
+    public boolean isFilterByOwned() {
+        return filterByOwned;
     }
 
-    public void setEnabledMorph(MorphType enabledMorph) {
-        this.enabledMorph = enabledMorph;
-    }
-
-    public MountType getEnabledMount() {
-        return enabledMount;
-    }
-
-    public void setEnabledMount(MountType enabledMount) {
-        this.enabledMount = enabledMount;
-    }
-
-    public ParticleEffectType getEnabledEffect() {
-        return enabledEffect;
-    }
-
-    public void setEnabledEffect(ParticleEffectType enabledEffect) {
-        this.enabledEffect = enabledEffect;
-    }
-
-    public PetType getEnabledPet() {
-        return enabledPet;
-    }
-
-    public void setEnabledPet(PetType enabledPet) {
-        this.enabledPet = enabledPet;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setFilterByOwned(boolean filterByOwned) {
+        this.filterByOwned = filterByOwned;
     }
 }

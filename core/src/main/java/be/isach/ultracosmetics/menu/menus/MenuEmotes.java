@@ -48,7 +48,7 @@ public class MenuEmotes extends CosmeticMenu<EmoteType> {
     }
 
     @Override
-    protected void toggleOff(UltraPlayer ultraPlayer) {
+    protected void toggleOff(UltraPlayer ultraPlayer, EmoteType type) {
         ultraPlayer.removeEmote();
     }
 

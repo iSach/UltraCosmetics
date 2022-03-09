@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.UnsafeValues;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -185,8 +184,7 @@ public class UltraCosmeticsData {
         try {
             Method mappingsVersionMethod = magicNumbersClass.getDeclaredMethod("getMappingsVersion");
             currentMappingsVersion = (String) mappingsVersionMethod.invoke(magicNumbers);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException 
-                | IllegalArgumentException | InvocationTargetException ignored) {}
+        } catch (ReflectiveOperationException ignored) {}
         if (currentMappingsVersion == null) {
             return version.getMappingsVersion() == null;
         }
@@ -194,7 +192,7 @@ public class UltraCosmeticsData {
     }
 
     public void initConfigFields() {
-        this.fileStorage = SettingsManager.getConfig().getString("Ammo-System-For-Gadgets.System").equalsIgnoreCase("file");
+        this.fileStorage = !SettingsManager.getConfig().getBoolean("MySQL.Enabled");
         this.placeHolderColor = SettingsManager.getConfig().getBoolean("Chat-Cosmetic-PlaceHolder-Color");
         this.ammoEnabled = SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Enabled");
         this.cooldownInBar = SettingsManager.getConfig().getBoolean("Categories.Gadgets.Cooldown-In-ActionBar");

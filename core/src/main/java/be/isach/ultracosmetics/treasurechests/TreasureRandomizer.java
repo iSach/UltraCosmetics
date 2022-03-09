@@ -205,7 +205,7 @@ public class TreasureRandomizer {
             spawnRandomFirework(loc);
         }
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Message.enabled")) {
-            Bukkit.broadcastMessage((getConfigMessage("TreasureChests.Loots.Money.Message.message")).replace("%name%", player.getName()).replace("%money%", money + ""));
+            broadcast((getConfigMessage("TreasureChests.Loots.Money.Message.message")).replace("%money%", money + ""));
         }
     }
 
@@ -221,7 +221,7 @@ public class TreasureRandomizer {
             spawnRandomFirework(loc);
         }
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Message.enabled")) {
-            Bukkit.broadcastMessage((getConfigMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%name%", player.getName()).replace("%ammo%", ammo + "").replace("%gadget%", (UltraCosmeticsData.get().arePlaceholdersColored()) ? g.getName() : TextUtil.filterColor(g.getName())));
+            broadcast((getConfigMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%ammo%", String.valueOf(ammo)).replace("%gadget%", (UltraCosmeticsData.get().arePlaceholdersColored()) ? g.getName() : TextUtil.filterColor(g.getName())));
         }
 
     }
@@ -238,8 +238,9 @@ public class TreasureRandomizer {
         spawnRandomFirework(loc);
         itemStack = cosmetic.getItemStack();
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots." + configName + ".Message.enabled")) {
-            Bukkit.broadcastMessage((getConfigMessage("TreasureChests.Loots." + configName + ".Message.message")).replace("%name%", player.getName())
-                    .replace("%" + lang.toLowerCase() + "%", UltraCosmeticsData.get().arePlaceholdersColored() ? cosmetic.getName() : TextUtil.filterColor(cosmetic.getName())));
+            String message = (getConfigMessage("TreasureChests.Loots." + configName + ".Message.message"))
+                    .replace("%" + lang.toLowerCase() + "%", UltraCosmeticsData.get().arePlaceholdersColored() ? cosmetic.getName() : TextUtil.filterColor(cosmetic.getName()));
+            broadcast(message);
         }
     }
 
@@ -251,14 +252,14 @@ public class TreasureRandomizer {
         CommandReward reward = rewards.getRandom();
         rewards.clear();
         for (String command : reward.getCommands()) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', command.replace("%name%", player.getName())));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%name%", player.getName()));
         }
         name = reward.getName().replace("%name%", player.getName());
         itemStack = reward.getItemStack();
         spawnRandomFirework(loc);
 
         if (reward.getMessageEnabled()) {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', reward.getMessage().replace("%name%", player.getName()).replace("%prefix%", MessageManager.getMessage("Prefix"))));
+            broadcast(ChatColor.translateAlternateColorCodes('&', reward.getMessage().replace("%prefix%", MessageManager.getMessage("Prefix"))));
         }
     }
 
@@ -283,6 +284,16 @@ public class TreasureRandomizer {
             for (Firework f : fireworks)
                 f.detonate();
         }, 2);
+    }
+
+    private void broadcast(String message) {
+        message = message.replace("%name%", player.getName());
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (SettingsManager.isAllowedWorld(player.getWorld())
+                    && UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).isTreasureNotifying()) {
+                player.sendMessage(message);
+            }
+        }
     }
 
     public void setLocation(Location newLoc) {

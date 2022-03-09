@@ -1,14 +1,11 @@
 package be.isach.ultracosmetics.listeners;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.menu.CosmeticsInventoryHolder;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
-import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import org.bukkit.Bukkit;
@@ -64,25 +61,6 @@ public class PlayerListener implements Listener {
                         event.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics > " + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
                     }
                 }
-
-                if (SettingsManager.isAllowedWorld(event.getPlayer().getWorld())
-                        && UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
-                    CosmeticsProfileManager cosmeticsProfileManager = ultraCosmetics.getCosmeticsProfileManager();
-                    if (cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId()) == null) {
-                        // ultraCosmetics.getSmartLogger().write("Creating cosmetics profile for " + event.getPlayer().getName());
-                        cosmeticsProfileManager.initForPlayer(cp);
-                    } else {
-                        //    ultraCosmetics.getSmartLogger().write("Loading cosmetics profile for " + event.getPlayer().getName());
-                        CosmeticsProfile cosmeticsProfile = cosmeticsProfileManager.getProfile(event.getPlayer().getUniqueId());
-                        cp.setCosmeticsProfile(cosmeticsProfile);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                cosmeticsProfile.loadToPlayer(cp);
-                            }
-                        }.runTask(ultraCosmetics);
-                    }
-                }
             }
         };
         bukkitRunnable.runTaskAsynchronously(ultraCosmetics);
@@ -98,14 +76,8 @@ public class PlayerListener implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
-                        CosmeticsProfile cp = ultraCosmetics.getCosmeticsProfileManager().getProfile(event.getPlayer().getUniqueId());
-                        if (cp == null) {
-                            ultraCosmetics.getCosmeticsProfileManager().initForPlayer(ultraPlayer);
-                        } else {
-                            cp.loadToPlayer();
-                        }
-                    }
+                    // check is done in the method
+                    ultraPlayer.equipProfile();
                 }
             }.runTaskLater(ultraCosmetics, 5);
         }
@@ -237,13 +209,11 @@ public class PlayerListener implements Listener {
         if (ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest() != null) {
             ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).getCurrentTreasureChest().forceOpen(0);
         }
-        // TODO: Do anything with cosmetics profile?
         UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
         up.setQuitting(true);
+        up.saveCosmeticsProfile();
         up.clear();
         up.removeMenuItem();
-        if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            ultraCosmetics.getCosmeticsProfileManager().clearPlayerFromProfile(up);
         ultraCosmetics.getPlayerManager().remove(event.getPlayer());
     }
 

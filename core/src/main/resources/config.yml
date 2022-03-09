@@ -204,7 +204,10 @@ TreasureChests:
       barriers: NETHER_BRICK_FENCE
       chest-type: NORMAL
       effect: SMOKE_NORMAL
-  Permission-Add-Command: lp user %name% permission set %permission% true
+  # This should be set to a command that sets permissions so UC can give cosmetics from treasure chests.
+  # %name% will be replaced with the player's name, and %permission% will be replaced with the permission to add.
+  # LuckPerms example: lp user %name% permission set %permission% true
+  Permission-Add-Command: say Please set "Permission-Add-Command" in UltraCosmetics config.yml
 
 # This option will fill the blank slots of inventories
 # with a custom item!
@@ -248,18 +251,18 @@ Mounts-Block-Trails: true
 # Ammo can be given with /uc give ammo
 # or bought from menu when activating gadget.
 #
-# For the system: 'file' or 'mysql'
-#
-# If you set mysql, please fill the MySQL infos.
+# Ammo will use MySQL if enabled.
 Ammo-System-For-Gadgets:
   Enabled: false
-  System: file
-  MySQL:
-    hostname: localhost
-    username: root
-    password: password
-    port: '3306'
-    database: UltraCosmetics
+
+MySQL:
+  Enabled: false
+  hostname: localhost
+  username: root
+  password: password
+  port: '3306'
+  database: UltraCosmetics
+  table: UltraCosmeticsData
 # The menu item settings.
 #
 # List for type: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
@@ -309,12 +312,9 @@ Gadget-Slot: 4
 # their drop key.
 Remove-Gadget-With-Drop: false
 
-# [BETA]
 # Allows for players to auto-equip on join cosmetics they had before disconnecting.
-# At the moment, only works while the server is up. Upon shutdown, the cosmetics saved states
-# are reset! Soon it will support shutdowns.
-Auto-Equip-Cosmetics:
-  enabled: false
+# Supports both flatfile and SQL, choosing SQL when possible.
+Auto-Equip-Cosmetics: false
 
 # Whether WorldGuard should be hooked when loading UC
 # Disable this if UC has trouble loading WorldGuard

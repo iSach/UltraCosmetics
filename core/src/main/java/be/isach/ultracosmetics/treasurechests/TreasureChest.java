@@ -185,7 +185,7 @@ public class TreasureChest implements Listener {
         runnable.runTaskTimer(uc, 0L, 12L);
 
         Bukkit.getScheduler().runTaskLater(uc, () -> {
-            if (pm.getUltraPlayer(player).getCurrentTreasureChest() == TreasureChest.this)
+            if (pm.getUltraPlayer(player) != null && pm.getUltraPlayer(player).getCurrentTreasureChest() == TreasureChest.this)
                 forceOpen(45);
         }, 1200L);
 

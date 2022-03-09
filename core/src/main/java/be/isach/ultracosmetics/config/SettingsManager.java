@@ -136,6 +136,10 @@ public class SettingsManager {
         return fileConfiguration.getBoolean(path);
     }
 
+    public boolean getBoolean(String path, boolean defaultValue) {
+        return fileConfiguration.getBoolean(path, defaultValue);
+    }
+
     /**
      * Get a int in config from a path.
      *

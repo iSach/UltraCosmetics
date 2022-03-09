@@ -86,7 +86,7 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
     }
 
     @Override
-    protected void toggleOff(UltraPlayer ultraPlayer) {
+    protected void toggleOff(UltraPlayer ultraPlayer, GadgetType type) {
         ultraPlayer.removeGadget();
     }
 

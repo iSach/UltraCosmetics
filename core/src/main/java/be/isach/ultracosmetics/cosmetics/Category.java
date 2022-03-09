@@ -132,6 +132,30 @@ public enum Category {
         return null;
     }
 
+    public CosmeticType<?> valueOfType(String name) {
+        if (name == null) return null;
+        switch(this) {
+        case EFFECTS:
+            return ParticleEffectType.valueOf(name);
+        case EMOTES:
+            return EmoteType.valueOf(name);
+        case GADGETS:
+            return GadgetType.valueOf(name);
+        case HATS:
+            return HatType.valueOf(name);
+        case MORPHS:
+            return MorphType.valueOf(name);
+        case MOUNTS:
+            return MountType.valueOf(name);
+        case PETS:
+            return PetType.valueOf(name);
+        case SUITS:
+            // at least return something
+            return SuitCategory.valueOf(name).getHelmet();
+        }
+        return null;
+    }
+
     /**
      * The config path name.
      */

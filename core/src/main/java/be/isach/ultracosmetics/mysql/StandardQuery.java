@@ -65,7 +65,7 @@ public class StandardQuery {
         if (UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().isDebug()) {
             String plaintext = sql.toString();
             for (Object obj : objects) {
-                plaintext = plaintext.replaceFirst("\\?", obj.toString());
+                plaintext = plaintext.replaceFirst("\\?", obj == null ? "NULL" : obj.toString());
             }
             Bukkit.getLogger().info("Executing SQL: " + plaintext);
         }

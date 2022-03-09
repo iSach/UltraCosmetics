@@ -37,7 +37,7 @@ public class MenuParticleEffects extends CosmeticMenu<ParticleEffectType> {
     }
 
     @Override
-    protected void toggleOff(UltraPlayer ultraPlayer) {
+    protected void toggleOff(UltraPlayer ultraPlayer, ParticleEffectType type) {
         ultraPlayer.removeParticleEffect();
     }
 

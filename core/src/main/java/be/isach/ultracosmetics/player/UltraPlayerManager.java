@@ -66,8 +66,11 @@ public class UltraPlayerManager {
     public void dispose() {
         Collection<UltraPlayer> set = playerCache.values();
         for (UltraPlayer cp : set) {
-            if (cp.getCurrentTreasureChest() != null)
+            cp.setQuitting(true);
+            if (cp.getCurrentTreasureChest() != null) {
                 cp.getCurrentTreasureChest().forceOpen(0);
+            }
+            cp.saveCosmeticsProfile();
             cp.clear();
             cp.removeMenuItem();
         }

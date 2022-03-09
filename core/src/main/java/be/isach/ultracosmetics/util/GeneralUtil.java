@@ -39,6 +39,7 @@ public class GeneralUtil {
         writer.println("General permissions, enabled by default:");
         writer.println("  - ultracosmetics.receivechest");
         writer.println("  - ultracosmetics.openmenu");
+        writer.println("  - ultracosmetics.commands.treasurenotification");
         writer.println();
         writer.println("Treasure Chests:");
         writer.println("  - ultracosmetics.treasurechests.buykey (enabled by default)");

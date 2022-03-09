@@ -20,8 +20,6 @@ import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
 import be.isach.ultracosmetics.placeholderapi.PlaceholderHook;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
-import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
-import be.isach.ultracosmetics.player.profile.CosmeticsProfileManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
@@ -35,8 +33,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -104,11 +100,6 @@ public class UltraCosmetics extends JavaPlugin {
     private ArmorStandManager armorStandManager;
 
     private EconomyHandler economyHandler;
-
-    /**
-     * Manages cosmetics profiles.
-     */
-    private CosmeticsProfileManager cosmeticsProfileManager;
     
     /**
      * Manages WorldGuard flags.
@@ -265,20 +256,6 @@ public class UltraCosmetics extends JavaPlugin {
             updateChecker.runTaskAsynchronously(this);
         }
 
-        if (UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) {
-            this.cosmeticsProfileManager = new CosmeticsProfileManager(this);
-            /**
-             * TODO Fix this.
-             * For some reason, the mount disappears without this kind of delay.
-             */
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    cosmeticsProfileManager.initPlayers();
-                }
-            }.runTaskLater(this, 20L);
-        }
-
         GeneralUtil.printPermissions(this);
 
         // Ended well :v
@@ -299,15 +276,6 @@ public class UltraCosmetics extends JavaPlugin {
 
         if (mySqlConnectionManager != null) {
             mySqlConnectionManager.shutdown();
-        }
-
-        // TODO Purge Pet Names. (and Treasure Chests bugged holograms).
-        // TODO Use Metadatas for that!
-
-        if (cosmeticsProfileManager != null) {
-            for (CosmeticsProfile cp : cosmeticsProfileManager.getCosmeticsProfiles().values()) {
-                cp.save();
-            }
         }
 
         playerManager.dispose();
@@ -444,6 +412,24 @@ public class UltraCosmetics extends JavaPlugin {
             section.set("Commands", Arrays.asList("give %name% yellow_flower 1", "lp user %name% permission set example.yellowflower true"));
         }
 
+        ConfigurationSection oldSQL = SettingsManager.getConfig().getConfigurationSection("Ammo-System-For-Gadgets.MySQL");
+        if (oldSQL != null) {
+            SettingsManager.getConfig().set("MySQL", oldSQL);
+            SettingsManager.getConfig().set("Ammo-System-For-Gadgets.MySQL", null);
+        }
+        String oldMysqlKey = "Ammo-System-For-Gadgets.System";
+        if (config.isString(oldMysqlKey)) {
+            config.set("MySQL.Enabled", !config.getString(oldMysqlKey).equalsIgnoreCase("file"));
+            config.set(oldMysqlKey, null);
+        }
+        config.addDefault("MySQL.Enabled", false);
+        config.addDefault("MySQL.hostname", "localhost");
+        config.addDefault("MySQL.username", "root");
+        config.addDefault("MySQL.password", "password");
+        config.addDefault("MySQL.port", "3306");
+        config.addDefault("MySQL.database", "database");
+        config.addDefault("MySQL.table", "UltraCosmeticsData");
+
         config.addDefault("Categories.Clear-Cosmetic-Item", XMaterial.REDSTONE_BLOCK.parseMaterial().toString(), "Item where user click to clear a cosmetic.");
         config.addDefault("Categories.Previous-Page-Item", XMaterial.ENDER_PEARL.parseMaterial().toString(), "Previous Page Item");
         config.addDefault("Categories.Next-Page-Item", XMaterial.ENDER_EYE.parseMaterial().toString(), "Next Page Item");
@@ -469,13 +455,9 @@ public class UltraCosmetics extends JavaPlugin {
             config.set("Auto-Equip-Cosmetics.is-enabled", false);
         }
 
-        if (!config.contains("Auto-Equip-Cosmetics")) {
-            config.createSection("Auto-Equip-Cosmetics", "[WARNING: ALPHA!]",
-                    "Allows for players to auto-equip on join cosmetics they had before disconnecting.",
-                    "At the moment, only works while the server is up. Upon shutdown, the cosmetics saved states",
-                    "are reset! Doesn't support MySQL yet.");
-            config.set("Auto-Equip-Cosmetics.is-enabled", false);
-            //config.set("Auto-Equip-Cosmetics.on-join", true);
+        if (config.isBoolean("Auto-Equip-Cosmetics.is-enabled")) {
+            boolean autoEquip = config.getBoolean("Auto-Equip-Cosmetics.is-enabled");
+            config.set("Auto-Equip-Cosmetics", autoEquip, "Allows for players to auto-equip on join cosmetics they had before disconnecting.", "Supports both flatfile and SQL, choosing SQL when possible.");
         }
 
         if (!config.contains("allow-damage-to-players-on-mounts")) {
@@ -488,6 +470,7 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("Menu-Item.Custom-Model-Data", 0, "Custom model data for the menu item. Only supported on MC >= 1.14.4 (when it was added)");
         config.addDefault("Menu-Item.Open-Menu-On-Inventory-Click", false, "Whether to open cosmetics menu when the menu item is clicked from the player's inventory");
         config.set("Menu-Item.Data", null);
+        config.addDefault("Auto-Equip-Cosmetics", true, "Allows for players to auto-equip on join cosmetics they had before disconnecting.", "Supports both flatfile and SQL, choosing SQL when possible.");
 
         upgradeIdsToMaterials();
 
@@ -580,10 +563,6 @@ public class UltraCosmetics extends JavaPlugin {
 
     public EconomyHandler getEconomyHandler() {
         return economyHandler;
-    }
-
-    public CosmeticsProfileManager getCosmeticsProfileManager() {
-        return cosmeticsProfileManager;
     }
 
     public AFlagManager getFlagManager() {

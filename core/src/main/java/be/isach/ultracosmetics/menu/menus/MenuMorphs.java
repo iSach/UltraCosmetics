@@ -73,7 +73,7 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
     }
 
     @Override
-    protected void toggleOff(UltraPlayer ultraPlayer) {
+    protected void toggleOff(UltraPlayer ultraPlayer, MorphType type) {
         ultraPlayer.removeMorph();
     }
 

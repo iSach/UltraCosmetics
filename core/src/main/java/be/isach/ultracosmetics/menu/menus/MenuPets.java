@@ -125,7 +125,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
     }
 
     @Override
-    protected void toggleOff(UltraPlayer ultraPlayer) {
+    protected void toggleOff(UltraPlayer ultraPlayer, PetType type) {
         ultraPlayer.removePet();
     }
 

@@ -11,6 +11,7 @@ import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
+import be.isach.ultracosmetics.util.XMaterial;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,25 +54,23 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
     }
 
     public void open(UltraPlayer player, int page) {
-        if (page > getMaxPages()) {
-            page = getMaxPages();
+        final int maxPages = getMaxPages(player);
+        if (page > maxPages) {
+            page = maxPages;
         }
         if (page < 1) {
             page = 1;
         }
 
-        Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), getSize(), getMaxPages() == 1 ? getName() : getName(page));
+        Inventory inventory = Bukkit.createInventory(new CosmeticsInventoryHolder(), getSize(), maxPages == 1 ? getName() : getName(page, player));
 
         // Cosmetic types.
-        Map<Integer,T> slots = getSlots(page);
+        Map<Integer,T> slots = getSlots(page, player);
         for (Entry<Integer,T> entry : slots.entrySet()) {
             int slot = entry.getKey();
             T cosmeticType = entry.getValue();
 
-            if (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")
-                    && !player.hasPermission(cosmeticType.getPermission())) {
-                continue;
-            }
+            if (shouldHideItem(player, cosmeticType)) continue;
 
             if (SettingsManager.getConfig().getBoolean("No-Permission.Custom-Item.enabled")
                     && !player.hasPermission(cosmeticType.getPermission())) {
@@ -143,7 +142,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         }
 
         // Next page item.
-        if (page < getMaxPages()) {
+        if (page < maxPages) {
             int finalPage = page;
             putItem(inventory, getSize() - 10, ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Next-Page-Item"),
                     MessageManager.getMessage("Menu.Next-Page")), (data) -> open(player, finalPage + 1));
@@ -153,7 +152,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         String message = MessageManager.getMessage(category.getClearConfigPath());
         ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
         putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
-            toggleOff(player);
+            toggleOff(player, null);
             open(player, getCurrentPage(player));
         });
 
@@ -162,6 +161,19 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             ItemStack item = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Back-Main-Menu-Item"), MessageManager.getMessage("Menu.Main-Menu"));
             putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(player));
         }
+
+        String filterItemName;
+        if (player.isFilteringByOwned()) {
+            filterItemName = MessageManager.getMessage("Disable-Filter-By-Owned");
+        } else {
+            filterItemName = MessageManager.getMessage("Enable-Filter-By-Owned");
+        }
+        ItemStack filterItem = ItemFactory.create(XMaterial.HOPPER, filterItemName);
+        final int finalPage = page;
+        putItem(inventory, inventory.getSize() - 3, filterItem, data -> {
+            player.setFilteringByOwned(!player.isFilteringByOwned());
+            open(player, finalPage); // refresh inventory completely because it changes the layout
+        });
 
         putItems(inventory, player, page);
         ItemFactory.fillInventory(inventory);
@@ -189,7 +201,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
                 && !title.equals(getName())) {
             String s = player.getOpenInventory().getTitle()
                     .replace(getName() + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(", "")
-                    .replace("/" + getMaxPages() + ")", "");
+                    .replace("/" + getMaxPages(ultraPlayer) + ")", "");
             return Integer.parseInt(s);
         }
         return 0;
@@ -200,17 +212,18 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      *
      * @return the maximum amount of pages.
      */
-    protected int getMaxPages() {
-        int max = 21;
-        int i = enabled().size();
-        if (i % max == 0) return i / max;
-        double j = i / 21;
-        int h = (int) Math.floor(j * 100) / 100;
-        return h + 1;
+    protected int getMaxPages(UltraPlayer player) {
+        int i = 0;
+        for (CosmeticType<?> type : enabled()) {
+            if (!shouldHideItem(player, type)) {
+                i++;
+            }
+        }
+        return Math.max(1, ((i - 1) / 21) + 1);
     }
 
     protected int getItemsPerPage() {
-        return 12;
+        return 21;
     }
 
     /**
@@ -235,8 +248,8 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      * @param page The page to open.
      * @return The name of the menu with page detailed.
      */
-    protected String getName(int page) {
-        return MessageManager.getMessage("Menus." + category.getConfigPath()) + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(" + page + "/" + getMaxPages() + ")";
+    protected String getName(int page, UltraPlayer ultraPlayer) {
+        return MessageManager.getMessage("Menus." + category.getConfigPath()) + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(" + page + "/" + getMaxPages(ultraPlayer) + ")";
     }
 
     @Override
@@ -283,20 +296,22 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
     public abstract List<T> enabled();
 
-    protected Map<Integer,T> getSlots(int page) {
-        int from = 21 * (page - 1);
-        int to = 21 * page;
+    protected Map<Integer,T> getSlots(int page, UltraPlayer player) {
+        int start = 21 * (page - 1);
+        int limit = 21;
+        int current = 0;
         Map<Integer,T> slots = new HashMap<>();
         List<T> enabled = enabled();
-        for (int i = from; i < to && i < enabled.size(); i++) {
-            slots.put(COSMETICS_SLOTS[i % 21], enabled.get(i));
+        for (int i = start; current < limit && i < enabled.size(); i++) {
+            if (shouldHideItem(player, enabled.get(i))) continue;
+            slots.put(COSMETICS_SLOTS[current++ % 21], enabled.get(i));
         }
         return slots;
     }
 
     protected abstract void toggleOn(UltraPlayer ultraPlayer, T type, UltraCosmetics ultraCosmetics);
 
-    protected abstract void toggleOff(UltraPlayer ultraPlayer);
+    protected abstract void toggleOff(UltraPlayer ultraPlayer, T type);
 
     protected abstract Cosmetic<?> getCosmetic(UltraPlayer ultraPlayer);
 
@@ -348,7 +363,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         }
 
         if (clicked.getItemMeta().getDisplayName().startsWith(category.getDeactivateMenu())) {
-            toggleOff(ultraPlayer);
+            toggleOff(ultraPlayer, cosmeticType);
             if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {
                 open(ultraPlayer, currentPage);
             }
@@ -357,10 +372,15 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
                 ultraPlayer.sendMessage(MessageManager.getMessage("No-Permission"));
                 return true;
             }
-            toggleOff(ultraPlayer);
             toggleOn(ultraPlayer, cosmeticType, getUltraCosmetics());
             return handleActivate(ultraPlayer);
         }
         return true;
+    }
+
+    protected boolean shouldHideItem(UltraPlayer player, CosmeticType<?> cosmeticType) {
+        return (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")
+                || player.isFilteringByOwned())
+                && !player.hasPermission(cosmeticType.getPermission());
     }
 }

@@ -85,7 +85,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
     }
 
     @Override
-    protected Map<Integer,SuitType> getSlots(int page) {
+    protected Map<Integer,SuitType> getSlots(int page, UltraPlayer player) {
         int from = (page - 1) * getItemsPerPage();
         int to = page * getItemsPerPage();
         Map<Integer,SuitType> slots = new HashMap<>();
@@ -112,8 +112,12 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
     }
 
     @Override
-    protected void toggleOff(UltraPlayer ultraPlayer) {
-        ultraPlayer.removeSuit();
+    protected void toggleOff(UltraPlayer ultraPlayer, SuitType type) {
+        if (type == null) {
+            ultraPlayer.removeSuit();
+            return;
+        }
+        toggleOff(ultraPlayer, type.getSlot());
     }
 
     @Override
@@ -124,5 +128,19 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
     @Override
     protected int getItemsPerPage() {
         return 7;
+    }
+
+    @Override
+    protected int getMaxPages(UltraPlayer player) {
+        int i = 0;
+        for (SuitCategory cat : SuitCategory.enabled()) {
+            if (player.hasPermission(cat.getHelmet().getPermission())
+                    || player.hasPermission(cat.getChestplate().getPermission())
+                    || player.hasPermission(cat.getLeggings().getPermission())
+                    || player.hasPermission(cat.getBoots().getPermission())) {
+                i++;
+            }
+        }
+        return Math.max(1, ((i - 1) / 21) + 1);
     }
 }

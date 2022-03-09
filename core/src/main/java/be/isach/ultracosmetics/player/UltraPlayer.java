@@ -20,6 +20,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.mysql.SqlCache;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
+import be.isach.ultracosmetics.player.profile.FileCosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -68,7 +69,7 @@ public class UltraPlayer {
     private Map<ArmorSlot, Suit> suitMap = new HashMap<>();
     private Emote currentEmote;
     /**
-     * Stores enabled cosmetics.
+     * Stores enabled cosmetics, keys, pet names, ammo, etc.
      */
     private CosmeticsProfile cosmeticsProfile;
     /**
@@ -80,10 +81,6 @@ public class UltraPlayer {
      * Cooldown map storing all the current cooldowns for gadgets.
      */
     private Map<GadgetType, Long> gadgetCooldowns = null;
-    /**
-     * MySql Cache.
-     */
-    private SqlCache sqlCache;
 
     private UltraCosmetics ultraCosmetics;
 
@@ -109,17 +106,13 @@ public class UltraPlayer {
         this.ultraCosmetics = ultraCosmetics;
 
         gadgetCooldowns = new HashMap<>();
-
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).addDefault("Gadgets-Enabled", true);
-            SettingsManager.getData(getBukkitPlayer()).addDefault("Third-Person-Morph-View", true);
-        }
-
         this.username = getBukkitPlayer().getDisplayName();
 
-        // sql loader thread add player to pre-load
-        if (!UltraCosmeticsData.get().usingFileStorage()) {
-            sqlCache = new SqlCache(uuid, ultraCosmetics);
+        if (UltraCosmeticsData.get().usingFileStorage()) {
+            cosmeticsProfile = new FileCosmeticsProfile(this, ultraCosmetics);
+        } else {
+            // loads data from database async
+            cosmeticsProfile = new SqlCache(this, ultraCosmetics); 
         }
     }
 
@@ -213,11 +206,7 @@ public class UltraPlayer {
     }
 
     public void addKeys(int amount) {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Keys", getKeys() + amount);
-        } else {
-            sqlCache.addKeys(amount);
-        }
+        cosmeticsProfile.addKeys(amount);
     }
 
     /**
@@ -238,12 +227,10 @@ public class UltraPlayer {
      * @return The amount of keys that the player owns.
      */
     public int getKeys() {
-        return UltraCosmeticsData.get().usingFileStorage() ? (int) SettingsManager.getData(getBukkitPlayer()).get("Keys") : sqlCache.getKeys();
+        return cosmeticsProfile.getKeys();
     }
 
     public void saveCosmeticsProfile() {
-        if (cosmeticsProfile == null) return;
-
         cosmeticsProfile.save();
     }
 
@@ -261,8 +248,9 @@ public class UltraPlayer {
 
     public void setCurrentSuitPart(ArmorSlot armorSlot, Suit suit) {
         suitMap.put(armorSlot, suit);
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
+        if (!isQuitting()) {
             cosmeticsProfile.setEnabledSuitPart(armorSlot, suit == null ? null : suit.getType());
+        }
     }
 
     /**
@@ -271,11 +259,6 @@ public class UltraPlayer {
      * @param armorSlot The ArmorSlot to remove.
      */
     public void removeSuit(ArmorSlot armorSlot) {
-        if (!suitMap.containsKey(armorSlot)) {
-            suitMap.put(armorSlot, null);
-            return;
-        }
-
         if (suitMap.get(armorSlot) == null) {
             return;
         }
@@ -300,10 +283,6 @@ public class UltraPlayer {
      * @return The Suit from the armor slot.
      */
     public Suit getSuit(ArmorSlot armorSlot) {
-        if (!suitMap.containsKey(armorSlot)) {
-            suitMap.put(armorSlot, null);
-        }
-
         return suitMap.get(armorSlot);
     }
 
@@ -451,11 +430,7 @@ public class UltraPlayer {
         if (name.isEmpty()) {
             name = null;
         }
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Pet-Names." + petType.getConfigName(), name);
-        } else {
-            sqlCache.setName(petType, name);
-        }
+        cosmeticsProfile.setPetName(petType, name);
         if (currentPet != null) {
             currentPet.updateName();
         }
@@ -468,11 +443,7 @@ public class UltraPlayer {
      * @return The pet name.
      */
     public String getPetName(PetType petType) {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            return SettingsManager.getData(getBukkitPlayer()).getString("Pet-Names." + petType.getConfigName());
-        } else {
-            return sqlCache.getPetName(petType);
-        }
+        return cosmeticsProfile.getPetName(petType);
     }
 
     /**
@@ -483,11 +454,7 @@ public class UltraPlayer {
      */
     public void addAmmo(GadgetType type, int amount) {
         if (UltraCosmeticsData.get().isAmmoEnabled()) {
-            if (UltraCosmeticsData.get().usingFileStorage()) {
-                SettingsManager.getData(getBukkitPlayer()).set("Ammo." + type.toString().toLowerCase(), getAmmo(type) + amount);
-            } else {
-                sqlCache.addAmmo(type, amount);
-            }
+            cosmeticsProfile.addAmmo(type, amount);
 
             if (currentGadget != null) {
                 getBukkitPlayer().getInventory().setItem(SettingsManager.getConfig().getInt("Gadget-Slot"),
@@ -509,11 +476,7 @@ public class UltraPlayer {
      * @param enabled if player has gadgets enabled.
      */
     public void setGadgetsEnabled(boolean enabled) {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Gadgets-Enabled", enabled);
-        } else {
-            sqlCache.setGadgetsEnabled(enabled);
-        }
+        cosmeticsProfile.setGadgetsEnabled(enabled);
 
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-Gadgets"));
@@ -526,11 +489,7 @@ public class UltraPlayer {
      * @return if the player has gadgets enabled or not.
      */
     public boolean hasGadgetsEnabled() {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            return SettingsManager.getData(getBukkitPlayer()).getBoolean("Gadgets-Enabled");
-        } else {
-            return sqlCache.hasGadgetsEnabled();
-        }
+        return cosmeticsProfile.hasGadgetsEnabled();
     }
 
     /**
@@ -539,11 +498,7 @@ public class UltraPlayer {
      * @param enabled if player should be able to see his own morph.
      */
     public void setSeeSelfMorph(boolean enabled) {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            SettingsManager.getData(getBukkitPlayer()).set("Third-Person-Morph-View", enabled);
-        } else {
-            sqlCache.setSeeSelfMorph(enabled);
-        }
+        cosmeticsProfile.setSeeSelfMorph(enabled);
         if (enabled) {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Enabled-SelfMorphView"));
         } else {
@@ -556,11 +511,7 @@ public class UltraPlayer {
      * @return if player should be able to see his own morph or not.
      */
     public boolean canSeeSelfMorph() {
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            return SettingsManager.getData(getBukkitPlayer()).getBoolean("Third-Person-Morph-View");
-        } else {
-            return sqlCache.canSeeSelfMorph();
-        }
+        return cosmeticsProfile.canSeeSelfMorph();
     }
 
     /**
@@ -571,11 +522,7 @@ public class UltraPlayer {
      */
     public int getAmmo(GadgetType type) {
         if (!UltraCosmeticsData.get().isAmmoEnabled()) return 0;
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            return (int) SettingsManager.getData(getBukkitPlayer()).get("Ammo." + type.toString().toLowerCase());
-        } else {
-            return sqlCache.getAmmo(type);
-        }
+        return cosmeticsProfile.getAmmo(type);
     }
 
     /**
@@ -661,8 +608,9 @@ public class UltraPlayer {
 
     public void setCurrentEmote(Emote currentEmote) {
         this.currentEmote = currentEmote;
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledEmote(currentEmote == null ? null : currentEmote.getType());
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(Category.EMOTES, currentEmote);
+        }
     }
 
     public Gadget getCurrentGadget() {
@@ -671,8 +619,9 @@ public class UltraPlayer {
 
     public void setCurrentGadget(Gadget currentGadget) {
         this.currentGadget = currentGadget;
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledGadget(currentGadget == null ? null : currentGadget.getType());
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(Category.GADGETS, currentGadget);
+        }
     }
 
     public Map<GadgetType, Long> getGadgetCooldowns() {
@@ -689,8 +638,9 @@ public class UltraPlayer {
 
     public void setCurrentHat(Hat currentHat) {
         this.currentHat = currentHat;
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledHat(currentHat == null ? null : currentHat.getType());
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(Category.HATS, currentHat);
+        }
     }
 
     public Morph getCurrentMorph() {
@@ -699,8 +649,9 @@ public class UltraPlayer {
 
     public void setCurrentMorph(Morph currentMorph) {
         this.currentMorph = currentMorph;
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledMorph(currentMorph == null ? null : currentMorph.getType());
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(Category.MORPHS, currentMorph);
+        }
     }
 
     public Mount<?> getCurrentMount() {
@@ -709,8 +660,9 @@ public class UltraPlayer {
 
     public void setCurrentMount(Mount<?> currentMount) {
         this.currentMount = currentMount;
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledMount(currentMount == null ? null : currentMount.getType());
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(Category.MOUNTS, currentMount);
+        }
     }
 
     public ParticleEffect getCurrentParticleEffect() {
@@ -719,8 +671,9 @@ public class UltraPlayer {
 
     public void setCurrentParticleEffect(ParticleEffect currentParticleEffect) {
         this.currentParticleEffect = currentParticleEffect;
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledEffect(currentParticleEffect == null ? null : currentParticleEffect.getType());
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(Category.EFFECTS, currentParticleEffect);
+        }
     }
 
     public Pet getCurrentPet() {
@@ -729,8 +682,9 @@ public class UltraPlayer {
 
     public void setCurrentPet(Pet currentPet) {
         this.currentPet = currentPet;
-        if (!isQuitting() && cosmeticsProfile != null && UltraCosmeticsData.get().areCosmeticsProfilesEnabled())
-            cosmeticsProfile.setEnabledPet(currentPet == null ? null : currentPet.getType());
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(Category.PETS, currentPet);
+        }
     }
 
     public TreasureChest getCurrentTreasureChest() {
@@ -788,14 +742,6 @@ public class UltraPlayer {
         }
     }
 
-    public CosmeticsProfile getCosmeticsProfile() {
-        return cosmeticsProfile;
-    }
-
-    public void setCosmeticsProfile(CosmeticsProfile cosmeticsProfile) {
-        this.cosmeticsProfile = cosmeticsProfile;
-    }
-
     public boolean isOnline() {
         return Bukkit.getServer().getPlayer(uuid) != null;
     }
@@ -814,5 +760,26 @@ public class UltraPlayer {
 
     public boolean isBypassingCooldown() {
         return getBukkitPlayer().hasPermission("ultracosmetics.bypass.cooldown");
+    }
+
+    public void equipProfile() {
+        // enabled check is in the equip method
+        cosmeticsProfile.equip();
+    }
+
+    public boolean isFilteringByOwned() {
+        return cosmeticsProfile.isFilterByOwned();
+    }
+
+    public void setFilteringByOwned(boolean filterByOwned) {
+        cosmeticsProfile.setFilterByOwned(filterByOwned);
+    }
+
+    public boolean isTreasureNotifying() {
+        return cosmeticsProfile.isTreasureNotifications();
+    }
+
+    public void setTreasureNotifying(boolean treasureNotifications) {
+        cosmeticsProfile.setTreasureNotifications(treasureNotifications);
     }
 }

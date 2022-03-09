@@ -1,14 +1,23 @@
 package be.isach.ultracosmetics.mysql;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
+import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Package: be.isach.ultracosmetics.mysql
@@ -16,94 +25,132 @@ import org.bukkit.Bukkit;
  * Date: 15/08/15
  * Project: UltraCosmetics
  */
-public class SqlCache {
+public class SqlCache extends CosmeticsProfile {
     private final Table table;
-    private final UUID uuid;
-    private boolean gadgetsEnabled;
-    private boolean morphSelfView;
-    private Map<PetType,String> petNames = new HashMap<>();
-    private Map<GadgetType,Integer> ammo = new HashMap<>();
-    private int keys;
+    private Map<String,Optional<Object>> updateQueue = new ConcurrentHashMap<>();
+    private BukkitTask updateTask = null;
 
-    public SqlCache(UUID uuid, UltraCosmetics ultraCosmetics) {
+    public SqlCache(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
+        super(ultraPlayer, ultraCosmetics);
         this.table = ultraCosmetics.getMySqlConnectionManager().getTable();
-        this.uuid = uuid;
-        Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> load());
     }
 
-    private void load() {
+    @Override
+    protected void load() {
         // update table with UUID. If it's already there, ignore
         table.insertIgnore().insert("uuid", uuid.toString()).execute();
         Map<String,Object> properties = table.select("*").uuid(uuid).getAll();
         gadgetsEnabled = (boolean) properties.get("gadgetsEnabled");
         morphSelfView = (boolean) properties.get("selfmorphview");
         for (PetType type : PetType.enabled()) {
-            petNames.put(type, (String) properties.get(cleanPetName(type)));
+            petNames.put(type, (String) properties.get(cleanCosmeticName(type)));
         }
         for (GadgetType type : GadgetType.enabled()) {
-            ammo.put(type, (int) properties.get(cleanGadgetName(type)));
+            ammo.put(type, (int) properties.get(cleanCosmeticName(type)));
         }
         keys = (int) properties.get("treasureKeys");
+        for (Category cat : Category.enabled()) {
+            if (cat == Category.SUITS) {
+                for (ArmorSlot slot : ArmorSlot.values()) {
+                    String suitCategory = (String) properties.get(Category.SUITS.toString().toLowerCase() + "_" + slot.toString().toLowerCase());
+                    if (suitCategory == null) continue;
+                    enabledSuitParts.put(slot, SuitCategory.valueOf(suitCategory.toUpperCase()).getPiece(slot));
+                }
+                continue;
+            }
+            ultraCosmetics.getSmartLogger().write("Loading category " + cat.toString() + " with value " + properties.get(cleanCategoryName(cat)) + " which has type " + cat.valueOfType((String) properties.get(cleanCategoryName(cat))));
+            enabled.put(cat, cat.valueOfType((String) properties.get(cleanCategoryName(cat))));
+        }
     }
 
-    public int getAmmo(GadgetType gadget) {
-        return ammo.get(gadget);
+    @Override
+    public void setEnabledCosmetic(Category cat, CosmeticType<?> type) {
+        super.setEnabledCosmetic(cat, type);
+        if (cat == Category.SUITS) return; // handled by setEnabledSuitPart
+        queueUpdate(cleanCategoryName(cat), type == null ? null : cleanCosmeticName(type));
     }
 
+    @Override
+    public void setEnabledSuitPart(ArmorSlot slot, SuitType type) {
+        super.setEnabledSuitPart(slot, type);
+        queueUpdate(cleanCategoryName(Category.SUITS) + "_" + slot.toString().toLowerCase(), cleanCosmeticName(type));
+    }
+
+    @Override
     public void setAmmo(GadgetType type, int amount) {
-        table.update().set(cleanGadgetName(type), amount).uuid(uuid).execute();
-        ammo.put(type, amount);
+        super.setAmmo(type, amount);
+        queueUpdate(cleanCosmeticName(type), amount);
     }
 
-    public void addAmmo(GadgetType type, int amount) {
-        setAmmo(type, getAmmo(type) + amount);
+    @Override
+    public void setPetName(PetType type, String name) {
+        super.setPetName(type, name);
+        queueUpdate(cleanCosmeticName(type), name);
     }
 
-    public String getPetName(PetType pet) {
-        return petNames.get(pet);
-    }
-
-    public void setName(PetType pet, String name) {
-        table.update().set(cleanPetName(pet), name).uuid(uuid).execute();
-        petNames.put(pet, name);
-    }
-
-    public int getKeys() {
-        return keys;
-    }
-
+    @Override
     public void setKeys(int amount) {
-        table.update().set("treasureKeys", amount).uuid(uuid).execute();
-        keys = amount;
+        super.setKeys(amount);
+        queueUpdate("treasureKeys", amount);
     }
 
-    public void addKeys(int amount) {
-        setKeys(getKeys() + amount);
+    @Override
+    public void setGadgetsEnabled(boolean gadgetsEnabled) {
+        super.setGadgetsEnabled(gadgetsEnabled);
+        queueUpdate("gadgetsEnabled", gadgetsEnabled);
     }
 
-    public void setGadgetsEnabled(boolean enabled) {
-        table.update().set("gadgetsEnabled", enabled).uuid(uuid).execute();
-        gadgetsEnabled = enabled;
+    @Override
+    public void setSeeSelfMorph(boolean seeSelfMorph) {
+        super.setSeeSelfMorph(seeSelfMorph);
+        queueUpdate("selfmorphview", seeSelfMorph);
     }
 
-    public boolean hasGadgetsEnabled() {
-        return gadgetsEnabled;
+    @Override
+    public void setTreasureNotifications(boolean treasureNotifications) {
+        super.setTreasureNotifications(treasureNotifications);
+        queueUpdate("treasureNotifications", treasureNotifications);
     }
 
-    public void setSeeSelfMorph(boolean enabled) {
-        table.update().set("selfmorphview", enabled).uuid(uuid).execute();
-        morphSelfView = enabled;
+    @Override
+    public void setFilterByOwned(boolean filterByOwned) {
+        super.setFilterByOwned(filterByOwned);
+        queueUpdate("filterByOwned", filterByOwned);
     }
 
-    public boolean canSeeSelfMorph() {
-        return morphSelfView;
+    private String cleanCosmeticName(CosmeticType<?> cosmetic) {
+        return cosmetic == null ? null : cosmetic.getConfigName().toLowerCase().replace("_", "");
     }
 
-    private String cleanGadgetName(GadgetType gadget) {
-        return gadget.toString().toLowerCase().replace("_", "");
+    private String cleanCategoryName(Category cat) {
+        return cat.toString().toLowerCase();
     }
 
-    private String cleanPetName(PetType pet) {
-        return pet.getConfigName().toLowerCase();
+    /**
+     * This function optimizes multiple separate queries into
+     * a single update query, as well as properly handling any
+     * conflicting queries in the order they were actually
+     * received.
+     * @param key
+     * @param value
+     */
+    private void queueUpdate(String key, Object value) {
+        updateQueue.put(key, Optional.ofNullable(value));
+        if (updateTask == null || !Bukkit.getScheduler().isQueued(updateTask.getTaskId())) {
+            updateTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    StandardQuery query = table.update().uuid(uuid);
+                    updateQueue.forEach((k,v) -> query.set(k, v.orElse(null)));
+                    query.execute();
+                    updateQueue.clear();
+                }
+            }.runTaskAsynchronously(ultraCosmetics);
+        }
+    }
+
+    // Saved on write
+    @Override
+    public void save() {
     }
 }

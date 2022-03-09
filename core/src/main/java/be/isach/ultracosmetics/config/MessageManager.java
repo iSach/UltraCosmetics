@@ -111,6 +111,10 @@ public class MessageManager {
         addMessage("Enable-Gadgets", "&a&lEnable Gadgets");
         addMessage("Disable-Third-Person-View", "&c&lDisable Morphs Third Person View");
         addMessage("Enable-Third-Person-View", "&a&lEnable Morphs Third Person View");
+        addMessage("Disable-Filter-By-Owned", "&c&lChange to Show All");
+        addMessage("Enable-Filter-By-Owned", "&c&lChange to Filter By Owned");
+        addMessage("Disable-Treasure-Notification", "&c&lTreasure notifications disabled");
+        addMessage("Enable-Treasure-Notification", "&c&lTreasure notifications enabled");
         addMessage("Gadgets-Enabled-Needed", "%prefix% &c&lYou need to enable gadgets!");
 
         // GADGETS

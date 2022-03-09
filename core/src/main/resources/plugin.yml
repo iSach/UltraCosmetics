@@ -67,6 +67,8 @@ permissions:
     default: op
   ultracosmetics.command.purge:
     default: op
+  ultracosmetics.command.treasurenotification:
+    default: true
   ultracosmetics.gadgets.*:
     children:
       - ultracosmetics.gadgets.paintballgun
