@@ -40,8 +40,6 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 
     @Override
     public void run() {
-        super.run();
-
         try {
             if (Bukkit.getPlayer(getOwnerUniqueId()) != null
                     && getOwner().getCurrentParticleEffect() != null

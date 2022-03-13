@@ -49,6 +49,7 @@ public class SubCommandPurge extends SubCommand {
 			    return;
 			}
 			for (File file : dataFolder.listFiles()) {
+			    // this is 1 day in ms?
 				if (file.lastModified() < System.currentTimeMillis() + 86400000) { // File old enough to check for config values set
 					YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 					if (config.getInt("Keys") > 0 || config.contains("Pet-Names")) {

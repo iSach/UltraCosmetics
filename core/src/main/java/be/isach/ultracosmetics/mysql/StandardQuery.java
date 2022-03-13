@@ -14,8 +14,6 @@ import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Function;
 
-import org.bukkit.Bukkit;
-
 import be.isach.ultracosmetics.UltraCosmeticsData;
 
 public class StandardQuery {
@@ -67,7 +65,7 @@ public class StandardQuery {
             for (Object obj : objects) {
                 plaintext = plaintext.replaceFirst("\\?", obj == null ? "NULL" : obj.toString());
             }
-            Bukkit.getLogger().info("Executing SQL: " + plaintext);
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write("Executing SQL: " + plaintext);
         }
         try (Connection connection = table.getConnection(); PreparedStatement statement = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < objects.size(); i++) {

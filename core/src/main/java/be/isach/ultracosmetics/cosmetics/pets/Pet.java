@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -240,5 +241,15 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (event.getPlayer() == getPlayer())
             getEntity().teleport(getPlayer());
+    }
+
+    @Override
+    protected String filterPlaceholders(String message) {
+        String filtered = super.filterPlaceholders(message);
+        String name = getOwner().getPetName(getType());
+        if (name != null) {
+            filtered += " " + ChatColor.GRAY + "(" + name + ChatColor.GRAY + ")";
+        }
+        return filtered; 
     }
 }

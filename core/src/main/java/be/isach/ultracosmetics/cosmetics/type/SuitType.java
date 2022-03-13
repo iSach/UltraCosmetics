@@ -71,7 +71,7 @@ public class SuitType extends CosmeticType<Suit> {
             e.printStackTrace();
             return null;
         }
-        suit.equip(slot);
+        suit.equip();
         return suit;
     }
 

@@ -125,7 +125,7 @@ public enum Category {
     public static Category fromString(String name) {
         String lowerName = name.toLowerCase();
         for (Category cat : values()) {
-            if (lowerName.endsWith(cat.prefix)) {
+            if (lowerName.startsWith(cat.prefix)) {
                 return cat;
             }
         }

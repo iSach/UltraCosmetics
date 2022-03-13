@@ -3,11 +3,9 @@ package be.isach.ultracosmetics.cosmetics;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
-import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -59,12 +57,7 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
         this.equipped = true;
 
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-        if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null) {
-            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics())
-                    + " " + ChatColor.GRAY + "(" + owner.getPetName((PetType) cosmeticType) + ChatColor.GRAY + ")");
-        } else {
-            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
-        }
+        mess = filterPlaceholders(mess);
         getPlayer().sendMessage(mess);
 
         onEquip();
@@ -72,21 +65,14 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
     public void clear() {
         String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-        if (category == Category.PETS && cosmeticType instanceof PetType && owner.getPetName((PetType) cosmeticType) != null) {
-            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics())
-                    + " " + ChatColor.GRAY + "(" + owner.getPetName((PetType) cosmeticType) + ChatColor.GRAY + ")");
-        } else {
-            mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
-        }
+        mess = filterPlaceholders(mess);
         getPlayer().sendMessage(mess);
 
         HandlerList.unregisterAll(this);
 
         try {
             cancel();
-        } catch (IllegalStateException ignored) {
-            // Not Scheduled yet. Ignore.
-        }
+        } catch (IllegalStateException ignored) {} // not scheduled yet
 
         // Call untask finally. (in main thread)
         onClear();
@@ -130,5 +116,9 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
     protected String getTypeName() {
         return getType().getName();
+    }
+
+    protected String filterPlaceholders(String message) {
+        return message.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
     }
 }

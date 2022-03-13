@@ -27,14 +27,9 @@ public class UltraPlayerManager {
     }
 
     public UltraPlayer getUltraPlayer(Player player) {
-        if (player == null || !playerCache.containsKey(player.getUniqueId()))
-            return null;
+        if (player == null) return null;
 
-        UltraPlayer p = playerCache.get(player.getUniqueId());
-        if (p == null) {
-            return create(player);
-        }
-        return p;
+        return playerCache.get(player.getUniqueId());
     }
 
     public UltraPlayer create(Player player) {

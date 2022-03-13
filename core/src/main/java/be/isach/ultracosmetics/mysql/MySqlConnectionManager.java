@@ -51,6 +51,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
     private final String CREATE_TABLE;
     private final List<Column> columns = new ArrayList<>();
     private final boolean debug;
+    private boolean success = true;
 
     public MySqlConnectionManager(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -132,6 +133,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
     }
 
     private void reportFailure(Exception e) {
+        success = false;
         SmartLogger log = ultraCosmetics.getSmartLogger();
         log.write(LogLevel.ERROR, "Could not connect to MySQL server!");
         log.write(LogLevel.ERROR, "Error:");
@@ -148,6 +150,10 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public boolean success() {
+        return success;
     }
 
     public void shutdown() {

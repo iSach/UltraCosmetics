@@ -36,6 +36,7 @@ public class Hat extends Cosmetic<HatType> {
 
         if (getPlayer().getInventory().getHelmet() != null) {
             getPlayer().sendMessage(MessageManager.getMessage("Hats.Must-Remove-Hat"));
+            clear();
             return;
         }
 

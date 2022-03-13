@@ -9,8 +9,6 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.TextUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,7 +31,6 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     public Suit(UltraPlayer ultraPlayer, SuitType suitType, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.SUITS, ultraPlayer, suitType);
-        Bukkit.getPluginManager().registerEvents(this, ultraCosmetics);
     }
 
     @EventHandler
@@ -80,12 +77,8 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
                 && is.getItemMeta().getDisplayName().equals(itemStack.getItemMeta().getDisplayName());
     }
 
-    public void equip(ArmorSlot slot) {
-        if (!getOwner().getBukkitPlayer().hasPermission(getType().getPermission())) {
-            getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
-            return;
-        }
-
+    @Override
+    protected void onEquip() {
         // Remove current equipped armor piece
         getOwner().removeSuit(getArmorSlot());
 
@@ -98,22 +91,10 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
         // give up and ask the user to free up the slot.
         if (getArmorItem() != null) {
             getOwner().sendMessage(MessageManager.getMessage("Suits.Must-Remove." + getArmorSlot().toString()));
+            clear();
             return;
         }
 
-        getUltraCosmetics().getServer().getPluginManager().registerEvents(this, getUltraCosmetics());
-
-        this.equipped = true;
-
-        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-        mess = mess.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
-        getPlayer().sendMessage(mess);
-
-        onEquip();
-    }
-
-    @Override
-    protected void onEquip() {
         setupItemStack();
         setArmorItem(itemStack);
 

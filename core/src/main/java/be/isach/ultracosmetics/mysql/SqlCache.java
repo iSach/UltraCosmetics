@@ -6,10 +6,10 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
-import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
+import be.isach.ultracosmetics.player.profile.ProfileKey;
 
 import java.util.Map;
 import java.util.Optional;
@@ -36,94 +36,68 @@ public class SqlCache extends CosmeticsProfile {
     }
 
     @Override
-    protected void load() {
-        // update table with UUID. If it's already there, ignore
-        table.insertIgnore().insert("uuid", uuid.toString()).execute();
-        Map<String,Object> properties = table.select("*").uuid(uuid).getAll();
-        gadgetsEnabled = (boolean) properties.get("gadgetsEnabled");
-        morphSelfView = (boolean) properties.get("selfmorphview");
-        for (PetType type : PetType.enabled()) {
-            petNames.put(type, (String) properties.get(cleanCosmeticName(type)));
-        }
-        for (GadgetType type : GadgetType.enabled()) {
-            ammo.put(type, (int) properties.get(cleanCosmeticName(type)));
-        }
-        keys = (int) properties.get("treasureKeys");
-        for (Category cat : Category.enabled()) {
-            if (cat == Category.SUITS) {
-                for (ArmorSlot slot : ArmorSlot.values()) {
-                    String suitCategory = (String) properties.get(Category.SUITS.toString().toLowerCase() + "_" + slot.toString().toLowerCase());
-                    if (suitCategory == null) continue;
-                    enabledSuitParts.put(slot, SuitCategory.valueOf(suitCategory.toUpperCase()).getPiece(slot));
-                }
-                continue;
-            }
-            ultraCosmetics.getSmartLogger().write("Loading category " + cat.toString() + " with value " + properties.get(cleanCategoryName(cat)) + " which has type " + cat.valueOfType((String) properties.get(cleanCategoryName(cat))));
-            enabled.put(cat, cat.valueOfType((String) properties.get(cleanCategoryName(cat))));
-        }
+    public void load() {
+        data.loadFromSQL();
+    }
+
+    // Saved on write
+    @Override
+    public void save() {
     }
 
     @Override
     public void setEnabledCosmetic(Category cat, CosmeticType<?> type) {
         super.setEnabledCosmetic(cat, type);
         if (cat == Category.SUITS) return; // handled by setEnabledSuitPart
-        queueUpdate(cleanCategoryName(cat), type == null ? null : cleanCosmeticName(type));
+        queueUpdate(Table.cleanCategoryName(cat), type == null ? null : Table.cleanCosmeticName(type));
     }
 
     @Override
     public void setEnabledSuitPart(ArmorSlot slot, SuitType type) {
         super.setEnabledSuitPart(slot, type);
-        queueUpdate(cleanCategoryName(Category.SUITS) + "_" + slot.toString().toLowerCase(), cleanCosmeticName(type));
+        queueUpdate(Table.cleanCategoryName(Category.SUITS) + "_" + slot.toString().toLowerCase(), Table.cleanCosmeticName(type));
     }
 
     @Override
     public void setAmmo(GadgetType type, int amount) {
         super.setAmmo(type, amount);
-        queueUpdate(cleanCosmeticName(type), amount);
+        queueUpdate(Table.cleanCosmeticName(type), amount);
     }
 
     @Override
     public void setPetName(PetType type, String name) {
         super.setPetName(type, name);
-        queueUpdate(cleanCosmeticName(type), name);
+        queueUpdate(Table.cleanCosmeticName(type), name);
     }
 
     @Override
     public void setKeys(int amount) {
         super.setKeys(amount);
-        queueUpdate("treasureKeys", amount);
+        queueUpdate(ProfileKey.KEYS, amount);
     }
 
     @Override
     public void setGadgetsEnabled(boolean gadgetsEnabled) {
         super.setGadgetsEnabled(gadgetsEnabled);
-        queueUpdate("gadgetsEnabled", gadgetsEnabled);
+        queueUpdate(ProfileKey.GADGETS_ENABLED, gadgetsEnabled);
     }
 
     @Override
     public void setSeeSelfMorph(boolean seeSelfMorph) {
         super.setSeeSelfMorph(seeSelfMorph);
-        queueUpdate("selfmorphview", seeSelfMorph);
+        queueUpdate(ProfileKey.MORPH_VIEW, seeSelfMorph);
     }
 
     @Override
     public void setTreasureNotifications(boolean treasureNotifications) {
         super.setTreasureNotifications(treasureNotifications);
-        queueUpdate("treasureNotifications", treasureNotifications);
+        queueUpdate(ProfileKey.TREASURE_NOTIFICATION, treasureNotifications);
     }
 
     @Override
     public void setFilterByOwned(boolean filterByOwned) {
         super.setFilterByOwned(filterByOwned);
-        queueUpdate("filterByOwned", filterByOwned);
-    }
-
-    private String cleanCosmeticName(CosmeticType<?> cosmetic) {
-        return cosmetic == null ? null : cosmetic.getConfigName().toLowerCase().replace("_", "");
-    }
-
-    private String cleanCategoryName(Category cat) {
-        return cat.toString().toLowerCase();
+        queueUpdate(ProfileKey.FILTER_OWNED, filterByOwned);
     }
 
     /**
@@ -135,6 +109,7 @@ public class SqlCache extends CosmeticsProfile {
      * @param value
      */
     private void queueUpdate(String key, Object value) {
+        // use Optionals because ConcurrentHashMap doesn't support null values
         updateQueue.put(key, Optional.ofNullable(value));
         if (updateTask == null || !Bukkit.getScheduler().isQueued(updateTask.getTaskId())) {
             updateTask = new BukkitRunnable() {
@@ -149,8 +124,7 @@ public class SqlCache extends CosmeticsProfile {
         }
     }
 
-    // Saved on write
-    @Override
-    public void save() {
+    private void queueUpdate(ProfileKey key, Object value) {
+        queueUpdate(key.getSqlKey(), value);
     }
 }

@@ -1,7 +1,5 @@
 package be.isach.ultracosmetics.player.profile;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
 
@@ -24,19 +22,12 @@ public abstract class CosmeticsProfile {
     protected final UltraPlayer ultraPlayer;
     protected final UUID uuid;
     protected final UltraCosmetics ultraCosmetics;
-    protected Map<Category,CosmeticType<?>> enabled = new HashMap<>();
-    protected Map<ArmorSlot, SuitType> enabledSuitParts = new HashMap<>();
-    protected int keys;
-    protected boolean gadgetsEnabled;
-    protected boolean morphSelfView;
-    protected boolean treasureNotifications;
-    protected boolean filterByOwned;
-    protected Map<PetType,String> petNames = new HashMap<>();
-    protected Map<GadgetType,Integer> ammo = new HashMap<>();
+    protected final PlayerData data;
     public CosmeticsProfile(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
         this.ultraPlayer = ultraPlayer;
         this.uuid = ultraPlayer.getUUID();
         this.ultraCosmetics = ultraCosmetics;
+        this.data = new PlayerData(uuid);
         Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
             load();
             if (!UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) return;
@@ -53,13 +44,13 @@ public abstract class CosmeticsProfile {
 
     public void equip() {
         if (!SettingsManager.isAllowedWorld(ultraPlayer.getBukkitPlayer().getWorld())) return;
-        for (Entry<Category,CosmeticType<?>> type : enabled.entrySet()) {
+        for (Entry<Category,CosmeticType<?>> type : data.getEnabledCosmetics().entrySet()) {
             if (type.getValue() == null || !type.getKey().isEnabled() || !type.getValue().isEnabled()) continue;
             type.getValue().equip(ultraPlayer, ultraCosmetics);
         }
 
         if (Category.SUITS.isEnabled()) {
-            for (SuitType type : enabledSuitParts.values()) {
+            for (SuitType type : data.getEnabledSuitParts().values()) {
                 if (type == null || !type.isEnabled()) continue;
                 type.equip(ultraPlayer, ultraCosmetics);
             }
@@ -79,19 +70,19 @@ public abstract class CosmeticsProfile {
             setEnabledSuitPart(suit.getSlot(), suit);
             return;
         }
-        enabled.put(cat, type);
+        data.getEnabledCosmetics().put(cat, type);
     }
 
     public void setEnabledSuitPart(ArmorSlot slot, SuitType suitType) {
-        this.enabledSuitParts.put(slot, suitType);
+        data.getEnabledSuitParts().put(slot, suitType);
     }
 
     public int getAmmo(GadgetType gadget) {
-        return ammo.getOrDefault(gadget, 0);
+        return data.getAmmo().getOrDefault(gadget, 0);
     }
 
     public void setAmmo(GadgetType type, int amount) {
-        ammo.put(type, amount);
+        data.getAmmo().put(type, amount);
     }
 
     public void addAmmo(GadgetType type, int amount) {
@@ -99,19 +90,19 @@ public abstract class CosmeticsProfile {
     }
 
     public String getPetName(PetType pet) {
-        return petNames.get(pet);
+        return data.getPetNames().get(pet);
     }
 
     public void setPetName(PetType pet, String name) {
-        petNames.put(pet, name);
+        data.getPetNames().put(pet, name);
     }
 
     public int getKeys() {
-        return keys;
+        return data.getKeys();
     }
 
     public void setKeys(int amount) {
-        keys = amount;
+        data.setKeys(amount);
     }
 
     public void addKeys(int amount) {
@@ -119,34 +110,34 @@ public abstract class CosmeticsProfile {
     }
 
     public void setGadgetsEnabled(boolean enabled) {
-        gadgetsEnabled = enabled;
+        data.setGadgetsEnabled(enabled);
     }
 
     public boolean hasGadgetsEnabled() {
-        return gadgetsEnabled;
+        return data.isGadgetsEnabled();
     }
 
     public void setSeeSelfMorph(boolean enabled) {
-        morphSelfView = enabled;
+        data.setMorphSelfView(enabled);
     }
 
     public boolean canSeeSelfMorph() {
-        return morphSelfView;
+        return data.isMorphSelfView();
     }
 
     public boolean isTreasureNotifications() {
-        return treasureNotifications;
+        return data.isTreasureNotifications();
     }
 
     public void setTreasureNotifications(boolean treasureNotifications) {
-        this.treasureNotifications = treasureNotifications;
+        data.setTreasureNotifications(treasureNotifications);
     }
 
     public boolean isFilterByOwned() {
-        return filterByOwned;
+        return data.isFilterByOwned();
     }
 
     public void setFilterByOwned(boolean filterByOwned) {
-        this.filterByOwned = filterByOwned;
+        data.setFilterByOwned(filterByOwned);
     }
 }

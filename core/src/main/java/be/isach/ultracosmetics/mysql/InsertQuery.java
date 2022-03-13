@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
-
 import be.isach.ultracosmetics.UltraCosmeticsData;
 
 import java.util.StringJoiner;
@@ -51,7 +49,7 @@ public class InsertQuery {
             for (Object obj : objects) {
                 plaintext = plaintext.replaceFirst("\\?", obj.toString());
             }
-            Bukkit.getLogger().info("Executing SQL: " + plaintext);
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write("Executing SQL: " + plaintext);
         }
         try (Connection connection = table.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             for (int i = 0; i < objects.size(); i++) {

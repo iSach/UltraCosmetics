@@ -67,6 +67,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
                 || Slime.class.isAssignableFrom(getType().getEntityType().getEntityClass()))
                 && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             getOwner().sendMessage(MessageManager.getMessage("Mounts.Cant-Spawn"));
+            clear();
             return;
         }
 

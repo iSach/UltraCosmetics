@@ -5,6 +5,9 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+
 public class Table {
     private final DataSource dataSource;
     private final String table;
@@ -45,5 +48,13 @@ public class Table {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String cleanCosmeticName(CosmeticType<?> cosmetic) {
+        return cosmetic == null ? null : cosmetic.getConfigName().toLowerCase().replace("_", "");
+    }
+
+    public static String cleanCategoryName(Category cat) {
+        return cat.toString().toLowerCase();
     }
 }

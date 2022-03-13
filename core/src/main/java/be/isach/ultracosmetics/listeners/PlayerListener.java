@@ -214,7 +214,8 @@ public class PlayerListener implements Listener {
         up.saveCosmeticsProfile();
         up.clear();
         up.removeMenuItem();
-        ultraCosmetics.getPlayerManager().remove(event.getPlayer());
+        // workaround plugins calling events after player quit
+        Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> ultraCosmetics.getPlayerManager().remove(event.getPlayer()), 1);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

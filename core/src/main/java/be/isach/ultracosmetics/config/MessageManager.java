@@ -17,6 +17,7 @@ public class MessageManager {
     public MessageManager() {
         settingsManager = SettingsManager.getMessages();
         loadMessages();
+        settingsManager.save();
     }
 
     /**

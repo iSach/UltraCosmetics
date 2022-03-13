@@ -117,8 +117,16 @@ public class SettingsManager {
      * @param path
      * @param value
      */
-    public void set(String path, Object value) {
+    public void set(String path, Object value, boolean autosave) {
         fileConfiguration.set(path, value);
+        if (autosave) save();
+    }
+
+    public void set(String path, Object value) {
+        set(path, value, false);
+    }
+
+    public void save() {
         try {
             fileConfiguration.save(file);
         } catch (IOException e) {
@@ -187,13 +195,7 @@ public class SettingsManager {
      * @return the configuration section created for the given path.
      */
     public ConfigurationSection createConfigurationSection(String path) {
-        ConfigurationSection cs = fileConfiguration.createSection(path);
-        try {
-            fileConfiguration.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return cs;
+        return fileConfiguration.createSection(path);
     }
 
     public Object get(String path) {
