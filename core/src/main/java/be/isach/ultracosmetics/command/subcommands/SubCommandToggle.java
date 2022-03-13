@@ -12,7 +12,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -53,7 +52,7 @@ public class SubCommandToggle extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
+    protected void onExeNotPlayer(CommandSender sender, String[] args) {
         if (args.length != 4) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "/uc toggle <type> <cosmetic> <player>");
             return;

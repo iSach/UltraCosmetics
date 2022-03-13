@@ -13,7 +13,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import java.util.StringJoiner;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -109,7 +108,7 @@ public class SubCommandMenu extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
+    protected void onExeNotPlayer(CommandSender sender, String[] args) {
         notAllowed(sender);
     }
 

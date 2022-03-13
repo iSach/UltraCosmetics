@@ -8,7 +8,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -29,7 +28,7 @@ public class SubCommandGive extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
+    protected void onExeNotPlayer(CommandSender sender, String[] args) {
         common(sender, args);
     }
 

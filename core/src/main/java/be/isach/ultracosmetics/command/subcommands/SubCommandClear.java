@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -28,7 +27,7 @@ public class SubCommandClear extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
+    protected void onExeNotPlayer(CommandSender sender, String[] args) {
         common(sender, args);
     }
 

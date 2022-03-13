@@ -5,7 +5,8 @@ import be.isach.ultracosmetics.command.SubCommand;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.command.ConsoleCommandSender;
+
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -32,7 +33,7 @@ public class SubCommandGadgets extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
+    protected void onExeNotPlayer(CommandSender sender, String[] args) {
         notAllowed(sender);
     }
 }

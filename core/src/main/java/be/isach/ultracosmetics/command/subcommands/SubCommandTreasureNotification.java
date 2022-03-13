@@ -1,6 +1,6 @@
 package be.isach.ultracosmetics.command.subcommands;
 
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import be.isach.ultracosmetics.UltraCosmetics;
@@ -27,8 +27,7 @@ public class SubCommandTreasureNotification extends SubCommand {
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
+    protected void onExeNotPlayer(CommandSender sender, String[] args) {
         notAllowed(sender);
     }
-
 }

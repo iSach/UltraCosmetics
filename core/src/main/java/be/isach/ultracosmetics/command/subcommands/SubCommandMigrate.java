@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,11 +29,16 @@ public class SubCommandMigrate extends SubCommand {
 
     @Override
     protected void onExePlayer(Player sender, String[] args) {
-        error(sender, "This command can only be used from the console.");
+        // non-console senders are filtered out in onExeNotPlayer
+        onExeNotPlayer(sender, args);
     }
 
     @Override
-    protected void onExeConsole(ConsoleCommandSender sender, String[] args) {
+    protected void onExeNotPlayer(CommandSender sender, String[] args) {
+        if (!(sender instanceof ConsoleCommandSender)) {
+            error(sender, "This command can only be used from the console.");
+            return;
+        }
         if (UltraCosmeticsData.get().usingFileStorage() || !ultraCosmetics.getMySqlConnectionManager().success()) {
             error(sender, "SQL must be enabled and connected to migrate either direction.");
             return;

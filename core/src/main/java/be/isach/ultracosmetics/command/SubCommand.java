@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -82,17 +81,17 @@ public abstract class SubCommand {
     protected abstract void onExePlayer(Player sender, String[] args);
 
     /**
-     * Called when the sub command is executed by console.
+     * Called when the sub command is executed by someone other than a player (console, .
      *
-     * @param sender The console sender who executed the command.
+     * @param sender The sender who executed the command.
      * @param args   The args of the command. (Includes the subcommand alias).
      */
-    protected abstract void onExeConsole(ConsoleCommandSender sender, String[] args);
+    protected abstract void onExeNotPlayer(CommandSender sender, String[] args);
 
     /**
-     * Sent when player doesn't have permission to the command.
+     * Called when a command is used from console but only works on players
      *
-     * @param commandSender The sender who hasn't got the required permission.
+     * @param commandSender The sender who needs to be informed about this
      */
     protected void notAllowed(CommandSender commandSender) {
         commandSender.sendMessage(MessageManager.getMessage("Not-Allowed-From-Console"));
