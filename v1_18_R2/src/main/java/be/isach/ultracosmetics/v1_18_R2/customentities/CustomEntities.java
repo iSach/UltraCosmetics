@@ -3,10 +3,12 @@ package be.isach.ultracosmetics.v1_18_R2.customentities;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.v1_18_R2.EntityBase;
 import be.isach.ultracosmetics.v1_18_R2.ObfuscatedFields;
 import be.isach.ultracosmetics.v1_18_R2.nms.EntityWrapper;
 import net.minecraft.SharedConstants;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -64,12 +66,20 @@ public enum CustomEntities {
     public static void registerEntities() {
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataFixers.getDataFixer().getSchema(DataFixUtils.makeKey(SharedConstants.getCurrentVersion().getWorldVersion())).findChoiceType(References.ENTITY).types();
 
-        unfreezeRegistry();
+        // true if the registry present is a vanilla registry and not a custom one like Citizens provides
+        boolean realRegistry = Registry.ENTITY_TYPE.getClass().equals(DefaultedRegistry.class);
+        if (realRegistry) {
+            unfreezeRegistry();
+        } else {
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write("Entity registry is not vanilla, skipping unfreeze and refreeze");
+        }
         registerEntity("zombie", Pumpling::new, types);
         registerEntity("slime", CustomSlime::new, types);
         registerEntity("spider", RideableSpider::new, types);
         registerEntity("guardian", CustomGuardian::new, types);
-        Registry.ENTITY_TYPE.freeze();
+        if (realRegistry) {
+            Registry.ENTITY_TYPE.freeze();
+        }
     }
 
     private static void unfreezeRegistry() {

@@ -131,7 +131,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (worldGuardIntegration && getServer().getPluginManager().getPlugin("WorldGuard") != null) {
             // does reflect-y things but isn't in VersionManager because of the load timing
             // and because it should only happen if WorldGuard is present
-            String wgVersionPackage = VersionManager.IS_VERSION_1_13 ? "v1_13_R2" : "v1_12_R1";
+            String wgVersionPackage = VersionManager.IS_VERSION_1_13 ? "v1_14_R1" : "v1_12_R1";
             try {
                 flagManager = (AFlagManager) ReflectionUtils.instantiateObject(Class.forName(VersionManager.PACKAGE + "." + wgVersionPackage + ".worldguard.FlagManager"));
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -348,15 +348,30 @@ public class UltraCosmetics extends JavaPlugin {
             config.set("TreasureChests.Count", 4, "How many treasure chests should be opened per key? Min 1, max 4");
         }
         // Add default values people could not have because of an old version of UC.
-        if (!config.isConfigurationSection("TreasureChests.Location")) {
+        /*if (!config.isConfigurationSection("TreasureChests.Location")) {
             ConfigurationSection section = config.createSection("TreasureChests.Location");
             config.set("TreasureChests.Location.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
             config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63", "To use the world the player is in, set World to 'none'");
             section.set("Y", 63);
             section.set("Z", 0);
+        }*/
+        if (config.isConfigurationSection("TreasureChests.Location")) {
+            config.set("TreasureChests.Locations.Enabled", config.getBoolean("TreasureChests.Location.Enabled"));
+            config.set("TreasureChests.Location.Enabled", null);
+            ConfigurationSection section = config.getConfigurationSection("TreasureChests.Location");
+            config.set("TreasureChests.Location", null);
+            config.set("TreasureChests.Locations.default", section);
+        }
+        if (!config.isConfigurationSection("TreasureChests.Locations")) {
+            ConfigurationSection section = config.createSection("TreasureChests.Locations.default");
+            config.set("TreasureChests.Locations.default.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
+            config.set("TreasureChests.Location.default.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63", "To use the world the player is in, set World to 'none'");
+            section.set("Y", 63);
+            section.set("Z", 0);
+            section.set("World", Bukkit.getWorlds().get(0).getName());
         }
 
-        config.addDefault("TreasureChests.Location.World", Bukkit.getWorlds().get(0).getName());
+        config.addDefault("TreasureChests.Locations.default.World", Bukkit.getWorlds().get(0).getName());
 
         if (!config.isInt("TreasureChests.Loots.Money.Min")) {
             int min = 15;

@@ -1,6 +1,0 @@
-dependencies {
-    implementation 'org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT'
-    implementation project(':core')
-    // WG 7.0.3 was last version to support Java <16
-    implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.3'
-}

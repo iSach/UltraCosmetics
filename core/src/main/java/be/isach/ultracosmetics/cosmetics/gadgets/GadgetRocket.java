@@ -165,7 +165,7 @@ public class GadgetRocket extends Gadget {
 
     @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
-        Area area = new Area(getPlayer().getLocation().add(-1, 0, -1), getPlayer().getLocation().add(1, 75, 1));
+        Area area = new Area(getPlayer().getLocation(), 1, 75);
         if (!area.isEmpty()) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
             return false;

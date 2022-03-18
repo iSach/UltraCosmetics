@@ -55,6 +55,7 @@ public class MessageManager {
         addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor $%price%");
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
+        addMessage("Treasure-Chest-Occupied", "%prefix% &c&lAll treasure locations are full, please wait and try again");
         addMessage("Clear-Cosmetics", "&c&lClear cosmetics");
         addMessage("Clear-Gadget", "&c&lClear current gadget");
         addMessage("Clear-Pet", "&c&lClear current pet");

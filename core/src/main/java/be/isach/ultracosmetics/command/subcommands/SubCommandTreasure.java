@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.manager.TreasureChestManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.treasurechests.TreasureLocation;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
@@ -135,7 +136,7 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        TreasureChestManager.tryOpenChest(opener, location);
+        TreasureChestManager.tryOpenChest(opener, TreasureLocation.fromLocation(location));
     }
 
     private boolean checkWorld(CommandSender sender, World world) {

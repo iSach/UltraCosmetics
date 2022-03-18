@@ -20,8 +20,6 @@ jobs:
       run: java -jar BuildTools.jar --rev 1.8.8
     - name: Build MC 1.12.2
       run: java -jar BuildTools.jar --rev 1.12.2
-    - name: Build MC 1.13.2
-      run: java -jar BuildTools.jar --rev 1.13.2
     - name: Build MC 1.14.4
       run: java -jar BuildTools.jar --rev 1.14.4
     - name: Build MC 1.15.2

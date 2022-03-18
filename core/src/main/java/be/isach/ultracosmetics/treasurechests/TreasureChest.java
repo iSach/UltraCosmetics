@@ -28,6 +28,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
@@ -43,35 +44,31 @@ import org.bukkit.util.Vector;
 public class TreasureChest implements Listener {
 
     private static final BlockFace[] SURROUNDING_FACES = new BlockFace[] {BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.SOUTH_EAST, BlockFace.NORTH_WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_WEST};
-    private Map<Block, BlockState> blocksToRestore = new HashMap<>();
-    private List<Block> chests = new ArrayList<>();
-    private List<Block> chestsToRemove = new ArrayList<>();
-    private UUID owner;
+    private final Map<Block, BlockState> blocksToRestore = new HashMap<>();
+    private final List<Block> chests = new ArrayList<>();
+    private final List<Block> chestsToRemove = new ArrayList<>();
+    private final UUID owner;
     private BukkitRunnable chestParticleRunnable = null;
     private BukkitRunnable placeChestRunnable = null;
     private TreasureRandomizer randomGenerator;
     private Location center;
-    private Particles particleEffect;
+    private final Particles particleEffect;
     private int chestsLeft = SettingsManager.getConfig().getInt("TreasureChests.Count", 4);
     private Player player;
     private List<Entity> items = new ArrayList<>();
     private List<Entity> holograms = new ArrayList<>();
     private boolean stopping;
     private boolean cooldown = false;
-    private TreasureChestDesign design;
-    private Location preLoc = null;
+    private final TreasureChestDesign design;
+    private final Location preLoc;
+    private final TreasureLocation treasureLoc;
 
-    public TreasureChest(UUID owner, final TreasureChestDesign design) {
-        this(owner, design, null);
-    }
-
-    public TreasureChest(UUID owner, final TreasureChestDesign design, Location preLoc) {
-        if (owner == null) return;
-
+    public TreasureChest(UUID owner, final TreasureChestDesign design, Location preLoc, TreasureLocation destLoc) {
         this.design = design;
         this.particleEffect = design.getEffect();
         this.owner = owner;
         this.preLoc = preLoc;
+        this.treasureLoc = destLoc;
         
         UltraCosmetics uc = UltraCosmeticsData.get().getPlugin();
         UltraPlayerManager pm = uc.getPlayerManager();
@@ -251,69 +248,39 @@ public class TreasureChest implements Listener {
             BlockUtils.treasureBlocks.remove(entry.getKey());
         }
         blocksToRestore.clear();
-        if (!stopping) {
-            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
-                for (Entity hologram : holograms) {
-                    hologram.remove();
-                }
-                holograms.clear();
-
-                for (Block b : chestsToRemove) {
-                    b.setType(Material.AIR);
-                }
-                chestsToRemove.clear();
-
-                for (Block b : chests) {
-                    b.setType(Material.AIR);
-                }
-                chests.clear();
-
-                for (Entity ent : items) {
-                    ent.remove();
-                }
-                items.clear();
-
-                cancelRunnables();
-                UltraPlayer ultraPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer());
-                if (ultraPlayer != null) {
-                    ultraPlayer.setCurrentTreasureChest(null);
-                    if (preLoc != null) {
-                        getPlayer().teleport(preLoc);
-                    }
-                }
-                owner = null;
-                if (randomGenerator != null)
-                    randomGenerator.clear();
-            }, 30L);
+        if (stopping) {
+            cleanup();
         } else {
-            for (Entity hologram : holograms)
-                hologram.remove();
-            for (Block b : chestsToRemove) {
-                b.setType(Material.AIR);
-            }
-            for (Block b : chests) {
-                b.setType(Material.AIR);
-            }
-            for (Entity ent : items)
-                ent.remove();
-            cancelRunnables();
-            items.clear();
-            chests.clear();
-            holograms.clear();
-            chestsToRemove.clear();
-            blocksToRestore.clear();
-            if (getPlayer() != null) {
-                UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentTreasureChest(null);
-                if(preLoc != null) {
-                    getPlayer().teleport(preLoc);
-                }
-            }
-            owner = null;
-            if (randomGenerator != null) {
-                randomGenerator.clear();
-            }
-            randomGenerator = null;
+            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cleanup(), 30L);
         }
+    }
+
+    private void cleanup() {
+        for (Entity hologram : holograms)
+            hologram.remove();
+        for (Block b : chestsToRemove) {
+            b.setType(Material.AIR);
+        }
+        for (Block b : chests) {
+            b.setType(Material.AIR);
+        }
+        for (Entity ent : items)
+            ent.remove();
+        cancelRunnables();
+        items.clear();
+        chests.clear();
+        holograms.clear();
+        chestsToRemove.clear();
+        if (getPlayer() != null) {
+            UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentTreasureChest(null);
+            if (preLoc != null) {
+                getPlayer().teleport(preLoc);
+            }
+        }
+        if (randomGenerator != null) {
+            randomGenerator.clear();
+        }
+        HandlerList.unregisterAll(this);
     }
 
     private void cancelRunnables() {
@@ -490,6 +457,10 @@ public class TreasureChest implements Listener {
         }
 
         return chestLocation;
+    }
+
+    public TreasureLocation getTreasureLocation() {
+        return treasureLoc;
     }
 
 

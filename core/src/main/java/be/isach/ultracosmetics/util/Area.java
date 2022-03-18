@@ -22,6 +22,10 @@ public class Area {
         this.z2 = Math.max(loc1.getBlockZ(), loc2.getBlockZ());
     }
 
+    public Area(Location center, int radius, int yUp) {
+        this(center.clone().add(-radius, 0, -radius), center.clone().add(radius, yUp, radius));
+    }
+
     public boolean isEmptyExcept(int badX, int badY, int badZ) {
         for (int x = x1; x <= x2; x++) {
             if (x == badX) continue;

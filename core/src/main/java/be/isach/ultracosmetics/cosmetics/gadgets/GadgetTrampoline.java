@@ -41,13 +41,10 @@ public class GadgetTrampoline extends Gadget {
 
     @Override
     void onRightClick() {
-        Location loc1 = getPlayer().getLocation().add(-2, 0, -2);
-        Location loc2 = getPlayer().getLocation().add(2, 15, 2);
-
         clearBlocks();
 
         center = getPlayer().getLocation();
-        cuboid = new Area(loc1, loc2);
+        cuboid = new Area(center, 2, 15);
 
         generateStructure();
 
