@@ -4,10 +4,10 @@ labels: ["bug"]
 body:
     -   type: checkboxes
         attributes:
-            label: "I have checked that the issue is present on the latest dev build"
+            label: "Check if the issue is fixed in dev builds"
             description: "You can find dev builds in #beta-testing in Discord or in the Actions tab on GitHub."
             options:
-            -   label: "You can find dev builds in #beta-testing in Discord or in the Actions tab on GitHub."
+            -   label: "I have confirmed that the issue is present on the latest dev build"
                 required: true
     -   type: textarea
         attributes:
