@@ -7,7 +7,8 @@ body:
             label: "I have checked that the issue is present on the latest dev build"
             description: "You can find dev builds in #beta-testing in Discord or in the Actions tab on GitHub."
             options:
-            -   required: true
+            -   label: "You can find dev builds in #beta-testing in Discord or in the Actions tab on GitHub."
+                required: true
     -   type: textarea
         attributes:
             label: "What steps will reproduce the issue?"
