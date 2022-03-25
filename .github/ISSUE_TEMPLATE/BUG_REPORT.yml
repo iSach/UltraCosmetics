@@ -2,6 +2,13 @@ name: Bug report
 description: Found a bug in UltraCosmetics? Report it here!
 labels: ["bug"]
 body:
+    -   type: checkboxes
+        attributes:
+            label: "Check if the issue is fixed in dev builds"
+            description: "You can find dev builds in #beta-testing in Discord or in the Actions tab on GitHub."
+            options:
+            -   label: "I have confirmed that the issue is present on the latest dev build"
+                required: true
     -   type: textarea
         attributes:
             label: "What steps will reproduce the issue?"
