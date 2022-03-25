@@ -20,7 +20,7 @@ public class RideableSpider extends Spider implements EntityBase {
 
     @Override
     public void travel(Vec3 vec3D) {
-    	if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.customEntities.contains(this)) {
             super.tickHeadTurn((float) vec3D.x, (float) vec3D.y);
             return;
         }
@@ -38,6 +38,6 @@ public class RideableSpider extends Spider implements EntityBase {
 
     @Override
     public TextComponent getName() {
-    	return new TextComponent(Language.getInstance().getOrDefault("entity.minecraft.spider"));
+        return new TextComponent(Language.getInstance().getOrDefault("entity.minecraft.spider"));
     }
 }

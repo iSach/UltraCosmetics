@@ -19,6 +19,7 @@ public enum ServerVersion {
     // which is more often than actual NMS revisions happen. You can find this
     // value by checking the source code of this method:
     // org.bukkit.craftbukkit.util.CraftMagicNumbers#getMappingsVersion
+    // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java#240
     // getMappingsVersion was added in 1.13.2, earlier versions don't have it.
     private String mappingsVersion;
 

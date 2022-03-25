@@ -73,14 +73,14 @@ public class EntityUtil implements IEntityUtil {
     private Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
     
     private static Field memoriesField;
-	private static Field sensorsField;
-	private static Field lockedFlagsField;
-	private static Field disabledFlagsField;
-	static {
-		try {
-			memoriesField = Brain.class.getDeclaredField(ObfuscatedFields.MEMORIES);
-			memoriesField.setAccessible(true);
-			
+    private static Field sensorsField;
+    private static Field lockedFlagsField;
+    private static Field disabledFlagsField;
+    static {
+        try {
+            memoriesField = Brain.class.getDeclaredField(ObfuscatedFields.MEMORIES);
+            memoriesField.setAccessible(true);
+            
             sensorsField = Brain.class.getDeclaredField(ObfuscatedFields.SENSORS);
             sensorsField.setAccessible(true);
             
@@ -89,11 +89,11 @@ public class EntityUtil implements IEntityUtil {
             
             disabledFlagsField = GoalSelector.class.getDeclaredField(ObfuscatedFields.DISABLED_FLAGS);
             disabledFlagsField.setAccessible(true);
-		} catch (NoSuchFieldException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        } catch (NoSuchFieldException | SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void resetWitherSize(Wither wither) {
@@ -166,7 +166,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void clearPathfinders(org.bukkit.entity.Entity entity) {
-    	Mob nmsEntity = (Mob) ((CraftEntity) entity).getHandle();
+        Mob nmsEntity = (Mob) ((CraftEntity) entity).getHandle();
         GoalSelector goalSelector = nmsEntity.goalSelector;
         GoalSelector targetSelector = nmsEntity.targetSelector;
 
@@ -184,8 +184,8 @@ public class EntityUtil implements IEntityUtil {
         }
 
         try {
-        	// this is also annotated VisibleForTesting
-        	// this clears net.minecraft.world.entity.ai.goal.GoalSelector#availableGoals
+            // this is also annotated VisibleForTesting
+            // this clears net.minecraft.world.entity.ai.goal.GoalSelector#availableGoals
             goalSelector.removeAllGoals();
             targetSelector.removeAllGoals();
 
@@ -243,7 +243,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void setClimb(org.bukkit.entity.Entity entity) {
-    	// TODO: this field (I) no longer exists so I'm not sure what to do here
+        // TODO: this field (I) no longer exists so I'm not sure what to do here
         //((CraftEntity) entity).getHandle().I = 1;
     }
 

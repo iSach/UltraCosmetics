@@ -17,6 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by sacha on 19/08/15.
@@ -66,12 +67,12 @@ public class TreasureRandomizer {
         if (Category.GADGETS.isEnabled()) {
             if (!ammoList.isEmpty()
                     && UltraCosmeticsData.get().isAmmoEnabled()
-                    && (boolean) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Enabled"))
+                    && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Enabled")) {
                 addWeightedResult(AMMO_CHANCE, ResultType.AMMO);
+            }
         }
         
-        if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Money.Enabled")
-                && UltraCosmeticsData.get().useMoneyTreasureLoot()) {
+        if (UltraCosmeticsData.get().useMoneyTreasureLoot()) {
             addWeightedResult(MONEY_CHANCE, ResultType.MONEY);
         }
 
@@ -85,7 +86,7 @@ public class TreasureRandomizer {
         String configName = category.name().substring(0, 1) + category.name().substring(1).toLowerCase();
         String configPath = "TreasureChests.Loots." + configName;
         if (!SettingsManager.getConfig().getBoolean(configPath + ".Enabled")) return;
-        if (!category.isEnabled() || !hasUnlockableInCategory(category)) return;
+        if (!category.isEnabled()) return;
         addWeightedResult(SettingsManager.getConfig().getInt(configPath + ".Chance"), ResultType.fromCategory(category));
     }
 
@@ -102,12 +103,16 @@ public class TreasureRandomizer {
         return false;
     }
 
-    public static FireworkEffect getRandomFireworkEffect() {
+    private FireworkEffect getRandomFireworkEffect() {
         if (!UltraCosmeticsData.get().getPlugin().isEnabled())
             return null;
-        Random r = new Random();
         FireworkEffect.Builder builder = FireworkEffect.builder();
-        return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL).withColor(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).withFade(Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255))).build();
+        return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL).withColor(randomColor()).withFade(randomColor()).build();
+    }
+
+    private static Color randomColor() {
+        Random r = ThreadLocalRandom.current();
+        return Color.fromRGB(r.nextInt(255), r.nextInt(255), r.nextInt(255));
     }
 
     private String getConfigMessage(String s) {
@@ -124,8 +129,11 @@ public class TreasureRandomizer {
 
     public void giveRandomThing() {
         SoundUtil.playSound(loc, Sounds.CHEST_OPEN, 1.4f, 1.5f);
-        if (resultTypes.size() == 0) {
-            giveNothing();
+        WeightedSet<ResultType> filtered = new WeightedSet<>(resultTypes);
+        // remove the key if the player has no unlockables
+        filtered.filter(r -> r.category != null && !hasUnlockableInCategory(r.category));
+        if (filtered.size() == 0) {
+            giveFallback();
             return;
         }
         ResultType type = resultTypes.getRandom();
@@ -181,20 +189,20 @@ public class TreasureRandomizer {
         resultTypes.clear();
     }
 
-    public void giveNothing() {
+    public void giveFallback() {
         if (UltraCosmeticsData.get().getPlugin().getEconomyHandler().isUsingEconomy()) {
             giveMoney();
         } else {
-            name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
-            itemStack = new ItemStack(Material.BARRIER);
+            giveNothing();
         }
     }
 
+    public void giveNothing() {
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Nothing");
+        itemStack = new ItemStack(Material.BARRIER);
+    }
+
     public void giveMoney() {
-        if (!UltraCosmeticsData.get().getPlugin().getEconomyHandler().isUsingEconomy()) {
-            giveNothing();
-            return;
-        }
         int max = (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max");
         int min = SettingsManager.getConfig().contains("TreasureChests.Loots.Money.Min") ? SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Min") : (max > 20 ? 20 : 0);
         int money = MathUtils.randomRangeInt(min, max);

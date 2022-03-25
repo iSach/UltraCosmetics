@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             @Override
             public void run() {
-                if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
+                if (SettingsManager.getConfig().getBoolean("Menu-Item.Enabled") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
                     Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
                         if (cp != null && event.getPlayer() != null)
                             cp.giveMenuItem();
@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
     public void onWorldChange(final PlayerChangedWorldEvent event) {
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
         if (SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
-            if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Join") && event.getPlayer().hasPermission("ultracosmetics.receivechest")) {
+            if (SettingsManager.getConfig().getBoolean("Menu-Item.Enabled") && event.getPlayer().hasPermission("ultracosmetics.receivechest")) {
                 ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer()).giveMenuItem();
             }
             new BukkitRunnable() {
@@ -192,7 +192,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
-        if (SettingsManager.getConfig().getBoolean("Menu-Item.Give-On-Respawn") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
+        if (SettingsManager.getConfig().getBoolean("Menu-Item.Enabled") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
             int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
             if (event.getPlayer().getInventory().getItem(slot) != null) {
                 event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getLocation(), event.getPlayer().getInventory().getItem(slot));

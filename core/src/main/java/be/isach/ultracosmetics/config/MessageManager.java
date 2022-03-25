@@ -77,6 +77,8 @@ public class MessageManager {
 
         addMessage("Active-Pet-Needed", "&c&lYou need to spawn a pet to rename it");
         addMessage("Rename-Pet", "&c&lClick to rename: %petname%");
+        addMessage("Rename-Pet-Placeholder", "Pet Name");
+        addMessage("Rename-Pet-Title", "Rename pet");
 
         addMessage("Treasure-Chests-Loot.Ammo", "%ammo% %name% ammo");
         addMessage("Treasure-Chests-Loot.Pet", "%pet% pet");

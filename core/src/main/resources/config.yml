@@ -267,8 +267,7 @@ MySQL:
 #
 # List for type: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 Menu-Item:
-  Give-On-Join: true
-  Give-On-Respawn: true
+  Enabled: false
   Slot: 3
   Type: ENDER_CHEST
   Displayname: '&6&lCosmetics'

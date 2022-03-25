@@ -15,18 +15,18 @@ public class SmartLogger {
         INFO(Level.INFO),
         WARNING(Level.WARNING),
         ERROR(Level.SEVERE);
-    	private Level level;
-    	private LogLevel(Level level) {
-    		this.level = level;
-    	}
+        private Level level;
+        private LogLevel(Level level) {
+            this.level = level;
+        }
     }
     private Logger logger;
     public SmartLogger(Logger logger) {
-    	this.logger = logger;
+        this.logger = logger;
     }
 
     public void write(LogLevel logLevel, Object... objects) {
-    	Level level = logLevel.level;
+        Level level = logLevel.level;
         if (objects.length == 0) {
             logger.log(level, "");
             return;

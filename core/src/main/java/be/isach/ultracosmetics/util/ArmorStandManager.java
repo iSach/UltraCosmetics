@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.manager;
+package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import org.bukkit.entity.ArmorStand;

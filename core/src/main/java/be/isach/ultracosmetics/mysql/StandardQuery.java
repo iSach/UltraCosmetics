@@ -138,13 +138,12 @@ public class StandardQuery {
     public Map<String,Object> getAll() {
         return getResults(r -> {
             try {
-                Map<String,Object> columns = new HashMap<>();
-                ResultSetMetaData meta = r.getMetaData();
-                int columnCount = meta.getColumnCount();
-                for (int i = 1; i <= columnCount; i++) {
-                    columns.put(meta.getColumnName(i), r.getObject(i));
+                Map<String,Object> values = new HashMap<>();
+                List<Column<?>> columns = UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().getColumns();
+                for (Column<?> column : columns) {
+                    values.put(column.getName(), r.getObject(column.getName(), column.getTypeClass()));
                 }
-                return columns;
+                return values;
             } catch (SQLException e) {
                 e.printStackTrace();
                 return null;

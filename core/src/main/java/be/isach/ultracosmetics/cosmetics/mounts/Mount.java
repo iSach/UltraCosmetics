@@ -137,7 +137,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     @Override
     protected void onClear() {
         if (entity != null) {
-			entity.remove();
+            entity.remove();
         }
 
         if (getOwner() != null) {

@@ -15,7 +15,6 @@ import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
-import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
 public abstract class CosmeticsProfile {
@@ -31,10 +30,6 @@ public abstract class CosmeticsProfile {
         Bukkit.getScheduler().runTaskAsynchronously(ultraCosmetics, () -> {
             load();
             if (!UltraCosmeticsData.get().areCosmeticsProfilesEnabled()) return;
-            if (!ultraPlayer.isOnline()) {
-                UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.WARNING, "Player " + ultraPlayer.getUsername() + " is no longer online, cancelling load");
-                return;
-            }
             Bukkit.getScheduler().runTask(ultraCosmetics, () -> equip());
         });
     }
@@ -43,6 +38,7 @@ public abstract class CosmeticsProfile {
     public abstract void save();
 
     public void equip() {
+        if (!ultraPlayer.isOnline()) return;
         if (!SettingsManager.isAllowedWorld(ultraPlayer.getBukkitPlayer().getWorld())) return;
         for (Entry<Category,CosmeticType<?>> type : data.getEnabledCosmetics().entrySet()) {
             if (type.getValue() == null || !type.getKey().isEnabled() || !type.getValue().isEnabled()) continue;

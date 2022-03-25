@@ -195,6 +195,8 @@ public class PlayerData {
         Map<String,Object> properties = table.select("*").uuid(uuid).getAll();
         gadgetsEnabled = (boolean) properties.get(ProfileKey.GADGETS_ENABLED.getSqlKey());
         morphSelfView = (boolean) properties.get(ProfileKey.MORPH_VIEW.getSqlKey());
+        treasureNotifications = (boolean) properties.get(ProfileKey.TREASURE_NOTIFICATION.getSqlKey());
+        filterByOwned = (boolean) properties.get(ProfileKey.FILTER_OWNED.getSqlKey());
         for (PetType type : PetType.enabled()) {
             petNames.put(type, (String) properties.get(Table.cleanCosmeticName(type)));
         }

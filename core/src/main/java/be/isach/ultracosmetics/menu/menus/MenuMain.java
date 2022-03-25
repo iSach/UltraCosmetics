@@ -6,14 +6,14 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.XMaterial;
+
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import static be.isach.ultracosmetics.manager.TreasureChestManager.tryOpenChest;
 
 /**
  * Main {@link be.isach.ultracosmetics.menu.Menu Menu}.
@@ -120,7 +120,7 @@ public class MenuMain extends Menu {
                     SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
                     return;
                 }
-                tryOpenChest(player.getBukkitPlayer());
+                TreasureChestManager.tryOpenChest(player.getBukkitPlayer());
             });
 
         }

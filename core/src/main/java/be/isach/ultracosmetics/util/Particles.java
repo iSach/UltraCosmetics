@@ -280,7 +280,7 @@ public enum Particles {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-//	FOOTSTEP("footstep", 28, -1), Doesn't support 1.13 Particle
+    //FOOTSTEP("footstep", 28, -1), Doesn't support 1.13 Particle
     /**
      * A particle effect which is displayed when a mob dies:
      * <ul>
@@ -373,7 +373,7 @@ public enum Particles {
      * <li>It has no visual effect
      * </ul>
      */
-//	ITEM_TAKE("take", 40, 8), Doesn't support 1.13 Particle
+    //ITEM_TAKE("take", 40, 8), Doesn't support 1.13 Particle
     /**
      * A particle effect which is displayed by elder guardians:
      * <ul>

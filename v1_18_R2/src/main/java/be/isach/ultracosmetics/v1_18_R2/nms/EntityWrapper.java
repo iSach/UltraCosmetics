@@ -87,7 +87,7 @@ public class EntityWrapper {
     }
 
     public void setJumping(boolean jumping) {
-    	// not sure why there's a setJumping method but no isJumping method
+        // not sure why there's a setJumping method but no isJumping method
         handle.setJumping(jumping);
     }
 

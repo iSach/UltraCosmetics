@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.manager;
+package be.isach.ultracosmetics.treasurechests;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
@@ -6,9 +6,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.treasurechests.TreasureChest;
-import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
-import be.isach.ultracosmetics.treasurechests.TreasureLocation;
 import be.isach.ultracosmetics.util.Area;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

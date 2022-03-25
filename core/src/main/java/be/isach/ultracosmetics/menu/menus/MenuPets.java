@@ -78,7 +78,11 @@ public class MenuPets extends CosmeticMenu<PetType> {
     }
 
     public void renamePet(final UltraPlayer ultraPlayer) {
-        new AnvilGUI.Builder().plugin(ultraCosmetics).itemLeft(XMaterial.PAPER.parseItem()).text("Pet Name").title("Rename pet").onComplete((Player player, String text) -> {
+        new AnvilGUI.Builder().plugin(ultraCosmetics)
+        .itemLeft(XMaterial.PAPER.parseItem())
+        .text(MessageManager.getMessage("Rename-Pet-Placeholder"))
+        .title(MessageManager.getMessage("Rename-Pet-Title"))
+        .onComplete((Player player, String text) -> {
             if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") &&
                     ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
                 return AnvilGUI.Response.openInventory(buyRenamePet(ultraPlayer, text));
@@ -90,7 +94,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
     }
 
     private Inventory buyRenamePet(UltraPlayer ultraPlayer, final String name) {
-        final String formattedName = ChatColor.translateAlternateColorCodes('&', name.replaceAll("[^A-Za-z0-9 &éèêë]", ""));
+        final String formattedName = ChatColor.translateAlternateColorCodes('&', name);
         ItemStack showcaseItem = ItemFactory.create(XMaterial.NAME_TAG, MessageManager.getMessage("Rename-Pet-Purchase")
                 .replace("%price%", "" + SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")).replace("%name%", formattedName));
 

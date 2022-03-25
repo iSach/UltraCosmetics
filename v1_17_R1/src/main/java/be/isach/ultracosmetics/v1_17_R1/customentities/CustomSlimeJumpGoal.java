@@ -6,10 +6,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class CustomSlimeJumpGoal extends Goal {
-    //private final CustomSlime slime;
-	// there's no real reason it needs to be referenced as a custom slime internally
-	// so it's Entity type for lest casting
-	private final Entity slime;
+    // there's no real reason it needs to be referenced as a custom slime internally
+    // so it's Entity type for lest casting
+    private final Entity slime;
 
     public CustomSlimeJumpGoal(CustomSlime slime) {
         this.slime = slime;

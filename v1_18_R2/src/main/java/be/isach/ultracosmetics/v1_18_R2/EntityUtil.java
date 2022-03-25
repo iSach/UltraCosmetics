@@ -167,7 +167,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void clearPathfinders(org.bukkit.entity.Entity entity) {
-    	Mob nmsEntity = (Mob) ((CraftEntity) entity).getHandle();
+        Mob nmsEntity = (Mob) ((CraftEntity) entity).getHandle();
         GoalSelector goalSelector = nmsEntity.goalSelector;
         GoalSelector targetSelector = nmsEntity.targetSelector;
 
@@ -191,8 +191,8 @@ public class EntityUtil implements IEntityUtil {
         }
 
         try {
-        	// this is also annotated VisibleForTesting
-        	// this clears net.minecraft.world.entity.ai.goal.GoalSelector#availableGoals
+            // this is also annotated VisibleForTesting
+            // this clears net.minecraft.world.entity.ai.goal.GoalSelector#availableGoals
             goalSelector.removeAllGoals();
             targetSelector.removeAllGoals();
 
@@ -250,7 +250,7 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void setClimb(org.bukkit.entity.Entity entity) {
-    	// TODO: this field (I) no longer exists so I'm not sure what to do here
+        // TODO: this field (I) no longer exists so I'm not sure what to do here
         //((CraftEntity) entity).getHandle().I = 1;
     }
 
