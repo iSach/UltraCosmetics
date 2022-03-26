@@ -136,7 +136,7 @@ public class TreasureRandomizer {
             giveFallback();
             return;
         }
-        ResultType type = resultTypes.getRandom();
+        ResultType type = filtered.getRandom();
 
         switch (type) {
             case MONEY:
