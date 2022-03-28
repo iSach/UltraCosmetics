@@ -10,8 +10,6 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.FlagWatcher;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 
-import java.util.UUID;
-
 /**
  * Represents an instance of a morph summoned by a player.
  *
@@ -25,12 +23,7 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
      *
      * @see me.libraryaddict.disguise.disguisetypes.MobDisguise MobDisguise from Lib's Disguises
      */
-    public MobDisguise disguise;
-
-    /**
-     * The Morph Owner.
-     */
-    public UUID owner;
+    protected MobDisguise disguise;
 
     public Morph(UltraPlayer owner, MorphType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MORPHS, owner, type);
@@ -48,9 +41,7 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
         watcher.setCustomName(getPlayer().getName());
         watcher.setCustomNameVisible(true);
 
-        if (!getOwner().canSeeSelfMorph()) {
-            disguise.setViewSelfDisguise(false);
-        }
+        disguise.setViewSelfDisguise(getOwner().canSeeSelfMorph());
 
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 
@@ -83,5 +74,9 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
      */
     public MobDisguise getDisguise() {
         return disguise;
+    }
+
+    public void setSeeSelf(boolean enabled) {
+        disguise.setViewSelfDisguise(enabled);
     }
 }

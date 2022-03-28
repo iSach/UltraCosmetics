@@ -347,13 +347,6 @@ public class UltraCosmetics extends JavaPlugin {
             config.set("TreasureChests.Count", 4, "How many treasure chests should be opened per key? Min 1, max 4");
         }
         // Add default values people could not have because of an old version of UC.
-        /*if (!config.isConfigurationSection("TreasureChests.Location")) {
-            ConfigurationSection section = config.createSection("TreasureChests.Location");
-            config.set("TreasureChests.Location.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
-            config.set("TreasureChests.Location.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63", "To use the world the player is in, set World to 'none'");
-            section.set("Y", 63);
-            section.set("Z", 0);
-        }*/
         if (config.isConfigurationSection("TreasureChests.Location")) {
             config.set("TreasureChests.Locations.Enabled", config.getBoolean("TreasureChests.Location.Enabled"));
             config.set("TreasureChests.Location.Enabled", null);
@@ -363,7 +356,7 @@ public class UltraCosmetics extends JavaPlugin {
         }
         if (!config.isConfigurationSection("TreasureChests.Locations")) {
             ConfigurationSection section = config.createSection("TreasureChests.Locations.default");
-            config.set("TreasureChests.Locations.default.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure.");
+            config.set("TreasureChests.Locations.default.Enabled", false, "Whether players should be moved to a certain", "location before opening a treasure chest.", "Does not override /uc treasure with position args.");
             config.set("TreasureChests.Location.default.X", 0, "The location players should be moved to.", "Block coordinates only, like 104, not 103.63", "To use the world the player is in, set World to 'none'");
             section.set("Y", 63);
             section.set("Z", 0);

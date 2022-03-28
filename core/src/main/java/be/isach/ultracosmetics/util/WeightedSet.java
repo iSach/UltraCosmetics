@@ -44,4 +44,8 @@ public class WeightedSet<T> {
     public void filter(Function<T,Boolean> filterFunc) {
         map.keySet().removeIf(k -> filterFunc.apply(k));
     }
+
+    public void remove(T key) {
+        map.remove(key);
+    }
 }

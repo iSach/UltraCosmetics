@@ -205,6 +205,7 @@ public class MessageManager {
         addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
         addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
         addMessage("Mounts.Cant-Spawn", "%prefix% &c&lMonsters can't spawn here!");
+        addMessage("Mounts.Not-Enough-Room", "%prefix% &c&lNot enough room for a mount here!");
 
         // PARTICLE-EFFECTS
         addMessage("Particle-Effects.Summon", "%prefix% &9You summoned %effectname%");

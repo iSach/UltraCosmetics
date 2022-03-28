@@ -504,7 +504,9 @@ public class UltraPlayer {
         } else {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
         }
-        DisguiseAPI.setViewDisguiseToggled(getBukkitPlayer(), enabled);
+        if (currentMorph != null) {
+            currentMorph.setSeeSelf(enabled);
+        }
     }
 
     /**

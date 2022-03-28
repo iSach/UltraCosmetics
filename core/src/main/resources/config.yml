@@ -82,7 +82,7 @@ TreasureChests:
   Location:
     # Whether players should be moved to a certain
     # location before opening a treasure chest.
-    # Does not override /uc treasure.
+    # Does not override /uc treasure with position args.
     Enabled: false
     # The location players should be moved to.
     # Block coordinates only, like 104, not 103.63

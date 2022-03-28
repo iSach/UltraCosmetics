@@ -41,7 +41,6 @@ public class TreasureRandomizer {
         if (Category.GADGETS.isEnabled() && UltraCosmeticsData.get().isAmmoEnabled() && ammoList.isEmpty())
             for (GadgetType type : GadgetType.values())
                 if (type.isEnabled()
-                        && player.hasPermission(type.getPermission())
                         && type.requiresAmmo()
                         && type.canBeFound())
                     ammoList.add(type);
@@ -103,6 +102,15 @@ public class TreasureRandomizer {
         return false;
     }
 
+    private boolean hasUnlockedInCategory(Category category) {
+        for (CosmeticType<?> type : category.getEnabled()) {
+            if (player.hasPermission(type.getPermission())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private FireworkEffect getRandomFireworkEffect() {
         if (!UltraCosmeticsData.get().getPlugin().isEnabled())
             return null;
@@ -131,7 +139,11 @@ public class TreasureRandomizer {
         SoundUtil.playSound(loc, Sounds.CHEST_OPEN, 1.4f, 1.5f);
         WeightedSet<ResultType> filtered = new WeightedSet<>(resultTypes);
         // remove the key if the player has no unlockables
+        // TODO: although robust, this can fire off a large number of permission checks. Optimize?
         filtered.filter(r -> r.category != null && !hasUnlockableInCategory(r.category));
+        if (!hasUnlockedInCategory(Category.GADGETS)) {
+            filtered.remove(ResultType.AMMO);
+        }
         if (filtered.size() == 0) {
             giveFallback();
             return;
@@ -143,10 +155,6 @@ public class TreasureRandomizer {
                 giveMoney();
                 break;
             case AMMO:
-                if (!UltraCosmeticsData.get().isAmmoEnabled()) {
-                    giveRandomThing();
-                    break;
-                }
                 giveAmmo();
                 break;
             case MOUNT:
@@ -218,23 +226,33 @@ public class TreasureRandomizer {
     }
 
     public void giveAmmo() {
-        int i = random.nextInt(ammoList.size());
-        GadgetType g = ammoList.get(i);
-        int ammo = MathUtils.randomRangeInt((int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Min"), (int) SettingsManager.getConfig().get("TreasureChests.Loots.Gadgets-Ammo.Max"));
-        name = MessageManager.getMessage("Treasure-Chests-Loot.Ammo").replace("%name%", g.getName()).replace("%ammo%", ammo + "");
-        ammoList.remove(i);
+        List<GadgetType> ammoOpts = new ArrayList<GadgetType>(ammoList);
+        ammoOpts.removeIf(k -> !player.hasPermission(k.getPermission()));
+        GadgetType g = ammoOpts.get(random.nextInt(ammoOpts.size()));
+        int ammoMin = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Min");
+        int ammoMax = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Max");
+        int ammo;
+        if (ammoMin < ammoMax) {
+            ammo = random.nextInt(ammoMax - ammoMin) + ammoMin;
+        } else {
+            ammo = ammoMin;
+        }
+        name = MessageManager.getMessage("Treasure-Chests-Loot.Ammo").replace("%name%", g.getName()).replace("%ammo%", String.valueOf(ammo));
+
         UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).addAmmo(g, ammo);
         itemStack = g.getMaterial().parseItem();
-        if (ammo > 50) {
+        // if the player received more than half of what they could have, send a firework
+        if (ammo > (ammoMax - ammoMin) / 2 + ammoMin) {
             spawnRandomFirework(loc);
         }
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Message.enabled")) {
             broadcast((getConfigMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%ammo%", String.valueOf(ammo)).replace("%gadget%", (UltraCosmeticsData.get().arePlaceholdersColored()) ? g.getName() : TextUtil.filterColor(g.getName())));
         }
-
     }
 
     public void giveRandomCosmetic(List<? extends CosmeticType<?>> cosmetics, String lang, String configName) {
+        // the string manipulation in this function is bad
+        // and should be replaced with something that makes sense
         WeightedSet<CosmeticType<?>> weightedCosmetics = new WeightedSet<>();
         for (CosmeticType<?> cosmetic : cosmetics) {
             if (player.hasPermission(cosmetic.getPermission())) continue;

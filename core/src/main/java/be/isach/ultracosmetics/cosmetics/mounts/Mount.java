@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.MountRegionChecker;
+import be.isach.ultracosmetics.util.Area;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -67,6 +68,13 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
                 || Slime.class.isAssignableFrom(getType().getEntityType().getEntityClass()))
                 && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             getOwner().sendMessage(MessageManager.getMessage("Mounts.Cant-Spawn"));
+            clear();
+            return;
+        }
+
+        Area area = new Area(getPlayer().getLocation(), 1, 1);
+        if (!area.isEmpty()) {
+            getOwner().sendMessage(MessageManager.getMessage("Mounts.Not-Enough-Room"));
             clear();
             return;
         }

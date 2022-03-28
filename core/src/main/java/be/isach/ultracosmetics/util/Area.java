@@ -28,11 +28,9 @@ public class Area {
 
     public boolean isEmptyExcept(int badX, int badY, int badZ) {
         for (int x = x1; x <= x2; x++) {
-            if (x == badX) continue;
             for (int y = y1; y <= y2; y++) {
-                if (y == badY) continue;
                 for (int z = z1; z <= z2; z++) {
-                    if (z == badZ) continue;
+                    if (x == badX && y == badY && z == badZ) continue;
                     if (world.getBlockAt(x, y, z).getType() != Material.AIR) {
                         return false;
                     }
