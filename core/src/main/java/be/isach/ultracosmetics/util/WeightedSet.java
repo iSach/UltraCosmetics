@@ -13,7 +13,8 @@ public class WeightedSet<T> {
     public WeightedSet(WeightedSet<T> copy) {
         this.map = new HashMap<>(copy.map);
     }
-    public void add(T key, Integer value) {
+
+    public void add(T key, int value) {
         // add to existing value if present, otherwise store value as-is
         map.merge(key, value, (a, b) -> a + b);
     }
@@ -47,5 +48,11 @@ public class WeightedSet<T> {
 
     public void remove(T key) {
         map.remove(key);
+    }
+
+    public T removeRandom() {
+        T random = getRandom();
+        map.remove(random);
+        return random;
     }
 }

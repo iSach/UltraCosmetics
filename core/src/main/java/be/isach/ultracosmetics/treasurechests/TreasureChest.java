@@ -277,9 +277,6 @@ public class TreasureChest implements Listener {
                 getPlayer().teleport(preLoc);
             }
         }
-        if (randomGenerator != null) {
-            randomGenerator.clear();
-        }
         HandlerList.unregisterAll(this);
     }
 

@@ -5,9 +5,20 @@ import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.type.*;
-import be.isach.ultracosmetics.util.*;
-import org.bukkit.*;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
+import be.isach.ultracosmetics.util.TextUtil;
+import be.isach.ultracosmetics.util.WeightedSet;
+import be.isach.ultracosmetics.util.XMaterial;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +26,9 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,9 +39,9 @@ public class TreasureRandomizer {
     private static final int MONEY_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Chance");
     private static final int AMMO_CHANCE = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Chance");
     private static final Random random = new Random();
-    private final WeightedSet<ResultType> resultTypes = new WeightedSet<>();
-    private final List<GadgetType> ammoList = new ArrayList<>();
+    private final WeightedSet<ResultType> basicResultTypes = new WeightedSet<>();
     private final List<CommandReward> commandRewardList = new ArrayList<>();
+    private final Map<ResultType,WeightedSet<CosmeticType<?>>> cosmetics = new HashMap<>();
     private Location loc;
     private final Player player;
     private ItemStack itemStack;
@@ -38,37 +51,27 @@ public class TreasureRandomizer {
         this.loc = location.add(0.5, 0, 0.5);
         this.player = player;
         // add ammo.
-        if (Category.GADGETS.isEnabled() && UltraCosmeticsData.get().isAmmoEnabled() && ammoList.isEmpty())
-            for (GadgetType type : GadgetType.values())
-                if (type.isEnabled()
-                        && type.requiresAmmo()
-                        && type.canBeFound())
-                    ammoList.add(type);
-        // Add GADGETS! (Not ammo)
-        if (commandRewardList.isEmpty()) {
-            CustomConfiguration config = UltraCosmeticsData.get().getPlugin().getConfig();
-
-            for (String key : config.getConfigurationSection("TreasureChests.Loots.Commands").getKeys(false)) {
-                String path = "TreasureChests.Loots.Commands." + key;
-                if (config.getBoolean(path + ".Enabled")) {
-                    String cancelPermission = config.getString(path + ".Cancel-If-Permission");
-                    if (cancelPermission.equals("no") || !player.hasPermission(cancelPermission)) {
-                        commandRewardList.add(new CommandReward(path));
-                    }
+        if (Category.GADGETS.isEnabled() && UltraCosmeticsData.get().isAmmoEnabled()
+                && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Enabled")) {
+            for (GadgetType type : GadgetType.values()) {
+                if (type.isEnabled() && type.requiresAmmo() && type.canBeFound() && player.hasPermission(type.getPermission())) {
+                    cosmetics.computeIfAbsent(ResultType.AMMO, k -> new WeightedSet<>()).add(type, type.getChestWeight());
+                }
+            }
+        }
+        CustomConfiguration config = UltraCosmeticsData.get().getPlugin().getConfig();
+        for (String key : config.getConfigurationSection("TreasureChests.Loots.Commands").getKeys(false)) {
+            String path = "TreasureChests.Loots.Commands." + key;
+            if (config.getBoolean(path + ".Enabled")) {
+                String cancelPermission = config.getString(path + ".Cancel-If-Permission");
+                if (cancelPermission.equals("no") || !player.hasPermission(cancelPermission)) {
+                    commandRewardList.add(new CommandReward(path));
                 }
             }
         }
 
         for (Category cat : Category.values()) {
             setupChance(cat);
-        }
-
-        if (Category.GADGETS.isEnabled()) {
-            if (!ammoList.isEmpty()
-                    && UltraCosmeticsData.get().isAmmoEnabled()
-                    && SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Enabled")) {
-                addWeightedResult(AMMO_CHANCE, ResultType.AMMO);
-            }
         }
         
         if (UltraCosmeticsData.get().useMoneyTreasureLoot()) {
@@ -82,33 +85,18 @@ public class TreasureRandomizer {
 
     private void setupChance(Category category) {
         // word case, like "Pets" rather than "PETS"
-        String configName = category.name().substring(0, 1) + category.name().substring(1).toLowerCase();
-        String configPath = "TreasureChests.Loots." + configName;
+        String configPath = "TreasureChests.Loots." + category.getConfigName();
         if (!SettingsManager.getConfig().getBoolean(configPath + ".Enabled")) return;
         if (!category.isEnabled()) return;
-        addWeightedResult(SettingsManager.getConfig().getInt(configPath + ".Chance"), ResultType.fromCategory(category));
+        ResultType result = ResultType.fromCategory(category);
+        for (CosmeticType<?> type : category.getEnabled()) {
+            if (!type.isEnabled() || type.getChestWeight() < 1 || player.hasPermission(type.getPermission())) continue;
+            cosmetics.computeIfAbsent(result, k -> new WeightedSet<>()).add(type, type.getChestWeight());
+        }
     }
 
     private void addWeightedResult(int weight, ResultType type) {
-        resultTypes.add(type, weight);
-    }
-
-    private boolean hasUnlockableInCategory(Category category) {
-        for (CosmeticType<?> type : category.getEnabled()) {
-            if (!player.hasPermission(type.getPermission())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean hasUnlockedInCategory(Category category) {
-        for (CosmeticType<?> type : category.getEnabled()) {
-            if (player.hasPermission(type.getPermission())) {
-                return true;
-            }
-        }
-        return false;
+        basicResultTypes.add(type, weight);
     }
 
     private FireworkEffect getRandomFireworkEffect() {
@@ -137,18 +125,23 @@ public class TreasureRandomizer {
 
     public void giveRandomThing() {
         SoundUtil.playSound(loc, Sounds.CHEST_OPEN, 1.4f, 1.5f);
-        WeightedSet<ResultType> filtered = new WeightedSet<>(resultTypes);
-        // remove the key if the player has no unlockables
-        // TODO: although robust, this can fire off a large number of permission checks. Optimize?
-        filtered.filter(r -> r.category != null && !hasUnlockableInCategory(r.category));
-        if (!hasUnlockedInCategory(Category.GADGETS)) {
-            filtered.remove(ResultType.AMMO);
+        WeightedSet<ResultType> choices = new WeightedSet<>(basicResultTypes);
+        for (ResultType result : cosmetics.keySet()) {
+            // categories with no unlockables will not appear as keys at all
+            int weight;
+            if (result.category == null) {
+                // ammo
+                weight = AMMO_CHANCE;
+            } else {
+                weight = SettingsManager.getConfig().getInt("TreasureChests.Loots." + result.category.getConfigName() + ".Chance");
+            }
+            choices.add(result, weight);
         }
-        if (filtered.size() == 0) {
+        if (choices.size() == 0) {
             giveFallback();
             return;
         }
-        ResultType type = filtered.getRandom();
+        ResultType type = choices.getRandom();
 
         switch (type) {
             case MONEY:
@@ -158,28 +151,28 @@ public class TreasureRandomizer {
                 giveAmmo();
                 break;
             case MOUNT:
-                giveRandomCosmetic(MountType.enabled(), "Mount", "Mounts");
+                giveRandomCosmetic(type, "Mount", "Mounts");
                 break;
             case MORPH:
-                giveRandomCosmetic(MorphType.enabled(), "Morph", "Morphs");
+                giveRandomCosmetic(type, "Morph", "Morphs");
                 break;
             case PET:
-                giveRandomCosmetic(PetType.enabled(), "Pet", "Pets");
+                giveRandomCosmetic(type, "Pet", "Pets");
                 break;
             case EFFECT:
-                giveRandomCosmetic(ParticleEffectType.enabled(), "Effect", "Effects");
+                giveRandomCosmetic(type, "Effect", "Effects");
                 break;
             case HAT:
-                giveRandomCosmetic(HatType.enabled(), "Hat", "Hats");
+                giveRandomCosmetic(type, "Hat", "Hats");
                 break;
             case GADGET:
-                giveRandomCosmetic(GadgetType.enabled(), "Gadget", "Gadgets");
+                giveRandomCosmetic(type, "Gadget", "Gadgets");
                 break;
             case SUIT:
-                giveRandomCosmetic(SuitType.enabled(), "Suit", "Suits");
+                giveRandomCosmetic(type, "Suit", "Suits");
                 break;
             case EMOTE:
-                giveRandomCosmetic(EmoteType.enabled(), "Emote", "Emotes");
+                giveRandomCosmetic(type, "Emote", "Emotes");
                 break;
             case COMMAND:
                 giveRandomCommandReward();
@@ -189,12 +182,6 @@ public class TreasureRandomizer {
 
     public String getName() {
         return name;
-    }
-
-    public void clear() {
-        ammoList.clear();
-        commandRewardList.clear();
-        resultTypes.clear();
     }
 
     public void giveFallback() {
@@ -210,10 +197,17 @@ public class TreasureRandomizer {
         itemStack = new ItemStack(Material.BARRIER);
     }
 
+    private int randomInRange(int min, int max) {
+        if (min < max) {
+            return random.nextInt(max - min) + min;
+        }
+        return min;
+    }
+
     public void giveMoney() {
-        int max = (int) SettingsManager.getConfig().get("TreasureChests.Loots.Money.Max");
-        int min = SettingsManager.getConfig().contains("TreasureChests.Loots.Money.Min") ? SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Min") : (max > 20 ? 20 : 0);
-        int money = MathUtils.randomRangeInt(min, max);
+        int min = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Min");
+        int max = SettingsManager.getConfig().getInt("TreasureChests.Loots.Money.Max");
+        int money = randomInRange(min, max);
         name = MessageManager.getMessage("Treasure-Chests-Loot.Money").replace("%money%", money + "");
         UltraCosmeticsData.get().getPlugin().getEconomyHandler().deposit(player, money);
         itemStack = XMaterial.SUNFLOWER.parseItem();
@@ -226,17 +220,10 @@ public class TreasureRandomizer {
     }
 
     public void giveAmmo() {
-        List<GadgetType> ammoOpts = new ArrayList<GadgetType>(ammoList);
-        ammoOpts.removeIf(k -> !player.hasPermission(k.getPermission()));
-        GadgetType g = ammoOpts.get(random.nextInt(ammoOpts.size()));
+        GadgetType g = (GadgetType) cosmetics.get(ResultType.AMMO).getRandom();
         int ammoMin = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Min");
         int ammoMax = SettingsManager.getConfig().getInt("TreasureChests.Loots.Gadgets-Ammo.Max");
-        int ammo;
-        if (ammoMin < ammoMax) {
-            ammo = random.nextInt(ammoMax - ammoMin) + ammoMin;
-        } else {
-            ammo = ammoMin;
-        }
+        int ammo = randomInRange(ammoMin, ammoMax);
         name = MessageManager.getMessage("Treasure-Chests-Loot.Ammo").replace("%name%", g.getName()).replace("%ammo%", String.valueOf(ammo));
 
         UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).addAmmo(g, ammo);
@@ -250,15 +237,16 @@ public class TreasureRandomizer {
         }
     }
 
-    public void giveRandomCosmetic(List<? extends CosmeticType<?>> cosmetics, String lang, String configName) {
-        // the string manipulation in this function is bad
-        // and should be replaced with something that makes sense
-        WeightedSet<CosmeticType<?>> weightedCosmetics = new WeightedSet<>();
-        for (CosmeticType<?> cosmetic : cosmetics) {
-            if (player.hasPermission(cosmetic.getPermission())) continue;
-            weightedCosmetics.add(cosmetic, cosmetic.getChestWeight());
+    private CosmeticType<?> getRandomCosmetic(ResultType result) {
+        CosmeticType<?> cosmetic = cosmetics.get(result).removeRandom();
+        if (cosmetics.get(result).size() == 0) {
+            cosmetics.remove(result);
         }
-        CosmeticType<?> cosmetic = weightedCosmetics.getRandom();
+        return cosmetic;
+    }
+
+    public void giveRandomCosmetic(ResultType result, String lang, String configName) {
+        CosmeticType<?> cosmetic = getRandomCosmetic(result);
         name = MessageManager.getMessage("Treasure-Chests-Loot." + lang).replace("%" + lang.toLowerCase() + "%", cosmetic.getName());
         givePermission(cosmetic.getPermission());
         spawnRandomFirework(loc);

@@ -256,6 +256,11 @@ public enum Category {
         return configPath;
     }
 
+    public String getConfigName() {
+        // Like configPath but value is different for Category.EFFECTS
+        return name().substring(0, 1) + name().substring(1).toLowerCase();
+    }
+
     public String getActivateMenu() {
         return MessageManager.getMessage("Menu." + activateMenu);
     }
