@@ -34,8 +34,8 @@ import static java.lang.Math.*;
 public class EntityUtil implements IEntityUtil {
 
     private Random r = new Random();
-    private Map<Player, List<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
-    private Map<Player, List<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
+    private Map<Player, Set<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
+    private Map<Player, Set<org.bukkit.entity.Entity>> cooldownJumpMap = new HashMap<>();
 
     @Override
     public void resetWitherSize(Wither wither) {
@@ -44,45 +44,39 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v) {
-        try {
-            if (!fakeArmorStandsMap.containsKey(player))
-                fakeArmorStandsMap.put(player, new ArrayList<>());
-            if (!cooldownJumpMap.containsKey(player))
-                cooldownJumpMap.put(player, new ArrayList<>());
-
-            final List<EntityArmorStand> fakeArmorStands = fakeArmorStandsMap.get(player);
-            final List<org.bukkit.entity.Entity> cooldownJump = cooldownJumpMap.get(player);
-
-            final EntityArmorStand as = new EntityArmorStand(EntityTypes.ARMOR_STAND, ((CraftWorld) player.getWorld()).getHandle());
-            as.setInvisible(true);
-            as.setFlag(5, true);
-            as.setSmall(true);
-            as.setNoGravity(true);
-            as.setArms(true);
-            as.setHeadPose(new Vector3f((float) (r.nextInt(360)),
-                    (float) (r.nextInt(360)),
-                    (float) (r.nextInt(360))));
-            as.setLocation(loc.getX() + MathUtils.randomDouble(-1.5, 1.5), loc.getY() + MathUtils.randomDouble(0, .5) - 0.75, loc.getZ() + MathUtils.randomDouble(-1.5, 1.5), 0, 0);
-            fakeArmorStands.add(as);
-            for (Player players : player.getWorld().getPlayers()) {
-                PacketSender.send(players, new PacketPlayOutSpawnEntityLiving(as));
-                PacketSender.send(players, new PacketPlayOutEntityMetadata(as.getId(),as.getDataWatcher(),false));
-                PacketSender.send(players, new PacketPlayOutEntityEquipment(as.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
-            }
-            UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
-            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
-                for (Player pl : player.getWorld().getPlayers())
-                    PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
-                fakeArmorStands.remove(as);
-            }, 20);
-            if (affectPlayers)
-                as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(ent -> !cooldownJump.contains(ent) && ent != player).forEachOrdered(ent -> {
-                    MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
-                    cooldownJump.add(ent);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
-                });
-        } catch (Exception exc) {
-
+        final Set<EntityArmorStand> fakeArmorStands = fakeArmorStandsMap.computeIfAbsent(player, k -> new HashSet<>());
+        final Set<org.bukkit.entity.Entity> cooldownJump = cooldownJumpMap.computeIfAbsent(player, k -> new HashSet<>());
+        final EntityArmorStand as = new EntityArmorStand(EntityTypes.ARMOR_STAND, ((CraftWorld) player.getWorld()).getHandle());
+        as.setInvisible(true);
+        as.setFlag(5, true);
+        as.setSmall(true);
+        as.setNoGravity(true);
+        as.setArms(true);
+        as.setHeadPose(new Vector3f((float) (r.nextInt(360)),
+                (float) (r.nextInt(360)),
+                (float) (r.nextInt(360))));
+        as.setLocation(loc.getX() + MathUtils.randomDouble(-1.5, 1.5), loc.getY() + MathUtils.randomDouble(0, .5) - 0.75, loc.getZ() + MathUtils.randomDouble(-1.5, 1.5), 0, 0);
+        fakeArmorStands.add(as);
+        PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(as);
+        PacketPlayOutEntityMetadata dataPacket = new PacketPlayOutEntityMetadata(as.getId(),as.getDataWatcher(),false);
+        PacketPlayOutEntityEquipment equipmentPacket = new PacketPlayOutEntityEquipment(as.getId(), EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE)));
+        for (Player players : player.getWorld().getPlayers()) {
+            PacketSender.send(players, spawnPacket);
+            PacketSender.send(players, dataPacket);
+            PacketSender.send(players, equipmentPacket);
+        }
+        UtilParticles.display(Particles.CLOUD, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5)), 2, 0.4f);
+        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
+            for (Player pl : player.getWorld().getPlayers())
+                PacketSender.send(pl, new PacketPlayOutEntityDestroy(as.getId()));
+            fakeArmorStands.remove(as);
+        }, 20);
+        if (affectPlayers) {
+            as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(ent -> !cooldownJump.contains(ent) && ent != player).forEachOrdered(ent -> {
+                MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
+                cooldownJump.add(ent);
+                Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
+            });
         }
     }
 

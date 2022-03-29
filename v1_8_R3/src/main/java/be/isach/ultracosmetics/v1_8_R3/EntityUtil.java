@@ -47,17 +47,19 @@ import org.bukkit.util.Vector;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by Sacha on 14/03/16.
  */
 public class EntityUtil implements IEntityUtil {
     private final Random r = new Random();
-    private final Map<Player, List<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
-    private final Map<Player, List<Entity>> cooldownJumpMap = new HashMap<>();
+    private final Map<Player, Set<EntityArmorStand>> fakeArmorStandsMap = new HashMap<>();
+    private final Map<Player, Set<Entity>> cooldownJumpMap = new HashMap<>();
 
     @Override
     public void resetWitherSize(Wither wither) {
@@ -66,14 +68,8 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v) {
-        if (!fakeArmorStandsMap.containsKey(player))
-            fakeArmorStandsMap.put(player, new ArrayList<>());
-        if (!cooldownJumpMap.containsKey(player))
-            cooldownJumpMap.put(player, new ArrayList<>());
-
-        final List<EntityArmorStand> fakeArmorStands = fakeArmorStandsMap.get(player);
-        final List<Entity> cooldownJump = cooldownJumpMap.get(player);
-
+        final Set<EntityArmorStand> fakeArmorStands = fakeArmorStandsMap.computeIfAbsent(player, k -> new HashSet<>());
+        final Set<Entity> cooldownJump = cooldownJumpMap.computeIfAbsent(player, k -> new HashSet<>());
         final EntityArmorStand as = new EntityArmorStand(((CraftWorld) player.getWorld()).getHandle());
         as.setInvisible(true);
         as.setSmall(true);
@@ -96,7 +92,7 @@ public class EntityUtil implements IEntityUtil {
             }
             fakeArmorStands.remove(as);
         }, 20);
-        if (affectPlayers)
+        if (affectPlayers) {
             for (final Entity ent : as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
                 if (!cooldownJump.contains(ent) && ent != player) {
                     MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
@@ -104,6 +100,7 @@ public class EntityUtil implements IEntityUtil {
                     Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
                 }
             }
+        }
     }
 
     @Override
