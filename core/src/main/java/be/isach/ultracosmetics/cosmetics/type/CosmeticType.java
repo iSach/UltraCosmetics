@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.XMaterial;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
@@ -46,6 +47,7 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
         } else {
             description = fromList(SettingsManager.getConfig().getStringList(category.getConfigPath() + "." + configName + ".Description"));
         }
+        Bukkit.getPluginManager().addPermission(null);
     }
 
     public T equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
