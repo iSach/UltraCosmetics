@@ -539,7 +539,7 @@ public class UltraPlayer {
     /**
      * Removes One Ammo of a gadget.
      *
-     * @param name The gadget.
+     * @param type The gadget.
      */
     public void removeAmmo(GadgetType type) {
         addAmmo(type, -1);

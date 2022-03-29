@@ -40,6 +40,7 @@ public class SubCommandReward extends SubCommand {
             target = Bukkit.getPlayer(args[2]);
             if (target == null) {
                 error(sender, "Invalid player!");
+                return;
             }
         } else {
             target = (Player) sender;
