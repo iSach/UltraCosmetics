@@ -7,9 +7,10 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
+import be.isach.ultracosmetics.util.BlockUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -110,8 +111,8 @@ public class TreasureChestManager implements Listener {
         }
 
         Block block = targetLoc.getBlock();
-        if (block.getRelative(BlockFace.UP).getType() != Material.AIR
-                || block.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+        if (!BlockUtils.isAir(block.getRelative(BlockFace.UP).getType())
+                || BlockUtils.isAir(block.getRelative(BlockFace.DOWN).getType())) {
             player.sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-On-Ground"));
             return;
         }

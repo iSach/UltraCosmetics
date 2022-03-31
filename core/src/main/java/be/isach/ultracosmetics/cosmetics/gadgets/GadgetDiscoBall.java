@@ -8,7 +8,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -58,7 +57,8 @@ public class GadgetDiscoBall extends Gadget {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.DiscoBall.Already-Active"));
             return false;
         }
-        if (getPlayer().getLocation().add(0, 4, 0).getBlock() != null && getPlayer().getLocation().add(0, 4, 0).getBlock().getType() != Material.AIR) {
+        Area area = new Area(getPlayer().getLocation(), 0, 4);
+        if (!area.isEmpty()) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.DiscoBall.Not-Space-Above"));
             return false;
         }

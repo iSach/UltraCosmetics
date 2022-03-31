@@ -5,10 +5,10 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -110,7 +110,7 @@ public class GadgetParachute extends Gadget {
     }
 
     private boolean isNotOnAir(Player p) {
-        return p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR;
+        return !BlockUtils.isAir(p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType());
     }
 
     @Override

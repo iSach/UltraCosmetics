@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -100,7 +99,7 @@ public class GadgetSmashDown extends Gadget {
                         && !BlockUtils.isRocketBlock(b)
                         && !BlockUtils.isTreasureChestBlock(b)
                         && b.getType().isSolid()
-                        && b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+                        && BlockUtils.isAir(b.getRelative(BlockFace.UP).getType())) {
                     Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                         FallingBlock fb = loc.getWorld().spawnFallingBlock(b.getLocation().clone().add(0, 1.1f, 0),
                                 b.getType(), b.getData());

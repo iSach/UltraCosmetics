@@ -8,12 +8,12 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
 import be.isach.ultracosmetics.treasurechests.TreasureLocation;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -113,10 +113,10 @@ public class SubCommandTreasure extends SubCommand {
 
         Location location = new Location(world, x + 0.5, y, z + 0.5);
         Block block = location.getBlock();
-        if (block.getType() != Material.AIR) {
+        if (!isAir(block)) {
             sender.sendMessage(MessageManager.getMessage("Chest-Location.In-Ground"));
             for (int i = y; i < vm.getWorldMaxHeight(world); i++) {
-                if (block.getWorld().getBlockAt(x, i, z).getType() == Material.AIR) {
+                if (isAir(block.getWorld().getBlockAt(x, i, z))) {
                     suggest(x, i, z, sender);
                     break;
                 }
@@ -124,10 +124,10 @@ public class SubCommandTreasure extends SubCommand {
             return;
         }
 
-        if (block.getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+        if (isAir(block.getRelative(BlockFace.DOWN))) {
             sender.sendMessage(MessageManager.getMessage("Chest-Location.In-Air"));
             for (int i = y; i > vm.getWorldMinHeight(world); i--) {
-                if (block.getWorld().getBlockAt(x, i, z).getType() != Material.AIR) {
+                if (!isAir(block.getWorld().getBlockAt(x, i, z))) {
                     // we found the ground, back up 1
                     suggest(x, i + 1, z, sender);
                     break;
@@ -147,5 +147,9 @@ public class SubCommandTreasure extends SubCommand {
 
     private void suggest(int x, int y, int z, CommandSender sender) {
         sender.sendMessage(MessageManager.getMessage("Chest-Location.Suggestion").replace("%location%", x + "," + y + "," + z));
+    }
+
+    private boolean isAir(Block block) {
+        return BlockUtils.isAir(block.getType());
     }
 }

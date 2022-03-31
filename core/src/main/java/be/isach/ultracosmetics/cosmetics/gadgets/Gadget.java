@@ -13,7 +13,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -340,8 +339,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             this.itemStack = itemStack;
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
         }
-        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != Material.AIR)
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             lastClickedBlock = event.getClickedBlock();
+        }
         if (asynchronous) {
             new BukkitRunnable() {
                 @Override

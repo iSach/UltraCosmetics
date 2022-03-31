@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -262,7 +261,7 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
-        if (getPlayer().getTargetBlock(null, 20).getType() == Material.AIR || getPlayer().getLastTwoTargetBlocks(null, 20).size() < 2) {
+        if (BlockUtils.isAir(getPlayer().getTargetBlock(null, 20).getType()) || getPlayer().getLastTwoTargetBlocks(null, 20).size() < 2) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.PortalGun.No-Block-Range"));
             return false;
         }

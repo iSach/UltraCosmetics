@@ -79,7 +79,7 @@ public class TreasureChest implements Listener {
 
         Location loc = getPlayer().getLocation().getBlock().getLocation();
         Block centerPossibleBlock = loc.getBlock();
-        if(centerPossibleBlock.getType() != Material.AIR) {
+        if(!BlockUtils.isAir(centerPossibleBlock.getType())) {
             // Save the block
             blocksToRestore.put(centerPossibleBlock, centerPossibleBlock.getState());
 

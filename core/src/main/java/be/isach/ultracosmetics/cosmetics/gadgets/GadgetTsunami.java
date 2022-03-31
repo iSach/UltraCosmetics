@@ -3,12 +3,12 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
@@ -37,11 +37,12 @@ public class GadgetTsunami extends Gadget {
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);
         final int i = Bukkit.getScheduler().runTaskTimerAsynchronously(getUltraCosmetics(), () -> {
-            if (loc.getBlock().getType() != Material.AIR
-                    && loc.getBlock().getType().isSolid())
+            if (loc.getBlock().getType().isSolid()) {
                 loc.add(0, 1, 0);
-            if (loc.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR)
+            }
+            if (BlockUtils.isAir(loc.clone().subtract(0, 1, 0).getBlock().getType())) {
                 loc.add(0, -1, 0);
+            }
             Location loc1 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
             Location loc2 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1.3, 1.8) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
             for (int i1 = 0; i1 < 5; i1++) {

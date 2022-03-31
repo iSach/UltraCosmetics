@@ -10,7 +10,7 @@ import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
@@ -56,8 +56,7 @@ public class GadgetChristmasTree extends Gadget {
 
     @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
-        if (event.getClickedBlock() == null
-                || event.getClickedBlock().getType() == Material.AIR) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getAction() != Action.LEFT_CLICK_BLOCK) {
             getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ChristmasTree.Click-On-Block"));
             return false;
         }

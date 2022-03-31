@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.util;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
@@ -31,7 +30,7 @@ public class Area {
             for (int y = y1; y <= y2; y++) {
                 for (int z = z1; z <= z2; z++) {
                     if (x == badX && y == badY && z == badZ) continue;
-                    if (world.getBlockAt(x, y, z).getType() != Material.AIR) {
+                    if (!BlockUtils.isAir(world.getBlockAt(x, y, z).getType())) {
                         return false;
                     }
                 }

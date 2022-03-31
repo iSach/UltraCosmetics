@@ -4,9 +4,10 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.BlockUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 /**
@@ -40,11 +41,11 @@ public class GadgetBlizzardBlaster extends Gadget {
     @Override
     public void onUpdate() {
         if (active) {
-            if (location.getBlock().getType() != Material.AIR && location.getBlock().getType().isSolid()) {
+            if (location.getBlock().getType().isSolid()) {
                 location.add(0, 1, 0);
             }
 
-            if (location.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR) {
+            if (BlockUtils.isAir(location.clone().subtract(0, 1, 0).getBlock().getType())) {
                 if (!location.clone().getBlock().getType().toString().contains("SLAB"))
                     location.add(0, -1, 0);
             }

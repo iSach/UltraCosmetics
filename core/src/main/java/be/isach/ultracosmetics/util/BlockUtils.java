@@ -28,10 +28,13 @@ public class BlockUtils {
      * be used with player.sendBlockChange
      */
     private static final Set<Material> badMaterials = new HashSet<>();
+    private static final Set<Material> AIRS = new HashSet<>();
 
     static {
+        AIRS.add(XMaterial.AIR.parseMaterial());
+        AIRS.add(XMaterial.CAVE_AIR.parseMaterial());
+        AIRS.add(XMaterial.VOID_AIR.parseMaterial());
         Set<XMaterial> badXMaterials = new HashSet<>();
-        badXMaterials.add(XMaterial.AIR);
         badXMaterials.add(XMaterial.CHEST);
         badXMaterials.add(XMaterial.ACACIA_WALL_SIGN);
         badXMaterials.add(XMaterial.BIRCH_WALL_SIGN);
@@ -77,6 +80,7 @@ public class BlockUtils {
         for (XMaterial mat : badXMaterials) {
             badMaterials.add(mat.parseMaterial());
         }
+        badMaterials.addAll(AIRS);
     }
 
     /**
@@ -185,7 +189,7 @@ public class BlockUtils {
     }
 
     private static boolean okAboveBlock(Material mat) {
-        return mat == Material.AIR || mat.isSolid();
+        return isAir(mat) || mat.isSolid();
     }
 
     /**
@@ -206,5 +210,9 @@ public class BlockUtils {
     // Returns true if mat should not be used with player.sendBlockChange per badMaterials Set
     public static boolean isBadMaterial(Material mat) {
         return badMaterials.contains(mat);
+    }
+
+    public static boolean isAir(Material mat) {
+        return AIRS.contains(mat);
     }
 }

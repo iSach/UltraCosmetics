@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.XBlock;
 import be.isach.ultracosmetics.util.XMaterial;
@@ -61,7 +62,7 @@ public class GadgetTrampoline extends Gadget {
         Block block2 = loc1.getBlock().getRelative(3, 1, 0);
         Area checkArea = new Area(loc1, loc2);
 
-        if (!checkArea.isEmpty() || block.getType() != Material.AIR || block2.getType() != Material.AIR) {
+        if (!checkArea.isEmpty() || !BlockUtils.isAir(block.getType()) || !BlockUtils.isAir(block2.getType())) {
             event.getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
             return false;
         }
