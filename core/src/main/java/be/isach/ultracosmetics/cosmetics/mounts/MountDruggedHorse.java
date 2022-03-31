@@ -25,8 +25,8 @@ public class MountDruggedHorse extends MountHorse {
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
+    public void setup() {
+        super.setup();
 
         getEntity().setJumpStrength(1.3);
 

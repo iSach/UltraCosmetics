@@ -29,8 +29,8 @@ public class MountRudolph extends MountAbstractHorse<Mule> {
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
+    public void setup() {
+        super.setup();
         left = spawnArmorStand(false);
         right = spawnArmorStand(true);
         moveAntlers();

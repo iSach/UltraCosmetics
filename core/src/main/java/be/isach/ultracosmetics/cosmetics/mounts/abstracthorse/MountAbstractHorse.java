@@ -16,8 +16,7 @@ public abstract class MountAbstractHorse<E extends AbstractHorse> extends Mount<
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
+    public void setup() {
         entity.setTamed(true);
         entity.setDomestication(1);
         entity.getInventory().setSaddle(new ItemStack(Material.SADDLE));

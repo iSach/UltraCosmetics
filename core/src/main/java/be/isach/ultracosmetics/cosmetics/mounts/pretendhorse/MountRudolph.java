@@ -31,9 +31,8 @@ public class MountRudolph extends MountHorse {
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
-        entity.setJumpStrength(0.7);
+    public void setup() {
+        super.setup();
         left = spawnArmorStand(false);
         right = spawnArmorStand(true);
         moveAntlers();

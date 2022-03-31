@@ -75,4 +75,8 @@ public class MountDragon extends Mount<EnderDragon> {
             event.setCancelled(true);
         }
     }
+
+    @Override
+    protected void setup() {
+    }
 }

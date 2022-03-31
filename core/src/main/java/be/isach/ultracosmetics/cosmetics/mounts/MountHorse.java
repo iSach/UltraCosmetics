@@ -18,12 +18,8 @@ public abstract class MountHorse extends Mount<Horse> {
         super(ultraPlayer, type, ultraCosmetics);
     }
 
-    /**
-     * Equips the pet.
-     */
     @Override
-    public void onEquip() {
-        super.onEquip();
+    public void setup() {
         // setColor has no effect on variant horses so skip if it's a variant horse
         if (getVariant() == null) {
             entity.setColor(getColor());
@@ -35,6 +31,7 @@ public abstract class MountHorse extends Mount<Horse> {
         entity.setTamed(true);
         entity.setDomestication(1);
         entity.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+        entity.setJumpStrength(0.7);
     }
 
     @Override

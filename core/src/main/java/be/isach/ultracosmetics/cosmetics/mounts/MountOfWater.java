@@ -19,12 +19,6 @@ public class MountOfWater extends MountHorse {
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
-        entity.setJumpStrength(0.7);
-    }
-
-    @Override
     public void onUpdate() {
         UtilParticles.display(Particles.DRIP_WATER, 0.4f, 0.2f, 0.4f, entity.getLocation().clone().add(0, 1, 0), 5);
     }

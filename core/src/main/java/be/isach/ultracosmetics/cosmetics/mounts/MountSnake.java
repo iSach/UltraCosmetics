@@ -31,12 +31,10 @@ public class MountSnake extends Mount<Sheep> {
 
     public MountSnake(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("snake"), ultraCosmetics);
-
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
+    public void setup() {
         color = MathUtils.randomRangeInt(0, 14);
         entity.setNoDamageTicks(Integer.MAX_VALUE);
         entity.setColor(DyeColor.values()[color]);

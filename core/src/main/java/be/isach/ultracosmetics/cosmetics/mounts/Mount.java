@@ -95,6 +95,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         entity.setPassenger(getPlayer());
         runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
+        setup();
         getOwner().setCurrentMount(this);
 
         if (!getUltraCosmetics().worldGuardHooked()) return;
@@ -267,4 +268,6 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             }
         }
     }
+
+    protected abstract void setup();
 }
