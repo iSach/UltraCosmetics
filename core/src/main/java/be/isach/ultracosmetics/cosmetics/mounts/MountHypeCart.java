@@ -43,8 +43,4 @@ public class MountHypeCart extends Mount<Minecart> {
             event.setCancelled(true);
         }
     }
-
-    @Override
-    protected void setup() {
-    }
 }

@@ -269,5 +269,5 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         }
     }
 
-    protected abstract void setup();
+    protected void setup() {};
 }
