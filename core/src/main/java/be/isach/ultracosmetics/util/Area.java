@@ -4,7 +4,12 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.log.SmartLogger;
+
 public class Area {
+    private static final boolean DEBUG = SettingsManager.getConfig().getBoolean("Area-Debug");
     protected final World world;
     protected final int x1, y1, z1;
     protected final int x2, y2, z2;
@@ -31,10 +36,17 @@ public class Area {
                 for (int z = z1; z <= z2; z++) {
                     if (x == badX && y == badY && z == badZ) continue;
                     if (!BlockUtils.isAir(world.getBlockAt(x, y, z).getType())) {
+                        if (DEBUG) {
+                            SmartLogger log = UltraCosmeticsData.get().getPlugin().getSmartLogger();
+                            log.write("Failed area check at (" + x + "," + y + "," + z + ") because it is " + world.getBlockAt(x, y, z).getType());
+                        }
                         return false;
                     }
                 }
             }
+        }
+        if (DEBUG) {
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write("Area check passed");
         }
         return true;
     }

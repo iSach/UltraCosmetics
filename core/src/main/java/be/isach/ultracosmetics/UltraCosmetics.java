@@ -491,6 +491,7 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("Menu-Item.Open-Menu-On-Inventory-Click", false, "Whether to open cosmetics menu when the menu item is clicked from the player's inventory");
         config.set("Menu-Item.Data", null);
         config.addDefault("Auto-Equip-Cosmetics", true, "Allows for players to auto-equip on join cosmetics they had before disconnecting.", "Supports both flatfile and SQL, choosing SQL when possible.");
+        config.addDefault("Area-Debug", false, "When enabled, prints why area checks failed to the console");
 
         upgradeIdsToMaterials();
 
