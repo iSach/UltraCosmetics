@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.config;
 
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.InvalidConfigurationException;
 
 /**
  * Message manager.

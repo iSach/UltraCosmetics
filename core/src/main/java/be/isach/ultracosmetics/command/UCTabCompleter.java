@@ -28,15 +28,16 @@ public class UCTabCompleter implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (!cmd.getName().equals("ultracosmetics")) return null;
         List<String> options = new ArrayList<>();
-        // TODO: maybe flip conditions so we sort by subcommand first, then arg index?
-        // more intuitive that way.
-        // or even just have the subcommands handle tab completion themselves?
+        // TODO: move each subcommand section to its subcommand class
         if (args.length == 1) {
             for (SubCommand sc : uc.getCommandManager().getCommands()) {
                 options.add(sc.getName());
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("menu") || args[0].equalsIgnoreCase("toggle")) {
+                options.add("main");
+                options.add("buykey");
+                options.add("renamepet");
                 for (Category category : Category.enabled()) {
                     options.add(category.toString());
                 }

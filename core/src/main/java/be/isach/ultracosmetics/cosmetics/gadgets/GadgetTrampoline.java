@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -31,7 +32,7 @@ import java.util.Set;
  * @since 12-19-2015
  */
 public class GadgetTrampoline extends Gadget {
-    private Set<Block> trampoline = new HashSet<>();
+    private Set<BlockState> trampoline = new HashSet<>();
     private Area cuboid;
     private Location center;
     private boolean running;
@@ -58,11 +59,11 @@ public class GadgetTrampoline extends Gadget {
     protected boolean checkRequirements(PlayerInteractEvent event) {
         Location loc1 = event.getPlayer().getLocation().add(2, 15, 2);
         Location loc2 = event.getPlayer().getLocation().clone().add(-3, 0, -2);
-        Block block = loc1.getBlock().getRelative(3, 0, 0);
-        Block block2 = loc1.getBlock().getRelative(3, 1, 0);
+        Block ladder1 = loc1.getBlock().getRelative(3, 0, 0);
+        Block ladder2 = loc1.getBlock().getRelative(3, 1, 0);
         Area checkArea = new Area(loc1, loc2);
 
-        if (!checkArea.isEmpty() || !BlockUtils.isAir(block.getType()) || !BlockUtils.isAir(block2.getType())) {
+        if (!checkArea.isEmpty() || !BlockUtils.isAir(ladder1.getType()) || !BlockUtils.isAir(ladder2.getType())) {
             event.getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Rocket.Not-Enough-Space"));
             return false;
         }
@@ -74,8 +75,9 @@ public class GadgetTrampoline extends Gadget {
         if (running && cuboid != null) {
             for (Entity entity : center.getWorld().getNearbyEntities(center, 4, 4, 4)) {
                 Block b = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-                if (b.getType().toString().contains("WOOL") && cuboid.contains(b))
+                if (b.getType().toString().contains("WOOL") && cuboid.contains(b)) {
                     MathUtils.applyVelocity(entity, new Vector(0, 3, 0));
+                }
             }
         }
     }
@@ -83,9 +85,6 @@ public class GadgetTrampoline extends Gadget {
     @Override
     public void onClear() {
         clearBlocks();
-        trampoline = null;
-        cuboid = null;
-        running = false;
     }
 
     private void generateStructure() {
@@ -145,7 +144,7 @@ public class GadgetTrampoline extends Gadget {
     }
 
     private void setToRestore(Block block, XMaterial material) {
-        trampoline.add(block);
+        trampoline.add(block.getState());
         XBlock.setType(block, material);
     }
 
@@ -172,11 +171,10 @@ public class GadgetTrampoline extends Gadget {
             get(-3, 0, 0).setType(Material.AIR);
             get(-3, 1, 0).setType(Material.AIR);
         }
-        if (trampoline != null) {
-            for (Block block : trampoline)
-                block.setType(Material.AIR);
-            trampoline.clear();
+        for (BlockState state : trampoline) {
+            state.update(true);
         }
+        trampoline.clear();
         cuboid = null;
         running = false;
     }

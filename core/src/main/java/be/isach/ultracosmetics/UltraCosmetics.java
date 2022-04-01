@@ -492,6 +492,9 @@ public class UltraCosmetics extends JavaPlugin {
         config.set("Menu-Item.Data", null);
         config.addDefault("Auto-Equip-Cosmetics", true, "Allows for players to auto-equip on join cosmetics they had before disconnecting.", "Supports both flatfile and SQL, choosing SQL when possible.");
         config.addDefault("Area-Debug", false, "When enabled, prints why area checks failed to the console");
+        List<String> airMaterials = new ArrayList<>();
+        Arrays.asList(XMaterial.AIR, XMaterial.CAVE_AIR, XMaterial.VOID_AIR, XMaterial.LIGHT).forEach(k -> airMaterials.add(k.name()));
+        config.addDefault("Air-Materials", airMaterials, "Materials that are treated as air. Changing these is not recommended.");
 
         upgradeIdsToMaterials();
 

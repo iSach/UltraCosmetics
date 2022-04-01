@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.util;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.version.VersionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,9 +32,19 @@ public class BlockUtils {
     private static final Set<Material> AIRS = new HashSet<>();
 
     static {
-        AIRS.add(XMaterial.AIR.parseMaterial());
-        AIRS.add(XMaterial.CAVE_AIR.parseMaterial());
-        AIRS.add(XMaterial.VOID_AIR.parseMaterial());
+        for (String name : SettingsManager.getConfig().getStringList("Air-Materials")) {
+            Optional<XMaterial> mat = XMaterial.matchXMaterial(name);
+            if (!mat.isPresent()) {
+                UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.WARNING, "Failed to parse 'Air-Materials' item: " + name);
+                continue;
+            }
+            Material parsed = mat.get().parseMaterial();
+            // silently ignore materials that are valid
+            // but not present in this MC version
+            if (parsed != null) {
+                AIRS.add(parsed);
+            }
+        }
         Set<XMaterial> badXMaterials = new HashSet<>();
         badXMaterials.add(XMaterial.CHEST);
         badXMaterials.add(XMaterial.ACACIA_WALL_SIGN);
@@ -129,7 +140,7 @@ public class BlockUtils {
      */
     public static boolean isRocketBlock(Block b) {
         for (GadgetRocket rocket : GadgetRocket.ROCKETS_WITH_BLOCKS) {
-            if (rocket.getBlocks().contains(b)) {
+            if (rocket.containsBlock(b)) {
                 return true;
             }
         }

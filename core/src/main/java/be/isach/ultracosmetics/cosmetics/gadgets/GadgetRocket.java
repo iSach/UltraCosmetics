@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
@@ -25,8 +26,10 @@ import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,7 +48,8 @@ public class GadgetRocket extends Gadget {
 
     private boolean launching;
     private ArmorStand armorStand;
-    private List<Block> blocks = new ArrayList<>();
+    // key is used for easy access for contains() checks
+    private Map<Block,BlockState> blocks = new HashMap<>();
     private List<FallingBlock> fallingBlocks = new ArrayList<>();
     private Entity playerVehicle = null;
     private BukkitTask currentTask = null;
@@ -67,12 +71,12 @@ public class GadgetRocket extends Gadget {
                 Block center = loc.clone().add(0, i, 0).getBlock();
                 for (BlockFace face : CARDINAL) {
                     Block side = center.getRelative(face);
+                    blocks.put(side, side.getState());
                     side.setType(FENCE);
-                    blocks.add(side);
                 }
                 Block quartz = center.getRelative(BlockFace.UP);
+                blocks.put(quartz, quartz.getState());
                 quartz.setType(Material.QUARTZ_BLOCK);
-                blocks.add(quartz);
             }
             armorStand = loc.getWorld().spawn(loc.add(0, 1.5, 0), ArmorStand.class);
             armorStand.setVisible(false);
@@ -119,8 +123,8 @@ public class GadgetRocket extends Gadget {
                     armorStand.remove();
                     armorStand = null;
 
-                    for (Block block : blocks) {
-                        block.setType(Material.AIR);
+                    for (BlockState state : blocks.values()) {
+                        state.update(true);
                     }
 
                     blocks.clear();
@@ -197,8 +201,8 @@ public class GadgetRocket extends Gadget {
 
     @Override
     public void onClear() {
-        for (Block block : blocks) {
-            block.setType(Material.AIR);
+        for (BlockState state : blocks.values()) {
+            state.update(true);
         }
         for (FallingBlock fallingBlock : fallingBlocks) {
             fallingBlock.remove();
@@ -217,8 +221,8 @@ public class GadgetRocket extends Gadget {
         }
     }
 
-    public List<Block> getBlocks() {
-        return blocks;
+    public boolean containsBlock(Block block) {
+        return blocks.containsKey(block);
     }
 
     @EventHandler
