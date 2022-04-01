@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -23,26 +24,20 @@ import java.util.UUID;
 public class SettingsManager {
 
     // Config file.
-    // Translation config file.
-    private static SettingsManager messages = new SettingsManager("messages");
-
     public FileConfiguration fileConfiguration;
     private File file;
+    // if the config was loaded successfully. Set to false on failure.
+    private boolean success = true;
 
     /**
      * Creates a new file and defines fileConfiguration and file.
      *
      * @param fileName
      */
-    private SettingsManager(String fileName) {
-
-        if (!UltraCosmeticsData.get().getPlugin().getDataFolder().exists()) {
-            UltraCosmeticsData.get().getPlugin().getDataFolder().mkdir();
-        }
-
-        File f = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), "/data");
-        if (!f.exists())
-            f.mkdirs();
+    protected SettingsManager(String fileName) {
+        File folder = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), "/data");
+        if (!folder.exists())
+            folder.mkdirs();
 
         file = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), fileName + ".yml");
 
@@ -50,28 +45,21 @@ public class SettingsManager {
             try {
                 file.createNewFile();
             } catch (IOException e) {
+                success = false;
                 e.printStackTrace();
             }
         }
 
-        fileConfiguration = YamlConfiguration.loadConfiguration(file);
-    }
-
-    /**
-     * Creates a new file and defines fileConfiguration and file.
-     */
-    private SettingsManager() {
-        file = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), "config.yml");
-        fileConfiguration = UltraCosmeticsData.get().getPlugin().getConfig();
-    }
-
-    /**
-     * Gets the messages SettingsManager.
-     *
-     * @return the messages SettingsManager.
-     */
-    public static SettingsManager getMessages() {
-        return messages;
+        // not using YamlConfiguration.loadConfiguration
+        // because we want to catch the exceptions and act on them
+        fileConfiguration = new YamlConfiguration();
+        try {
+            fileConfiguration.load(file);
+        } catch (IOException | InvalidConfigurationException e) {
+            success = false;
+            e.printStackTrace();
+        }
+        
     }
 
     /**
@@ -105,6 +93,10 @@ public class SettingsManager {
     public static boolean hasData(UUID uuid) {
         return Arrays.asList(UltraCosmeticsData.get().getPlugin().getDataFolder()
                 .listFiles()).contains(new File(uuid.toString() + ".yml"));
+    }
+
+    public boolean success() {
+        return success;
     }
 
     public void reload() {

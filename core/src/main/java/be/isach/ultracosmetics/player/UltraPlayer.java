@@ -382,7 +382,7 @@ public class UltraPlayer {
             return;
         }
 
-        ItemStack itemStack = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', ((String) SettingsManager.getMessages().get("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
+        ItemStack itemStack = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', (MessageManager.getMessage("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
 
         PurchaseData pd = new PurchaseData();
         pd.setPrice(SettingsManager.getConfig().getInt("TreasureChests.Key-Price"));

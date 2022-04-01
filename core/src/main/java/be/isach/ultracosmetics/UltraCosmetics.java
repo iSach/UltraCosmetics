@@ -106,6 +106,7 @@ public class UltraCosmetics extends JavaPlugin {
     private AFlagManager flagManager = null;
 
     private boolean legacyMessagePrinted = false;
+    private boolean enableFinished = false;
     
     /**
      * Called when plugin is loaded.
@@ -170,16 +171,24 @@ public class UltraCosmetics extends JavaPlugin {
         getSmartLogger().write("Link: http://bit.ly/UltraCosmetics");
 
         // Set up config.
-        setUpConfig();
+        if (!setUpConfig()) {
+            getSmartLogger().write(LogLevel.ERROR, "Failed to load config.yml, shutting down to protect data.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // Initialize NMS Module
         if (!UltraCosmeticsData.get().initModule()) {
-            Bukkit.getPluginManager().disablePlugin(this);
+            getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         // Init Message manager.
-        new MessageManager();
+        if (!MessageManager.success()) {
+            getSmartLogger().write(LogLevel.ERROR, "Failed to load messages.yml, shutting down to protect data.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // reward.yml & design.yml
         new TreasureManager(this);
@@ -261,6 +270,7 @@ public class UltraCosmetics extends JavaPlugin {
         getSmartLogger().write();
         getSmartLogger().write("UltraCosmetics successfully finished loading and is now enabled!");
         getSmartLogger().write("-------------------------------------------------------------------");
+        enableFinished = true;
     }
 
     /**
@@ -269,7 +279,7 @@ public class UltraCosmetics extends JavaPlugin {
     @Override
     public void onDisable() {
         // when the plugin is disabled from onEnable, skip cleanup
-        if (UltraCosmeticsData.get().getServerVersion() == null) {
+        if (!enableFinished) {
             return;
         }
 
@@ -319,17 +329,14 @@ public class UltraCosmetics extends JavaPlugin {
         }
     }
 
-    private void setUpConfig() {
+    private boolean setUpConfig() {
         file = new File(getDataFolder(), "config.yml");
-
         if (!file.exists()) {
-            file.getParentFile().mkdirs();
             saveResource("config.yml", false);
-            getSmartLogger().write("Config file doesn't exist yet.");
-            getSmartLogger().write("Creating Config File and loading it.");
         }
-
-        config = loadConfiguration(file);
+        if (!loadConfiguration(file)) {
+            return false;
+        }
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
@@ -491,7 +498,9 @@ public class UltraCosmetics extends JavaPlugin {
             config.save(file);
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     /**
@@ -594,8 +603,7 @@ public class UltraCosmetics extends JavaPlugin {
         return !worldGuardHooked() || flagManager.areChestsAllowedHere(player);
     }
 
-    public CustomConfiguration loadConfiguration(File file) {
-        CustomConfiguration config;
+    public boolean loadConfiguration(File file) {
         // In 1.18.1 and later, Spigot supports comment preservation and
         // writing comments programmatically, so use built-in methods if we can.
         // Check if the method exists before we load AutoCommentConfig
@@ -608,7 +616,7 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (SecurityException e) {
             // ???
             e.printStackTrace();
-            return null;
+            return false;
         }
 
         try {
@@ -616,8 +624,9 @@ public class UltraCosmetics extends JavaPlugin {
         } catch (FileNotFoundException ignored) {
         } catch (IOException | InvalidConfigurationException ex) {
             getSmartLogger().write(LogLevel.ERROR, "Cannot load " + file, ex);
+            return false;
         }
-        return config;
+        return true;
     }
 
     private void upgradeIdsToMaterials() {

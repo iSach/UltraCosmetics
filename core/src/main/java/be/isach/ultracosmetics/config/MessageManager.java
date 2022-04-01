@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.config;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 /**
  * Message manager.
@@ -9,21 +10,30 @@ import org.bukkit.ChatColor;
  * @since 03-08-2015
  */
 public class MessageManager {
-    private static SettingsManager settingsManager;
+    private static final SettingsManager messagesConfig;
+    // should be set to true by the time anybody else can read this
+    private static boolean success = false;
 
     /**
-     * Set up the messages in the config.
+     * Load the messages config
      */
-    public MessageManager() {
-        settingsManager = SettingsManager.getMessages();
-        loadMessages();
-        settingsManager.save();
+    static {
+        messagesConfig = new SettingsManager("messages");
+        if (messagesConfig.success()) {
+            loadMessages();
+            messagesConfig.save();
+            success = true;
+        }
+    }
+
+    public static boolean success() {
+        return success;
     }
 
     /**
      * Set up the messages in the config.
      */
-    private void loadMessages() {
+    private static void loadMessages() {
         addMessage("Prefix", "&l&oCosmetics >&r");
         addMessage("No-Permission", "%prefix% &c&lYou don't have the permission!");
         addMessage("Cosmetic-Disabled", "%prefix% &c&lThis cosmetic is disabled!");
@@ -89,10 +99,10 @@ public class MessageManager {
         addMessage("Treasure-Chests-Loot.Money", "&e&l%money%$");
         String oldGadgetKey = "Treasure-Chests-Loot.gadget";
         String newGadgetKey = "Treasure-Chests-Loot.Gadget";
-        String gadgetMessage = settingsManager.getString(oldGadgetKey);
+        String gadgetMessage = messagesConfig.getString(oldGadgetKey);
         if (gadgetMessage != null) {
-            settingsManager.set(newGadgetKey, gadgetMessage);
-            settingsManager.set(oldGadgetKey, null);
+            messagesConfig.set(newGadgetKey, gadgetMessage);
+            messagesConfig.set(oldGadgetKey, null);
         }
         addMessage("Treasure-Chests-Loot.Gadget", "%gadget% gadget");
         addMessage("Treasure-Chests-Loot.Suit", "%suit%");
@@ -515,7 +525,7 @@ public class MessageManager {
      * @param message The config value.
      */
     public static void addMessage(String path, String message) {
-        settingsManager.addDefault(path, message);
+        messagesConfig.addDefault(path, message);
     }
 
     /**
@@ -525,6 +535,9 @@ public class MessageManager {
      * @return a message from a config path.
      */
     public static String getMessage(String messagePath) {
-        return ChatColor.translateAlternateColorCodes('&', settingsManager.getString(messagePath).replace("%prefix%", settingsManager.getString("Prefix")));
+        return ChatColor.translateAlternateColorCodes('&', messagesConfig.getString(messagePath).replace("%prefix%", messagesConfig.getString("Prefix")));
+    }
+
+    private MessageManager() {
     }
 }
