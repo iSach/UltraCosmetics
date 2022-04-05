@@ -140,7 +140,7 @@ public class StandardQuery {
                 Map<String,Object> values = new HashMap<>();
                 List<Column<?>> columns = UltraCosmeticsData.get().getPlugin().getMySqlConnectionManager().getColumns();
                 for (Column<?> column : columns) {
-                    values.put(column.getName(), r.getObject(column.getName(), column.getTypeClass()));
+                    values.put(column.getName(), column.getValue(r));
                 }
                 return values;
             } catch (SQLException e) {

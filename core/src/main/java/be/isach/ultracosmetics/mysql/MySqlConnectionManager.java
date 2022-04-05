@@ -174,7 +174,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
         boolean upgradeAnnounced = false;
         try (ResultSet rs = md.getColumns(null, null, tableName, "id")) {
             if (rs.next()) {
-                ultraCosmetics.getSmartLogger().write("You have an old database. UC will attempt to upgrade it...");
+                ultraCosmetics.getSmartLogger().write("You have an old UCData table. Attempting to upgrade it...");
                 List<String> commands = new ArrayList<>();
                 commands.add("DROP COLUMN id");
                 commands.add("DROP COLUMN username");
