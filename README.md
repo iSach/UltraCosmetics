@@ -1,6 +1,6 @@
 ![logo](https://puu.sh/E6GuW/414e92c886.png)
 
-[discord-invite]: https://discord.gg/0125SVBfnBFwl7XOP
+[discord-invite]: https://discord.gg/PgSXZT37JV
 [travis-link]: https://travis-ci.org/iSach/UltraCosmetics
 [jenkins-link]: https://ci.isach.be/job/UltraCosmetics/lastSuccessfulBuild/
 [wiki-link]: https://github.com/iSach/UltraCosmetics/wiki
