@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.util.XMaterial;
  * Represents an instance of a silverfish pet summoned by a player.
  *
  * @author Chris6ix
- * @since 19-01-2021
+ * @since 19-01-2022
  */
 public class PetSilverfish extends Pet {
     public PetSilverfish(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
