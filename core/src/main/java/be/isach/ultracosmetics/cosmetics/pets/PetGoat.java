@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.util.XMaterial;
  * Represents an instance of a goat pet summoned by a player.
  *
  * @author Chris6ix
- * @since 18-01-2021
+ * @since 18-01-2022
  */
 
 /*Temporarily using WHEAT as material until https://minecraft.fandom.com/wiki/Goat_Horn comes to Java edition*/
