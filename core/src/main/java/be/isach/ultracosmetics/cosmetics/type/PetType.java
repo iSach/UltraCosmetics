@@ -74,6 +74,7 @@ public final class PetType extends CosmeticEntType<Pet> {
         new PetType("ultracosmetics.pets.cow", "Cow", XMaterial.MILK_BUCKET, "&7&oMoooo!", EntityType.COW, PetCow.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.mooshroom", "Mooshroom", XMaterial.RED_MUSHROOM, "&7&oMoooo!", EntityType.MUSHROOM_COW, PetMooshroom.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.horse", "Horse", XMaterial.LEATHER_HORSE_ARMOR, "&7&o*fhrrrrhh*", EntityType.HORSE, PetHorse.class, ServerVersion.earliest());
+        new PetType("ultracosmetics.pets.blaze", "Blaze", XMaterial.BLAZE_ROD, "&7&oFlying and hot!", EntityType.BLAZE, PetBlaze.class, ServerVersion.earliest());
         
         if (serverVersion.isAtLeast(ServerVersion.v1_17_R1)) {
             /*new PetType("ultracosmetics.pets.axolotl", "Axolotl", XMaterial.AXOLOTL_BUCKET, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class, ServerVersion.v1_17_R1);*/
