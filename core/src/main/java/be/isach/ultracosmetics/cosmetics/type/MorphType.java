@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.morphs.*;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 
 import java.util.ArrayList;

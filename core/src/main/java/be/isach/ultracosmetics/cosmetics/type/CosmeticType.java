@@ -8,13 +8,14 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * A cosmetic type.
@@ -40,12 +41,16 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
         this.baseVersion = baseVersion;
         this.material = material;
 
-        if (SettingsManager.getConfig().get(getCategory().getConfigPath() + "." + configName + ".Description") == null) {
-            description = defaultDescription;
-            SettingsManager.getConfig().set(getCategory().getConfigPath() + "." + configName + ".Description", getDescriptionColored(), "Description of this cosmetic.");
+        String descPath = getCategory().getConfigPath() + "." + configName + ".Description";
+        if (SettingsManager.getConfig().getStringList(descPath).size() > 0) {
+            StringJoiner builder = new StringJoiner("\n");
+            SettingsManager.getConfig().getStringList(descPath).forEach(k -> builder.add(k));
+            MessageManager.addMessage(descPath, builder.toString());
+            SettingsManager.getConfig().set(descPath, null);
         } else {
-            description = fromList(SettingsManager.getConfig().getStringList(category.getConfigPath() + "." + configName + ".Description"));
+            MessageManager.addMessage(descPath, defaultDescription);
         }
+        description = MessageManager.getMessage(descPath);
     }
 
     public T equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
@@ -146,19 +151,6 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
      */
     public int getChestWeight() {
         return SettingsManager.getConfig().getInt(category.getConfigPath() + "." + getConfigName() + ".Treasure-Chest-Weight");
-    }
-
-    /**
-     * Get the description as a String from list.
-     *
-     * @param description The Description as a list.
-     * @return The description as a String.
-     */
-    private String fromList(List<String> description) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < description.size(); i++)
-            stringBuilder.append(description.get(i)).append(i < description.size() - 1 ? "\n" : "");
-        return stringBuilder.toString();
     }
 
     /**

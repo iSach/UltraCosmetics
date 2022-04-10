@@ -4,7 +4,13 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
+import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Chicken;
@@ -16,6 +22,8 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
 import java.util.List;

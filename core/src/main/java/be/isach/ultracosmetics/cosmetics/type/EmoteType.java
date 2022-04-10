@@ -8,7 +8,7 @@ import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.TexturedSkullFactory;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;

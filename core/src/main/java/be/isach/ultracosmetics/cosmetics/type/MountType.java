@@ -6,7 +6,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.mounts.*;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 

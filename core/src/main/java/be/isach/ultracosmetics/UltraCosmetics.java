@@ -22,7 +22,12 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
 import be.isach.ultracosmetics.run.MovingChecker;
 import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ArmorStandManager;
+import be.isach.ultracosmetics.util.EntitySpawningManager;
+import be.isach.ultracosmetics.util.GeneralUtil;
+import be.isach.ultracosmetics.util.Metrics;
+import be.isach.ultracosmetics.util.ReflectionUtils;
+import be.isach.ultracosmetics.util.UpdateManager;
 import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
 
@@ -32,6 +37,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.cryptomorin.xseries.XMaterial;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

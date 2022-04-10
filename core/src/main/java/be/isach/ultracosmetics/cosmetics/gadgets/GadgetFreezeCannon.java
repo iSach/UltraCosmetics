@@ -6,7 +6,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.UtilParticles;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;

@@ -208,4 +208,8 @@ public class SettingsManager {
         if (worlds.contains(world.getName())) return true;
         return false;
     }
+
+    public ConfigurationSection getConfigurationSection(String path) {
+        return fileConfiguration.getConfigurationSection(path);
+    }
 }

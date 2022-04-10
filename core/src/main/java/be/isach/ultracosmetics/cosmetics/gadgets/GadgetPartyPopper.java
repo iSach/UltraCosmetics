@@ -4,9 +4,17 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
+
 import org.bukkit.Particle;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 /**
  * Represents an instance of a party popper gadget summoned by a player.

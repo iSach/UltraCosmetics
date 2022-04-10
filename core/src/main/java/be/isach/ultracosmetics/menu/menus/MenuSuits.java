@@ -10,7 +10,7 @@ import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,23 +28,14 @@ import java.util.Map;
 public final class MenuSuits extends CosmeticMenu<SuitType> {
 
     private static final int[] SLOTS = new int[]{10, 11, 12, 13, 14, 15, 16, 17};
-    private static final Category CATEGORY = Category.SUITS;
 
     public MenuSuits(UltraCosmetics ultraCosmetics) {
-        super(ultraCosmetics, CATEGORY);
+        super(ultraCosmetics, Category.SUITS);
     }
 
     @Override
     protected int getSize() {
         return 54;
-    }
-
-    /**
-     * @return The name of the menu.
-     */
-    @Override
-    protected String getName() {
-        return MessageManager.getMessage("Menus." + CATEGORY.getConfigPath());
     }
 
     @Override
@@ -56,7 +47,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
             SuitCategory cat = enabled.get(i);
             ItemStack wholeEquipStack = XMaterial.HOPPER.parseItem();
             ItemMeta wholeEquipMeta = wholeEquipStack.getItemMeta();
-            wholeEquipMeta.setDisplayName(CATEGORY.getActivateMenu() + " " + MessageManager.getMessage("Suits." + cat.getConfigName() + ".whole-equip"));
+            wholeEquipMeta.setDisplayName(Category.SUITS.getActivateTooltip() + " " + MessageManager.getMessage("Suits." + cat.getConfigName() + ".whole-equip"));
             wholeEquipMeta.setLore(Arrays.asList("", MessageManager.getMessage("Suits.Whole-Equip-Lore"), ""));
             wholeEquipStack.setItemMeta(wholeEquipMeta);
             putItem(inventory, SLOTS[i % getItemsPerPage()] - 9, wholeEquipStack, clickData -> {

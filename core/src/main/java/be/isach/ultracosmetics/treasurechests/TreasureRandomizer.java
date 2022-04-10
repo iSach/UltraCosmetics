@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
 import be.isach.ultracosmetics.util.TextUtil;
 import be.isach.ultracosmetics.util.WeightedSet;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

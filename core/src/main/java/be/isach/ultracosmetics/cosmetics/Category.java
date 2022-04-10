@@ -3,11 +3,28 @@ package be.isach.ultracosmetics.cosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
-import be.isach.ultracosmetics.cosmetics.type.*;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.cosmetics.type.EmoteType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.HatType;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.menu.Menus;
-import be.isach.ultracosmetics.menu.menus.*;
+import be.isach.ultracosmetics.menu.menus.MenuEmotes;
+import be.isach.ultracosmetics.menu.menus.MenuGadgets;
+import be.isach.ultracosmetics.menu.menus.MenuHats;
+import be.isach.ultracosmetics.menu.menus.MenuMorphs;
+import be.isach.ultracosmetics.menu.menus.MenuMounts;
+import be.isach.ultracosmetics.menu.menus.MenuParticleEffects;
+import be.isach.ultracosmetics.menu.menus.MenuPets;
+import be.isach.ultracosmetics.menu.menus.MenuSuits;
 import be.isach.ultracosmetics.util.ItemFactory;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +42,7 @@ import java.util.stream.Collectors;
  */
 public enum Category {
 
-    PETS("Pets", "Spawn", "Despawn", "Clear-Pet", "%petname%", "Spawn", "Despawn", "pe") {
+    PETS("Pets", "%petname%", "pe") {
         @Override
         public MenuPets getMenu(Menus menus) {
             return menus.getPetsMenu();
@@ -36,7 +53,7 @@ public enum Category {
             return PetType.enabled();
         }
     },
-    GADGETS("Gadgets", "Activate", "Deactivate", "Clear-Gadget", "%gadgetname%", "Equip", "Unequip", "g") {
+    GADGETS("Gadgets", "%gadgetname%", "g") {
         @Override
         public MenuGadgets getMenu(Menus menus) {
             return menus.getGadgetsMenu();
@@ -47,7 +64,7 @@ public enum Category {
             return GadgetType.enabled();
         }
     },
-    EFFECTS("Particle-Effects", "Summon", "Unsummon", "Clear-Effect", "%effectname%", "Summon", "Unsummon", "ef") {
+    EFFECTS("Particle-Effects", "%effectname%", "ef") {
         @Override
         public MenuParticleEffects getMenu(Menus menus) {
             return menus.getEffectsMenu();
@@ -58,7 +75,7 @@ public enum Category {
             return ParticleEffectType.enabled();
         }
     },
-    MOUNTS("Mounts", "Spawn", "Despawn", "Clear-Mount", "%mountname%", "Spawn", "Despawn", "mou") {
+    MOUNTS("Mounts", "%mountname%", "mou") {
         @Override
         public MenuMounts getMenu(Menus menus) {
             return menus.getMountsMenu();
@@ -69,7 +86,7 @@ public enum Category {
             return MountType.enabled();
         }
     },
-    MORPHS("Morphs", "Morph", "Unmorph", "Clear-Morph", "%morphname%", "Morph", "Unmorph", "mor") {
+    MORPHS("Morphs", "%morphname%", "mor") {
         @Override
         public MenuMorphs getMenu(Menus menus) {
             return menus.getMorphsMenu();
@@ -80,7 +97,7 @@ public enum Category {
             return MorphType.enabled();
         }
     },
-    HATS("Hats", "Equip", "Unequip", "Clear-Hat", "%hatname%", "Equip", "Unequip", "h") {
+    HATS("Hats", "%hatname%", "h") {
         @Override
         public MenuHats getMenu(Menus menus) {
             return menus.getHatsMenu();
@@ -91,7 +108,7 @@ public enum Category {
             return HatType.enabled();
         }
     },
-    SUITS("Suits", "Equip", "Unequip", "Clear-Suit", "%suitname%", "Equip", "Unequip", "s") {
+    SUITS("Suits", "%suitname%", "s") {
         @Override
         public MenuSuits getMenu(Menus menus) {
             return menus.getSuitsMenu();
@@ -102,7 +119,7 @@ public enum Category {
             return SuitType.enabled();
         }
     },
-    EMOTES("Emotes", "Equip", "Unequip", "Clear-Emote", "%emotename%", "Equip", "Unequip", "e") {
+    EMOTES("Emotes", "%emotename%", "e") {
         @Override
         public MenuEmotes getMenu(Menus menus) {
             return menus.getEmotesMenu();
@@ -161,62 +178,20 @@ public enum Category {
      */
     private final String configPath;
 
-    /**
-     * The ItemStack in Main Menu.
-     */
-    private final ItemStack is;
-
-    /**
-     * Message on menu to activate a cosmetic of this category.
-     */
-    private final String activateMenu;
-
-    /**
-     * Message on menu to deactivate a cosmetic of this category.
-     */
-    private final String deactivateMenu;
-
-    /**
-     * Path of the clear message.
-     */
-    private final String clearConfigPath;
     private final String chatPlaceholder;
-    private final String activateConfig;
-    private final String deactivateConfig;
     private final String prefix;
 
     /**
      * Category of Cosmetic.
      *
      * @param configPath       The config path name.
-     * @param activateMenu     Message on menu to activate a cosmetic of this category.
-     * @param deactivateMenu   Message on menu to deactivate a cosmetic of this category.
-     * @param clearConfigPath
      * @param chatPlaceholder
-     * @param activateConfig
-     * @param deactivateConfig
      * @param prefix TODO
      */
-    private Category(String configPath, String activateMenu, String deactivateMenu, String clearConfigPath, String chatPlaceholder, String activateConfig, String deactivateConfig, String prefix) {
+    private Category(String configPath, String chatPlaceholder, String prefix) {
         this.configPath = configPath;
-        this.activateMenu = activateMenu;
-        this.deactivateMenu = deactivateMenu;
-        this.clearConfigPath = clearConfigPath;
         this.chatPlaceholder = chatPlaceholder;
-        this.activateConfig = activateConfig;
-        this.deactivateConfig = deactivateConfig;
         this.prefix = prefix;
-        if (SettingsManager.getConfig().contains("Categories." + configPath + ".Main-Menu-Item")) {
-            this.is = ItemFactory.getItemStackFromConfig("Categories." + configPath + ".Main-Menu-Item");
-        } else {
-            this.is = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA" +
-                    "6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTA1OWQ1OWViNGU1OWM" +
-                    "zMWVlY2Y5ZWNlMmY5Y2YzOTM0ZTQ1YzBlYzQ3NmZjODZiZmFlZjhlYTkxM2VhNzE" +
-                    "wIn19fQ==", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC);
-        }
-        ItemMeta itemMeta = is.getItemMeta();
-        itemMeta.setDisplayName(MessageManager.getMessage("Menu." + configPath));
-        is.setItemMeta(itemMeta);
     }
 
     /**
@@ -225,6 +200,18 @@ public enum Category {
      * @return The ItemStack in Main Menu.
      */
     public ItemStack getItemStack() {
+        ItemStack is;
+        if (SettingsManager.getConfig().contains("Categories." + configPath + ".Main-Menu-Item")) {
+            is = ItemFactory.getItemStackFromConfig("Categories." + configPath + ".Main-Menu-Item");
+        } else {
+            is = ItemFactory.createSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA" +
+                    "6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTA1OWQ1OWViNGU1OWM" +
+                    "zMWVlY2Y5ZWNlMmY5Y2YzOTM0ZTQ1YzBlYzQ3NmZjODZiZmFlZjhlYTkxM2VhNzE" +
+                    "wIn19fQ==", ChatColor.DARK_GRAY + "" + ChatColor.ITALIC);
+        }
+        ItemMeta itemMeta = is.getItemMeta();
+        itemMeta.setDisplayName(MessageManager.getMessage("Menu." + configPath + ".Button.Name"));
+        is.setItemMeta(itemMeta);
         return is;
     }
 
@@ -261,28 +248,24 @@ public enum Category {
         return name().substring(0, 1) + name().substring(1).toLowerCase();
     }
 
-    public String getActivateMenu() {
-        return MessageManager.getMessage("Menu." + activateMenu);
+    public String getActivateTooltip() {
+        return MessageManager.getMessage("Menu." + configPath + ".Button.Tooltip-Equip");
     }
 
-    public String getClearConfigPath() {
-        return clearConfigPath;
-    }
-
-    public String getDeactivateMenu() {
-        return MessageManager.getMessage("Menu." + deactivateMenu);
+    public String getDeactivateTooltip() {
+        return MessageManager.getMessage("Menu." + configPath + ".Button.Tooltip-Unequip");
     }
 
     public String getChatPlaceholder() {
         return chatPlaceholder;
     }
 
-    public String getActivateConfig() {
-        return activateConfig;
+    public String getActivateMessage() {
+        return MessageManager.getMessage(configPath + ".Equip");
     }
 
-    public String getDeactivateConfig() {
-        return deactivateConfig;
+    public String getDeactivateMessage() {
+        return MessageManager.getMessage(configPath + ".Unequip");
     }
 
     public abstract CosmeticMenu<?> getMenu(Menus menus);

@@ -4,7 +4,11 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -17,6 +21,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
 import java.util.List;

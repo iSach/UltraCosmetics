@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.util;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 

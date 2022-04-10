@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.pets.*;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import be.isach.ultracosmetics.version.GetForVersion;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

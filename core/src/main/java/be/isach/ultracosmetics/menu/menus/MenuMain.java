@@ -10,7 +10,7 @@ import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -85,7 +85,7 @@ public class MenuMain extends Menu {
         }
 
         // Clear cosmetics item.
-        String message = MessageManager.getMessage("Clear-Cosmetics");
+        String message = MessageManager.getMessage("Clear.Cosmetics");
         ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
         putItem(inventory, inventory.getSize() - 5, itemStack, data -> {
             player.clear();
@@ -128,7 +128,7 @@ public class MenuMain extends Menu {
 
     @Override
     protected String getName() {
-        return MessageManager.getMessage("Menus.Main-Menu");
+        return MessageManager.getMessage("Menu.Main.Title");
     }
 
     @Override

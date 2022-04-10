@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import be.isach.ultracosmetics.version.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -105,7 +105,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
             ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), formattedName);
         });
 
-        MenuPurchase menu = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menus.Rename-Pet"), purchaseData);
+        MenuPurchase menu = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menu.Purchase-Rename.Title"), purchaseData);
         return menu.getInventory(ultraPlayer);
     }
 

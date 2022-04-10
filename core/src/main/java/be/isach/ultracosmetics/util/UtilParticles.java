@@ -1,14 +1,16 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+
+import java.awt.Color;
+
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.awt.*;
-
 /**
  * Created by sacha on 07/08/15.
+ * TODO: just merge into Particles
  */
 public class UtilParticles {
 

@@ -56,17 +56,13 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
         this.equipped = true;
 
-        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getActivateConfig());
-        mess = filterPlaceholders(mess);
-        getPlayer().sendMessage(mess);
+        getPlayer().sendMessage(filterPlaceholders(getCategory().getActivateMessage()));
 
         onEquip();
     }
 
     public void clear() {
-        String mess = MessageManager.getMessage(getCategory().getConfigPath() + "." + getCategory().getDeactivateConfig());
-        mess = filterPlaceholders(mess);
-        getPlayer().sendMessage(mess);
+        getPlayer().sendMessage(filterPlaceholders(getCategory().getDeactivateMessage()));
 
         HandlerList.unregisterAll(this);
 

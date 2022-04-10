@@ -7,9 +7,16 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
+
+import com.cryptomorin.xseries.XMaterial;
 
 /**
  * Represents an instance of a particle effect summoned by a player.

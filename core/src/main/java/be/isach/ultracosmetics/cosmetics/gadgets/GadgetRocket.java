@@ -6,7 +6,12 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.Area;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
+import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -24,6 +29,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
 import java.util.HashMap;

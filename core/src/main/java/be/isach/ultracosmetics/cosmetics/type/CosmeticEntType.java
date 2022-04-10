@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.entity.EntityType;
 
 /**

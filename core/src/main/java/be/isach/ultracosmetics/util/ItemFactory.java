@@ -4,6 +4,9 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
+
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XTag;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.ChatColor;
@@ -131,6 +134,7 @@ public class ItemFactory {
         if (url.isEmpty()) return head;
 
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        // TODO: is this required?
         headMeta.setOwner("Notch");
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", url));

@@ -5,6 +5,7 @@ import org.bukkit.Sound;
 
 /**
  * Version independent spigot sounds.
+ * TODO: replace this with XSound that we include anyway
  */
 public enum Sounds {
     AMBIENCE_CAVE("AMBIENCE_CAVE", "AMBIENT_CAVE", "AMBIENT_CAVE"),

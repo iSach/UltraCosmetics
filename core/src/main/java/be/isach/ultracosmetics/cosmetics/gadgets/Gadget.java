@@ -10,7 +10,13 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ConfigUtils;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.PurchaseData;
+import be.isach.ultracosmetics.util.SoundUtil;
+import be.isach.ultracosmetics.util.Sounds;
+import be.isach.ultracosmetics.util.TextUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -19,7 +25,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -262,7 +271,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 lastPage = 1;
             }, 1);
         });
-        MenuPurchase mp = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menus.Buy-Ammo"), pd);
+        MenuPurchase mp = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menu.Buy-Ammo.Title"), pd);
         getPlayer().openInventory(mp.getInventory(getOwner()));
     }
 
