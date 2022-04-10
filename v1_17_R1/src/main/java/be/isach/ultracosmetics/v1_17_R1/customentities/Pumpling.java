@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.v1_17_R1.customentities;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
 import be.isach.ultracosmetics.v1_17_R1.pets.CustomEntityPet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.locale.Language;
@@ -83,7 +82,7 @@ public class Pumpling extends Zombie implements IPetCustomEntity {
         super.tick();
         if (!isCustomEntity()) return;
         ((Entity)this).remainingFireTicks = 0;
-        UtilParticles.display(Particles.FLAME, 0.2f, 0.2f, 0.2f, ((org.bukkit.entity.Zombie) getBukkitEntity()).getEyeLocation(), 3);
+        Particles.FLAME.display(0.2f, 0.2f, 0.2f, ((org.bukkit.entity.Zombie) getBukkitEntity()).getEyeLocation(), 3);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(getBukkitEntity());
         pet.getFollowTask().follow(pet.getPlayer());
         ((Entity)this).setInvisible(true);
