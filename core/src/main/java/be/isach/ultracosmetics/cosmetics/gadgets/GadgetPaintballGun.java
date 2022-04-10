@@ -10,7 +10,6 @@ import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -106,7 +105,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
             }
             if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().getConfigName() + ".Particle.Enabled")) {
                 Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().getConfigName() + ".Particle.Effect")).replace("_", ""));
-                UtilParticles.display(effect, 2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
+                effect.display(2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);
             }
             event.getEntity().remove();
         }

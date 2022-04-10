@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.util.Vector;
 
 /**
@@ -50,8 +50,8 @@ public class ParticleEffectFireWaves extends ParticleEffect {
             v.setZ(Math.sin(angle) * RADIUS);
             v.setY(0.5 + Math.sin(angle * U_PER_WAVE) * heightFactor);
 
-            UtilParticles.display(getType().getEffect(), getPlayer().getLocation().add(v));
-            UtilParticles.display(getType().getEffect(), getPlayer().getLocation().add(v).add(0, 1, 0));
+            getType().getEffect().display(getPlayer().getLocation().add(v));
+            getType().getEffect().display(getPlayer().getLocation().add(v).add(0, 1, 0));
         }
     }
 }

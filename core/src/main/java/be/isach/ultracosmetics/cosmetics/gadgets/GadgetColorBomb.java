@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -72,7 +71,7 @@ public class GadgetColorBomb extends Gadget {
                 break;
         }
 
-        UtilParticles.display(effect, bomb.getLocation(), 1, 0.2f);
+        effect.display(bomb.getLocation(), 1, 0.2f);
 
         Iterator<Item> iter = items.iterator();
         while (iter.hasNext()) {

@@ -11,7 +11,6 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -93,8 +92,8 @@ public class GadgetDiscoBall extends Gadget {
             armorStand.setHelmet(ItemFactory.getRandomStainedGlass());
         }
 
-        UtilParticles.display(Particles.SPELL, armorStand.getEyeLocation(), 1, 1f);
-        UtilParticles.display(Particles.SPELL_INSTANT, armorStand.getEyeLocation(), 1, 1f);
+        Particles.SPELL.display(armorStand.getEyeLocation(), 1, 1f);
+        Particles.SPELL_INSTANT.display(armorStand.getEyeLocation(), 1, 1f);
         Location loc = armorStand.getEyeLocation().add(MathUtils.randomDouble(-4, 4), MathUtils.randomDouble(-3, 3), MathUtils.randomDouble(-4, 4));
         Particles.NOTE.display(new Particles.NoteColor(RANDOM.nextInt(25)), loc, 128);
         double angle, angle2, x, x2, z, z2;
@@ -172,7 +171,7 @@ public class GadgetDiscoBall extends Gadget {
             step++;
             loc.add(v);
             if (dust) {
-                UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
+                Particles.REDSTONE.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
             }
         }
     }

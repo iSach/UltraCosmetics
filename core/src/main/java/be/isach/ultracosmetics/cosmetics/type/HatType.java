@@ -47,11 +47,6 @@ public class HatType extends CosmeticType<Hat> {
     }
 
     /**
-     * STATIC list of all the enabled hats.
-     */
-    public static List<HatType> enabled = new ArrayList<>();
-
-    /**
      * The HatType ItemStack
      */
     private final ItemStack itemStack;

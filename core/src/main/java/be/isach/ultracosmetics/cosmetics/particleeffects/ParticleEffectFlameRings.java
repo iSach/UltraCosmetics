@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.util.Vector;
 
 /**
@@ -38,7 +38,7 @@ public class ParticleEffectFlameRings extends ParticleEffect {
             } else {
                 MathUtils.rotateAroundAxisZ(v, 90);
             }
-            UtilParticles.display(getType().getEffect(), getPlayer().getLocation().clone().add(0, 1, 0).add(v));
+            getType().getEffect().display(getPlayer().getLocation().clone().add(0, 1, 0).add(v));
         }
         step += 3;
     }

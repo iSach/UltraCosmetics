@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -47,7 +46,7 @@ public class GadgetPortalGun extends Gadget {
     @Override
     void onRightClick() {
         SoundUtil.playSound(getPlayer(), Sounds.ENDERMAN_TELEPORT, 0.2f, 1.5f);
-        UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock(null, 20).getLocation(), Particles.REDSTONE, 100, 0, 0, 255);
+        Particles.REDSTONE.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock(null, 20).getLocation(), 100, 0, 0, 255);
         locBlue = getPlayer().getTargetBlock(null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks(null, 20);
         blueBlockFace = getBlockFace(b.get(0), b.get(1));
@@ -68,7 +67,7 @@ public class GadgetPortalGun extends Gadget {
     @Override
     void onLeftClick() {
         SoundUtil.playSound(getPlayer(), Sounds.ENDERMAN_TELEPORT, 0.2f, 1.5f);
-        UtilParticles.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock(null, 20).getLocation(), Particles.REDSTONE, 100, 255, 0, 0);
+        Particles.REDSTONE.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock(null, 20).getLocation(), 100, 255, 0, 0);
         locRed = getPlayer().getTargetBlock(null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks(null, 20);
         redBlockFace = getBlockFace(b.get(0), b.get(1));
@@ -198,7 +197,7 @@ public class GadgetPortalGun extends Gadget {
                         }
                     }
                     MathUtils.rotateVector(v, x, 0, z);
-                    UtilParticles.display(31, 0, 127, loc.add(v));
+                    Particles.REDSTONE.display(31, 0, 127, loc.add(v));
                 }
             }
             if (locRed != null) {
@@ -253,7 +252,7 @@ public class GadgetPortalGun extends Gadget {
                         }
                     }
                     MathUtils.rotateVector(v, x, 0, z);
-                    UtilParticles.display(255, 0, 0, loc.add(v));
+                    Particles.REDSTONE.display(255, 0, 0, loc.add(v));
                 }
             }
         } catch (IllegalArgumentException ex) {

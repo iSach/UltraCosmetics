@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -93,7 +92,7 @@ public class MorphChicken extends Morph {
                     }.runTaskTimer(getUltraCosmetics(), 0, 4);
                     Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                         for (Chicken chicken : chickens) {
-                            UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
+                            Particles.LAVA.display(chicken.getLocation(), 10);
                             chicken.remove();
                         }
                         chickens.clear();
@@ -124,7 +123,7 @@ public class MorphChicken extends Morph {
     @Override
     protected void onClear() {
         for (Chicken chicken : chickens) {
-            UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
+            Particles.LAVA.display(chicken.getLocation(), 10);
             chicken.remove();
         }
         chickens.clear();

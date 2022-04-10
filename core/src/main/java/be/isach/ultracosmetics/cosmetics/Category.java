@@ -15,14 +15,6 @@ import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.menu.Menus;
-import be.isach.ultracosmetics.menu.menus.MenuEmotes;
-import be.isach.ultracosmetics.menu.menus.MenuGadgets;
-import be.isach.ultracosmetics.menu.menus.MenuHats;
-import be.isach.ultracosmetics.menu.menus.MenuMorphs;
-import be.isach.ultracosmetics.menu.menus.MenuMounts;
-import be.isach.ultracosmetics.menu.menus.MenuParticleEffects;
-import be.isach.ultracosmetics.menu.menus.MenuPets;
-import be.isach.ultracosmetics.menu.menus.MenuSuits;
 import be.isach.ultracosmetics.util.ItemFactory;
 
 import org.bukkit.Bukkit;
@@ -32,6 +24,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -42,94 +36,14 @@ import java.util.stream.Collectors;
  */
 public enum Category {
 
-    PETS("Pets", "%petname%", "pe") {
-        @Override
-        public MenuPets getMenu(Menus menus) {
-            return menus.getPetsMenu();
-        }
-
-        @Override
-        public List<PetType> getEnabled() {
-            return PetType.enabled();
-        }
-    },
-    GADGETS("Gadgets", "%gadgetname%", "g") {
-        @Override
-        public MenuGadgets getMenu(Menus menus) {
-            return menus.getGadgetsMenu();
-        }
-
-        @Override
-        public List<GadgetType> getEnabled() {
-            return GadgetType.enabled();
-        }
-    },
-    EFFECTS("Particle-Effects", "%effectname%", "ef") {
-        @Override
-        public MenuParticleEffects getMenu(Menus menus) {
-            return menus.getEffectsMenu();
-        }
-
-        @Override
-        public List<ParticleEffectType> getEnabled() {
-            return ParticleEffectType.enabled();
-        }
-    },
-    MOUNTS("Mounts", "%mountname%", "mou") {
-        @Override
-        public MenuMounts getMenu(Menus menus) {
-            return menus.getMountsMenu();
-        }
-
-        @Override
-        public List<MountType> getEnabled() {
-            return MountType.enabled();
-        }
-    },
-    MORPHS("Morphs", "%morphname%", "mor") {
-        @Override
-        public MenuMorphs getMenu(Menus menus) {
-            return menus.getMorphsMenu();
-        }
-
-        @Override
-        public List<MorphType> getEnabled() {
-            return MorphType.enabled();
-        }
-    },
-    HATS("Hats", "%hatname%", "h") {
-        @Override
-        public MenuHats getMenu(Menus menus) {
-            return menus.getHatsMenu();
-        }
-
-        @Override
-        public List<HatType> getEnabled() {
-            return HatType.enabled();
-        }
-    },
-    SUITS("Suits", "%suitname%", "s") {
-        @Override
-        public MenuSuits getMenu(Menus menus) {
-            return menus.getSuitsMenu();
-        }
-
-        @Override
-        public List<SuitType> getEnabled() {
-            return SuitType.enabled();
-        }
-    },
-    EMOTES("Emotes", "%emotename%", "e") {
-        @Override
-        public MenuEmotes getMenu(Menus menus) {
-            return menus.getEmotesMenu();
-        }
-
-        @Override
-        public List<EmoteType> getEnabled() {
-            return EmoteType.enabled();
-        }
-    };
+    PETS("Pets", "%petname%", "pe", k -> k.getPetsMenu(), () -> PetType.enabled()),
+    GADGETS("Gadgets", "%gadgetname%", "g", k -> k.getGadgetsMenu(), () -> GadgetType.enabled()),
+    EFFECTS("Particle-Effects", "%effectname%", "ef", k -> k.getEffectsMenu(), () -> ParticleEffectType.enabled()),
+    MOUNTS("Mounts", "%mountname%", "mou", k -> k.getMountsMenu(), () -> MountType.enabled()),
+    MORPHS("Morphs", "%morphname%", "mor", k -> k.getMorphsMenu(), () -> MorphType.enabled()),
+    HATS("Hats", "%hatname%", "h", k -> k.getHatsMenu(), () -> HatType.enabled()),
+    SUITS("Suits", "%suitname%", "s", k -> k.getSuitsMenu(), () -> SuitType.enabled()),
+    EMOTES("Emotes", "%emotename%", "e", k -> k.getEmotesMenu(), () -> EmoteType.enabled());
 
     public static int enabledSize() {
         return enabled().size();
@@ -180,6 +94,8 @@ public enum Category {
 
     private final String chatPlaceholder;
     private final String prefix;
+    private final Function<Menus,CosmeticMenu<?>> menuFunc;
+    private final Supplier<List<? extends CosmeticType<?>>> enabledFunc;
 
     /**
      * Category of Cosmetic.
@@ -188,10 +104,12 @@ public enum Category {
      * @param chatPlaceholder
      * @param prefix TODO
      */
-    private Category(String configPath, String chatPlaceholder, String prefix) {
+    private Category(String configPath, String chatPlaceholder, String prefix, Function<Menus,CosmeticMenu<?>> menuFunc, Supplier<List<? extends CosmeticType<?>>> enabledFunc) {
         this.configPath = configPath;
         this.chatPlaceholder = chatPlaceholder;
         this.prefix = prefix;
+        this.menuFunc = menuFunc;
+        this.enabledFunc = enabledFunc;
     }
 
     /**
@@ -268,7 +186,11 @@ public enum Category {
         return MessageManager.getMessage(configPath + ".Unequip");
     }
 
-    public abstract CosmeticMenu<?> getMenu(Menus menus);
+    public CosmeticMenu<?> getMenu(Menus menus) {
+        return menuFunc.apply(menus);
+    }
 
-    public abstract List<? extends CosmeticType<?>> getEnabled();
+    public List<? extends CosmeticType<?>> getEnabled() {
+        return enabledFunc.get();
+    }
 }

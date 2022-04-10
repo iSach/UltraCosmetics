@@ -6,7 +6,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -46,11 +46,12 @@ public class GadgetTsunami extends Gadget {
             Location loc1 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(0, .5) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
             Location loc2 = loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1.3, 1.8) - 0.75, MathUtils.randomDouble(-1.5, 1.5));
             for (int i1 = 0; i1 < 5; i1++) {
-                UtilParticles.display(Particles.EXPLOSION_NORMAL, 0.2d, 0.2d, 0.2d, loc1, 1);
-                UtilParticles.display(Particles.DRIP_WATER, 0.4d, 0.4d, 0.4d, loc2, 2);
+                Particles.EXPLOSION_NORMAL.display(0.2d, 0.2d, 0.2d, loc1, 1);
+                Particles.DRIP_WATER.display(0.4d, 0.4d, 0.4d, loc2, 2);
             }
-            for (int a = 0; a < 100; a++)
-                UtilParticles.display(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
+            for (int a = 0; a < 100; a++) {
+                Particles.REDSTONE.display(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
+            }
             if (affectPlayers) {
                 Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                     for (final Entity ent : getPlayer().getWorld().getNearbyEntities(loc, 0.6, 0.6, 0.6)) {

@@ -9,10 +9,11 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
+
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -48,7 +49,7 @@ public class MorphCreeper extends Morph {
                 //  disguise.setShowName(true);
             }
             if (charge == 100) {
-                UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
+                Particles.EXPLOSION_HUGE.display(getPlayer().getLocation());
                 SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 1.4f, 1.5f);
 
                 for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {

@@ -6,7 +6,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
@@ -48,8 +48,8 @@ public class GadgetFunGun extends Gadget {
         for (Projectile snowball : projectiles)
             snowball.remove();
 
-        UtilParticles.display(Particles.LAVA, 1.3f, 1f, 1.3f, location, 16);
-        UtilParticles.display(Particles.HEART, 0.8f, 0.8f, 0.8f, location, 20);
+        Particles.LAVA.display(1.3f, 1f, 1.3f, location, 16);
+        Particles.HEART.display(0.8f, 0.8f, 0.8f, location, 20);
         SoundUtil.playSound(getPlayer(), Sounds.CAT_PURREOW, 1.4f, 1.5f);
     }
 

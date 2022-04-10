@@ -11,7 +11,6 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -82,7 +81,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                                 }
                             }
                         } else
-                            UtilParticles.display(getType().getEffect(), .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), getModifiedAmount(3));
+                            getType().getEffect().display(0.4f, 0.3f, 0.4f, getPlayer().getLocation().add(0, 1, 0), getModifiedAmount(3));
                     }
                 } else
                     onUpdate();

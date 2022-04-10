@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -103,7 +102,7 @@ public class GadgetBatBlaster extends Gadget {
                 }
 
                 SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
-                UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
+                Particles.SMOKE_NORMAL.display(bat.getLocation());
 
                 bat.remove();
             }
@@ -116,7 +115,7 @@ public class GadgetBatBlaster extends Gadget {
         if (bats != null) {
             for (Bat bat : bats) {
                 if (bat.isValid()) {
-                    UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+                    Particles.SMOKE_LARGE.display(bat.getLocation());
                 }
                 bat.remove();
             }

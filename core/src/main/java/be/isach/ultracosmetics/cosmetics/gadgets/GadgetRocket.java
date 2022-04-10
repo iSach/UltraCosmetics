@@ -10,7 +10,6 @@ import be.isach.ultracosmetics.util.Area;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -164,7 +163,7 @@ public class GadgetRocket extends Gadget {
                         fallingBlocks.clear();
                         FallDamageManager.addNoFall(getPlayer());
                         SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
-                        UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
+                        Particles.EXPLOSION_HUGE.display(getPlayer().getLocation());
                         disableFlight();
                         launching = false;
                     }, 80);
@@ -199,8 +198,8 @@ public class GadgetRocket extends Gadget {
         }
 
         if (launching && !fallingBlocks.isEmpty()) {
-            UtilParticles.display(Particles.FLAME, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
-            UtilParticles.display(Particles.LAVA, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
+            Particles.FLAME.display(0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
+            Particles.LAVA.display(0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
             SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.BAT_LOOP, 1.5f, 1.0f);
             SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.FIZZ, 0.025f, 1.0f);
         }
@@ -259,7 +258,7 @@ public class GadgetRocket extends Gadget {
                 cancel();
                 enableFlight();
                 if (vehicle instanceof ArmorStand) {
-                    UtilParticles.display(Particles.SMOKE_LARGE, 0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
+                    Particles.SMOKE_LARGE.display(0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
                     SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.FIZZ, 0.025f, 1.0f);
                 }
             }

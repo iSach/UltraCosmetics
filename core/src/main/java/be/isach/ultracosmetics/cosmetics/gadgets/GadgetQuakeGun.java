@@ -8,7 +8,6 @@ import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -58,7 +57,7 @@ public class GadgetQuakeGun extends Gadget {
                     if ((entity instanceof Player || entity instanceof Creature)
                             && entity != getPlayer()) {
                         MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
-                        UtilParticles.display(Particles.FLAME, entity.getLocation(), 60, 0.4f);
+                        Particles.FLAME.display(entity.getLocation(), 60, 0.4f);
                         FireworkEffect.Builder builder = FireworkEffect.builder();
                         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                                 .withColor(Color.RED).withFade(Color.ORANGE).build();

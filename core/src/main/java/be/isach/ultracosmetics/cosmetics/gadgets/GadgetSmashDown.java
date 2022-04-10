@@ -10,7 +10,6 @@ import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.SoundUtil;
 import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -53,7 +52,7 @@ public class GadgetSmashDown extends Gadget {
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final BukkitTask task = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
             if (getOwner() != null && getPlayer() != null && isEquipped()) {
-                UtilParticles.display(Particles.CLOUD, getPlayer().getLocation());
+                Particles.CLOUD.display(getPlayer().getLocation());
             } else {
                 cancel();
             }

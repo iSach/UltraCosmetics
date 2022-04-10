@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -59,8 +58,8 @@ public class GadgetAntiGravity extends Gadget {
         }
 
         as.setHeadPose(as.getHeadPose().add(0, 0.1, 0));
-        UtilParticles.display(Particles.PORTAL, 3f, 3f, 3f, as.getLocation(), 150);
-        UtilParticles.display(Particles.SPELL_WITCH, .3f, .3f, .3f, as.getEyeLocation(), 5);
+        Particles.PORTAL.display(3f, 3f, 3f, as.getLocation(), 150);
+        Particles.SPELL_WITCH.display(.3f, .3f, .3f, as.getEyeLocation(), 5);
         for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
             if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
                 LivingEntity le = (LivingEntity) ent;
