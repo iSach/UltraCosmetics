@@ -81,7 +81,7 @@ public class GadgetChristmasTree extends Gadget {
         for (float f = 0.8f; f <= 2.5f; f += 0.2f) {
             if (radius >= 0) {
                 float d = 13f / f;
-                float g = RANDOM.nextFloat(d);
+                float g = MathUtils.random(d);
                 int e = RANDOM.nextInt(2);
                 if (e == 1) {
                     double inc = (2 * Math.PI) / d;
