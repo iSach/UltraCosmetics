@@ -15,12 +15,10 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.*;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
@@ -248,11 +246,6 @@ public class EntityUtil implements IEntityUtil {
         ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addEntity(ei);
 
         return ei.getBukkitEntity();
-    }
-
-    @Override
-    public boolean isSameInventory(Inventory first, Inventory second) {
-        return ((CraftInventory) first).getInventory().equals(((CraftInventory) second).getInventory());
     }
 
     @Override

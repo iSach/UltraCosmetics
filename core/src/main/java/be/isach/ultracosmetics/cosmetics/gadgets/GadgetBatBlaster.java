@@ -5,14 +5,13 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +100,7 @@ public class GadgetBatBlaster extends Gadget {
                     MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
                 }
 
-                SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
+                XSound.ENTITY_BAT_HURT.play(bat.getLocation(), 1.0f, 1.0f);
                 Particles.SMOKE_NORMAL.display(bat.getLocation());
 
                 bat.remove();

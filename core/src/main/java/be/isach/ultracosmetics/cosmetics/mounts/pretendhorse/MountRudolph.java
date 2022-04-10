@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.mounts.MountHorse;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.PlayerUtils;
 
@@ -46,9 +45,9 @@ public class MountRudolph extends MountHorse {
         armorStand.setArms(true);
         armorStand.setVisible(false);
         if (!right) {
-            armorStand.setRightArmPose(new EulerAngle(MathUtils.PI, Math.PI / 4, -(MathUtils.PI / 4)));
+            armorStand.setRightArmPose(new EulerAngle(Math.PI, Math.PI / 4, -(Math.PI / 4)));
         } else {
-            armorStand.setRightArmPose(new EulerAngle(MathUtils.PI, Math.PI / 4 + -(Math.PI / 2), MathUtils.PI / 4));
+            armorStand.setRightArmPose(new EulerAngle(Math.PI, Math.PI / 4 + -(Math.PI / 2), Math.PI / 4));
         }
         armorStand.setItemInHand(new ItemStack(Material.DEAD_BUSH));
         armorStand.setMetadata("C_AD_ArmorStand", new FixedMetadataValue(getUltraCosmetics(), getPlayer().getUniqueId().toString()));

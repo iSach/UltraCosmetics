@@ -8,9 +8,8 @@ import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -108,7 +107,7 @@ public class MenuMain extends Menu {
 
             putItem(inventory, 5, keys, (data) -> {
                 if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
-                    SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
+                    XSound.BLOCK_ANVIL_LAND.play(player.getBukkitPlayer().getLocation(), 0.2f, 1.2f);
                     return;
                 }
                 player.getBukkitPlayer().closeInventory();
@@ -117,7 +116,7 @@ public class MenuMain extends Menu {
 
             putItem(inventory, 3, chest, (data) -> {
                 if (!getUltraCosmetics().getEconomyHandler().isUsingEconomy() && player.getKeys() == 0) {
-                    SoundUtil.playSound(player.getBukkitPlayer().getLocation(), Sounds.ANVIL_LAND, 0.2f, 1.2f);
+                    XSound.BLOCK_ANVIL_LAND.play(player.getBukkitPlayer().getLocation(), 0.2f, 1.2f);
                     return;
                 }
                 TreasureChestManager.tryOpenChest(player.getBukkitPlayer());

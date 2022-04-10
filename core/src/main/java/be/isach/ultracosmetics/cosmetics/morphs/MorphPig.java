@@ -4,13 +4,13 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 /**
  * Represents an instance of a pig morph summoned by a player.
@@ -36,7 +36,7 @@ public class MorphPig extends Morph {
                         && !cooldown) {
                     cooldown = true;
                     Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cooldown = false, 20);
-                    SoundUtil.playSound(getPlayer(), Sounds.PIG_IDLE, .2f, 1.5f);
+                    XSound.ENTITY_PIG_AMBIENT.play(getPlayer(), .2f, 1.5f);
                     Vector v = new Vector(0, 0.6, 0);
                     Vector vEnt = ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).add(v);
                     Vector vPig = getPlayer().getLocation().toVector().subtract(ent.getLocation().toVector()).add(v);

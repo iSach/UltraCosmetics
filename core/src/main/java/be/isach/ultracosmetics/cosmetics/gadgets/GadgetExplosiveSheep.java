@@ -7,9 +7,6 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -21,6 +18,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +111,7 @@ public class GadgetExplosiveSheep extends Gadget {
                 return;
             }
             s.setColor(red ? DyeColor.RED : DyeColor.WHITE);
-            SoundUtil.playSound(s.getLocation(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
+            XSound.BLOCK_NOTE_BLOCK_HAT.play(s.getLocation(), 1.4f, 1.5f);
             red = !red;
             time -= 0.2;
 
@@ -120,7 +119,7 @@ public class GadgetExplosiveSheep extends Gadget {
                 new SheepColorRunnable(time, red, s, gadgetExplosiveSheep);
                 return;
             }
-            SoundUtil.playSound(s.getLocation(), Sounds.EXPLODE, 1.4f, 1.5f);
+            XSound.ENTITY_GENERIC_EXPLODE.play(s.getLocation(), 1.4f, 1.5f);
             Particles.EXPLOSION_HUGE.display(s.getLocation());
             for (int i = 0; i < 50; i++) {
                 if (getOwner() == null || getPlayer() == null) {

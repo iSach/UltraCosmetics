@@ -7,9 +7,6 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
@@ -18,6 +15,8 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 /**
  * @author iSach
@@ -37,7 +36,7 @@ public class MorphCreeper extends Morph {
             creeperWatcher.setIgnited(true);
             if (charge + 4 <= 100)
                 charge += 4;
-            SoundUtil.playSound(getPlayer(), Sounds.CREEPER_HISS, 1.4f, 1.5f);
+            XSound.ENTITY_CREEPER_PRIMED.play(getPlayer(), 1.4f, 1.5f);
         } else {
             if (creeperWatcher.isIgnited()) {
                 disguise = new MobDisguise(getType().getDisguiseType());
@@ -50,7 +49,7 @@ public class MorphCreeper extends Morph {
             }
             if (charge == 100) {
                 Particles.EXPLOSION_HUGE.display(getPlayer().getLocation());
-                SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 1.4f, 1.5f);
+                XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer(), 1.4f, 1.5f);
 
                 for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {
                     if (ent instanceof Creature || ent instanceof Player) {

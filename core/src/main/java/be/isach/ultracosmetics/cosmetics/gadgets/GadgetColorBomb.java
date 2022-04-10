@@ -7,9 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -17,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.XTag;
 
 import java.util.ArrayList;
@@ -59,7 +57,7 @@ public class GadgetColorBomb extends Gadget {
         if (!running) return;
 
         Particles effect;
-        switch (MathUtils.random.nextInt(5)) {
+        switch (RANDOM.nextInt(5)) {
             default:
                 effect = Particles.FIREWORKS_SPARK;
                 break;
@@ -92,7 +90,7 @@ public class GadgetColorBomb extends Gadget {
             i.setPickupDelay(500000);
             i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
             items.add(i);
-            SoundUtil.playSound(i.getLocation(), Sounds.CHICKEN_EGG_POP, .2f, 1.0f);
+            XSound.ENTITY_CHICKEN_EGG.play(i.getLocation(), .2f, 1.0f);
 
             for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
 

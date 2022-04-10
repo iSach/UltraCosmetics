@@ -8,9 +8,6 @@ import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +29,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 /**
  * Represents an instance of a paintball gun gadget summoned by a player.
@@ -69,7 +67,7 @@ public class GadgetPaintballGun extends Gadget implements Listener {
     void onRightClick() {
         Projectile projectile = getPlayer().launchProjectile(EnderPearl.class, getPlayer().getLocation().getDirection().multiply(2));
         projectiles.add(projectile);
-        SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, 1.5f, 1.2f);
+        XSound.ENTITY_CHICKEN_EGG.play(getPlayer(), 1.5f, 1.2f);
     }
 
     @EventHandler

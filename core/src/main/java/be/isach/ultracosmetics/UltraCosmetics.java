@@ -24,7 +24,7 @@ import be.isach.ultracosmetics.run.MovingChecker;
 import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
 import be.isach.ultracosmetics.util.ArmorStandManager;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
-import be.isach.ultracosmetics.util.GeneralUtil;
+import be.isach.ultracosmetics.util.PermissionPrinter;
 import be.isach.ultracosmetics.util.Metrics;
 import be.isach.ultracosmetics.util.ReflectionUtils;
 import be.isach.ultracosmetics.util.UpdateManager;
@@ -272,7 +272,7 @@ public class UltraCosmetics extends JavaPlugin {
             updateChecker.runTaskAsynchronously(this);
         }
 
-        GeneralUtil.printPermissions(this);
+        PermissionPrinter.printPermissions(this);
 
         // Ended well :v
         getSmartLogger().write();

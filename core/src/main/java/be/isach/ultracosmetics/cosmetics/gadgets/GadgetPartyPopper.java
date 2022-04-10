@@ -5,16 +5,13 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 /**
  * Represents an instance of a party popper gadget summoned by a player.
@@ -43,12 +40,12 @@ public class GadgetPartyPopper extends Gadget {
 
             } else {
                 Particles.ITEM_CRACK.display(new Particles.ItemData(XMaterial.INK_SAC.parseMaterial(),
-                                MathUtils.randomByte(15)), getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(1.2),
+                                (byte)RANDOM.nextInt(15)), getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(1.2),
                         0.6f, getPlayer().getEyeLocation(), 128);
             }
         }
         for (int i = 0; i < 3; i++)
-            SoundUtil.playSound(getPlayer().getLocation(), Sounds.CHICKEN_EGG_POP, 1.0f, 1.0f);
+            XSound.ENTITY_CHICKEN_EGG.play(getPlayer().getLocation(), 1.0f, 1.0f);
     }
 
     @Override

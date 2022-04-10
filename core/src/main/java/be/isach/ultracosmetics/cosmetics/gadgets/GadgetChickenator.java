@@ -5,10 +5,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -23,6 +19,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,16 +43,16 @@ public class GadgetChickenator extends Gadget {
         final Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getEyeLocation(), EntityType.CHICKEN);
         chicken.setNoDamageTicks(500);
         chicken.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
-        SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_IDLE, 1.4f, 1.5f);
-        SoundUtil.playSound(getPlayer(), Sounds.EXPLODE, 0.3f, 1.5f);
+        XSound.ENTITY_CHICKEN_AMBIENT.play(getPlayer(), 1.4f, 1.5f);
+        XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer(), 0.3f, 1.5f);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             spawnRandomFirework(chicken.getLocation());
-            SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_HURT, 1.4f, 1.5f);
+            XSound.ENTITY_CHICKEN_HURT.play(getPlayer(), 1.4f, 1.5f);
             chicken.remove();
             for (int i = 0; i < 30; i++) {
                 final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(XMaterial.COOKED_CHICKEN, UltraCosmeticsData.get().getItemNoPickupString()));
                 ITEM.setPickupDelay(30000);
-                ITEM.setVelocity(new Vector(MathUtils.random.nextDouble() - 0.5, MathUtils.random.nextDouble() / 2.0, MathUtils.random.nextDouble() - 0.5));
+                ITEM.setVelocity(new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2.0, RANDOM.nextDouble() - 0.5));
                 items.add(ITEM);
             }
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> items.forEach(Item::remove), 50);

@@ -21,7 +21,7 @@ import java.util.UUID;
  * Project: UltraCosmetics
  */
 public class TexturedSkullFactory {
-
+    // TODO: method in ItemFactory is almost identical, remove?
     public static ItemStack createSkull(String url) {
         ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
         if (url == null || url.isEmpty()) {

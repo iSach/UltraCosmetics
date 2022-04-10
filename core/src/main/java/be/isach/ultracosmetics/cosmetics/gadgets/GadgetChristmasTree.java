@@ -81,15 +81,15 @@ public class GadgetChristmasTree extends Gadget {
         for (float f = 0.8f; f <= 2.5f; f += 0.2f) {
             if (radius >= 0) {
                 float d = 13f / f;
-                float g = MathUtils.random(0, d);
-                int e = MathUtils.random(0, 2);
+                float g = RANDOM.nextFloat(d);
+                int e = RANDOM.nextInt(2);
                 if (e == 1) {
                     double inc = (2 * Math.PI) / d;
                     float angle = (float) (g * inc);
                     float x = MathUtils.cos(angle) * (radius + 0.05f);
                     float z = MathUtils.sin(angle) * (radius + 0.05f);
                     lastLocation.add(x, f, z);
-                    Particles.REDSTONE.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), lastLocation);
+                    Particles.REDSTONE.display(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256), lastLocation);
                     lastLocation.subtract(x, f, z);
                 }
                 for (int i = 0; i < d; i++) {

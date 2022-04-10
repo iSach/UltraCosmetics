@@ -7,7 +7,6 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -39,8 +38,6 @@ public interface IEntityUtil {
     void playChestAnimation(Block b, boolean open, TreasureChestDesign design);
 
     Entity spawnItem(ItemStack itemStack, Location blockLocation);
-
-    boolean isSameInventory(Inventory first, Inventory second);
 
     void follow(Entity toFollow, Entity follower);
 

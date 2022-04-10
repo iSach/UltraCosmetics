@@ -3,11 +3,10 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 /**
  * Represents an instance of frost lord particles summoned by a player.
@@ -43,7 +42,7 @@ public class ParticleEffectFrostLord extends ParticleEffect {
                 stepY = 0;
                 step = 0;
                 radius = 1.5f;
-                SoundUtil.playSound(getPlayer(), Sounds.DIG_SNOW, .5f, 1.5f);
+                XSound.BLOCK_SNOW_BREAK.play(getPlayer(), .5f, 1.5f);
                 getType().getEffect().display(location.clone().add(0, 3, 0), getModifiedAmount(48), 0.3f);
             }
         }

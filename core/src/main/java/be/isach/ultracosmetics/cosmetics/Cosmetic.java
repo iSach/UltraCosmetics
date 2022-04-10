@@ -115,6 +115,6 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
     }
 
     protected String filterPlaceholders(String message) {
-        return message.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName(), getUltraCosmetics()));
+        return message.replace(getCategory().getChatPlaceholder(), TextUtil.filterPlaceHolder(getTypeName()));
     }
 }

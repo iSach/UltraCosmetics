@@ -4,12 +4,12 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 /**
  * Represents an instance of a bat morph summoned by a player.
@@ -43,7 +43,7 @@ public class MorphBat extends Morph {
             MathUtils.applyVelocity(getPlayer(), v);
             event.getPlayer().setFlying(false);
             event.setCancelled(true);
-            SoundUtil.playSound(getPlayer(), Sounds.BAT_LOOP, 0.4f, 1.0f);
+            XSound.ENTITY_BAT_LOOP.play(getPlayer(), 0.4f, 1.0f);
         }
     }
 

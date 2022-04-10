@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 
 import org.bukkit.Location;
@@ -47,8 +46,8 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
 
         distTarget = currentLocation.distance(targetLocation);
 
-        if (MathUtils.random.nextDouble() > 0.98)
-            noMoveTime = System.currentTimeMillis() + MathUtils.randomDouble(0, 2000);
+        if (RANDOM.nextDouble() > 0.98)
+            noMoveTime = System.currentTimeMillis() + RANDOM.nextDouble(2000);
 
         if (getPlayer().getEyeLocation().distance(currentLocation) < 3)
             movementSpeed = noMoveTime > System.currentTimeMillis() ? Math.max(0, movementSpeed - 0.0075)

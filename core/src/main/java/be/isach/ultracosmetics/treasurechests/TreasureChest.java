@@ -10,9 +10,6 @@ import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,6 +44,7 @@ import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XBlock;
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 public class TreasureChest implements Listener {
 
@@ -134,7 +132,7 @@ public class TreasureChest implements Listener {
                                     public void run() {
                                         Block b = getChestLocation(i, center.clone()).getBlock();
                                         b.setType(design.getChestType().getType());
-                                        SoundUtil.playSound(getPlayer(), Sounds.ANVIL_LAND, 1.4f, 1.5f);
+                                        XSound.BLOCK_ANVIL_LAND.play(getPlayer(), 1.4f, 1.5f);
                                         Particles.SMOKE_LARGE.display(b.getLocation(), 5);
                                         Particles.LAVA.display(b.getLocation(), 5);
                                         BlockFace blockFace = BlockFace.SOUTH;

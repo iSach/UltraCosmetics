@@ -4,15 +4,14 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.ProjectileHitEvent;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class GadgetFunGun extends Gadget {
 
         Particles.LAVA.display(1.3f, 1f, 1.3f, location, 16);
         Particles.HEART.display(0.8f, 0.8f, 0.8f, location, 20);
-        SoundUtil.playSound(getPlayer(), Sounds.CAT_PURREOW, 1.4f, 1.5f);
+        XSound.ENTITY_CAT_PURREOW.play(getPlayer(), 1.4f, 1.5f);
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
@@ -21,8 +22,6 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
 
 /**
  * Represents an instance of a mooshroom morph summoned by a player.
@@ -60,7 +59,7 @@ public class MorphMooshroom extends Morph {
                 }
                 items.clear();
             }, 50);
-            SoundUtil.playSound(getPlayer(), Sounds.SHEEP_SHEAR, 0.4f, (float) Math.random() + 1f);
+            XSound.ENTITY_SHEEP_SHEAR.play(getPlayer(), 0.4f, (float) Math.random() + 1f);
         }
     }
 

@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by Sacha on 24/12/15.
  */
-public class GeneralUtil {
+public class PermissionPrinter {
 
     /**
      * Print permissions to permissions.txt

@@ -7,9 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -18,6 +15,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     void onRightClick() {
-        SoundUtil.playSound(getPlayer(), Sounds.ENDERMAN_TELEPORT, 0.2f, 1.5f);
+        XSound.ENTITY_ENDERMAN_TELEPORT.play(getPlayer(), 0.2f, 1.5f);
         Particles.REDSTONE.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock(null, 20).getLocation(), 100, 0, 0, 255);
         locBlue = getPlayer().getTargetBlock(null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks(null, 20);
@@ -66,7 +65,7 @@ public class GadgetPortalGun extends Gadget {
 
     @Override
     void onLeftClick() {
-        SoundUtil.playSound(getPlayer(), Sounds.ENDERMAN_TELEPORT, 0.2f, 1.5f);
+        XSound.ENTITY_ENDERMAN_TELEPORT.play(getPlayer(), 0.2f, 1.5f);
         Particles.REDSTONE.drawParticleLine(getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6)), getPlayer().getTargetBlock(null, 20).getLocation(), 100, 255, 0, 0);
         locRed = getPlayer().getTargetBlock(null, 20).getLocation();
         List<Block> b = getPlayer().getLastTwoTargetBlocks(null, 20);
@@ -292,7 +291,7 @@ public class GadgetPortalGun extends Gadget {
         Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
             entity.teleport(location);
             if (entity instanceof Player) {
-                SoundUtil.playSound(((Player) entity), Sounds.ENDERMAN_TELEPORT);
+                XSound.ENTITY_ENDERMAN_TELEPORT.play((Player)entity);
             }
         });
     }

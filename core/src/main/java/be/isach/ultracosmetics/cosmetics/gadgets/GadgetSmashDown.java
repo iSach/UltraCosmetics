@@ -8,9 +8,6 @@ import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -25,6 +22,8 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class GadgetSmashDown extends Gadget {
 
     @Override
     void onRightClick() {
-        SoundUtil.playSound(getPlayer().getLocation(), Sounds.FIREWORK_LAUNCH, 2.0f, 1.0f);
+        XSound.ENTITY_FIREWORK_ROCKET_LAUNCH.play(getPlayer().getLocation(), 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final BukkitTask task = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
             if (getOwner() != null && getPlayer() != null && isEquipped()) {
@@ -86,7 +85,7 @@ public class GadgetSmashDown extends Gadget {
         }
 
         Location loc = getPlayer().getLocation();
-        SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 2.0f, 1.0f);
+        XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 2.0f, 1.0f);
 
         if (i == 5) {
             playEffect = false;
@@ -135,7 +134,7 @@ public class GadgetSmashDown extends Gadget {
             } else {
                 Particles.BLOCK_CRACK.display(new Particles.BlockData(fb.getMaterial(), event.getBlock().getData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
             }
-            SoundUtil.playSound(getPlayer().getLocation(), Sounds.ANVIL_BREAK, 0.05f, 1.0f);
+            XSound.BLOCK_ANVIL_BREAK.play(getPlayer().getLocation(), 0.05f, 1.0f);
             event.getEntity().remove();
         }
     }
