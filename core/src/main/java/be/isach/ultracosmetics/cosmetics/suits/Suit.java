@@ -3,8 +3,8 @@ package be.isach.ultracosmetics.cosmetics.suits;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.ArmorCosmetic;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
  * @author iSach
  * @since 12-20-2015
  */
-public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
+public abstract class Suit extends ArmorCosmetic<SuitType> implements Updatable {
     /**
      * ItemStack of the Suit.
      */
@@ -31,6 +31,7 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     public Suit(UltraPlayer ultraPlayer, SuitType suitType, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.SUITS, ultraPlayer, suitType);
+        setupItemStack();
     }
 
     @EventHandler
@@ -79,25 +80,6 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
 
     @Override
     protected void onEquip() {
-        // Remove current equipped armor piece
-        getOwner().removeSuit(getArmorSlot());
-
-        if (getArmorSlot() == ArmorSlot.HELMET) {
-            getOwner().removeHat();
-            getOwner().removeEmote();
-        }
-
-        // If the user's armor slot is still occupied after we've removed all related cosmetics,
-        // give up and ask the user to free up the slot.
-        if (getArmorItem() != null) {
-            getOwner().sendMessage(MessageManager.getMessage("Suits.Must-Remove." + getArmorSlot().toString()));
-            clear();
-            return;
-        }
-
-        setupItemStack();
-        setArmorItem(itemStack);
-
         getOwner().setCurrentSuitPart(cosmeticType.getSlot(), this);
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
     }
@@ -120,7 +102,6 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
      */
     @Override
     public void onClear() {
-        setArmorItem(null);
         getOwner().setCurrentSuitPart(getArmorSlot(), null);
     }
 
@@ -138,43 +119,17 @@ public abstract class Suit extends Cosmetic<SuitType> implements Updatable {
      *
      * @return Suit Armor Slot.
      */
+    @Override
     public ArmorSlot getArmorSlot() {
         return cosmeticType.getSlot();
     }
 
     @Override
+    public String getOccupiedSlotKey() {
+        return "Suits.Must-Remove." + getArmorSlot().toString();
+    }
+
+    @Override
     public void onUpdate() {
-    }
-
-    protected ItemStack getArmorItem() {
-        switch (getArmorSlot()) {
-        case BOOTS:
-            return getPlayer().getInventory().getBoots();
-        case LEGGINGS:
-            return getPlayer().getInventory().getLeggings();
-        case CHESTPLATE:
-            return getPlayer().getInventory().getChestplate();
-        case HELMET:
-            return getPlayer().getInventory().getHelmet();
-        default:
-            return null;
-        }
-    }
-
-    protected void setArmorItem(ItemStack item) {
-        switch (getArmorSlot()) {
-        case BOOTS:
-            getPlayer().getInventory().setBoots(item);
-            break;
-        case LEGGINGS:
-            getPlayer().getInventory().setLeggings(item);
-            break;
-        case CHESTPLATE:
-            getPlayer().getInventory().setChestplate(item);
-            break;
-        case HELMET:
-            getPlayer().getInventory().setHelmet(item);
-            break;
-        }
     }
 }

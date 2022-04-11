@@ -69,23 +69,6 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             getOwner().removeMount();
         }
 
-        // If the entity is a monster and the world is set to peaceful, we can't spawn it
-        if ((Monster.class.isAssignableFrom(getType().getEntityType().getEntityClass())
-                // no idea why Slime doesn't implement Monster but we have to check for it
-                || Slime.class.isAssignableFrom(getType().getEntityType().getEntityClass()))
-                && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
-            getOwner().sendMessage(MessageManager.getMessage("Mounts.Cant-Spawn"));
-            clear();
-            return;
-        }
-
-        Area area = new Area(getPlayer().getLocation(), 1, 1);
-        if (!area.isEmpty()) {
-            getOwner().sendMessage(MessageManager.getMessage("Mounts.Not-Enough-Room"));
-            clear();
-            return;
-        }
-
         EntitySpawningManager.setBypass(true);
         entity = spawnEntity();
         EntitySpawningManager.setBypass(false);
@@ -109,6 +92,25 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         // Horses trigger PlayerMoveEvent so the standard WG move handler will be sufficient
         if (isHorse(entity.getType())) return;
         mountRegionTask = new MountRegionChecker(getOwner(), getUltraCosmetics()).runTaskTimer(getUltraCosmetics(), 0, 1);
+    }
+
+    @Override
+    protected boolean tryEquip() {
+     // If the entity is a monster and the world is set to peaceful, we can't spawn it
+        if ((Monster.class.isAssignableFrom(getType().getEntityType().getEntityClass())
+                // no idea why Slime doesn't implement Monster but we have to check for it
+                || Slime.class.isAssignableFrom(getType().getEntityType().getEntityClass()))
+                && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+            getOwner().sendMessage(MessageManager.getMessage("Mounts.Cant-Spawn"));
+            return false;
+        }
+
+        Area area = new Area(getPlayer().getLocation(), 1, 1);
+        if (!area.isEmpty()) {
+            getOwner().sendMessage(MessageManager.getMessage("Mounts.Not-Enough-Room"));
+            return false;
+        }
+        return true;
     }
 
     @Override

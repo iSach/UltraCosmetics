@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
-import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.TexturedSkullFactory;
@@ -216,13 +215,6 @@ public class EmoteType extends CosmeticType<Emote> {
 
     @Override
     public Emote equip(UltraPlayer ultraPlayer, UltraCosmetics ultraCosmetics) {
-        ultraPlayer.removeHat();
-        ultraPlayer.removeEmote();
-        ultraPlayer.removeSuit(ArmorSlot.HELMET);
-        if (ultraPlayer.getBukkitPlayer().getInventory().getHelmet() != null) {
-            ultraPlayer.sendMessage(MessageManager.getMessage("Emotes.Must-Remove-Helmet"));
-            return null;
-        }
         Emote cosmetic = null;
         try {
             cosmetic = getClazz().getDeclaredConstructor(UltraPlayer.class, EmoteType.class, UltraCosmetics.class).newInstance(ultraPlayer, this, ultraCosmetics);

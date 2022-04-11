@@ -41,7 +41,7 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
         this.cosmeticType = type;
     }
 
-    public void equip() {
+    public final void equip() {
         if (!owner.getBukkitPlayer().hasPermission(getType().getPermission())) {
             getPlayer().sendMessage(MessageManager.getMessage("No-Permission"));
             return;
@@ -49,6 +49,10 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
         if (!ultraCosmetics.areCosmeticsAllowedInRegion(getPlayer())) {
             getPlayer().sendMessage(MessageManager.getMessage("Region-Disabled"));
+            return;
+        }
+
+        if (!tryEquip()) {
             return;
         }
 
@@ -61,7 +65,7 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
         onEquip();
     }
 
-    public void clear() {
+    public /* final */ void clear() {
         getPlayer().sendMessage(filterPlaceholders(getCategory().getDeactivateMessage()));
 
         HandlerList.unregisterAll(this);
@@ -72,6 +76,10 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
         // Call untask finally. (in main thread)
         onClear();
+    }
+
+    protected boolean tryEquip() {
+        return true;
     }
 
     @Override
