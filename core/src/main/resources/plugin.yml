@@ -292,6 +292,7 @@ permissions:
       - ultracosmetics.pets.blaze
       - ultracosmetics.pets.creeper
       - ultracosmetics.pets.enderman
+      - ultracosmetics.pets.skeleton
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -344,6 +345,8 @@ permissions:
   ultracosmetics.pets.creeper:
     default: op
   ultracosmetics.pets.enderman:
+    default: op
+  ultracosmetics.pets.skeleton:
     default: op
   ultracosmetics.morphs.*:
     children:
