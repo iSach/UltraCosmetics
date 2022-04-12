@@ -290,6 +290,7 @@ permissions:
       - ultracosmetics.pets.silverfish
       - ultracosmetics.pets.horse
       - ultracosmetics.pets.blaze
+      - ultracosmetics.pets.creeper
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -338,6 +339,8 @@ permissions:
   ultracosmetics.pets.horse:
     default: op
   ultracosmetics.pets.blaze:
+    default: op
+  ultracosmetics.pets.creeper:
     default: op
   ultracosmetics.morphs.*:
     children:
