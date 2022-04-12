@@ -303,6 +303,8 @@ public class MessageManager {
         addMessage("Pets.Blaze.entity-displayname", "&l%playername%'s Blaze");
         addMessage("Pets.Creeper.menu-name", "&a&lCreeper");
         addMessage("Pets.Creeper.entity-displayname", "&l%playername%'s Creeper");
+        addMessage("Pets.Enderman.menu-name", "&a&5Enderman");
+        addMessage("Pets.Enderman.entity-displayname", "&l%playername%'s Enderman");
         addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
 
