@@ -17,4 +17,10 @@ public class PetSkeleton extends Pet {
     public PetSkeleton(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.getByName("skeleton"), ItemFactory.create(XMaterial.BOW, UltraCosmeticsData.get().getItemNoPickupString()));
     }
+    
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        entity.setFireTicks(0);
+    }
 }
