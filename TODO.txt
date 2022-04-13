@@ -35,7 +35,6 @@
     - Ghast
     - Magma Cube
     - Spider Jockey
-    - Zombie
     - Zombie Villager
     - Wither Skeleton
     - Witch
