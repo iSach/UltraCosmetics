@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -36,8 +36,8 @@ public class ParticleEffectBloodHelix extends ParticleEffect {
             v1.setZ(Math.sin(angle) * radius);
             v2.setX(Math.cos(angle + 3.5) * radius);
             v2.setZ(Math.sin(angle + 3.5) * radius);
-            UtilParticles.display(Particles.REDSTONE, location.clone().add(v1));
-            UtilParticles.display(Particles.REDSTONE, location.clone().add(v2));
+            Particles.REDSTONE.display(location.clone().add(v1));
+            Particles.REDSTONE.display(location.clone().add(v2));
             location.add(0, 0.12d, 0);
             radius -= 4.4f / steps;
         }

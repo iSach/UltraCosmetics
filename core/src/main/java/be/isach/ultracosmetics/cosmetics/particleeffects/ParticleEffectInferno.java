@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.util.Vector;
 
 /**
@@ -41,7 +41,7 @@ public class ParticleEffectInferno extends ParticleEffect {
             Vector v = new Vector();
             v.setX(Math.cos(angle) * 1.1);
             v.setZ(Math.sin(angle) * 1.1);
-            UtilParticles.display(getType().getEffect(), 0.15f, 0.15f, 0.15f,
+            getType().getEffect().display(0.15f, 0.15f, 0.15f,
                     getPlayer().getLocation().clone().add(v).add(0, height[i], 0), getModifiedAmount(4));
             if (i == 0 || i == 3)
                 steps[i] -= 4;

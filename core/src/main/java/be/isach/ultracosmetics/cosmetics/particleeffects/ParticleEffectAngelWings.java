@@ -3,7 +3,8 @@ package be.isach.ultracosmetics.cosmetics.particleeffects;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.UtilParticles;
+import be.isach.ultracosmetics.util.Particles;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -62,8 +63,9 @@ public class ParticleEffectAngelWings extends ParticleEffect {
 
                     location.add(v);
                     location.add(v2);
-                    for (int k = 0; k < getModifiedAmount(3); k++)
-                        UtilParticles.display(255, 255, 255, location);
+                    for (int k = 0; k < getModifiedAmount(3); k++) {
+                        Particles.REDSTONE.display(255, 255, 255, location);
+                    }
                     location.subtract(v2);
                     location.subtract(v);
                 }

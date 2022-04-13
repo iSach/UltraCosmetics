@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    // should we use "api" instead of "implementation" anywhere?
-    compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+    // ideally matches the dependency version of the latest NMS module
+    compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
     compileOnly('LibsDisguises:LibsDisguises:9.5.2') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
@@ -23,7 +23,12 @@ dependencies {
     implementation ('com.zaxxer:HikariCP:4.0.3') {
         exclude group: 'org.slf4j'
     }
+    // 'api' so it's passed down to NMS modules
+    api 'com.github.cryptomorin:XSeries:8.7.1'
 }
 shadowJar {
+    // XParticle is big and not required so don't shade it
+    exclude 'com/cryptomorin/xseries/particles/*'
     relocate ('com.zaxxer.hikari', 'be.isach.ultracosmetics.shaded.hikari')
+    relocate ('com.cryptomorin.xseries', 'be.isach.ultracosmetics.shaded.xseries')
 }

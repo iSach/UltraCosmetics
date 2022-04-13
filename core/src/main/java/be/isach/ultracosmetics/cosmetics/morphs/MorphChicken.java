@@ -4,7 +4,9 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Chicken;
@@ -16,6 +18,9 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +52,7 @@ public class MorphChicken extends Morph {
                 items.add(i);
                 Random r = new Random();
                 i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(0.5));
-                SoundUtil.playSound(getPlayer(), Sounds.CHICKEN_EGG_POP, .5f, 1.5f);
+                XSound.ENTITY_CHICKEN_EGG.play(getPlayer(), .5f, 1.5f);
             }
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                 BukkitRunnable followRunnable;
@@ -61,7 +66,7 @@ public class MorphChicken extends Morph {
                         } else {
                             Particles.BLOCK_CRACK.display(new Particles.BlockData(XMaterial.WHITE_TERRACOTTA.parseMaterial(), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
                         }
-                        SoundUtil.playSound(i.getLocation(), Sounds.ZOMBIE_WOOD, .05f, 1f);
+                        XSound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR.play(i.getLocation(), .05f, 1f);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
                         chicken.setAgeLock(true);
                         chicken.setBaby();
@@ -85,7 +90,7 @@ public class MorphChicken extends Morph {
                     }.runTaskTimer(getUltraCosmetics(), 0, 4);
                     Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
                         for (Chicken chicken : chickens) {
-                            UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
+                            Particles.LAVA.display(chicken.getLocation(), 10);
                             chicken.remove();
                         }
                         chickens.clear();
@@ -116,7 +121,7 @@ public class MorphChicken extends Morph {
     @Override
     protected void onClear() {
         for (Chicken chicken : chickens) {
-            UtilParticles.display(Particles.LAVA, chicken.getLocation(), 10);
+            Particles.LAVA.display(chicken.getLocation(), 10);
             chicken.remove();
         }
         chickens.clear();

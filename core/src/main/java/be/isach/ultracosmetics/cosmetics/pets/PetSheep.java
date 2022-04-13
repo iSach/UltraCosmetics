@@ -5,8 +5,8 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.XMaterial;
-import be.isach.ultracosmetics.util.XTag;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XTag;
 
 /**
  * Represents an instance of a sheep pet summoned by a player.

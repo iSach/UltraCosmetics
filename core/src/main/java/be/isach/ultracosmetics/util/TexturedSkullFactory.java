@@ -1,5 +1,6 @@
 package be.isach.ultracosmetics.util;
 
+import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
@@ -20,7 +21,7 @@ import java.util.UUID;
  * Project: UltraCosmetics
  */
 public class TexturedSkullFactory {
-
+    // TODO: method in ItemFactory is almost identical, remove?
     public static ItemStack createSkull(String url) {
         ItemStack skull = XMaterial.PLAYER_HEAD.parseItem();
         if (url == null || url.isEmpty()) {

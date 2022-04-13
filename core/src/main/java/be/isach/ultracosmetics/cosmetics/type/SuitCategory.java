@@ -12,14 +12,14 @@ import be.isach.ultracosmetics.cosmetics.suits.SuitDiamond;
 import be.isach.ultracosmetics.cosmetics.suits.SuitFrozen;
 import be.isach.ultracosmetics.cosmetics.suits.SuitRave;
 import be.isach.ultracosmetics.cosmetics.suits.SuitSanta;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 
 public enum SuitCategory {
     RAVE("Rave", "rave", "&7&oSuch amazing colors!", XMaterial.LEATHER_HELMET, XMaterial.LEATHER_CHESTPLATE, XMaterial.LEATHER_LEGGINGS, XMaterial.LEATHER_BOOTS, SuitRave.class),
     ASTRONAUT("Astronaut", "astronaut", "&7&oHouston?", XMaterial.GLASS, XMaterial.GOLDEN_CHESTPLATE, XMaterial.GOLDEN_LEGGINGS, XMaterial.GOLDEN_BOOTS, SuitAstronaut.class),
     DIAMOND("Diamond", "diamond", "&7&oShow your Mining skills\n&7&owith this amazing outfit!", XMaterial.DIAMOND_HELMET, XMaterial.DIAMOND_CHESTPLATE, XMaterial.DIAMOND_LEGGINGS, XMaterial.DIAMOND_BOOTS, SuitDiamond.class),
     SANTA("Santa", "santa", "&7&oBecome Santa and deliver presents!", XMaterial.LEATHER_HELMET, XMaterial.LEATHER_CHESTPLATE, XMaterial.LEATHER_LEGGINGS, XMaterial.LEATHER_BOOTS, SuitSanta.class),
-    FROZEN("Frozen", "frozen", "&7&oThis suit belongs to the\nLord of the Frozen Lands!", XMaterial.PACKED_ICE, XMaterial.LEATHER_CHESTPLATE, XMaterial.LEATHER_LEGGINGS, XMaterial.LEATHER_BOOTS, SuitFrozen.class),
+    FROZEN("Frozen", "frozen", "&7&oThis suit belongs to the\n&7&oLord of the Frozen Lands!", XMaterial.PACKED_ICE, XMaterial.LEATHER_CHESTPLATE, XMaterial.LEATHER_LEGGINGS, XMaterial.LEATHER_BOOTS, SuitFrozen.class),
     ;
     private final String configName;
     private final String permissionSuffix;

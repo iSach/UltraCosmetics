@@ -1,14 +1,16 @@
 package be.isach.ultracosmetics.util;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.ReflectionUtils.PackageType;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.awt.Color;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -384,6 +386,7 @@ public enum Particles {
      */
     MOB_APPEARANCE("mobappearance", 41, 8);
 
+    private final static int DEF_RADIUS = 128; // for convenience functions by iSach
     private static final Map<String, Particles> NAME_MAP = new HashMap<>();
     private static final Map<Integer, Particles> ID_MAP = new HashMap<>();
     private final String name;
@@ -407,7 +410,7 @@ public enum Particles {
      * @param requiredVersion Version which is required (1.x)
      * @param properties      Properties of this particle effect
      */
-    Particles(String name, int id, int requiredVersion, ParticleProperty... properties) {
+    private Particles(String name, int id, int requiredVersion, ParticleProperty... properties) {
         this.name = name;
         this.id = id;
         this.requiredVersion = requiredVersion;
@@ -899,6 +902,92 @@ public enum Particles {
     public void display(ParticleData data, Vector direction, float speed, Location center, Player... players) throws ParticleVersionException, ParticleDataException {
         display(data, direction, speed, center, Arrays.asList(players));
     }
+
+    // Start convenience functions originally by iSach
+    public void drawParticleLine(Location from, Location to, int particles, Color color) {
+        drawParticleLine(from, to, particles, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    public void drawParticleLine(Location from, Location to, int particles, int r, int g, int b) {
+        Location location = from.clone();
+        Location target = to.clone();
+        Vector link = target.toVector().subtract(location.toVector());
+        float length = (float) link.length();
+        link.normalize();
+
+        float ratio = length / particles;
+        Vector v = link.multiply(ratio);
+        Location loc = location.clone().subtract(v);
+        int step = 0;
+        for (int i = 0; i < particles; i++) {
+            if (step >= (double) particles)
+                step = 0;
+            step++;
+            loc.add(v);
+            if (this == Particles.REDSTONE) {
+                display(new Particles.OrdinaryColor(r, g, b), loc, 128);
+            } else {
+                display(0, 0, 0, 0, 1, loc, 128);
+            }
+        }
+    }
+
+    public void playHelix(final Location loc, final float i) {
+        BukkitRunnable runnable = new BukkitRunnable() {
+            double radius = 0;
+            double step;
+            double y = loc.getY();
+            Location location = loc.clone().add(0, 3, 0);
+
+            @Override
+            public void run() {
+                double inc = (2 * Math.PI) / 50;
+                double angle = step * inc + i;
+                Vector v = new Vector();
+                v.setX(Math.cos(angle) * radius);
+                v.setZ(Math.sin(angle) * radius);
+                if (Particles.this == Particles.REDSTONE)
+                    display(0, 0, 255, location, 1);
+                else
+                    display(location);
+                location.subtract(v);
+                location.subtract(0, 0.1d, 0);
+                if (location.getY() <= y) {
+                    cancel();
+                }
+                step += 4;
+                radius += 1 / 50f;
+            }
+        };
+        runnable.runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, 1);
+    }
+
+    public void display(Location location, int amount, float speed) {
+        display(0, 0, 0, speed, amount, location, 128);
+    }
+
+    public void display(Location location, int amount) {
+        display(0, 0, 0, 0, amount, location, 128);
+    }
+
+    public void display(Location location) {
+        display(location, 1);
+    }
+
+    public void display(double x, double y, double z, Location location, int amount) {
+        display((float) x, (float) y, (float) z, 0f, amount, location, 128);
+    }
+
+    public void display(int red, int green, int blue, Location location, int amount) {
+        for (int i = 0; i < amount; i++) {
+            display(new Particles.OrdinaryColor(red, green, blue), location, DEF_RADIUS);
+        }
+    }
+
+    public void display(int red, int green, int blue, Location location) {
+        display(red, green, blue, location, 1);
+    }
+    // End convenience functions
 
     /**
      * Represents the property of a particle effect
@@ -1472,7 +1561,7 @@ public enum Particles {
                     if (r == 0 && g == 0 && b == 0) { // Normal redstone particle, no color data supplied
                         r = 255;
                     }
-                    center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, 0, new org.bukkit.Particle.DustOptions(Color.fromRGB(r, g, b), 1));
+                    center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, 0, new org.bukkit.Particle.DustOptions(org.bukkit.Color.fromRGB(r, g, b), 1));
                 } else if (effect == Particles.SPELL_MOB || effect == Particles.SPELL_MOB_AMBIENT) {
                     center.getWorld().spawnParticle(org.bukkit.Particle.valueOf(effect.toString()), center, amount, offsetX, offsetY, offsetZ, 1);
                 } else if (effect == Particles.NOTE) {

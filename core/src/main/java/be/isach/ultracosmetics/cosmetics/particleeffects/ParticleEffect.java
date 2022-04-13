@@ -7,9 +7,15 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
+
+import com.cryptomorin.xseries.XMaterial;
 
 /**
  * Represents an instance of a particle effect summoned by a player.
@@ -75,7 +81,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                                 }
                             }
                         } else
-                            UtilParticles.display(getType().getEffect(), .4f, .3f, .4f, getPlayer().getLocation().add(0, 1, 0), getModifiedAmount(3));
+                            getType().getEffect().display(0.4f, 0.3f, 0.4f, getPlayer().getLocation().add(0, 1, 0), getModifiedAmount(3));
                     }
                 } else
                     onUpdate();

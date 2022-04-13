@@ -4,11 +4,11 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +92,7 @@ public class ParticleEffectMagicalRods extends ParticleEffect {
                 v.setY(BASE_HEIGHT + Math.sin(angleStep * 3) * heightDiffFactor); // The height of the columns is a sine wave.
                 loc = getPlayer().getLocation().add(v);
 
-                UtilParticles.drawParticleLine(loc, loc.clone().add(0, ROD_HEIGHT, 0), Particles.REDSTONE, getModifiedAmount(((int) ROD_HEIGHT) * 5), COLORS.get(j));
+                Particles.REDSTONE.drawParticleLine(loc, loc.clone().add(0, ROD_HEIGHT, 0), getModifiedAmount(((int) ROD_HEIGHT) * 5), COLORS.get(j));
 
                 angleStep += workingSpace / COLORS.size();
                 height += (i >= 3 && i <= 5) ? heightDiffFactor : -heightDiffFactor;

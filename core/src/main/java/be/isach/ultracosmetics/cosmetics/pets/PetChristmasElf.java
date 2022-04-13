@@ -4,8 +4,11 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TexturedSkullFactory;
+
 import org.bukkit.inventory.ItemStack;
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents an instance of a Christmas Elf pet summoned by a player.

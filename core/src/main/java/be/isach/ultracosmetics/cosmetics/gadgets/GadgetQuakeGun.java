@@ -4,13 +4,20 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +30,7 @@ import java.util.List;
  */
 public class GadgetQuakeGun extends Gadget {
 
-    List<Firework> fireworkList = new ArrayList<>();
+    private List<Firework> fireworkList = new ArrayList<>();
 
     public GadgetQuakeGun(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("quakegun"), ultraCosmetics);
@@ -31,7 +38,7 @@ public class GadgetQuakeGun extends Gadget {
 
     @Override
     void onRightClick() {
-        SoundUtil.playSound(getPlayer(), Sounds.BLAZE_DEATH, 1.4f, 1.5f);
+        XSound.ENTITY_BLAZE_DEATH.play(getPlayer(), 1.4f, 1.5f);
 
         Location location = getPlayer().getEyeLocation().subtract(0, 0.4, 0);
         Vector vector = location.getDirection();
@@ -49,7 +56,7 @@ public class GadgetQuakeGun extends Gadget {
                     if ((entity instanceof Player || entity instanceof Creature)
                             && entity != getPlayer()) {
                         MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
-                        UtilParticles.display(Particles.FLAME, entity.getLocation(), 60, 0.4f);
+                        Particles.FLAME.display(entity.getLocation(), 60, 0.4f);
                         FireworkEffect.Builder builder = FireworkEffect.builder();
                         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
                                 .withColor(Color.RED).withFade(Color.ORANGE).build();

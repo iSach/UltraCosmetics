@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,7 +41,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
     };
 
 
-    private Category category;
+    protected Category category;
 
     public CosmeticMenu(UltraCosmetics ultraCosmetics, Category category) {
         super(ultraCosmetics);
@@ -87,11 +87,11 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
                 continue;
             }
 
-            String toggle = category.getActivateMenu();
+            String toggle = category.getActivateTooltip();
             boolean deactivate = getCosmetic(player) != null && getCosmetic(player).getType() == cosmeticType;
 
             if (deactivate) {
-                toggle = category.getDeactivateMenu();
+                toggle = category.getDeactivateTooltip();
             }
 
             String typeName = getTypeName(cosmeticType, player);
@@ -138,18 +138,18 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         if (page > 1) {
             int finalPage = page;
             putItem(inventory, getSize() - 18, ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Previous-Page-Item"),
-                    MessageManager.getMessage("Menu.Previous-Page")), (data) -> open(player, finalPage - 1));
+                    MessageManager.getMessage("Menu.Misc.Button.Previous-Page")), (data) -> open(player, finalPage - 1));
         }
 
         // Next page item.
         if (page < maxPages) {
             int finalPage = page;
             putItem(inventory, getSize() - 10, ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Next-Page-Item"),
-                    MessageManager.getMessage("Menu.Next-Page")), (data) -> open(player, finalPage + 1));
+                    MessageManager.getMessage("Menu.Misc.Button.Next-Page")), (data) -> open(player, finalPage + 1));
         }
 
         // Clear cosmetic item.
-        String message = MessageManager.getMessage(category.getClearConfigPath());
+        String message = MessageManager.getMessage("Clear." + category.getConfigPath());
         ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
         putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
             toggleOff(player, null);
@@ -158,7 +158,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
         // Go Back to Main Menu Arrow.
         if (getCategory().hasGoBackArrow()) {
-            ItemStack item = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Back-Main-Menu-Item"), MessageManager.getMessage("Menu.Main-Menu"));
+            ItemStack item = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Back-Main-Menu-Item"), MessageManager.getMessage("Menu.Main.Title"));
             putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(player));
         }
 
@@ -249,7 +249,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      * @return The name of the menu with page detailed.
      */
     protected String getName(int page, UltraPlayer ultraPlayer) {
-        return MessageManager.getMessage("Menus." + category.getConfigPath()) + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(" + page + "/" + getMaxPages(ultraPlayer) + ")";
+        return MessageManager.getMessage("Menu." + category.getConfigPath() + ".Title") + " " + ChatColor.GRAY + "" + ChatColor.ITALIC + "(" + page + "/" + getMaxPages(ultraPlayer) + ")";
     }
 
     @Override
@@ -278,7 +278,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      */
     @Override
     protected String getName() {
-        return MessageManager.getMessage("Menus." + category.getConfigPath());
+        return MessageManager.getMessage("Menu." + category.getConfigPath() + ".Title");
     }
 
     public Category getCategory() {
@@ -362,12 +362,12 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             return false; // we just opened another inventory, don't close it
         }
 
-        if (clicked.getItemMeta().getDisplayName().startsWith(category.getDeactivateMenu())) {
+        if (clicked.getItemMeta().getDisplayName().startsWith(category.getDeactivateTooltip())) {
             toggleOff(ultraPlayer, cosmeticType);
             if (!UltraCosmeticsData.get().shouldCloseAfterSelect()) {
                 open(ultraPlayer, currentPage);
             }
-        } else if (clicked.getItemMeta().getDisplayName().startsWith(category.getActivateMenu())) {
+        } else if (clicked.getItemMeta().getDisplayName().startsWith(category.getActivateTooltip())) {
             if (!ultraPlayer.hasPermission(cosmeticType.getPermission())) {
                 ultraPlayer.sendMessage(MessageManager.getMessage("No-Permission"));
                 return true;

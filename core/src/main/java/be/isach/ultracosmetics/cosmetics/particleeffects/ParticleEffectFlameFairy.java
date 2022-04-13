@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -47,8 +47,9 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
 
         distTarget = currentLocation.distance(targetLocation);
 
-        if (MathUtils.random.nextDouble() > 0.98)
+        if (RANDOM.nextDouble() > 0.98) {
             noMoveTime = System.currentTimeMillis() + MathUtils.randomDouble(0, 2000);
+        }
 
         if (getPlayer().getEyeLocation().distance(currentLocation) < 3)
             movementSpeed = noMoveTime > System.currentTimeMillis() ? Math.max(0, movementSpeed - 0.0075)
@@ -68,8 +69,8 @@ public class ParticleEffectFlameFairy extends ParticleEffect {
         if (distTarget > 0.1)
             currentLocation.add(targetDirection.clone().multiply(movementSpeed));
 
-        UtilParticles.display(Particles.LAVA, currentLocation);
-        UtilParticles.display(Particles.FLAME, currentLocation);
+        Particles.LAVA.display(currentLocation);
+        Particles.FLAME.display(currentLocation);
     }
 
     private Location generateNewTarget() {

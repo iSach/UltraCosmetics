@@ -7,8 +7,9 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
-import be.isach.ultracosmetics.util.*;
-
+import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,6 +41,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XBlock;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 public class TreasureChest implements Listener {
 
@@ -118,8 +123,8 @@ public class TreasureChest implements Listener {
                                 }
                                 int animationTime = 0;
                                 if (particleEffect != null) {
-                                    UtilParticles.playHelix(getChestLocation(i, center.clone()), 0.0F, particleEffect);
-                                    UtilParticles.playHelix(getChestLocation(i, center.clone()), 3.5F, particleEffect);
+                                    particleEffect.playHelix(getChestLocation(i, center.clone()), 0.0F);
+                                    particleEffect.playHelix(getChestLocation(i, center.clone()), 3.5F);
                                     animationTime = 30;
                                 }
                                 placeChestRunnable = new BukkitRunnable() {
@@ -127,9 +132,9 @@ public class TreasureChest implements Listener {
                                     public void run() {
                                         Block b = getChestLocation(i, center.clone()).getBlock();
                                         b.setType(design.getChestType().getType());
-                                        SoundUtil.playSound(getPlayer(), Sounds.ANVIL_LAND, 1.4f, 1.5f);
-                                        UtilParticles.display(Particles.SMOKE_LARGE, b.getLocation(), 5);
-                                        UtilParticles.display(Particles.LAVA, b.getLocation(), 5);
+                                        XSound.BLOCK_ANVIL_LAND.play(getPlayer(), 1.4f, 1.5f);
+                                        Particles.SMOKE_LARGE.display(b.getLocation(), 5);
+                                        Particles.LAVA.display(b.getLocation(), 5);
                                         BlockFace blockFace = BlockFace.SOUTH;
                                         switch (i) {
                                             case 4:

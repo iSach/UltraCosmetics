@@ -5,9 +5,9 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -33,7 +33,7 @@ public class MorphVillager extends Morph {
                 || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
             if (coolDown > System.currentTimeMillis()) return;
             event.setCancelled(true);
-            SoundUtil.playSound(event.getPlayer(), Sounds.ORB_PICKUP);
+            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(getPlayer());
             Item emerald = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(XMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
             emerald.setPickupDelay(30000);
             emerald.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.5));

@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -50,7 +49,7 @@ public class GadgetChristmasTree extends Gadget {
 
     private void drawSnow() {
         lastLocation.add(0, 3, 0);
-        UtilParticles.display(Particles.FIREWORKS_SPARK, 4d, 3d, 4d, lastLocation, 10);
+        Particles.FIREWORKS_SPARK.display(4d, 3d, 4d, lastLocation, 10);
         lastLocation.subtract(0, 3, 0);
     }
 
@@ -72,7 +71,7 @@ public class GadgetChristmasTree extends Gadget {
         float ratio = length / 10;
         Vector vector = link.multiply(ratio);
         for (int i = 0; i < 10; i++) {
-            UtilParticles.display(LOG_COLOR.getRed(), LOG_COLOR.getGreen(), LOG_COLOR.getBlue(), current);
+            Particles.REDSTONE.display(LOG_COLOR.getRed(), LOG_COLOR.getGreen(), LOG_COLOR.getBlue(), current);
             current.add(vector);
         }
     }
@@ -82,15 +81,15 @@ public class GadgetChristmasTree extends Gadget {
         for (float f = 0.8f; f <= 2.5f; f += 0.2f) {
             if (radius >= 0) {
                 float d = 13f / f;
-                float g = MathUtils.random(0, d);
-                int e = MathUtils.random(0, 2);
+                float g = MathUtils.random(d);
+                int e = RANDOM.nextInt(2);
                 if (e == 1) {
                     double inc = (2 * Math.PI) / d;
                     float angle = (float) (g * inc);
                     float x = MathUtils.cos(angle) * (radius + 0.05f);
                     float z = MathUtils.sin(angle) * (radius + 0.05f);
                     lastLocation.add(x, f, z);
-                    UtilParticles.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), lastLocation);
+                    Particles.REDSTONE.display(RANDOM.nextInt(256), RANDOM.nextInt(256), RANDOM.nextInt(256), lastLocation);
                     lastLocation.subtract(x, f, z);
                 }
                 for (int i = 0; i < d; i++) {
@@ -99,7 +98,7 @@ public class GadgetChristmasTree extends Gadget {
                     float x = MathUtils.cos(angle) * radius;
                     float z = MathUtils.sin(angle) * radius;
                     lastLocation.add(x, f, z);
-                    UtilParticles.display(0, 100, 0, lastLocation);
+                    Particles.REDSTONE.display(0, 100, 0, lastLocation);
                     lastLocation.subtract(x, f, z);
                 }
                 radius = radius - (0.7f / 8.5f);
@@ -109,7 +108,7 @@ public class GadgetChristmasTree extends Gadget {
 
     private void drawStar() {
         lastLocation.add(0, 2.6, 0);
-        UtilParticles.display(255, 255, 0, lastLocation);
+        Particles.REDSTONE.display(255, 255, 0, lastLocation);
         lastLocation.subtract(0, 2.6, 0);
     }
 

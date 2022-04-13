@@ -1,6 +1,13 @@
 package be.isach.ultracosmetics.config;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+
+import be.isach.ultracosmetics.cosmetics.Category;
 
 /**
  * Message manager.
@@ -33,6 +40,11 @@ public class MessageManager {
      * Set up the messages in the config.
      */
     private static void loadMessages() {
+        ConfigurationSection menuBlock = messagesConfig.getConfigurationSection("Menu");
+        if (menuBlock != null && menuBlock.isString("Gadgets")) {
+            upgradeCategoryStrings(menuBlock);
+        }
+
         addMessage("Prefix", "&l&oCosmetics >&r");
         addMessage("No-Permission", "%prefix% &c&lYou don't have the permission!");
         addMessage("Cosmetic-Disabled", "%prefix% &c&lThis cosmetic is disabled!");
@@ -65,16 +77,17 @@ public class MessageManager {
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
         addMessage("Treasure-Chest-Occupied", "%prefix% &c&lAll treasure locations are full, please wait and try again");
-        addMessage("Clear-Cosmetics", "&c&lClear cosmetics");
-        addMessage("Clear-Gadget", "&c&lClear current gadget");
-        addMessage("Clear-Pet", "&c&lClear current pet");
-        addMessage("Clear-Mount", "&c&lClear current mount");
-        addMessage("Clear-Effect", "&c&lClear current effect");
-        addMessage("Clear-Morph", "&c&lClear current morph");
-        addMessage("Clear-Hat", "&c&lClear current hat");
-        addMessage("Clear-Suit", "&c&lClear current suit");
-        addMessage("Clear-Emote", "&c&lClear current emote");
-        addMessage("Rename-Pet-Purchase", "&c&lRename the pet to &f&l%name% &c&lfor &e&l$%price%");
+
+        addMessage("Clear.Cosmetics", "&c&lClear cosmetics");
+        addMessage("Clear." + Category.GADGETS.getConfigPath(), "&c&lClear current gadget");
+        addMessage("Clear." + Category.PETS.getConfigPath(), "&c&lClear current pet");
+        addMessage("Clear." + Category.MOUNTS.getConfigPath(), "&c&lClear current mount");
+        addMessage("Clear." + Category.EFFECTS.getConfigPath(), "&c&lClear current effect");
+        addMessage("Clear." + Category.MORPHS.getConfigPath(), "&c&lClear current morph");
+        addMessage("Clear." + Category.HATS.getConfigPath(), "&c&lClear current hat");
+        addMessage("Clear." + Category.SUITS.getConfigPath(), "&c&lClear current suit");
+        addMessage("Clear." + Category.EMOTES.getConfigPath(), "&c&lClear current emote");
+        addMessage("Menu.Purchase-Rename.Button.Showcase", "&c&lRename the pet to &f&l%name% &c&lfor &e&l$%price%");
 
         addMessage("Chest-Location.Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
         addMessage("Chest-Location.Too-Close", "%prefix% &c&lYou are too close to another treasure chest!");
@@ -85,9 +98,9 @@ public class MessageManager {
         addMessage("Chest-Location.Suggestion", "%prefix% &aMaybe you meant %location%?");
 
         addMessage("Active-Pet-Needed", "&c&lYou need to spawn a pet to rename it");
-        addMessage("Rename-Pet", "&c&lClick to rename: %petname%");
-        addMessage("Rename-Pet-Placeholder", "Pet Name");
-        addMessage("Rename-Pet-Title", "Rename pet");
+        addMessage("Menu.Rename-Pet.Button.Name", "&c&lClick to rename: %petname%");
+        addMessage("Menu.Rename-Pet.Placeholder", "Pet Name");
+        addMessage("Menu.Rename-Pet.Title", "Rename pet");
 
         addMessage("Treasure-Chests-Loot.Ammo", "%ammo% %name% ammo");
         addMessage("Treasure-Chests-Loot.Pet", "%pet% pet");
@@ -109,17 +122,17 @@ public class MessageManager {
         addMessage("Treasure-Chests-Loot.Nothing", "&c&lNothing");
 
         // MENUS
-        addMessage("Menus.Main-Menu", "&lMain Menu");
-        addMessage("Menus.Pets", "&lPets");
-        addMessage("Menus.Gadgets", "&lGadgets");
-        addMessage("Menus.Mounts", "&lMounts");
-        addMessage("Menus.Morphs", "&lMorphs");
-        addMessage("Menus.Hats", "&lHats");
-        addMessage("Menus.Particle-Effects", "&lParticle Effects");
-        addMessage("Menus.Suits", "&lSuits");
-        addMessage("Menus.Emotes", "&lEmotes");
-        addMessage("Menus.Buy-Ammo", "&lBuy Ammo");
-        addMessage("Menus.Rename-Pet", "&lRename Pet");
+        addMessage("Menu.Main.Title", "&lMain Menu");
+        addMessage("Menu.Pets.Title", "&lPets");
+        addMessage("Menu.Gadgets.Title", "&lGadgets");
+        addMessage("Menu.Mounts.Title", "&lMounts");
+        addMessage("Menu.Morphs.Title", "&lMorphs");
+        addMessage("Menu.Hats.Title", "&lHats");
+        addMessage("Menu.Particle-Effects.Title", "&lParticle Effects");
+        addMessage("Menu.Suits.Title", "&lSuits");
+        addMessage("Menu.Emotes.Title", "&lEmotes");
+        addMessage("Menu.Buy-Ammo.Title", "&lBuy Ammo");
+        addMessage("Menu.Rename-Pet.Title", "&lRename Pet");
         addMessage("Disable-Gadgets", "&c&lDisable Gadgets");
         addMessage("Enable-Gadgets", "&a&lEnable Gadgets");
         addMessage("Disable-Third-Person-View", "&c&lDisable Morphs Third Person View");
@@ -211,20 +224,19 @@ public class MessageManager {
         addMessage("Mounts.MoltenSnake.entity-displayname", "&l%playername%'s Molten Snake");
         addMessage("Mounts.FlyingShip.menu-name", "&a&lFlying Ship");
         addMessage("Mounts.FlyingShip.entity-displayname", "&l%playername%'s Flying Ship");
-        addMessage("Mounts.Spawn", "%prefix% &9You spawned %mountname%");
-        addMessage("Mounts.Despawn", "%prefix% &9You despawned %mountname%");
+        addMessage("Mounts.Equip", "%prefix% &9You spawned %mountname%");
+        addMessage("Mounts.Unequip", "%prefix% &9You despawned %mountname%");
         addMessage("Mounts.Cant-Spawn", "%prefix% &c&lMonsters can't spawn here!");
         addMessage("Mounts.Not-Enough-Room", "%prefix% &c&lNot enough room for a mount here!");
 
         // PARTICLE-EFFECTS
-        addMessage("Particle-Effects.Summon", "%prefix% &9You summoned %effectname%");
-        addMessage("Particle-Effects.Unsummon", "%prefix% &9You unsummoned %effectname%");
+        addMessage("Particle-Effects.Equip", "%prefix% &9You summoned %effectname%");
+        addMessage("Particle-Effects.Unequip", "%prefix% &9You unsummoned %effectname%");
         addMessage("Particle-Effects.RainCloud.name", "&9&lRain Cloud");
         addMessage("Particle-Effects.SnowCloud.name", "&f&lSnow Cloud");
         addMessage("Particle-Effects.BloodHelix.name", "&4&lBlood Helix");
         addMessage("Particle-Effects.FrostLord.name", "&b&lFrost Lord");
         addMessage("Particle-Effects.FlameRings.name", "&c&lFlame Rings");
-        // addMessage("Particle-Effects.AngelWings.name", "&f&lAngel Wings");
         addMessage("Particle-Effects.GreenSparks.name", "&a&lGreen Sparks");
         addMessage("Particle-Effects.InLove.name", "&c&lIn Love");
         addMessage("Particle-Effects.FrozenWalk.name", "&b&lFrozen Walk");
@@ -297,6 +309,7 @@ public class MessageManager {
         addMessage("Pets.Goat.entity-displayname", "&l%playername%'s Goat");
         addMessage("Pets.Silverfish.menu-name", "&7&lSilverfish");
         addMessage("Pets.Silverfish.entity-displayname", "&l%playername%'s Silverfish");
+
         addMessage("Pets.Horse.menu-name", "&a&lHorse");
         addMessage("Pets.Horse.entity-displayname", "&l%playername%'s Horse");
         addMessage("Pets.Blaze.menu-name", "&c&lBlaze");
@@ -309,8 +322,8 @@ public class MessageManager {
         addMessage("Pets.Skeleton.entity-displayname", "&l%playername%'s Skeleton");
         addMessage("Pets.Zombie.menu-name", "&2&lZombie");
         addMessage("Pets.Zombie.entity-displayname", "&l%playername%'s Zombie");
-        addMessage("Pets.Spawn", "%prefix% &9You spawned %petname%");
-        addMessage("Pets.Despawn", "%prefix% &9You despawned %petname%");
+        addMessage("Pets.Equip", "%prefix% &9You spawned %petname%");
+        addMessage("Pets.Unequip", "%prefix% &9You despawned %petname%");
 
         // MORPHS
         addMessage("Morphs.Blaze.name", "&6&lBlaze");
@@ -331,8 +344,8 @@ public class MessageManager {
         addMessage("Morphs.Creeper.release-to-explode", "&f&lRelease to explode!");
         addMessage("Morphs.Snowman.name", "&f&lSnowman");
         addMessage("Morphs.Snowman.skill", "&eLeft Click&7 to: &aThrow Snowball");
-        addMessage("Morphs.Morph", "%prefix% &9You morphed into %morphname%");
-        addMessage("Morphs.Unmorph", "%prefix% &9You unmorphed from %morphname%");
+        addMessage("Morphs.Equip", "%prefix% &9You morphed into %morphname%");
+        addMessage("Morphs.Unequip", "%prefix% &9You unmorphed from %morphname%");
         addMessage("Morphs.WitherSkeleton.name", "&8&lWither Skeleton");
         addMessage("Morphs.WitherSkeleton.skill", "&eSneak&7 to: &aBone Bomb");
         addMessage("Morphs.ElderGuardian.name", "&8&lElder Guardian");
@@ -497,28 +510,43 @@ public class MessageManager {
         addMessage("Emotes.Must-Remove-Helmet", "%prefix% &c&lYou must remove your helmet to equip an emote!");
 
         // MENU
-        addMessage("Menu.Gadgets", "&9&lGadgets");
-        addMessage("Menu.Particle-Effects", "&b&lParticle Effects");
-        addMessage("Menu.Mounts", "&6&lMounts");
-        addMessage("Menu.Pets", "&a&lPets");
-        addMessage("Menu.Morphs", "&2&lMorphs");
-        addMessage("Menu.Hats", "&b&lHats");
-        addMessage("Menu.Suits", "&c&lSuits");
-        addMessage("Menu.Emotes", "&e&lEmotes");
-        addMessage("Menu.Main-Menu", "&c&lMain Menu");
-        addMessage("Menu.Activate", "&b&lActivate");
-        addMessage("Menu.Deactivate", "&c&lDeactivate");
-        addMessage("Menu.Spawn", "&b&lSpawn");
-        addMessage("Menu.Despawn", "&c&lDespawn");
-        addMessage("Menu.Summon", "&b&lSummon");
-        addMessage("Menu.Unsummon", "&c&lUnsummon");
-        addMessage("Menu.Equip", "&b&lEquip");
-        addMessage("Menu.Unequip", "&c&lUnequip");
-        addMessage("Menu.Morph", "&b&lMorph into");
-        addMessage("Menu.Unmorph", "&c&lUnmorph from");
-        addMessage("Menu.Previous-Page", "&c&lPrevious Page");
-        addMessage("Menu.Next-Page", "&a&lNext Page");
+        addMessage("Menu.Gadgets.Button.Name", "&9&lGadgets");
+        addMessage("Menu.Gadgets.Button.Tooltip-Equip", "&b&lActivate");
+        addMessage("Menu.Gadgets.Button.Tooltip-Unequip", "&c&lDeactivate");
 
+        addMessage("Menu.Particle-Effects.Button.Name", "&b&lParticle Effects");
+        addMessage("Menu.Particle-Effects.Button.Tooltip-Equip", "&b&lSummon");
+        addMessage("Menu.Particle-Effects.Button.Tooltip-Unequip", "&c&lUnsummon");
+
+        addMessage("Menu.Mounts.Button.Name", "&6&lMounts");
+        addMessage("Menu.Mounts.Button.Tooltip-Equip", "&b&lSpawn");
+        addMessage("Menu.Mounts.Button.Tooltip-Unequip", "&c&lDespawn");
+
+        addMessage("Menu.Pets.Button.Name", "&a&lPets");
+        addMessage("Menu.Pets.Button.Tooltip-Equip", "&b&lSpawn");
+        addMessage("Menu.Pets.Button.Tooltip-Unequip", "&c&lDespawn");
+
+        addMessage("Menu.Morphs.Button.Name", "&2&lMorphs");
+        addMessage("Menu.Morphs.Button.Tooltip-Equip", "&b&lMorph into");
+        addMessage("Menu.Morphs.Button.Tooltip-Unequip", "&c&lUnmorph from");
+
+        addMessage("Menu.Hats.Button.Name", "&b&lHats");
+        addMessage("Menu.Hats.Button.Tooltip-Equip", "&b&lEquip");
+        addMessage("Menu.Hats.Button.Tooltip-Unequip", "&c&lUnequip");
+
+        addMessage("Menu.Suits.Button.Name", "&c&lSuits");
+        addMessage("Menu.Suits.Button.Tooltip-Equip", "&b&lEquip");
+        addMessage("Menu.Suits.Button.Tooltip-Unequip", "&c&lUnequip");
+
+        addMessage("Menu.Emotes.Button.Name", "&e&lEmotes");
+        addMessage("Menu.Emotes.Button.Tooltip-Equip", "&b&lEquip");
+        addMessage("Menu.Emotes.Button.Tooltip-Unequip", "&c&lUnequip");
+
+        addMessage("Menu.Main.Button.Name", "&c&lMain Menu");
+        addMessage("Menu.Misc.Button.Previous-Page", "&c&lPrevious Page");
+        addMessage("Menu.Misc.Button.Next-Page", "&a&lNext Page");
+
+        // Misc messages
         addMessage("Enabled-SelfMorphView", "%prefix% &9you enabled self view for morphs!");
         addMessage("Disabled-SelfMorphView", "%prefix% &9you disabled self view for morphs!");
         addMessage("Enabled-Gadgets", "%prefix% &9you enabled gadgets!");
@@ -539,6 +567,10 @@ public class MessageManager {
         messagesConfig.addDefault(path, message);
     }
 
+    public static void save() {
+        messagesConfig.save();
+    }
+
     /**
      * Gets a message.
      *
@@ -550,5 +582,78 @@ public class MessageManager {
     }
 
     private MessageManager() {
+    }
+
+    private static void upgradeCategoryStrings(ConfigurationSection menuBlock) {
+        messagesConfig.set("Menu", null);
+        Map<Category,Map<String,String>> buttons = new HashMap<>();
+        Map<Category,String> menuNames = new HashMap<>();
+        for (Category cat : Category.values()) {
+            Map<String,String> catSection = new HashMap<>();
+            catSection.put("Name", menuBlock.getString(cat.getConfigPath()));
+            buttons.put(cat, catSection);
+            menuNames.put(cat, messagesConfig.getString("Menus." + cat.getConfigPath()));
+        }
+        addButton(buttons, menuBlock, Category.PETS, "Spawn", "Despawn");
+        addButton(buttons, menuBlock, Category.GADGETS, "Activate", "Deactivate");
+        addButton(buttons, menuBlock, Category.EFFECTS, "Summon", "Unsummon");
+        addButton(buttons, menuBlock, Category.MOUNTS, "Spawn", "Despawn");
+        addButton(buttons, menuBlock, Category.MORPHS, "Morph", "Unmorph");
+        addButton(buttons, menuBlock, Category.HATS, "Equip", "Unequip");
+        addButton(buttons, menuBlock, Category.SUITS, "Equip", "Unequip");
+        addButton(buttons, menuBlock, Category.EMOTES, "Equip", "Unequip");
+        for (Entry<Category,Map<String,String>> catMap : buttons.entrySet()) {
+            messagesConfig.set("Menu." + catMap.getKey().getConfigPath() + ".Title", menuNames.get(catMap.getKey()));
+            for (Entry<String,String> translation : catMap.getValue().entrySet()) {
+                messagesConfig.set("Menu." + catMap.getKey().getConfigPath() + ".Button." + translation.getKey(), translation.getValue());
+            }
+        }
+        messagesConfig.set("Menu.Main.Button.Name", menuBlock.getString("Main-Menu"));
+        migrateKey("Menus.Main-Menu", "Menu.Main.Title");
+        migrateKey("Menus.Buy-Ammo", "Menu.Buy-Ammo.Title");
+        migrateKey("Menus.Rename-Pet", "Menu.Purchase-Rename.Title");
+        migrateKey("Rename-Pet-Purchase", "Menu.Purchase-Rename.Button.Showcase");
+        migrateKey("Rename-Pet", "Menu.Rename-Pet.Button.Name");
+        migrateKey("Rename-Pet-Placeholder", "Menu.Rename-Pet.Placeholder");
+        migrateKey("Rename-Pet-Title", "Menu.Rename-Pet.Title");
+
+        migrateMiscButton(menuBlock, "Previous-Page");
+        migrateMiscButton(menuBlock, "Next-Page");
+        messagesConfig.set("Menus", null);
+
+        // Only categories that don't already use "Equip" path
+        migrateActivateMsg(Category.PETS, "Spawn", "Despawn");
+        migrateActivateMsg(Category.EFFECTS, "Summon", "Unsummon");
+        migrateActivateMsg(Category.MOUNTS, "Spawn", "Despawn");
+        migrateActivateMsg(Category.MORPHS, "Morph", "Unmorph");
+
+        migrateClearMsg("Cosmetics", "Cosmetics");
+        for (Category cat : Category.values()) {
+            String configName = cat.getConfigName();
+            migrateClearMsg(cat.getConfigPath(), configName.substring(0, configName.length() - 1));
+        }
+    }
+
+    private static void addButton(Map<Category,Map<String,String>> buttons, ConfigurationSection menuBlock, Category cat, String oldEquipKey, String oldUnequipKey) {
+        buttons.get(cat).put("Tooltip-Equip", menuBlock.getString(oldEquipKey));
+        buttons.get(cat).put("Tooltip-Unequip", menuBlock.getString(oldUnequipKey));
+    }
+
+    private static void migrateMiscButton(ConfigurationSection section, String key) {
+        messagesConfig.set("Menu.Misc.Button." + key, section.getString(key));
+    }
+
+    private static void migrateActivateMsg(Category cat, String oldEquipKey, String oldUnequipKey) {
+        migrateKey(cat.getConfigPath() + "." + oldEquipKey, cat.getConfigPath() + ".Equip");
+        migrateKey(cat.getConfigPath() + "." + oldUnequipKey, cat.getConfigPath() + ".Unequip");
+    }
+
+    private static void migrateClearMsg(String newKey, String oldKey) {
+        migrateKey("Clear-" + oldKey, "Clear." + newKey);
+    }
+
+    private static void migrateKey(String oldKey, String newKey) {
+        messagesConfig.set(newKey, messagesConfig.getString(oldKey));
+        messagesConfig.set(oldKey, null);
     }
 }

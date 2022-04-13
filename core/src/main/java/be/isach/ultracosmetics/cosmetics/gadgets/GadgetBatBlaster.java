@@ -3,12 +3,15 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.MathUtils;
+import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +100,8 @@ public class GadgetBatBlaster extends Gadget {
                     MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
                 }
 
-                SoundUtil.playSound(bat.getLocation(), Sounds.BAT_HURT, 1.0f, 1.0f);
-                UtilParticles.display(Particles.SMOKE_NORMAL, bat.getLocation());
+                XSound.ENTITY_BAT_HURT.play(bat.getLocation(), 1.0f, 1.0f);
+                Particles.SMOKE_NORMAL.display(bat.getLocation());
 
                 bat.remove();
             }
@@ -111,7 +114,7 @@ public class GadgetBatBlaster extends Gadget {
         if (bats != null) {
             for (Bat bat : bats) {
                 if (bat.isValid()) {
-                    UtilParticles.display(Particles.SMOKE_LARGE, bat.getLocation());
+                    Particles.SMOKE_LARGE.display(bat.getLocation());
                 }
                 bat.remove();
             }

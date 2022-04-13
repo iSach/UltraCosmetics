@@ -4,12 +4,11 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.UtilParticles;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+
+import com.cryptomorin.xseries.XSound;
 
 /**
  * Represents an instance of a blaze morph summoned by a player.
@@ -26,9 +25,9 @@ public class MorphBlaze extends Morph {
     @Override
     public void onUpdate() {
         if (getPlayer().isSneaking()) {
-            UtilParticles.display(Particles.FLAME, getPlayer().getLocation());
-            UtilParticles.display(Particles.LAVA, getPlayer().getLocation());
-            SoundUtil.playSound(getPlayer(), Sounds.FIZZ, 0.1f, 1.5f);
+            Particles.FLAME.display(getPlayer().getLocation());
+            Particles.LAVA.display(getPlayer().getLocation());
+            XSound.BLOCK_FIRE_EXTINGUISH.play(getPlayer(), 0.1f, 1.5f);
             getPlayer().setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1));
         }
     }

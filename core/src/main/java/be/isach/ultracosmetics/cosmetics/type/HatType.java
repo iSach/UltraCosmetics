@@ -7,7 +7,7 @@ import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,11 +45,6 @@ public class HatType extends CosmeticType<Hat> {
     public static void checkEnabled() {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
-
-    /**
-     * STATIC list of all the enabled hats.
-     */
-    public static List<HatType> enabled = new ArrayList<>();
 
     /**
      * The HatType ItemStack

@@ -7,7 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.v1_17_R1.FireworkFactory;
-import be.isach.ultracosmetics.v1_17_R1.customentities.CustomEntityFirework;
 import be.isach.ultracosmetics.v1_17_R1.customentities.CustomGuardian;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

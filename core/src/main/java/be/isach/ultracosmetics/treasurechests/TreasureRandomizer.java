@@ -7,11 +7,9 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
-import be.isach.ultracosmetics.util.TextUtil;
 import be.isach.ultracosmetics.util.WeightedSet;
-import be.isach.ultracosmetics.util.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -124,7 +122,7 @@ public class TreasureRandomizer {
     }
 
     public void giveRandomThing() {
-        SoundUtil.playSound(loc, Sounds.CHEST_OPEN, 1.4f, 1.5f);
+        XSound.BLOCK_CHEST_OPEN.play(loc, 1.4f, 1.5f);
         WeightedSet<ResultType> choices = new WeightedSet<>(basicResultTypes);
         for (ResultType result : cosmetics.keySet()) {
             // categories with no unlockables will not appear as keys at all
@@ -233,7 +231,7 @@ public class TreasureRandomizer {
             spawnRandomFirework(loc);
         }
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots.Gadgets-Ammo.Message.enabled")) {
-            broadcast((getConfigMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%ammo%", String.valueOf(ammo)).replace("%gadget%", (UltraCosmeticsData.get().arePlaceholdersColored()) ? g.getName() : TextUtil.filterColor(g.getName())));
+            broadcast((getConfigMessage("TreasureChests.Loots.Gadgets-Ammo.Message.message")).replace("%ammo%", String.valueOf(ammo)).replace("%gadget%", (UltraCosmeticsData.get().arePlaceholdersColored()) ? g.getName() : ChatColor.stripColor(g.getName())));
         }
     }
 
@@ -253,7 +251,7 @@ public class TreasureRandomizer {
         itemStack = cosmetic.getItemStack();
         if (SettingsManager.getConfig().getBoolean("TreasureChests.Loots." + configName + ".Message.enabled")) {
             String message = (getConfigMessage("TreasureChests.Loots." + configName + ".Message.message"))
-                    .replace("%" + lang.toLowerCase() + "%", UltraCosmeticsData.get().arePlaceholdersColored() ? cosmetic.getName() : TextUtil.filterColor(cosmetic.getName()));
+                    .replace("%" + lang.toLowerCase() + "%", UltraCosmeticsData.get().arePlaceholdersColored() ? cosmetic.getName() : ChatColor.stripColor(cosmetic.getName()));
             broadcast(message);
         }
     }

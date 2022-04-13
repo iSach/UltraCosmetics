@@ -1,9 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
-import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.type.MorphType;
-import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.*;
+import java.util.ArrayList;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
@@ -11,7 +14,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import java.util.ArrayList;
+import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.player.UltraPlayer;
 
 /**
  * Represents an instance of an enderman morph summoned by a player.

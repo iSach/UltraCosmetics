@@ -10,7 +10,10 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.PurchaseData;
+import be.isach.ultracosmetics.util.TextUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -19,13 +22,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -100,10 +108,11 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
         runTaskTimer(getUltraCosmetics(), 0, 1);
 
-        if (getPlayer().getInventory().getItem(ConfigUtils.getGadgetSlot()) != null) {
+        int slot = SettingsManager.getConfig().getInt("Gadget-Slot");
+        if (getPlayer().getInventory().getItem(slot) != null) {
             getPlayer().getWorld().dropItem(getPlayer().getLocation(),
-                    getPlayer().getInventory().getItem(ConfigUtils.getGadgetSlot()));
-            getPlayer().getInventory().setItem(ConfigUtils.getGadgetSlot(), null);
+                    getPlayer().getInventory().getItem(slot));
+            getPlayer().getInventory().setItem(slot, null);
         }
 
         String ammo = "";
@@ -151,9 +160,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                     if (decimalRoundedValue == 0) {
                         String message = MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar");
                         message = message.replace("%gadgetname%",
-                                TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()));
+                                TextUtil.filterPlaceHolder(getType().getName()));
                         UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), message);
-                        SoundUtil.playSound(getPlayer(), Sounds.NOTE_STICKS, 1.4f, 1.5f);
+                        XSound.BLOCK_NOTE_BLOCK_HAT.play(getPlayer(), 1.4f, 1.5f);
                     }
                 }
             } else {
@@ -262,7 +271,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 lastPage = 1;
             }, 1);
         });
-        MenuPurchase mp = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menus.Buy-Ammo"), pd);
+        MenuPurchase mp = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menu.Buy-Ammo.Title"), pd);
         getPlayer().openInventory(mp.getInventory(getOwner()));
     }
 
@@ -326,7 +335,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             String timeLeft = new DecimalFormat("#.#").format(coolDown);
             if (getType().getCountdown() > 1)
                 getPlayer().sendMessage(MessageManager.getMessage("Gadgets.Countdown-Message")
-                        .replace("%gadgetname%", TextUtil.filterPlaceHolder(getType().getName(), getUltraCosmetics()))
+                        .replace("%gadgetname%", TextUtil.filterPlaceHolder(getType().getName()))
                         .replace("%time%", timeLeft));
             return;
         }

@@ -6,7 +6,8 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
-import be.isach.ultracosmetics.util.*;
+import be.isach.ultracosmetics.util.Area;
+import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -24,6 +25,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityDismountEvent;
+
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,7 +108,7 @@ public class GadgetRocket extends Gadget {
                     }
                     if (i > 0) {
                         getPlayer().sendTitle(ChatColor.RED + "" + ChatColor.BOLD + i, "");
-                        SoundUtil.playSound(getPlayer(), Sounds.NOTE_BASS_DRUM, 1.0f, 1.0f);
+                        XSound.BLOCK_NOTE_BLOCK_BASS.play(getPlayer(), 1.0f, 1.0f);
                         i--;
                         return;
                     }
@@ -118,7 +122,7 @@ public class GadgetRocket extends Gadget {
                         
                     }
                     getPlayer().sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"), "");
-                    SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
+                    XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.0f, 1.0f);
                     playerVehicle = null;
                     armorStand.remove();
                     armorStand = null;
@@ -156,8 +160,8 @@ public class GadgetRocket extends Gadget {
                         fallingBlocks.forEach(Entity::remove);
                         fallingBlocks.clear();
                         FallDamageManager.addNoFall(getPlayer());
-                        SoundUtil.playSound(getPlayer().getLocation(), Sounds.EXPLODE, 1.0f, 1.0f);
-                        UtilParticles.display(Particles.EXPLOSION_HUGE, getPlayer().getLocation());
+                        XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.0f, 1.0f);
+                        Particles.EXPLOSION_HUGE.display(getPlayer().getLocation());
                         disableFlight();
                         launching = false;
                     }, 80);
@@ -192,10 +196,10 @@ public class GadgetRocket extends Gadget {
         }
 
         if (launching && !fallingBlocks.isEmpty()) {
-            UtilParticles.display(Particles.FLAME, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
-            UtilParticles.display(Particles.LAVA, 0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
-            SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.BAT_LOOP, 1.5f, 1.0f);
-            SoundUtil.playSound(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), Sounds.FIZZ, 0.025f, 1.0f);
+            Particles.FLAME.display(0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
+            Particles.LAVA.display(0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
+            XSound.ENTITY_BAT_LOOP.play(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), 1.5f, 1.0f);
+            XSound.BLOCK_FIRE_EXTINGUISH.play(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), 0.025f, 1.0f);
         }
     }
 
@@ -252,8 +256,8 @@ public class GadgetRocket extends Gadget {
                 cancel();
                 enableFlight();
                 if (vehicle instanceof ArmorStand) {
-                    UtilParticles.display(Particles.SMOKE_LARGE, 0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
-                    SoundUtil.playSound(armorStand.getLocation().clone().add(0, -3, 0), Sounds.FIZZ, 0.025f, 1.0f);
+                    Particles.SMOKE_LARGE.display(0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
+                    XSound.BLOCK_FIRE_EXTINGUISH.play(armorStand.getLocation().clone().add(0, -3, 0), 0.025f, 1.0f);
                 }
             }
             // doesn't seem to work as well if you only wait one tick before trying to remount the player

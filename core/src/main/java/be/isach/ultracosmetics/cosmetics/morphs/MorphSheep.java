@@ -3,14 +3,14 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.SoundUtil;
-import be.isach.ultracosmetics.util.Sounds;
 import me.libraryaddict.disguise.disguisetypes.watchers.SheepWatcher;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import com.cryptomorin.xseries.XSound;
 
 import java.util.Random;
 
@@ -35,7 +35,7 @@ public class MorphSheep extends Morph {
                 || event.getAction() == Action.LEFT_CLICK_BLOCK) && event.getPlayer() == getPlayer()) {
             if (coolDown > System.currentTimeMillis()) return;
             event.setCancelled(true);
-            SoundUtil.playSound(event.getPlayer().getLocation(), Sounds.SHEEP_IDLE, 1.0F, 1.0F);
+            XSound.ENTITY_SHEEP_AMBIENT.play(event.getPlayer().getLocation(), 1.0f, 1.0f);
             SheepWatcher sheepWatcher = (SheepWatcher) getDisguise().getWatcher();
             count = 0;
             Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {

@@ -1,8 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.emotes;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.ArmorCosmetic;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Material;
@@ -17,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
  * @author iSach
  * @since 06-17-2016
  */
-public class Emote extends Cosmetic<EmoteType> {
+public class Emote extends ArmorCosmetic<EmoteType> {
 
     private EmoteAnimation animation;
     private ItemStack itemStack;
@@ -26,19 +27,18 @@ public class Emote extends Cosmetic<EmoteType> {
         super(ultraCosmetics, Category.EMOTES, owner, emoteType);
 
         this.animation = new EmoteAnimation(getType().getTicksPerFrame(), this);
-
-        owner.setCurrentEmote(this);
     }
 
     @Override
     protected void onEquip() {
         animation.start();
+        getOwner().setCurrentEmote(this);
     }
 
     @Override
-    protected synchronized void onClear() {
+    protected void onClear() {
         animation.stop();
-        getPlayer().getInventory().setHelmet(null);
+        getOwner().setCurrentEmote(null);
     }
 
     public ItemStack getItemStack() {
@@ -71,5 +71,15 @@ public class Emote extends Cosmetic<EmoteType> {
             event.setCancelled(true);
             getPlayer().closeInventory(); // Close the inventory because clicking again results in the event being handled client side
         }
+    }
+
+    @Override
+    protected ArmorSlot getArmorSlot() {
+        return ArmorSlot.HELMET;
+    }
+
+    @Override
+    protected String getOccupiedSlotKey() {
+        return "Emotes.Must-Remove-Helmet";
     }
 }
