@@ -83,6 +83,7 @@ public final class PetType extends CosmeticEntType<Pet> {
         new PetType("ultracosmetics.pets.bat", "Bat", XMaterial.COAL, "&7&oI prefer dark areas", EntityType.BAT, PetBat.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.sheep", "Sheep", XMaterial.WHITE_WOOL, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.wither", "Wither", XMaterial.WITHER_SKELETON_SKULL, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class, ServerVersion.earliest());
+        /*Slime disabled because its just constantly jumping in one direction instead of following the player*/
         /*new PetType("ultracosmetics.pets.slime", "Slime", XMaterial.SLIME_BALL, "&7&oSquish...", EntityType.SLIME, PetSlime.class, ServerVersion.earliest());*/
         new PetType("ultracosmetics.pets.silverfish", "Silverfish", XMaterial.GRAY_DYE, "&7&oLurking in the walls...", EntityType.SILVERFISH, PetSilverfish.class, ServerVersion.earliest());
         new PetType("ultracosmetics.pets.horse", "Horse", XMaterial.LEATHER_HORSE_ARMOR, "&7&o*fhrrrrhh*", EntityType.HORSE, PetHorse.class, ServerVersion.earliest());
@@ -93,11 +94,13 @@ public final class PetType extends CosmeticEntType<Pet> {
         new PetType("ultracosmetics.pets.zombie", "Zombie", XMaterial.ROTTEN_FLESH, "&7&oQuick! Hide your Villagers!", EntityType.ZOMBIE, PetZombie.class, ServerVersion.earliest());
         
         if (serverVersion.isAtLeast(ServerVersion.v1_17_R1)) {
+            /*Axolotl disabled because it walks way too fast*/
             /*new PetType("ultracosmetics.pets.axolotl", "Axolotl", XMaterial.AXOLOTL_BUCKET, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class, ServerVersion.v1_17_R1);*/
             /*Temporarily using WHEAT as material for the Goat until https://minecraft.fandom.com/wiki/Goat_Horn comes to Java edition*/
             new PetType("ultracosmetics.pets.goat", "Goat", XMaterial.WHEAT, "&7&oBAAAA!", EntityType.GOAT, PetGoat.class, ServerVersion.v1_17_R1);
         }
         
+        /*Piglin disabled because it turns into a Zombified Piglin in the Overworld*/
         /*if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
             new PetType("ultracosmetics.pets.piglin", "Piglin", XMaterial.GOLD_INGOT, "&7&oDeals with Gold!", EntityType.PIGLIN, PetPiglin.class, ServerVersion.v1_16_R3);
         }*/
@@ -120,6 +123,7 @@ public final class PetType extends CosmeticEntType<Pet> {
             new PetType("ultracosmetics.pets.polarbear", "PolarBear", XMaterial.SNOW_BLOCK, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetPolarBear.class, ServerVersion.v1_12_R1);
             new PetType("ultracosmetics.pets.llama", "Llama", XMaterial.RED_WOOL, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class, ServerVersion.v1_12_R1);
             new PetType("ultracosmetics.pets.parrot", "Parrot", XMaterial.COOKIE, "&7&oPolly want a cracker?", GetForVersion.entityType("PARROT"), PetParrot.class, ServerVersion.v1_12_R1);
+            /*Vex disabled because its just not following the player at all (Besides teleport)*/
             /*new PetType("ultracosmetics.pets.vex", "Vex", XMaterial.IRON_SWORD, "&7&oYAAHH Ehehhehe!", GetForVersion.entityType("VEX"), PetVex.class, ServerVersion.v1_12_R1);*/
         }
     }
