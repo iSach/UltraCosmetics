@@ -309,6 +309,19 @@ public class MessageManager {
         addMessage("Pets.Goat.entity-displayname", "&l%playername%'s Goat");
         addMessage("Pets.Silverfish.menu-name", "&7&lSilverfish");
         addMessage("Pets.Silverfish.entity-displayname", "&l%playername%'s Silverfish");
+
+        addMessage("Pets.Horse.menu-name", "&a&lHorse");
+        addMessage("Pets.Horse.entity-displayname", "&l%playername%'s Horse");
+        addMessage("Pets.Blaze.menu-name", "&c&lBlaze");
+        addMessage("Pets.Blaze.entity-displayname", "&l%playername%'s Blaze");
+        addMessage("Pets.Creeper.menu-name", "&a&lCreeper");
+        addMessage("Pets.Creeper.entity-displayname", "&l%playername%'s Creeper");
+        addMessage("Pets.Enderman.menu-name", "&5&lEnderman");
+        addMessage("Pets.Enderman.entity-displayname", "&l%playername%'s Enderman");
+        addMessage("Pets.Skeleton.menu-name", "&f&lSkeleton");
+        addMessage("Pets.Skeleton.entity-displayname", "&l%playername%'s Skeleton");
+        addMessage("Pets.Zombie.menu-name", "&2&lZombie");
+        addMessage("Pets.Zombie.entity-displayname", "&l%playername%'s Zombie");
         addMessage("Pets.Equip", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Unequip", "%prefix% &9You despawned %petname%");
 

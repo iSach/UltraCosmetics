@@ -288,6 +288,12 @@ permissions:
       - ultracosmetics.pets.bee
       - ultracosmetics.pets.goat
       - ultracosmetics.pets.silverfish
+      - ultracosmetics.pets.horse
+      - ultracosmetics.pets.blaze
+      - ultracosmetics.pets.creeper
+      - ultracosmetics.pets.enderman
+      - ultracosmetics.pets.skeleton
+      - ultracosmetics.pets.zombie
       - ultracosmetics.pets.rename
   ultracosmetics.pets.piggy:
     default: op
@@ -332,6 +338,18 @@ permissions:
   ultracosmetics.pets.goat:
     default: op
   ultracosmetics.pets.silverfish:
+    default: op
+  ultracosmetics.pets.horse:
+    default: op
+  ultracosmetics.pets.blaze:
+    default: op
+  ultracosmetics.pets.creeper:
+    default: op
+  ultracosmetics.pets.enderman:
+    default: op
+  ultracosmetics.pets.skeleton:
+    default: op
+  ultracosmetics.pets.zombie:
     default: op
   ultracosmetics.morphs.*:
     children:

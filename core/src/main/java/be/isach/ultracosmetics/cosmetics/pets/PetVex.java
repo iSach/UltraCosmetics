@@ -11,7 +11,7 @@ import com.cryptomorin.xseries.XMaterial;
  * Represents an instance of a vex pet summoned by a player.
  *
  * @author Chris6ix
- * @since 13-01-2021
+ * @since 13-01-2022
  */
 public class PetVex extends Pet {
     public PetVex(UltraPlayer owner, UltraCosmetics ultraCosmetics) {

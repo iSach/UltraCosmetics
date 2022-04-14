@@ -11,7 +11,7 @@ import com.cryptomorin.xseries.XMaterial;
  * Represents an instance of a piglin pet summoned by a player.
  *
  * @author Chris6ix
- * @since 16-01-2021
+ * @since 16-01-2022
  */
 public class PetPiglin extends Pet {
     public PetPiglin(UltraPlayer owner, UltraCosmetics ultraCosmetics) {

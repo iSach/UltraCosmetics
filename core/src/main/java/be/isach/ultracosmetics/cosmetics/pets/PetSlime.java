@@ -13,7 +13,7 @@ import com.cryptomorin.xseries.XMaterial;
  * Represents an instance of a slime pet summoned by a player.
  *
  * @author datatags
- * @since 18-01-2021
+ * @since 18-01-2022
  */
 
 public class PetSlime extends Pet {

@@ -11,7 +11,7 @@ import com.cryptomorin.xseries.XMaterial;
  * Represents an instance of a panda pet summoned by a player.
  *
  * @author Chris6ix
- * @since 13-01-2021
+ * @since 13-01-2022
  */
 public class PetPanda extends Pet {
     public PetPanda(UltraPlayer owner, UltraCosmetics ultraCosmetics) {

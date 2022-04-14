@@ -11,7 +11,7 @@ import com.cryptomorin.xseries.XMaterial;
  * Represents an instance of a axolotl pet summoned by a player.
  *
  * @author Chris6ix
- * @since 14-01-2021
+ * @since 14-01-2022
  */
 public class PetAxolotl extends Pet {
     public PetAxolotl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {

@@ -11,7 +11,7 @@ import com.cryptomorin.xseries.XMaterial;
  * Represents an instance of a bee pet summoned by a player.
  *
  * @author Chris6ix
- * @since 18-01-2021
+ * @since 18-01-2022
  */
 public class PetBee extends Pet {
     public PetBee(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
