@@ -17,4 +17,10 @@ public class PetPiglin extends Pet {
     public PetPiglin(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.getByName("piglin"), ItemFactory.create(XMaterial.GOLD_INGOT, UltraCosmeticsData.get().getItemNoPickupString()));
     }
+    
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        ((Piglin)entity).setImmuneToZombification(true);
+    }
 }
