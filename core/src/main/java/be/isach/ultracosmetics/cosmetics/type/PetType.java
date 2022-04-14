@@ -100,10 +100,9 @@ public final class PetType extends CosmeticEntType<Pet> {
             new PetType("ultracosmetics.pets.goat", "Goat", XMaterial.WHEAT, "&7&oBAAAA!", EntityType.GOAT, PetGoat.class, ServerVersion.v1_17_R1);
         }
         
-        /*Piglin disabled because it turns into a Zombified Piglin in the Overworld*/
-        /*if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
+        if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
             new PetType("ultracosmetics.pets.piglin", "Piglin", XMaterial.GOLD_INGOT, "&7&oDeals with Gold!", EntityType.PIGLIN, PetPiglin.class, ServerVersion.v1_16_R3);
-        }*/
+        }
         
         if (serverVersion.isAtLeast(ServerVersion.v1_15_R1)) {
             new PetType("ultracosmetics.pets.bee", "Bee", XMaterial.HONEYCOMB, "&7&o*bzzzz* *bzzzz*", EntityType.BEE, PetBee.class, ServerVersion.v1_15_R1);
