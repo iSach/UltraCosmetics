@@ -102,18 +102,10 @@ public final class PetType extends CosmeticEntType<Pet> {
         
         if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
             new PetType("ultracosmetics.pets.piglin", "Piglin", XMaterial.GOLD_INGOT, "&7&oDeals with Gold!", EntityType.PIGLIN, PetPiglin.class, ServerVersion.v1_16_R3);
-        }
-        
-        if (serverVersion.isAtLeast(ServerVersion.v1_15_R1)) {
-            new PetType("ultracosmetics.pets.bee", "Bee", XMaterial.HONEYCOMB, "&7&o*bzzzz* *bzzzz*", EntityType.BEE, PetBee.class, ServerVersion.v1_15_R1);
-        }
-        
-        if (serverVersion.isAtLeast(ServerVersion.v1_14_R1)) {
-            new PetType("ultracosmetics.pets.panda", "Panda", XMaterial.BAMBOO, "&7&oLikes Bamboo!", EntityType.PANDA, PetPanda.class, ServerVersion.v1_14_R1);
-            new PetType("ultracosmetics.pets.fox", "Fox", XMaterial.SWEET_BERRIES, "&7&oWhat does the fox say?", EntityType.FOX, PetFox.class, ServerVersion.v1_14_R1);
-        }
-        if (serverVersion.isAtLeast(ServerVersion.v1_14_R1)) {
-            new PetType("ultracosmetics.pets.kitty", "Kitty", XMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.CAT, PetKitty.class, ServerVersion.v1_14_R1);
+            new PetType("ultracosmetics.pets.bee", "Bee", XMaterial.HONEYCOMB, "&7&o*bzzzz* *bzzzz*", EntityType.BEE, PetBee.class, ServerVersion.v1_16_R3);
+            new PetType("ultracosmetics.pets.panda", "Panda", XMaterial.BAMBOO, "&7&oLikes Bamboo!", EntityType.PANDA, PetPanda.class, ServerVersion.v1_16_R3);
+            new PetType("ultracosmetics.pets.fox", "Fox", XMaterial.SWEET_BERRIES, "&7&oWhat does the fox say?", EntityType.FOX, PetFox.class, ServerVersion.v1_16_R3);
+            new PetType("ultracosmetics.pets.kitty", "Kitty", XMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.CAT, PetKitty.class, ServerVersion.v1_16_R3);
         } else {
             new PetType("ultracosmetics.pets.kitty", "Kitty", XMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class, ServerVersion.earliest());
         }

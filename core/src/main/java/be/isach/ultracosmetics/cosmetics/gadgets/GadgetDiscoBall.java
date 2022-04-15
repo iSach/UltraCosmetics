@@ -19,6 +19,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
@@ -54,7 +55,7 @@ public class GadgetDiscoBall extends Gadget {
         armorStand.setVisible(false);
         armorStand.setGravity(false);
         armorStand.setSmall(false);
-        armorStand.setHelmet(ItemFactory.rename(XMaterial.LIGHT_BLUE_STAINED_GLASS.parseItem(), " "));
+        setHelmet(armorStand, ItemFactory.rename(XMaterial.LIGHT_BLUE_STAINED_GLASS.parseItem(), " "));
         running = true;
         DISCO_BALLS.add(this);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 400);
@@ -89,7 +90,7 @@ public class GadgetDiscoBall extends Gadget {
 
         if (UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_8_R3) {
             // TODO: why only on 1.8.8? does it work on other versions?
-            armorStand.setHelmet(ItemFactory.getRandomStainedGlass());
+            setHelmet(armorStand, ItemFactory.getRandomStainedGlass());
         }
 
         Particles.SPELL.display(armorStand.getEyeLocation(), 1, 1f);
@@ -174,5 +175,10 @@ public class GadgetDiscoBall extends Gadget {
                 Particles.REDSTONE.display(MathUtils.random(255), MathUtils.random(255), MathUtils.random(255), loc);
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setHelmet(ArmorStand stand, ItemStack itemStack) {
+        stand.setHelmet(itemStack);
     }
 }

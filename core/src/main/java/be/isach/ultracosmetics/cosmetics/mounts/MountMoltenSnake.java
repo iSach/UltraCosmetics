@@ -55,7 +55,7 @@ public class MountMoltenSnake extends Mount<MagmaCube> {
                     entity.teleport(lastLocation);
                 else {
                     entity.teleport(lastLocation.clone().add(0, -1.3, 0));
-                    ((ArmorStand) entity).setHelmet(null);
+                    setHelmet((ArmorStand) entity, null);
                 }
                 ArmorStand as = ((ArmorStand) entity);
                 as.setHeadPose(new EulerAngle(Math.toRadians(lastPitch), Math.toRadians(lastYaw), 0));
@@ -74,9 +74,14 @@ public class MountMoltenSnake extends Mount<MagmaCube> {
             entities.add(armorStand);
             armorStand.setVisible(false);
             armorStand.setGravity(false);
-            armorStand.setHelmet(new ItemStack(Material.NETHERRACK));
+            setHelmet(armorStand, new ItemStack(Material.NETHERRACK));
             armorStand.setMetadata("NO_INTER", new FixedMetadataValue(getUltraCosmetics(), ""));
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setHelmet(ArmorStand stand, ItemStack itemStack) {
+        stand.setHelmet(itemStack);
     }
 
     @Override

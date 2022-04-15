@@ -38,6 +38,7 @@ public class MountRudolph extends MountHorse {
         moveAntlers();
     }
 
+    @SuppressWarnings("deprecation")
     private ArmorStand spawnArmorStand(boolean right) {
         ArmorStand armorStand = getEntity().getWorld().spawn(getEntity().getEyeLocation(), ArmorStand.class);
         armorStand.setBasePlate(false);

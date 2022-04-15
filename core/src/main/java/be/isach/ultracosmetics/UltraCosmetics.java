@@ -25,12 +25,13 @@ import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
 import be.isach.ultracosmetics.util.ArmorStandManager;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.PermissionPrinter;
-import be.isach.ultracosmetics.util.Metrics;
 import be.isach.ultracosmetics.util.ReflectionUtils;
+import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UpdateManager;
 import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -139,7 +140,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (worldGuardIntegration && getServer().getPluginManager().getPlugin("WorldGuard") != null) {
             // does reflect-y things but isn't in VersionManager because of the load timing
             // and because it should only happen if WorldGuard is present
-            String wgVersionPackage = VersionManager.IS_VERSION_1_13 ? "v1_14_R1" : "v1_12_R1";
+            String wgVersionPackage = (VersionManager.IS_VERSION_1_13 ? ServerVersion.v1_16_R3 : ServerVersion.v1_12_R1).name();
             try {
                 flagManager = (AFlagManager) ReflectionUtils.instantiateObject(Class.forName(VersionManager.PACKAGE + "." + wgVersionPackage + ".worldguard.FlagManager"));
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException

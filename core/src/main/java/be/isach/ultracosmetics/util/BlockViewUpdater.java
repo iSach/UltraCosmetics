@@ -18,6 +18,7 @@ public class BlockViewUpdater extends BukkitRunnable {
         blocksUpdating.add(block.getLocation());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void run() {
         if (!blocksUpdating.remove(block.getLocation())) return;

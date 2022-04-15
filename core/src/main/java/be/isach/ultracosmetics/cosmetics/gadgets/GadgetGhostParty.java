@@ -35,6 +35,7 @@ public class GadgetGhostParty extends Gadget {
         super(owner, GadgetType.valueOf("ghostparty"), ultraCosmetics);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     void onRightClick() {
         for (int i = 0; i < 20; i++) {

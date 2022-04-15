@@ -61,6 +61,7 @@ public class GadgetBatBlaster extends Gadget {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onUpdate() {
         if (bats != null && bats.isEmpty()) {

@@ -567,7 +567,7 @@ public class UltraPlayer {
         int model = SettingsManager.getConfig().getInt("Menu-Item.Custom-Model-Data");
         ItemStack stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Menu-Item.Type"), name);
 
-        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1) && model != 0) {
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R3) && model != 0) {
             ItemMeta meta = stack.getItemMeta();
             meta.setCustomModelData(model);
             stack.setItemMeta(meta);

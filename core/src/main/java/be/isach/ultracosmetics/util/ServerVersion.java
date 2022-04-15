@@ -7,8 +7,6 @@ public enum ServerVersion {
 
     v1_8_R3("1.8.8", null),
     v1_12_R1("1.12.2", null),
-    v1_14_R1("1.14.4", "11ae498d9cf909730659b6357e7c2afa"),
-    v1_15_R1("1.15.2", "5684afcc1835d966e1b6eb0ed3f72edb"),
     v1_16_R3("1.16.5", "d4b392244df170796f8779ef0fc1f2e9"),
     v1_17_R1("1.17.1", "f0e3dfc7390de285a4693518dd5bd126"),
     v1_18_R2("1.18.2", "eaeedbff51b16ead3170906872fda334"),
@@ -53,6 +51,6 @@ public enum ServerVersion {
     }
 
     public boolean is113() {
-        return isAtLeast(v1_14_R1);
+        return isAtLeast(v1_16_R3);
     }
 }

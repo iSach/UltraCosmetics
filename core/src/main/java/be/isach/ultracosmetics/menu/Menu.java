@@ -31,7 +31,7 @@ public abstract class Menu implements Listener {
     /**
      * UltraCosmetcs Instance.
      */
-    private UltraCosmetics ultraCosmetics;
+    protected UltraCosmetics ultraCosmetics;
 
     /**
      * Click Runnables maps.

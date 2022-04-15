@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
@@ -10,7 +9,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -71,7 +70,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
                                 }
                             }
                         } else if (getType().getEffect() == Particles.ITEM_CRACK) {
-                            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
+                            if (VersionManager.IS_VERSION_1_13) {
                                 for (int i = 0; i < getModifiedAmount(15); i++) {
                                     getPlayer().getLocation().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getLocation(), 1, 0.2, 0.2, 0.2, 0, ItemFactory.getRandomDye());
                                 }

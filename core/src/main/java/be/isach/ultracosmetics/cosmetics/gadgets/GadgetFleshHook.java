@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -34,8 +33,9 @@ public class GadgetFleshHook extends Gadget implements Listener {
         super(owner, GadgetType.valueOf("fleshhook"), ultraCosmetics);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
-    public void onItemPickup(PlayerPickupItemEvent event) {
+    public void onItemPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
         UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(event.getPlayer());
         if(ultraPlayer != null
          && !ultraPlayer.canBeHitByOtherGadgets()) {

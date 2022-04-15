@@ -1,13 +1,13 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -72,6 +72,7 @@ public class GadgetSmashDown extends Gadget {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onUpdate() {
         if (active && getPlayer().isOnGround()) {
@@ -106,8 +107,7 @@ public class GadgetSmashDown extends Gadget {
                         && b.getType().isSolid()
                         && BlockUtils.isAir(b.getRelative(BlockFace.UP).getType())) {
                     Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                        FallingBlock fb = loc.getWorld().spawnFallingBlock(b.getLocation().clone().add(0, 1.1f, 0),
-                                b.getType(), b.getData());
+                        FallingBlock fb = BlockUtils.spawnFallingBlock(b.getLocation().clone().add(0, 1.1f, 0), b);
 
                         fb.setVelocity(new Vector(0, 0.3f, 0));
                         fb.setDropItem(false);
@@ -122,13 +122,14 @@ public class GadgetSmashDown extends Gadget {
         i++;
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockChangeState(EntityChangeBlockEvent event) {
         if (fallingBlocks.contains(event.getEntity())) {
             event.setCancelled(true);
             fallingBlocks.remove(event.getEntity());
             FallingBlock fb = (FallingBlock) event.getEntity();
-            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R3)) {
+            if (VersionManager.IS_VERSION_1_13) {
                 BlockData data = fb.getBlockData();
                 fb.getWorld().spawnParticle(Particle.BLOCK_CRACK, fb.getLocation(), 50, 0, 0, 0, 0.4d, data);
             } else {

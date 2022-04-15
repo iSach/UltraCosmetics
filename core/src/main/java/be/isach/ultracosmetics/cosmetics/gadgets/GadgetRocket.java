@@ -7,7 +7,9 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.Area;
+import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -62,6 +64,7 @@ public class GadgetRocket extends Gadget {
         super(owner, GadgetType.valueOf("rocket"), ultraCosmetics);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     void onRightClick() {
         getPlayer().setVelocity(new Vector(0, 1, 0));
@@ -107,7 +110,7 @@ public class GadgetRocket extends Gadget {
                         return;
                     }
                     if (i > 0) {
-                        getPlayer().sendTitle(ChatColor.RED + "" + ChatColor.BOLD + i, "");
+                        sendTitle(ChatColor.RED + "" + ChatColor.BOLD + i);
                         XSound.BLOCK_NOTE_BLOCK_BASS.play(getPlayer(), 1.0f, 1.0f);
                         i--;
                         return;
@@ -116,12 +119,12 @@ public class GadgetRocket extends Gadget {
                     if (isTaskRunning()) {
                         // if the player is refusing to be on the rocket (by holding sneak), abort the launch
                         onClear();
-                        getPlayer().sendTitle(MessageManager.getMessage("Gadgets.Rocket.LaunchAborted"), "");
+                        sendTitle(MessageManager.getMessage("Gadgets.Rocket.LaunchAborted"));
                         cancel();
                         return;
                         
                     }
-                    getPlayer().sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"), "");
+                    sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"));
                     XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.0f, 1.0f);
                     playerVehicle = null;
                     armorStand.remove();
@@ -134,13 +137,13 @@ public class GadgetRocket extends Gadget {
                     blocks.clear();
                     ROCKETS_WITH_BLOCKS.remove(GadgetRocket.this);
 
-                    final FallingBlock top = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 3, 0), Material.QUARTZ_BLOCK, (byte) 0);
-                    FallingBlock base = getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 2, 0), Material.QUARTZ_BLOCK, (byte) 0);
+                    final FallingBlock top = BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(0, 3, 0), Material.QUARTZ_BLOCK);
+                    FallingBlock base = BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(0, 2, 0), Material.QUARTZ_BLOCK);
                     for (int i = 0; i < 2; i++) {
-                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, 1), FENCE, (byte) 0));
-                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, -1), FENCE, (byte) 0));
-                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(1, 1 + i, 0), FENCE, (byte) 0));
-                        fallingBlocks.add(getPlayer().getWorld().spawnFallingBlock(getPlayer().getLocation().add(-1, 1 + i, 0), FENCE, (byte) 0));
+                        fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, 1), FENCE));
+                        fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, -1), FENCE));
+                        fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(1, 1 + i, 0), FENCE));
+                        fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(1, 1 + i, 0), FENCE));
                     }
 
                     fallingBlocks.add(top);
@@ -171,6 +174,7 @@ public class GadgetRocket extends Gadget {
         }, 12);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected boolean checkRequirements(PlayerInteractEvent event) {
         Area area = new Area(getPlayer().getLocation(), 1, 75);
@@ -221,7 +225,7 @@ public class GadgetRocket extends Gadget {
         launching = false;
 
         if (getPlayer() != null) {
-            getPlayer().sendTitle(" ", "");
+            sendTitle(" ");
         }
     }
 
@@ -249,6 +253,7 @@ public class GadgetRocket extends Gadget {
                 Entity vehicle = playerVehicle;
                 playerVehicle = null;
                 // can fail if player is holding sneak
+                @SuppressWarnings("deprecation")
                 boolean success = vehicle.setPassenger(getPlayer());
                 playerVehicle = vehicle;
                 if (!success) return;
@@ -276,5 +281,10 @@ public class GadgetRocket extends Gadget {
 
     private boolean isTaskRunning() {
         return currentTask != null && Bukkit.getScheduler().isQueued(currentTask.getTaskId());
+    }
+
+    @SuppressWarnings("deprecation")
+    private void sendTitle(String title) {
+        getPlayer().sendTitle(title, "");
     }
 }

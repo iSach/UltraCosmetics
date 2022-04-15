@@ -18,6 +18,7 @@ public abstract class MountHorse extends Mount<Horse> {
         super(ultraPlayer, type, ultraCosmetics);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setup() {
         // setColor has no effect on variant horses so skip if it's a variant horse
@@ -39,6 +40,7 @@ public abstract class MountHorse extends Mount<Horse> {
 
     abstract protected Horse.Color getColor();
 
+    @SuppressWarnings("deprecation")
     protected Horse.Variant getVariant() {
         return null;
     }

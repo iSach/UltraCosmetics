@@ -26,6 +26,7 @@ public class MountDragon extends Mount<EnderDragon> {
         super(owner, MountType.valueOf("dragon"), ultraCosmetics);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onUpdate() {
         if (entity.getPassenger() == null) {
@@ -48,6 +49,7 @@ public class MountDragon extends Mount<EnderDragon> {
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().moveDragon(getPlayer(), vector, entity);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onClear() {
         super.onClear();

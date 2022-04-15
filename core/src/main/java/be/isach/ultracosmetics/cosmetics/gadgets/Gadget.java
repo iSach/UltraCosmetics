@@ -34,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.cryptomorin.xseries.XSound;
+import com.cryptomorin.xseries.messages.ActionBar;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -138,6 +139,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                 onUpdate();
                 try {
                     if (UltraCosmeticsData.get().displaysCooldownInBar()) {
+                        @SuppressWarnings("deprecation")
                         ItemStack hand = getPlayer().getItemInHand();
                         // TODO: this is ugly
                         if (hand != null && itemStack != null && hand.hasItemMeta() && hand.getType() == getItemStack().getType()
@@ -161,7 +163,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
                         String message = MessageManager.getMessage("Gadgets.Gadget-Ready-ActionBar");
                         message = message.replace("%gadgetname%",
                                 TextUtil.filterPlaceHolder(getType().getName()));
-                        UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), message);
+                        ActionBar.sendActionBar(getPlayer(), message);
                         XSound.BLOCK_NOTE_BLOCK_HAT.play(getPlayer(), 1.4f, 1.5f);
                     }
                 }
@@ -211,8 +213,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         final DecimalFormat decimalFormat = new DecimalFormat("0.0", otherSymbols);
         String timeLeft = decimalFormat.format(currentCooldown) + "s";
 
-        UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(),
-                getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " " + timeLeft);
+        ActionBar.sendActionBar(getPlayer(), getType().getName() + ChatColor.WHITE + " " + stringBuilder.toString() + ChatColor.WHITE + " " + timeLeft);
 
     }
 
@@ -297,6 +298,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         if (player != getPlayer()) return;
         if (event.getAction() == Action.PHYSICAL)
             return;
+        @SuppressWarnings("deprecation")
         ItemStack itemStack = player.getItemInHand();
         if (itemStack.getType() != getType().getMaterial().parseMaterial())
             return;

@@ -63,6 +63,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
     /**
      * Equips the pet.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public void onEquip() {
         if (getOwner().getCurrentMount() != null) {
@@ -113,41 +114,35 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void run() {
-        try {
-            if (entity.getPassenger() != getPlayer()
-                    && entity.getTicksLived() > 10
-                    && !beingRemoved) {
-                clear();
-                cancel();
-                return;
-            }
-
-            if (!entity.isValid()) {
-                cancel();
-                return;
-            }
-
-            // Prevents players on mounts from being able to fall in the void infinitely.
-            if (entity.getLocation().getY() <= UltraCosmeticsData.get().getVersionManager().getWorldMinHeight(entity.getWorld()) - 15) {
-                clear();
-                cancel();
-                return;
-            }
-
-            if (getOwner() != null
-                    && Bukkit.getPlayer(getOwnerUniqueId()) != null
-                    && getOwner().getCurrentMount() != null
-                    && getOwner().getCurrentMount().getType() == getType()) {
-                onUpdate();
-            } else {
-                cancel();
-            }
-
-        } catch (NullPointerException exc) {
-            exc.printStackTrace();
+        if (entity.getPassenger() != getPlayer()
+                && entity.getTicksLived() > 10
+                && !beingRemoved) {
             clear();
+            cancel();
+            return;
+        }
+
+        if (!entity.isValid()) {
+            cancel();
+            return;
+        }
+
+        // Prevents players on mounts from being able to fall in the void infinitely.
+        if (entity.getLocation().getY() <= UltraCosmeticsData.get().getVersionManager().getWorldMinHeight(entity.getWorld()) - 15) {
+            clear();
+            cancel();
+            return;
+        }
+
+        if (getOwner() != null
+                && Bukkit.getPlayer(getOwnerUniqueId()) != null
+                && getOwner().getCurrentMount() != null
+                && getOwner().getCurrentMount().getType() == getType()) {
+            onUpdate();
+        } else {
             cancel();
         }
     }

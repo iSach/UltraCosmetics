@@ -6,7 +6,8 @@ import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Chicken;
@@ -61,7 +62,7 @@ public class MorphChicken extends Morph {
                 public void run() {
                     chickens = new ArrayList<>();
                     for (Item i : items) {
-                        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
+                        if (VersionManager.IS_VERSION_1_13) {
                             i.getWorld().spawnParticle(Particle.BLOCK_CRACK, i.getLocation(), 0, 0, 0, 0, 0, XMaterial.WHITE_TERRACOTTA.parseMaterial().createBlockData());
                         } else {
                             Particles.BLOCK_CRACK.display(new Particles.BlockData(XMaterial.WHITE_TERRACOTTA.parseMaterial(), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);

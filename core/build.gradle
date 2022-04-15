@@ -25,10 +25,13 @@ dependencies {
     }
     // 'api' so it's passed down to NMS modules
     api 'com.github.cryptomorin:XSeries:8.7.1'
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
 }
 shadowJar {
+    def path = 'be.isach.ultracosmetics.shaded'
     // XParticle is big and not required so don't shade it
     exclude 'com/cryptomorin/xseries/particles/*'
-    relocate ('com.zaxxer.hikari', 'be.isach.ultracosmetics.shaded.hikari')
-    relocate ('com.cryptomorin.xseries', 'be.isach.ultracosmetics.shaded.xseries')
+    relocate ('com.zaxxer.hikari', path + '.hikari')
+    relocate ('com.cryptomorin.xseries', path + '.xseries')
+    relocate ('org.bstats', path + '.metrics')
 }

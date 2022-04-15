@@ -1,12 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Location;
@@ -39,7 +39,7 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
         double x = Math.cos(angle) * 1.1f;
         double z = Math.sin(angle) * 1.1f;
         center.add(x, 0, z);
-        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
+        if (VersionManager.IS_VERSION_1_13) {
             for (int i = 0; i < 15; i++) {
                 getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 1, 0.2d, 0.2d, 0.2d,
                         0, ItemFactory.getRandomDye());

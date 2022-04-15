@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.6.2-DEV-b3'
+    version = '2.6.2-DEV-b4'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -63,10 +63,6 @@ subprojects { subproj ->
     repositories {
         mavenLocal()
         mavenCentral()
-
-        maven {
-            url 'https://repo.isach.be'
-        }
 
         // Lib's Disguises
         maven {

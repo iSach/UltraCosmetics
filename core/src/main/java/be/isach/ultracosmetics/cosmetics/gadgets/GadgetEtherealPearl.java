@@ -48,6 +48,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     void onRightClick() {
         if (getOwner().getCurrentMount() != null) {

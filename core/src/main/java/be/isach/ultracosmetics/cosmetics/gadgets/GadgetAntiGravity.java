@@ -36,6 +36,7 @@ public class GadgetAntiGravity extends Gadget {
         super(owner, GadgetType.valueOf("antigravity"), ultraCosmetics);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     void onRightClick() {
         as = getPlayer().getWorld().spawn(getPlayer().getLocation(), ArmorStand.class);

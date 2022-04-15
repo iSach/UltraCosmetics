@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,7 +33,7 @@ public class MainListener implements Listener {
 
     @SuppressWarnings("deprecation")
     @EventHandler
-    public void onPlayerPickup(PlayerPickupItemEvent event) {
+    public void onPlayerPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
         processPickup(event.getItem(), event);
     }
 

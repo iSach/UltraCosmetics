@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -17,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XSound;
+import com.cryptomorin.xseries.messages.ActionBar;
 
 /**
  * @author iSach
@@ -66,7 +66,7 @@ public class MorphCreeper extends Morph {
                         MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
                     }
                 }
-                UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), "");
+                ActionBar.clearActionBar(getPlayer());
                 charge = 0;
                 return;
             }
@@ -75,11 +75,13 @@ public class MorphCreeper extends Morph {
         }
         if (charge > 0 && charge < 100) {
             if (charge < 5) {
-                UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), "");
-            } else
-                UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
-        } else if (charge == 100)
-            UltraCosmeticsData.get().getVersionManager().getAncientUtil().sendActionBarMessage(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
+                ActionBar.clearActionBar(getPlayer());
+            } else {
+                ActionBar.sendActionBar(getPlayer(), MessageManager.getMessage("Morphs.Creeper.charging").replace("%chargelevel%", charge + ""));
+            }
+        } else if (charge == 100) {
+            ActionBar.sendActionBar(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
+        }
     }
 
     @Override

@@ -1,12 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
@@ -33,7 +33,7 @@ public class GadgetPartyPopper extends Gadget {
             Vector rand = new Vector(Math.random() - 0.5D,
                     Math.random() - 0.5D, Math.random() - 0.5D);
 
-            if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
+            if (VersionManager.IS_VERSION_1_13) {
                 Vector v = getPlayer().getEyeLocation().getDirection().add(rand.multiply(0.2)).multiply(3.2);
                 getPlayer().getWorld().spawnParticle(Particle.ITEM_CRACK, getPlayer().getEyeLocation(), 10, v.getX(), v.getY(), v.getZ(),
                         0.2d, ItemFactory.getRandomDye());

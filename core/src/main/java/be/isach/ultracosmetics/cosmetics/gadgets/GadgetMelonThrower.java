@@ -15,7 +15,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -36,8 +35,9 @@ public class GadgetMelonThrower extends Gadget implements Listener {
         super(owner, GadgetType.valueOf("melonthrower"), ultraCosmetics);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
-    public void onTakeUpMelon(PlayerPickupItemEvent event) {
+    public void onTakeUpMelon(org.bukkit.event.player.PlayerPickupItemEvent event) {
         if (event.getItem().hasMetadata("UC#MELONITEM")
                 && event.getItem().getTicksLived() > 5
                 && affectPlayers) {

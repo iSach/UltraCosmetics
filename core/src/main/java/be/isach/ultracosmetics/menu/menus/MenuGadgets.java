@@ -64,7 +64,9 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
         loreList.add("");
         int ammo = player.getAmmo(gadgetType);
         loreList.add(MessageManager.getMessage("Ammo").replace("%ammo%", "" + ammo));
-        loreList.add(MessageManager.getMessage("Right-Click-Buy-Ammo"));
+        if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
+            loreList.add(MessageManager.getMessage("Right-Click-Buy-Ammo"));
+        }
 
         if (SettingsManager.getConfig().getBoolean("Ammo-System-For-Gadgets.Show-Ammo-In-Menu-As-Item-Amount")
                 && !(player.getCurrentGadget() != null
@@ -97,7 +99,7 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
 
     @Override
     protected void handleRightClick(UltraPlayer ultraPlayer, GadgetType type) {
-        if (UltraCosmeticsData.get().isAmmoEnabled() && type.requiresAmmo()) {
+        if (ultraCosmetics.getEconomyHandler().isUsingEconomy() && UltraCosmeticsData.get().isAmmoEnabled() && type.requiresAmmo()) {
             toggleOn(ultraPlayer, type, getUltraCosmetics());
             ultraPlayer.getCurrentGadget().lastPage = getCurrentPage(ultraPlayer);
             ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
@@ -106,7 +108,7 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
 
     @Override
     protected boolean handleActivate(UltraPlayer ultraPlayer) {
-        if (UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getCurrentGadget().getType().requiresAmmo() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType()) < 1) {
+        if (ultraCosmetics.getEconomyHandler().isUsingEconomy() && UltraCosmeticsData.get().isAmmoEnabled() && ultraPlayer.getCurrentGadget().getType().requiresAmmo() && ultraPlayer.getAmmo(ultraPlayer.getCurrentGadget().getType()) < 1) {
             ultraPlayer.getCurrentGadget().lastPage = getCurrentPage(ultraPlayer);
             ultraPlayer.getCurrentGadget().openAmmoPurchaseMenu();
             return false;

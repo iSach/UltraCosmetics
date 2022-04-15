@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashSet;
@@ -37,8 +36,9 @@ public class GadgetFreezeCannon extends Gadget {
         items.add(item);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
-    public void onPickup(PlayerPickupItemEvent event) {
+    public void onPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
         if (items.contains(event.getItem())) event.setCancelled(true);
     }
 

@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 
 import com.cryptomorin.xseries.XMaterial;
@@ -233,5 +234,23 @@ public class BlockUtils {
 
     public static boolean isAir(Material mat) {
         return AIRS.contains(mat);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static FallingBlock spawnFallingBlock(Location loc, Material type) {
+        if (VersionManager.IS_VERSION_1_13) {
+            return loc.getWorld().spawnFallingBlock(loc, type.createBlockData());
+        } else {
+            return loc.getWorld().spawnFallingBlock(loc, type, (byte)0);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static FallingBlock spawnFallingBlock(Location loc, Block source) {
+        if (VersionManager.IS_VERSION_1_13) {
+            return loc.getWorld().spawnFallingBlock(loc, source.getBlockData());
+        } else {
+            return loc.getWorld().spawnFallingBlock(loc, source.getType(), source.getData());
+        }
     }
 }

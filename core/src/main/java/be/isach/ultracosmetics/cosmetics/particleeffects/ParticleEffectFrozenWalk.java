@@ -1,11 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.particleeffects;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
+import be.isach.ultracosmetics.version.VersionManager;
+
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ public class ParticleEffectFrozenWalk extends ParticleEffect {
         Location locationRight = getPlayer().getLocation().add(vectorRight);
         locationLeft.setY(getPlayer().getLocation().getY());
         locationRight.setY(getPlayer().getLocation().getY());
-        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_14_R1)) {
+        if (VersionManager.IS_VERSION_1_13) {
             locationLeft.getWorld().spawnParticle(Particle.ITEM_CRACK, locationLeft, 0, 0, 0, 0, 0, XMaterial.SNOW.parseItem());
             locationLeft.getWorld().spawnParticle(Particle.ITEM_CRACK, locationRight, 0, 0, 0, 0, 0, XMaterial.SNOW.parseItem());
         } else {

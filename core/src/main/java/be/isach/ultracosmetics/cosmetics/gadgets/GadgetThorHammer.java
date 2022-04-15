@@ -10,7 +10,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
-import com.cryptomorin.xseries.XMaterial;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Item;
@@ -18,9 +18,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -78,8 +79,9 @@ public class GadgetThorHammer extends Gadget implements Listener {
         Bukkit.getPluginManager().registerEvents(listener, getUltraCosmetics());
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
-    public void onItemPickup(PlayerPickupItemEvent event) {
+    public void onItemPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
         if (!hammer.contains(event.getItem())) return;
         event.setCancelled(true);
 
@@ -104,6 +106,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
         event.getItem().remove();
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onDamEnt(EntityDamageByEntityEvent event) {
         if (getOwner() != null

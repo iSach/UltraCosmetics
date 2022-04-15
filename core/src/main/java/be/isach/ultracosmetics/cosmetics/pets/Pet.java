@@ -78,6 +78,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         this.pathUpdater = Executors.newSingleThreadExecutor();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onEquip() {
         if (getOwner().getCurrentPet() != null) {

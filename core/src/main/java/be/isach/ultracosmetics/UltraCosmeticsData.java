@@ -5,8 +5,9 @@ import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.version.VersionManager;
+
 import org.bukkit.Bukkit;
-import org.bukkit.UnsafeValues;
+
 import java.lang.reflect.Method;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -175,7 +176,7 @@ public class UltraCosmeticsData {
     boolean checkMappingsVersion(ServerVersion version) {
         String currentMappingsVersion = null;
         @SuppressWarnings("deprecation")
-        UnsafeValues magicNumbers = Bukkit.getUnsafe();
+        Object magicNumbers = Bukkit.getUnsafe();
         Class<?> magicNumbersClass = magicNumbers.getClass();
         try {
             Method mappingsVersionMethod = magicNumbersClass.getDeclaredMethod("getMappingsVersion");

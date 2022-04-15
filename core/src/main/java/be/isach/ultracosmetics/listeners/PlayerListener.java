@@ -97,6 +97,7 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event) {
         if (isMenuItem(event.getItemDrop().getItemStack())) {
@@ -257,6 +258,7 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerPickUpItem(PlayerPickupItemEvent event) {
         if (isMenuItem(event.getItem().getItemStack())) {
