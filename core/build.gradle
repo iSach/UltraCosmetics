@@ -5,26 +5,27 @@ plugins {
 dependencies {
     // ideally matches the dependency version of the latest NMS module
     compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
-    compileOnly('LibsDisguises:LibsDisguises:9.5.2') {
+    compileOnly('LibsDisguises:LibsDisguises:10.0.28') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
     }
-    compileOnly('net.milkbowl.vault:VaultAPI:1.6') {
+    compileOnly('net.milkbowl.vault:VaultAPI:1.7') {
         exclude group: 'org.bukkit'
     }
-    compileOnly 'me.clip:placeholderapi:2.10.3'
+    compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly 'org.black_ixx:playerpoints:3.1.0'
-    compileOnly 'com.google.code.gson:gson:2.2.4'
     // WG 7.0.3 was last version to support Java <16
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.3'
-    compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
-    // same version used in 1.17.1
+    // same version used in 1.17.1, 3.x uses Java 16
     compileOnly 'com.mojang:authlib:2.3.31'
+    // used by the update checker
+    compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
     // hikari requires slf4j, this attaches it to log4j
     implementation ('org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2') {
         exclude group: 'org.apache.logging.log4j', module: 'log4j-api'
         exclude group: 'org.apache.logging.log4j', module: 'log4j-core' 
     }
+    // versions above 4.0.3 are compiled with Java 11 so we can't use them
     implementation 'com.zaxxer:HikariCP:4.0.3'
     // 'api' so it's passed down to NMS modules
     api 'com.github.cryptomorin:XSeries:8.7.1'
