@@ -105,8 +105,8 @@ public class MorphElderGuardian extends Morph {
 
     @Override
     public void onClear() {
-        if (customGuardian != null)
-            ((Entity)customGuardian).discard();
+        if (customGuardian == null) return;
+        ((Entity)customGuardian).discard();
         customEntities.remove(customGuardian);
     }
 

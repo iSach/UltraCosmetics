@@ -32,7 +32,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         double z = getPlayer().getLocation().getZ();
         getCustomEntity().setLocation(x, y + 2, z, 0, 0);
         ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
-        CustomEntities.customEntities.add(getCustomEntity());
+        CustomEntities.addCustomEntity(getCustomEntity());
         removeAI(customEntity);
         return getEntity();
     }
@@ -55,7 +55,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
     @Override
     protected void removeEntity() {
         getCustomEntity().dead = true;
-        CustomEntities.customEntities.remove(customEntity);
+        CustomEntities.removeCustomEntity(customEntity);
     }
 
     @SuppressWarnings("unchecked")

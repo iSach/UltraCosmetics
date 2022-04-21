@@ -38,7 +38,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
         Entity petEntity;
 
         if (pet.isCustomEntity()) {
-            petEntity = ((CustomEntityPet) pet).getCustomEntity();
+            petEntity = ((CustomEntityPet) pet).getNMSEntity();
         } else {
             petEntity = ((CraftEntity) pet.getEntity()).getHandle();
         }
@@ -60,13 +60,15 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             PathEntity path = ((EntityInsentient) petEntity).getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1, 1);
 
             try {
-                int distance = (int) Bukkit.getPlayer(player.getName()).getLocation().distance(petEntity.getBukkitEntity().getLocation());
+                double distanceSquared = Bukkit.getPlayer(player.getName()).getLocation().distanceSquared(petEntity.getBukkitEntity().getLocation());
 
-                if (distance > 10 && petEntity.valid && player.isOnGround()) {
+                @SuppressWarnings("deprecation")
+                boolean onGround = player.isOnGround();
+                if (onGround && distanceSquared > 10 * 10 && petEntity.valid) {
                     petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
                 }
 
-                if (path != null && distance > 1.3) {
+                if (path != null && distanceSquared > 1.3 * 1.3) {
                     double speed = 1.15d;
 
                     if (pet.getType().getEntityType() == EntityType.ZOMBIE) {

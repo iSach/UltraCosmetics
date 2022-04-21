@@ -21,7 +21,7 @@ public class CustomSlime extends Slime implements EntityBase {
 
     @Override
     public void travel(Vec3 vec3D) {
-        if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.isCustomEntity(this)) {
             super.tickHeadTurn((float) vec3D.x, (float) vec3D.y);
             return;
         }
@@ -39,7 +39,7 @@ public class CustomSlime extends Slime implements EntityBase {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(5, new CustomSlimeJumpGoal(this));
+        goalSelector.addGoal(5, new CustomSlimeJumpGoal());
     }
 
     @Override

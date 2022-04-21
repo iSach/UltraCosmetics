@@ -1,33 +1,26 @@
 package be.isach.ultracosmetics.v1_16_R3.pathfinders;
 
 
-import net.minecraft.server.v1_16_R3.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.EnumSet;
+
+import net.minecraft.server.v1_16_R3.EntityCreature;
+import net.minecraft.server.v1_16_R3.EntityLiving;
+import net.minecraft.server.v1_16_R3.PathfinderGoal;
+import net.minecraft.server.v1_16_R3.RandomPositionGenerator;
+import net.minecraft.server.v1_16_R3.Vec3D;
 
 /**
  * @author RadBuilder
  */
 public class CustomPathFinderGoalPanic extends PathfinderGoal {
 
-    // speed
-    protected double a;
     // NMS Entity
     private EntityCreature b;
-    // random PosX
-    private double c;
 
-    // random PosY
-    private double d;
-
-    // random PosZ
-    private double e;
-
-    public CustomPathFinderGoalPanic(EntityCreature entitycreature, double d0) {
+    public CustomPathFinderGoalPanic(EntityCreature entitycreature) {
         this.b = entitycreature;
-        this.a = d0;
         EnumSet<Type> set = EnumSet.noneOf(PathfinderGoal.Type.class);
         set.add(PathfinderGoal.Type.MOVE);
         this.a(set);
@@ -35,12 +28,7 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
-        if (vec3d == null) return false; //
-        this.c = vec3d.x;
-        this.d = vec3d.y;
-        this.e = vec3d.z;
-        return true;
+        return RandomPositionGenerator.a(this.b, 5, 4) != null;
     }
 
     @Override
@@ -84,6 +72,4 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
 
         return !boo;
     }
-
-
 }

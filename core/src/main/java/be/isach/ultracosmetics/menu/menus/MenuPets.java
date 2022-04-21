@@ -46,25 +46,14 @@ public class MenuPets extends CosmeticMenu<PetType> {
             ItemStack stack;
             int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 5 : 6);
             ClickRunnable run;
-            if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required")) {
-                if (player.hasPermission("ultracosmetics.pets.rename")) {
-                    if (player.getCurrentPet() != null) {
-                        stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
-                        run = data -> renamePet(player);
-                    } else {
-                        stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Active-Pet-Needed"));
-                        run = data -> {
-                            player.getBukkitPlayer().sendMessage(MessageManager.getMessage("Active-Pet-Needed"));
-                            player.getBukkitPlayer().closeInventory();
-                        };
-                    }
-                } else {
-                    stack = new ItemStack(Material.AIR);
-                    run = data -> {
-                    };
-                }
-            } else if (player.getCurrentPet() != null) {
-                stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Rename-Pet").replace("%petname%", player.getCurrentPet().getType().getName()));
+            if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required") && !player.hasPermission("ultracosmetics.pets.rename")) {
+                stack = new ItemStack(Material.AIR);
+                run = data -> {};
+                putItem(inventory, slot, stack, run);
+                return;
+            }
+            if (player.getCurrentPet() != null) {
+                stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Menu.Rename-Pet.Button.Name").replace("%petname%", player.getCurrentPet().getType().getName()));
                 run = data -> renamePet(player);
             } else {
                 stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Rename-Pet-Item"), MessageManager.getMessage("Active-Pet-Needed"));
@@ -80,8 +69,8 @@ public class MenuPets extends CosmeticMenu<PetType> {
     public void renamePet(final UltraPlayer ultraPlayer) {
         new AnvilGUI.Builder().plugin(ultraCosmetics)
         .itemLeft(XMaterial.PAPER.parseItem())
-        .text(MessageManager.getMessage("Rename-Pet-Placeholder"))
-        .title(MessageManager.getMessage("Rename-Pet-Title"))
+        .text(MessageManager.getMessage("Menu.Rename-Pet.Placeholder"))
+        .title(MessageManager.getMessage("Menu.Rename-Pet.Title"))
         .onComplete((Player player, String text) -> {
             if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") &&
                     ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
@@ -95,7 +84,7 @@ public class MenuPets extends CosmeticMenu<PetType> {
 
     private Inventory buyRenamePet(UltraPlayer ultraPlayer, final String name) {
         final String formattedName = ChatColor.translateAlternateColorCodes('&', name);
-        ItemStack showcaseItem = ItemFactory.create(XMaterial.NAME_TAG, MessageManager.getMessage("Rename-Pet-Purchase")
+        ItemStack showcaseItem = ItemFactory.create(XMaterial.NAME_TAG, MessageManager.getMessage("Menu.Purchase-Rename.Button.Showcase")
                 .replace("%price%", "" + SettingsManager.getConfig().get("Pets-Rename.Requires-Money.Price")).replace("%name%", formattedName));
 
         PurchaseData purchaseData = new PurchaseData();

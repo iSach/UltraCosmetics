@@ -21,12 +21,12 @@ public class RideableSpider extends EntitySpider {
      */
     @Override
     public void g(float sideMot, float forMot) {
-        if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.isCustomEntity(this)) {
             super.g(sideMot, forMot);
             return;
         }
         if (this.passenger != null && this.passenger instanceof EntityHuman
-                && CustomEntities.customEntities.contains(this)) {
+                && CustomEntities.isCustomEntity(this)) {
             this.lastYaw = this.yaw = this.passenger.yaw;
             this.pitch = this.passenger.pitch * 0.5F;
             this.setYawPitch(this.yaw, this.pitch);//Update the pitch and yaw

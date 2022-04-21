@@ -1,25 +1,26 @@
 package be.isach.ultracosmetics.v1_18_R2.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.v1_18_R2.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_18_R2.customentities.Pumpling;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import net.minecraft.world.entity.EntityType;
 
 /**
  * @author RadBuilder
@@ -29,7 +30,7 @@ public abstract class CustomEntityPet extends Pet {
     /**
      * Custom Entity.
      */
-    public IPetCustomEntity customEntity;
+    protected Entity customEntity;
 
     public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
         super(owner, ultraCosmetics, petType, dropItem);
@@ -51,21 +52,15 @@ public abstract class CustomEntityPet extends Pet {
         double z = getPlayer().getLocation().getZ();
 
         if (this instanceof PetPumpling) {
-            /**customEntity = CustomEntities.typesLoc.b(((CraftPlayer) getPlayer()).getHandle().getWorld(),
-             null,
-             null,
-             null,
-             new BlockPosition(x, y, z),
-             null, false, false);*/
             EntitySpawningManager.setBypass(true);
-            customEntity = new Pumpling(EntityType.ZOMBIE, ((CraftPlayer) getPlayer()).getHandle().getLevel(), this);
+            customEntity = new Pumpling(EntityType.ZOMBIE, ((CraftPlayer) getPlayer()).getHandle().getLevel(), this).getBukkitEntity();
             EntitySpawningManager.setBypass(false);
         }
         Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-            CustomEntities.customEntities.add(((CraftEntity) customEntity.getEntity()).getHandle());
-            getCustomEntity().moveTo(x, y, z, 0, 0);
-            Location spawnLoc = customEntity.getEntity().getLocation();
-            armorStand = (ArmorStand) customEntity.getEntity().getWorld().spawnEntity(spawnLoc, org.bukkit.entity.EntityType.ARMOR_STAND);
+            CustomEntities.addCustomEntity(getNMSEntity());
+            getNMSEntity().moveTo(x, y, z, 0, 0);
+            Location spawnLoc = customEntity.getLocation();
+            armorStand = (ArmorStand) customEntity.getWorld().spawnEntity(spawnLoc, org.bukkit.entity.EntityType.ARMOR_STAND);
             armorStand.setVisible(false);
             armorStand.setSmall(true);
             armorStand.setCustomNameVisible(true);
@@ -73,22 +68,22 @@ public abstract class CustomEntityPet extends Pet {
             armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
             updateName();
 
-            customEntity.getEntity().addPassenger(armorStand);
+            customEntity.addPassenger(armorStand);
             EntitySpawningManager.setBypass(true);
-            ((CraftWorld) getPlayer().getWorld()).getHandle().addFreshEntity(getCustomEntity());
+            ((CraftWorld) getPlayer().getWorld()).getHandle().addFreshEntity(getNMSEntity());
             EntitySpawningManager.setBypass(false);
         });
 
         if (getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
-            getOwner().sendMessage("§c§lUltraCosmetics > Monsters can't spawn here!");
+            getOwner().sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "UltraCosmetics > Monsters can't spawn here!");
             getOwner().removePet();
         }
     }
 
     @Override
     protected void removeEntity() {
-        getCustomEntity().discard();
-        CustomEntities.customEntities.remove(customEntity);
+        getNMSEntity().discard();
+        CustomEntities.removeCustomEntity(getNMSEntity());
     }
 
     @Override
@@ -97,11 +92,11 @@ public abstract class CustomEntityPet extends Pet {
     }
 
     @Override
-    public org.bukkit.entity.Entity getEntity() {
-        return customEntity.getEntity();
+    public Entity getEntity() {
+        return customEntity;
     }
 
-    public Entity getCustomEntity() {
-        return ((CraftEntity) customEntity.getEntity()).getHandle();
+    public net.minecraft.world.entity.Entity getNMSEntity() {
+        return ((CraftEntity) customEntity).getHandle();
     }
 }

@@ -18,7 +18,6 @@ public class Module implements IModule {
 
     @Override
     public void disable() {
-        CustomEntities.unregisterEntities();
     }
 
     @Override

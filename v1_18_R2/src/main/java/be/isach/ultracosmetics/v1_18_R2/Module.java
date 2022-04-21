@@ -32,9 +32,7 @@ public class Module implements IModule {
     }
 
     @Override
-    public void disable() {
-        CustomEntities.unregisterEntities();
-    }
+    public void disable() {}
 
     @Override
     public Class<? extends Mount<?>> getSpiderClass() {

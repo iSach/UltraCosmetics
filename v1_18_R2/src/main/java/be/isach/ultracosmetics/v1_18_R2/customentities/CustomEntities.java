@@ -1,18 +1,24 @@
 package be.isach.ultracosmetics.v1_18_R2.customentities;
 
-import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.types.Type;
-
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.v1_18_R2.EntityBase;
 import be.isach.ultracosmetics.v1_18_R2.ObfuscatedFields;
 import be.isach.ultracosmetics.v1_18_R2.nms.EntityWrapper;
+
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.types.Type;
+
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.Set;
+
 import net.minecraft.SharedConstants;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
@@ -21,49 +27,16 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityType.EntityFactory;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.monster.Guardian;
-import net.minecraft.world.entity.monster.Slime;
-import net.minecraft.world.entity.monster.Spider;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author RadBuilder
  */
-public enum CustomEntities {
-
-    PUMPLING("pumpling", org.bukkit.entity.EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Zombie.class, Pumpling.class),
-    SLIME("customslime", org.bukkit.entity.EntityType.SLIME.getTypeId(), EntityType.SLIME, Slime.class, CustomSlime.class),
-    RIDEABLE_SPIDER("rideablespider", org.bukkit.entity.EntityType.SPIDER.getTypeId(), EntityType.SPIDER, Spider.class, RideableSpider.class),
-    CUSTOM_GUARDIAN("customguardian", org.bukkit.entity.EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, Guardian.class, CustomGuardian.class);
-
-    public static List<Entity> customEntities = new ArrayList<>();
-
-    private String name;
-    private int id;
-    private EntityType<?> entityType;
-    private ResourceLocation minecraftKey;
-    private Class<? extends Mob> nmsClass;
-    private Class<? extends Entity> customClass;
-
-    private CustomEntities(String name, int id, EntityType entityType, Class<? extends Mob> nmsClass,
-                   Class<? extends Entity> customClass) {
-        this.name = name;
-        this.id = id;
-        this.entityType = entityType;
-        this.minecraftKey = new ResourceLocation(name);
-        this.nmsClass = nmsClass;
-        this.customClass = customClass;
-    }
-
+public class CustomEntities {
+    private static final Set<Entity> customEntities = new HashSet<>();
     public static void registerEntities() {
+        @SuppressWarnings({ "unchecked", "deprecation" })
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataFixers.getDataFixer().getSchema(DataFixUtils.makeKey(SharedConstants.getCurrentVersion().getWorldVersion())).findChoiceType(References.ENTITY).types();
 
         // true if the registry present is a vanilla registry and not a custom one like Citizens provides
@@ -99,7 +72,7 @@ public enum CustomEntities {
                     at net.minecraft.world.entity.EntityTypes$Builder.a(EntityTypes.java:669) ~[spigot-1.18.2-R0.1-SNAPSHOT.jar:3445-Spigot-fb0dd5f-05a38da]
                     at be.isach.ultracosmetics.v1_18_R2.customentities.CustomEntities.registerEntity(CustomEntities.java:78) ~[?:?]
         */
-        Class<MappedRegistry> registryClass = MappedRegistry.class;
+        Class<?> registryClass = MappedRegistry.class;
         try {
             Field intrusiveHolderCache = registryClass.getDeclaredField(ObfuscatedFields.INTRUSIVE_HOLDER_CACHE);
             intrusiveHolderCache.setAccessible(true);
@@ -113,43 +86,11 @@ public enum CustomEntities {
         }
     }
     
-    private static void registerEntity(String type, EntityFactory customMob, Map<String,Type<?>> types) {
+    private static void registerEntity(String type, @SuppressWarnings("rawtypes") EntityFactory customMob, Map<String,Type<?>> types) {
         String customName = "minecraft:ultracosmetics_" + type;
         types.put(customName, types.get("minecraft:" + type));
         EntityType.Builder<Entity> a = EntityType.Builder.of(customMob, MobCategory.AMBIENT);
         Registry.register(Registry.ENTITY_TYPE, customName, a.build(customName));
-    }
-
-    public static void unregisterEntities() {}
-
-    public static Object getPrivateField(Class<?> clazz, Object handle, String fieldName) throws Exception {
-        Field field = clazz.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(handle);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getID() {
-        return id;
-    }
-
-    public EntityType getEntityType() {
-        return entityType;
-    }
-
-    public ResourceLocation getMinecraftKey() {
-        return this.minecraftKey;
-    }
-
-    public Class<? extends Mob> getNMSClass() {
-        return nmsClass;
-    }
-
-    public Class<? extends Entity> getCustomClass() {
-        return customClass;
     }
 
     public static void ride(float sideMot, float forMot, Player passenger, Mob mob) {
@@ -213,5 +154,17 @@ public enum CustomEntities {
 
         wEntity.setLimbSwingAmount(wEntity.getLimbSwingAmount() + (f4 - wEntity.getLimbSwingAmount()) * 0.4f);
         wEntity.setLimbSwing(wEntity.getLimbSwing() + wEntity.getLimbSwingAmount());
+    }
+
+    public static void addCustomEntity(Entity entity) {
+        customEntities.add(entity);
+    }
+
+    public static boolean isCustomEntity(Entity entity) {
+        return customEntities.contains(entity);
+    }
+
+    public static void removeCustomEntity(Entity entity) {
+        customEntities.remove(entity);
     }
 }

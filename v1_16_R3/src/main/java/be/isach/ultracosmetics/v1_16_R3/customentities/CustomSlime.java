@@ -15,7 +15,7 @@ public class CustomSlime extends EntitySlime implements EntityBase {
     // Corresponds to travel(Vec3D)
     @Override
     public void g(Vec3D vec3D) {
-        if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.isCustomEntity(this)) {
             // Corresponds to tickHeadTurn(float, float)
             super.f((float) vec3D.x, (float) vec3D.y);
             return;
@@ -34,7 +34,7 @@ public class CustomSlime extends EntitySlime implements EntityBase {
 
     @Override
     protected void initPathfinder() {
-        goalSelector.a(5, new CustomSlimeJumpGoal(this));
+        goalSelector.a(5, new CustomSlimeJumpGoal());
     }
 
     @Override

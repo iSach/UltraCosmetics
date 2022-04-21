@@ -12,65 +12,42 @@ import java.util.Map;
 import java.util.Set;
 
 public enum CustomEntities {
-    PUMPLING("Pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, Pumpling.class, Pumpling.class),
-    SLIME("CustomSlime", EntityType.SLIME.getTypeId(), EntityType.SLIME, CustomSlime.class, CustomSlime.class),
-    RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
-    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
+    PUMPLING("Pumpling", EntityType.ZOMBIE, Pumpling.class, Pumpling.class),
+    SLIME("CustomSlime", EntityType.SLIME, CustomSlime.class, CustomSlime.class),
+    RIDEABLE_SPIDER("RideableSpider", EntityType.SPIDER, RideableSpider.class, RideableSpider.class),
+    CUSTOM_GUARDIAN("CustomGuardian", EntityType.GHAST, CustomGuardian.class, CustomGuardian.class);
 
     private String name;
-    private int id;
-    private EntityType entityType;
+    private short id;
     private Class<? extends EntityInsentient> nmsClass;
     private Class<? extends EntityInsentient> customClass;
 
-    // mounts
-    public static final Set<Entity> customEntities = new HashSet<>();
+    private static final Set<Entity> customEntities = new HashSet<>();
 
-    private CustomEntities(String name, int id, EntityType entityType,
-                   Class<? extends EntityInsentient> nmsClass,
+    @SuppressWarnings("deprecation")
+    private CustomEntities(String name, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
                    Class<? extends EntityInsentient> customClass) {
         this.name = name;
-        this.id = id;
-        this.entityType = entityType;
+        this.id = entityType.getTypeId();
         this.nmsClass = nmsClass;
         this.customClass = customClass;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getID() {
-        return id;
-    }
-
-    public EntityType getEntityType() {
-        return entityType;
-    }
-
-    public Class<? extends EntityInsentient> getNMSClass() {
-        return nmsClass;
-    }
-
-    public Class<? extends EntityInsentient> getCustomClass() {
-        return customClass;
-    }
-
     public static void registerEntities() {
         for (CustomEntities entity : values())
-            a(entity.getCustomClass(), entity.getName(), entity.getID());
+            a(entity.customClass, entity.name, entity.id);
     }
 
     public static void unregisterEntities() {
         for (CustomEntities entity : values()) {
             try {
-                getEntityTypesMap("d").remove(entity.getCustomClass());
+                getEntityTypesMap("d").remove(entity.customClass);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             try {
-                getEntityTypesMap("f").remove(entity.getCustomClass());
+                getEntityTypesMap("f").remove(entity.customClass);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -78,7 +55,7 @@ public enum CustomEntities {
 
         for (CustomEntities entity : values())
             try {
-                a(entity.getNMSClass(), entity.getName(), entity.getID());
+                a(entity.nmsClass, entity.name, entity.id);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -104,5 +81,17 @@ public enum CustomEntities {
                     paramInt);
         } catch (Exception ignored) {
         }
+    }
+
+    public static void addCustomEntity(Entity entity) {
+        customEntities.add(entity);
+    }
+
+    public static boolean isCustomEntity(Entity entity) {
+        return customEntities.contains(entity);
+    }
+
+    public static void removeCustomEntity(Entity entity) {
+        customEntities.remove(entity);
     }
 }

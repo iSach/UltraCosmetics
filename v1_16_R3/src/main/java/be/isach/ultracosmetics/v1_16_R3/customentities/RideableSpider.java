@@ -15,7 +15,7 @@ public class RideableSpider extends EntitySpider implements EntityBase {
     // Corresponds to travel(Vec3D)
     @Override
     public void g(Vec3D vec3D) {
-        if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.isCustomEntity(this)) {
             // Corresponds to travel(Vec3D)
             super.g(vec3D);
             return;

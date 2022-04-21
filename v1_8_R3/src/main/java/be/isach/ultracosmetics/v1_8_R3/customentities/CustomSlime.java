@@ -26,7 +26,7 @@ public class CustomSlime extends EntitySlime {
      */
     @Override
     public void g(float f, float f1) {
-        if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.isCustomEntity(this)) {
             super.g(f, f1);
             return;
         }

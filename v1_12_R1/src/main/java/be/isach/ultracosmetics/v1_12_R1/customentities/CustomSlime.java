@@ -14,7 +14,7 @@ public class CustomSlime extends EntitySlime implements EntityBase {
 
     @Override
     public void a(float sideMot, float forMot, float f2) {
-        if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.isCustomEntity(this)) {
             super.g(sideMot, forMot);
             return;
         }

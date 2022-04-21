@@ -122,7 +122,7 @@ public class EntityUtil implements IEntityUtil {
             bField.set(entitySheep.targetSelector, new UnsafeList<PathfinderGoalSelector>());
             cField.set(entitySheep.goalSelector, new UnsafeList<PathfinderGoalSelector>());
             cField.set(entitySheep.targetSelector, new UnsafeList<PathfinderGoalSelector>());
-        } catch (Exception exc) {
+        } catch (ReflectiveOperationException exc) {
             exc.printStackTrace();
         }
     }
@@ -192,24 +192,15 @@ public class EntityUtil implements IEntityUtil {
 
     @Override
     public Entity spawnItem(ItemStack itemStack, Location blockLocation) {
-        EntityItem ei = new EntityItem(
-                ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle(),
-                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getX(),
-                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getY(),
-                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getZ(),
-                CraftItemStack.asNMSCopy(itemStack)) {
-
-
-            public boolean a(EntityItem entityitem) {
-                return false;
-            }
-        };
+        Location loc = blockLocation.clone().add(0.5, 1.2, 0.5);
+        EntityItem ei = new EntityItem(((CraftWorld) loc.getWorld()).getHandle(), loc.getX(), loc.getY(), loc.getZ(),
+                CraftItemStack.asNMSCopy(itemStack));
         ei.getBukkitEntity().setVelocity(new Vector(0.0D, 0.25D, 0.0D));
         ei.pickupDelay = 2147483647;
         ei.getBukkitEntity().setCustomName(UltraCosmeticsData.get().getItemNoPickupString());
         ei.pickupDelay = 20;
 
-        ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addEntity(ei);
+        ((CraftWorld) loc.getWorld()).getHandle().addEntity(ei);
 
         return ei.getBukkitEntity();
     }

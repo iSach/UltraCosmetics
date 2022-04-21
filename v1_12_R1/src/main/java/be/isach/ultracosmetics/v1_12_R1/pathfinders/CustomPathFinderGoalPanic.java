@@ -1,7 +1,10 @@
 package be.isach.ultracosmetics.v1_12_R1.pathfinders;
 
-
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.EntityCreature;
+import net.minecraft.server.v1_12_R1.EntityLiving;
+import net.minecraft.server.v1_12_R1.PathfinderGoal;
+import net.minecraft.server.v1_12_R1.RandomPositionGenerator;
+import net.minecraft.server.v1_12_R1.Vec3D;
 
 /**
  * @author RadBuilder
@@ -11,32 +14,14 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
     // NMS Entity
     private EntityCreature b;
 
-    // speed
-    protected double a;
-
-    // random PosX
-    private double c;
-
-    // random PosY
-    private double d;
-
-    // random PosZ
-    private double e;
-
-    public CustomPathFinderGoalPanic(EntityCreature entitycreature, double d0) {
+    public CustomPathFinderGoalPanic(EntityCreature entitycreature) {
         this.b = entitycreature;
-        this.a = d0;
         this.a(1);
     }
 
     @Override
     public boolean a() {
-        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
-        if (vec3d == null) return false; //
-        this.c = vec3d.x;
-        this.d = vec3d.y;
-        this.e = vec3d.z;
-        return true;
+        return RandomPositionGenerator.a(this.b, 5, 4) != null;
     }
 
     @Override
@@ -56,6 +41,4 @@ public class CustomPathFinderGoalPanic extends PathfinderGoal {
         // CraftBukkit end
         return !this.b.getNavigation().o();
     }
-
-
 }

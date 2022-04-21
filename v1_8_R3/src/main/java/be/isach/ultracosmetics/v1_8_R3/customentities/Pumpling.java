@@ -1,17 +1,24 @@
 package be.isach.ultracosmetics.v1_8_R3.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
-import net.minecraft.server.v1_8_R3.*;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 
+import net.minecraft.server.v1_8_R3.Block;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.Blocks;
+import net.minecraft.server.v1_8_R3.EntityZombie;
+import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.PathEntity;
+import net.minecraft.server.v1_8_R3.World;
+
 /**
  * Created by Sacha on 18/10/15.
  */
-public class Pumpling extends EntityZombie implements IPetCustomEntity {
+public class Pumpling extends EntityZombie {
 
     Player player;
 
@@ -23,10 +30,6 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     public Pumpling(World world) {
         super(world);
-    }
-
-    public org.bukkit.entity.Entity getEntity() {
-        return getBukkitEntity();
     }
 
     @Override
@@ -82,18 +85,21 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     private void follow() {
         Location petLoc = getBukkitEntity().getLocation();
         Location loc = player.getLocation();
+        double distanceSquared = petLoc.distanceSquared(loc);
+        @SuppressWarnings("deprecation")
+        boolean onGround = player.isOnGround();
         if (!petLoc.getWorld().equals(loc.getWorld())
-                || (petLoc.distance(loc) > 10 && valid && player.isOnGround())) {
+                || (distanceSquared > 10 * 10 && valid && onGround)) {
             getBukkitEntity().teleport(player);
             return;
         }
-        if (petLoc.distance(loc) > 3.3d) {
+        if (distanceSquared > 3.3 * 3.3) {
             PathEntity pathEntity = this.navigation.a(loc.getX(), loc.getY(), loc.getZ());
             this.navigation.a(pathEntity, 1f);
         }
     }
 
     private boolean isCustomEntity() {
-        return CustomEntities.customEntities.contains(this);
+        return CustomEntities.isCustomEntity(this);
     }
 }

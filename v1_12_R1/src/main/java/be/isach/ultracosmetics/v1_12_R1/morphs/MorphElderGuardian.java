@@ -63,8 +63,7 @@ public class MorphElderGuardian extends Morph {
     }
 
     private void shootLaser() {
-        if (customGuardian == null)
-            return;
+        if (customGuardian == null) return;
 
         final Location FROM = customGuardian.getBukkitEntity().getLocation();
         final Location TO = FROM.clone().add(getPlayer().getLocation().getDirection().multiply(10));
@@ -127,7 +126,7 @@ public class MorphElderGuardian extends Morph {
         world.addEntity(customGuardian);
         EntitySpawningManager.setBypass(false);
 
-        getPlayer().setPassenger(customGuardian.getBukkitEntity());
+        getPlayer().addPassenger(customGuardian.getBukkitEntity());
 
         customGuardian.setInvisible(true);
     }

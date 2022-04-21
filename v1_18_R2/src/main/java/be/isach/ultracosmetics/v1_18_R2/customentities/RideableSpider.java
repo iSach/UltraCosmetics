@@ -20,7 +20,7 @@ public class RideableSpider extends Spider implements EntityBase {
 
     @Override
     public void travel(Vec3 vec3D) {
-        if (!CustomEntities.customEntities.contains(this)) {
+        if (!CustomEntities.isCustomEntity(this)) {
             super.tickHeadTurn((float) vec3D.x, (float) vec3D.y);
             return;
         }

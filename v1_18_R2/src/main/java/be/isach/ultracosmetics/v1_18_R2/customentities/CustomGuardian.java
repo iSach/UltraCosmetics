@@ -53,7 +53,7 @@ public class CustomGuardian extends Guardian {
 
     @Override
     public Component getName() {
-        return new TextComponent(Language.getInstance().getOrDefault("entity.Guardian.name"));
+        return new TextComponent(Language.getInstance().getOrDefault("entity.minecraft.guardian"));
     }
 
 

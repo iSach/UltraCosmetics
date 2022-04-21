@@ -1,16 +1,27 @@
 package be.isach.ultracosmetics.v1_12_R1.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.v1_12_R1.pets.CustomEntityPet;
-import net.minecraft.server.v1_12_R1.*;
+
 import org.bukkit.entity.Zombie;
+
+import net.minecraft.server.v1_12_R1.Block;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.Blocks;
+import net.minecraft.server.v1_12_R1.DamageSource;
+import net.minecraft.server.v1_12_R1.EntityZombie;
+import net.minecraft.server.v1_12_R1.EnumItemSlot;
+import net.minecraft.server.v1_12_R1.ItemStack;
+import net.minecraft.server.v1_12_R1.LocaleI18n;
+import net.minecraft.server.v1_12_R1.SoundEffect;
+import net.minecraft.server.v1_12_R1.SoundEffects;
+import net.minecraft.server.v1_12_R1.World;
 
 /**
  * @author RadBuilder
  */
-public class Pumpling extends EntityZombie implements IPetCustomEntity {
+public class Pumpling extends EntityZombie {
 
     private CustomEntityPet pet = null;
 
@@ -21,10 +32,6 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     public Pumpling(World world, CustomEntityPet pet) {
         super(world);
         this.pet = pet;
-    }
-
-    public org.bukkit.entity.Entity getEntity() {
-        return getBukkitEntity();
     }
 
     @Override
@@ -78,7 +85,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     }
 
     private boolean isCustomEntity() {
-        return CustomEntities.customEntities.contains(this);
+        return CustomEntities.isCustomEntity(this);
     }
 
 }

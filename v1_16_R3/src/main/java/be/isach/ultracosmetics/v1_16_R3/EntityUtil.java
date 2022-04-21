@@ -58,7 +58,7 @@ public class EntityUtil implements IEntityUtil {
         PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(as);
         PacketPlayOutEntityMetadata dataPacket = new PacketPlayOutEntityMetadata(as.getId(), as.getDataWatcher(), false);
         List<Pair<EnumItemSlot, ItemStack>> list = new ArrayList<>();
-        list.add(new Pair(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
+        list.add(new Pair<EnumItemSlot, ItemStack>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         PacketPlayOutEntityEquipment equipmentPacket = new PacketPlayOutEntityEquipment(as.getId(), list);
         for (Player players : player.getWorld().getPlayers()) {
             PacketSender.send(players, spawnPacket);
@@ -148,7 +148,7 @@ public class EntityUtil implements IEntityUtil {
             fField = PathfinderGoalSelector.class.getDeclaredField("f");
             fField.setAccessible(true);
             fField.set(targetSelector, EnumSet.noneOf(PathfinderGoal.Type.class));
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+        } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
 
@@ -157,7 +157,7 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void makePanic(org.bukkit.entity.Entity entity) {
         EntityInsentient insentient = (EntityInsentient) ((CraftEntity) entity).getHandle();
-        insentient.goalSelector.a(3, new CustomPathFinderGoalPanic((EntityCreature) insentient, 0.4d));
+        insentient.goalSelector.a(3, new CustomPathFinderGoalPanic((EntityCreature) insentient));
     }
 
     @Override

@@ -42,7 +42,7 @@ public class CustomGuardian extends EntityGuardian {
 
     @Override
     public String getName() {
-        return LocaleLanguage.a().a("entity.Guardian.name");
+        return LocaleLanguage.a().a("entity.minecraft.guardian");
     }
 
 

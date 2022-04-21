@@ -20,17 +20,27 @@ dependencies {
     compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
     // same version used in 1.17.1
     compileOnly 'com.mojang:authlib:2.3.31'
-    implementation ('com.zaxxer:HikariCP:4.0.3') {
-        exclude group: 'org.slf4j'
+    // hikari requires slf4j, this attaches it to log4j
+    implementation ('org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2') {
+        exclude group: 'org.apache.logging.log4j', module: 'log4j-api'
+        exclude group: 'org.apache.logging.log4j', module: 'log4j-core' 
     }
+    implementation 'com.zaxxer:HikariCP:4.0.3'
     // 'api' so it's passed down to NMS modules
     api 'com.github.cryptomorin:XSeries:8.7.1'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
 }
 shadowJar {
+    // removes unused classes in 'implementation' path dependencies
+    minimize()
     def path = 'be.isach.ultracosmetics.shaded'
-    // XParticle is big and not required so don't shade it
+    // XParticle is big and not required so don't shade it.
+    // It's not removed by minimize() because it's on the API path I guess?
     exclude 'com/cryptomorin/xseries/particles/*'
+    // I'd like to relocate everything but slf4j breaks when relocated.
+    // I think it has something to do with META-INF/services/org.slf4j.spi.SLF4JServiceProvider
+    //relocate ('org.slf4j', path + '.slf4j')
+    //relocate ('org.apache.logging.slf4j', path + '.log4j-slf4j')
     relocate ('com.zaxxer.hikari', path + '.hikari')
     relocate ('com.cryptomorin.xseries', path + '.xseries')
     relocate ('org.bstats', path + '.metrics')

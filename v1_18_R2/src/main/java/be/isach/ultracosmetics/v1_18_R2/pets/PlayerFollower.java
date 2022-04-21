@@ -28,7 +28,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
 
     @Override
     public void follow(Player player) {
-        if (player == null) {
+        if (player == null || !player.isOnline()) {
             return;
         }
 
@@ -39,7 +39,7 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
         Entity petEntity;
 
         if (pet.isCustomEntity()) {
-            petEntity = ((CustomEntityPet) pet).getCustomEntity();
+            petEntity = ((CustomEntityPet) pet).getNMSEntity();
         } else {
             petEntity = ((CraftEntity) pet.getEntity()).getHandle();
         }
@@ -48,40 +48,38 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             return;
         }
 
-        // Run in sync... To enhance :S
-        Bukkit.getScheduler().runTask(UltraCosmeticsData.get().getPlugin(), () -> {
-            if (!player.isOnline()) return;
-            if (!player.getWorld().equals(petEntity.getBukkitEntity().getWorld())) {
-                petEntity.getBukkitEntity().teleport(player.getLocation());
-                return;
-            }
+        if (!player.getWorld().equals(petEntity.getBukkitEntity().getWorld())) {
+            petEntity.getBukkitEntity().teleport(player.getLocation());
+            return;
+        }
 
-            ((Mob) petEntity).getNavigation().setSpeedModifier(2d);
-            Location targetLocation = player.getLocation();
-            Path path = path((Mob)petEntity, targetLocation);
+        ((Mob) petEntity).getNavigation().setSpeedModifier(2d);
+        Location targetLocation = player.getLocation();
+        Path path = path((Mob)petEntity, targetLocation);
 
-            try {
-                int distance = (int) Bukkit.getPlayer(player.getName()).getLocation().distance(petEntity.getBukkitEntity().getLocation());
+        try {
+            double distanceSquared = Bukkit.getPlayer(player.getName()).getLocation().distanceSquared(petEntity.getBukkitEntity().getLocation());
 
-                if (distance > 10 && petEntity.valid && player.isOnGround()) {
-                    petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                }
-
-                if (path != null && distance > 1.3) {
-                    double speed = 1.15d;
-
-                    if (pet.getType().getEntityType() == EntityType.ZOMBIE) {
-                        speed *= 1.3;
-                    }
-
-                    ((Mob) petEntity).getNavigation().moveTo(path, speed);
-                    ((Mob) petEntity).getNavigation().setSpeedModifier(speed);
-                }
-            } catch (IllegalArgumentException exception) {
+            @SuppressWarnings("deprecation")
+            boolean onGround = player.isOnGround();
+            if (onGround && distanceSquared > 10 * 10 && petEntity.valid) {
                 petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                //exception.printStackTrace();
             }
-        });
+
+            if (path != null && distanceSquared > 1.3 * 1.3) {
+                double speed = 1.15d;
+
+                if (pet.getType().getEntityType() == EntityType.ZOMBIE) {
+                    speed *= 1.3;
+                }
+
+                ((Mob) petEntity).getNavigation().moveTo(path, speed);
+                ((Mob) petEntity).getNavigation().setSpeedModifier(speed);
+            }
+        } catch (IllegalArgumentException exception) {
+            petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
+            //exception.printStackTrace();
+        }
     }
 
     @Override

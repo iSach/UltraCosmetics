@@ -115,7 +115,7 @@ public class EntityUtil implements IEntityUtil {
         ClientboundAddEntityPacket addPacket = new ClientboundAddEntityPacket(as);
         ClientboundSetEntityDataPacket dataPacket = new ClientboundSetEntityDataPacket(as.getId(), as.getEntityData(), false);
         List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();
-        equipment.add(new Pair(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
+        equipment.add(new Pair<EquipmentSlot, ItemStack>(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(as.getId(), equipment);
         for (Player loopPlayer : player.getWorld().getPlayers()) {
             sendPacket(loopPlayer, addPacket);
@@ -191,7 +191,7 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void makePanic(org.bukkit.entity.Entity entity) {
         PathfinderMob insentient = (PathfinderMob) ((CraftEntity) entity).getHandle();
-        insentient.goalSelector.addGoal(3, new CustomPathFinderGoalPanic(insentient, 0.4d));
+        insentient.goalSelector.addGoal(3, new CustomPathFinderGoalPanic(insentient));
     }
 
     @Override
@@ -317,7 +317,7 @@ public class EntityUtil implements IEntityUtil {
         return false;
     }
 
-    private void sendPacket(Player player, Packet packet) {
+    private void sendPacket(Player player, Packet<?> packet) {
         ((CraftPlayer) player).getHandle().connection.send(packet);
     }
 }

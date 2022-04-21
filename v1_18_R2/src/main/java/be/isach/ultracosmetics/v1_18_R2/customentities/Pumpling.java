@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.v1_18_R2.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.v1_18_R2.pets.CustomEntityPet;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.TextComponent;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * @author RadBuilder
  */
-public class Pumpling extends Zombie implements IPetCustomEntity {
+public class Pumpling extends Zombie  {
 
     private CustomEntityPet pet = null;
 
@@ -34,10 +34,6 @@ public class Pumpling extends Zombie implements IPetCustomEntity {
     public Pumpling(EntityType<? extends Zombie> entitytypes, Level world, CustomEntityPet pet) {
         super(entitytypes, world);
         this.pet = pet;
-    }
-
-    public org.bukkit.entity.Entity getEntity() {
-        return getBukkitEntity();
     }
 
     @Override
@@ -74,7 +70,7 @@ public class Pumpling extends Zombie implements IPetCustomEntity {
 
     @Override
     public TextComponent getName() {
-        return new TextComponent(Language.getInstance().getOrDefault("entity.Zombie.name"));
+        return new TextComponent(Language.getInstance().getOrDefault("entity.minecraft.zombie"));
     }
 
     @Override
@@ -91,7 +87,7 @@ public class Pumpling extends Zombie implements IPetCustomEntity {
     }
 
     private boolean isCustomEntity() {
-        return CustomEntities.customEntities.contains(this);
+        return CustomEntities.isCustomEntity(this);
     }
 
 }

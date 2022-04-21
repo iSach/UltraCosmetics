@@ -106,7 +106,7 @@ public class EntityUtil implements IEntityUtil {
     @Override
     public void makePanic(org.bukkit.entity.Entity entity) {
         EntityInsentient insentient = (EntityInsentient) ((CraftEntity) entity).getHandle();
-        insentient.goalSelector.a(3, new CustomPathFinderGoalPanic((EntityCreature) insentient, 0.4d));
+        insentient.goalSelector.a(3, new CustomPathFinderGoalPanic((EntityCreature) insentient));
     }
 
     @Override

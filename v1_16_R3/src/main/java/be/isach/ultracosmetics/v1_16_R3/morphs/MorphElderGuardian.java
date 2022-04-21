@@ -128,7 +128,7 @@ public class MorphElderGuardian extends Morph {
         world.addEntity(customGuardian);
         EntitySpawningManager.setBypass(false);
 
-        getPlayer().setPassenger(customGuardian.getBukkitEntity());
+        getPlayer().addPassenger(customGuardian.getBukkitEntity());
 
         customGuardian.setInvisible(true);
     }

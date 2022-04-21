@@ -1,16 +1,28 @@
 package be.isach.ultracosmetics.v1_16_R3.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.pets.IPetCustomEntity;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.v1_16_R3.pets.CustomEntityPet;
-import net.minecraft.server.v1_16_R3.*;
+
 import org.bukkit.entity.Zombie;
+
+import net.minecraft.server.v1_16_R3.BlockPosition;
+import net.minecraft.server.v1_16_R3.Blocks;
+import net.minecraft.server.v1_16_R3.DamageSource;
+import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.server.v1_16_R3.EntityZombie;
+import net.minecraft.server.v1_16_R3.EnumItemSlot;
+import net.minecraft.server.v1_16_R3.IBlockData;
+import net.minecraft.server.v1_16_R3.ItemStack;
+import net.minecraft.server.v1_16_R3.LocaleLanguage;
+import net.minecraft.server.v1_16_R3.SoundEffect;
+import net.minecraft.server.v1_16_R3.SoundEffects;
+import net.minecraft.server.v1_16_R3.World;
 
 /**
  * @author RadBuilder
  */
-public class Pumpling extends EntityZombie implements IPetCustomEntity {
+public class Pumpling extends EntityZombie {
 
     private CustomEntityPet pet = null;
 
@@ -21,10 +33,6 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     public Pumpling(EntityTypes<? extends EntityZombie> entitytypes, World world, CustomEntityPet pet) {
         super(entitytypes, world);
         this.pet = pet;
-    }
-
-    public org.bukkit.entity.Entity getEntity() {
-        return getBukkitEntity();
     }
 
     @Override
@@ -61,7 +69,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
 
     @Override
     public String getName() {
-        return LocaleLanguage.a().a("entity.Zombie.name");
+        return LocaleLanguage.a().a("entity.minecraft.zombie");
     }
 
     @Override
@@ -78,7 +86,7 @@ public class Pumpling extends EntityZombie implements IPetCustomEntity {
     }
 
     private boolean isCustomEntity() {
-        return CustomEntities.customEntities.contains(this);
+        return CustomEntities.isCustomEntity(this);
     }
 
 }

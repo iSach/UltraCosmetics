@@ -1,76 +1,58 @@
 package be.isach.ultracosmetics.v1_16_R3.customentities;
 
+import be.isach.ultracosmetics.v1_16_R3.EntityBase;
+import be.isach.ultracosmetics.v1_16_R3.nms.EntityWrapper;
+
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
-import be.isach.ultracosmetics.v1_16_R3.EntityBase;
-import be.isach.ultracosmetics.v1_16_R3.nms.EntityWrapper;
-import net.minecraft.server.v1_16_R3.*;
-import org.bukkit.entity.EntityType;
-
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.server.v1_16_R3.DataConverterRegistry;
+import net.minecraft.server.v1_16_R3.DataConverterTypes;
+import net.minecraft.server.v1_16_R3.Entity;
+import net.minecraft.server.v1_16_R3.EntityHuman;
+import net.minecraft.server.v1_16_R3.EntityInsentient;
+import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.server.v1_16_R3.EnumCreatureType;
+import net.minecraft.server.v1_16_R3.IRegistry;
+import net.minecraft.server.v1_16_R3.MathHelper;
+import net.minecraft.server.v1_16_R3.SharedConstants;
+import net.minecraft.server.v1_16_R3.Vec3D;
 
 /**
  * @author RadBuilder
  */
-public enum CustomEntities {
-
-    PUMPLING("pumpling", EntityType.ZOMBIE.getTypeId(), EntityType.ZOMBIE, EntityZombie.class, Pumpling.class),
-    SLIME("customslime", EntityType.SLIME.getTypeId(), EntityType.SLIME, EntitySlime.class, CustomSlime.class),
-    RIDEABLE_SPIDER("rideablespider", EntityType.SPIDER.getTypeId(), EntityType.SPIDER, EntitySpider.class, RideableSpider.class),
-    CUSTOM_GUARDIAN("customguardian", EntityType.GUARDIAN.getTypeId(), EntityType.GHAST, EntityGuardian.class, CustomGuardian.class);
-
-    public static List<Entity> customEntities = new ArrayList<>();
-
-    public static EntityTypes<Entity> typesLocA;
-    public static EntityTypes<Entity> typesLocB;
-    public static EntityTypes<Entity> typesLocC;
-    public static EntityTypes<Entity> typesLocD;
-
-    private String name;
-    private int id;
-    private EntityType entityType;
-    private MinecraftKey minecraftKey;
-    private Class<? extends EntityInsentient> nmsClass;
-    private Class<? extends Entity> customClass;
-
-    CustomEntities(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass,
-                   Class<? extends Entity> customClass) {
-        this.name = name;
-        this.id = id;
-        this.entityType = entityType;
-        this.minecraftKey = new MinecraftKey(name);
-        this.nmsClass = nmsClass;
-        this.customClass = customClass;
-    }
-
+public class CustomEntities {
+    private static final Set<Entity> customEntities = new HashSet<>();
     public static void registerEntities() {
         String customName = "ultracosmetics";
 
+        @SuppressWarnings("unchecked")
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
 
         // Pumpling
         types.put("minecraft:" + customName, types.get("minecraft:zombie"));
         EntityTypes.Builder<Entity> a = EntityTypes.Builder.a(Pumpling::new, EnumCreatureType.AMBIENT);
-        typesLocA = IRegistry.a(IRegistry.ENTITY_TYPE, customName, a.a(customName));
+        IRegistry.a(IRegistry.ENTITY_TYPE, customName, a.a(customName));
 
         // Slime
         types.put("minecraft:" + customName, types.get("minecraft:slime"));
         EntityTypes.Builder<Entity> b = EntityTypes.Builder.a(CustomSlime::new, EnumCreatureType.AMBIENT);
-        typesLocB = IRegistry.a(IRegistry.ENTITY_TYPE, customName, b.a(customName));
+        IRegistry.a(IRegistry.ENTITY_TYPE, customName, b.a(customName));
 
         // Spider
         types.put("minecraft:" + customName, types.get("minecraft:spider"));
         EntityTypes.Builder<Entity> c = EntityTypes.Builder.a(RideableSpider::new, EnumCreatureType.AMBIENT);
-        typesLocC = IRegistry.a(IRegistry.ENTITY_TYPE, customName, c.a(customName));
+        IRegistry.a(IRegistry.ENTITY_TYPE, customName, c.a(customName));
 
         // Guardian
         types.put("minecraft:" + customName, types.get("minecraft:guardian"));
         EntityTypes.Builder<Entity> d = EntityTypes.Builder.a(CustomGuardian::new, EnumCreatureType.AMBIENT);
-        typesLocD = IRegistry.a(IRegistry.ENTITY_TYPE, customName, d.a(customName));
+        IRegistry.a(IRegistry.ENTITY_TYPE, customName, d.a(customName));
     }
 
     public static void unregisterEntities() {}
@@ -79,30 +61,6 @@ public enum CustomEntities {
         Field field = clazz.getDeclaredField(fieldName);
         field.setAccessible(true);
         return field.get(handle);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getID() {
-        return id;
-    }
-
-    public EntityType getEntityType() {
-        return entityType;
-    }
-
-    public MinecraftKey getMinecraftKey() {
-        return this.minecraftKey;
-    }
-
-    public Class<? extends EntityInsentient> getNMSClass() {
-        return nmsClass;
-    }
-
-    public Class<? extends Entity> getCustomClass() {
-        return customClass;
     }
 
     public static void ride(float sideMot, float forMot, EntityHuman passenger, EntityInsentient entity) {
@@ -163,5 +121,17 @@ public enum CustomEntities {
 
             entityBase.g_(sideMot, forMot);
         }
+    }
+
+    public static void addCustomEntity(Entity entity) {
+        customEntities.add(entity);
+    }
+
+    public static boolean isCustomEntity(Entity entity) {
+        return customEntities.contains(entity);
+    }
+
+    public static void removeCustomEntity(Entity entity) {
+        customEntities.remove(entity);
     }
 }
