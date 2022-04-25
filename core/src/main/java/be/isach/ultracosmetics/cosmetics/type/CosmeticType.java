@@ -1,17 +1,18 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ServerVersion;
+
 import com.cryptomorin.xseries.XMaterial;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,21 +25,27 @@ import java.util.StringJoiner;
  * @since 07-05-2016
  */
 public abstract class CosmeticType<T extends Cosmetic<?>> {
+    private static final Permission ALL_PERMISSION = new Permission("ultracosmetics.allcosmetics");
+
+    static {
+        Bukkit.getPluginManager().addPermission(ALL_PERMISSION);
+    }
 
     private final String configName;
-    private final String permission;
     private final String description;
     private final Class<? extends T> clazz;
     private final Category category;
-    private final ServerVersion baseVersion;
     private final XMaterial material;
+    private Permission permission;
 
-    public CosmeticType(Category category, String configName, String permission, String defaultDescription, XMaterial material, Class<? extends T> clazz, ServerVersion baseVersion) {
+    public CosmeticType(Category category, String configName, String defaultDescription, XMaterial material, Class<? extends T> clazz) {
+        this(category, configName, defaultDescription, material, clazz, true);
+    }
+
+    public CosmeticType(Category category, String configName, String defaultDescription, XMaterial material, Class<? extends T> clazz, boolean registerPerm) {
         this.configName = configName;
-        this.permission = permission;
         this.clazz = clazz;
         this.category = category;
-        this.baseVersion = baseVersion;
         this.material = material;
 
         String descPath = getCategory().getConfigPath() + "." + configName + ".Description";
@@ -51,6 +58,9 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
             MessageManager.addMessage(descPath, defaultDescription);
         }
         description = MessageManager.getMessage(descPath);
+        if (registerPerm) {
+            registerPermission();
+        }
     }
 
     public T equip(UltraPlayer player, UltraCosmetics ultraCosmetics) {
@@ -66,7 +76,7 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
     }
 
     public boolean isEnabled() {
-        return SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled") && UltraCosmeticsData.get().getServerVersion().isAtLeast(baseVersion);
+        return SettingsManager.getConfig().getBoolean(category.getConfigPath() + "." + configName + ".Enabled");
     }
 
     public String getName() {
@@ -77,7 +87,7 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
         return configName;
     }
 
-    public String getPermission() {
+    public Permission getPermission() {
         return permission;
     }
 
@@ -161,5 +171,15 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
     @Override
     public String toString() {
         return getConfigName().toUpperCase();
+    }
+
+    protected void registerPermission() {
+        permission = new Permission(category.getPermission() + "." + getPermissionSuffix());
+        Bukkit.getPluginManager().addPermission(permission);
+        permission.addParent(ALL_PERMISSION, true);
+    }
+
+    protected String getPermissionSuffix() {
+        return getConfigName().toLowerCase();
     }
 }

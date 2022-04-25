@@ -30,6 +30,7 @@ dependencies {
     // 'api' so it's passed down to NMS modules
     api 'com.github.cryptomorin:XSeries:8.7.1'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
+    compileOnly 'net.luckperms:api:5.4'
 }
 shadowJar {
     // removes unused classes in 'implementation' path dependencies

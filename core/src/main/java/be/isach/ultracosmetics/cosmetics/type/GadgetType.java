@@ -70,7 +70,7 @@ public class GadgetType extends CosmeticType<Gadget> {
     private final boolean affectPlayersPossible;
 
     private GadgetType(XMaterial material, double defaultCountdown, int runTime, String permission, String configName, String defaultDesc, boolean affectPlayersPossible, Class<? extends Gadget> clazz) {
-        super(Category.GADGETS, configName, permission, defaultDesc, material, clazz, ServerVersion.earliest());
+        super(Category.GADGETS, configName, defaultDesc, material, clazz);
 
         this.affectPlayersPossible = affectPlayersPossible;
         this.affectPlayersEnabled = SettingsManager.getConfig().getBoolean("Gadgets." + configName + ".Affect-Players");

@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.particleeffects.*;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.util.ServerVersion;
+
 import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ParticleEffectType extends CosmeticType<ParticleEffect> {
     private final double particleMultiplier;
 
     private ParticleEffectType(String permission, String configName, int repeatDelay, Particles effect, XMaterial material, Class<? extends ParticleEffect> clazz, String defaultDesc, boolean supportsParticleMultiplier) {
-        super(Category.EFFECTS, configName, permission, defaultDesc, material, clazz, ServerVersion.earliest());
+        super(Category.EFFECTS, configName, defaultDesc, material, clazz);
         this.repeatDelay = repeatDelay;
         this.effect = effect;
         if (supportsParticleMultiplier) {

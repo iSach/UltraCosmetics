@@ -206,8 +206,11 @@ TreasureChests:
       effect: SMOKE_NORMAL
   # This should be set to a command that sets permissions so UC can give cosmetics from treasure chests.
   # %name% will be replaced with the player's name, and %permission% will be replaced with the permission to add.
-  # LuckPerms example: lp user %name% permission set %permission% true
-  Permission-Add-Command: say Please set "Permission-Add-Command" in UltraCosmetics config.yml
+  #
+  # Alternatively, if you're using LuckPerms, you can use '!lp-api' to access the LuckPerms API directly rather than using commands.
+  # If you want to apply LuckPerms contexts to the added permissions, simply add them after !lp-api, like: '!lp-api server=hub'
+  # Adding nolog will suppress logging of added permissions
+  Permission-Add-Command: '!lp-api'
 
 # This option will fill the blank slots of inventories
 # with a custom item!

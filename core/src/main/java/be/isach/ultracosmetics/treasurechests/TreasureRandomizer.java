@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.permissions.Permission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -275,9 +276,8 @@ public class TreasureRandomizer {
         }
     }
 
-    public void givePermission(String permission) {
-        String command = SettingsManager.getConfig().getString("TreasureChests.Permission-Add-Command").replace("%name%", player.getName()).replace("%permission%", permission);
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+    public void givePermission(Permission permission) {
+        UltraCosmeticsData.get().getPlugin().getPermissionProvider().setPermission(player, permission);
     }
 
     public void spawnRandomFirework(Location location) {

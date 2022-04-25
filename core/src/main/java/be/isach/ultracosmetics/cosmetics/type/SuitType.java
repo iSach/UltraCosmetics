@@ -6,7 +6,7 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.*;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
-import be.isach.ultracosmetics.util.ServerVersion;
+
 import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
@@ -56,9 +56,11 @@ public class SuitType extends CosmeticType<Suit> {
      * @param category         The Suit category this part belongs to
      */
     protected SuitType(XMaterial material, ArmorSlot slot, SuitCategory category) {
-        super(Category.SUITS, category.getConfigName(), "ultracosmetics.suits." + category.getPermissionSuffix(), category.getDefaultDesc(), material, category.getSuitClass(), ServerVersion.earliest());
+        super(Category.SUITS, category.getConfigName(), category.getDefaultDesc(), material, category.getSuitClass(), false);
         this.slot = slot;
         this.category = category;
+        // delay permission registration until we've loaded slot and category fields
+        registerPermission();
         VALUES.add(this);
     }
 
@@ -80,14 +82,9 @@ public class SuitType extends CosmeticType<Suit> {
         return MessageManager.getMessage("Suits." + getConfigName() + "." + slot.toString().toLowerCase() + "-name");
     }
 
-    /**
-     * Get the permission required to toggle suit.
-     *
-     * @return The required permission to toggle the suittype.
-     */
     @Override
-    public String getPermission() {
-        return super.getPermission() + "." + slot.toString().toLowerCase();
+    protected String getPermissionSuffix() {
+        return category.getPermissionSuffix() + "." + slot.toString().toLowerCase();
     }
 
     public ArmorSlot getSlot() {

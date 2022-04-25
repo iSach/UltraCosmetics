@@ -36,14 +36,14 @@ import java.util.stream.Collectors;
  */
 public enum Category {
 
-    PETS("Pets", "%petname%", "pe", k -> k.getPetsMenu(), () -> PetType.enabled()),
-    GADGETS("Gadgets", "%gadgetname%", "g", k -> k.getGadgetsMenu(), () -> GadgetType.enabled()),
-    EFFECTS("Particle-Effects", "%effectname%", "ef", k -> k.getEffectsMenu(), () -> ParticleEffectType.enabled()),
-    MOUNTS("Mounts", "%mountname%", "mou", k -> k.getMountsMenu(), () -> MountType.enabled()),
-    MORPHS("Morphs", "%morphname%", "mor", k -> k.getMorphsMenu(), () -> MorphType.enabled()),
-    HATS("Hats", "%hatname%", "h", k -> k.getHatsMenu(), () -> HatType.enabled()),
-    SUITS("Suits", "%suitname%", "s", k -> k.getSuitsMenu(), () -> SuitType.enabled()),
-    EMOTES("Emotes", "%emotename%", "e", k -> k.getEmotesMenu(), () -> EmoteType.enabled());
+    PETS("Pets", "%petname%", "pets", "pe", k -> k.getPetsMenu(), () -> PetType.enabled()),
+    GADGETS("Gadgets", "%gadgetname%", "gadgets", "g", k -> k.getGadgetsMenu(), () -> GadgetType.enabled()),
+    EFFECTS("Particle-Effects", "%effectname%", "particleeffects", "ef", k -> k.getEffectsMenu(), () -> ParticleEffectType.enabled()),
+    MOUNTS("Mounts", "%mountname%", "mounts", "mou", k -> k.getMountsMenu(), () -> MountType.enabled()),
+    MORPHS("Morphs", "%morphname%", "morphs", "mor", k -> k.getMorphsMenu(), () -> MorphType.enabled()),
+    HATS("Hats", "%hatname%", "hats", "h", k -> k.getHatsMenu(), () -> HatType.enabled()),
+    SUITS("Suits", "%suitname%", "suits", "s", k -> k.getSuitsMenu(), () -> SuitType.enabled()),
+    EMOTES("Emotes", "%emotename%", "emotes", "e", k -> k.getEmotesMenu(), () -> EmoteType.enabled());
 
     public static int enabledSize() {
         return enabled().size();
@@ -93,6 +93,7 @@ public enum Category {
     private final String configPath;
 
     private final String chatPlaceholder;
+    private final String permission;
     private final String prefix;
     private final Function<Menus,CosmeticMenu<?>> menuFunc;
     private final Supplier<List<? extends CosmeticType<?>>> enabledFunc;
@@ -104,9 +105,10 @@ public enum Category {
      * @param chatPlaceholder
      * @param prefix TODO
      */
-    private Category(String configPath, String chatPlaceholder, String prefix, Function<Menus,CosmeticMenu<?>> menuFunc, Supplier<List<? extends CosmeticType<?>>> enabledFunc) {
+    private Category(String configPath, String chatPlaceholder, String permission, String prefix, Function<Menus,CosmeticMenu<?>> menuFunc, Supplier<List<? extends CosmeticType<?>>> enabledFunc) {
         this.configPath = configPath;
         this.chatPlaceholder = chatPlaceholder;
+        this.permission = permission;
         this.prefix = prefix;
         this.menuFunc = menuFunc;
         this.enabledFunc = enabledFunc;
@@ -176,6 +178,10 @@ public enum Category {
 
     public String getChatPlaceholder() {
         return chatPlaceholder;
+    }
+
+    public String getPermission() {
+        return "ultracosmetics." + permission;
     }
 
     public String getActivateMessage() {

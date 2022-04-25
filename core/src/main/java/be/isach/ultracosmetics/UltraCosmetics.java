@@ -15,6 +15,9 @@ import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.menu.Menus;
 import be.isach.ultracosmetics.mysql.MySqlConnectionManager;
+import be.isach.ultracosmetics.permissions.LuckPermsHook;
+import be.isach.ultracosmetics.permissions.PermissionCommand;
+import be.isach.ultracosmetics.permissions.PermissionProvider;
 import be.isach.ultracosmetics.placeholderapi.PlaceholderHook;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
@@ -108,7 +111,9 @@ public class UltraCosmetics extends JavaPlugin {
     private ArmorStandManager armorStandManager;
 
     private EconomyHandler economyHandler;
-    
+
+    private PermissionProvider permissionProvider;
+
     /**
      * Manages WorldGuard flags.
      */
@@ -233,6 +238,8 @@ public class UltraCosmetics extends JavaPlugin {
         // Set up economy if needed.
         setupEconomy();
 
+        setupPermissionProvider();
+
         if (!UltraCosmeticsData.get().usingFileStorage()) {
             getSmartLogger().write();
             getSmartLogger().write("Connecting to MySQL database...");
@@ -322,6 +329,18 @@ public class UltraCosmetics extends JavaPlugin {
     private void setupEconomy() {
         economyHandler = new EconomyHandler(this, getConfig().getString("Economy"));
         UltraCosmeticsData.get().checkTreasureChests();
+    }
+
+    private void setupPermissionProvider() {
+        if (SettingsManager.getConfig().getString("TreasureChests.Permission-Add-Command", "").startsWith("!lp-api")) {
+            if (Bukkit.getPluginManager().isPluginEnabled("LuckPerms")) {
+                permissionProvider = new LuckPermsHook(this);
+                return;
+            }
+            getSmartLogger().write("Permission-Add-Command was set to '!lp-api' but LuckPerms is not present");
+            SettingsManager.getConfig().set("TreasureChests.Permission-Add-Command", "say Please set Permission-Add-Command in UC config.yml");
+        }
+        permissionProvider = new PermissionCommand();
     }
 
     private void setupWorldGuard() {
@@ -598,6 +617,10 @@ public class UltraCosmetics extends JavaPlugin {
 
     public EconomyHandler getEconomyHandler() {
         return economyHandler;
+    }
+
+    public PermissionProvider getPermissionProvider() {
+        return permissionProvider;
     }
 
     public AFlagManager getFlagManager() {

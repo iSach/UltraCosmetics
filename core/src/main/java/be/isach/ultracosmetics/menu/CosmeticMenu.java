@@ -352,8 +352,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             pd.setPrice(price);
             pd.setShowcaseItem(display);
             pd.setOnPurchase(() -> {
-                String command = SettingsManager.getConfig().getString("TreasureChests.Permission-Add-Command").replace("%name%", ultraPlayer.getUsername()).replace("%permission%", cosmeticType.getPermission());
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                ultraCosmetics.getPermissionProvider().setPermission(ultraPlayer.getBukkitPlayer(), cosmeticType.getPermission());
                 // delay by one tick so the command processes
                 Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cosmeticType.equip(ultraPlayer, getUltraCosmetics()), 5);
             });

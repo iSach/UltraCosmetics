@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.mounts.*;
-import be.isach.ultracosmetics.util.ServerVersion;
+
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -51,7 +51,7 @@ public class MountType extends CosmeticEntType<Mount<?>> {
     private final double movementSpeed;
 
     private MountType(String permission, String configName, XMaterial material, EntityType entityType, String defaultDescription, int repeatDelay, List<XMaterial> defaultBlocks, double defaultSpeed, Class<? extends Mount<?>> mountClass) {
-        super(Category.MOUNTS, configName, permission, defaultDescription, material, entityType, mountClass, ServerVersion.earliest());
+        super(Category.MOUNTS, configName, permission, defaultDescription, material, entityType, mountClass);
         this.repeatDelay = repeatDelay;
         this.defaultBlocks = defaultBlocks;
         this.defaultSpeed = defaultSpeed;

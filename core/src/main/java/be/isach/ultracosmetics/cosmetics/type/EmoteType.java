@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.TexturedSkullFactory;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.inventory.ItemStack;
@@ -206,7 +205,7 @@ public class EmoteType extends CosmeticType<Emote> {
     private int ticksPerFrame;
 
     private EmoteType(String permission, String configName, String defaultDesc, int ticksPerFrame) {
-        super(Category.EMOTES, configName, permission, defaultDesc, XMaterial.PLAYER_HEAD, Emote.class, ServerVersion.earliest());
+        super(Category.EMOTES, configName, defaultDesc, XMaterial.PLAYER_HEAD, Emote.class);
         this.ticksPerFrame = ticksPerFrame;
         this.frames = new ArrayList<>();
 
