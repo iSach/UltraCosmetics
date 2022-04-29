@@ -1,8 +1,6 @@
 package be.isach.ultracosmetics.v1_17_R1.mount;
 
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.entity.Spider;
-
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -13,7 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 /**
  * @author RadBuilder
  */
-public class MountSpider extends MountCustomEntity<Spider> {
+public class MountSpider extends MountCustomEntity {
     public MountSpider(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("spider"), ultraCosmetics);
     }

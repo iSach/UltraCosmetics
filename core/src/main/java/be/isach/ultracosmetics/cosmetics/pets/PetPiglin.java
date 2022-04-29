@@ -22,8 +22,7 @@ public class PetPiglin extends Pet {
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
+    public void setupEntity() {
         ((Piglin)entity).setImmuneToZombification(true);
     }
 }

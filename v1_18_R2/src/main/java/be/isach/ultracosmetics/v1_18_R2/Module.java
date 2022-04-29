@@ -35,12 +35,12 @@ public class Module implements IModule {
     public void disable() {}
 
     @Override
-    public Class<? extends Mount<?>> getSpiderClass() {
+    public Class<? extends Mount> getSpiderClass() {
         return MountSpider.class;
     }
 
     @Override
-    public Class<? extends Mount<?>> getSlimeClass() {
+    public Class<? extends Mount> getSlimeClass() {
         return MountSlime.class;
     }
 }

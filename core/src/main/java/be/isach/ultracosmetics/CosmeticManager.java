@@ -97,6 +97,7 @@ public class CosmeticManager {
             setupCategory(config, MorphType.values());
         }
         setupCategory(config, PetType.values());
+        config.addDefault("Pets.Axolotl.Fast", false, "https://imgur.com/a/EKWwQ6w");
         setupCategory(config, HatType.values());
         setupCategory(config, EmoteType.values());
         setupCategory(config, ParticleEffectType.values());

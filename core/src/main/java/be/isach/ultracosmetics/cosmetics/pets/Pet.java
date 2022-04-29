@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.EntityCosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -15,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Tameable;
@@ -28,8 +29,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Represents an instance of a pet summoned by a player.
@@ -37,7 +36,7 @@ import java.util.concurrent.Executors;
  * @author iSach
  * @since 03-08-2015
  */
-public abstract class Pet extends Cosmetic<PetType> implements Updatable {
+public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
     /**
      * List of items popping out from Pet.
      */
@@ -49,23 +48,13 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
     protected ArmorStand armorStand;
 
     /**
-     * Runs the task for pets following players
-     */
-    protected ExecutorService pathUpdater;
-    //protected int followTaskId;
-
-    /**
      * Task that forces pets to follow player
      */
-    protected IPlayerFollower followTask;
-
-    /**
-     * If Pet is a normal entity, it will be stored here.
-     */
-    protected Entity entity;
+    protected final APlayerFollower followTask;
 
     /**
      * The {@link org.bukkit.inventory.ItemStack ItemStack} this pet drops, null if none.
+     * Sometimes modified before dropping to change what is dropped
      */
     protected ItemStack dropItem;
 
@@ -75,7 +64,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         super(ultraCosmetics, Category.PETS, owner, petType);
 
         this.dropItem = dropItem;
-        this.pathUpdater = Executors.newSingleThreadExecutor();
+        this.followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
     }
 
     @SuppressWarnings("deprecation")
@@ -85,15 +74,13 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             getOwner().removePet();
         }
 
-        this.followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
-
         getOwner().setCurrentPet(this);
 
         runTaskTimer(getUltraCosmetics(), 0, 3);
 
         // Bypass WorldGuard protection.
         EntitySpawningManager.setBypass(true);
-        entity = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
+        entity = spawnEntity();
         EntitySpawningManager.setBypass(false);
 
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
@@ -112,7 +99,17 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             ((Tameable)entity).setTamed(true);
         }
 
-        getEntity().setCustomNameVisible(true);
+        if (isCustomEntity()) {
+            armorStand = (ArmorStand) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.ARMOR_STAND);
+            armorStand.setVisible(false);
+            armorStand.setSmall(true);
+            armorStand.setCustomNameVisible(true);
+            FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
+            armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
+            entity.setPassenger(armorStand);
+        } else {
+            getEntity().setCustomNameVisible(true);
+        }
 
         updateName();
 
@@ -123,6 +120,7 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         }
 
         this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
+        setupEntity();
     }
 
     @Override
@@ -132,12 +130,10 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             return;
         }
 
-        if (Bukkit.getPlayer(getOwnerUniqueId()) != null
-                && getOwner().getCurrentPet() != null
-                && getOwner().getCurrentPet().getType() == getType()) {
+        if (getOwner().isOnline() && getOwner().getCurrentPet() == this) {
             onUpdate();
 
-            pathUpdater.submit(followTask.getTask());
+            followTask.run();
         } else {
             clear();
         }
@@ -159,31 +155,14 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
         // Clear items.
         items.clear();
 
-        // Shutdown path updater.
-        pathUpdater.shutdown();
-
         // Empty current Pet.
         if (getPlayer() != null && getOwner() != null) {
             getOwner().setCurrentPet(null);
         }
     }
 
-    public boolean isCustomEntity() {
-        return false;
-    }
-
-    protected void removeEntity() {
-        if (entity != null) {
-            entity.remove();
-        }
-    }
-
-    public IPlayerFollower getFollowTask() {
+    public APlayerFollower getFollowTask() {
         return followTask;
-    }
-
-    public Entity getEntity() {
-        return entity;
     }
 
     public ArmorStand getArmorStand() {
@@ -258,5 +237,9 @@ public abstract class Pet extends Cosmetic<PetType> implements Updatable {
             filtered += " " + ChatColor.GRAY + "(" + name + ChatColor.GRAY + ")";
         }
         return filtered; 
+    }
+
+    public boolean isCustomEntity() {
+        return false;
     }
 }

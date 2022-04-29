@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author iSach
  * @since 12-18-2015
  */
-public class MountType extends CosmeticEntType<Mount<?>> {
+public class MountType extends CosmeticEntType<Mount> {
 
     private final static List<MountType> ENABLED = new ArrayList<>();
     private final static List<MountType> VALUES = new ArrayList<>();
@@ -50,7 +50,7 @@ public class MountType extends CosmeticEntType<Mount<?>> {
     private final double defaultSpeed;
     private final double movementSpeed;
 
-    private MountType(String permission, String configName, XMaterial material, EntityType entityType, String defaultDescription, int repeatDelay, List<XMaterial> defaultBlocks, double defaultSpeed, Class<? extends Mount<?>> mountClass) {
+    private MountType(String permission, String configName, XMaterial material, EntityType entityType, String defaultDescription, int repeatDelay, List<XMaterial> defaultBlocks, double defaultSpeed, Class<? extends Mount> mountClass) {
         super(Category.MOUNTS, configName, permission, defaultDescription, material, entityType, mountClass);
         this.repeatDelay = repeatDelay;
         this.defaultBlocks = defaultBlocks;

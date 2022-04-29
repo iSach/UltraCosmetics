@@ -29,11 +29,9 @@ import java.util.List;
  * @since 08-23-2016
  */
 public class MenuPets extends CosmeticMenu<PetType> {
-    private UltraCosmetics ultraCosmetics;
 
     public MenuPets(UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.PETS);
-        this.ultraCosmetics = ultraCosmetics;
     }
 
     @Override

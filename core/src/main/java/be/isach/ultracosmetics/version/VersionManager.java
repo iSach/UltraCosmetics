@@ -1,7 +1,7 @@
 package be.isach.ultracosmetics.version;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
+import be.isach.ultracosmetics.cosmetics.pets.APlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.util.ReflectionUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
@@ -27,7 +27,7 @@ public class VersionManager {
     private Mounts mounts;
     private IPets pets;
     private IMorphs morphs;
-    private Constructor<? extends IPlayerFollower> playerFollowerConstructor;
+    private Constructor<? extends APlayerFollower> playerFollowerConstructor;
 
     public VersionManager(ServerVersion serverVersion) {
         this.serverVersion = serverVersion;
@@ -46,7 +46,7 @@ public class VersionManager {
         fireworkFactory = loadModule("FireworkFactory");
         pets = loadModule("Pets");
         morphs = loadModule("Morphs");
-        playerFollowerConstructor = (Constructor<? extends IPlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pets.PlayerFollower"), Pet.class, Player.class);
+        playerFollowerConstructor = (Constructor<? extends APlayerFollower>) ReflectionUtils.getConstructor(Class.forName(PACKAGE + "." + serverVersion + ".pets.PlayerFollower"), Pet.class, Player.class);
         playerFollowerConstructor.setAccessible(true);
     }
 
@@ -72,7 +72,7 @@ public class VersionManager {
         return mounts;
     }
 
-    public IPlayerFollower newPlayerFollower(Pet pet, Player player) {
+    public APlayerFollower newPlayerFollower(Pet pet, Player player) {
         try {
             return playerFollowerConstructor.newInstance(pet, player);
         } catch (ReflectiveOperationException e) {

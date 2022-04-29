@@ -20,7 +20,7 @@ import org.bukkit.util.Vector;
 /**
  * @author RadBuilder
  */
-public class MountRudolph extends MountAbstractHorse<Mule> {
+public class MountRudolph extends MountAbstractHorse {
 
     private ArmorStand left, right;
 
@@ -29,8 +29,8 @@ public class MountRudolph extends MountAbstractHorse<Mule> {
     }
 
     @Override
-    public void setup() {
-        super.setup();
+    public void setupEntity() {
+        super.setupEntity();
         left = spawnArmorStand(false);
         right = spawnArmorStand(true);
         moveAntlers();
@@ -38,7 +38,7 @@ public class MountRudolph extends MountAbstractHorse<Mule> {
 
     @SuppressWarnings("deprecation")
     private ArmorStand spawnArmorStand(boolean right) {
-        ArmorStand armorStand = getEntity().getWorld().spawn(getEntity().getEyeLocation(), ArmorStand.class);
+        ArmorStand armorStand = getEntity().getWorld().spawn(getEyeLocation(), ArmorStand.class);
         armorStand.setBasePlate(false);
         armorStand.setGravity(false);
         armorStand.setArms(true);
@@ -61,7 +61,7 @@ public class MountRudolph extends MountAbstractHorse<Mule> {
     }
 
     private void moveAntlers() {
-        Location location = getEntity().getEyeLocation();
+        Location location = getEyeLocation();
 
         Vector vectorLeft = getLeftVector(location).multiply(0.5).multiply(1.6);
         Vector rightVector = getRightVector(location).multiply(0.5).multiply(0.4);
@@ -110,5 +110,9 @@ public class MountRudolph extends MountAbstractHorse<Mule> {
         final float newZ = (float) (loc.getZ() + (-1 * Math.sin(Math.toRadians(loc.getYaw() + 0))));
 
         return new Vector(newX - loc.getX(), 0, newZ - loc.getZ());
+    }
+
+    private Location getEyeLocation() {
+        return ((Mule)entity).getEyeLocation();
     }
 }

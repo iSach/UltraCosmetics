@@ -27,8 +27,10 @@ dependencies {
     }
     // versions above 4.0.3 are compiled with Java 11 so we can't use them
     implementation 'com.zaxxer:HikariCP:4.0.3'
-    // 'api' so it's passed down to NMS modules
-    api 'com.github.cryptomorin:XSeries:8.7.1'
+    // Do not use 'api' instead of 'implementation' here,
+    // IDEs do not like it when 'core' references XSeries directly
+    // but subprojects must reference XSeries as shaded.
+    implementation 'com.github.cryptomorin:XSeries:8.7.1'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
     compileOnly 'net.luckperms:api:5.4'
 }

@@ -5,12 +5,10 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 
-import org.bukkit.entity.ZombieHorse;
-
 /**
  * @author RadBuilder
  */
-public class MountWalkingDead extends MountAbstractHorse<ZombieHorse> {
+public class MountWalkingDead extends MountAbstractHorse {
 
     public MountWalkingDead(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("walkingdead"), ultraCosmetics);

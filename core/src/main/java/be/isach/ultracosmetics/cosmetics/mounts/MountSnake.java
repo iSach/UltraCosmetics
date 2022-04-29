@@ -24,7 +24,7 @@ import java.util.List;
  * @author iSach
  * @since 08-10-2015
  */
-public class MountSnake extends Mount<Sheep> {
+public class MountSnake extends Mount {
 
     private List<Creature> tail = new ArrayList<>();
     private int color = 1;
@@ -34,19 +34,21 @@ public class MountSnake extends Mount<Sheep> {
     }
 
     @Override
-    public void setup() {
+    public void setupEntity() {
         color = MathUtils.randomRangeInt(0, 14);
-        entity.setNoDamageTicks(Integer.MAX_VALUE);
-        entity.setColor(DyeColor.values()[color]);
-        tail.add(entity);
+        Sheep sheep = (Sheep) entity;
+        sheep.setNoDamageTicks(Integer.MAX_VALUE);
+        sheep.setColor(DyeColor.values()[color]);
+        tail.add(sheep);
         addSheepToTail(4);
     }
 
     @Override
     public void onClear() {
         super.onClear();
-        for (Entity ent : tail)
-            ent.remove();    
+        for (Entity ent : tail) {
+            ent.remove();
+        }
         tail.clear();
     }
 

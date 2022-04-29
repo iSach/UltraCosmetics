@@ -24,10 +24,10 @@ public class MountDruggedHorse extends MountHorse {
     }
 
     @Override
-    public void setup() {
-        super.setup();
+    public void setupEntity() {
+        super.setupEntity();
 
-        getEntity().setJumpStrength(1.3);
+        ((Horse)getEntity()).setJumpStrength(1.3);
 
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10000000, 1));

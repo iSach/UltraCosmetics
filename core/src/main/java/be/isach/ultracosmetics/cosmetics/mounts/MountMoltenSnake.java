@@ -22,7 +22,7 @@ import java.util.List;
  * @author iSach
  * @since 11-28-2015
  */
-public class MountMoltenSnake extends Mount<MagmaCube> {
+public class MountMoltenSnake extends Mount {
 
     private List<Entity> entities = new ArrayList<>();
     private Location lastLocation;
@@ -34,8 +34,8 @@ public class MountMoltenSnake extends Mount<MagmaCube> {
     }
 
     @Override
-    public void setup() {
-        entity.setSize(2);
+    public void setupEntity() {
+        ((MagmaCube)entity).setSize(2);
         entities.add(entity);
         summonTailPart(25);
     }

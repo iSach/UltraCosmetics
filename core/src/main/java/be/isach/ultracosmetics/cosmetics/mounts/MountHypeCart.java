@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.PlayerUtils;
-import org.bukkit.entity.Minecart;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.util.Vector;
@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
  * @author iSach
  * @since 08-03-2015
  */
-public class MountHypeCart extends Mount<Minecart> {
+public class MountHypeCart extends Mount {
 
     public MountHypeCart(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("hypecart"), ultraCosmetics);

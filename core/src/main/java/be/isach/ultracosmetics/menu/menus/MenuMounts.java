@@ -51,7 +51,7 @@ public class MenuMounts extends CosmeticMenu<MountType> {
     }
 
     @Override
-    protected Mount<?> getCosmetic(UltraPlayer ultraPlayer) {
+    protected Mount getCosmetic(UltraPlayer ultraPlayer) {
         return ultraPlayer.getCurrentMount();
     }
 }

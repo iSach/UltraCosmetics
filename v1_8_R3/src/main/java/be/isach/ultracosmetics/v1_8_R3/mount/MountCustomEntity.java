@@ -12,11 +12,12 @@ import java.lang.reflect.Field;
 
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
+import org.bukkit.entity.Entity;
 
 /**
  * Created by Sacha on 15/03/16.
  */
-public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> extends Mount<E> {
+public abstract class MountCustomEntity extends Mount {
 
     protected EntityInsentient customEntity;
 
@@ -25,7 +26,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
     }
 
     @Override
-    public E spawnEntity() {
+    public Entity spawnEntity() {
         customEntity = getNewEntity();
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
@@ -58,10 +59,9 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         CustomEntities.removeCustomEntity(customEntity);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public E getEntity() {
-        return (E) customEntity.getBukkitEntity();
+    public Entity getEntity() {
+        return customEntity.getBukkitEntity();
     }
 
     public EntityInsentient getCustomEntity() {

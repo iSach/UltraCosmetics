@@ -8,12 +8,11 @@ import net.minecraft.server.v1_16_R3.EntityLiving;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.entity.Slime;
 
 /**
  * @author RadBuilder
  */
-public class MountSlime extends MountCustomEntity<Slime> {
+public class MountSlime extends MountCustomEntity {
 
     public MountSlime(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("slime"), ultraCosmetics);

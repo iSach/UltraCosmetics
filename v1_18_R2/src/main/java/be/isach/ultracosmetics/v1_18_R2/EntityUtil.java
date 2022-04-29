@@ -31,7 +31,6 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -270,25 +269,6 @@ public class EntityUtil implements IEntityUtil {
             ChestBlockEntity tileChest = (ChestBlockEntity) world.getBlockEntity(position);
             world.blockEvent(position, tileChest.getBlockState().getBlock(), 1, open ? 1 : 0);
         }
-    }
-
-    @Override
-    public org.bukkit.entity.Entity spawnItem(org.bukkit.inventory.ItemStack itemStack, Location blockLocation) {
-        ItemEntity ei = new ItemEntity(
-                ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle(),
-                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getX(),
-                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getY(),
-                blockLocation.clone().add(0.5D, 1.2D, 0.5D).getZ(),
-                CraftItemStack.asNMSCopy(itemStack)) {
-        };
-        ei.getBukkitEntity().setVelocity(new Vector(0.0D, 0.25D, 0.0D));
-        ei.pickupDelay = 2147483647;
-        ei.getBukkitEntity().setCustomName(UltraCosmeticsData.get().getItemNoPickupString());
-        ei.pickupDelay = 20;
-
-        ((CraftWorld) blockLocation.clone().add(0.5D, 1.2D, 0.5D).getWorld()).getHandle().addFreshEntity(ei);
-
-        return ei.getBukkitEntity();
     }
 
     @Override

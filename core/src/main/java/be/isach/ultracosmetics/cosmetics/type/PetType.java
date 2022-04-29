@@ -94,8 +94,7 @@ public final class PetType extends CosmeticEntType<Pet> {
         new PetType("ultracosmetics.pets.zombie", "Zombie", XMaterial.ROTTEN_FLESH, "&7&oQuick! Hide your Villagers!", EntityType.ZOMBIE, PetZombie.class);
         
         if (serverVersion.isAtLeast(ServerVersion.v1_17_R1)) {
-            /*Axolotl disabled because it walks way too fast*/
-            /*new PetType("ultracosmetics.pets.axolotl", "Axolotl", XMaterial.AXOLOTL_BUCKET, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class);*/
+            new PetType("ultracosmetics.pets.axolotl", "Axolotl", XMaterial.AXOLOTL_BUCKET, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class);
             /*Temporarily using WHEAT as material for the Goat until https://minecraft.fandom.com/wiki/Goat_Horn comes to Java edition*/
             new PetType("ultracosmetics.pets.goat", "Goat", XMaterial.WHEAT, "&7&oBAAAA!", EntityType.GOAT, PetGoat.class);
         }

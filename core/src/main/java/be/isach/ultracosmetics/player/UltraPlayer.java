@@ -27,7 +27,6 @@ import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
 import be.isach.ultracosmetics.util.ServerVersion;
 import com.cryptomorin.xseries.XMaterial;
-import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -61,7 +60,7 @@ public class UltraPlayer {
      * Current Cosmetics.
      */
     private Gadget currentGadget;
-    private Mount<?> currentMount;
+    private Mount currentMount;
     private ParticleEffect currentParticleEffect;
     private Pet currentPet;
     private TreasureChest currentTreasureChest;
@@ -339,7 +338,6 @@ public class UltraPlayer {
                 // when changing worlds, making sure morphs get correctly unset.
                 && (isQuitting() || SettingsManager.isAllowedWorld(getBukkitPlayer().getWorld()))) {
             removeMorph();
-            DisguiseAPI.undisguiseToAll(getBukkitPlayer());
         }
         removeGadget();
         removeParticleEffect();
@@ -661,11 +659,11 @@ public class UltraPlayer {
         }
     }
 
-    public Mount<?> getCurrentMount() {
+    public Mount getCurrentMount() {
         return currentMount;
     }
 
-    public void setCurrentMount(Mount<?> currentMount) {
+    public void setCurrentMount(Mount currentMount) {
         this.currentMount = currentMount;
         if (!isQuitting()) {
             cosmeticsProfile.setEnabledCosmetic(Category.MOUNTS, currentMount);

@@ -442,7 +442,7 @@ public class MathUtils {
     }
 
     public static Vector getRandomCircleVector() {
-        double rnd = random.nextDouble() * 2.0D * 3.141592653589793D;
+        double rnd = random.nextDouble() * PI2;
         double x = Math.cos(rnd);
         double z = Math.sin(rnd);
 
@@ -454,7 +454,7 @@ public class MathUtils {
     }
 
     public static double getRandomAngle() {
-        return random.nextDouble() * 2 * Math.PI;
+        return random.nextDouble() * PI2;
     }
 
     public static double randomDouble(double min, double max) {

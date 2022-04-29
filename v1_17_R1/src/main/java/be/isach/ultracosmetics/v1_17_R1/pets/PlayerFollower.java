@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.v1_17_R1.pets;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.cosmetics.pets.IPlayerFollower;
+import be.isach.ultracosmetics.cosmetics.pets.APlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -16,29 +15,17 @@ import org.bukkit.entity.Player;
 /**
  * @author RadBuilder
  */
-public class PlayerFollower implements Runnable, IPlayerFollower {
-
-    private final Pet pet;
-    private final Player player;
+public class PlayerFollower extends APlayerFollower {
 
     public PlayerFollower(Pet pet, Player player) {
-        this.pet = pet;
-        this.player = player;
+        super(pet, player);
     }
 
     @Override
-    public void follow(Player player) {
-        if (player == null || !player.isOnline()) {
-            return;
-        }
-
-        if (UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer(player).getCurrentTreasureChest() != null) {
-            return;
-        }
-
+    public void follow() {
         Entity petEntity;
 
-        if (pet.isCustomEntity()) {
+        if (pet instanceof CustomEntityPet) {
             petEntity = ((CustomEntityPet) pet).getNMSEntity();
         } else {
             petEntity = ((CraftEntity) pet.getEntity()).getHandle();
@@ -80,16 +67,6 @@ public class PlayerFollower implements Runnable, IPlayerFollower {
             petEntity.moveTo(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
             //exception.printStackTrace();
         }
-    }
-
-    @Override
-    public void run() {
-        follow(player);
-    }
-
-    @Override
-    public Runnable getTask() {
-        return this;
     }
     
     private Path path(Mob mob, Location loc) {

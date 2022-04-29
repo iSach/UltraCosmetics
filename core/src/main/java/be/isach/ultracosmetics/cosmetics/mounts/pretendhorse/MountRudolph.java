@@ -31,8 +31,8 @@ public class MountRudolph extends MountHorse {
     }
 
     @Override
-    public void setup() {
-        super.setup();
+    public void setupEntity() {
+        super.setupEntity();
         left = spawnArmorStand(false);
         right = spawnArmorStand(true);
         moveAntlers();
@@ -40,7 +40,7 @@ public class MountRudolph extends MountHorse {
 
     @SuppressWarnings("deprecation")
     private ArmorStand spawnArmorStand(boolean right) {
-        ArmorStand armorStand = getEntity().getWorld().spawn(getEntity().getEyeLocation(), ArmorStand.class);
+        ArmorStand armorStand = getEntity().getWorld().spawn(getEyeLocation(), ArmorStand.class);
         armorStand.setBasePlate(false);
         armorStand.setGravity(false);
         armorStand.setArms(true);
@@ -63,7 +63,7 @@ public class MountRudolph extends MountHorse {
     }
 
     private void moveAntlers() {
-        Location location = getEntity().getEyeLocation();
+        Location location = getEyeLocation();
 
         Vector vectorLeft = getLeftVector(location).multiply(0.5).multiply(1.6);
         Vector rightVector = getRightVector(location).multiply(0.5).multiply(0.4);
@@ -125,5 +125,9 @@ public class MountRudolph extends MountHorse {
     @Override
     protected Color getColor() {
         return null;
+    }
+
+    private Location getEyeLocation() {
+        return ((Horse)entity).getEyeLocation();
     }
 }

@@ -20,7 +20,7 @@ import org.bukkit.util.Vector;
  * @author iSach
  * @since 08-17-2015
  */
-public class MountDragon extends Mount<EnderDragon> {
+public class MountDragon extends Mount {
 
     public MountDragon(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("dragon"), ultraCosmetics);

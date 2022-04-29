@@ -14,7 +14,7 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 /**
  * @author RadBuilder
  */
-public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> extends Mount<E> {
+public abstract class MountCustomEntity extends Mount {
 
     protected EntityLiving customEntity;
 
@@ -23,7 +23,7 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
     }
 
     @Override
-    public E spawnEntity() {
+    public org.bukkit.entity.Entity spawnEntity() {
         customEntity = getNewEntity();
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
@@ -41,10 +41,9 @@ public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> exte
         CustomEntities.removeCustomEntity(customEntity);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public E getEntity() {
-        return (E) customEntity.getBukkitEntity();
+    public org.bukkit.entity.Entity getEntity() {
+        return customEntity.getBukkitEntity();
     }
 
     public Entity getCustomEntity() {

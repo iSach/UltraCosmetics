@@ -7,7 +7,6 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 /**
@@ -36,8 +35,6 @@ public interface IEntityUtil {
     void moveShip(Player player, Entity entity, Vector vector);
 
     void playChestAnimation(Block b, boolean open, TreasureChestDesign design);
-
-    Entity spawnItem(ItemStack itemStack, Location blockLocation);
 
     void follow(Entity toFollow, Entity follower);
 

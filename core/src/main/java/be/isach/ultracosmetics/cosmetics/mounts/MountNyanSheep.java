@@ -23,15 +23,15 @@ import java.util.Random;
  * @author iSach
  * @since 08-17-2015
  */
-public class MountNyanSheep extends Mount<Sheep> {
+public class MountNyanSheep extends Mount {
 
     public MountNyanSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("nyansheep"), ultraCosmetics);
     }
 
     @Override
-    public void setup() {
-        entity.setNoDamageTicks(Integer.MAX_VALUE);
+    public void setupEntity() {
+        ((Sheep)entity).setNoDamageTicks(Integer.MAX_VALUE);
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(entity);
     }
 
@@ -39,7 +39,7 @@ public class MountNyanSheep extends Mount<Sheep> {
     public void onUpdate() {
         Bukkit.getScheduler().runTask(getUltraCosmetics(), this::move);
 
-        entity.setColor(DyeColor.values()[new Random().nextInt(15)]);
+        ((Sheep)entity).setColor(DyeColor.values()[new Random().nextInt(15)]);
 
         List<RGBColor> colors = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class MountNyanSheep extends Mount<Sheep> {
         Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
         Location loc = player.getLocation().add(vel);
 
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(entity, loc);
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(((Sheep)entity), loc);
     }
 
     private class RGBColor {

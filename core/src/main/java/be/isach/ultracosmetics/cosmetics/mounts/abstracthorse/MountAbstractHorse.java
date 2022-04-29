@@ -9,17 +9,18 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.inventory.ItemStack;
 
 // Class for mounts that are like horses but not normal horses
-public abstract class MountAbstractHorse<E extends AbstractHorse> extends Mount<E> {
+public abstract class MountAbstractHorse extends Mount {
 
     public MountAbstractHorse(UltraPlayer ultraPlayer, MountType type, UltraCosmetics ultraCosmetics) {
         super(ultraPlayer, type, ultraCosmetics);
     }
 
     @Override
-    public void setup() {
-        entity.setTamed(true);
-        entity.setDomestication(1);
-        entity.getInventory().setSaddle(new ItemStack(Material.SADDLE));
-        entity.setJumpStrength(0.7);
+    public void setupEntity() {
+        AbstractHorse horse = (AbstractHorse) entity;
+        horse.setTamed(true);
+        horse.setDomestication(1);
+        horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+        horse.setJumpStrength(0.7);
     }
 }

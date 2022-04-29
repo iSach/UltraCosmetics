@@ -22,8 +22,7 @@ public class PetSlime extends Pet {
     }
 
     @Override
-    public void onEquip() {
-        super.onEquip();
+    public void setupEntity() {
         ((Slime)entity).setSize(1);
     }
 }

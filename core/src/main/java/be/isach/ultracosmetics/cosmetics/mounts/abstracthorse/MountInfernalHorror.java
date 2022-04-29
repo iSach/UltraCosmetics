@@ -5,12 +5,10 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 
-import org.bukkit.entity.SkeletonHorse;
-
 /**
  * @author RadBuilder
  */
-public class MountInfernalHorror extends MountAbstractHorse<SkeletonHorse> {
+public class MountInfernalHorror extends MountAbstractHorse {
 
     public MountInfernalHorror(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("infernalhorror"), ultraCosmetics);

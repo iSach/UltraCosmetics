@@ -18,22 +18,22 @@ public class Mounts {
     }
 
     // These should all only be called once so no need to cache result
-    public Class<? extends Mount<?>> getHorrorClass() {
+    public Class<? extends Mount> getHorrorClass() {
         return getMountClass("InfernalHorror");
     }
 
-    public Class<? extends Mount<?>> getWalkingDeadClass() {
+    public Class<? extends Mount> getWalkingDeadClass() {
         return getMountClass("WalkingDead");
     }
 
-    public Class<? extends Mount<?>> getRudolphClass() {
+    public Class<? extends Mount> getRudolphClass() {
         return getMountClass("Rudolph");
     }
 
     @SuppressWarnings("unchecked")
-    private Class<? extends Mount<?>> getMountClass(String name) {
+    private Class<? extends Mount> getMountClass(String name) {
         try {
-            return (Class<? extends Mount<?>>) Class.forName(packageName + ".Mount" + name);
+            return (Class<? extends Mount>) Class.forName(packageName + ".Mount" + name);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             return null;

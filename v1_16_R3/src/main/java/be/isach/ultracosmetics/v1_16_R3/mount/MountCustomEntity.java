@@ -10,45 +10,38 @@ import net.minecraft.server.v1_16_R3.Entity;
 import net.minecraft.server.v1_16_R3.EntityLiving;
 
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 
 /**
  * @author RadBuilder
  */
-public abstract class MountCustomEntity<E extends org.bukkit.entity.Entity> extends Mount<E> {
-
-    protected EntityLiving customEntity;
+public abstract class MountCustomEntity extends Mount {
 
     public MountCustomEntity(UltraPlayer owner, MountType type, UltraCosmetics ultraCosmetics) {
         super(owner, type, ultraCosmetics);
     }
 
     @Override
-    public E spawnEntity() {
-        customEntity = getNewEntity();
+    public org.bukkit.entity.Entity spawnEntity() {
+        entity = getNewEntity().getBukkitEntity();
         double x = getPlayer().getLocation().getX();
         double y = getPlayer().getLocation().getY();
         double z = getPlayer().getLocation().getZ();
         getCustomEntity().setLocation(x, y + 2, z, 0, 0);
         ((CraftWorld) getPlayer().getWorld()).getHandle().addEntity(getCustomEntity());
         CustomEntities.addCustomEntity(getCustomEntity());
-        new EntityWrapper(customEntity).setMoveSpeed((float) getType().getMovementSpeed());
+        new EntityWrapper((EntityLiving)getCustomEntity()).setMoveSpeed((float) getType().getMovementSpeed());
         return getEntity();
     }
 
     @Override
     protected void removeEntity() {
         getCustomEntity().dead = true;
-        CustomEntities.removeCustomEntity(customEntity);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public E getEntity() {
-        return (E) customEntity.getBukkitEntity();
+        CustomEntities.removeCustomEntity(getCustomEntity());
     }
 
     public Entity getCustomEntity() {
-        return customEntity;
+        return ((CraftEntity)entity).getHandle();
     }
 
     public abstract EntityLiving getNewEntity();

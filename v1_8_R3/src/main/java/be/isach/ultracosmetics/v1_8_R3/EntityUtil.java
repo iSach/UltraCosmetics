@@ -14,7 +14,6 @@ import net.minecraft.server.v1_8_R3.EntityBoat;
 import net.minecraft.server.v1_8_R3.EntityCreature;
 import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.EntityItem;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
@@ -188,21 +187,6 @@ public class EntityUtil implements IEntityUtil {
             TileEntityChest tileChest = (TileEntityChest) world.getTileEntity(position);
             world.playBlockAction(position, tileChest.w(), 1, open ? 1 : 0);
         }
-    }
-
-    @Override
-    public Entity spawnItem(ItemStack itemStack, Location blockLocation) {
-        Location loc = blockLocation.clone().add(0.5, 1.2, 0.5);
-        EntityItem ei = new EntityItem(((CraftWorld) loc.getWorld()).getHandle(), loc.getX(), loc.getY(), loc.getZ(),
-                CraftItemStack.asNMSCopy(itemStack));
-        ei.getBukkitEntity().setVelocity(new Vector(0.0D, 0.25D, 0.0D));
-        ei.pickupDelay = 2147483647;
-        ei.getBukkitEntity().setCustomName(UltraCosmeticsData.get().getItemNoPickupString());
-        ei.pickupDelay = 20;
-
-        ((CraftWorld) loc.getWorld()).getHandle().addEntity(ei);
-
-        return ei.getBukkitEntity();
     }
 
     @Override

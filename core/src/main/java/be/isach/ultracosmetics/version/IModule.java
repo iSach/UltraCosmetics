@@ -7,7 +7,7 @@ public interface IModule {
 
     public void disable();
 
-    public Class<? extends Mount<?>> getSpiderClass();
+    public Class<? extends Mount> getSpiderClass();
 
-    public Class<? extends Mount<?>> getSlimeClass();
+    public Class<? extends Mount> getSlimeClass();
 }

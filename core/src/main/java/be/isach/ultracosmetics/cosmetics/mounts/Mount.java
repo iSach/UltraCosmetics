@@ -5,7 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.cosmetics.EntityCosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -19,7 +19,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
@@ -46,12 +45,8 @@ import java.util.List;
  * @author iSach
  * @since 08-03-2015
  */
-public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implements Updatable {
+public abstract class Mount extends EntityCosmetic<MountType> implements Updatable {
     private BukkitTask mountRegionTask = null;
-    /**
-     * The Entity, if it isn't a Custom Entity.
-     */
-    protected E entity;
 
     protected boolean beingRemoved = false;
     protected final boolean placesBlocks = getType().doesPlaceBlocks();
@@ -69,6 +64,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         if (getOwner().getCurrentMount() != null) {
             getOwner().removeMount();
         }
+        getOwner().setCurrentMount(this);
 
         EntitySpawningManager.setBypass(true);
         entity = spawnEntity();
@@ -86,8 +82,7 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         entity.setPassenger(getPlayer());
         runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
-        setup();
-        getOwner().setCurrentMount(this);
+        setupEntity();
 
         if (!getUltraCosmetics().worldGuardHooked()) return;
         // Horses trigger PlayerMoveEvent so the standard WG move handler will be sufficient
@@ -160,19 +155,6 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
         if (mountRegionTask != null) {
             mountRegionTask.cancel();
         }
-    }
-
-    protected void removeEntity() {
-        entity.remove();
-    }
-
-    public E getEntity() {
-        return entity;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected E spawnEntity() {
-        return (E) getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), getType().getEntityType());
     }
 
     @EventHandler
@@ -272,6 +254,4 @@ public abstract class Mount<E extends Entity> extends Cosmetic<MountType> implem
             }
         }
     }
-
-    protected void setup() {};
 }
