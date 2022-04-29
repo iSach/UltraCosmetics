@@ -372,7 +372,9 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
                 return true;
             }
             toggleOn(ultraPlayer, cosmeticType, getUltraCosmetics());
-            return handleActivate(ultraPlayer);
+            if (getCosmetic(ultraPlayer) != null) {
+                return handleActivate(ultraPlayer);
+            }
         }
         return true;
     }
