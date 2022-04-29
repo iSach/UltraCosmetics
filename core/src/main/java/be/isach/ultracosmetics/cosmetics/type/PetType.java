@@ -86,7 +86,6 @@ public final class PetType extends CosmeticEntType<Pet> {
         /*Slime disabled because its just constantly jumping in one direction instead of following the player*/
         /*new PetType("ultracosmetics.pets.slime", "Slime", XMaterial.SLIME_BALL, "&7&oSquish...", EntityType.SLIME, PetSlime.class);*/
         new PetType("ultracosmetics.pets.silverfish", "Silverfish", XMaterial.GRAY_DYE, "&7&oLurking in the walls...", EntityType.SILVERFISH, PetSilverfish.class);
-        new PetType("ultracosmetics.pets.horse", "Horse", XMaterial.LEATHER_HORSE_ARMOR, "&7&o*fhrrrrhh*", EntityType.HORSE, PetHorse.class);
         new PetType("ultracosmetics.pets.blaze", "Blaze", XMaterial.BLAZE_ROD, "&7&oFlying and hot!", EntityType.BLAZE, PetBlaze.class);
         new PetType("ultracosmetics.pets.creeper", "Creeper", XMaterial.GUNPOWDER, "&7&oLikes blowing up your favorite Stuff...", EntityType.CREEPER, PetCreeper.class);
         new PetType("ultracosmetics.pets.enderman", "Enderman", XMaterial.ENDER_PEARL, "&7&oDont look at it or it will hunt you!", EntityType.ENDERMAN, PetEnderman.class);
@@ -105,8 +104,10 @@ public final class PetType extends CosmeticEntType<Pet> {
             new PetType("ultracosmetics.pets.panda", "Panda", XMaterial.BAMBOO, "&7&oLikes Bamboo!", EntityType.PANDA, PetPanda.class);
             new PetType("ultracosmetics.pets.fox", "Fox", XMaterial.SWEET_BERRIES, "&7&oWhat does the fox say?", EntityType.FOX, PetFox.class);
             new PetType("ultracosmetics.pets.kitty", "Kitty", XMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.CAT, PetKitty.class);
+            new PetType("ultracosmetics.pets.horse", "Horse", XMaterial.LEATHER_HORSE_ARMOR, "&7&o*fhrrrrhh*", EntityType.HORSE, PetHorse.class);
         } else {
             new PetType("ultracosmetics.pets.kitty", "Kitty", XMaterial.TROPICAL_FISH, "&7&oMeoooow", EntityType.OCELOT, PetKitty.class);
+            new PetType("ultracosmetics.pets.horse", "Horse", XMaterial.LEATHER, "&7&o*fhrrrrhh*", EntityType.HORSE, PetHorse.class);
         }
 
         if (serverVersion.isAtLeast(ServerVersion.v1_12_R1)) {

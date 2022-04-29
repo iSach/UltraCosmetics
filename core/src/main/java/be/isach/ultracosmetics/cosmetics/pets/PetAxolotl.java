@@ -5,8 +5,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
-
 import org.bukkit.entity.Axolotl;
 
 import com.cryptomorin.xseries.XMaterial;
@@ -19,7 +17,7 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetAxolotl extends Pet {
     public PetAxolotl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("axolotl"), ItemFactory.create(XMaterial.AXOLOTL_BUCKET, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("axolotl"), XMaterial.AXOLOTL_BUCKET);
     }
 
     @Override

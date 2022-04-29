@@ -3,10 +3,8 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import com.cryptomorin.xseries.XMaterial;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
 
 /**
  * Represents an instance of a zombie pet summoned by a player.
@@ -16,7 +14,7 @@ import be.isach.ultracosmetics.util.ItemFactory;
  */
 public class PetZombie extends Pet {
     public PetZombie(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("zombie"), ItemFactory.create(XMaterial.ROTTEN_FLESH, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("zombie"), XMaterial.ROTTEN_FLESH);
     }
     
     @Override

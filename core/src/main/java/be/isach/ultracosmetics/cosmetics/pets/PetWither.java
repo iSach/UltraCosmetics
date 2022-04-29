@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Represents an instance of a wither pet summoned by a player.
@@ -18,7 +19,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 public class PetWither extends Pet {
 
     public PetWither(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("wither"), null);
+        super(owner, ultraCosmetics, PetType.getByName("wither"), (ItemStack)null);
     }
 
     @Override

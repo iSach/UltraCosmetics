@@ -9,6 +9,8 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
+import be.isach.ultracosmetics.util.ItemFactory;
+import be.isach.ultracosmetics.util.ServerVersion;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,6 +27,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +66,12 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
 
     public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
         super(ultraCosmetics, Category.PETS, owner, petType);
-
         this.dropItem = dropItem;
         this.followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
+    }
+
+    public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, XMaterial dropItemType) {
+        this(owner, ultraCosmetics, petType, ItemFactory.create(dropItemType, UltraCosmeticsData.get().getItemNoPickupString()));
     }
 
     @SuppressWarnings("deprecation")
@@ -99,10 +106,12 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
             ((Tameable)entity).setTamed(true);
         }
 
-        if (isCustomEntity()) {
+        // setCustomNameVisible(true) doesn't seem to work on 1.8, so we'll just use armor stands in that case
+        if (isCustomEntity() || UltraCosmeticsData.get().getServerVersion() == ServerVersion.v1_8_R3) {
             armorStand = (ArmorStand) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.ARMOR_STAND);
             armorStand.setVisible(false);
             armorStand.setSmall(true);
+            armorStand.setMarker(true);
             armorStand.setCustomNameVisible(true);
             FixedMetadataValue metadataValue = new FixedMetadataValue(getUltraCosmetics(), "C_AD_ArmorStand");
             armorStand.setMetadata("C_AD_ArmorStand", metadataValue);
@@ -119,7 +128,7 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
             UltraCosmeticsData.get().getVersionManager().getAncientUtil().setSilent(entity, true);
         }
 
-        this.entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
+        entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
         setupEntity();
     }
 

@@ -1,10 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
 import com.cryptomorin.xseries.XMaterial;
 
 /**
@@ -15,6 +13,6 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetCow extends Pet {
     public PetCow(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("cow"), ItemFactory.create(XMaterial.MILK_BUCKET, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("cow"), XMaterial.MILK_BUCKET);
     }
 }

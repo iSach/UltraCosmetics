@@ -1,10 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
 import com.cryptomorin.xseries.XMaterial;
 
 /**
@@ -15,6 +13,6 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetVex extends Pet {
     public PetVex(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("vex"), ItemFactory.create(XMaterial.IRON_SWORD, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("vex"), XMaterial.IRON_SWORD);
     }
 }

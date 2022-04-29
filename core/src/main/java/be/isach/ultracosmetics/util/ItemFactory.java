@@ -5,10 +5,6 @@ import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XTag;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -19,6 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XTag;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -53,7 +55,7 @@ public class ItemFactory {
     }
 
     public static ItemStack rename(ItemStack itemstack, String displayName) {
-        return rename (itemstack, displayName, (String[])null);
+        return rename(itemstack, displayName, (String[])null);
     }
 
     public static ItemStack rename(ItemStack itemstack, String displayName, String... lore) {

@@ -1,10 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Wolf;
@@ -17,7 +15,7 @@ import org.bukkit.entity.Wolf;
  */
 public class PetDog extends Pet {
     public PetDog(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("dog"), ItemFactory.create(XMaterial.BONE, UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("dog"), XMaterial.BONE);
     }
 
     @Override

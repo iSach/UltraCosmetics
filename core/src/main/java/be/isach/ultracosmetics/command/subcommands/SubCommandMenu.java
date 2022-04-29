@@ -34,8 +34,10 @@ public class SubCommandMenu extends SubCommand {
             return;
         }
 
+        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(sender);
+        Menus menus = ultraCosmetics.getMenus();
         if (args.length < 2) {
-            sendMenuList(sender);
+            menus.getMainMenu().open(ultraPlayer);
             return;
         }
 
@@ -46,10 +48,6 @@ public class SubCommandMenu extends SubCommand {
         }
 
         String s = args[1].toLowerCase();
-
-        Menus menus = ultraCosmetics.getMenus();
-
-        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(sender);
 
         if (s.startsWith("ma")) {
             menus.getMainMenu().open(ultraPlayer);
