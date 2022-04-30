@@ -58,7 +58,9 @@ public class Version implements Comparable<Version> {
     }
 
     public boolean isRelease() {
-        return versionString.toLowerCase().contains("release");
+        // Versions from Spigot do not contain -DEV or -RELEASE classifiers,
+        // so just assume it's a release version if it doesn't say otherwise.
+        return !isDev();
     }
 
     @Override
