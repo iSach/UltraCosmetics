@@ -44,7 +44,6 @@ public class PlaceChestRunnable extends BukkitRunnable {
         }
         XBlock.setDirection(b, blockFace);
         chest.addChest(b);
-        chest.setChestsLeft(locationIndex - 1);
     }
 
 }
