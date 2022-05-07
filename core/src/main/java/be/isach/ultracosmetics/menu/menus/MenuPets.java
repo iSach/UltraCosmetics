@@ -4,7 +4,6 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
@@ -113,15 +112,5 @@ public class MenuPets extends CosmeticMenu<PetType> {
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, PetType petType, UltraCosmetics ultraCosmetics) {
         petType.equip(ultraPlayer, ultraCosmetics);
-    }
-
-    @Override
-    protected void toggleOff(UltraPlayer ultraPlayer, PetType type) {
-        ultraPlayer.removePet();
-    }
-
-    @Override
-    protected Pet getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getCurrentPet();
     }
 }

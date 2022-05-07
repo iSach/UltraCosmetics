@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -28,7 +29,7 @@ import java.util.List;
  * @author iSach
  * @since 10-12-2015
  */
-public class GadgetQuakeGun extends Gadget {
+public class GadgetQuakeGun extends Gadget implements PlayerAffectingCosmetic {
 
     private List<Firework> fireworkList = new ArrayList<>();
 
@@ -50,19 +51,17 @@ public class GadgetQuakeGun extends Gadget {
 
             List<Entity> nearbyEntities = firework.getNearbyEntities(0.5d, 0.5d, 0.5d);
 
-            if (affectPlayers)
-                if (!nearbyEntities.isEmpty()) {
-                    Entity entity = nearbyEntities.get(0);
-                    if ((entity instanceof Player || entity instanceof Creature)
-                            && entity != getPlayer()) {
-                        MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
-                        Particles.FLAME.display(entity.getLocation(), 60, 0.4f);
-                        FireworkEffect.Builder builder = FireworkEffect.builder();
-                        FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
-                                .withColor(Color.RED).withFade(Color.ORANGE).build();
-                        UltraCosmeticsData.get().getVersionManager().getFireworkFactory().spawn(location, effect);
-                    }
+            for (Entity entity : nearbyEntities) {
+                if ((entity instanceof Player || entity instanceof Creature)
+                        && entity != getPlayer() && canAffect(entity)) {
+                    MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
+                    Particles.FLAME.display(entity.getLocation(), 60, 0.4f);
+                    FireworkEffect.Builder builder = FireworkEffect.builder();
+                    FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
+                            .withColor(Color.RED).withFade(Color.ORANGE).build();
+                    UltraCosmeticsData.get().getVersionManager().getFireworkFactory().spawn(location, effect);
                 }
+            }
         }
         Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> {
             for (Firework firework : fireworkList)

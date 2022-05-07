@@ -29,7 +29,6 @@ public class Hat extends ArmorCosmetic<HatType> {
 
     @Override
     protected void onEquip() {
-        getOwner().setCurrentHat(this);
     }
 
     @EventHandler
@@ -76,7 +75,6 @@ public class Hat extends ArmorCosmetic<HatType> {
 
     @Override
     protected void onClear() {
-        getOwner().setCurrentHat(null);
     }
 
     public ItemStack getItemStack() {

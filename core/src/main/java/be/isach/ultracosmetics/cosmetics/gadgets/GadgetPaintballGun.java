@@ -19,7 +19,6 @@ import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -37,7 +36,7 @@ import com.cryptomorin.xseries.XSound;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetPaintballGun extends Gadget implements Listener {
+public class GadgetPaintballGun extends Gadget {
 
     private static final List<XMaterial> PAINT_BLOCKS = new ArrayList<>();
 

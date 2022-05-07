@@ -35,9 +35,11 @@ public class UCTabCompleter implements TabCompleter {
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("menu") || args[0].equalsIgnoreCase("toggle")) {
-                options.add("main");
-                options.add("buykey");
-                options.add("renamepet");
+                if (args[0].equalsIgnoreCase("menu")) {
+                    options.add("main");
+                    options.add("buykey");
+                    options.add("renamepet");
+                }
                 for (Category category : Category.enabled()) {
                     options.add(category.toString());
                 }

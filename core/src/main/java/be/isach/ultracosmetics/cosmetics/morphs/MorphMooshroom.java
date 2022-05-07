@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -18,6 +16,7 @@ import com.cryptomorin.xseries.XSound;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -29,7 +28,7 @@ import be.isach.ultracosmetics.util.MathUtils;
  * @author RadBuilder
  * @since 07-03-2017
  */
-public class MorphMooshroom extends Morph {
+public class MorphMooshroom extends Morph implements PlayerAffectingCosmetic {
     private boolean inCooldown = false;
 
     public MorphMooshroom(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
@@ -42,8 +41,9 @@ public class MorphMooshroom extends Morph {
             inCooldown = true;
             Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> inCooldown = false, 200);
             for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {
-                if (ent instanceof Player || ent instanceof Creature)
+                if (canAffect(ent)) {
                     MathUtils.applyVelocity(ent, ent.getLocation().toVector().subtract(getPlayer().getLocation().toVector()).setY(1));
+                }
             }
             final List<Entity> items = new ArrayList<>();
             for (int i = 0; i < 20; i++) {

@@ -61,39 +61,20 @@ public class SubCommandClear extends SubCommand {
         UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(target);
 
         Category cat = Category.fromString(args[2]);
-        switch(cat) {
-        case EFFECTS:
-            up.removeParticleEffect();
-            break;
-        case EMOTES:
-            up.removeEmote();
-            break;
-        case GADGETS:
-            up.removeGadget();
-            break;
-        case HATS:
-            up.removeHat();
-            break;
-        case MORPHS:
-            up.removeMorph();
-            break;
-        case MOUNTS:
-            up.removeMount();
-            break;
-        case PETS:
-            up.removePet();
-            break;
-        case SUITS:
+        if (cat == null) {
+            error(sender, "Invalid cosmetic type.");
+            return;
+        }
+        if (cat == Category.SUITS) {
             String[] parts = args[2].split(":");
             if (parts.length < 2) {
                 up.removeSuit();
-                break;
+                return;
             }
             up.removeSuit(ArmorSlot.getByName(parts[1]));
-            break;
-        default: // null
-            error(sender, "Invalid cosmetic type.");
-            break;
+            return;
         }
+
+        up.removeCosmetic(cat);
     }
 }

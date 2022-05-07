@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -10,9 +11,7 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
 
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XSound;
@@ -22,7 +21,7 @@ import com.cryptomorin.xseries.messages.ActionBar;
  * @author iSach
  * @since 08-26-2015
  */
-public class MorphCreeper extends Morph {
+public class MorphCreeper extends Morph implements PlayerAffectingCosmetic {
     private int charge = 0;
 
     public MorphCreeper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
@@ -52,7 +51,7 @@ public class MorphCreeper extends Morph {
                 XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer(), 1.4f, 1.5f);
 
                 for (Entity ent : getPlayer().getNearbyEntities(3, 3, 3)) {
-                    if (ent instanceof Creature || ent instanceof Player) {
+                    if (canAffect(ent)) {
                         double dX = getPlayer().getLocation().getX() - ent.getLocation().getX();
                         double dY = getPlayer().getLocation().getY() - ent.getLocation().getY();
                         double dZ = getPlayer().getLocation().getZ() - ent.getLocation().getZ();

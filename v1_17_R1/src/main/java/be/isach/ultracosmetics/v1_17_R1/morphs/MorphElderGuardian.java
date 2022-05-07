@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.v1_17_R1.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -144,7 +145,7 @@ public class MorphElderGuardian extends Morph {
         }
         if (customGuardian == null
                 || !customGuardian.isAlive()) {
-            getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeMorph();
+            getOwner().removeCosmetic(Category.MORPHS);
             cancel();
         }
     }

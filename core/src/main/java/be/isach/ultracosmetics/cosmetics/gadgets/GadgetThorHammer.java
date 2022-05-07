@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.listeners.HammerPickupListener;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -16,7 +17,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -32,7 +32,7 @@ import java.util.Set;
  * @author iSach
  * @since 08-08-2015
  */
-public class GadgetThorHammer extends Gadget implements Listener {
+public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic {
     // EntityPickupItemEvent didn't exist until 1.12
     private static final boolean USE_OTHER_LISTENER = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1);
     // potential memory leak? how can a player have multiple hammers thrown?
@@ -86,7 +86,7 @@ public class GadgetThorHammer extends Gadget implements Listener {
         event.setCancelled(true);
 
         if (event.getPlayer() != getPlayer()) {
-            if (v != null && affectPlayers) {
+            if (v != null && canAffect(event.getPlayer())) {
                 MathUtils.applyVelocity(event.getPlayer(), v);
             }
             return;
@@ -136,10 +136,6 @@ public class GadgetThorHammer extends Gadget implements Listener {
 
     public Set<Item> getHammerItems() {
         return hammer;
-    }
-
-    public boolean isAffectingPlayers() {
-        return affectPlayers;
     }
 
     public Vector getDirection() {

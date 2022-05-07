@@ -81,19 +81,17 @@ public class SubCommandToggle extends SubCommand {
         }
         Category category = (Category) categories[0];
         boolean suits = category == Category.SUITS; 
-        if (target.getCosmetic(category) != null) {
-            if (suits) {
-                ArmorSlot slot;
-                try {
-                    slot = ArmorSlot.getByName(cosm.split(":")[1]);
-                } catch (IllegalArgumentException e) {
-                    sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "/uc toggle suit <suit type:suit piece> <player>.");
-                    return;
-                }
-                target.removeSuit(slot);
-            } else {
-                target.removeCosmetic(category);
+        ArmorSlot slot = null;
+        if (suits) {
+            try {
+                slot = ArmorSlot.getByName(cosm.split(":")[1].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "/uc toggle suit <suit type:suit piece> <player>.");
+                return;
             }
+            target.removeSuit(slot);
+        } else {
+            target.removeCosmetic(category);
         }
         Optional<? extends CosmeticType<?>> matchingType = category.getEnabled().stream().filter(cosmeticType -> cosmeticType.isEnabled() && cosmeticType.toString().toLowerCase().contains(cosm.split(":")[0])).findFirst();
         if (!matchingType.isPresent()) {
@@ -107,10 +105,8 @@ public class SubCommandToggle extends SubCommand {
         }
 
         SuitType suitType;
-        ArmorSlot armorSlot;
         try {
-            armorSlot = ArmorSlot.valueOf(cosm.split(":")[1]);
-            suitType = SuitType.getSuitPart(cosm.split(":")[0], armorSlot);
+            suitType = SuitType.getSuitPart(cosm.split(":")[0], slot);
         } catch (IllegalArgumentException e) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "/uc toggle suit <suit type:suit piece> <player>.");
             return;

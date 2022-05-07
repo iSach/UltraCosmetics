@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -34,15 +33,5 @@ public class MenuParticleEffects extends CosmeticMenu<ParticleEffectType> {
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, ParticleEffectType particleEffectType, UltraCosmetics ultraCosmetics) {
         particleEffectType.equip(ultraPlayer, ultraCosmetics);
-    }
-
-    @Override
-    protected void toggleOff(UltraPlayer ultraPlayer, ParticleEffectType type) {
-        ultraPlayer.removeParticleEffect();
-    }
-
-    @Override
-    protected ParticleEffect getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getCurrentParticleEffect();
     }
 }

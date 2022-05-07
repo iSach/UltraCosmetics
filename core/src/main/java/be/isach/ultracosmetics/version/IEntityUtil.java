@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;
 import org.bukkit.util.Vector;
 
+import java.util.function.Function;
+
 /**
  * Created by Sacha on 14/03/16.
  */
@@ -16,7 +18,7 @@ public interface IEntityUtil {
 
     void resetWitherSize(Wither wither);
 
-    void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v);
+    void sendBlizzard(final Player player, Location loc, Function<Entity,Boolean> canAffectFunc, Vector v);
 
     void clearBlizzard(final Player player);
 

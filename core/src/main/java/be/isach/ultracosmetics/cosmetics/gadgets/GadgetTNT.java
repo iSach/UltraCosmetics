@@ -1,13 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -28,7 +27,7 @@ import java.util.List;
  * @author iSach
  * @since 08-17-2015
  */
-public class GadgetTNT extends Gadget {
+public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
 
     List<Entity> entities = new ArrayList<>();
 
@@ -79,7 +78,7 @@ public class GadgetTNT extends Gadget {
             XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer(), 1.4f, 1.5f);
 
             for (Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {
-                if (ent instanceof Creature || ent instanceof Player) {
+                if (canAffect(ent)) {
                     double dX = event.getEntity().getLocation().getX() - ent.getLocation().getX();
                     double dY = event.getEntity().getLocation().getY() - ent.getLocation().getY();
                     double dZ = event.getEntity().getLocation().getZ() - ent.getLocation().getZ();
@@ -90,8 +89,7 @@ public class GadgetTNT extends Gadget {
                     double Z = Math.cos(pitch);
 
                     Vector vector = new Vector(X, Z, Y);
-                    if (affectPlayers)
-                        MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
+                    MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
                 }
             }
             entities.remove(event.getEntity());

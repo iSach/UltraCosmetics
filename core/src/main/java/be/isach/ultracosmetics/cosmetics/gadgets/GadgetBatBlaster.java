@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -22,7 +23,7 @@ import java.util.List;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetBatBlaster extends Gadget {
+public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic {
 
     private boolean active = false;
     private Location playerVelocity;
@@ -97,7 +98,7 @@ public class GadgetBatBlaster extends Gadget {
 
                 other.setFallDistance(0);
 
-                if (affectPlayers) {
+                if (canAffect(other)) {
                     MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
                 }
 

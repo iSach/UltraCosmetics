@@ -32,13 +32,11 @@ public class Emote extends ArmorCosmetic<EmoteType> {
     @Override
     protected void onEquip() {
         animation.start();
-        getOwner().setCurrentEmote(this);
     }
 
     @Override
     protected void onClear() {
         animation.stop();
-        getOwner().setCurrentEmote(null);
     }
 
     public ItemStack getItemStack() {

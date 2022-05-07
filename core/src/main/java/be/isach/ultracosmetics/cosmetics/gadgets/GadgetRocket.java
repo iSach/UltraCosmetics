@@ -52,6 +52,7 @@ public class GadgetRocket extends Gadget {
     private static final Material FENCE = XMaterial.OAK_FENCE.parseMaterial();
     public static final Set<GadgetRocket> ROCKETS_WITH_BLOCKS = new HashSet<>();
 
+    private boolean stillEquipped = true;
     private boolean launching;
     private ArmorStand armorStand;
     // key is used for easy access for contains() checks
@@ -190,7 +191,7 @@ public class GadgetRocket extends Gadget {
     }
 
     private boolean isStillCurrentGadget() {
-        return getOwner() != null;
+        return stillEquipped;
     }
 
     @Override
@@ -209,6 +210,7 @@ public class GadgetRocket extends Gadget {
 
     @Override
     public void onClear() {
+        stillEquipped = false;
         for (BlockState state : blocks.values()) {
             state.update(true);
         }

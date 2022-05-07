@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
-import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
@@ -112,11 +111,6 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
     }
 
     @Override
-    protected Suit getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getSuit(ArmorSlot.CHESTPLATE);
-    }
-
-    @Override
     protected int getItemsPerPage() {
         return 7;
     }
@@ -133,5 +127,10 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
             }
         }
         return Math.max(1, ((i - 1) / 21) + 1);
+    }
+
+    @Override
+    public boolean hasEquipped(UltraPlayer ultraPlayer, SuitType type) {
+        return ultraPlayer.hasSuitPartOn(type.getSlot());
     }
 }

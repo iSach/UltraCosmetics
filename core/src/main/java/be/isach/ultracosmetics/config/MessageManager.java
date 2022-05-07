@@ -554,6 +554,7 @@ public class MessageManager {
         addMessage("Not-Allowed-From-Console", "&c&lThis can't be executed from console!");
         addMessage("World-Disabled", "%prefix% &c&lCosmetics are disabled in this world!");
         addMessage("Region-Disabled", "%prefix% &c&lCosmetics are disabled in this area!");
+        addMessage("Region-Disabled-Category", "%prefix% &c&l%category% cosmetics are disabled in this area!");
         addMessage("Disabled-Command-Message", "%prefix% &c&lYou can't use this command while cosmetics are equipped!");
     }
 

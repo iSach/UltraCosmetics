@@ -30,8 +30,8 @@ public abstract class ArmorCosmetic<T extends CosmeticType<?>> extends Cosmetic<
         getOwner().removeSuit(getArmorSlot());
 
         if (getArmorSlot() == ArmorSlot.HELMET) {
-            getOwner().removeHat();
-            getOwner().removeEmote();
+            getOwner().removeCosmetic(Category.HATS);
+            getOwner().removeCosmetic(Category.EMOTES);
         }
 
         // If the user's armor slot is still occupied after we've removed all related cosmetics,

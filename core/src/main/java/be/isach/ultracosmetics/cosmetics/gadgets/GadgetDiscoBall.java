@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
@@ -35,7 +36,7 @@ import java.util.Set;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetDiscoBall extends Gadget {
+public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic {
 
     private static final Set<GadgetDiscoBall> DISCO_BALLS = new HashSet<>();
 
@@ -126,10 +127,8 @@ public class GadgetDiscoBall extends Gadget {
             }
         }
 
-        if (!affectPlayers) return;
-
         for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
-            if (ent.isOnGround()) {
+            if (ent.isOnGround() && canAffect(ent)) {
                 MathUtils.applyVelocity(ent, new Vector(0, 0.3, 0));
             }
         }

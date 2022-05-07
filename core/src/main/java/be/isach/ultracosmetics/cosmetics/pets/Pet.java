@@ -77,11 +77,6 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
     @SuppressWarnings("deprecation")
     @Override
     protected void onEquip() {
-        if (getOwner().getCurrentPet() != null) {
-            getOwner().removePet();
-        }
-
-        getOwner().setCurrentPet(this);
 
         runTaskTimer(getUltraCosmetics(), 0, 3);
 
@@ -163,11 +158,6 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
 
         // Clear items.
         items.clear();
-
-        // Empty current Pet.
-        if (getPlayer() != null && getOwner() != null) {
-            getOwner().setCurrentPet(null);
-        }
     }
 
     public APlayerFollower getFollowTask() {

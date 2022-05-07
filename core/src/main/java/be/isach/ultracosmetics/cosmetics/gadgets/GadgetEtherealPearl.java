@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
@@ -13,7 +14,6 @@ import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -31,7 +31,7 @@ import java.util.Set;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetEtherealPearl extends Gadget implements Listener {
+public class GadgetEtherealPearl extends Gadget {
 
     private EnderPearl pearl;
     private boolean running;
@@ -51,9 +51,7 @@ public class GadgetEtherealPearl extends Gadget implements Listener {
     @SuppressWarnings("deprecation")
     @Override
     void onRightClick() {
-        if (getOwner().getCurrentMount() != null) {
-            getOwner().removeMount();
-        }
+        getOwner().removeCosmetic(Category.MOUNTS);
 
         if (getPlayer().getVehicle() instanceof EnderPearl) {
             getPlayer().getVehicle().remove();

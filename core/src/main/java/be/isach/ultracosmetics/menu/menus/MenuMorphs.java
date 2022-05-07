@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.menu.menus;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
@@ -70,15 +69,5 @@ public class MenuMorphs extends CosmeticMenu<MorphType> {
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, MorphType morphType, UltraCosmetics ultraCosmetics) {
         morphType.equip(ultraPlayer, ultraCosmetics);
-    }
-
-    @Override
-    protected void toggleOff(UltraPlayer ultraPlayer, MorphType type) {
-        ultraPlayer.removeMorph();
-    }
-
-    @Override
-    protected Morph getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getCurrentMorph();
     }
 }

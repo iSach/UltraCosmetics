@@ -3,6 +3,14 @@ package be.isach.ultracosmetics.cosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.emotes.Emote;
+import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.cosmetics.hats.Hat;
+import be.isach.ultracosmetics.cosmetics.morphs.Morph;
+import be.isach.ultracosmetics.cosmetics.mounts.Mount;
+import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
+import be.isach.ultracosmetics.cosmetics.pets.Pet;
+import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
@@ -36,14 +44,14 @@ import java.util.stream.Collectors;
  */
 public enum Category {
 
-    PETS("Pets", "%petname%", "pets", "pe", k -> k.getPetsMenu(), () -> PetType.enabled()),
-    GADGETS("Gadgets", "%gadgetname%", "gadgets", "g", k -> k.getGadgetsMenu(), () -> GadgetType.enabled()),
-    EFFECTS("Particle-Effects", "%effectname%", "particleeffects", "ef", k -> k.getEffectsMenu(), () -> ParticleEffectType.enabled()),
-    MOUNTS("Mounts", "%mountname%", "mounts", "mou", k -> k.getMountsMenu(), () -> MountType.enabled()),
-    MORPHS("Morphs", "%morphname%", "morphs", "mor", k -> k.getMorphsMenu(), () -> MorphType.enabled()),
-    HATS("Hats", "%hatname%", "hats", "h", k -> k.getHatsMenu(), () -> HatType.enabled()),
-    SUITS("Suits", "%suitname%", "suits", "s", k -> k.getSuitsMenu(), () -> SuitType.enabled()),
-    EMOTES("Emotes", "%emotename%", "emotes", "e", k -> k.getEmotesMenu(), () -> EmoteType.enabled());
+    PETS("Pets", "%petname%", "pets", "pe", k -> k.getPetsMenu(), () -> PetType.enabled(), Pet.class),
+    GADGETS("Gadgets", "%gadgetname%", "gadgets", "g", k -> k.getGadgetsMenu(), () -> GadgetType.enabled(), Gadget.class),
+    EFFECTS("Particle-Effects", "%effectname%", "particleeffects", "ef", k -> k.getEffectsMenu(), () -> ParticleEffectType.enabled(), ParticleEffect.class),
+    MOUNTS("Mounts", "%mountname%", "mounts", "mou", k -> k.getMountsMenu(), () -> MountType.enabled(), Mount.class),
+    MORPHS("Morphs", "%morphname%", "morphs", "mor", k -> k.getMorphsMenu(), () -> MorphType.enabled(), Morph.class),
+    HATS("Hats", "%hatname%", "hats", "h", k -> k.getHatsMenu(), () -> HatType.enabled(), Hat.class),
+    SUITS("Suits", "%suitname%", "suits", "s", k -> k.getSuitsMenu(), () -> SuitType.enabled(), Suit.class),
+    EMOTES("Emotes", "%emotename%", "emotes", "e", k -> k.getEmotesMenu(), () -> EmoteType.enabled(), Emote.class);
 
     public static int enabledSize() {
         return enabled().size();
@@ -97,6 +105,7 @@ public enum Category {
     private final String prefix;
     private final Function<Menus,CosmeticMenu<?>> menuFunc;
     private final Supplier<List<? extends CosmeticType<?>>> enabledFunc;
+    private final Class<? extends Cosmetic<?>> cosmeticClass;
 
     /**
      * Category of Cosmetic.
@@ -105,13 +114,14 @@ public enum Category {
      * @param chatPlaceholder
      * @param prefix TODO
      */
-    private Category(String configPath, String chatPlaceholder, String permission, String prefix, Function<Menus,CosmeticMenu<?>> menuFunc, Supplier<List<? extends CosmeticType<?>>> enabledFunc) {
+    private Category(String configPath, String chatPlaceholder, String permission, String prefix, Function<Menus,CosmeticMenu<?>> menuFunc, Supplier<List<? extends CosmeticType<?>>> enabledFunc, Class<? extends Cosmetic<?>> cosmeticClass) {
         this.configPath = configPath;
         this.chatPlaceholder = chatPlaceholder;
         this.permission = permission;
         this.prefix = prefix;
         this.menuFunc = menuFunc;
         this.enabledFunc = enabledFunc;
+        this.cosmeticClass = cosmeticClass;
     }
 
     /**
@@ -198,5 +208,9 @@ public enum Category {
 
     public List<? extends CosmeticType<?>> getEnabled() {
         return enabledFunc.get();
+    }
+
+    public Class<? extends Cosmetic<?>> getCosmeticClass() {
+        return cosmeticClass;
     }
 }

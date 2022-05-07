@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
@@ -34,7 +35,7 @@ import java.util.List;
  * @author iSach
  * @since 08-08-2015
  */
-public class GadgetSmashDown extends Gadget {
+public class GadgetSmashDown extends Gadget implements PlayerAffectingCosmetic {
 
     private boolean active = false;
     private List<FallingBlock> fallingBlocks = new ArrayList<>();
@@ -113,8 +114,8 @@ public class GadgetSmashDown extends Gadget {
                         fb.setDropItem(false);
                         fallingBlocks.add(fb);
                         fb.getNearbyEntities(1, 1, 1).stream().filter(ent -> ent != getPlayer()
-                                && ent.getType() != EntityType.FALLING_BLOCK).filter(ent -> affectPlayers).
-                                forEach(ent -> MathUtils.applyVelocity(ent, new Vector(0, 0.5, 0)));
+                                && ent.getType() != EntityType.FALLING_BLOCK && canAffect(ent))
+                                .forEach(ent -> MathUtils.applyVelocity(ent, new Vector(0, 0.5, 0)));
                     });
                 }
             }

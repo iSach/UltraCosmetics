@@ -29,7 +29,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitTask;
@@ -61,10 +60,6 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
     @SuppressWarnings("deprecation")
     @Override
     public void onEquip() {
-        if (getOwner().getCurrentMount() != null) {
-            getOwner().removeMount();
-        }
-        getOwner().setCurrentMount(this);
 
         EntitySpawningManager.setBypass(true);
         entity = spawnEntity();
@@ -113,10 +108,8 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
     @Override
     public void run() {
         if (entity.getPassenger() != getPlayer()
-                && entity.getTicksLived() > 10
-                && !beingRemoved) {
+                && entity.getTicksLived() > 10) {
             clear();
-            cancel();
             return;
         }
 
@@ -128,7 +121,6 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
         // Prevents players on mounts from being able to fall in the void infinitely.
         if (entity.getLocation().getY() <= UltraCosmeticsData.get().getVersionManager().getWorldMinHeight(entity.getWorld()) - 15) {
             clear();
-            cancel();
             return;
         }
 
@@ -148,16 +140,12 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
             entity.remove();
         }
 
-        if (getOwner() != null) {
-            getOwner().setCurrentMount(null);
-        }
-
         if (mountRegionTask != null) {
             mountRegionTask.cancel();
         }
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
         if (event.getVehicle().getType() == EntityType.BOAT
                 || event.getVehicle().getType().toString().contains("MINECART")) {
@@ -166,7 +154,8 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
 
         String name = getType().getName(getPlayer());;
 
-        if (name != null
+        if (!beingRemoved
+                && name != null
                 && getOwner() != null
                 && getPlayer() != null
                 && getOwner() != null
@@ -174,12 +163,12 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
                 && event.getExited() != null
                 && event.getVehicle().getCustomName() != null
                 && event.getVehicle().getCustomName().equals(name)
-                && event.getExited() == getPlayer()
-                && !beingRemoved) {
+                && event.getExited() == getPlayer()) {
             beingRemoved = true;
-            clear();
+            // clear is already called by the 'beingRemoved' checker in run() so I don't think this is necessary
+            //clear();
         }
-    }
+    }*/
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {

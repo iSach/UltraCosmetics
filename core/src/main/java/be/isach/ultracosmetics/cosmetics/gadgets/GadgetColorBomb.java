@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -26,7 +27,7 @@ import java.util.Iterator;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetColorBomb extends Gadget {
+public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic {
 
     private Item bomb;
     private ArrayList<Item> items = new ArrayList<>();
@@ -93,15 +94,8 @@ public class GadgetColorBomb extends Gadget {
             XSound.ENTITY_CHICKEN_EGG.play(i.getLocation(), .2f, 1.0f);
 
             for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
-
-                if (entity instanceof Player) {
-                    if (entity.hasMetadata("NPC")) {
-                        continue;
-                    }
-
-                    if (affectPlayers) {
-                        MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-                    }
+                if (entity instanceof Player && canAffect(entity)) {
+                    MathUtils.applyVelocity(entity, new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
                 }
             }
         });

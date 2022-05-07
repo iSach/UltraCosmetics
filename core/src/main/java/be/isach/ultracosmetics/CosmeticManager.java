@@ -3,6 +3,7 @@ package be.isach.ultracosmetics;
 import be.isach.ultracosmetics.config.CustomConfiguration;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.*;
 
 import java.io.IOException;
@@ -55,9 +56,6 @@ public class CosmeticManager {
 
         for (GadgetType gadgetType : GadgetType.values()) {
             setupCosmetic(config, gadgetType);
-            if (gadgetType.affectPlayersPossible()) {
-                config.addDefault("Gadgets." + gadgetType.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
-            }
             if (gadgetType == GadgetType.valueOf("paintballgun")) {
                 // default "" so we don't have to deal with null
                 if (config.getString("Gadgets." + gadgetType.getConfigName() + ".Block-Type", "").equals("STAINED_CLAY")) {
@@ -136,6 +134,9 @@ public class CosmeticManager {
 
     private void setupCosmetic(CustomConfiguration config, CosmeticType<?> type) {
         setupCosmetic(config, type.getConfigPath());
+        if (PlayerAffectingCosmetic.class.isAssignableFrom(type.getClazz())) {
+            config.addDefault("Gadgets." + type.getConfigName() + ".Affect-Players", true, "Should it affect players? (Velocity, etc.)");
+        }
     }
 
     private void setupCosmetic(CustomConfiguration config, String path) {

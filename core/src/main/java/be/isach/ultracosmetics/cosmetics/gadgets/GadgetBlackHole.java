@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -24,7 +25,7 @@ import org.bukkit.util.Vector;
  * @author iSach
  * @since 08-17-2015
  */
-public class GadgetBlackHole extends Gadget {
+public class GadgetBlackHole extends Gadget implements PlayerAffectingCosmetic {
 
     private Item item;
 
@@ -73,17 +74,15 @@ public class GadgetBlackHole extends Gadget {
                 }
             }
 
-            if (!affectPlayers) return;
-            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                for (final Entity entity : item.getNearbyEntities(5, 3, 5)) {
-                    Vector vector = item.getLocation().toVector().subtract(entity.getLocation().toVector());
-                    MathUtils.applyVelocity(entity, vector);
-                    Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                        if (entity instanceof Player)
-                            ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
-                    });
+            if (!isAffectingPlayersEnabled()) return;
+            for (final Entity entity : item.getNearbyEntities(5, 3, 5)) {
+                if (!canAffect(entity)) continue;
+                Vector vector = item.getLocation().toVector().subtract(entity.getLocation().toVector());
+                MathUtils.applyVelocity(entity, vector);
+                if (entity instanceof Player) {
+                    ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 40));
                 }
-            });
+            }
         }
     }
 

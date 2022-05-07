@@ -15,6 +15,7 @@ import be.isach.ultracosmetics.cosmetics.particleeffects.ParticleEffect;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
 import be.isach.ultracosmetics.cosmetics.suits.Suit;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
@@ -59,15 +60,9 @@ public class UltraPlayer {
     /**
      * Current Cosmetics.
      */
-    private Gadget currentGadget;
-    private Mount currentMount;
-    private ParticleEffect currentParticleEffect;
-    private Pet currentPet;
+    private final Map<Category,Cosmetic<?>> equipped = new HashMap<>();
     private TreasureChest currentTreasureChest;
-    private Morph currentMorph;
-    private Hat currentHat;
     private Map<ArmorSlot, Suit> suitMap = new HashMap<>();
-    private Emote currentEmote;
     /**
      * Stores enabled cosmetics, keys, pet names, ammo, etc.
      */
@@ -159,50 +154,85 @@ public class UltraPlayer {
         return Bukkit.getPlayer(uuid);
     }
 
-    /**
-     * Removes the current gadget.
-     */
-    public void removeGadget() {
-        if (currentGadget == null) {
-            return;
+    public Cosmetic<?> getCosmetic(Category category) {
+        if (category == Category.SUITS) {
+            throw new IllegalArgumentException("Can't use generic getCosmetic for suit category!");
         }
+        return equipped.get(category);
+    }
 
-        currentGadget.clear();
-        setCurrentGadget(null);
+    // I don't like this but I can't think of a better way without a bunch of casting elsewhere
+    public ParticleEffect getCurrentParticleEffect() { return (ParticleEffect) getCosmetic(Category.EFFECTS); }
+    public Emote getCurrentEmote() { return (Emote) getCosmetic(Category.EMOTES); }
+    public Gadget getCurrentGadget() { return (Gadget) getCosmetic(Category.GADGETS); }
+    public Hat getCurrentHat() { return (Hat) getCosmetic(Category.HATS); }
+    public Morph getCurrentMorph() { return (Morph) getCosmetic(Category.MORPHS); }
+    public Mount getCurrentMount() { return (Mount) getCosmetic(Category.MOUNTS); }
+    public Pet getCurrentPet() { return (Pet) getCosmetic(Category.PETS); }
+
+    public boolean hasCosmetic(Category category) {
+        return equipped.containsKey(category);
     }
 
     /**
-     * Removes the current emote.
+     * Unequips the cosmetic of the specified category.
+     * 
+     * @return {@code true} if a cosmetic was actually unequipped
      */
-    public void removeEmote() {
-        if (currentEmote == null) {
-            return;
+    public boolean removeCosmetic(Category category) {
+        if (category == Category.SUITS) {
+            return removeSuit();
         }
-        currentEmote.clear();
-        setCurrentEmote(null);
-    }
 
-
-    /**
-     * Removes the current Mount.
-     */
-    public void removeMount() {
-        if (currentMount == null) {
-            return;
+        if (!equipped.containsKey(category)) {
+            return false;
         }
-        currentMount.clear();
-        setCurrentMount(null);
+
+        unsetCosmetic(category).clear();
+        
+        return true;
     }
 
     /**
-     * Removes the current Pet.
+     * Removes a cosmetic from a player without calling clear()
+     * Internal use only
+     * 
+     * @param category The category of cosmetic to unequip
+     * @return
      */
-    public void removePet() {
-        if (currentPet == null) {
+    public Cosmetic<?> unsetCosmetic(Category category) {
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(category, (CosmeticType<?>)null);
+        }
+        return equipped.remove(category);
+    }
+
+    /**
+     * Sets a cosmetic as equipped, unequipping any cosmetic
+     * of the same category that is already equipped.
+     * 
+     * Note that this does not actually call equip() on the cosmetic,
+     * equipping should be done before this method is called.
+     * 
+     * Category of the cosmetic is automatically determined.
+     * For equipping a Suit part, please use setCurrentSuitPart(ArmorSlot, Suit)
+     * 
+     * @param cosmetic The cosmetic to set as equipped.
+     */
+    public void setCosmeticEquipped(Cosmetic<?> cosmetic) {
+        if (cosmetic instanceof Suit) {
+            Suit suit = (Suit) cosmetic;
+            if (hasSuitPartOn(suit.getArmorSlot())) {
+                removeSuit(suit.getArmorSlot());
+            }
+            setCurrentSuitPart(suit.getArmorSlot(), suit);
             return;
         }
-        currentPet.clear();
-        setCurrentPet(null);
+        removeCosmetic(cosmetic.getCategory());
+        equipped.put(cosmetic.getCategory(), cosmetic);
+        if (!isQuitting()) {
+            cosmeticsProfile.setEnabledCosmetic(cosmetic.getCategory(), cosmetic);
+        }
     }
 
     public void addKeys(int amount) {
@@ -234,20 +264,12 @@ public class UltraPlayer {
         cosmeticsProfile.save();
     }
 
-    /**
-     * Removes the current hat.
-     */
-    public void removeHat() {
-        if (currentHat == null) {
-            return;
-        }
-
-        currentHat.clear();
-        setCurrentHat(null);
-    }
-
     public void setCurrentSuitPart(ArmorSlot armorSlot, Suit suit) {
-        suitMap.put(armorSlot, suit);
+        if (suit == null) {
+            suitMap.remove(armorSlot);
+        } else {
+            suitMap.put(armorSlot, suit);
+        }
         if (!isQuitting()) {
             cosmeticsProfile.setEnabledSuitPart(armorSlot, suit == null ? null : suit.getType());
         }
@@ -258,13 +280,14 @@ public class UltraPlayer {
      *
      * @param armorSlot The ArmorSlot to remove.
      */
-    public void removeSuit(ArmorSlot armorSlot) {
-        if (suitMap.get(armorSlot) == null) {
-            return;
+    public boolean removeSuit(ArmorSlot armorSlot) {
+        if (!suitMap.containsKey(armorSlot)) {
+            return false;
         }
 
-        suitMap.get(armorSlot).clear();
+        getSuit(armorSlot).clear();
         setCurrentSuitPart(armorSlot, null);
+        return true;
     }
 
     public double getBalance() {
@@ -296,35 +319,31 @@ public class UltraPlayer {
      * @return True if this player has any suit piece on, false otherwise.
      */
     public boolean hasSuitOn() {
-        for (ArmorSlot armorSlot : ArmorSlot.values()) {
-            if (suitMap.get(armorSlot) != null)
-                return true;
-        }
-        return false;
+        return suitMap.size() > 0;
+    }
+
+    public boolean hasSuitPartOn(ArmorSlot slot) {
+        return suitMap.containsKey(slot);
     }
 
     /**
      * Removes entire suit.
      */
-    public void removeSuit() {
+    public boolean removeSuit() {
+        boolean removedSomething = false;
         for (ArmorSlot armorSlot : ArmorSlot.values()) {
-            removeSuit(armorSlot);
+            if (removeSuit(armorSlot)) {
+                removedSomething = true;
+            }
         }
+        return removedSomething;
     }
 
     /**
      * Returns true if the player has any cosmetics equipped
      */
     public boolean hasCosmeticsEquipped() {
-        return currentGadget != null
-                || currentParticleEffect != null
-                || currentPet != null
-                || currentMount != null
-                || currentTreasureChest != null
-                || currentHat != null
-                || currentEmote != null
-                || currentMorph != null
-                || hasSuitOn();
+        return equipped.size() > 0 || suitMap.size() > 0;
     }
 
     /**
@@ -337,39 +356,15 @@ public class UltraPlayer {
                 // If player is "quitting", remove the disguise anyway. Player is marked as quitting
                 // when changing worlds, making sure morphs get correctly unset.
                 && (isQuitting() || SettingsManager.isAllowedWorld(getBukkitPlayer().getWorld()))) {
-            removeMorph();
+            removeCosmetic(Category.MORPHS);
         }
-        removeGadget();
-        removeParticleEffect();
-        removePet();
-        removeMount();
+        for (Category cat : Category.values()) {
+            // handled above
+            if (cat == Category.MORPHS) continue;
+            removeCosmetic(cat);
+        }
         removeTreasureChest();
-        removeHat();
-        removeEmote();
-        removeSuit();
         return toReturn;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends Cosmetic<?>> T getCosmetic(Category category) {
-        switch (category) {
-            case EFFECTS:
-                return (T) getCurrentParticleEffect();
-            case EMOTES:
-                return (T) getCurrentEmote();
-            case GADGETS:
-                return (T) getCurrentGadget();
-            case HATS:
-                return (T) getCurrentHat();
-            case MORPHS:
-                return (T) getCurrentMorph();
-            case MOUNTS:
-                return (T) getCurrentMount();
-            case PETS:
-                return (T) getCurrentPet();
-            default:
-                return null;
-        }
     }
 
     /**
@@ -400,30 +395,6 @@ public class UltraPlayer {
     }
 
     /**
-     * Removes current Particle Effect.
-     */
-    public void removeParticleEffect() {
-        if (currentParticleEffect == null) {
-            return;
-        }
-
-        currentParticleEffect.clear();
-        setCurrentParticleEffect(null);
-    }
-
-    /**
-     * Removes current Morph.
-     */
-    public void removeMorph() {
-        if (currentMorph == null) {
-            return;
-        }
-
-        currentMorph.clear();
-        setCurrentMorph(null);
-    }
-
-    /**
      * Sets the name of a pet.
      *
      * @param petType The pet name.
@@ -434,8 +405,8 @@ public class UltraPlayer {
             name = null;
         }
         cosmeticsProfile.setPetName(petType, name);
-        if (currentPet != null) {
-            currentPet.updateName();
+        if (hasCosmetic(Category.PETS)) {
+            ((Pet)getCosmetic(Category.PETS)).updateName();
         }
     }
 
@@ -458,12 +429,11 @@ public class UltraPlayer {
     public void addAmmo(GadgetType type, int amount) {
         if (UltraCosmeticsData.get().isAmmoEnabled()) {
             cosmeticsProfile.addAmmo(type, amount);
-
-            if (currentGadget != null) {
-                getBukkitPlayer().getInventory().setItem(SettingsManager.getConfig().getInt("Gadget-Slot"),
-                        ItemFactory.create(currentGadget.getType().getMaterial(),
-                                ChatColor.WHITE + "" + ChatColor.BOLD + getAmmo(currentGadget.getType()) + " " + currentGadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
-            }
+            Gadget gadget = getCurrentGadget();
+            if (gadget == null) return;
+            getBukkitPlayer().getInventory().setItem(SettingsManager.getConfig().getInt("Gadget-Slot"),
+                    ItemFactory.create(gadget.getType().getMaterial(),
+                            ChatColor.WHITE + "" + ChatColor.BOLD + getAmmo(gadget.getType()) + " " + gadget.getType().getName(), MessageManager.getMessage("Gadgets.Lore")));
         }
     }
 
@@ -507,8 +477,8 @@ public class UltraPlayer {
         } else {
             getBukkitPlayer().sendMessage(MessageManager.getMessage("Disabled-SelfMorphView"));
         }
-        if (currentMorph != null) {
-            currentMorph.setSeeSelf(enabled);
+        if (hasCosmetic(Category.MORPHS)) {
+            getCurrentMorph().setSeeSelf(enabled);
         }
     }
 
@@ -607,89 +577,12 @@ public class UltraPlayer {
         return uuid;
     }
 
-    public Emote getCurrentEmote() {
-        return currentEmote;
-    }
-
-    public void setCurrentEmote(Emote currentEmote) {
-        this.currentEmote = currentEmote;
-        if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(Category.EMOTES, currentEmote);
-        }
-    }
-
-    public Gadget getCurrentGadget() {
-        return currentGadget;
-    }
-
-    public void setCurrentGadget(Gadget currentGadget) {
-        this.currentGadget = currentGadget;
-        if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(Category.GADGETS, currentGadget);
-        }
-    }
-
     public Map<GadgetType, Long> getGadgetCooldowns() {
         return gadgetCooldowns;
     }
 
     public void setGadgetCooldowns(HashMap<GadgetType, Long> gadgetCooldowns) {
         this.gadgetCooldowns = gadgetCooldowns;
-    }
-
-    public Hat getCurrentHat() {
-        return currentHat;
-    }
-
-    public void setCurrentHat(Hat currentHat) {
-        this.currentHat = currentHat;
-        if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(Category.HATS, currentHat);
-        }
-    }
-
-    public Morph getCurrentMorph() {
-        return currentMorph;
-    }
-
-    public void setCurrentMorph(Morph currentMorph) {
-        this.currentMorph = currentMorph;
-        if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(Category.MORPHS, currentMorph);
-        }
-    }
-
-    public Mount getCurrentMount() {
-        return currentMount;
-    }
-
-    public void setCurrentMount(Mount currentMount) {
-        this.currentMount = currentMount;
-        if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(Category.MOUNTS, currentMount);
-        }
-    }
-
-    public ParticleEffect getCurrentParticleEffect() {
-        return currentParticleEffect;
-    }
-
-    public void setCurrentParticleEffect(ParticleEffect currentParticleEffect) {
-        this.currentParticleEffect = currentParticleEffect;
-        if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(Category.EFFECTS, currentParticleEffect);
-        }
-    }
-
-    public Pet getCurrentPet() {
-        return currentPet;
-    }
-
-    public void setCurrentPet(Pet currentPet) {
-        this.currentPet = currentPet;
-        if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(Category.PETS, currentPet);
-        }
     }
 
     public TreasureChest getCurrentTreasureChest() {
@@ -722,29 +615,6 @@ public class UltraPlayer {
 
     public boolean canBeHitByOtherGadgets() {
         return canBeHitByOtherGadgets;
-    }
-
-    public void removeCosmetic(Category category) {
-        switch (category) {
-            case EFFECTS:
-                removeParticleEffect();
-            case EMOTES:
-                removeEmote();
-            case GADGETS:
-                removeGadget();
-            case HATS:
-                removeHat();
-            case MORPHS:
-                removeMorph();
-            case MOUNTS:
-                removeMount();
-            case PETS:
-                removePet();
-            case SUITS:
-                removeSuit();
-            default:
-                return;
-        }
     }
 
     public boolean isOnline() {

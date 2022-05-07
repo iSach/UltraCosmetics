@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmetics.CosmeticRegionState;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -47,8 +48,13 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
             return;
         }
 
-        if (!ultraCosmetics.areCosmeticsAllowedInRegion(getPlayer())) {
+        CosmeticRegionState state = ultraCosmetics.cosmeticRegionState(getPlayer(), category);
+        if (state == CosmeticRegionState.BLOCKED_ALL) {
             getPlayer().sendMessage(MessageManager.getMessage("Region-Disabled"));
+            return;
+        } else if (state == CosmeticRegionState.BLOCKED_CATEGORY) {
+            getPlayer().sendMessage(MessageManager.getMessage("Region-Disabled-Category")
+                    .replace("%category%", MessageManager.getMessage("Menu." + category.getConfigName() + ".Title")));
             return;
         }
 
@@ -58,11 +64,15 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
         ultraCosmetics.getServer().getPluginManager().registerEvents(this, ultraCosmetics);
 
+        unequipLikeCosmetics();
+
         this.equipped = true;
 
         getPlayer().sendMessage(filterPlaceholders(getCategory().getActivateMessage()));
 
         onEquip();
+
+        getOwner().setCosmeticEquipped(this);
     }
 
     public /* final */ void clear() {
@@ -76,6 +86,15 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
         // Call untask finally. (in main thread)
         onClear();
+        unsetCosmetic();
+    }
+
+    protected void unsetCosmetic() {
+        owner.unsetCosmetic(category);
+    }
+
+    protected void unequipLikeCosmetics() {
+        getOwner().removeCosmetic(category);
     }
 
     protected boolean tryEquip() {

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -17,7 +18,7 @@ import com.cryptomorin.xseries.XSound;
  * @author iSach
  * @since 08-26-2015
  */
-public class MorphBat extends Morph {
+public class MorphBat extends Morph implements PlayerAffectingCosmetic {
 
     public MorphBat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.valueOf("bat"), ultraCosmetics);

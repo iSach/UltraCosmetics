@@ -1,13 +1,11 @@
 package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -425,18 +423,6 @@ public class MathUtils {
     }
 
     public static void applyVelocity(final Entity ent, Vector v) {
-        applyVelocity(ent, v, false);
-    }
-
-    public static void applyVelocity(final Entity ent, Vector v, boolean ignoreGadgetsEnabled) {
-        if (ent.hasMetadata("NPC"))
-            return;
-        if (!ignoreGadgetsEnabled && ent instanceof Player) {
-            UltraPlayer customPlayer = UltraCosmeticsData.get().getPlugin().getPlayerManager().getUltraPlayer((Player) ent);
-            if (!customPlayer.hasGadgetsEnabled()) {
-                return;
-            }
-        }
         ent.setVelocity(v);
         Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> FallDamageManager.addNoFall(ent), 4);
     }

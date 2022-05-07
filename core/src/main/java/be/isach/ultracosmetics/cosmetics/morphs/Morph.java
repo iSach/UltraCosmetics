@@ -32,10 +32,6 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
     @Override
     protected void onEquip() {
 
-        if (getOwner().getCurrentMorph() != null) {
-            getOwner().removeMorph();
-        }
-
         disguise = new MobDisguise(getType().getDisguiseType());
         FlagWatcher watcher = disguise.getWatcher();
         watcher.setCustomName(getPlayer().getName());
@@ -46,8 +42,6 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
 
         runTaskTimer(getUltraCosmetics(), 0, 1);
-
-        getOwner().setCurrentMorph(this);
     }
 
     @Override
@@ -65,7 +59,6 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
     @Override
     public void clear() {
         DisguiseAPI.undisguiseToAll(getPlayer());
-        getOwner().setCurrentMorph(null);
         super.clear();
     }
 

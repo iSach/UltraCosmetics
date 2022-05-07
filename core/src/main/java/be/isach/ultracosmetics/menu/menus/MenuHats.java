@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.hats.Hat;
 import be.isach.ultracosmetics.cosmetics.type.HatType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -45,15 +44,5 @@ public class MenuHats extends CosmeticMenu<HatType> {
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, HatType hatType, UltraCosmetics ultraCosmetics) {
         hatType.equip(ultraPlayer, ultraCosmetics);
-    }
-
-    @Override
-    protected void toggleOff(UltraPlayer ultraPlayer, HatType type) {
-        ultraPlayer.removeHat();
-    }
-
-    @Override
-    protected Hat getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getCurrentHat();
     }
 }

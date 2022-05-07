@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.config.ManualCommentConfiguration;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
+import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.economy.EconomyHandler;
 import be.isach.ultracosmetics.listeners.Listener19;
 import be.isach.ultracosmetics.listeners.MainListener;
@@ -31,8 +32,8 @@ import be.isach.ultracosmetics.util.PermissionPrinter;
 import be.isach.ultracosmetics.util.ReflectionUtils;
 import be.isach.ultracosmetics.util.ServerVersion;
 import be.isach.ultracosmetics.util.UpdateManager;
-import be.isach.ultracosmetics.version.AFlagManager;
 import be.isach.ultracosmetics.version.VersionManager;
+import be.isach.ultracosmetics.worldguard.AFlagManager;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -631,12 +632,28 @@ public class UltraCosmetics extends JavaPlugin {
         return flagManager != null;
     }
 
-    public boolean areCosmeticsAllowedInRegion(Player player) {
-        return !worldGuardHooked() || flagManager.areCosmeticsAllowedHere(player);
+    public boolean areCosmeticsAllowedInRegion(Player player, Category category) {
+        return !worldGuardHooked() || flagManager.areCosmeticsAllowedHere(player, category);
     }
 
     public boolean areChestsAllowedInRegion(Player player) {
         return !worldGuardHooked() || flagManager.areChestsAllowedHere(player);
+    }
+
+    public boolean arePlayersAffectedInRegion(Player target) {
+        return !worldGuardHooked() || flagManager.canAffectPlayersHere(target);
+    }
+
+    public CosmeticRegionState cosmeticRegionState(Player player, Category category) {
+        if (!worldGuardHooked()) {
+            return CosmeticRegionState.ALLOWED;
+        }
+        return flagManager.allowedCosmeticsState(player, category);
+    }
+
+    public void forceRegionCheck(Player target) {
+        if (!worldGuardHooked()) return;
+        flagManager.doCosmeticCheck(target, this);
     }
 
     public boolean loadConfiguration(File file) {
@@ -716,5 +733,12 @@ public class UltraCosmetics extends JavaPlugin {
         } else if (legacyMessagePrinted) {
             getSmartLogger().write(LogLevel.WARNING, "Couldn't upgrade key '" + key + "' because it has been changed. Please upgrade it manually.");
         }
+    }
+
+    // has to be outside AFlagManager because AFlagManager cannot load if WorldGuard is not present
+    public enum CosmeticRegionState {
+        BLOCKED_ALL,
+        BLOCKED_CATEGORY,
+        ALLOWED,
     }
 }

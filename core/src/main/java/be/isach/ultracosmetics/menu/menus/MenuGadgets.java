@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
@@ -85,16 +84,6 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, GadgetType gadgetType, UltraCosmetics ultraCosmetics) {
         gadgetType.equip(ultraPlayer, ultraCosmetics);
-    }
-
-    @Override
-    protected void toggleOff(UltraPlayer ultraPlayer, GadgetType type) {
-        ultraPlayer.removeGadget();
-    }
-
-    @Override
-    protected Gadget getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getCurrentGadget();
     }
 
     @Override

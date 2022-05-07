@@ -80,7 +80,6 @@ public abstract class Suit extends ArmorCosmetic<SuitType> implements Updatable 
 
     @Override
     protected void onEquip() {
-        getOwner().setCurrentSuitPart(cosmeticType.getSlot(), this);
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
     }
 
@@ -97,12 +96,18 @@ public abstract class Suit extends ArmorCosmetic<SuitType> implements Updatable 
         onUpdate();
     }
 
-    /**
-     * Clears the Suit.
-     */
+    @Override
+    protected void unsetCosmetic() {
+        getOwner().setCurrentSuitPart(getArmorSlot(), null);
+    }
+
+    @Override
+    protected void unequipLikeCosmetics() {
+        getOwner().removeSuit(getArmorSlot());
+    }
+    
     @Override
     public void onClear() {
-        getOwner().setCurrentSuitPart(getArmorSlot(), null);
     }
 
     /**

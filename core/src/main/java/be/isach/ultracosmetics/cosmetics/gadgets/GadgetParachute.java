@@ -106,7 +106,8 @@ public class GadgetParachute extends Gadget {
         if (active) {
             // isOnGround returns true if they're on a solid block and doesn't account for non-solid blocks (#362)
             if (!isNotOnAir(getPlayer()) && getPlayer().getVelocity().getY() < -0.3)
-                MathUtils.applyVelocity(getPlayer(), getPlayer().getVelocity().add(new Vector(0, 0.1, 0)), true);
+                // Intentionally omitted check for canAffect
+                MathUtils.applyVelocity(getPlayer(), getPlayer().getVelocity().add(new Vector(0, 0.1, 0)));
             if (isNotOnAir(getPlayer()))
                 killParachute();
         }

@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -26,7 +27,7 @@ import org.bukkit.util.Vector;
  * @author iSach
  * @since 08-10-2015
  */
-public class GadgetAntiGravity extends Gadget {
+public class GadgetAntiGravity extends Gadget implements PlayerAffectingCosmetic {
 
     private static final boolean USE_LEVITATION = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1);
     private ArmorStand as;
@@ -67,7 +68,7 @@ public class GadgetAntiGravity extends Gadget {
                 if (USE_LEVITATION) {
                     le.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 5, 0));
                 } else {
-                    MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
+                    if (canAffect(ent)) MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
                 }
             }
         }

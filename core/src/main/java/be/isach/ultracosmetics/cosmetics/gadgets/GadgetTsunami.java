@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
@@ -9,7 +10,6 @@ import be.isach.ultracosmetics.util.Particles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
@@ -23,7 +23,7 @@ import java.util.List;
  * @author iSach
  * @since 08-08-2015
  */
-public class GadgetTsunami extends Gadget {
+public class GadgetTsunami extends Gadget implements PlayerAffectingCosmetic {
 
     private final List<Entity> cooldownJump = new ArrayList<>();
 
@@ -52,10 +52,10 @@ public class GadgetTsunami extends Gadget {
             for (int a = 0; a < 100; a++) {
                 Particles.REDSTONE.display(0, 0, 255, loc.clone().add(MathUtils.randomDouble(-1.5, 1.5), MathUtils.randomDouble(1, 1.6) - 0.75, MathUtils.randomDouble(-1.5, 1.5)));
             }
-            if (affectPlayers) {
+            if (isAffectingPlayersEnabled()) {
                 Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
                     for (final Entity ent : getPlayer().getWorld().getNearbyEntities(loc, 0.6, 0.6, 0.6)) {
-                        if (!cooldownJump.contains(ent) && ent != getPlayer() && !(ent instanceof ArmorStand)) {
+                        if (!cooldownJump.contains(ent) && ent != getPlayer() && canAffect(ent)) {
                             MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v.clone().multiply(2)));
                             cooldownJump.add(ent);
                             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cooldownJump.remove(ent), 20);

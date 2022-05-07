@@ -58,7 +58,7 @@ public class MorphPolarBear extends Morph {
 
             for (int i = 0; i < 3; i++) {
                 UltraCosmeticsData.get().getVersionManager().getEntityUtil()
-                        .sendBlizzard(getPlayer(), location, false, vector);
+                        .sendBlizzard(getPlayer(), location, ent -> false, vector);
             }
 
             location.add(vector);

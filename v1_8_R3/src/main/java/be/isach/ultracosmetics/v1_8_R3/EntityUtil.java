@@ -46,6 +46,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Created by Sacha on 14/03/16.
@@ -61,7 +62,7 @@ public class EntityUtil implements IEntityUtil {
     }
 
     @Override
-    public void sendBlizzard(final Player player, Location loc, boolean affectPlayers, Vector v) {
+    public void sendBlizzard(final Player player, Location loc, Function<Entity,Boolean> canAffectFunc, Vector v) {
         final Set<EntityArmorStand> fakeArmorStands = fakeArmorStandsMap.computeIfAbsent(player, k -> new HashSet<>());
         final Set<Entity> cooldownJump = cooldownJumpMap.computeIfAbsent(player, k -> new HashSet<>());
         final EntityArmorStand as = new EntityArmorStand(((CraftWorld) player.getWorld()).getHandle());
@@ -86,13 +87,11 @@ public class EntityUtil implements IEntityUtil {
             }
             fakeArmorStands.remove(as);
         }, 20);
-        if (affectPlayers) {
-            for (final Entity ent : as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
-                if (!cooldownJump.contains(ent) && ent != player) {
-                    MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
-                    cooldownJump.add(ent);
-                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
-                }
+        for (final Entity ent : as.getBukkitEntity().getNearbyEntities(0.5, 0.5, 0.5)) {
+            if (!cooldownJump.contains(ent) && ent != player && canAffectFunc.apply(ent)) {
+                MathUtils.applyVelocity(ent, new Vector(0, 1, 0).add(v));
+                cooldownJump.add(ent);
+                Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> cooldownJump.remove(ent), 20);
             }
         }
     }

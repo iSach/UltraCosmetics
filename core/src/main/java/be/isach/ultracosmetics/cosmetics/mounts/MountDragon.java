@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
 
-import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -26,14 +25,8 @@ public class MountDragon extends Mount {
         super(owner, MountType.valueOf("dragon"), ultraCosmetics);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onUpdate() {
-        if (entity.getPassenger() == null) {
-            clear();
-            return;
-        }
-
         Vector vector = getPlayer().getLocation().toVector();
 
         double rotX = getPlayer().getLocation().getYaw();
@@ -63,8 +56,9 @@ public class MountDragon extends Mount {
         Entity e = event.getEntity();
         if (e instanceof EnderDragonPart)
             e = ((EnderDragonPart) e).getParent();
-        if (e instanceof EnderDragon && e == entity)
+        if (e == entity) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -73,7 +67,7 @@ public class MountDragon extends Mount {
         if (e instanceof EnderDragonPart) {
             e = ((EnderDragonPart) e).getParent();
         }
-        if (e instanceof EnderDragon && e == entity) {
+        if (e == entity) {
             event.setCancelled(true);
         }
     }

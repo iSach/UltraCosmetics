@@ -86,27 +86,16 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     protected Block lastClickedBlock;
 
     /**
-     * If true, it will affect players (velocity).
-     */
-    protected boolean affectPlayers;
-
-    /**
      * If Gadget interaction should tick asynchronously.
      */
     private boolean asynchronous = false;
 
     public Gadget(UltraPlayer owner, GadgetType type, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.GADGETS, owner, type);
-
-        this.affectPlayers = type.affectPlayersEnabled();
     }
 
     @Override
     protected void onEquip() {
-        if (getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).getCurrentGadget() != null) {
-            getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
-        }
-
         runTaskTimer(getUltraCosmetics(), 0, 1);
 
         int slot = SettingsManager.getConfig().getInt("Gadget-Slot");
@@ -124,8 +113,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
         itemStack = ItemFactory.create(getType().getMaterial(), ammo + getType().getName(),
                 MessageManager.getMessage("Gadgets.Lore"));
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
-
-        getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).setCurrentGadget(this);
     }
 
     @Override
@@ -202,7 +189,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             if (i == 50 - res) {
                 stringBuilder.append(ChatColor.RED);
             }
-            //stringBuilder.append("┃");
             stringBuilder.append("|");
         }
 
@@ -385,7 +371,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
     public void onItemDrop(PlayerDropItemEvent event) {
         if (event.getItemDrop().getItemStack().equals(getItemStack())) {
             if (SettingsManager.getConfig().getBoolean("Remove-Gadget-With-Drop")) {
-                getUltraCosmetics().getPlayerManager().getUltraPlayer(getPlayer()).removeGadget();
+                clear();
                 event.getItemDrop().remove();
             } else {
                 event.setCancelled(true);

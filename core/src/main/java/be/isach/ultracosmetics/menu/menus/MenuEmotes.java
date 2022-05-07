@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.menu.menus;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.emotes.Emote;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -45,15 +44,5 @@ public class MenuEmotes extends CosmeticMenu<EmoteType> {
     @Override
     protected void toggleOn(UltraPlayer ultraPlayer, EmoteType emoteType, UltraCosmetics ultraCosmetics) {
         emoteType.equip(ultraPlayer, ultraCosmetics);
-    }
-
-    @Override
-    protected void toggleOff(UltraPlayer ultraPlayer, EmoteType type) {
-        ultraPlayer.removeEmote();
-    }
-
-    @Override
-    protected Emote getCosmetic(UltraPlayer ultraPlayer) {
-        return ultraPlayer.getCurrentEmote();
     }
 }

@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -13,7 +14,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.Iterator;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetFleshHook extends Gadget implements Listener {
+public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic {
 
     private ArrayList<Item> items = new ArrayList<>();
 
@@ -45,7 +45,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
 
         if (items.contains(event.getItem())) {
             event.setCancelled(true);
-            if (event.getPlayer().getName().equals(getPlayer().getName())) {
+            if (event.getPlayer() == getPlayer() || !canAffect(event.getPlayer())) {
                 return;
             }
             items.remove(event.getItem());
@@ -63,8 +63,7 @@ public class GadgetFleshHook extends Gadget implements Listener {
             double Z = Math.cos(pitch);
 
             Vector vector = new Vector(X, Z, Y);
-            if (affectPlayers)
-                MathUtils.applyVelocity(HIT, vector.multiply(2.5D).add(new Vector(0D, 1.45D, 0D)));
+            MathUtils.applyVelocity(HIT, vector.multiply(2.5D).add(new Vector(0D, 1.45D, 0D)));
         }
     }
 

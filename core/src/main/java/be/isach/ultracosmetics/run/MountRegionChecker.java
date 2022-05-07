@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
 /*
@@ -25,9 +24,6 @@ public class MountRegionChecker extends BukkitRunnable {
         Player bukkitPlayer = player.getBukkitPlayer();
         // Mount#onClear() will cancel it for us
         if (bukkitPlayer == null) return;
-        if (!uc.areCosmeticsAllowedInRegion(bukkitPlayer)) {
-            player.clear();
-            bukkitPlayer.sendMessage(MessageManager.getMessage("Region-Disabled"));
-        }
+        uc.forceRegionCheck(bukkitPlayer);
     }
 }
