@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TextUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -54,7 +55,7 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
             return;
         } else if (state == CosmeticRegionState.BLOCKED_CATEGORY) {
             getPlayer().sendMessage(MessageManager.getMessage("Region-Disabled-Category")
-                    .replace("%category%", MessageManager.getMessage("Menu." + category.getConfigName() + ".Title")));
+                    .replace("%category%", ChatColor.stripColor(MessageManager.getMessage("Menu." + category.getConfigName() + ".Title"))));
             return;
         }
 

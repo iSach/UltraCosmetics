@@ -34,7 +34,7 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
     }
 
     private void putToggleGadgetsItems(Inventory inventory, UltraPlayer player) {
-        int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 5 : 6);
+        int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 4 : 6);
         String configPath;
         boolean toggle;
         if (player.hasGadgetsEnabled()) {

@@ -62,37 +62,37 @@ public class PermissionPrinter {
         writer.println("Gadgets:");
         writer.println("  - ultracosmetics.gadgets.*");
         for (GadgetType gadgetType : GadgetType.values()) {
-            writer.println("  - " + gadgetType.getPermission());
+            writer.println("  - " + gadgetType.getPermission().getName());
         }
         writer.println();
         writer.println("Pets:");
         writer.println("  - ultracosmetics.pets.*");
         for (PetType petType : PetType.values()) {
-            writer.println("  - " + petType.getPermission());
+            writer.println("  - " + petType.getPermission().getName());
         }
         writer.println();
         writer.println("Mounts:");
         writer.println("  - ultracosmetics.mounts.*");
         for (MountType mountType : MountType.values()) {
-            writer.println("  - " + mountType.getPermission());
+            writer.println("  - " + mountType.getPermission().getName());
         }
         writer.println();
         writer.println("Morphs:");
         writer.println("  - ultracosmetics.morphs.*");
         for (MorphType morphType : MorphType.values()) {
-            writer.println("  - " + morphType.getPermission());
+            writer.println("  - " + morphType.getPermission().getName());
         }
         writer.println();
         writer.println("Hats:");
         writer.println("  - ultracosmetics.hats.*");
         for (HatType hat : HatType.values()) {
-            writer.println("  - " + hat.getPermission());
+            writer.println("  - " + hat.getPermission().getName());
         }
         writer.println();
         writer.println("Particle Effects:");
         writer.println("  - ultracosmetics.particleeffects.*");
         for (ParticleEffectType effect : ParticleEffectType.values()) {
-            writer.println("  - " + effect.getPermission());
+            writer.println("  - " + effect.getPermission().getName());
         }
         writer.println();
         writer.println("Suits:");
@@ -100,14 +100,14 @@ public class PermissionPrinter {
         for (SuitCategory cat : SuitCategory.values()) {
             writer.println("  - ultracosmetics.suits." + cat.getConfigName().toLowerCase() + ".*");
             for (SuitType suitType : cat.getPieces()) {
-                writer.println("  - " + suitType.getPermission());
+                writer.println("  - " + suitType.getPermission().getName());
             }
         }
         writer.println();
         writer.println("Emotes:");
         writer.println("  - ultracosmetics.emotes.*");
         for (EmoteType emoteType : EmoteType.values()) {
-            writer.println("  - " + emoteType.getPermission());
+            writer.println("  - " + emoteType.getPermission().getName());
         }
         writer.println();
 

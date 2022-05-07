@@ -2,7 +2,6 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
-import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -32,12 +30,11 @@ import java.util.Set;
  */
 public class GadgetExplosiveSheep extends Gadget {
 
-    public static final Set<GadgetExplosiveSheep> EXPLOSIVE_SHEEP = new HashSet<>();
-
     // I know 'sheeps' isn't the plural form of 'sheep' but it's funny
     // and it distinguishes it from the local variables named 'sheep' (singular)
     private Set<Sheep> sheeps = new HashSet<>();
     private BukkitRunnable sheepExplosionRunnable = null;
+    private BukkitRunnable sheepCreationRunnable = null;
 
     public GadgetExplosiveSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("explosivesheep"), ultraCosmetics);
@@ -54,18 +51,7 @@ public class GadgetExplosiveSheep extends Gadget {
 
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
 
-        EXPLOSIVE_SHEEP.add(this);
-
-        new SheepColorRunnable(7, true, sheep);
-    }
-
-    @Override
-    protected boolean checkRequirements(PlayerInteractEvent event) {
-        if (GadgetExplosiveSheep.EXPLOSIVE_SHEEP.size() > 0) {
-            getPlayer().sendMessage(MessageManager.getMessage("Gadgets.ExplosiveSheep.Already-Active"));
-            return false;
-        }
-        return true;
+        new SheepColorRunnable(sheep, 7, true);
     }
 
     @EventHandler
@@ -91,28 +77,30 @@ public class GadgetExplosiveSheep extends Gadget {
         for (Sheep sheep : sheeps) {
             sheep.remove();
         }
-        EXPLOSIVE_SHEEP.remove(this);
         HandlerList.unregisterAll(this);
         if (sheepExplosionRunnable != null) {
             sheepExplosionRunnable.cancel();
         }
+        if (sheepCreationRunnable != null) {
+            sheepCreationRunnable.cancel();
+        }
     }
 
     private class SheepColorRunnable extends BukkitRunnable {
+        private final Sheep s;
         private boolean red;
         private double time;
-        private Sheep s;
 
-        private SheepColorRunnable(double time, boolean red, Sheep s) {
+        private SheepColorRunnable(Sheep s, double time, boolean red) {
+            this.s = s;
             this.red = red;
             this.time = time;
-            this.s = s;
             this.runTaskLater(getUltraCosmetics(), (int) time);
         }
 
         @Override
         public void run() {
-            if (getOwner() == null || getPlayer() == null) {
+            if (getOwner() == null || getPlayer() == null || !s.isValid()) {
                 cancel();
                 return;
             }
@@ -122,31 +110,42 @@ public class GadgetExplosiveSheep extends Gadget {
             time -= 0.2;
 
             if (time >= 0.5) {
-                new SheepColorRunnable(time, red, s);
+                // unfortunately we can't reschedule this existing task, we have to make a new one.
+                new SheepColorRunnable(s, time, red);
                 return;
             }
             XSound.ENTITY_GENERIC_EXPLODE.play(s.getLocation(), 1.4f, 1.5f);
             Particles.EXPLOSION_HUGE.display(s.getLocation());
             sheeps.remove(s);
             s.remove();
-            for (int i = 0; i < 50; i++) {
-                final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
-                sheep.setColor(DyeColor.values()[MathUtils.randomRangeInt(0, 15)]);
-                MathUtils.applyVelocity(sheep, new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2, RANDOM.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
-                sheep.setBaby();
-                sheep.setAgeLock(true);
-                sheep.setNoDamageTicks(120);
-                sheeps.add(sheep);
-                UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
-                UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
-            }
+            sheepCreationRunnable = new BukkitRunnable() {
+                int i = 5;
+                @Override
+                public void run() {
+                    for (int i = 0; i < 10; i++) {
+                        final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
+                        sheep.setColor(DyeColor.values()[RANDOM.nextInt(16)]);
+                        MathUtils.applyVelocity(sheep, new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2, RANDOM.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
+                        sheep.setBaby();
+                        sheep.setAgeLock(true);
+                        sheep.setNoDamageTicks(120);
+                        sheeps.add(sheep);
+                        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
+                        UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
+                    }
+                    if (--i < 1) {
+                        cancel();
+                        sheepCreationRunnable = null;
+                    }
+                }
+            };
+            sheepCreationRunnable.runTaskTimer(getUltraCosmetics(), 0, 1);
             sheepExplosionRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {
                     for (Sheep sheep : sheeps) {
                         Particles.LAVA.display(sheep.getLocation(), 5);
                         sheep.remove();
-                        EXPLOSIVE_SHEEP.remove(GadgetExplosiveSheep.this);
                     }
                     sheepExplosionRunnable = null;
                 }

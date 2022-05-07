@@ -29,6 +29,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitTask;
@@ -145,7 +146,7 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
         }
     }
 
-    /*@EventHandler
+    @EventHandler
     public void onPlayerToggleSneakEvent(VehicleExitEvent event) {
         if (event.getVehicle().getType() == EntityType.BOAT
                 || event.getVehicle().getType().toString().contains("MINECART")) {
@@ -165,10 +166,9 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
                 && event.getVehicle().getCustomName().equals(name)
                 && event.getExited() == getPlayer()) {
             beingRemoved = true;
-            // clear is already called by the 'beingRemoved' checker in run() so I don't think this is necessary
-            //clear();
+            clear();
         }
-    }*/
+    }
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {

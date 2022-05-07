@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmetics.CosmeticRegionState;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.protection.flags.EnumFlag;
@@ -56,7 +57,7 @@ public abstract class AFlagManager {
         for (Category category : blockedCategories) {
             if (blockedCategories.contains(category) && uc.getPlayerManager().getUltraPlayer(player).removeCosmetic(category)) {
                 player.sendMessage(MessageManager.getMessage("Region-Disabled-Category")
-                        .replace("%category%", MessageManager.getMessage("Menu." + category.getConfigName() + ".Title")));
+                        .replace("%category%", ChatColor.stripColor(MessageManager.getMessage("Menu." + category.getConfigName() + ".Title"))));
             }
         }
     }

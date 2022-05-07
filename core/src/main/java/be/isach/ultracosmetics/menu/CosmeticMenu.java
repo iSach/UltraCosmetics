@@ -158,7 +158,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         // Clear cosmetic item.
         String message = MessageManager.getMessage("Clear." + category.getConfigPath());
         ItemStack itemStack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Clear-Cosmetic-Item"), message);
-        putItem(inventory, inventory.getSize() - 4, itemStack, data -> {
+        putItem(inventory, inventory.getSize() - 5, itemStack, data -> {
             toggleOff(player, null);
             open(player, getCurrentPage(player));
         });
@@ -310,9 +310,9 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         int limit = 21;
         int current = 0;
         Map<Integer,T> slots = new HashMap<>();
-        List<T> enabled = enabled();
+        List<T> enabled = new ArrayList<>(enabled());
+        enabled.removeIf(k -> shouldHideItem(player, k));
         for (int i = start; current < limit && i < enabled.size(); i++) {
-            if (shouldHideItem(player, enabled.get(i))) continue;
             slots.put(COSMETICS_SLOTS[current++ % 21], enabled.get(i));
         }
         return slots;

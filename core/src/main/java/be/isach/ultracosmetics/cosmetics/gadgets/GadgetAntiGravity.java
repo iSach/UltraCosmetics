@@ -63,12 +63,12 @@ public class GadgetAntiGravity extends Gadget implements PlayerAffectingCosmetic
         Particles.PORTAL.display(3f, 3f, 3f, as.getLocation(), 150);
         Particles.SPELL_WITCH.display(.3f, .3f, .3f, as.getEyeLocation(), 5);
         for (Entity ent : as.getNearbyEntities(3, 2, 3)) {
-            if (ent instanceof LivingEntity && !(ent instanceof ArmorStand)) {
+            if (canAffect(ent)) {
                 LivingEntity le = (LivingEntity) ent;
                 if (USE_LEVITATION) {
                     le.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 5, 0));
                 } else {
-                    if (canAffect(ent)) MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
+                    MathUtils.applyVelocity(ent, new Vector(0, 0.05, 0));
                 }
             }
         }
