@@ -144,7 +144,7 @@ public class GadgetRocket extends Gadget {
                         fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, 1), FENCE));
                         fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(0, 1 + i, -1), FENCE));
                         fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(1, 1 + i, 0), FENCE));
-                        fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(1, 1 + i, 0), FENCE));
+                        fallingBlocks.add(BlockUtils.spawnFallingBlock(getPlayer().getLocation().add(-1, 1 + i, 0), FENCE));
                     }
 
                     fallingBlocks.add(top);

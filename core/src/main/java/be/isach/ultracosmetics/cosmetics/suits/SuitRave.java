@@ -1,9 +1,11 @@
 package be.isach.ultracosmetics.cosmetics.suits;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Color;
+import org.bukkit.GameMode;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 /**
@@ -14,9 +16,26 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  */
 public class SuitRave extends Suit {
     private int[] colors = new int[]{255, 0, 0};
+    private int tick = 0;
+    private int updateInterval = SettingsManager.getConfig().getInt("Suits.Rave.Update-Delay-In-Creative", 1);
 
     public SuitRave(UltraPlayer owner, SuitType suitType, UltraCosmetics ultraCosmetics) {
         super(owner, suitType, ultraCosmetics);
+    }
+
+    @Override
+    public void onEquip() {
+        super.onEquip();
+        // If the player has another rave suit part equipped already,
+        // sync up the update timers.
+        for (ArmorSlot slot : ArmorSlot.values()) {
+            if (slot == getArmorSlot()) continue;
+            Suit part = getOwner().getSuit(slot);
+            if (part instanceof SuitRave) {
+                tick = ((SuitRave)part).getTick();
+                break;
+            }
+        }
     }
 
     @Override
@@ -38,9 +57,15 @@ public class SuitRave extends Suit {
     }
 
     private void refresh() {
+        if (getPlayer().getGameMode() == GameMode.CREATIVE && ++tick < updateInterval) return;
+        tick = 0;
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         itemMeta.setColor(Color.fromRGB(colors[0], colors[1], colors[2]));
         itemStack.setItemMeta(itemMeta);
         setArmorItem(itemStack);
+    }
+
+    public int getTick() {
+        return tick;
     }
 }

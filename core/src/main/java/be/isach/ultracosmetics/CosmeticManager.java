@@ -90,6 +90,11 @@ public class CosmeticManager {
         for (SuitCategory suit : SuitCategory.values()) {
             setupCosmetic(config, suit.getConfigPath());
         }
+        config.addDefault("Suits.Rave.Update-Delay-In-Creative", 10,
+                "How many ticks UC should wait between updating the rave suit for creative players.",
+                "Setting this to a higher value allows more time between updates,",
+                "meaning players shouldn't have their inventories close immediately after opening.",
+                "Set to 1 or less to update every tick.");
 
         if (Category.MORPHS.isEnabled()) {
             setupCategory(config, MorphType.values());

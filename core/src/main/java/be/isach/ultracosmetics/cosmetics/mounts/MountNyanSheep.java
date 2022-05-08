@@ -6,16 +6,14 @@ import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
 
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.util.Vector;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Represents an instance of a nyansheep mount.
@@ -24,6 +22,16 @@ import java.util.Random;
  * @since 08-17-2015
  */
 public class MountNyanSheep extends Mount {
+    private static final List<Color> COLORS = new ArrayList<>();
+
+    static {
+        COLORS.add(new Color(255, 0, 0));
+        COLORS.add(new Color(255, 165, 0));
+        COLORS.add(new Color(255, 255, 0));
+        COLORS.add(new Color(154, 205, 50));
+        COLORS.add(new Color(30, 144, 255));
+        COLORS.add(new Color(148, 0, 211));
+    }
 
     public MountNyanSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MountType.valueOf("nyansheep"), ultraCosmetics);
@@ -37,59 +45,24 @@ public class MountNyanSheep extends Mount {
 
     @Override
     public void onUpdate() {
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), this::move);
+        move();
 
-        ((Sheep)entity).setColor(DyeColor.values()[new Random().nextInt(15)]);
+        ((Sheep)entity).setColor(DyeColor.values()[RANDOM.nextInt(16)]);
 
-        List<RGBColor> colors = new ArrayList<>();
-
-        colors.add(new RGBColor(255, 0, 0));
-        colors.add(new RGBColor(255, 165, 0));
-        colors.add(new RGBColor(255, 255, 0));
-        colors.add(new RGBColor(154, 205, 50));
-        colors.add(new RGBColor(30, 144, 255));
-        colors.add(new RGBColor(148, 0, 211));
-
-        float y = 1.2f;
-        for (RGBColor rgbColor : colors) {
-            for (int i = 0; i < 10; i++)
-                Particles.REDSTONE.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue(),
-                        entity.getLocation().add(entity.getLocation().getDirection()
-                                .normalize().multiply(-1).multiply(1.4)).add(0, y, 0));
-            y -= 0.2;
+        Location particleLoc = entity.getLocation().add(entity.getLocation().getDirection().normalize().multiply(-1.4)).add(0, 1.2, 0);
+        for (Color rgbColor : COLORS) {
+            for (int i = 0; i < 10; i++) {
+                Particles.REDSTONE.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue(), particleLoc);
+            }
+            particleLoc.subtract(0, 0.2, 0);
         }
     }
 
     private void move() {
-        if (getPlayer() == null) return;
-        Player player = getPlayer();
-        Vector vel = player.getLocation().getDirection().setY(0).normalize().multiply(4);
-        Location loc = player.getLocation().add(vel);
+        Location playerLoc = getPlayer().getLocation();
+        Vector vel = playerLoc.getDirection().setY(0).normalize().multiply(4);
+        playerLoc.add(vel);
 
-        UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(((Sheep)entity), loc);
-    }
-
-    private class RGBColor {
-        int red;
-        int green;
-        int blue;
-
-        public RGBColor(int red, int green, int blue) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-        }
-
-        public int getBlue() {
-            return blue;
-        }
-
-        public int getGreen() {
-            return green;
-        }
-
-        public int getRed() {
-            return red;
-        }
+        UltraCosmeticsData.get().getVersionManager().getEntityUtil().move(((Sheep)entity), playerLoc);
     }
 }
