@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.EntityCosmetic;
@@ -14,6 +15,7 @@ import be.isach.ultracosmetics.util.ServerVersion;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Difficulty;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -125,6 +127,15 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
 
         entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
         setupEntity();
+    }
+
+    @Override
+    public boolean tryEquip() {
+        if (getType().isMonster() && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+            getOwner().sendMessage(MessageManager.getMessage("Mounts.Cant-Spawn"));
+            return false;
+        }
+        return true;
     }
 
     @Override

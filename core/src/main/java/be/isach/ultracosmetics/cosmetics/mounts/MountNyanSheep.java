@@ -49,7 +49,7 @@ public class MountNyanSheep extends Mount {
 
         ((Sheep)entity).setColor(DyeColor.values()[RANDOM.nextInt(16)]);
 
-        Location particleLoc = entity.getLocation().add(entity.getLocation().getDirection().normalize().multiply(-1.4)).add(0, 1.2, 0);
+        Location particleLoc = entity.getLocation().add(entity.getLocation().getDirection().normalize().multiply(-2)).add(0, 1.2, 0);
         for (Color rgbColor : COLORS) {
             for (int i = 0; i < 10; i++) {
                 Particles.REDSTONE.display(rgbColor.getRed(), rgbColor.getGreen(), rgbColor.getBlue(), particleLoc);

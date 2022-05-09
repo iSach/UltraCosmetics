@@ -21,7 +21,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -88,11 +87,8 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
 
     @Override
     protected boolean tryEquip() {
-     // If the entity is a monster and the world is set to peaceful, we can't spawn it
-        if ((Monster.class.isAssignableFrom(getType().getEntityType().getEntityClass())
-                // no idea why Slime doesn't implement Monster but we have to check for it
-                || Slime.class.isAssignableFrom(getType().getEntityType().getEntityClass()))
-                && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+        // If the entity is a monster and the world is set to peaceful, we can't spawn it
+        if (getType().isMonster() && getPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
             getOwner().sendMessage(MessageManager.getMessage("Mounts.Cant-Spawn"));
             return false;
         }

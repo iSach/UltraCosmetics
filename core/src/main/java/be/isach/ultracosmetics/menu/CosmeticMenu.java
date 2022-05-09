@@ -5,6 +5,7 @@ import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.type.CosmeticEntType;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -13,6 +14,7 @@ import be.isach.ultracosmetics.util.PurchaseData;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Difficulty;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -389,9 +391,17 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
     }
 
     protected boolean shouldHideItem(UltraPlayer player, CosmeticType<?> cosmeticType) {
-        return (SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")
+        if ((SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")
                 || player.isFilteringByOwned())
-                && !player.hasPermission(cosmeticType.getPermission());
+                && !player.hasPermission(cosmeticType.getPermission())){
+                    return true;
+                }
+        if (cosmeticType instanceof CosmeticEntType
+                && ((CosmeticEntType<?>) cosmeticType).isMonster()
+                && player.getBukkitPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {
+            return true;
+        }
+        return false;
     }
 
     protected boolean hasEquipped(UltraPlayer ultraPlayer, T type) {
