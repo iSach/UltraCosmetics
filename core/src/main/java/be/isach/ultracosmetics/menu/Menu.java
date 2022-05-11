@@ -16,6 +16,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import static be.isach.ultracosmetics.util.ItemFactory.fillerItem;
 
@@ -83,7 +85,7 @@ public abstract class Menu implements Listener {
             return;
         }
 
-        if (event.getCurrentItem() == null) {
+        if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta() || !event.getCurrentItem().getItemMeta().hasDisplayName()) {
             return;
         }
 
@@ -92,14 +94,10 @@ public abstract class Menu implements Listener {
             return;
         }
 
-        // Check Inventory is the good one
-        if (!event.getView().getTitle().contains(getName())) {
-            return;
-        }
-
-        // Check that the filler item isn't being clicked
-        if (fillerItem != null && event.getCurrentItem().equals(fillerItem)) {
-            event.setCancelled(true);
+        // Check Inventory is the good one.
+        // Using contains because inventory titles get
+        // page numbers when multiple pages exist.
+        if (!event.getView().getTitle().startsWith(getName())) {
             return;
         }
         // Check that Inventory is valid.
@@ -107,24 +105,26 @@ public abstract class Menu implements Listener {
             return;
         }
 
-        boolean correctItem = false;
+        // Check that the filler item isn't being clicked
+        if (event.getCurrentItem().equals(fillerItem)) {
+            event.setCancelled(true);
+            return;
+        }
 
         ClickRunnable clickRunnable = null;
-        for (ItemStack itemStack : clickRunnableMap.get(event.getInventory()).keySet()) {
-            if (ItemFactory.haveSameName(itemStack, event.getCurrentItem())) {
-                correctItem = true;
-                clickRunnable = clickRunnableMap.get(event.getInventory()).get(itemStack);
+        String clickItemName = event.getCurrentItem().getItemMeta().getDisplayName();
+        Set<Entry<ItemStack, ClickRunnable>> entries = clickRunnableMap.get(event.getInventory()).entrySet();
+        for (Entry<ItemStack, ClickRunnable> entry : entries) {
+            if (entry.getKey().getItemMeta().getDisplayName().equals(clickItemName)) {
+                clickRunnable = entry.getValue();
+                break;
             }
         }
-        if (!correctItem) {
+        if (clickRunnable == null) {
             return;
         }
 
         event.setCancelled(true);
-
-        if (clickRunnable == null) {
-            return;
-        }
 
         Player player = (Player) event.getWhoClicked();
         UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(player);

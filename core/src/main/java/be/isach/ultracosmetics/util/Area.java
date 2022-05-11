@@ -1,8 +1,11 @@
 package be.isach.ultracosmetics.util;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+
+import java.util.function.Function;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
@@ -30,12 +33,24 @@ public class Area {
         this(center.clone().add(-radius, 0, -radius), center.clone().add(radius, yUp, radius));
     }
 
-    public boolean isEmptyExcept(int badX, int badY, int badZ) {
+    /**
+     * Checks each material in the area against okMatFunc,
+     * and returns true if every block is "ok" accordingly.
+     *
+     * Ignores the block at (badX, badY, badZ)
+     *
+     * @param badX X coordinate of block to ignore
+     * @param badY Y coordinate of block to ignore
+     * @param badZ Z coordinate of block to ignore
+     * @param okMatFunc A function that decides if a Material is OK to be there
+     * @return true if every block matches okMatFunc
+     */
+    public boolean isEmptyExcept(int badX, int badY, int badZ, Function<Material,Boolean> okMatFunc) {
         for (int x = x1; x <= x2; x++) {
             for (int y = y1; y <= y2; y++) {
                 for (int z = z1; z <= z2; z++) {
                     if (x == badX && y == badY && z == badZ) continue;
-                    if (!BlockUtils.isAir(world.getBlockAt(x, y, z).getType())) {
+                    if (!okMatFunc.apply(world.getBlockAt(x, y, z).getType())) {
                         if (DEBUG) {
                             SmartLogger log = UltraCosmeticsData.get().getPlugin().getSmartLogger();
                             log.write("Failed area check at (" + x + "," + y + "," + z + ") because it is " + world.getBlockAt(x, y, z).getType());
@@ -52,12 +67,19 @@ public class Area {
     }
 
     public boolean isEmptyExcept(Location loc) {
-        return isEmptyExcept(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        return isEmptyExcept(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), m -> BlockUtils.isAir(m));
     }
 
     public boolean isEmpty() {
         // no special meaning, but the loop will never make it that far
-        return isEmptyExcept(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        return isEmptyExcept(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, m -> BlockUtils.isAir(m));
+    }
+
+    // It's deprecated because it "does not have an implementation which is well linked to the underlying server,"
+    // but that doesn't really matter for our purposes.
+    @SuppressWarnings("deprecation")
+    public boolean isTransparent() {
+        return isEmptyExcept(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, m -> m.isTransparent());
     }
 
     public boolean contains(Block block) {

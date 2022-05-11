@@ -17,6 +17,7 @@ import be.isach.ultracosmetics.util.ItemFactory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
@@ -95,8 +96,10 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
             return false;
         }
 
-        Area area = new Area(getPlayer().getLocation(), 1, 1);
-        if (!area.isEmpty()) {
+        Location center = getPlayer().getLocation();
+        center.setY(Math.ceil(center.getY()));
+        Area area = new Area(center, 1, 1);
+        if (!area.isTransparent()) {
             getOwner().sendMessage(MessageManager.getMessage("Mounts.Not-Enough-Room"));
             return false;
         }
