@@ -27,7 +27,9 @@ import org.bukkit.util.Vector;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XTag;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -113,6 +115,7 @@ public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic {
         i2 += 0.4;
 
         XTag<XMaterial> tag = null;
+        Map<Block, XMaterial> updates = new HashMap<>();
         for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
             XMaterial mat = XMaterial.matchXMaterial(b.getType());
             if (XTag.WOOL.isTagged(mat)) {
@@ -122,10 +125,12 @@ public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic {
             }
             
             if (tag != null) {
-                BlockUtils.setToRestore(b, ItemFactory.randomFromTag(tag), 4);
+                updates.put(b, ItemFactory.randomFromTag(tag));
                 tag = null;
             }
         }
+
+        BlockUtils.setToRestore(updates, 4);
 
         for (Entity ent : loc.getWorld().getNearbyEntities(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 7.5, 7.5, 7.5)) {
             if (ent.isOnGround() && canAffect(ent)) {

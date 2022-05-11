@@ -13,8 +13,10 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,17 +47,19 @@ public class GadgetFreezeCannon extends Gadget {
     @Override
     public void onUpdate() {
         Iterator<Item> iter = items.iterator();
+        Map<Block,XMaterial> updates = new HashMap<>();
         while (iter.hasNext()) {
             Item item = iter.next();
             if (item.isOnGround()) {
                 for (Block b : BlockUtils.getBlocksInRadius(item.getLocation(), 4, false)) {
-                    BlockUtils.setToRestore(b, XMaterial.PACKED_ICE, 50);
+                    updates.put(b, XMaterial.PACKED_ICE);
                 }
                 Particles.FIREWORKS_SPARK.display(4d, 3d, 4d, item.getLocation(), 80);
                 item.remove();
                 iter.remove();
             }
         }
+        BlockUtils.setToRestore(updates, 50);
     }
 
     @Override

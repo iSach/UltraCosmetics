@@ -49,8 +49,4 @@ public enum ServerVersion {
     public boolean offhandAvailable() {
         return isAtLeast(v1_12_R1);
     }
-
-    public boolean is113() {
-        return isAtLeast(v1_16_R3);
-    }
 }

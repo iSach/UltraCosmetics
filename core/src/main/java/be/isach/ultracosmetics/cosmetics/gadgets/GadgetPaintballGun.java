@@ -9,8 +9,10 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Location;
@@ -97,9 +99,11 @@ public class GadgetPaintballGun extends Gadget {
         // if successfully removed (in other words, if it was there to begin with)
         if (projectiles.remove(event.getEntity())) {
             Location center = event.getEntity().getLocation().add(event.getEntity().getVelocity());
+            Map<Block,XMaterial> updates = new HashMap<>();
             for (Block block : BlockUtils.getBlocksInRadius(center.getBlock().getLocation(), radius, false)) {
-                BlockUtils.setToRestore(block, PAINT_BLOCKS.get(RANDOM.nextInt(PAINT_BLOCKS.size())), 20 * 3);
+                updates.put(block, PAINT_BLOCKS.get(RANDOM.nextInt(PAINT_BLOCKS.size())));
             }
+            BlockUtils.setToRestore(updates, 20 * 3);
             if (SettingsManager.getConfig().getBoolean("Gadgets." + getType().getConfigName() + ".Particle.Enabled")) {
                 Particles effect = Particles.valueOf((SettingsManager.getConfig().getString("Gadgets." + getType().getConfigName() + ".Particle.Effect")).replace("_", ""));
                 effect.display(2.5, 0.2f, 2.5f, center.clone().add(0.5f, 1.2f, 0.5F), 50);

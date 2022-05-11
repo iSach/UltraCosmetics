@@ -9,12 +9,15 @@ import be.isach.ultracosmetics.version.VersionManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -164,38 +167,41 @@ public class BlockUtils {
      * @param tickDelay The delay after which the block is restored.
      */
     @SuppressWarnings("deprecation")
-    public static void setToRestoreIgnoring(final Block block, final XMaterial newType, final int tickDelay) {
+    public static void setToRestoreIgnoring(final Map<Block,XMaterial> blocks, final int tickDelay) {
         Bukkit.getScheduler().runTaskAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> {
-            if (BlockViewUpdater.isUpdating(block.getLocation())) return;
-            for (Player player : block.getLocation().getWorld().getPlayers()) {
-                if (VersionManager.IS_VERSION_1_13) {
-                    // we have to do this when we can or we enable legacy material support which is evil sometimes
-                    player.sendBlockChange(block.getLocation(), Bukkit.createBlockData(newType.parseMaterial()));
-                } else {
-                    player.sendBlockChange(block.getLocation(), newType.parseMaterial(), newType.getData());
+            blocks.keySet().removeIf(BlockViewUpdater::isUpdating);
+            if (blocks.size() == 0) return;
+            World world = blocks.keySet().iterator().next().getWorld();
+            for (Entry<Block,XMaterial> entry : blocks.entrySet()) {
+                for (Player player : world.getPlayers()) {
+                    if (VersionManager.IS_VERSION_1_13) {
+                        // we have to do this when we can or we enable legacy material support which is evil sometimes
+                        player.sendBlockChange(entry.getKey().getLocation(), Bukkit.createBlockData(entry.getValue().parseMaterial()));
+                    } else {
+                        player.sendBlockChange(entry.getKey().getLocation(), entry.getValue().parseMaterial(), entry.getValue().getData());
+                    }
                 }
             }
-            new BlockViewUpdater(block).runTaskLater(UltraCosmeticsData.get().getPlugin(), tickDelay);
+            new BlockViewUpdater(blocks.keySet()).runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), tickDelay);
         });
     }
 
-    /**
-     * Replaces a block with a new material and data, and after delay, restore it.
-     *
-     * @param block     The block.
-     * @param newType   The new material.
-     * @param tickDelay The delay after which the block is restored.
-     */
-    public static void setToRestore(final Block block, final XMaterial newType, final int tickDelay) {
+    public static void setToRestore(final Map<Block,XMaterial> blocks, final int tickDelay) {
+        blocks.keySet().removeIf(b -> !canRestore(b));
+        setToRestoreIgnoring(blocks, tickDelay);
+    }
+
+    public static boolean canRestore(Block block) {
         if (badMaterials.contains(block.getType())
-                || SettingsManager.getConfig().getStringList("Gadgets.PaintballGun.BlackList").contains(block.getType().name())
-                || isPortalBlock(block)
-                || isRocketBlock(block)
-                || isTreasureChestBlock(block)
-                || !block.getType().isSolid()
-                || !okAboveBlock(block.getRelative(BlockFace.UP).getType()))
-            return;
-        setToRestoreIgnoring(block, newType, tickDelay);
+            || SettingsManager.getConfig().getStringList("Gadgets.PaintballGun.BlackList").contains(block.getType().name())
+            || isPortalBlock(block)
+            || isRocketBlock(block)
+            || isTreasureChestBlock(block)
+            || !block.getType().isSolid()
+            || !okAboveBlock(block.getRelative(BlockFace.UP).getType())) {
+            return false;
+        }
+        return true;
     }
 
     /**

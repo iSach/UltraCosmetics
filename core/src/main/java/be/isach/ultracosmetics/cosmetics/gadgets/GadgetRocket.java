@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.util.Area;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,7 +48,7 @@ import java.util.Set;
 public class GadgetRocket extends Gadget {
 
     // EntityDismountEvent has existed at least since 1.8, but wasn't cancellable until 1.13
-    private static final boolean DISMOUNT_CANCELLABLE = UltraCosmeticsData.get().getServerVersion().is113();
+    private static final boolean DISMOUNT_CANCELLABLE = VersionManager.IS_VERSION_1_13;
     private static final BlockFace[] CARDINAL = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
     private static final Material FENCE = XMaterial.OAK_FENCE.parseMaterial();
     public static final Set<GadgetRocket> ROCKETS_WITH_BLOCKS = new HashSet<>();

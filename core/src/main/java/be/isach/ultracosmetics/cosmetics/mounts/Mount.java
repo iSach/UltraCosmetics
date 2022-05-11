@@ -35,7 +35,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.cryptomorin.xseries.XMaterial;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -231,12 +233,14 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
             if (mats.size() == 0) {
                 return;
             }
+            Map<Block,XMaterial> updates = new HashMap<>();
             for (Block b : BlockUtils.getBlocksInRadius(event.getPlayer().getLocation(), 3, false)) {
                 if (b.getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1) {
                     XMaterial mat = mats.get(RANDOM.nextInt(mats.size()));
-                    BlockUtils.setToRestore(b, mat, 20);
+                    updates.put(b, mat);
                 }
             }
+            BlockUtils.setToRestore(updates, 20);
         }
     }
 }
