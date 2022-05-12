@@ -110,7 +110,7 @@ public class SubCommandMigrate extends SubCommand {
         Table table = ultraCosmetics.getMySqlConnectionManager().getTable();
         List<UUID> uuids;
         try (Connection co = ultraCosmetics.getMySqlConnectionManager().getDataSource().getConnection()) {
-            PreparedStatement statement = co.prepareStatement("SELECT uuid FROM " + table.getName());
+            PreparedStatement statement = co.prepareStatement("SELECT uuid FROM " + table.getWrappedName());
             ResultSet set = statement.executeQuery();
             uuids = new ArrayList<>();
             while (set.next()) {

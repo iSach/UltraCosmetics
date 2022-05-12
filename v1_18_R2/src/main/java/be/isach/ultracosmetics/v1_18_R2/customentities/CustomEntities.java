@@ -1,9 +1,12 @@
 package be.isach.ultracosmetics.v1_18_R2.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.v1_18_R2.EntityBase;
 import be.isach.ultracosmetics.v1_18_R2.ObfuscatedFields;
 import be.isach.ultracosmetics.v1_18_R2.nms.EntityWrapper;
+
+import org.bukkit.Bukkit;
 
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
@@ -19,6 +22,7 @@ import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.References;
@@ -40,8 +44,8 @@ public class CustomEntities {
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataFixers.getDataFixer().getSchema(DataFixUtils.makeKey(SharedConstants.getCurrentVersion().getWorldVersion())).findChoiceType(References.ENTITY).types();
 
         // true if the registry present is a vanilla registry and not a custom one like Citizens provides
-        boolean realRegistry = Registry.ENTITY_TYPE.getClass().equals(DefaultedRegistry.class);
-        if (realRegistry) {
+        boolean isRealRegistry = Registry.ENTITY_TYPE.getClass().equals(DefaultedRegistry.class);
+        if (isRealRegistry) {
             unfreezeRegistry();
         } else {
             UltraCosmeticsData.get().getPlugin().getSmartLogger().write("Entity registry is not vanilla, skipping unfreeze and refreeze");
@@ -50,7 +54,7 @@ public class CustomEntities {
         registerEntity("slime", CustomSlime::new, types);
         registerEntity("spider", RideableSpider::new, types);
         registerEntity("guardian", CustomGuardian::new, types);
-        if (realRegistry) {
+        if (isRealRegistry) {
             Registry.ENTITY_TYPE.freeze();
         }
     }
@@ -85,9 +89,15 @@ public class CustomEntities {
             return;
         }
     }
-    
+
     private static void registerEntity(String type, @SuppressWarnings("rawtypes") EntityFactory customMob, Map<String,Type<?>> types) {
         String customName = "minecraft:ultracosmetics_" + type;
+        ResourceLocation key = new ResourceLocation(customName);
+        if (Registry.ENTITY_TYPE.containsKey(key)) {
+            // Happens when UltraCosmetics is reloaded.
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.WARNING, "Skipping registration of " + customName + " because it is already registered.");
+            return;
+        }
         types.put(customName, types.get("minecraft:" + type));
         EntityType.Builder<Entity> a = EntityType.Builder.of(customMob, MobCategory.AMBIENT);
         Registry.register(Registry.ENTITY_TYPE, customName, a.build(customName));

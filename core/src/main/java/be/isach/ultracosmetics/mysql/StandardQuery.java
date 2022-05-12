@@ -23,7 +23,7 @@ public class StandardQuery {
 
     protected StandardQuery(Table table, String command) {
         this.table = table;
-        this.command = command + " " + table.getName();
+        this.command = command + " " + table.getWrappedName();
     }
 
     public StandardQuery where(String key, Object value) {

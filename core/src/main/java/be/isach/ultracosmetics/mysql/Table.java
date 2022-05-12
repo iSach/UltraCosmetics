@@ -17,8 +17,8 @@ public class Table {
         this.table = table;
     }
 
-    public String getName() {
-        return table;
+    public String getWrappedName() {
+        return "`" + table + "`";
     }
 
     public StandardQuery select(String columns) {

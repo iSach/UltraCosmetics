@@ -34,7 +34,7 @@ public class InsertQuery {
     }
 
     public void execute() {
-        String sql = "INSERT " + (ignore ? "IGNORE " : "") + "INTO " + table.getName() + " ";
+        String sql = "INSERT " + (ignore ? "IGNORE " : "") + "INTO " + table.getWrappedName() + " ";
         StringJoiner columns = new StringJoiner(", ", "(", ")");
         StringJoiner values = new StringJoiner(", ", "(", ")");
         List<String> objects = new ArrayList<>();

@@ -250,11 +250,12 @@ public class UltraCosmetics extends JavaPlugin {
             mySqlConnectionManager.start();
 
             getSmartLogger().write("Connected to MySQL database.");
+        } else {
+            // Initialize UltraPlayers and give chest (if needed).
+            // Only actually does anything when the plugin is reloaded or loaded REALLY late.
+            // MySQL manager handles this when active.
+            playerManager.initPlayers();
         }
-
-        // Initialize UltraPlayers and give chest (if needed).
-
-        playerManager.initPlayers();
 
         // Start the Fall Damage and Invalid World Check Runnables.
 

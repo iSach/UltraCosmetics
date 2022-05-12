@@ -1,10 +1,12 @@
 package be.isach.ultracosmetics.cosmetics.type;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
+import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
 import com.cryptomorin.xseries.XMaterial;
@@ -26,9 +28,16 @@ import java.util.StringJoiner;
  */
 public abstract class CosmeticType<T extends Cosmetic<?>> {
     private static final Permission ALL_PERMISSION = new Permission("ultracosmetics.allcosmetics");
+    private static boolean PERMISSIONS_OK = true;
 
     static {
-        Bukkit.getPluginManager().addPermission(ALL_PERMISSION);
+        try {
+            Bukkit.getPluginManager().addPermission(ALL_PERMISSION);
+        } catch (IllegalArgumentException e) {
+            // Happens when permission is already registered, i.e. UltraCosmetics is being reloaded :(
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.ERROR, "It seems like you are attempting to reload UltraCosmetics. This is not recommended. If you experience issues, please fully restart the server.");
+            PERMISSIONS_OK = false;
+        }
     }
 
     private final String configName;
@@ -175,6 +184,7 @@ public abstract class CosmeticType<T extends Cosmetic<?>> {
 
     protected void registerPermission() {
         permission = new Permission(category.getPermission() + "." + getPermissionSuffix());
+        if (!PERMISSIONS_OK) return;
         Bukkit.getPluginManager().addPermission(permission);
         permission.addParent(ALL_PERMISSION, true);
     }

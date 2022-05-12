@@ -109,7 +109,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
         for (Column<?> column : columns) {
             columnJoiner.add(column.toString());
         }
-        CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + tableName + columnJoiner.toString();
+        CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `" + tableName + "`" + columnJoiner.toString();
     }
 
     public void start() {
@@ -130,6 +130,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
             reportFailure(e);
             return;
         }
+        ultraCosmetics.getPlayerManager().initPlayers();
     }
 
     private void reportFailure(Exception e) {
