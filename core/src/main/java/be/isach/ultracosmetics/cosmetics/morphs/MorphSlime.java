@@ -52,12 +52,4 @@ public class MorphSlime extends Morph {
         SlimeWatcher slimeWatcher = (SlimeWatcher) disguise.getWatcher();
         slimeWatcher.setSize(3);
     }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    protected void onClear() {
-    }
 }

@@ -6,8 +6,6 @@ import be.isach.ultracosmetics.v1_18_R2.EntityBase;
 import be.isach.ultracosmetics.v1_18_R2.ObfuscatedFields;
 import be.isach.ultracosmetics.v1_18_R2.nms.EntityWrapper;
 
-import org.bukkit.Bukkit;
-
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 

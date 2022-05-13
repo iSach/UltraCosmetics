@@ -32,11 +32,10 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
     private final UUID ownerUniqueId;
 
     public Cosmetic(UltraCosmetics ultraCosmetics, Category category, UltraPlayer owner, T type) {
-        this.owner = owner;
-        if (owner == null
-                || Bukkit.getPlayer(owner.getUUID()) == null) {
+        if (owner == null || Bukkit.getPlayer(owner.getUUID()) == null) {
             throw new IllegalArgumentException("Invalid UltraPlayer.");
         }
+        this.owner = owner;
         this.ownerUniqueId = owner.getUUID();
         this.category = category;
         this.ultraCosmetics = ultraCosmetics;
@@ -71,6 +70,10 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
         getPlayer().sendMessage(filterPlaceholders(getCategory().getActivateMessage()));
 
+        if (this instanceof Updatable) {
+            scheduleTask();
+        }
+
         onEquip();
 
         getOwner().setCosmeticEquipped(this);
@@ -90,6 +93,10 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
         unsetCosmetic();
     }
 
+    protected void scheduleTask() {
+        runTaskTimer(getUltraCosmetics(), 0, 1);
+    }
+
     protected void unsetCosmetic() {
         owner.unsetCosmetic(category);
     }
@@ -104,11 +111,16 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
 
     @Override
     public void run() {
+        if (getPlayer() == null || getOwner().getCosmetic(category) != this) {
+            return;
+        }
+        ((Updatable)this).onUpdate();
     }
 
     protected abstract void onEquip();
 
-    protected abstract void onClear();
+    protected void onClear() {
+    }
 
     public final UltraPlayer getOwner() {
         return owner;

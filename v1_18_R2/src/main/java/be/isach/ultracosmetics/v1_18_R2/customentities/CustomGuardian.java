@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.v1_18_R2.customentities;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftArmorStand;
 import org.bukkit.entity.ArmorStand;
 
-import be.isach.ultracosmetics.v1_18_R2.morphs.MorphElderGuardian;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -21,33 +20,27 @@ import net.minecraft.world.level.Level;
  */
 public class CustomGuardian extends Guardian {
 
-    private boolean custom;
-
     public CustomGuardian(EntityType<? extends Guardian> entitytypes, Level world) {
         super(entitytypes, world);
     }
 
-    public void check() {
-        custom = MorphElderGuardian.customEntities.contains(this);
+    private boolean isCustom() {
+        return CustomEntities.isCustomEntity(this);
     }
 
     public void target(ArmorStand armorStand) {
-        try {
-            ((Entity)this).getEntityData().set(EntityDataSerializers.INT.createAccessor(17), armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId());
-        } catch (Exception exc) {
-
-        }
+        ((Entity)this).getEntityData().set(EntityDataSerializers.INT.createAccessor(17), armorStand == null ? 0 : ((CraftArmorStand) armorStand).getHandle().getId());
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        if (custom) return null;
+        if (isCustom()) return null;
         else return super.getAmbientSound();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource paramDamageSource) {
-        if (custom) return null;
+        if (isCustom()) return null;
         else return super.getHurtSound(paramDamageSource);
     }
 
@@ -59,13 +52,13 @@ public class CustomGuardian extends Guardian {
 
     @Override
     protected SoundEvent getDeathSound() {
-        if (custom) return null;
+        if (isCustom()) return null;
         else return super.getDeathSound();
     }
 
     @Override
     public void tick() {
-        if (!custom) super.tick();
+        if (!isCustom()) super.tick();
         else ((LivingEntity)this).setHealth(getMaxHealth());
     }
 }

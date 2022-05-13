@@ -11,7 +11,6 @@ import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import java.util.Random;
 
 /**
  * Represents an instance of crushed candy cane particles summoned by a player.
@@ -23,16 +22,15 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
 
     private int step;
 
-    private static Random random = new Random();
-
     public ParticleEffectCrushedCandyCane(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, owner, ParticleEffectType.valueOf("crushedcandycane"));
     }
 
     @Override
     public void onUpdate() {
-        if (step > 360)
+        if (step > 360) {
             step = 0;
+        }
         Location center = getPlayer().getEyeLocation().add(0, 0.6, 0);
         double inc = (2 * Math.PI) / 20;
         double angle = step * inc;
@@ -52,12 +50,13 @@ public class ParticleEffectCrushedCandyCane extends ParticleEffect {
     }
 
     public static byte getRandomColor() {
-        float f = random.nextFloat();
-        if (f > 0.98)
+        int random = RANDOM.nextInt(100);
+        if (random > 98) {
             return (byte) 2;
-        else if (f > 0.49)
+        } else if (random > 49) {
             return (byte) 1;
-        else
+        } else {
             return (byte) 15;
+        }
     }
 }

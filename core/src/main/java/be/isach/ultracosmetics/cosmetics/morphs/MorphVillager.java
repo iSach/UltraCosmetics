@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -34,19 +33,9 @@ public class MorphVillager extends Morph {
             if (coolDown > System.currentTimeMillis()) return;
             event.setCancelled(true);
             XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(getPlayer());
-            Item emerald = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(XMaterial.EMERALD, UltraCosmeticsData.get().getItemNoPickupString()));
-            emerald.setPickupDelay(30000);
-            emerald.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.5));
+            Item emerald = ItemFactory.createUnpickableItemDirectional(XMaterial.EMERALD, getPlayer(), 1.5);
             coolDown = System.currentTimeMillis() + 5000;
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), emerald::remove, 80);
         }
-    }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    protected void onClear() {
     }
 }

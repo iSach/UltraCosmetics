@@ -32,12 +32,4 @@ public class MorphSnowman extends Morph {
             coolDown = System.currentTimeMillis() + 500;
         }
     }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    protected void onClear() {
-    }
 }

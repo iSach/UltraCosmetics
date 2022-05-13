@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XSound;
@@ -27,7 +26,7 @@ import java.util.Iterator;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic {
+public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic, Updatable {
 
     private Item bomb;
     private ArrayList<Item> items = new ArrayList<>();
@@ -39,11 +38,7 @@ public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic {
 
     @Override
     void onRightClick() {
-        ItemStack item = ItemFactory.rename(ItemFactory.randomItemFromTag(XTag.WOOL), UltraCosmeticsData.get().getItemNoPickupString());
-        Item bomb = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), item);
-        bomb.setPickupDelay(50000);
-        bomb.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(0.7532));
-        this.bomb = bomb;
+        bomb = ItemFactory.createUnpickableItemDirectional(ItemFactory.randomFromTag(XTag.WOOL), getPlayer(), 0.7532);
     }
 
     @Override
@@ -86,12 +81,10 @@ public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic {
                 return;
             }
 
-            ItemStack item = ItemFactory.rename(ItemFactory.randomItemFromTag(XTag.WOOL), UltraCosmeticsData.get().getItemNoPickupString());
-            Item i = bomb.getWorld().dropItem(bomb.getLocation().add(0, 0.15f, 0), item);
-            i.setPickupDelay(500000);
-            i.setVelocity(new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1)));
-            items.add(i);
-            XSound.ENTITY_CHICKEN_EGG.play(i.getLocation(), .2f, 1.0f);
+            Vector velocity = new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1));
+            Item item = ItemFactory.spawnUnpickableItem(ItemFactory.randomItemFromTag(XTag.WOOL), bomb.getLocation().add(0, 0.15, 0), velocity);
+            items.add(item);
+            XSound.ENTITY_CHICKEN_EGG.play(item.getLocation(), 0.2f, 1.0f);
 
             for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
                 if (entity instanceof Player && canAffect(entity)) {

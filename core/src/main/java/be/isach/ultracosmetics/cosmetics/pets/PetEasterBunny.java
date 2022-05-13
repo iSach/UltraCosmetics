@@ -1,10 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import be.isach.ultracosmetics.util.ItemFactory;
 import com.cryptomorin.xseries.XMaterial;
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +18,12 @@ public class PetEasterBunny extends Pet {
             XMaterial.ZOMBIE_HORSE_SPAWN_EGG, XMaterial.ENDERMAN_SPAWN_EGG, XMaterial.GHAST_SPAWN_EGG, XMaterial.OCELOT_SPAWN_EGG);
 
     public PetEasterBunny(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("easterbunny"), ItemFactory.rename(EGGS.get(0).parseItem(), UltraCosmeticsData.get().getItemNoPickupString()));
+        super(owner, ultraCosmetics, PetType.getByName("easterbunny"), EGGS.get(0));
     }
 
     @Override
     public void onUpdate() {
-        dropItem = EGGS.get(random.nextInt(EGGS.size())).parseItem();
+        dropItem = EGGS.get(RANDOM.nextInt(EGGS.size())).parseItem();
         super.onUpdate();
     }
 }

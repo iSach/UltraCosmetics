@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
@@ -26,7 +27,7 @@ import java.util.List;
  * @author iSach
  * @since 08-07-2015
  */
-public class GadgetPortalGun extends Gadget {
+public class GadgetPortalGun extends Gadget implements Updatable {
 
     private boolean teleported = false;
 

@@ -36,10 +36,6 @@ public class GadgetSnowball extends Gadget {
     }
 
     @Override
-    public void onUpdate() {
-    }
-
-    @Override
     public void onClear() {
         for (Snowball snowball : snowballs)
             snowball.remove();

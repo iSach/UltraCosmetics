@@ -2,12 +2,14 @@ package be.isach.ultracosmetics.v1_18_R2.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.EntitySpawningManager;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.v1_18_R2.FireworkFactory;
+import be.isach.ultracosmetics.v1_18_R2.customentities.CustomEntities;
 import be.isach.ultracosmetics.v1_18_R2.customentities.CustomGuardian;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,18 +30,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author RadBuilder
  */
-public class MorphElderGuardian extends Morph {
-
-    /**
-     * List of the custom entities.
-     */
-    public static List<Entity> customEntities = new ArrayList<>();
+public class MorphElderGuardian extends Morph implements Updatable {
 
     private boolean cooldown;
     private CustomGuardian customGuardian;
@@ -108,7 +102,7 @@ public class MorphElderGuardian extends Morph {
     public void onClear() {
         if (customGuardian == null) return;
         ((Entity)customGuardian).discard();
-        customEntities.remove(customGuardian);
+        CustomEntities.removeCustomEntity(customGuardian);
     }
 
     @Override
@@ -117,8 +111,7 @@ public class MorphElderGuardian extends Morph {
         Level world = ((CraftWorld) getPlayer().getWorld()).getHandle();
 
         customGuardian = new CustomGuardian(EntityType.ELDER_GUARDIAN, world);
-        customEntities.add(customGuardian);
-        customGuardian.check();
+        CustomEntities.addCustomEntity(customGuardian);
 
         Location location = getPlayer().getLocation();
         double x = location.getX();
@@ -138,13 +131,11 @@ public class MorphElderGuardian extends Morph {
 
     @Override
     public void onUpdate() {
-        if (getOwner() == null
-                || getPlayer() == null) {
+        if (getOwner() == null || getPlayer() == null) {
             cancel();
             return;
         }
-        if (customGuardian == null
-                || !customGuardian.isAlive()) {
+        if (customGuardian == null || !customGuardian.isAlive()) {
             getOwner().removeCosmetic(Category.MORPHS);
             cancel();
         }

@@ -36,9 +36,6 @@ public abstract class MountHorse extends Mount {
         horse.setJumpStrength(0.7);
     }
 
-    @Override
-    public void onUpdate() {}
-
     abstract protected Horse.Color getColor();
 
     @SuppressWarnings("deprecation")

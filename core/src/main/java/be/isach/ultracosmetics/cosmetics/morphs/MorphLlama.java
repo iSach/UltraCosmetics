@@ -34,14 +34,6 @@ public class MorphLlama extends Morph {
         }
     }
 
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    protected void onClear() {
-    }
-
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         if (getOwner() != null && getPlayer() != null && event.getDamager() == getPlayer()) {

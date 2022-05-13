@@ -31,12 +31,4 @@ public class MorphWitch extends Morph {
             coolDown = System.currentTimeMillis() + 2000;
         }
     }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    protected void onClear() {
-    }
 }

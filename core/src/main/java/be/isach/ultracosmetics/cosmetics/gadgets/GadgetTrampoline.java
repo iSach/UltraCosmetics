@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
@@ -32,7 +33,7 @@ import java.util.Set;
  * @author iSach
  * @since 12-19-2015
  */
-public class GadgetTrampoline extends Gadget {
+public class GadgetTrampoline extends Gadget implements Updatable {
     private Set<BlockState> trampoline = new HashSet<>();
     private Area cuboid;
     private Location center;

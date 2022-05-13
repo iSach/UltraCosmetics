@@ -68,10 +68,6 @@ public class MorphEnderman extends Morph {
         }
     }
 
-    @Override
-    public void onUpdate() {
-    }
-
     public static FireworkEffect getRandomFireworkEffect() {
         FireworkEffect.Builder builder = FireworkEffect.builder();
         return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(0, 0, 0)).withFade(Color.fromRGB(0, 0, 0)).build();

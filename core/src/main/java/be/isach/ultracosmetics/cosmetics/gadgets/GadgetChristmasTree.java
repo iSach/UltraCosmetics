@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -19,7 +20,7 @@ import org.bukkit.util.Vector;
  * @author iSach
  * @since 11-29-2015
  */
-public class GadgetChristmasTree extends Gadget {
+public class GadgetChristmasTree extends Gadget implements Updatable {
 
     private boolean active = false;
     private Location lastLocation;

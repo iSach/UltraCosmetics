@@ -11,7 +11,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -69,15 +68,10 @@ public class GadgetExplosiveSheep extends Gadget {
     }
 
     @Override
-    public void onUpdate() {
-    }
-
-    @Override
     public void onClear() {
         for (Sheep sheep : sheeps) {
             sheep.remove();
         }
-        HandlerList.unregisterAll(this);
         if (sheepExplosionRunnable != null) {
             sheepExplosionRunnable.cancel();
         }

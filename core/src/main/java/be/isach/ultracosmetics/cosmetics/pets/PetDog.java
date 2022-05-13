@@ -21,6 +21,6 @@ public class PetDog extends Pet {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        ((Wolf)entity).setCollarColor(DyeColor.values()[random.nextInt(16)]);
+        ((Wolf)entity).setCollarColor(DyeColor.values()[RANDOM.nextInt(16)]);
     }
 }

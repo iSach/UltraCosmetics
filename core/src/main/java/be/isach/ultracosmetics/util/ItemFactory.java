@@ -7,14 +7,19 @@ import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XTag;
@@ -26,6 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,6 +42,7 @@ public class ItemFactory {
     // for some reason I don't understand, there's no Tag or XTag for dyes
     private static final List<XMaterial> DYES = new ArrayList<>(16);
     private static final List<XMaterial> STAINED_GLASS = new ArrayList<>(16);
+    private static final FixedMetadataValue UNPICKABLE_META = new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), true);
 
     static {
         for (XMaterial mat : XMaterial.VALUES) {
@@ -45,10 +52,15 @@ public class ItemFactory {
                 STAINED_GLASS.add(mat);
             }
         }
+        ItemStack itemStack = getItemStackFromConfig("Fill-Blank-Slots-With-Item.Item");
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.GRAY + "");
+        itemStack.setItemMeta(itemMeta);
+        fillerItem = itemStack;
     }
 
     private static boolean noticePrinted = false;
-    public static ItemStack fillerItem;
+    public static final ItemStack fillerItem;
 
     public static ItemStack create(XMaterial material, String displayName, String... lore) {
         return rename(material.parseItem(), displayName, lore);
@@ -74,15 +86,28 @@ public class ItemFactory {
         return itemstack;
     }
 
+    public static Item setUnpickable(Item item) {
+        item.setMetadata("UNPICKABLEUP", UNPICKABLE_META);
+        return item;
+    }
+
+    public static Item spawnUnpickableItem(ItemStack stack, Location loc, Vector velocity) {
+        Item item = loc.getWorld().dropItem(loc, stack);
+        item.setVelocity(velocity);
+        setUnpickable(item);
+        return item;
+    }
+
+    public static Item createUnpickableItemDirectional(XMaterial material, Player player, double scale) {
+        return spawnUnpickableItem(material.parseItem(), player.getLocation(), player.getLocation().getDirection().multiply(scale));
+    }
+
+    public static Item createUnpickableItemVariance(XMaterial material, Location loc, Random random, double variance) {
+        return spawnUnpickableItem(material.parseItem(), loc, new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0, random.nextDouble() - 0.5).multiply(variance));
+    }
+
     public static void fillInventory(Inventory inventory) {
         if (SettingsManager.getConfig().getBoolean("Fill-Blank-Slots-With-Item.Enabled")) {
-            if (fillerItem == null) {
-                ItemStack itemStack = getItemStackFromConfig("Fill-Blank-Slots-With-Item.Item");
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                itemMeta.setDisplayName(ChatColor.GRAY + "");
-                itemStack.setItemMeta(itemMeta);
-                fillerItem = itemStack;
-            }
             for (int i = 0; i < inventory.getSize(); i++) {
                 if (inventory.getItem(i) == null
                         || inventory.getItem(i).getType() == Material.AIR)
@@ -210,6 +235,6 @@ public class ItemFactory {
 
     public static XMaterial randomFromTag(XTag<XMaterial> tag) {
         // copy tag values into temporary ArrayList because getting random values from a Set is hard
-        return randomXMaterial(new ArrayList<XMaterial>(tag.getValues()));
+        return randomXMaterial(new ArrayList<>(tag.getValues()));
     }
 }

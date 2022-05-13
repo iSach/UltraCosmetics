@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
@@ -38,7 +39,7 @@ import java.util.Set;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic {
+public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic, Updatable {
 
     private static final Set<GadgetDiscoBall> DISCO_BALLS = new HashSet<>();
 

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -12,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Bat;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -27,7 +27,7 @@ import java.util.Map;
  * @author iSach
  * @since 10-18-2015
  */
-public class GadgetGhostParty extends Gadget {
+public class GadgetGhostParty extends Gadget implements Updatable {
 
     Map<Bat, ArmorStand> bats = new HashMap<>();
 
@@ -79,6 +79,5 @@ public class GadgetGhostParty extends Gadget {
     @Override
     public void onClear() {
         killBats();
-        HandlerList.unregisterAll(this);
     }
 }

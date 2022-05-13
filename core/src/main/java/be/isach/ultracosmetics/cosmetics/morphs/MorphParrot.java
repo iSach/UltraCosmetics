@@ -27,10 +27,6 @@ public class MorphParrot extends Morph {
         getPlayer().setAllowFlight(true);
     }
 
-    @Override
-    public void onUpdate() {
-    }
-
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         if (event.getPlayer() == getPlayer()

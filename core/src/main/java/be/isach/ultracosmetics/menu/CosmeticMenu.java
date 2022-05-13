@@ -303,7 +303,8 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
      * @param ultraPlayer Inventory Owner.
      * @param page        Page to open.
      */
-    protected abstract void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page);
+    protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
+    }
 
     public abstract List<T> enabled();
 

@@ -5,7 +5,6 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.EmoteType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -21,10 +20,6 @@ public class MenuEmotes extends CosmeticMenu<EmoteType> {
 
     public MenuEmotes(UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.EMOTES);
-    }
-
-    @Override
-    protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
     }
 
     @Override

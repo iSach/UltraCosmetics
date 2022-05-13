@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
 import com.cryptomorin.xseries.XSound;
@@ -50,14 +49,5 @@ public class GadgetFunGun extends Gadget {
         Particles.LAVA.display(1.3f, 1f, 1.3f, location, 16);
         Particles.HEART.display(0.8f, 0.8f, 0.8f, location, 20);
         XSound.ENTITY_CAT_PURREOW.play(getPlayer(), 1.4f, 1.5f);
-    }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    public void onClear() {
-        HandlerList.unregisterAll(this);
     }
 }

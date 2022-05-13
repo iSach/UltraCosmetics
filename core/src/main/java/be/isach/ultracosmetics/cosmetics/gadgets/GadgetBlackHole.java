@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -25,7 +25,7 @@ import org.bukkit.util.Vector;
  * @author iSach
  * @since 08-17-2015
  */
-public class GadgetBlackHole extends Gadget implements PlayerAffectingCosmetic {
+public class GadgetBlackHole extends Gadget implements PlayerAffectingCosmetic, Updatable {
 
     private Item item;
 
@@ -37,13 +37,10 @@ public class GadgetBlackHole extends Gadget implements PlayerAffectingCosmetic {
     void onRightClick() {
         if (item != null) {
             item.remove();
-            item = null;
         }
 
-        Item newItem = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.rename(XMaterial.BLACK_TERRACOTTA.parseItem(), UltraCosmeticsData.get().getItemNoPickupString()));
-        newItem.setPickupDelay(Integer.MAX_VALUE);
-        newItem.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
-        this.item = newItem;
+        item = ItemFactory.spawnUnpickableItem(XMaterial.BLACK_TERRACOTTA.parseItem(), getPlayer().getEyeLocation(), getPlayer().getEyeLocation().getDirection().multiply(1.3d));
+
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             if (item != null) {
                 item.remove();

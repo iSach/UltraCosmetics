@@ -5,10 +5,10 @@ import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.ArmorCosmetic;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
  * @author iSach
  * @since 12-20-2015
  */
-public abstract class Suit extends ArmorCosmetic<SuitType> implements Updatable {
+public abstract class Suit extends ArmorCosmetic<SuitType> {
     /**
      * ItemStack of the Suit.
      */
@@ -79,21 +79,12 @@ public abstract class Suit extends ArmorCosmetic<SuitType> implements Updatable 
     }
 
     @Override
-    protected void onEquip() {
+    protected void scheduleTask() {
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, 1);
     }
 
     protected void setupItemStack() {
         itemStack = ItemFactory.create(getType().getMaterial(), getType().getName(), "", MessageManager.getMessage("Suits.Suit-Part-Lore"));
-    }
-
-    @Override
-    public void run() {
-        if (getOwner() == null || getPlayer() == null) {
-            cancel();
-            return;
-        }
-        onUpdate();
     }
 
     @Override
@@ -105,9 +96,9 @@ public abstract class Suit extends ArmorCosmetic<SuitType> implements Updatable 
     protected void unequipLikeCosmetics() {
         getOwner().removeSuit(getArmorSlot());
     }
-    
+
     @Override
-    public void onClear() {
+    protected void onEquip() {
     }
 
     /**
@@ -132,9 +123,5 @@ public abstract class Suit extends ArmorCosmetic<SuitType> implements Updatable 
     @Override
     public String getOccupiedSlotKey() {
         return "Suits.Must-Remove." + getArmorSlot().toString();
-    }
-
-    @Override
-    public void onUpdate() {
     }
 }

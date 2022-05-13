@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -23,7 +24,7 @@ import java.util.List;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic {
+public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic, Updatable {
 
     private boolean active = false;
     private Location playerVelocity;

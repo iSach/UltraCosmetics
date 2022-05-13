@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
@@ -23,7 +24,7 @@ import java.util.Set;
  * @author iSach
  * @since 12-15-2015
  */
-public class GadgetFreezeCannon extends Gadget {
+public class GadgetFreezeCannon extends Gadget implements Updatable {
 
     private Set<Item> items = new HashSet<>();
 

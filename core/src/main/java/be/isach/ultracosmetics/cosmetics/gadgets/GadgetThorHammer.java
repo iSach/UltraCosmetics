@@ -118,17 +118,12 @@ public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic 
     }
 
     @Override
-    public void onUpdate() {
-    }
-
-    @Override
     public void onClear() {
         for (Item i : hammer) {
             i.remove();
         }
         hammer.clear();
         v = null;
-        HandlerList.unregisterAll(this);
         if (!USE_OTHER_LISTENER) return;
         HandlerList.unregisterAll(listener);
         listener = null;

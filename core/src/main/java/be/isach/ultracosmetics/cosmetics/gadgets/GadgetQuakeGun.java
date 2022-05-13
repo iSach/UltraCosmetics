@@ -68,12 +68,4 @@ public class GadgetQuakeGun extends Gadget implements PlayerAffectingCosmetic {
                 UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendDestroyPacket(getPlayer(), firework);
         }, 6);
     }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    public void onClear() {
-    }
 }

@@ -29,6 +29,7 @@ public class Hat extends ArmorCosmetic<HatType> {
 
     @Override
     protected void onEquip() {
+        // Setting the item is done in ArmorCosmetic#tryEquip
     }
 
     @EventHandler
@@ -71,10 +72,6 @@ public class Hat extends ArmorCosmetic<HatType> {
             }
             player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
         }
-    }
-
-    @Override
-    protected void onClear() {
     }
 
     public ItemStack getItemStack() {

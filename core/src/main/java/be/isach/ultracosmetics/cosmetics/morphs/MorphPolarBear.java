@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
@@ -19,7 +20,7 @@ import org.bukkit.util.Vector;
  * @author RadBuilder
  * @since 07-03-2017
  */
-public class MorphPolarBear extends Morph {
+public class MorphPolarBear extends Morph implements Updatable {
     private long coolDown = 0;
     private boolean active;
     private Location location;

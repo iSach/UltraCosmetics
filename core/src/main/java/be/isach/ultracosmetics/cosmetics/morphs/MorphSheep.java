@@ -12,8 +12,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.cryptomorin.xseries.XSound;
 
-import java.util.Random;
-
 /**
  * Represents an instance of a sheep morph summoned by a player.
  *
@@ -22,7 +20,6 @@ import java.util.Random;
  */
 public class MorphSheep extends Morph {
     private long coolDown = 0;
-    private Random r = new Random();
     private int count = 0;
 
     public MorphSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
@@ -43,18 +40,10 @@ public class MorphSheep extends Morph {
                     cancel();
                     return;
                 }
-                sheepWatcher.setColor(DyeColor.values()[r.nextInt(DyeColor.values().length)]);
+                sheepWatcher.setColor(DyeColor.values()[RANDOM.nextInt(DyeColor.values().length)]);
                 count++;
             }, 0, 2);
             coolDown = System.currentTimeMillis() + 3000;
         }
-    }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    protected void onClear() {
     }
 }

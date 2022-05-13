@@ -34,7 +34,6 @@ import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Represents an instance of a pet summoned by a player.
@@ -64,8 +63,6 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
      */
     protected ItemStack dropItem;
 
-    protected Random random = new Random();
-
     public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
         super(ultraCosmetics, Category.PETS, owner, petType);
         this.dropItem = dropItem;
@@ -73,14 +70,12 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
     }
 
     public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, XMaterial dropItemType) {
-        this(owner, ultraCosmetics, petType, ItemFactory.create(dropItemType, UltraCosmeticsData.get().getItemNoPickupString()));
+        this(owner, ultraCosmetics, petType, dropItemType.parseItem());
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void onEquip() {
-
-        runTaskTimer(getUltraCosmetics(), 0, 3);
 
         // Bypass WorldGuard protection.
         EntitySpawningManager.setBypass(true);
@@ -127,6 +122,11 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
 
         entity.setMetadata("Pet", new FixedMetadataValue(getUltraCosmetics(), "UltraCosmetics"));
         setupEntity();
+    }
+
+    @Override
+    protected void scheduleTask() {
+        runTaskTimer(getUltraCosmetics(), 0, 3);
     }
 
     @Override
@@ -217,9 +217,10 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
     }
 
     public void dropItem() {
-        final Item drop = entity.getWorld().dropItem(((LivingEntity) entity).getEyeLocation(), dropItem);
-        drop.setPickupDelay(30000);
-        drop.setVelocity(new Vector(random.nextDouble() - 0.5, random.nextDouble() / 2.0 + 0.3, random.nextDouble() - 0.5).multiply(0.4));
+        // Not using the ItemFactory variance method for this one
+        // because we want to bump the Y velocity a bit between calcs.
+        Vector velocity = new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2.0 + 0.3, RANDOM.nextDouble() - 0.5).multiply(0.4);
+        final Item drop = ItemFactory.spawnUnpickableItem(dropItem, ((LivingEntity)entity).getEyeLocation(), velocity);
         items.add(drop);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             drop.remove();

@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.v1_12_R1.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.morphs.Morph;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -31,7 +32,7 @@ import java.util.List;
 /**
  * @author RadBuilder
  */
-public class MorphElderGuardian extends Morph {
+public class MorphElderGuardian extends Morph implements Updatable {
 
     /**
      * List of the custom entities.
@@ -134,13 +135,11 @@ public class MorphElderGuardian extends Morph {
 
     @Override
     public void onUpdate() {
-        if (getOwner() == null
-                || getPlayer() == null) {
+        if (getOwner() == null || getPlayer() == null) {
             cancel();
             return;
         }
-        if (customGuardian == null
-                || !customGuardian.isAlive()) {
+        if (customGuardian == null || !customGuardian.isAlive()) {
             getOwner().removeCosmetic(Category.MORPHS);
             cancel();
         }

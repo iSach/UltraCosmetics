@@ -78,7 +78,6 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
         entity.setCustomNameVisible(true);
         entity.setCustomName(getType().getName(getPlayer()));
         entity.setPassenger(getPlayer());
-        runTaskTimer(UltraCosmeticsData.get().getPlugin(), 0, getType().getRepeatDelay());
         entity.setMetadata("Mount", new FixedMetadataValue(UltraCosmeticsData.get().getPlugin(), "UltraCosmetics"));
         setupEntity();
 
@@ -86,6 +85,11 @@ public abstract class Mount extends EntityCosmetic<MountType> implements Updatab
         // Horses trigger PlayerMoveEvent so the standard WG move handler will be sufficient
         if (isHorse(entity.getType())) return;
         mountRegionTask = new MountRegionChecker(getOwner(), getUltraCosmetics()).runTaskTimer(getUltraCosmetics(), 0, 1);
+    }
+
+    @Override
+    protected void scheduleTask() {
+        runTaskTimer(getUltraCosmetics(), 0, getType().getRepeatDelay());
     }
 
     @Override

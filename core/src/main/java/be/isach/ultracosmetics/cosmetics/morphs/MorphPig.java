@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -17,7 +18,7 @@ import com.cryptomorin.xseries.XSound;
  * @author iSach
  * @since 08-27-2015
  */
-public class MorphPig extends Morph implements PlayerAffectingCosmetic {
+public class MorphPig extends Morph implements PlayerAffectingCosmetic, Updatable {
     private boolean cooldown = false;
 
     public MorphPig(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
@@ -41,9 +42,5 @@ public class MorphPig extends Morph implements PlayerAffectingCosmetic {
                 MathUtils.applyVelocity(getPlayer(), vPig.multiply(0.75));
             }
         }
-    }
-
-    @Override
-    protected void onClear() {
     }
 }

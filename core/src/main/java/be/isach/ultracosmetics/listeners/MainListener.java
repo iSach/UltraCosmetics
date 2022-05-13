@@ -1,7 +1,5 @@
 package be.isach.ultracosmetics.listeners;
 
-import be.isach.ultracosmetics.UltraCosmeticsData;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.event.Cancellable;
@@ -10,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Main listener
@@ -38,11 +35,7 @@ public class MainListener implements Listener {
     }
 
     public void processPickup(Item item, Cancellable event) {
-        ItemStack stack = item.getItemStack();
-        // TODO: just switch to UNPICKABLEUP meta entirely and remove getItemNoPickupString?
-        if (item.hasMetadata("UNPICKABLEUP")
-                || (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()
-                && stack.getItemMeta().getDisplayName().equals(UltraCosmeticsData.get().getItemNoPickupString()))) {
+        if (item.hasMetadata("UNPICKABLEUP")) {
             event.setCancelled(true);
         }
     }

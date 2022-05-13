@@ -1,9 +1,9 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -18,11 +18,9 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 /**
  * Represents an instance of a melon thrower gadget summoned by a player.
@@ -30,7 +28,7 @@ import org.bukkit.util.Vector;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmetic {
+public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmetic, Updatable {
     private Item melon = null;
     private final Set<Item> melonSlices = new HashSet<>();
 
@@ -48,6 +46,7 @@ public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmeti
             XSound.ENTITY_PLAYER_BURP.play(getPlayer().getLocation(), 1.4f, 1.5f);
             event.getItem().remove();
             melonSlices.remove(event.getItem());
+            // Should be done anyway by PlayerListener, but just to be safe
             event.setCancelled(true);
         }
     }
@@ -72,11 +71,7 @@ public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmeti
     @Override
     void onRightClick() {
         XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.4f, 1.5f);
-        Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(XMaterial.MELON, UltraCosmeticsData.get().getItemNoPickupString()));
-        item.setPickupDelay(0);
-        item.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), "UC#MELONBLOCK"));
-        item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.3d));
-        melon = item;
+        melon = ItemFactory.createUnpickableItemDirectional(XMaterial.MELON, getPlayer(), 1.3);
     }
 
     @Override
@@ -87,9 +82,7 @@ public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmeti
         if (melon.isOnGround()) {
             melon.getWorld().playEffect(melon.getLocation(), Effect.STEP_SOUND, 103);
             for (int i = 0; i < 8; i++) {
-                final Item newItem = melon.getWorld().dropItem(melon.getLocation(), ItemFactory.create(XMaterial.MELON_SLICE, UltraCosmeticsData.get().getItemNoPickupString()));
-                newItem.setVelocity(new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2.0, RANDOM.nextDouble() - 0.5).multiply(0.75D));
-                melonSlices.add(newItem);
+                melonSlices.add(ItemFactory.createUnpickableItemVariance(XMaterial.MELON_SLICE, melon.getLocation(), RANDOM, 0.75));
             }
             new BukkitRunnable() {
                 @Override

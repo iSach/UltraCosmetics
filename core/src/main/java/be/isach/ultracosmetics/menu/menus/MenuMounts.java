@@ -5,8 +5,6 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.MountType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.inventory.Inventory;
-
 import java.util.List;
 
 /**
@@ -19,10 +17,6 @@ public class MenuMounts extends CosmeticMenu<MountType> {
 
     public MenuMounts(UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.MOUNTS);
-    }
-
-    @Override
-    protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
     }
 
     @Override

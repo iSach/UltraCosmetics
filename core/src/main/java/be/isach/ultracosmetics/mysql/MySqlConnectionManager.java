@@ -78,31 +78,31 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
         // "PRIMARY KEY" implies UNIQUE NOT NULL.
         // String form of UUID is always exactly 36 chars so just store it that way.
-        columns.add(new Column<String>("uuid", "CHAR(36) PRIMARY KEY", String.class));
-        columns.add(new Column<Boolean>("gadgetsEnabled", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
-        columns.add(new Column<Boolean>("selfmorphview", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
-        columns.add(new Column<Boolean>("treasureNotifications", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
-        columns.add(new Column<Boolean>("filterByOwned", "BOOLEAN DEFAULT FALSE NOT NULL", Boolean.class));
-        columns.add(new Column<Integer>("treasureKeys", "INTEGER DEFAULT 0 NOT NULL", Integer.class));
+        columns.add(new Column<>("uuid", "CHAR(36) PRIMARY KEY", String.class));
+        columns.add(new Column<>("gadgetsEnabled", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
+        columns.add(new Column<>("selfmorphview", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
+        columns.add(new Column<>("treasureNotifications", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
+        columns.add(new Column<>("filterByOwned", "BOOLEAN DEFAULT FALSE NOT NULL", Boolean.class));
+        columns.add(new Column<>("treasureKeys", "INTEGER DEFAULT 0 NOT NULL", Integer.class));
         for (GadgetType gadgetType : GadgetType.values()) {
-            columns.add(new Column<Integer>(gadgetType.getConfigName().toLowerCase(), "INTEGER DEFAULT 0 NOT NULL", Integer.class));
+            columns.add(new Column<>(gadgetType.getConfigName().toLowerCase(), "INTEGER DEFAULT 0 NOT NULL", Integer.class));
         }
         for (PetType petType : PetType.values()) {
             // Anvil can only hold 50 characters on 1.18, but there's no extra overhead between 50 and 255.
             // This way if they extend the anvil size again we'll be fine.
-            columns.add(new Column<String>(petType.getConfigName().toLowerCase(), "VARCHAR(255)", String.class));
+            columns.add(new Column<>(petType.getConfigName().toLowerCase(), "VARCHAR(255)", String.class));
         }
 
         for (Category cat : Category.values()) {
             // it's a varchar anyway so might as well make it 255 for expansion purposes
             if (cat == Category.SUITS) {
                 for (ArmorSlot slot : ArmorSlot.values()) {
-                    columns.add(new Column<String>(cat.toString().toLowerCase() + "_" + slot.toString().toLowerCase(), "VARCHAR(255)", String.class));
+                    columns.add(new Column<>(cat.toString().toLowerCase() + "_" + slot.toString().toLowerCase(), "VARCHAR(255)", String.class));
                 }
                 continue;
             }
             
-            columns.add(new Column<String>(cat.toString().toLowerCase(), "VARCHAR(255)", String.class));
+            columns.add(new Column<>(cat.toString().toLowerCase(), "VARCHAR(255)", String.class));
         }
 
         StringJoiner columnJoiner = new StringJoiner(", ", "(", ")");

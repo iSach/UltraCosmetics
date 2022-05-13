@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 
@@ -31,7 +32,7 @@ import java.util.Set;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetEtherealPearl extends Gadget {
+public class GadgetEtherealPearl extends Gadget implements Updatable {
 
     private EnderPearl pearl;
     private boolean running;

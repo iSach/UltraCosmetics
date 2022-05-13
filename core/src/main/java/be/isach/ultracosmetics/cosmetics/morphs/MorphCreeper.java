@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
@@ -21,7 +22,7 @@ import com.cryptomorin.xseries.messages.ActionBar;
  * @author iSach
  * @since 08-26-2015
  */
-public class MorphCreeper extends Morph implements PlayerAffectingCosmetic {
+public class MorphCreeper extends Morph implements PlayerAffectingCosmetic, Updatable {
     private int charge = 0;
 
     public MorphCreeper(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
@@ -81,9 +82,5 @@ public class MorphCreeper extends Morph implements PlayerAffectingCosmetic {
         } else if (charge == 100) {
             ActionBar.sendActionBar(getPlayer(), MessageManager.getMessage("Morphs.Creeper.release-to-explode"));
         }
-    }
-
-    @Override
-    protected void onClear() {
     }
 }

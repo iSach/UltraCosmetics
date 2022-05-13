@@ -33,7 +33,7 @@ public class PetChristmasElf extends Pet {
 
     @Override
     public void onUpdate() {
-        dropItem = PRESENTS.get(random.nextInt(PRESENTS.size()));
+        dropItem = PRESENTS.get(RANDOM.nextInt(PRESENTS.size()));
         super.onUpdate();
     }
 

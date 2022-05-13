@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
@@ -180,9 +180,6 @@ public class TreasureChest implements Listener {
             randomGenerator.setLocation(b.getLocation().clone().add(0.0D, 1.0D, 0.0D));
             randomGenerator.giveRandomThing();
             ItemStack is = randomGenerator.getItemStack();
-            ItemMeta itemMeta = is.getItemMeta();
-            itemMeta.setDisplayName(UltraCosmeticsData.get().getItemNoPickupString());
-            is.setItemMeta(itemMeta);
 
             items.add(spawnItem(is, b.getLocation()));
             final String name = randomGenerator.getName();
@@ -235,9 +232,6 @@ public class TreasureChest implements Listener {
                 Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> cooldown = false, 3L);
 
                 ItemStack is = randomGenerator.getItemStack();
-                ItemMeta itemMeta = is.getItemMeta();
-                itemMeta.setDisplayName(UltraCosmeticsData.get().getItemNoPickupString());
-                is.setItemMeta(itemMeta);
 
                 items.add(spawnItem(is, event.getClickedBlock().getLocation()));
                 final String nameas = randomGenerator.getName();
@@ -255,12 +249,7 @@ public class TreasureChest implements Listener {
     }
 
     private Item spawnItem(ItemStack stack, Location loc) {
-        Item item = loc.getWorld().dropItem(loc.clone().add(0.5, 1.2, 0.5), stack);
-        item.setVelocity(new Vector(0, 0.25, 0));
-        item.setCustomName(UltraCosmeticsData.get().getItemNoPickupString());
-        // not needed?
-        item.setPickupDelay(20);
-        return item;
+        return ItemFactory.spawnUnpickableItem(stack, loc.clone().add(0.5, 1.2, 0.5), new Vector(0, 0.25, 0));
     }
 
     @EventHandler

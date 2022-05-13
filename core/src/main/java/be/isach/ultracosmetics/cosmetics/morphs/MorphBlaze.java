@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
@@ -16,7 +17,7 @@ import com.cryptomorin.xseries.XSound;
  * @author iSach
  * @since 08-26-2015
  */
-public class MorphBlaze extends Morph {
+public class MorphBlaze extends Morph implements Updatable {
 
     public MorphBlaze(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, MorphType.valueOf("blaze"), ultraCosmetics);
@@ -37,10 +38,6 @@ public class MorphBlaze extends Morph {
         if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && event.getReason().contains("Flying")) {
             event.setCancelled(true);
         }
-    }
-
-    @Override
-    protected void onClear() {
     }
 
     @EventHandler

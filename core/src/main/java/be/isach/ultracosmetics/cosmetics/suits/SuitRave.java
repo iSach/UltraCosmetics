@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.suits;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.SuitType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.Color;
@@ -14,7 +15,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  * @author iSach
  * @since 12-20-2015
  */
-public class SuitRave extends Suit {
+public class SuitRave extends Suit implements Updatable {
     private int[] colors = new int[]{255, 0, 0};
     private int tick = 0;
     private int updateInterval = SettingsManager.getConfig().getInt("Suits.Rave.Update-Delay-In-Creative", 1);
@@ -25,7 +26,6 @@ public class SuitRave extends Suit {
 
     @Override
     public void onEquip() {
-        super.onEquip();
         // If the player has another rave suit part equipped already,
         // sync up the update timers.
         for (ArmorSlot slot : ArmorSlot.values()) {

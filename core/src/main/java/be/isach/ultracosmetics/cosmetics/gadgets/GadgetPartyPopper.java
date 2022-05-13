@@ -47,12 +47,4 @@ public class GadgetPartyPopper extends Gadget {
         for (int i = 0; i < 3; i++)
             XSound.ENTITY_CHICKEN_EGG.play(getPlayer().getLocation(), 1.0f, 1.0f);
     }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    public void onClear() {
-    }
 }

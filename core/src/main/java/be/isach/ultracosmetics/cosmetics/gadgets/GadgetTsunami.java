@@ -11,7 +11,6 @@ import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -66,14 +65,5 @@ public class GadgetTsunami extends Gadget implements PlayerAffectingCosmetic {
             loc.add(v);
         }, 0, 1).getTaskId();
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> Bukkit.getScheduler().cancelTask(i), 40);
-    }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    public void onClear() {
-        HandlerList.unregisterAll(this);
     }
 }

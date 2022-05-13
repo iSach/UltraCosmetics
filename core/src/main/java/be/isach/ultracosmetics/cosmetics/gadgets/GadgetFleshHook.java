@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -13,11 +13,11 @@ import org.bukkit.EntityEffect;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Represents an instance of a fleshhook gadget summoned by a player.
@@ -25,9 +25,9 @@ import java.util.Iterator;
  * @author iSach
  * @since 08-03-2015
  */
-public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic {
+public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic, Updatable {
 
-    private ArrayList<Item> items = new ArrayList<>();
+    private Set<Item> items = new HashSet<>();
 
     public GadgetFleshHook(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("fleshhook"), ultraCosmetics);
@@ -37,8 +37,7 @@ public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic {
     @EventHandler
     public void onItemPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
         UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(event.getPlayer());
-        if(ultraPlayer != null
-         && !ultraPlayer.canBeHitByOtherGadgets()) {
+        if(ultraPlayer != null && !ultraPlayer.canBeHitByOtherGadgets()) {
             event.setCancelled(true);
             return;
         }
@@ -69,10 +68,7 @@ public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic {
 
     @Override
     void onRightClick() {
-        Item hook = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(XMaterial.TRIPWIRE_HOOK, UltraCosmeticsData.get().getItemNoPickupString()));
-        hook.setPickupDelay(0);
-        hook.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.5));
-        items.add(hook);
+        items.add(ItemFactory.createUnpickableItemDirectional(XMaterial.TRIPWIRE_HOOK, getPlayer(), 1.5));
     }
 
     @Override
@@ -80,9 +76,9 @@ public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic {
         Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
             Iterator<Item> it = items.iterator();
             while (it.hasNext()) {
-                Object pair = it.next();
-                if (((Item) pair).isOnGround()) {
-                    ((Item) pair).remove();
+                Item pair = it.next();
+                if (pair.isOnGround()) {
+                    pair.remove();
                     it.remove();
                 }
             }
@@ -91,8 +87,9 @@ public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic {
 
     @Override
     public void onClear() {
-        for (Item item : items)
+        for (Item item : items) {
             item.remove();
-        HandlerList.unregisterAll(this);
+        }
+        items.clear();
     }
 }

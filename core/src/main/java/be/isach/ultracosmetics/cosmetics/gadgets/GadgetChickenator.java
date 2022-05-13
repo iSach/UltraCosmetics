@@ -1,7 +1,6 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -16,8 +15,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.util.Vector;
-
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 
@@ -50,10 +47,7 @@ public class GadgetChickenator extends Gadget {
             XSound.ENTITY_CHICKEN_HURT.play(getPlayer(), 1.4f, 1.5f);
             chicken.remove();
             for (int i = 0; i < 30; i++) {
-                final Item ITEM = chicken.getWorld().dropItem(chicken.getLocation(), ItemFactory.create(XMaterial.COOKED_CHICKEN, UltraCosmeticsData.get().getItemNoPickupString()));
-                ITEM.setPickupDelay(30000);
-                ITEM.setVelocity(new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2.0, RANDOM.nextDouble() - 0.5));
-                items.add(ITEM);
+                items.add(ItemFactory.createUnpickableItemVariance(XMaterial.COOKED_CHICKEN, chicken.getLocation(), RANDOM, 1));
             }
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> items.forEach(Item::remove), 50);
         }, 9);
@@ -61,14 +55,11 @@ public class GadgetChickenator extends Gadget {
     }
 
     @Override
-    public void onUpdate() {
-    }
-
-    @Override
     public void onClear() {
         for (Item i : items) {
             i.remove();
         }
+        items.clear();
     }
 
     public static FireworkEffect getRandomFireworkEffect() {

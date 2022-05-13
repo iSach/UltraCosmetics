@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
@@ -16,7 +17,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -25,7 +25,6 @@ import com.cryptomorin.xseries.XSound;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Represents an instance of a chicken morph summoned by a player.
@@ -33,7 +32,7 @@ import java.util.Random;
  * @author iSach
  * @since 08-27-2015
  */
-public class MorphChicken extends Morph {
+public class MorphChicken extends Morph implements Updatable {
 
     private List<Item> items = new ArrayList<>();
     private List<Chicken> chickens = new ArrayList<>();
@@ -48,12 +47,8 @@ public class MorphChicken extends Morph {
         if (event.getPlayer() == getPlayer() && getOwner().getCurrentMorph() == this && !cooldown) {
             items = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
-                final Item i = getPlayer().getWorld().dropItem(getPlayer().getLocation(), ItemFactory.create(XMaterial.EGG, UltraCosmeticsData.get().getItemNoPickupString()));
-                i.setMetadata("UNPICKABLEUP", new FixedMetadataValue(getUltraCosmetics(), ""));
-                items.add(i);
-                Random r = new Random();
-                i.setVelocity(new Vector(r.nextDouble() - 0.5, r.nextDouble() / 2, r.nextDouble() - 0.5).multiply(0.5));
-                XSound.ENTITY_CHICKEN_EGG.play(getPlayer(), .5f, 1.5f);
+                items.add(ItemFactory.createUnpickableItemVariance(XMaterial.EGG, getPlayer().getLocation(), RANDOM, 0.5));
+                XSound.ENTITY_CHICKEN_EGG.play(getPlayer(), 0.5f, 1.5f);
             }
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), new Runnable() {
                 BukkitRunnable followRunnable;
@@ -67,7 +62,7 @@ public class MorphChicken extends Morph {
                         } else {
                             Particles.BLOCK_CRACK.display(new Particles.BlockData(XMaterial.WHITE_TERRACOTTA.parseMaterial(), (byte) 0), 0, 0, 0, 0.3f, 50, i.getLocation(), 128);
                         }
-                        XSound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR.play(i.getLocation(), .05f, 1f);
+                        XSound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR.play(i.getLocation(), 0.05f, 1f);
                         final Chicken chicken = (Chicken) i.getWorld().spawnEntity(i.getLocation(), EntityType.CHICKEN);
                         chicken.setAgeLock(true);
                         chicken.setBaby();

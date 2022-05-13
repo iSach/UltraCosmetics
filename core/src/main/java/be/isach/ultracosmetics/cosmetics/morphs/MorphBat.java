@@ -30,10 +30,6 @@ public class MorphBat extends Morph implements PlayerAffectingCosmetic {
         getPlayer().setAllowFlight(true);
     }
 
-    @Override
-    public void onUpdate() {
-    }
-
     @EventHandler
     public void onPlayerToggleFligh(PlayerToggleFlightEvent event) {
         if (event.getPlayer() == getPlayer()

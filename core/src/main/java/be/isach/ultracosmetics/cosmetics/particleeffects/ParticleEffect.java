@@ -35,6 +35,10 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 
     @Override
     protected void onEquip() {
+    }
+
+    @Override
+    protected void scheduleTask() {
         runTaskTimerAsynchronously(getUltraCosmetics(), 0, getType().getRepeatDelay());
     }
 
@@ -42,8 +46,7 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
     public void run() {
         try {
             if (Bukkit.getPlayer(getOwnerUniqueId()) != null
-                    && getOwner().getCurrentParticleEffect() != null
-                    && getOwner().getCurrentParticleEffect().getType() == getType()) {
+                    && getOwner().getCurrentParticleEffect() == this) {
                 if (getType() != ParticleEffectType.valueOf("frozenwalk")
                         && getType() != ParticleEffectType.valueOf("enchanted")
                         && getType() != ParticleEffectType.valueOf("music")
@@ -91,10 +94,6 @@ public abstract class ParticleEffect extends Cosmetic<ParticleEffectType> implem
 
     protected boolean isMoving() {
         return getOwner().isMoving();
-    }
-
-    @Override
-    protected void onClear() {
     }
     
     protected int getModifiedAmount(int originalAmount) {

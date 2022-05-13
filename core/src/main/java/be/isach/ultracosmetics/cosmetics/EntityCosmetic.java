@@ -29,5 +29,6 @@ public abstract class EntityCosmetic<T extends CosmeticEntType<?>> extends Cosme
         }
     }
 
-    protected void setupEntity() {};
+    protected void setupEntity() {
+    }
 }

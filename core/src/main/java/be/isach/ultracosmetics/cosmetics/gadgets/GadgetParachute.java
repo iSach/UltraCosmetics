@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
@@ -15,7 +16,6 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityUnleashEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -30,7 +30,7 @@ import java.util.Set;
  * @author iSach
  * @since 10-12-2015
  */
-public class GadgetParachute extends Gadget {
+public class GadgetParachute extends Gadget implements Updatable {
 
     private Set<Chicken> chickens = new HashSet<>();
     private boolean active;
@@ -120,6 +120,5 @@ public class GadgetParachute extends Gadget {
     @Override
     public void onClear() {
         killParachute();
-        HandlerList.unregisterAll(this);
     }
 }

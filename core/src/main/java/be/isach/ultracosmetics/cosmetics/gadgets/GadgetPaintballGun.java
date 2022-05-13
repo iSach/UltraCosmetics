@@ -127,10 +127,6 @@ public class GadgetPaintballGun extends Gadget {
         }
     }
 
-    @Override
-    public void onUpdate() {
-    }
-
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         // TODO: can we check if the pearl that caused the spawn is the pearl thrown by this gadget?

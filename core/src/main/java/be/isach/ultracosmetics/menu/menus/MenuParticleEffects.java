@@ -5,8 +5,6 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import org.bukkit.inventory.Inventory;
-
 import java.util.List;
 
 /**
@@ -19,10 +17,6 @@ public class MenuParticleEffects extends CosmeticMenu<ParticleEffectType> {
 
     public MenuParticleEffects(UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.EFFECTS);
-    }
-
-    @Override
-    protected void putItems(Inventory inventory, UltraPlayer ultraPlayer, int page) {
     }
 
     @Override

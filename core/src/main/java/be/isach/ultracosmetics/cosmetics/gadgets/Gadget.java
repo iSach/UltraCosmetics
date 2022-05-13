@@ -46,7 +46,7 @@ import java.util.Locale;
  * @author iSach
  * @since 08-03-2015
  */
-public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
+public abstract class Gadget extends Cosmetic<GadgetType> {
 
     private static final DecimalFormatSymbols OTHER_SYMBOLS = new DecimalFormatSymbols(Locale.US);
     private static final DecimalFormat DECIMAL_FORMAT;
@@ -96,8 +96,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
 
     @Override
     protected void onEquip() {
-        runTaskTimer(getUltraCosmetics(), 0, 1);
-
         int slot = SettingsManager.getConfig().getInt("Gadget-Slot");
         if (getPlayer().getInventory().getItem(slot) != null) {
             getPlayer().getWorld().dropItem(getPlayer().getLocation(),
@@ -123,7 +121,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
             }
 
             if (getOwner().getCurrentGadget() != null && getOwner().getCurrentGadget().getType() == getType()) {
-                onUpdate();
+                ((Updatable)this).onUpdate();
                 try {
                     if (UltraCosmeticsData.get().displaysCooldownInBar()) {
                         @SuppressWarnings("deprecation")
@@ -451,11 +449,5 @@ public abstract class Gadget extends Cosmetic<GadgetType> implements Updatable {
      * only called if useTwoInteractMethods is true.
      */
     void onLeftClick() {};
-
-    /**
-     * Called when gadget is cleared.
-     */
-    @Override
-    public abstract void onClear();
 
 }

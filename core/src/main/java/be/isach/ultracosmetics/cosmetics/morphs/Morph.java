@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.morphs;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.Cosmetic;
-import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.MorphType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -16,7 +15,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
  * @author iSach
  * @since 08-03-2015
  */
-public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
+public abstract class Morph extends Cosmetic<MorphType> {
 
     /**
      * The MobDiguise
@@ -40,17 +39,6 @@ public abstract class Morph extends Cosmetic<MorphType> implements Updatable {
         disguise.setViewSelfDisguise(getOwner().canSeeSelfMorph());
 
         DisguiseAPI.disguiseToAll(getPlayer(), disguise);
-
-        runTaskTimer(getUltraCosmetics(), 0, 1);
-    }
-
-    @Override
-    public void run() {
-        if (getPlayer() == null || getOwner().getCurrentMorph() != this) {
-            return;
-        }
-
-        onUpdate();
     }
 
     /**

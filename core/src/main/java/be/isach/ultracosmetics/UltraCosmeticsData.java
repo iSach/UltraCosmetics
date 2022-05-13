@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 
 import java.lang.reflect.Method;
 import java.util.StringJoiner;
-import java.util.UUID;
 
 /**
  * This class is only for cleaning main class a bit.
@@ -21,10 +20,6 @@ import java.util.UUID;
 public class UltraCosmeticsData {
 
     private static UltraCosmeticsData instance;
-    /**
-     * A String that items that shouldn't be picked up are given. Randomly generated each time the server starts.
-     */
-    private final String itemNoPickupString;
 
     /**
      * True -> should execute custom command when going back to main menu.
@@ -87,7 +82,6 @@ public class UltraCosmeticsData {
 
     public UltraCosmeticsData(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
-        this.itemNoPickupString = UUID.randomUUID().toString();
     }
 
     public static UltraCosmeticsData get() {
@@ -254,10 +248,6 @@ public class UltraCosmeticsData {
      */
     public UltraCosmetics getPlugin() {
         return ultraCosmetics;
-    }
-
-    public final String getItemNoPickupString() {
-        return this.itemNoPickupString;
     }
 
     public boolean areCosmeticsProfilesEnabled() {

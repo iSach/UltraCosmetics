@@ -1,8 +1,8 @@
 package be.isach.ultracosmetics.cosmetics.gadgets;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.run.FallDamageManager;
@@ -45,7 +45,7 @@ import java.util.Set;
  * @author iSach
  * @since 08-17-2015
  */
-public class GadgetRocket extends Gadget {
+public class GadgetRocket extends Gadget implements Updatable {
 
     // EntityDismountEvent has existed at least since 1.8, but wasn't cancellable until 1.13
     private static final boolean DISMOUNT_CANCELLABLE = VersionManager.IS_VERSION_1_13;
@@ -75,6 +75,7 @@ public class GadgetRocket extends Gadget {
         loc.setY(loc.getBlockY());
         loc.setZ(loc.getBlockZ() + 0.5);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            if (getOwner() == null || getOwner().getCurrentGadget() != this) return;
             ROCKETS_WITH_BLOCKS.add(this);
             for (int i = 0; i < 2; i++) {
                 Block center = loc.clone().add(0, i, 0).getBlock();
@@ -91,7 +92,8 @@ public class GadgetRocket extends Gadget {
             armorStand.setVisible(false);
             armorStand.setGravity(false);
         }, 10);
-        Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            if (getOwner() == null || getOwner().getCurrentGadget() != this) return;
             // prevent kicking
             enableFlight();
             playerVehicle = null;

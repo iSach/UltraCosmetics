@@ -9,7 +9,6 @@ import be.isach.ultracosmetics.util.Particles;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -18,8 +17,8 @@ import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XSound;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an instance of a TNT gadget summoned by a player.
@@ -29,7 +28,7 @@ import java.util.List;
  */
 public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
 
-    List<Entity> entities = new ArrayList<>();
+    private Set<Entity> entities = new HashSet<>();
 
     public GadgetTNT(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("tnt"), ultraCosmetics);
@@ -55,7 +54,7 @@ public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
     public void onItemFrameBreak(HangingBreakEvent event) {
         for (Entity ent : entities) {
             if (ent.getWorld() != event.getEntity().getWorld()) continue;
-            if (ent.getLocation().distance(event.getEntity().getLocation()) < 15)
+            if (ent.getLocation().distanceSquared(event.getEntity().getLocation()) < 15 * 15)
                 event.setCancelled(true);
         }
     }
@@ -64,7 +63,7 @@ public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
     public void onVehicleDestroy(VehicleDestroyEvent event) {
         for (Entity tnt : entities) {
             if (tnt.getWorld() != event.getVehicle().getWorld()) continue;
-            if (tnt.getLocation().distance(event.getVehicle().getLocation()) < 10) {
+            if (tnt.getLocation().distanceSquared(event.getVehicle().getLocation()) < 10 * 10) {
                 event.setCancelled(true);
             }
         }
@@ -72,7 +71,7 @@ public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (entities.contains(event.getEntity())) {
+        if (entities.remove(event.getEntity())) {
             event.setCancelled(true);
             Particles.EXPLOSION_HUGE.display(event.getEntity().getLocation());
             XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer(), 1.4f, 1.5f);
@@ -92,18 +91,14 @@ public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
                     MathUtils.applyVelocity(ent, vector.multiply(1.3D).add(new Vector(0, 1.4D, 0)));
                 }
             }
-            entities.remove(event.getEntity());
         }
     }
 
     @Override
-    public void onUpdate() {
-    }
-
-    @Override
     public void onClear() {
-        for (Entity ent : entities)
+        for (Entity ent : entities) {
             ent.remove();
-        HandlerList.unregisterAll(this);
+        }
+        entities.clear();
     }
 }

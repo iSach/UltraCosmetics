@@ -42,12 +42,4 @@ public class GadgetFirework extends Gadget {
 
         fw.setFireworkMeta(fwm);
     }
-
-    @Override
-    public void onUpdate() {
-    }
-
-    @Override
-    public void onClear() {
-    }
 }
