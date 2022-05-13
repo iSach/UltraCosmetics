@@ -51,15 +51,13 @@ public class EntityUtil implements IEntityUtil {
         as.setSmall(true);
         as.setNoGravity(true);
         as.setArms(true);
-        as.setHeadPose(new Vector3f((float) (r.nextInt(360)),
-                (float) (r.nextInt(360)),
-                (float) (r.nextInt(360))));
+        as.setHeadPose(new Vector3f(r.nextInt(360), r.nextInt(360), r.nextInt(360)));
         as.setLocation(loc.getX() + MathUtils.randomDouble(-1.5, 1.5), loc.getY() + MathUtils.randomDouble(0, .5) - 0.75, loc.getZ() + MathUtils.randomDouble(-1.5, 1.5), 0, 0);
         fakeArmorStands.add(as);
         PacketPlayOutSpawnEntityLiving spawnPacket = new PacketPlayOutSpawnEntityLiving(as);
         PacketPlayOutEntityMetadata dataPacket = new PacketPlayOutEntityMetadata(as.getId(), as.getDataWatcher(), false);
         List<Pair<EnumItemSlot, ItemStack>> list = new ArrayList<>();
-        list.add(new Pair<EnumItemSlot, ItemStack>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
+        list.add(new Pair<>(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         PacketPlayOutEntityEquipment equipmentPacket = new PacketPlayOutEntityEquipment(as.getId(), list);
         for (Player players : player.getWorld().getPlayers()) {
             PacketSender.send(players, spawnPacket);

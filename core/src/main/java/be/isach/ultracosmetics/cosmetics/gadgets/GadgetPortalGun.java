@@ -292,7 +292,7 @@ public class GadgetPortalGun extends Gadget implements Updatable {
         Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
             entity.teleport(location);
             if (entity instanceof Player) {
-                XSound.ENTITY_ENDERMAN_TELEPORT.play((Player)entity);
+                XSound.ENTITY_ENDERMAN_TELEPORT.play(entity);
             }
         });
     }

@@ -88,6 +88,7 @@ public class MessageManager {
         addMessage("Clear." + Category.SUITS.getConfigPath(), "&c&lClear current suit");
         addMessage("Clear." + Category.EMOTES.getConfigPath(), "&c&lClear current emote");
         addMessage("Menu.Purchase-Rename.Button.Showcase", "&c&lRename the pet to &f&l%name% &c&lfor &e&l$%price%");
+        addMessage("Menu.Purchase-Rename.Title", "&lRename Pet");
 
         addMessage("Chest-Location.Not-Enough-Space", "%prefix% &c&lThere isn't enough space for a treasure chest!");
         addMessage("Chest-Location.Too-Close", "%prefix% &c&lYou are too close to another treasure chest!");

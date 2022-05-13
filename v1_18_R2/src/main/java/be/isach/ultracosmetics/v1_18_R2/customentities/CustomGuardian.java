@@ -49,7 +49,6 @@ public class CustomGuardian extends Guardian {
         return new TextComponent(Language.getInstance().getOrDefault("entity.minecraft.guardian"));
     }
 
-
     @Override
     protected SoundEvent getDeathSound() {
         if (isCustom()) return null;

@@ -117,7 +117,7 @@ public class EntityUtil implements IEntityUtil {
         ClientboundAddEntityPacket addPacket = new ClientboundAddEntityPacket(as);
         ClientboundSetEntityDataPacket dataPacket = new ClientboundSetEntityDataPacket(as.getId(), as.getEntityData(), false);
         List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();
-        equipment.add(new Pair<EquipmentSlot, ItemStack>(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
+        equipment.add(new Pair<>(EquipmentSlot.HEAD, CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(org.bukkit.Material.PACKED_ICE))));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(as.getId(), equipment);
         for (Player loopPlayer : player.getWorld().getPlayers()) {
             sendPacket(loopPlayer, addPacket);
