@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public final class MenuSuits extends CosmeticMenu<SuitType> {
 
-    private static final int[] SLOTS = new int[]{10, 11, 12, 13, 14, 15, 16, 17};
+    private static final int[] SLOTS = new int[] {10, 11, 12, 13, 14, 15, 16};
 
     public MenuSuits(UltraCosmetics ultraCosmetics) {
         super(ultraCosmetics, Category.SUITS);
@@ -126,7 +126,7 @@ public final class MenuSuits extends CosmeticMenu<SuitType> {
                 i++;
             }
         }
-        return Math.max(1, ((i - 1) / 21) + 1);
+        return Math.max(1, ((i - 1) / getItemsPerPage()) + 1);
     }
 
     @Override

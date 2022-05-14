@@ -90,6 +90,12 @@ public class UltraPlayer {
     private boolean quitting = false;
 
     /**
+     * Stores the client brand string.
+     * Used for determining if player is a Geyser client.
+     */
+    private String clientBrand = null;
+
+    /**
      * Allows to store custom data for each player easily.
      * <p/>
      * Created on join, and deleted on quit.
@@ -661,5 +667,22 @@ public class UltraPlayer {
 
     public void setTreasureNotifying(boolean treasureNotifications) {
         cosmeticsProfile.setTreasureNotifications(treasureNotifications);
+    }
+
+    /**
+     * Clients with brand "Geyser" are not guaranteed to actually be Geyser clients,
+     * but all Geyser clients will have brand "Geyser". If some Java client wants
+     * to see the Geyser menu view enough to change its brand, UC has no problems with that.
+     * We're doing this weird inverted equals() check because it means we don't have to do
+     * a separate null check.
+     * Not currently used anywhere.
+     * @return {@code true} if the client says it is a Geyser client.
+     */
+    public boolean isGeyserClient() {
+        return "Geyser".equals(clientBrand);
+    }
+
+    public void setClientBrand(String brand) {
+        this.clientBrand = brand;
     }
 }

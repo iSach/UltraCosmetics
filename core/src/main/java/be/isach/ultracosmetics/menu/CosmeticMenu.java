@@ -265,18 +265,8 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
     @Override
     protected int getSize() {
-        int listSize = enabled().size();
-        int slotAmount = 54;
-        if (listSize < 22) {
-            slotAmount = 54;
-        }
-        if (listSize < 15) {
-            slotAmount = 45;
-        }
-        if (listSize < 8) {
-            slotAmount = 36;
-        }
-        return slotAmount;
+        // I think for consistency it's better to have all menus max size
+        return 54;
     }
 
     @Override

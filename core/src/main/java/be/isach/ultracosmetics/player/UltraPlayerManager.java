@@ -2,6 +2,8 @@ package be.isach.ultracosmetics.player;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.SettingsManager;
+import be.isach.ultracosmetics.listeners.ClientBrandListener;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -56,6 +58,7 @@ public class UltraPlayerManager {
                 getUltraPlayer(p).giveMenuItem();
             }
         }
+        Bukkit.getMessenger().registerIncomingPluginChannel(ultraCosmetics, "minecraft:brand", new ClientBrandListener(ultraCosmetics));
     }
 
     public void dispose() {
