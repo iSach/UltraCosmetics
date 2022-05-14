@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 public class SubCommandGive extends SubCommand {
 
     public SubCommandGive(UltraCosmetics ultraCosmetics) {
-        super("give", "Gives Ammo/Keys", "ultracosmetics.command.give", "/uc give key [amount] [player] OR /uc give ammo <type> <amount> [player]", ultraCosmetics);
+        super("give", "Gives Ammo/Keys", "key [amount] [player] OR /uc give ammo <type> <amount> [player]", ultraCosmetics);
     }
 
     @Override

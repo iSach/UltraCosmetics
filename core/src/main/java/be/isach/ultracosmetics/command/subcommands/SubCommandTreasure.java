@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 public class SubCommandTreasure extends SubCommand {
 
     public SubCommandTreasure(UltraCosmetics ultraCosmetics) {
-        super("treasure", "Starts Treasure Chest.", "ultracosmetics.command.treasure", "/uc treasure <player> <x> <y> <z> <world>", ultraCosmetics);
+        super("treasure", "Starts Treasure Chest.", "[player] [<x> <y> <z>] [world]", ultraCosmetics);
     }
 
     @Override

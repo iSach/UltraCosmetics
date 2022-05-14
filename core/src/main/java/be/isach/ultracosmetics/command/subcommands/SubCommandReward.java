@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.treasurechests.TreasureRandomizer;
 public class SubCommandReward extends SubCommand {
 
     public SubCommandReward(UltraCosmetics ultraCosmetics) {
-        super("reward", "Gives reward(s) as if a treasure chest was used", "ultracosmetics.command.reward", "/uc reward [amount] [player]", ultraCosmetics);
+        super("reward", "Gives reward(s) as if a treasure chest was used", "[amount] [player]", ultraCosmetics);
     }
 
     @Override

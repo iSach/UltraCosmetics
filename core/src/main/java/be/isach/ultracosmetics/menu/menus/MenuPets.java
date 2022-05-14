@@ -69,11 +69,12 @@ public class MenuPets extends CosmeticMenu<PetType> {
         .text(MessageManager.getMessage("Menu.Rename-Pet.Placeholder"))
         .title(MessageManager.getMessage("Menu.Rename-Pet.Title"))
         .onComplete((Player player, String text) -> {
+            String newName = ChatColor.translateAlternateColorCodes('&', text);
             if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") &&
                     ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
-                return AnvilGUI.Response.openInventory(buyRenamePet(ultraPlayer, text));
+                return AnvilGUI.Response.openInventory(buyRenamePet(ultraPlayer, newName));
             } else {
-                ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), text);
+                ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), newName);
                 return AnvilGUI.Response.close();
             }
         }).open(ultraPlayer.getBukkitPlayer());

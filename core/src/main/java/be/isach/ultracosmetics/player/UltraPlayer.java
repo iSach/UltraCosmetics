@@ -375,15 +375,20 @@ public class UltraPlayer {
             return;
         }
 
+        int price = SettingsManager.getConfig().getInt("TreasureChests.Key-Price");
+        if (price < 1) {
+            return;
+        }
+
         if (!getBukkitPlayer().hasPermission("ultracosmetics.treasurechests.buykey")) {
             getBukkitPlayer().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You don't have permission to buy Treasure Keys.");
             return;
         }
 
-        ItemStack itemStack = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', (MessageManager.getMessage("Buy-Treasure-Key-ItemName")).replace("%price%", "" + SettingsManager.getConfig().getInt("TreasureChests.Key-Price"))));
+        ItemStack itemStack = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, ChatColor.translateAlternateColorCodes('&', (MessageManager.getMessage("Buy-Treasure-Key-ItemName")).replace("%price%", String.valueOf(price))));
 
         PurchaseData pd = new PurchaseData();
-        pd.setPrice(SettingsManager.getConfig().getInt("TreasureChests.Key-Price"));
+        pd.setPrice(price);
         pd.setShowcaseItem(itemStack);
         pd.setOnPurchase(() -> {
             addKey();

@@ -28,7 +28,7 @@ public class SubCommandToggle extends SubCommand {
     private static final String ERROR_PREFIX = " " + ChatColor.RED + ChatColor.BOLD;
 
     public SubCommandToggle(UltraCosmetics ultraCosmetics) {
-        super("toggle", "Toggles a cosmetic.", "ultracosmetics.command.toggle", "/uc toggle <type> <cosmetic> [player]", ultraCosmetics);
+        super("toggle", "Toggles a cosmetic.", "<type> <cosmetic> [player]", ultraCosmetics);
     }
 
     @Override

@@ -18,11 +18,11 @@ public abstract class SubCommand {
     private final String name, description, permission, usage;
     protected final UltraCosmetics ultraCosmetics;
 
-    public SubCommand(String name, String description, String permission, String usage, UltraCosmetics ultraCosmetics) {
+    public SubCommand(String name, String description, String usage, UltraCosmetics ultraCosmetics) {
         this.name = name;
         this.description = description;
-        this.permission = permission;
-        this.usage = usage;
+        this.permission = "ultracosmetics.command." + name;
+        this.usage = "/uc " + name + " " + usage;
         this.ultraCosmetics = ultraCosmetics;
     }
 

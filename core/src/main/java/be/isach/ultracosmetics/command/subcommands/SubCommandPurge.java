@@ -19,7 +19,7 @@ import java.io.File;
 public class SubCommandPurge extends SubCommand {
 
     public SubCommandPurge(UltraCosmetics ultraCosmetics) {
-        super("purge", "Purges old data files.", "ultracosmetics.command.purge", "/uc purge <confirm>", ultraCosmetics);
+        super("purge", "Purges old data files.", "<confirm>", ultraCosmetics);
     }
 
     @Override

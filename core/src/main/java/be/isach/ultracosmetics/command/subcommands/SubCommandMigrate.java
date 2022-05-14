@@ -24,7 +24,7 @@ import be.isach.ultracosmetics.player.profile.PlayerData;
 public class SubCommandMigrate extends SubCommand {
 
     public SubCommandMigrate(UltraCosmetics ultraCosmetics) {
-        super("migrate", "Moves player data from flatfile to MySQL and vice versa", "ultracosmetics.subcommand.migrate", "/uc migrate <flatfile|sql>", ultraCosmetics);
+        super("migrate", "Moves player data from flatfile to MySQL and vice versa", "<flatfile|sql>", ultraCosmetics);
     }
 
     @Override
