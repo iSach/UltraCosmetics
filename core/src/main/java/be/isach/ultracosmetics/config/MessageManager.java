@@ -658,4 +658,8 @@ public class MessageManager {
         messagesConfig.set(newKey, messagesConfig.getString(oldKey));
         messagesConfig.set(oldKey, null);
     }
+
+    public static void reload() {
+        messagesConfig.reload();
+    }
 }

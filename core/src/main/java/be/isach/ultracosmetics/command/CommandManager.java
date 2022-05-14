@@ -118,5 +118,6 @@ public class CommandManager implements CommandExecutor {
         registerCommand(new SubCommandTreasureNotification(ultraCosmetics));
         registerCommand(new SubCommandMigrate(ultraCosmetics));
         registerCommand(new SubCommandReward(ultraCosmetics));
+        registerCommand(new SubCommandReload(ultraCosmetics));
     }
 }
