@@ -73,6 +73,10 @@ public class MySqlConnectionManager extends BukkitRunnable {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
         config.addDataSourceProperty("cachePrepStmts", true);
         config.addDataSourceProperty("useServerPrepStmts", true);
+        // Specify character encoding because apparently MySQL 8
+        // by default uses an encoding we don't support.
+        config.addDataSourceProperty("characterEncoding", "utf8");
+        config.addDataSourceProperty("useUnicode", true);
 
         dataSource = new HikariDataSource(config);
 
