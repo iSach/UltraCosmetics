@@ -37,7 +37,7 @@ import java.util.Arrays;
  */
 public class PlayerListener implements Listener {
 
-    private UltraCosmetics ultraCosmetics;
+    private final UltraCosmetics ultraCosmetics;
 
     public PlayerListener(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -45,25 +45,25 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(final PlayerJoinEvent event) {
-        UltraPlayer cp = ultraCosmetics.getPlayerManager().create(event.getPlayer());
-        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+        new BukkitRunnable() {
             @Override
             public void run() {
                 if (SettingsManager.getConfig().getBoolean("Menu-Item.Enabled") && event.getPlayer().hasPermission("ultracosmetics.receivechest") && SettingsManager.isAllowedWorld(event.getPlayer().getWorld())) {
                     Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
-                        if (cp != null && event.getPlayer() != null)
-                            cp.giveMenuItem();
+                        UltraPlayer up = ultraCosmetics.getPlayerManager().getUltraPlayer(event.getPlayer());
+                        if (up != null) {
+                            up.giveMenuItem();
+                        }
                     }, 5);
                 }
 
                 if (ultraCosmetics.getUpdateChecker() != null && ultraCosmetics.getUpdateChecker().isOutdated()) {
-                    if (event.getPlayer().isOp()) {
+                    if (event.getPlayer().hasPermission("ultracosmetics.updatenotify")) {
                         event.getPlayer().sendMessage(ChatColor.BOLD + "" + ChatColor.ITALIC + "UltraCosmetics > " + ChatColor.RED + "" + ChatColor.BOLD + "An update is available: " + ultraCosmetics.getUpdateChecker().getLastVersion());
                     }
                 }
             }
-        };
-        bukkitRunnable.runTaskAsynchronously(ultraCosmetics);
+        }.runTaskAsynchronously(ultraCosmetics);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -91,8 +91,9 @@ public class PlayerListener implements Listener {
             // Disable cosmetics when joining a bad world.
             ultraPlayer.removeMenuItem();
             ultraPlayer.setQuitting(true);
-            if (ultraPlayer.clear())
+            if (ultraPlayer.clear()) {
                 ultraPlayer.getBukkitPlayer().sendMessage(MessageManager.getMessage("World-Disabled"));
+            }
             ultraPlayer.setQuitting(false);
         }
     }

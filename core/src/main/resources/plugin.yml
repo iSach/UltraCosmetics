@@ -48,3 +48,5 @@ permissions:
     default: op
   ultracosmetics.command.treasurenotification:
     default: true
+  ultracosmetics.updatenotify:
+    default: op

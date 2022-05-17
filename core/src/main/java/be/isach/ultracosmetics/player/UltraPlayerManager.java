@@ -31,13 +31,7 @@ public class UltraPlayerManager {
     public UltraPlayer getUltraPlayer(Player player) {
         if (player == null) return null;
 
-        return playerCache.get(player.getUniqueId());
-    }
-
-    public UltraPlayer create(Player player) {
-        UltraPlayer customPlayer = new UltraPlayer(player.getUniqueId(), ultraCosmetics);
-        playerCache.put(player.getUniqueId(), customPlayer);
-        return customPlayer;
+        return playerCache.computeIfAbsent(player.getUniqueId(), u -> new UltraPlayer(u, ultraCosmetics));
     }
 
     public boolean remove(Player player) {
@@ -53,7 +47,6 @@ public class UltraPlayerManager {
      */
     public void initPlayers() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            create(p);
             if (SettingsManager.getConfig().getBoolean("Menu-Item.Enabled") && SettingsManager.isAllowedWorld(p.getWorld())) {
                 getUltraPlayer(p).giveMenuItem();
             }
