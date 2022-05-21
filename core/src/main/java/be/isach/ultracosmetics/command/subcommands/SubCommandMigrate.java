@@ -39,7 +39,7 @@ public class SubCommandMigrate extends SubCommand {
             error(sender, "This command can only be used from the console.");
             return;
         }
-        if (UltraCosmeticsData.get().usingFileStorage() || !ultraCosmetics.getMySqlConnectionManager().success()) {
+        if (UltraCosmeticsData.get().usingFileStorage()) {
             error(sender, "SQL must be enabled and connected to migrate either direction.");
             return;
         }

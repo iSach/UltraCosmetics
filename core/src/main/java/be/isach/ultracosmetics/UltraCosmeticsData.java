@@ -131,7 +131,11 @@ public class UltraCosmeticsData {
         return false;
     }
 
-    boolean checkServerVersion() {
+    /**
+     * Checks to make sure UC is OK to run on this MC version
+     * @return the reason the check failed, or null if it succeeded.
+     */
+    String checkServerVersion() {
         String versionString = Bukkit.getServer().getClass().getPackage().getName(); 
         String mcVersion;
         try {
@@ -139,7 +143,7 @@ public class UltraCosmeticsData {
         } catch (ArrayIndexOutOfBoundsException e) {
             ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Unable to determine server version. Please report this error.");
             ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Version string: " + versionString);
-            return false;
+            return "Unable to determine server version";
         }
 
         ServerVersion serverVersion;
@@ -158,13 +162,12 @@ public class UltraCosmeticsData {
             ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "ULTRACOSMETICS CAN ONLY RUN ON " + sj.toString() + ", OR " + ServerVersion.latest().getName() + "!");
             ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "");
             ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "----------------------------");
-            // plugin can't be disabled at load time since it hasn't been enabled yet?
-            return false;
+            return "Unsupported MC version";
         }
 
         setServerVersion(serverVersion);
 
-        return true;
+        return null;
     }
 
     boolean checkMappingsVersion(ServerVersion version) {
@@ -252,5 +255,9 @@ public class UltraCosmeticsData {
 
     public boolean areCosmeticsProfilesEnabled() {
         return cosmeticsProfilesEnabled;
+    }
+
+    public void setFileStorage(boolean fileStorage) {
+        this.fileStorage = fileStorage;
     }
 }

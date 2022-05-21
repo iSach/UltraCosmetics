@@ -47,7 +47,7 @@ public class MorphType extends CosmeticType<Morph> {
      */
     private final DisguiseType disguiseType;
 
-    private MorphType(String permission, String configName, XMaterial material, DisguiseType disguiseType, String defaultDesc, Class<? extends Morph> clazz) {
+    private MorphType(String configName, XMaterial material, DisguiseType disguiseType, String defaultDesc, Class<? extends Morph> clazz) {
         super(Category.MORPHS, configName, defaultDesc, material, clazz);
         this.disguiseType = disguiseType;
 
@@ -73,28 +73,28 @@ public class MorphType extends CosmeticType<Morph> {
     }
 
     public static void register() {
-        new MorphType("ultracosmetics.morphs.bat", "Bat", XMaterial.COAL, DisguiseType.BAT, "&7&oBecome a bat!", MorphBat.class);
-        new MorphType("ultracosmetics.morphs.blaze", "Blaze", XMaterial.BLAZE_POWDER, DisguiseType.BLAZE, "&7&oIt might be hot on there..", MorphBlaze.class);
-        new MorphType("ultracosmetics.morphs.chicken", "Chicken", XMaterial.EGG, DisguiseType.CHICKEN, "&7&oBecome a chicken!", MorphChicken.class);
-        new MorphType("ultracosmetics.morphs.pig", "Pig", XMaterial.PORKCHOP, DisguiseType.PIG, "&7&oMust hold your carrot!", MorphPig.class);
-        new MorphType("ultracosmetics.morphs.enderman", "Enderman", XMaterial.ENDER_PEARL, DisguiseType.ENDERMAN, "&7&oI go from there to\n" + "&7&othere, then you lost me..", MorphEnderman.class);
-        new MorphType("ultracosmetics.morphs.slime", "Slime", XMaterial.SLIME_BALL, DisguiseType.SLIME, "&7&oSplat splat!", MorphSlime.class);
-        new MorphType("ultracosmetics.morphs.creeper", "Creeper", XMaterial.GUNPOWDER, DisguiseType.CREEPER, "&7&oHey What'sssssss up?", MorphCreeper.class);
-        new MorphType("ultracosmetics.morphs.snowman", "Snowman", XMaterial.SNOWBALL, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class);
-        new MorphType("ultracosmetics.morphs.elderguardian", "ElderGuardian", XMaterial.PRISMARINE_CRYSTALS, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", UltraCosmeticsData.get().getVersionManager().getMorphs().getElderGuardianClass());
-        new MorphType("ultracosmetics.morphs.cow", "Cow", XMaterial.MILK_BUCKET, DisguiseType.COW, "&7&oMoooo!", MorphCow.class);
-        new MorphType("ultracosmetics.morphs.mooshroom", "Mooshroom", XMaterial.RED_MUSHROOM, DisguiseType.MUSHROOM_COW, "&7&oMoooo!", MorphMooshroom.class);
-        new MorphType("ultracosmetics.morphs.villager", "Villager", XMaterial.EMERALD, DisguiseType.VILLAGER, "&7&oHmmmmmmmmm", MorphVillager.class);
+        new MorphType("Bat", XMaterial.COAL, DisguiseType.BAT, "&7&oBecome a bat!", MorphBat.class);
+        new MorphType("Blaze", XMaterial.BLAZE_POWDER, DisguiseType.BLAZE, "&7&oIt might be hot on there..", MorphBlaze.class);
+        new MorphType("Chicken", XMaterial.EGG, DisguiseType.CHICKEN, "&7&oBecome a chicken!", MorphChicken.class);
+        new MorphType("Pig", XMaterial.PORKCHOP, DisguiseType.PIG, "&7&oMust hold your carrot!", MorphPig.class);
+        new MorphType("Enderman", XMaterial.ENDER_PEARL, DisguiseType.ENDERMAN, "&7&oI go from there to\n" + "&7&othere, then you lost me..", MorphEnderman.class);
+        new MorphType("Slime", XMaterial.SLIME_BALL, DisguiseType.SLIME, "&7&oSplat splat!", MorphSlime.class);
+        new MorphType("Creeper", XMaterial.GUNPOWDER, DisguiseType.CREEPER, "&7&oHey What'sssssss up?", MorphCreeper.class);
+        new MorphType("Snowman", XMaterial.SNOWBALL, DisguiseType.SNOWMAN, "&7&oBecome Olaf!", MorphSnowman.class);
+        new MorphType("ElderGuardian", XMaterial.PRISMARINE_CRYSTALS, DisguiseType.ELDER_GUARDIAN, "&7&oBecome an Elder Guardian!!", UltraCosmeticsData.get().getVersionManager().getMorphs().getElderGuardianClass());
+        new MorphType("Cow", XMaterial.MILK_BUCKET, DisguiseType.COW, "&7&oMoooo!", MorphCow.class);
+        new MorphType("Mooshroom", XMaterial.RED_MUSHROOM, DisguiseType.MUSHROOM_COW, "&7&oMoooo!", MorphMooshroom.class);
+        new MorphType("Villager", XMaterial.EMERALD, DisguiseType.VILLAGER, "&7&oHmmmmmmmmm", MorphVillager.class);
 
         if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1)) {
-            new MorphType("ultracosmetics.morphs.witch", "Witch", XMaterial.POISONOUS_POTATO, getDisguiseType("WITCH"), "&7&oMuahahahahaha", MorphWitch.class);
-            new MorphType("ultracosmetics.morphs.polarbear", "PolarBear", XMaterial.SNOW_BLOCK, getDisguiseType("POLAR_BEAR"), "&7&oI prefer cold areas", MorphPolarBear.class);
-            new MorphType("ultracosmetics.morphs.llama", "Llama", XMaterial.RED_WOOL, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class);
-            new MorphType("ultracosmetics.morphs.parrot", "Parrot", XMaterial.COOKIE, getDisguiseType("PARROT"), "&7&oPolly want a cracker?", MorphParrot.class);
+            new MorphType("Witch", XMaterial.POISONOUS_POTATO, getDisguiseType("WITCH"), "&7&oMuahahahahaha", MorphWitch.class);
+            new MorphType("PolarBear", XMaterial.SNOW_BLOCK, getDisguiseType("POLAR_BEAR"), "&7&oI prefer cold areas", MorphPolarBear.class);
+            new MorphType("Llama", XMaterial.RED_WOOL, getDisguiseType("LLAMA"), "&7&oNeed me to carry anything?", MorphLlama.class);
+            new MorphType("Parrot", XMaterial.COOKIE, getDisguiseType("PARROT"), "&7&oPolly want a cracker?", MorphParrot.class);
         }
 
-        new MorphType("ultracosmetics.morphs.sheep", "Sheep", XMaterial.WHITE_WOOL, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class);
-        new MorphType("ultracosmetics.morphs.witherskeleton", "WitherSkeleton", XMaterial.WITHER_SKELETON_SKULL, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class);
+        new MorphType("Sheep", XMaterial.WHITE_WOOL, DisguiseType.SHEEP, "&7&oBaaaa, baa", MorphSheep.class);
+        new MorphType("WitherSkeleton", XMaterial.WITHER_SKELETON_SKULL, DisguiseType.WITHER_SKELETON, "&7&oJust a regular skeleton..\n&7&obut from the Nether!", MorphWitherSkeleton.class);
     }
 
     private static DisguiseType getDisguiseType(String type) {

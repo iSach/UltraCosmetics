@@ -20,13 +20,6 @@ dependencies {
     compileOnly 'com.mojang:authlib:2.3.31'
     // used by the update checker
     compileOnly 'com.googlecode.json-simple:json-simple:1.1.1'
-    // hikari requires slf4j, this attaches it to log4j
-    implementation ('org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2') {
-        exclude group: 'org.apache.logging.log4j', module: 'log4j-api'
-        exclude group: 'org.apache.logging.log4j', module: 'log4j-core' 
-    }
-    // versions above 4.0.3 are compiled with Java 11 so we can't use them
-    implementation 'com.zaxxer:HikariCP:4.0.3'
     // NMS modules can't actually use XSeries but it doesn't compile without 'api'.
     // IDEs do not like it when 'core' references XSeries directly
     // but subprojects must reference XSeries as shaded.
@@ -41,11 +34,6 @@ shadowJar {
     // XParticle is big and not required so don't shade it.
     // It's not removed by minimize() because it's on the API path I guess?
     exclude 'com/cryptomorin/xseries/particles/*'
-    // I'd like to relocate everything but slf4j breaks when relocated.
-    // I think it has something to do with META-INF/services/org.slf4j.spi.SLF4JServiceProvider
-    //relocate ('org.slf4j', path + '.slf4j')
-    //relocate ('org.apache.logging.slf4j', path + '.log4j-slf4j')
-    relocate ('com.zaxxer.hikari', path + '.hikari')
     relocate ('com.cryptomorin.xseries', path + '.xseries')
     relocate ('org.bstats', path + '.metrics')
 }

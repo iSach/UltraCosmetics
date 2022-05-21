@@ -106,7 +106,7 @@ public class CosmeticManager {
         setupCategory(config, ParticleEffectType.values());
 
         try {
-            config.save(ultraCosmetics.getFile());
+            config.save(ultraCosmetics.getConfigFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,7 +123,7 @@ public class CosmeticManager {
         }
 
         try {
-            config.save(ultraCosmetics.getFile());
+            config.save(ultraCosmetics.getConfigFile());
             // for any default descriptions saved
             MessageManager.save();
         } catch (IOException e) {

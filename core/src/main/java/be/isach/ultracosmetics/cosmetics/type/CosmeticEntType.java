@@ -19,7 +19,7 @@ public abstract class CosmeticEntType<T extends Cosmetic<?>> extends CosmeticTyp
 
     private final EntityType entityType;
 
-    public CosmeticEntType(Category category, String configName, String permission, String description, XMaterial material, EntityType entityType, Class<? extends T> clazz) {
+    public CosmeticEntType(Category category, String configName, String description, XMaterial material, EntityType entityType, Class<? extends T> clazz) {
         super(category, configName, description, material, clazz);
         this.entityType = entityType;
     }

@@ -1,6 +1,7 @@
 package be.isach.ultracosmetics.mysql;
 
 import be.isach.ultracosmetics.UltraCosmetics;
+import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.suits.ArmorSlot;
@@ -8,9 +9,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import be.isach.ultracosmetics.mysql.hikari.IHikariHook;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,7 +46,8 @@ public class MySqlConnectionManager extends BukkitRunnable {
     /**
      * Connecting pooling.
      */
-    private final HikariDataSource dataSource;
+    private final IHikariHook hikariHook;
+    private final DataSource dataSource;
     private final String CREATE_TABLE;
     private final List<Column<?>> columns = new ArrayList<>();
     private final boolean debug;
@@ -63,22 +63,16 @@ public class MySqlConnectionManager extends BukkitRunnable {
         String username = section.getString("username");
         String password = section.getString("password");
         tableName = section.getString("table");
-        
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
-        config.setUsername(username);
-        config.setPassword(password);
-        // performance tips from https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-        config.addDataSourceProperty("prepStmtCacheSize", 250);
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-        config.addDataSourceProperty("cachePrepStmts", true);
-        config.addDataSourceProperty("useServerPrepStmts", true);
-        // Specify character encoding because apparently MySQL 8
-        // by default uses an encoding we don't support.
-        config.addDataSourceProperty("characterEncoding", "utf8");
-        config.addDataSourceProperty("useUnicode", true);
 
-        dataSource = new HikariDataSource(config);
+        hikariHook = createHikariHook(hostname, port, database, username, password);
+        if (hikariHook == null) {
+            // If we couldn't load the Hikari hook, finish initializing the final
+            // fields and give up, an error has already been thrown.
+            dataSource = null;
+            CREATE_TABLE = null;
+            return;
+        }
+        dataSource = hikariHook.getDataSource();
 
         // "PRIMARY KEY" implies UNIQUE NOT NULL.
         // String form of UUID is always exactly 36 chars so just store it that way.
@@ -137,8 +131,9 @@ public class MySqlConnectionManager extends BukkitRunnable {
         ultraCosmetics.getPlayerManager().initPlayers();
     }
 
-    private void reportFailure(Exception e) {
+    private void reportFailure(Throwable e) {
         success = false;
+        UltraCosmeticsData.get().setFileStorage(true);
         SmartLogger log = ultraCosmetics.getSmartLogger();
         log.write(LogLevel.ERROR, "Could not connect to MySQL server!");
         log.write(LogLevel.ERROR, "Error:");
@@ -166,7 +161,25 @@ public class MySqlConnectionManager extends BukkitRunnable {
     }
 
     public void shutdown() {
-        dataSource.close();
+        hikariHook.close();
+    }
+
+    private IHikariHook createHikariHook(String hostname, String port, String database, String username, String password) {
+        try {
+            Class<?> newHikari = Class.forName("be.isach.ultracosmetics.mysql.hikari.NewHikariHook");
+            ultraCosmetics.getSmartLogger().write("Loading Hikari for Java 11...");
+            return (IHikariHook) newHikari.getDeclaredConstructor(String.class, String.class, String.class, String.class, String.class)
+                .newInstance(hostname, port, database, username, password);
+        } catch (UnsupportedClassVersionError e) {
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Java 11 or higher is required for SQL support.");
+            ultraCosmetics.getSmartLogger().write("(Paper 1.8.8/1.12.2 run fine on Java 11.)");
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "SQL support will be disabled.");
+            reportFailure(e);
+        } catch (ReflectiveOperationException e) {
+            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Failed to initialize Hikari handler");
+            reportFailure(e);
+        }
+        return null;
     }
 
     /**
@@ -180,14 +193,10 @@ public class MySqlConnectionManager extends BukkitRunnable {
         try (ResultSet rs = md.getColumns(null, null, tableName, "id")) {
             if (rs.next()) {
                 ultraCosmetics.getSmartLogger().write("You have an old UCData table. Attempting to upgrade it...");
-                List<String> commands = new ArrayList<>();
-                commands.add("DROP COLUMN id");
-                commands.add("DROP COLUMN username");
-                commands.add("ADD PRIMARY KEY (uuid)");
-                commands.add("MODIFY uuid CHAR(36)");
-                for (String command : commands) {
-                    alter(co, command);
-                }
+                alter(co, "DROP COLUMN id");
+                alter(co, "DROP COLUMN username");
+                alter(co, "ADD PRIMARY KEY (uuid)");
+                alter(co, "MODIFY uuid CHAR(36)");
             }
         }
 
@@ -215,7 +224,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
     }
 
     private void alter(Connection co, String command) throws SQLException {
-        PreparedStatement ps = co.prepareStatement("ALTER TABLE " + tableName + " " + command);
+        PreparedStatement ps = co.prepareStatement("ALTER TABLE `" + tableName + "` " + command);
         ps.execute();
         ps.close();
     }

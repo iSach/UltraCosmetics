@@ -44,15 +44,15 @@ public class EmoteType extends CosmeticType<Emote> {
         ENABLED.addAll(values().stream().filter(CosmeticType::isEnabled).collect(Collectors.toList()));
     }
 
-    public static final EmoteType CRY = new EmoteType("ultracosmetics.emotes.cry", "Cry", "&7&oAre you really sad? :(", 1);
-    public static final EmoteType ANGRY = new EmoteType("ultracosmetics.emotes.angry", "Angry", "&7&oShow your rage to the other players!", 1);
-    public static final EmoteType HAPPY = new EmoteType("ultracosmetics.emotes.happy", "Happy", "&7&oDon't worry, be happy!", 1);
-    public static final EmoteType CHEEKY = new EmoteType("ultracosmetics.emotes.cheeky", "Cheeky", "&7&oYou like being cheeky? Well, this emote is for you!", 1);
-    public static final EmoteType LOVE = new EmoteType("ultracosmetics.emotes.love", "Love", "&7&oYou have beautiful eyes, do you know that?", 2);
-    public static final EmoteType DEAL_WITH_IT = new EmoteType("ultracosmetics.emotes.dealwithit", "DealWithIt", "&7&oDo you feel like showing off? This emote is for you!", 3);
-    public static final EmoteType COOL = new EmoteType("ultracosmetics.emotes.cool", "Cool", "&7&oKeep cool man!", 2);
-    public static final EmoteType SURPRISED = new EmoteType("ultracosmetics.emotes.surprised", "Surprised", "&7&oOH LORD!!!", 1);
-    public static final EmoteType WINK = new EmoteType("ultracosmetics.emotes.wink", "Wink", "&7&oHaving fun? Let someone know you are in on the joke", 2);
+    public static final EmoteType CRY = new EmoteType("Cry", "&7&oAre you really sad? :(", 1);
+    public static final EmoteType ANGRY = new EmoteType("Angry", "&7&oShow your rage to the other players!", 1);
+    public static final EmoteType HAPPY = new EmoteType("Happy", "&7&oDon't worry, be happy!", 1);
+    public static final EmoteType CHEEKY = new EmoteType("Cheeky", "&7&oYou like being cheeky? Well, this emote is for you!", 1);
+    public static final EmoteType LOVE = new EmoteType("Love", "&7&oYou have beautiful eyes, do you know that?", 2);
+    public static final EmoteType DEAL_WITH_IT = new EmoteType("DealWithIt", "&7&oDo you feel like showing off? This emote is for you!", 3);
+    public static final EmoteType COOL = new EmoteType("Cool", "&7&oKeep cool man!", 2);
+    public static final EmoteType SURPRISED = new EmoteType("Surprised", "&7&oOH LORD!!!", 1);
+    public static final EmoteType WINK = new EmoteType("Wink", "&7&oHaving fun? Let someone know you are in on the joke", 2);
 
     static {
 
@@ -204,7 +204,7 @@ public class EmoteType extends CosmeticType<Emote> {
     private List<ItemStack> frames;
     private int ticksPerFrame;
 
-    private EmoteType(String permission, String configName, String defaultDesc, int ticksPerFrame) {
+    private EmoteType(String configName, String defaultDesc, int ticksPerFrame) {
         super(Category.EMOTES, configName, defaultDesc, XMaterial.PLAYER_HEAD, Emote.class);
         this.ticksPerFrame = ticksPerFrame;
         this.frames = new ArrayList<>();

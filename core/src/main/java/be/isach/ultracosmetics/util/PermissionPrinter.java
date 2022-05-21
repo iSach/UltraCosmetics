@@ -59,6 +59,10 @@ public class PermissionPrinter {
             writer.println("  - " + subCommand.getPermission());
         }
         writer.println();
+        writer.println("Other:");
+        writer.println("  - ultracosmetics.allcosmetics");
+        writer.println("  - ultracosmetics.updatenotify");
+        writer.println();
         writer.println("Gadgets:");
         writer.println("  - ultracosmetics.gadgets.*");
         for (GadgetType gadgetType : GadgetType.values()) {

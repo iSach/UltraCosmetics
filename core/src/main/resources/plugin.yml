@@ -12,6 +12,9 @@ softdepend:
 - WorldGuard
 - Essentials
 - LuckPerms
+libraries:
+# Should match the version depended on in 'hikari' submodule
+- 'com.zaxxer:HikariCP:5.0.1'
 commands:
   ultracosmetics:
     aliases: [uc, cosmetics]

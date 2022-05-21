@@ -122,6 +122,11 @@ public class UltraCosmetics extends JavaPlugin {
 
     private boolean legacyMessagePrinted = false;
     private boolean enableFinished = false;
+
+    /**
+     * Stores the reason plugin load failed, if any.
+     */
+    private String failReason = null;
     
     /**
      * Called when plugin is loaded.
@@ -135,7 +140,8 @@ public class UltraCosmetics extends JavaPlugin {
 
         UltraCosmeticsData.init(this);
 
-        if (!UltraCosmeticsData.get().checkServerVersion()) {
+        failReason = UltraCosmeticsData.get().checkServerVersion();
+        if (failReason != null) {
             return;
         }
 
@@ -167,16 +173,33 @@ public class UltraCosmetics extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        // if loading failed...
+        // Enable command manager as early as possible
+        // so we can print helpful error messages about
+        // why the plugin didn't start correctly.
+        commandManager = new CommandManager(this);
+        // Set up config.
+        if (!setUpConfig()) {
+            getSmartLogger().write(LogLevel.ERROR, "Failed to load config.yml, shutting down to protect data.");
+            failReason = "Failed to load config.yml, please run it through a YAML checker";
+            return;
+        }
+
+        // Start update checker ASAP so if there's a problem that can be
+        // resolved by updating, the user knows there's an update.
+        // (We can't start it before the config loader because we need config settings.)
+        if (SettingsManager.getConfig().getBoolean("Check-For-Updates")) {
+            getSmartLogger().write("Checking for update...");
+            updateChecker = new UpdateManager(this);
+            updateChecker.runTaskAsynchronously(this);
+        }
+
+        // if early loading failed...
         if (UltraCosmeticsData.get().getServerVersion() == null) {
             getSmartLogger().write(LogLevel.ERROR, "Plugin load has failed, please check earlier in the log for details.");
-            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
         // Create UltraPlayer Manager.
         this.playerManager = new UltraPlayerManager(this);
-
-        this.armorStandManager = new ArmorStandManager(this);
 
         // Beginning of boot log. basic informations.
         getSmartLogger().write("-------------------------------------------------------------------");
@@ -185,23 +208,16 @@ public class UltraCosmetics extends JavaPlugin {
         getSmartLogger().write("Plugin by iSach.");
         getSmartLogger().write("Link: http://bit.ly/UltraCosmetics");
 
-        // Set up config.
-        if (!setUpConfig()) {
-            getSmartLogger().write(LogLevel.ERROR, "Failed to load config.yml, shutting down to protect data.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         // Initialize NMS Module
         if (!UltraCosmeticsData.get().initModule()) {
-            getServer().getPluginManager().disablePlugin(this);
+            failReason = "Failed to load NMS module";
             return;
         }
 
         // Init Message manager.
         if (!MessageManager.success()) {
             getSmartLogger().write(LogLevel.ERROR, "Failed to load messages.yml, shutting down to protect data.");
-            getServer().getPluginManager().disablePlugin(this);
+            failReason = "Failed to load messages.yml, please run it through a YAML checker";
             return;
         }
 
@@ -211,8 +227,7 @@ public class UltraCosmetics extends JavaPlugin {
         // Register Listeners.
         registerListeners();
 
-        // Register the command
-        commandManager = new CommandManager(this);
+        // Register the command pt. 2
         commandManager.registerCommands(this);
 
         UltraCosmeticsData.get().initConfigFields();
@@ -246,11 +261,15 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write("Connecting to MySQL database...");
 
             // Start MySQL.
-            this.mySqlConnectionManager = new MySqlConnectionManager(this);
-            mySqlConnectionManager.start();
-
-            getSmartLogger().write("Connected to MySQL database.");
-        } else {
+            mySqlConnectionManager = new MySqlConnectionManager(this);
+            if (mySqlConnectionManager.success()) {
+                mySqlConnectionManager.start();
+                getSmartLogger().write("Connected to MySQL database.");
+            }
+        }
+        // This might seem redundant, but MySQLConnectionManager
+        // forcefully switches to file storage if it fails to connect.
+        if (UltraCosmeticsData.get().usingFileStorage()) {
             // Initialize UltraPlayers and give chest (if needed).
             // Only actually does anything when the plugin is reloaded or loaded REALLY late.
             // MySQL manager handles this when active.
@@ -265,6 +284,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (!config.getStringList("Enabled-Worlds").contains("*")) {
             new InvalidWorldChecker(this).runTaskTimerAsynchronously(this, 0, 5);
         }
+        armorStandManager = new ArmorStandManager(this);
 
         // Start up bStats
         new Metrics(this, 2629);
@@ -275,11 +295,6 @@ public class UltraCosmetics extends JavaPlugin {
             config.save(file);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        if (SettingsManager.getConfig().getBoolean("Check-For-Updates")) {
-            updateChecker = new UpdateManager(this);
-            updateChecker.runTaskAsynchronously(this);
         }
 
         PermissionPrinter.printPermissions(this);
@@ -301,7 +316,7 @@ public class UltraCosmetics extends JavaPlugin {
             return;
         }
 
-        if (mySqlConnectionManager != null) {
+        if (mySqlConnectionManager != null && mySqlConnectionManager.success()) {
             mySqlConnectionManager.shutdown();
         }
 
@@ -525,6 +540,7 @@ public class UltraCosmetics extends JavaPlugin {
         List<String> airMaterials = new ArrayList<>();
         Arrays.asList(XMaterial.AIR, XMaterial.CAVE_AIR, XMaterial.VOID_AIR, XMaterial.LIGHT).forEach(k -> airMaterials.add(k.name()));
         config.addDefault("Air-Materials", airMaterials, "Materials that are treated as air. Changing these is not recommended.");
+        config.addDefault("Auto-Update", false, "Whether UltraCosmetics should automatically download and install new versions.", "Requires Check-For-Updates to be enabled.");
 
         upgradeIdsToMaterials();
 
@@ -554,10 +570,17 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     /**
-     * @return Overwrites getFile to return our own File.
+     * Increase visibility of getFile() for Updater
      */
     @Override
     public File getFile() {
+        return super.getFile();
+    }
+
+    /**
+     * @return Config file
+     */
+    public File getConfigFile() {
         return file;
     }
 
@@ -719,6 +742,8 @@ public class UltraCosmetics extends JavaPlugin {
         upgradeKeyToMaterial("TreasureChests.Designs.Nether.third-blocks", "87:0", XMaterial.NETHERRACK);
         upgradeKeyToMaterial("TreasureChests.Designs.Nether.below-chests", "112:0", XMaterial.NETHER_BRICKS);
         upgradeKeyToMaterial("TreasureChests.Designs.Nether.barriers", "113:0", XMaterial.NETHER_BRICK_FENCE);
+
+        upgradeKeyToMaterial("Fill-Blank-Slots-With-Item.Item", "160:15", XMaterial.BLACK_STAINED_GLASS_PANE);
     }
 
     private void upgradeKeyToMaterial(String key, String oldValue, XMaterial newValue) {
@@ -734,6 +759,10 @@ public class UltraCosmetics extends JavaPlugin {
         } else if (legacyMessagePrinted) {
             getSmartLogger().write(LogLevel.WARNING, "Couldn't upgrade key '" + key + "' because it has been changed. Please upgrade it manually.");
         }
+    }
+
+    public String getFailReason() {
+        return failReason;
     }
 
     // has to be outside AFlagManager because AFlagManager cannot load if WorldGuard is not present

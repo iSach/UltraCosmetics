@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.6.3-DEV-b2'
+    version = '2.6.3-DEV-b3'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -52,7 +52,10 @@ dependencies {
         if (p.name.equals("core")) {
             shaded(project(path: ':core', configuration: 'shadow'))
             return;
-    	}
+        } else if (p.name.equals("hikari")) {
+            shaded(project(path: ':hikari', configuration: 'shadow'))
+            return;
+        }
         shaded(p) {
             transitive false
         }
@@ -106,9 +109,9 @@ subprojects { subproj ->
             url 'https://jitpack.io'
         }
 
-		// Mojang Authlib
+        // Mojang Authlib
         maven {
-        	url 'https://libraries.minecraft.net'
+            url 'https://libraries.minecraft.net'
         }
     }
     def version = 8

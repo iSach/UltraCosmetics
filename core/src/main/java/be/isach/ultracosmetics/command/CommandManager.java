@@ -24,12 +24,14 @@ public class CommandManager implements CommandExecutor {
     /**
      * List of the registered commands.
      */
-    private List<SubCommand> commands = new ArrayList<>();
+    private final List<SubCommand> commands = new ArrayList<>();
+    private final UltraCosmetics ultraCosmetics;
 
     public CommandManager(UltraCosmetics ultraCosmetics) {
         PluginCommand cmd = ultraCosmetics.getCommand("ultracosmetics");
         cmd.setExecutor(this);
         cmd.setTabCompleter(new UCTabCompleter(ultraCosmetics));
+        this.ultraCosmetics = ultraCosmetics;
     }
 
     /**
@@ -72,6 +74,11 @@ public class CommandManager implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] arguments) {
+        if (ultraCosmetics.getFailReason() != null) {
+            sender.sendMessage(ChatColor.RED + "Plugin is currently disabled because: " + ultraCosmetics.getFailReason());
+            return true;
+        }
+
         if (arguments.length == 0) {
             showHelp(sender, 1);
             return true;
