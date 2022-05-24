@@ -49,43 +49,44 @@ import java.util.UUID;
  */
 public class UltraPlayer {
 
+    private final UUID uuid;
+    private final UltraCosmetics ultraCosmetics;
+
     /**
-     * Player UUID.
-     */
-    private UUID uuid;
-    /**
-     * Saves the username for logging usage.
-     */
-    private String username;
-    /**
-     * Current Cosmetics.
+     * Equipped suit cosmetics are stored in `suitMap`,
+     * all others are in `equipped`.
      */
     private final Map<Category,Cosmetic<?>> equipped = new HashMap<>();
+    private final Map<ArmorSlot, Suit> suitMap = new HashMap<>();
     private TreasureChest currentTreasureChest;
-    private Map<ArmorSlot, Suit> suitMap = new HashMap<>();
+
     /**
-     * Stores enabled cosmetics, keys, pet names, ammo, etc.
+     * Stores data that can persist, such as enabled cosmetics, keys, pet names, ammo, etc.
      */
-    private CosmeticsProfile cosmeticsProfile;
+    private final CosmeticsProfile cosmeticsProfile;
+
     /**
      * Specifies if the player can currently be hit by any other gadget.
      * Exemple: Get hit by a flesh hook.
+     *
+     * TODO: this is only used in one place, is that a problem?
      */
     private boolean canBeHitByOtherGadgets = true;
+
     /**
      * Cooldown map storing all the current cooldowns for gadgets.
+     * The value is the currentTimeMillis when the player should
+     * regain access to the gadget.
      */
-    private Map<GadgetType, Long> gadgetCooldowns = null;
-
-    private UltraCosmetics ultraCosmetics;
+    private final Map<GadgetType, Long> gadgetCooldowns = new HashMap<>();
 
     private volatile boolean moving;
     private volatile Location lastPos;
 
     /**
-     * Indicates if the player is leaving the server.
+     * Indicates if the player is leaving the server or switching worlds.
      * Useful to differentiate for example when a player deactivates
-     * a cosmetic on purpose or because they leave.
+     * a cosmetic on purpose or because they are leaving.
      */
     private boolean quitting = false;
 
@@ -97,17 +98,14 @@ public class UltraPlayer {
 
     /**
      * Allows to store custom data for each player easily.
-     * <p/>
      * Created on join, and deleted on quit.
      *
      * @param uuid The player UUID.
+     * @param ultraCosmetics UltraCosmetics
      */
     public UltraPlayer(UUID uuid, UltraCosmetics ultraCosmetics) {
         this.uuid = uuid;
         this.ultraCosmetics = ultraCosmetics;
-
-        gadgetCooldowns = new HashMap<>();
-        this.username = getBukkitPlayer().getDisplayName();
 
         if (UltraCosmeticsData.get().usingFileStorage()) {
             cosmeticsProfile = new FileCosmeticsProfile(this, ultraCosmetics);
@@ -588,14 +586,6 @@ public class UltraPlayer {
         return uuid;
     }
 
-    public Map<GadgetType, Long> getGadgetCooldowns() {
-        return gadgetCooldowns;
-    }
-
-    public void setGadgetCooldowns(HashMap<GadgetType, Long> gadgetCooldowns) {
-        this.gadgetCooldowns = gadgetCooldowns;
-    }
-
     public TreasureChest getCurrentTreasureChest() {
         return currentTreasureChest;
     }
@@ -630,10 +620,6 @@ public class UltraPlayer {
 
     public boolean isOnline() {
         return Bukkit.getServer().getPlayer(uuid) != null;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public boolean isQuitting() {

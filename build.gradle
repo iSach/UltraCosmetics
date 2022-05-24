@@ -72,6 +72,7 @@ subprojects { subproj ->
             url 'https://repo.md-5.net/content/groups/public/'
         }
 
+        // WorldEdit
         maven {
             url 'https://repo.aikar.co/nexus/content/groups/aikar'
         }
@@ -91,10 +92,7 @@ subprojects { subproj ->
             url 'https://repo.rosewooddev.io/repository/public/'
         }
         
-        // Spigot for 1.16.4
-        maven {
-            url = 'https://oss.sonatype.org/content/repositories/snapshots'
-        }
+        // Spigot
         maven {
             url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
         }
