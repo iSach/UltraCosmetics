@@ -142,7 +142,7 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
 
         // Don't get stuck in the ground or in a wall
         if (lastLoc != null) {
-            getPlayer().teleport(lastLoc);
+            getPlayer().teleport(lastLoc.add(0, 1, 0));
         }
         spawnRandomFirework(getPlayer().getLocation());
         if (pearl != null) {
