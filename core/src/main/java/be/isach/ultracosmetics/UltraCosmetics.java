@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.config.TreasureManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.economy.EconomyHandler;
+import be.isach.ultracosmetics.listeners.Listener113;
 import be.isach.ultracosmetics.listeners.Listener19;
 import be.isach.ultracosmetics.listeners.MainListener;
 import be.isach.ultracosmetics.listeners.PlayerListener;
@@ -337,6 +338,9 @@ public class UltraCosmetics extends JavaPlugin {
 
         if (UltraCosmeticsData.get().getServerVersion().offhandAvailable()) {
             pluginManager.registerEvents(new Listener19(this), this);
+            if (VersionManager.IS_VERSION_1_13) {
+                pluginManager.registerEvents(new Listener113(), this);
+            }
         }
     }
 

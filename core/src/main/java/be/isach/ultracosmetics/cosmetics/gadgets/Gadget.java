@@ -278,16 +278,13 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
 
     @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event) {
+        if (event.getAction() == Action.PHYSICAL) return;
         Player player = event.getPlayer();
         if (player != getPlayer()) return;
-        if (event.getAction() == Action.PHYSICAL)
-            return;
         @SuppressWarnings("deprecation")
         ItemStack itemStack = player.getItemInHand();
-        if (itemStack.getType() != getType().getMaterial().parseMaterial())
-            return;
-        if (player.getInventory().getHeldItemSlot() != SettingsManager.getConfig().getInt("Gadget-Slot"))
-            return;
+        if (itemStack.getType() != getType().getMaterial().parseMaterial()) return;
+        if (player.getInventory().getHeldItemSlot() != SettingsManager.getConfig().getInt("Gadget-Slot")) return;
         if (UltraCosmeticsData.get().getServerVersion().offhandAvailable()) {
             if (event.getHand() != EquipmentSlot.HAND) {
                 return;

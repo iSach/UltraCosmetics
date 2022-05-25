@@ -305,7 +305,7 @@ public class TreasureChest implements Listener {
      */
     @EventHandler
     public void onItemMerge(ItemMergeEvent event) {
-        if (items.contains(event.getEntity())) {
+        if (items.contains(event.getEntity()) || items.contains(event.getTarget())) {
             event.setCancelled(true);
         }
     }

@@ -53,7 +53,7 @@ public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmeti
 
     @EventHandler
     public void onItemMerge(ItemMergeEvent event) {
-        if (melonSlices.contains(event.getEntity())) {
+        if (melonSlices.contains(event.getEntity()) || melonSlices.contains(event.getTarget())) {
             event.setCancelled(true);
         }
     }

@@ -4,6 +4,8 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Piglin;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PiglinBarterEvent;
 
 import com.cryptomorin.xseries.XMaterial;
 
@@ -20,6 +22,15 @@ public class PetPiglin extends Pet {
 
     @Override
     public void setupEntity() {
-        ((Piglin)entity).setImmuneToZombification(true);
+        Piglin piglin = (Piglin) entity;
+        piglin.setImmuneToZombification(true);
+        piglin.getEquipment().clear();
+    }
+
+    @EventHandler
+    public void onBarter(PiglinBarterEvent event) {
+        if (event.getEntity() == entity) {
+            event.setCancelled(true);
+        }
     }
 }

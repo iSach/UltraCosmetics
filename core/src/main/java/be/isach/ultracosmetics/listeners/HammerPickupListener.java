@@ -15,8 +15,7 @@ public class HammerPickupListener implements Listener {
 
     @EventHandler
     public void onHammerPickup(EntityPickupItemEvent e) {
-        if (e.getEntityType() == EntityType.PLAYER) return;
-        if (gadget.getHammerItems().contains(e.getItem())) {
+        if (e.getEntityType() != EntityType.PLAYER && gadget.getHammer() == e.getItem()) {
             e.setCancelled(true);
         }
     }

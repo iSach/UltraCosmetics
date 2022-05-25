@@ -7,6 +7,8 @@ public class Column<T> {
     private final String name;
     private final String properties;
     private final Class<T> type;
+
+    // columnSize for use with String type
     public Column(String name, String properties, Class<T> type) {
         this.name = name;
         this.properties = properties;

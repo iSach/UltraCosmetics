@@ -13,12 +13,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.spigotmc.event.entity.EntityDismountEvent;
@@ -36,6 +36,8 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
 
     private EnderPearl pearl;
     private boolean running;
+    private boolean handledThisTick = false;
+    private Location lastLoc = null;
 
     public GadgetEtherealPearl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("etherealpearl"), ultraCosmetics);
@@ -47,6 +49,16 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
         if (pearl != null) {
             pearl.remove();
         }
+    }
+
+    @Override
+    protected boolean checkRequirements(PlayerInteractEvent event) {
+        // For some reason, the client sends two `use` packets for ender pearls
+        // so we have to figure out how to ignore one of them.
+        if (handledThisTick) return false;
+        handledThisTick = true;
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> handledThisTick = false, 1);
+        return true;
     }
 
     @SuppressWarnings("deprecation")
@@ -78,17 +90,9 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
 
     @EventHandler
     public void onEntityDismount(EntityDismountEvent event) {
-        if (event.getEntity() != getPlayer()) return;
         if (pearl == null) return;
-        Player player = getPlayer();
-
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            player.setAllowFlight(false);
-        }
-
-        spawnRandomFirework(player.getLocation());
-        pearl.remove();
-        running = false;
+        if (event.getEntity() != getPlayer()) return;
+        endRide();
     }
 
     public FireworkEffect getRandomFireworkEffect() {
@@ -131,19 +135,29 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
         }
     }
 
+    private void endRide() {
+        if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+            getPlayer().setAllowFlight(false);
+        }
+
+        // Don't get stuck in the ground or in a wall
+        if (lastLoc != null) {
+            getPlayer().teleport(lastLoc);
+        }
+        spawnRandomFirework(getPlayer().getLocation());
+        if (pearl != null) {
+            pearl.remove();
+            pearl = null;
+        }
+        running = false;
+    }
+
     @Override
     public void onUpdate() {
         if (running && (pearl == null || !pearl.isValid())) {
-            running = false;
-            pearl = null;
-            spawnRandomFirework(getPlayer().getLocation());
-
-            Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-                getPlayer().eject();
-                if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-                    getPlayer().setAllowFlight(false);
-                }
-            });
+            endRide();
+        } else {
+            lastLoc = getPlayer().getLocation();
         }
     }
 }

@@ -23,9 +23,6 @@ import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XMaterial;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Represents an instance of a thor hammer gadget summoned by a player.
  *
@@ -35,8 +32,7 @@ import java.util.Set;
 public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic {
     // EntityPickupItemEvent didn't exist until 1.12
     private static final boolean USE_OTHER_LISTENER = UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_12_R1);
-    // potential memory leak? how can a player have multiple hammers thrown?
-    private final Set<Item> hammer = new HashSet<>();
+    private Item hammer = null;
     private HammerPickupListener listener;
     private Vector v;
 
@@ -46,27 +42,30 @@ public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic 
 
     @Override
     void onRightClick() {
-        final Item i = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), ItemFactory.create(XMaterial.IRON_AXE, MessageManager.getMessage("Gadgets.ThorHammer.name")));
-        i.setPickupDelay(0);
-        i.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(1.4));
-        getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), null);
-        hammer.add(i);
+        // I think this can only happen if a player is bypassing cooldowns 
+        if (hammer != null) {
+            hammer.remove();
+        }
+        Vector velocity = getPlayer().getEyeLocation().getDirection().multiply(1.4);
+        hammer = ItemFactory.spawnUnpickableItem(ItemFactory.create(XMaterial.IRON_AXE, MessageManager.getMessage("Gadgets.ThorHammer.name")), getPlayer().getEyeLocation(), velocity);
+        getPlayer().getInventory().setItem(SettingsManager.getConfig().getInt("Gadget-Slot"), null);
         v = getPlayer().getEyeLocation().getDirection().multiply(1.4).add(new Vector(0, 1, 0));
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-            i.setVelocity(getPlayer().getEyeLocation().toVector().subtract(i.getLocation().toVector()).multiply(0.2).add(new Vector(0, 0, 0)));
+            if (hammer == null) return;
+            hammer.setVelocity(getPlayer().getEyeLocation().toVector().subtract(hammer.getLocation().toVector()).multiply(0.2).add(new Vector(0, 0, 0)));
             v = null;
             Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-                if (i.isValid()) {
-                    ItemStack is;
-                    if (UltraCosmeticsData.get().isAmmoEnabled()) {
-                        is = ItemFactory.create(getType().getMaterial(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
-                    } else {
-                        is = ItemFactory.create(getType().getMaterial(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
-                    }
-                    itemStack = is;
-                    getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), is);
-                    i.remove();
+                if (hammer == null) return;
+                ItemStack is;
+                if (UltraCosmeticsData.get().isAmmoEnabled()) {
+                    is = ItemFactory.create(getType().getMaterial(), ChatColor.WHITE + "" + ChatColor.BOLD + getOwner().getAmmo(getType()) + " " + getType().getName(), ChatColor.BLUE + "Gadget");
+                } else {
+                    is = ItemFactory.create(getType().getMaterial(), getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
                 }
+                itemStack = is;
+                getPlayer().getInventory().setItem(SettingsManager.getConfig().getInt("Gadget-Slot"), is);
+                hammer.remove();
+                hammer = null;
             }, 40);
         }, 20);
     }
@@ -82,7 +81,7 @@ public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic 
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onItemPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
-        if (!hammer.contains(event.getItem())) return;
+        if (hammer != event.getItem()) return;
         event.setCancelled(true);
 
         if (event.getPlayer() != getPlayer()) {
@@ -92,7 +91,7 @@ public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic 
             return;
         }
 
-        if (event.getItem().getTicksLived() <= 5) return;
+        if (hammer.getTicksLived() <= 5) return;
 
         ItemStack is;
         if (UltraCosmeticsData.get().isAmmoEnabled()) {
@@ -102,8 +101,8 @@ public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic 
         }
         itemStack = is;
         getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), is);
-        hammer.remove(event.getItem());
-        event.getItem().remove();
+        hammer.remove();
+        hammer = null;
     }
 
     @SuppressWarnings("deprecation")
@@ -119,21 +118,17 @@ public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic 
 
     @Override
     public void onClear() {
-        for (Item i : hammer) {
-            i.remove();
+        if (hammer != null) {
+            hammer.remove();
+            hammer = null;
         }
-        hammer.clear();
         v = null;
         if (!USE_OTHER_LISTENER) return;
         HandlerList.unregisterAll(listener);
         listener = null;
     }
 
-    public Set<Item> getHammerItems() {
+    public Item getHammer() {
         return hammer;
-    }
-
-    public Vector getDirection() {
-        return v;
     }
 }

@@ -86,21 +86,20 @@ public class MySqlConnectionManager extends BukkitRunnable {
             columns.add(new Column<>(gadgetType.getConfigName().toLowerCase(), "INTEGER DEFAULT 0 NOT NULL", Integer.class));
         }
         for (PetType petType : PetType.values()) {
-            // Anvil can only hold 50 characters on 1.18, but there's no extra overhead between 50 and 255.
-            // This way if they extend the anvil size again we'll be fine.
-            columns.add(new Column<>(petType.getConfigName().toLowerCase(), "VARCHAR(255)", String.class));
+            // Anvil can only hold 50 characters on 1.18
+            columns.add(new StringColumn(petType.getConfigName().toLowerCase(), 50));
         }
 
         for (Category cat : Category.values()) {
-            // it's a varchar anyway so might as well make it 255 for expansion purposes
+            // 32 because it's about double the longest existing cosmetic name
             if (cat == Category.SUITS) {
                 for (ArmorSlot slot : ArmorSlot.values()) {
-                    columns.add(new Column<>(cat.toString().toLowerCase() + "_" + slot.toString().toLowerCase(), "VARCHAR(255)", String.class));
+                    columns.add(new StringColumn(cat.toString().toLowerCase() + "_" + slot.toString().toLowerCase(), 32));
                 }
                 continue;
             }
             
-            columns.add(new Column<>(cat.toString().toLowerCase(), "VARCHAR(255)", String.class));
+            columns.add(new StringColumn(cat.toString().toLowerCase(), 32));
         }
 
         StringJoiner columnJoiner = new StringJoiner(", ", "(", ")");
@@ -215,6 +214,15 @@ public class MySqlConnectionManager extends BukkitRunnable {
                         afterPrevious = "AFTER " + columns.get(i - 1).getName();
                     }
                     alter(co, "ADD " + col.toString() + " " + afterPrevious);
+                    continue;
+                }
+                // if a varchar is the wrong size, adjust it
+                if (col instanceof StringColumn && rs.getInt("COLUMN_SIZE") != ((StringColumn) col).getSize()) {
+                    if (!upgradeAnnounced) {
+                        ultraCosmetics.getSmartLogger().write("Upgrading database...");
+                        upgradeAnnounced = true;
+                    }
+                    alter(co, "MODIFY COLUMN " + col.toString());
                 }
             }
         }

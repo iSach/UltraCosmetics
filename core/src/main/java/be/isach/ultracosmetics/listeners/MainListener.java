@@ -5,6 +5,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -36,6 +37,13 @@ public class MainListener implements Listener {
 
     public void processPickup(Item item, Cancellable event) {
         if (item.hasMetadata("UNPICKABLEUP")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onMerge(ItemMergeEvent event) {
+        if (event.getEntity().hasMetadata("UNPICKABLEUP") || event.getTarget().hasMetadata("UNPICKABLEUP")) {
             event.setCancelled(true);
         }
     }

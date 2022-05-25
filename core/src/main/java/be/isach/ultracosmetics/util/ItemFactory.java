@@ -99,7 +99,7 @@ public class ItemFactory {
     }
 
     public static Item createUnpickableItemDirectional(XMaterial material, Player player, double scale) {
-        return spawnUnpickableItem(material.parseItem(), player.getLocation(), player.getLocation().getDirection().multiply(scale));
+        return spawnUnpickableItem(material.parseItem(), player.getEyeLocation(), player.getLocation().getDirection().multiply(scale));
     }
 
     public static Item createUnpickableItemVariance(XMaterial material, Location loc, Random random, double variance) {
