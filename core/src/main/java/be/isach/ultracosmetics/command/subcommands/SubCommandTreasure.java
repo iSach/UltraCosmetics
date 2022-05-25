@@ -33,20 +33,12 @@ public class SubCommandTreasure extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String[] args) {
-        common(sender, args);
-    }
-
-    @Override
-    protected void onExeNotPlayer(CommandSender sender, String[] args) {
-        if (args.length < 2) {
+    protected void onExeAnyone(CommandSender sender, String[] args) {
+        if (args.length < 2 && !(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "You must specify a player.");
             return;
         }
-        common(sender, args);
-    }
 
-    private void common(CommandSender sender, String... args) {
         if (args.length > 6) {
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "Incorrect Usage! " + getUsage());
             return;

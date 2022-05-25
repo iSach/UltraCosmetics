@@ -15,12 +15,7 @@ public class SubCommandReload extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String[] args) {
-        onExeNotPlayer(sender, args);
-    }
-
-    @Override
-    protected void onExeNotPlayer(CommandSender sender, String[] args) {
+    protected void onExeAnyone(CommandSender sender, String[] args) {
         sender.sendMessage(ChatColor.YELLOW + "Please note that this currently ONLY reloads the messages.yml file.");
         MessageManager.reload();
         sender.sendMessage(ChatColor.GREEN + "Messages reloaded");

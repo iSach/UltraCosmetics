@@ -15,12 +15,7 @@ public class SubCommandReward extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String[] args) {
-        onExeNotPlayer(sender, args);
-    }
-
-    @Override
-    protected void onExeNotPlayer(CommandSender sender, String[] args) {
+    protected void onExeAnyone(CommandSender sender, String[] args) {
         if (args.length < 3 && !(sender instanceof Player)) {
             badUsage(sender, "You must specify a player when used in console!");
             return;

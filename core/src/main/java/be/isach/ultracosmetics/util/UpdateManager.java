@@ -34,6 +34,7 @@ import java.util.logging.Level;
 public class UpdateManager extends BukkitRunnable {
 
     private static final String RESOURCE_URL = "https://api.spiget.org/v2/resources/10905/";
+    // String starts with a space on purpose, because that's what's returned from the API for some reason.
     private static final String VERSIONS_PREFIX = " Supported versions: ";
     /**
      * Current UC version.
@@ -64,6 +65,7 @@ public class UpdateManager extends BukkitRunnable {
     public void run() {
         String spigotVersionString = getLastVersion();
         if (spigotVersionString == null) {
+            ultraCosmetics.getSmartLogger().write("Cannot update, unknown version");
             return;
         }
         spigotVersion = new Version(spigotVersionString);
@@ -81,11 +83,17 @@ public class UpdateManager extends BukkitRunnable {
         if (!SettingsManager.getConfig().getBoolean("Auto-Update")) {
             return;
         }
+        update();
+    }
+
+    public boolean update() {
         if (!download()) {
             ultraCosmetics.getSmartLogger().write("Failed to download update");
-            return;
+            return false;
         }
+        outdated = false;
         ultraCosmetics.getSmartLogger().write("Successfully downloaded new version, restart server to apply update.");
+        return true;
     }
 
     /**
@@ -138,8 +146,7 @@ public class UpdateManager extends BukkitRunnable {
      *
      * Borrowed from https://github.com/Stipess1/AutoUpdater/blob/master/src/main/java/com/stipess1/updater/Updater.java
      */
-    private boolean download()
-    {
+    private boolean download() {
         BufferedInputStream in = null;
         FileOutputStream fout = null;
 
@@ -155,6 +162,7 @@ public class UpdateManager extends BukkitRunnable {
             }
             return true;
         } catch (Exception e) {
+            ultraCosmetics.getLogger().log(Level.SEVERE, null, e);
             return false;
         } finally {
             try {
@@ -189,7 +197,7 @@ public class UpdateManager extends BukkitRunnable {
         String supportedVersionsLine = lines[lines.length - 1];
 
         if (!supportedVersionsLine.startsWith(VERSIONS_PREFIX)) {
-            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Skipping update because UC couldn't read supported versions line:");
+            ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, "Can't read supported versions line:");
             ultraCosmetics.getSmartLogger().write(LogLevel.WARNING, supportedVersionsLine);
             return false;
         }

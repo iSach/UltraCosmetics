@@ -12,8 +12,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
-
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.command.SubCommand;
@@ -28,13 +26,7 @@ public class SubCommandMigrate extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String[] args) {
-        // non-console senders are filtered out in onExeNotPlayer
-        onExeNotPlayer(sender, args);
-    }
-
-    @Override
-    protected void onExeNotPlayer(CommandSender sender, String[] args) {
+    protected void onExeAnyone(CommandSender sender, String[] args) {
         if (!(sender instanceof ConsoleCommandSender)) {
             error(sender, "This command can only be used from the console.");
             return;

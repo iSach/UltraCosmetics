@@ -23,16 +23,7 @@ public class SubCommandGive extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String[] args) {
-        common(sender, args);
-    }
-
-    @Override
-    protected void onExeNotPlayer(CommandSender sender, String[] args) {
-        common(sender, args);
-    }
-
-    private void common(CommandSender sender, String[] args) {
+    protected void onExeAnyone(CommandSender sender, String[] args) {
         if (args.length < 2 || (!args[1].toLowerCase().startsWith("k") && !args[1].toLowerCase().startsWith("a"))) {
             badUsage(sender);
             return;

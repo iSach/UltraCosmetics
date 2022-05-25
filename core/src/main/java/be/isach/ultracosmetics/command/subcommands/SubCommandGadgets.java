@@ -33,7 +33,7 @@ public class SubCommandGadgets extends SubCommand {
     }
 
     @Override
-    protected void onExeNotPlayer(CommandSender sender, String[] args) {
+    protected void onExeAnyone(CommandSender sender, String[] args) {
         notAllowed(sender);
     }
 }

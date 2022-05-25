@@ -28,10 +28,10 @@ public class CommandManager implements CommandExecutor {
     private final UltraCosmetics ultraCosmetics;
 
     public CommandManager(UltraCosmetics ultraCosmetics) {
+        this.ultraCosmetics = ultraCosmetics;
         PluginCommand cmd = ultraCosmetics.getCommand("ultracosmetics");
         cmd.setExecutor(this);
         cmd.setTabCompleter(new UCTabCompleter(ultraCosmetics));
-        this.ultraCosmetics = ultraCosmetics;
     }
 
     /**
@@ -73,24 +73,32 @@ public class CommandManager implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] arguments) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (ultraCosmetics.getFailReason() != null) {
             sender.sendMessage(ChatColor.RED + "Plugin is currently disabled because: " + ultraCosmetics.getFailReason());
             return true;
         }
 
-        if (arguments.length == 0) {
+        if (args.length == 0) {
             showHelp(sender, 1);
             return true;
         }
 
-        if (arguments.length == 1 && MathUtils.isInteger(arguments[0])) {
-            showHelp(sender, Math.max(1, Math.min(Integer.parseInt(arguments[0]), getMaxPages())));
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("help")) {
+                showHelp(sender, 1);
+                return true;
+            } else if (MathUtils.isInteger(args[0])) {
+                showHelp(sender, Integer.parseInt(args[0]));
+                return true;
+            }
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("help") && MathUtils.isInteger(args[1])) {
+            showHelp(sender, Integer.parseInt(args[1]));
             return true;
         }
 
         for (SubCommand meCommand : commands) {
-            if (meCommand.is(arguments[0])) {
+            if (meCommand.is(args[0])) {
 
                 if (!sender.hasPermission(meCommand.getPermission())) {
                     sender.sendMessage(MessageManager.getMessage("No-Permission"));
@@ -98,9 +106,9 @@ public class CommandManager implements CommandExecutor {
                 }
 
                 if (sender instanceof Player) {
-                    meCommand.onExePlayer((Player) sender, arguments);
+                    meCommand.onExePlayer((Player) sender, args);
                 } else {
-                    meCommand.onExeNotPlayer(sender, arguments);
+                    meCommand.onExeAnyone(sender, args);
                 }
                 return true;
             }
@@ -126,5 +134,6 @@ public class CommandManager implements CommandExecutor {
         registerCommand(new SubCommandMigrate(ultraCosmetics));
         registerCommand(new SubCommandReward(ultraCosmetics));
         registerCommand(new SubCommandReload(ultraCosmetics));
+        registerCommand(new SubCommandUpdate(ultraCosmetics));
     }
 }

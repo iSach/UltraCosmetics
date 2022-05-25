@@ -22,16 +22,7 @@ public class SubCommandClear extends SubCommand {
     }
 
     @Override
-    protected void onExePlayer(Player sender, String[] args) {
-        common(sender, args);
-    }
-
-    @Override
-    protected void onExeNotPlayer(CommandSender sender, String[] args) {
-        common(sender, args);
-    }
-
-    private void common(CommandSender sender, String[] args) {
+    protected void onExeAnyone(CommandSender sender, String[] args) {
         Player target;
         if (args.length < 2) {
             if (sender instanceof Player) {

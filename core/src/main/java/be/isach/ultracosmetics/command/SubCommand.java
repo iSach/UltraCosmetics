@@ -78,15 +78,18 @@ public abstract class SubCommand {
      * @param sender The player who executed the command.
      * @param args   The args of the command. (Includes the subcommand alias).
      */
-    protected abstract void onExePlayer(Player sender, String[] args);
+    protected void onExePlayer(Player sender, String[] args) {
+        onExeAnyone(sender, args);
+    }
 
     /**
-     * Called when the sub command is executed by someone other than a player (console, .
+     * Called when the sub command is executed by someone other than a player,
+     * or when the command does not distinguish between players and non-players.
      *
      * @param sender The sender who executed the command.
      * @param args   The args of the command. (Includes the subcommand alias).
      */
-    protected abstract void onExeNotPlayer(CommandSender sender, String[] args);
+    protected abstract void onExeAnyone(CommandSender sender, String[] args);
 
     /**
      * Called when a command is used from console but only works on players
