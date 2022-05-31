@@ -545,6 +545,7 @@ public class UltraCosmetics extends JavaPlugin {
         Arrays.asList(XMaterial.AIR, XMaterial.CAVE_AIR, XMaterial.VOID_AIR, XMaterial.LIGHT).forEach(k -> airMaterials.add(k.name()));
         config.addDefault("Air-Materials", airMaterials, "Materials that are treated as air. Changing these is not recommended.");
         config.addDefault("Auto-Update", false, "Whether UltraCosmetics should automatically download and install new versions.", "Requires Check-For-Updates to be enabled.");
+        config.addDefault("Prevent-Cosmetics-In-Vanish", false, "Whether UltraCosmetics should prevent vanished players from using cosmetics.", "Works with any vanish plugin that uses 'vanished' metdata.");
 
         upgradeIdsToMaterials();
 

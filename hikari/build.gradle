@@ -1,13 +1,4 @@
-plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
-}
-
 dependencies {
-    implementation 'com.zaxxer:HikariCP:5.0.1'
+    compileOnly 'com.zaxxer:HikariCP:5.0.1'
     compileOnly project(':core')
-}
-
-shadowJar {
-    minimize()
-  	relocate ('com.zaxxer.hikari', 'be.isach.ultracosmetics.shaded.hikari')
 }

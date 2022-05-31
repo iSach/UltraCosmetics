@@ -3,6 +3,7 @@ package be.isach.ultracosmetics.cosmetics;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmetics.CosmeticRegionState;
 import be.isach.ultracosmetics.config.MessageManager;
+import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.TextUtil;
@@ -48,6 +49,11 @@ public abstract class Cosmetic<T extends CosmeticType<?>> extends BukkitRunnable
             return;
         }
 
+        if (SettingsManager.getConfig().getBoolean("Prevent-Cosmetics-In-Vanish")) {
+            owner.clear();
+            getPlayer().sendMessage(MessageManager.getMessage("Not-Allowed-In-Vanish"));
+            return;
+        }
         CosmeticRegionState state = ultraCosmetics.cosmeticRegionState(getPlayer(), category);
         if (state == CosmeticRegionState.BLOCKED_ALL) {
             getPlayer().sendMessage(MessageManager.getMessage("Region-Disabled"));

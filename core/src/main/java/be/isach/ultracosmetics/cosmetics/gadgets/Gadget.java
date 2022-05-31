@@ -293,12 +293,19 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
         event.setCancelled(true);
         player.updateInventory();
         UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(event.getPlayer());
-        if (!ultraPlayer.hasGadgetsEnabled()) {
-            getPlayer().sendMessage(MessageManager.getMessage("Gadgets-Enabled-Needed"));
+
+        if (ultraPlayer.getCurrentTreasureChest() != null) {
             return;
         }
 
-        if (ultraPlayer.getCurrentTreasureChest() != null) {
+        if (SettingsManager.getConfig().getBoolean("Prevent-Cosmetics-In-Vanish")) {
+            getOwner().clear();
+            getPlayer().sendMessage(MessageManager.getMessage("Not-Allowed-In-Vanish"));
+            return;
+        }
+
+        if (!ultraPlayer.hasGadgetsEnabled()) {
+            getPlayer().sendMessage(MessageManager.getMessage("Gadgets-Enabled-Needed"));
             return;
         }
 

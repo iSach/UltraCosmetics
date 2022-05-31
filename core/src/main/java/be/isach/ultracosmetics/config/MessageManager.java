@@ -557,6 +557,7 @@ public class MessageManager {
         addMessage("Region-Disabled", "%prefix% &c&lCosmetics are disabled in this area!");
         addMessage("Region-Disabled-Category", "%prefix% &c&l%category% cosmetics are disabled in this area!");
         addMessage("Disabled-Command-Message", "%prefix% &c&lYou can't use this command while cosmetics are equipped!");
+        addMessage("Not-Allowed-In-Vanish", "%prefix% &c&lYou can't use cosmetics while in vanish!");
     }
 
     /**

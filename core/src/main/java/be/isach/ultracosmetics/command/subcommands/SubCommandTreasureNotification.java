@@ -11,7 +11,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 public class SubCommandTreasureNotification extends SubCommand {
 
     public SubCommandTreasureNotification(UltraCosmetics ultraCosmetics) {
-        super("treasurenotification", "Toggles notifications of loot given to other players", "", ultraCosmetics);
+        super("treasurenotification", "Toggles notifications of loot given to other players", "", ultraCosmetics, true);
     }
 
     @Override

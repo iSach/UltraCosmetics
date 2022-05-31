@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 public class SubCommandMenu extends SubCommand {
 
     public SubCommandMenu(UltraCosmetics ultraCosmetics) {
-        super("menu", "Opens Specified Menu", "<menu> [page]", ultraCosmetics);
+        super("menu", "Opens Specified Menu", "<menu> [page]", ultraCosmetics, true);
     }
 
     @Override

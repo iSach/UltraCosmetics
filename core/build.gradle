@@ -26,6 +26,7 @@ dependencies {
     api 'com.github.cryptomorin:XSeries:8.7.1'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
     compileOnly 'net.luckperms:api:5.4'
+    implementation 'com.zaxxer:HikariCP:4.0.3'
 }
 shadowJar {
     // removes unused classes in 'implementation' path dependencies
@@ -34,6 +35,7 @@ shadowJar {
     // XParticle is big and not required so don't shade it.
     // It's not removed by minimize() because it's on the API path I guess?
     exclude 'com/cryptomorin/xseries/particles/*'
+    relocate ('com.zaxxer.hikari', path + '.hikari')
     relocate ('com.cryptomorin.xseries', path + '.xseries')
     relocate ('org.bstats', path + '.metrics')
 }

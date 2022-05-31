@@ -8,6 +8,8 @@ import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
+import be.isach.ultracosmetics.util.ServerVersion;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -95,7 +97,6 @@ public class GadgetPaintballGun extends Gadget {
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getEntity().getType() != EntityType.ENDER_PEARL) return;
         // if successfully removed (in other words, if it was there to begin with)
         if (projectiles.remove(event.getEntity())) {
             Location center = event.getEntity().getLocation().add(event.getEntity().getVelocity());
@@ -130,8 +131,9 @@ public class GadgetPaintballGun extends Gadget {
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         // TODO: can we check if the pearl that caused the spawn is the pearl thrown by this gadget?
-        if (event.getSpawnReason() == SpawnReason.ENDER_PEARL)
+        if (UltraCosmeticsData.get().getServerVersion() != ServerVersion.v1_8_R3 && event.getSpawnReason() == SpawnReason.ENDER_PEARL) {
             event.setCancelled(true);
+        }
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.sk89q.worldguard.session.MoveType;
 import com.sk89q.worldguard.session.Session;
 import com.sk89q.worldguard.session.handler.Handler;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
@@ -23,10 +24,15 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 
 public class CosmeticFlagHandler extends Handler {
+    private static final Set<Category> ALL_CATEGORIES = new HashSet<>();
+    static {
+        for (Category cat : Category.values()) {
+            ALL_CATEGORIES.add(cat);
+        }
+    }
     private final UltraPlayerManager pm;
     private final StateFlag cosmeticsFlag;
-    private final SetFlag<Category> categoryFlag;
-    private State lastCosmeticsFlagValue = null;
+    private final SetFlag<Category> categoryFlag;   
     private Set<Category> lastCategoryFlagValue = null;
     protected CosmeticFlagHandler(Session session, StateFlag cosmeticsFlag, SetFlag<Category> categoryFlag) {
         super(session);
@@ -41,34 +47,44 @@ public class CosmeticFlagHandler extends Handler {
         if (Bukkit.getPlayer(player.getUniqueId()) == null) return true;
 
         LocalPlayer wrappedPlayer = getSession().getManager().getPlugin().wrapPlayer(player);
-        boolean categoriesRequiresUpdate = true;
         State currentValue = toSet.queryState(wrappedPlayer, cosmeticsFlag);
+        if (currentValue == State.DENY) {
+            if (pm.getUltraPlayer(player).clear()) {
+                player.sendMessage(MessageManager.getMessage("Region-Disabled"));
+            }
+            // This is effectively what DENY represents for the `uc-cosmetics` flag
+            lastCategoryFlagValue = ALL_CATEGORIES;
+            return true;
+        }
         Set<Category> categoryValue = toSet.queryValue(wrappedPlayer, categoryFlag);
-        if (!currentValue.equals(lastCosmeticsFlagValue)) {
-            lastCosmeticsFlagValue = currentValue;
-            if (currentValue == State.DENY) {
-                // if the player is stripped of all cosmetics by the general flag anyway, no need to re-check the more granular flag
-                categoriesRequiresUpdate = false;
-                if (pm.getUltraPlayer(player).clear()) {
-                    player.sendMessage(MessageManager.getMessage("Region-Disabled"));
+        Set<Category> needsUpdating = compareSets(categoryValue, lastCategoryFlagValue);
+        // This check is not actually required, but it saves the call to getUltraPlayer if we don't actually need it.
+        if (needsUpdating.size() > 0) {
+            UltraPlayer up = pm.getUltraPlayer(player);
+            for (Category cat : needsUpdating) {
+                if (up.removeCosmetic(cat)) {
+                    player.sendMessage(MessageManager.getMessage("Region-Disabled-Category").replace("%category%", cat.getConfigName()));
                 }
             }
         }
-        if (!categoryValue.equals(lastCategoryFlagValue)) {
-            // if lastCategoryFlagValue was as restrictive or more restrictive than categoryValue, nothing needs to be updated.
-            if (categoriesRequiresUpdate && lastCategoryFlagValue != null && lastCategoryFlagValue.containsAll(categoryValue)) {
-                categoriesRequiresUpdate = false;
-            }
-            lastCategoryFlagValue = categoryValue;
-            if (categoriesRequiresUpdate) {
-                UltraPlayer up = pm.getUltraPlayer(player);
-                for (Category cat : categoryValue) {
-                    if (up.removeCosmetic(cat)) {
-                        player.sendMessage(MessageManager.getMessage("Region-Disabled-Category").replace("%category%", cat.getConfigName()));
-                    }
-                }
-            }
-        }
+        lastCategoryFlagValue = categoryValue;
         return true;
+    }
+
+    /**
+     * Returns any values in currentSet that are not in previousSet,
+     * or an empty set if no comparison is required.
+     * 
+     * @param currentSet The active set of categories
+     * @param previousSet The last known active set of categories
+     * @return a set containing any Categories not present in previousSet  
+     */
+    private Set<Category> compareSets(Set<Category> currentSet, Set<Category> lastSet) {
+        Set<Category> newValues = new HashSet<>();
+        if (currentSet == null) return newValues;
+        if (lastSet == null) return currentSet;
+        newValues.addAll(currentSet);
+        newValues.removeAll(lastSet);
+        return newValues;
     }
 }

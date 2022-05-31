@@ -4,7 +4,7 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.6.3-DEV-b4'
+    version = '2.7-DEV-b5'
 
     compileJava.options.encoding = 'UTF-8'
 
@@ -51,9 +51,6 @@ dependencies {
     subprojects.each { p ->
         if (p.name.equals("core")) {
             shaded(project(path: ':core', configuration: 'shadow'))
-            return;
-        } else if (p.name.equals("hikari")) {
-            shaded(project(path: ':hikari', configuration: 'shadow'))
             return;
         }
         shaded(p) {

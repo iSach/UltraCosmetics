@@ -6,7 +6,6 @@ import be.isach.ultracosmetics.config.MessageManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class SubCommandReload extends SubCommand {
 

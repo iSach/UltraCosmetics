@@ -3,9 +3,12 @@ package be.isach.ultracosmetics.command;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.config.MessageManager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 /**
  * A subcommand.
@@ -15,13 +18,20 @@ import org.bukkit.entity.Player;
  */
 public abstract class SubCommand {
 
-    private final String name, description, permission, usage;
+    private final String name;
+    private final String description;
+    private final Permission permission;
+    private final String usage;
     protected final UltraCosmetics ultraCosmetics;
 
     public SubCommand(String name, String description, String usage, UltraCosmetics ultraCosmetics) {
+        this(name, description, usage, ultraCosmetics, false);
+    }
+
+    public SubCommand(String name, String description, String usage, UltraCosmetics ultraCosmetics, boolean defaultPerm) {
         this.name = name;
         this.description = description;
-        this.permission = "ultracosmetics.command." + name;
+        this.permission = registerPermission("ultracosmetics.command." + name, defaultPerm);
         this.usage = "/uc " + name + " " + usage;
         this.ultraCosmetics = ultraCosmetics;
     }
@@ -68,8 +78,20 @@ public abstract class SubCommand {
      *
      * @return The permission of this command.
      */
-    public String getPermission() {
+    public Permission getPermission() {
         return permission;
+    }
+
+    private Permission registerPermission(String strPerm, boolean defaultPerm) {
+        Permission perm = new Permission(strPerm);
+        try {
+            Bukkit.getPluginManager().addPermission(perm);
+        } catch (IllegalArgumentException e) {
+            // Ignore; the user has been warned about reloading the plugin elsewhere
+            return Bukkit.getPluginManager().getPermission(strPerm);
+        }
+        perm.setDefault(defaultPerm ? PermissionDefault.TRUE : PermissionDefault.OP);
+        return perm;
     }
 
     /**

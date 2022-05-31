@@ -5,14 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
 
-public class NewHikariHook implements IHikariHook {
-    static {
-        // Throws an exception on class load if Hikari isn't present
-        HikariConfig.class.getName();
-    }
-
+public class OldHikariHook implements IHikariHook {
     private final HikariDataSource dataSource;
-    public NewHikariHook(String hostname, String port, String database, String username, String password) {
+    public OldHikariHook(String hostname, String port, String database, String username, String password) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
         config.setUsername(username);

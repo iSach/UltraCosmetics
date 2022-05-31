@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 public class SubCommandClear extends SubCommand {
 
     public SubCommandClear(UltraCosmetics ultraCosmetics) {
-        super("clear", "Clears a Cosmetic.", "<player> [type]", ultraCosmetics);
+        super("clear", "Clears a Cosmetic.", "<player> [type]", ultraCosmetics, true);
     }
 
     @Override

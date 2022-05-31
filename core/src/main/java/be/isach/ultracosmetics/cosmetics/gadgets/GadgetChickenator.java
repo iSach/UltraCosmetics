@@ -85,7 +85,7 @@ public class GadgetChickenator extends Gadget {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getDamager().getType() != EntityType.FIREWORK) return;
+        if (!(event.getDamager() instanceof Firework)) return;
         FireworkMeta fm = ((Firework) event.getDamager()).getFireworkMeta();
         if (fm.getDisplayName().equals("uc_firework"))
             event.setCancelled(true);

@@ -10,6 +10,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
 import be.isach.ultracosmetics.mysql.hikari.IHikariHook;
+import be.isach.ultracosmetics.mysql.hikari.OldHikariHook;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -76,6 +77,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
         // "PRIMARY KEY" implies UNIQUE NOT NULL.
         // String form of UUID is always exactly 36 chars so just store it that way.
+        // This is not a StringColumn because StringColumns are varchars
         columns.add(new Column<>("uuid", "CHAR(36) PRIMARY KEY", String.class));
         columns.add(new Column<>("gadgetsEnabled", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
         columns.add(new Column<>("selfmorphview", "BOOLEAN DEFAULT TRUE NOT NULL", Boolean.class));
@@ -164,21 +166,23 @@ public class MySqlConnectionManager extends BukkitRunnable {
     }
 
     private IHikariHook createHikariHook(String hostname, String port, String database, String username, String password) {
+        Class<?> hook;
         try {
-            Class<?> newHikari = Class.forName("be.isach.ultracosmetics.mysql.hikari.NewHikariHook");
+            hook = Class.forName("be.isach.ultracosmetics.mysql.hikari.NewHikariHook");
             ultraCosmetics.getSmartLogger().write("Loading Hikari for Java 11...");
-            return (IHikariHook) newHikari.getDeclaredConstructor(String.class, String.class, String.class, String.class, String.class)
-                .newInstance(hostname, port, database, username, password);
-        } catch (UnsupportedClassVersionError e) {
-            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Java 11 or higher is required for SQL support.");
-            ultraCosmetics.getSmartLogger().write("(Paper 1.8.8/1.12.2 run fine on Java 11.)");
-            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "SQL support will be disabled.");
-            reportFailure(e);
+            // I think ClassNotFoundException would only be thrown if NewHikariHook isn't present, but we have to catch it anyway
+        } catch (UnsupportedClassVersionError | ClassNotFoundException | NoClassDefFoundError e) {
+            hook = OldHikariHook.class;
+            ultraCosmetics.getSmartLogger().write("Loading Hikari for Java 8...");
+        }
+        try {
+            return (IHikariHook) hook.getDeclaredConstructor(String.class, String.class, String.class, String.class, String.class)
+                    .newInstance(hostname, port, database, username, password);
         } catch (ReflectiveOperationException e) {
             ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Failed to initialize Hikari handler");
             reportFailure(e);
+            return null;
         }
-        return null;
     }
 
     /**
@@ -194,8 +198,8 @@ public class MySqlConnectionManager extends BukkitRunnable {
                 ultraCosmetics.getSmartLogger().write("You have an old UCData table. Attempting to upgrade it...");
                 alter(co, "DROP COLUMN id");
                 alter(co, "DROP COLUMN username");
-                alter(co, "ADD PRIMARY KEY (uuid)");
                 alter(co, "MODIFY uuid CHAR(36)");
+                alter(co, "ADD PRIMARY KEY (uuid)");
             }
         }
 
@@ -232,7 +236,11 @@ public class MySqlConnectionManager extends BukkitRunnable {
     }
 
     private void alter(Connection co, String command) throws SQLException {
-        PreparedStatement ps = co.prepareStatement("ALTER TABLE `" + tableName + "` " + command);
+        String query = "ALTER TABLE `" + tableName + "` " + command;
+        if (isDebug()) {
+            UltraCosmeticsData.get().getPlugin().getSmartLogger().write("Executing SQL: " + query);
+        }
+        PreparedStatement ps = co.prepareStatement(query);
         ps.execute();
         ps.close();
     }

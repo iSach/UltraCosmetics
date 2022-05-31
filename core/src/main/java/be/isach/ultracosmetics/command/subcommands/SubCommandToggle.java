@@ -28,24 +28,22 @@ public class SubCommandToggle extends SubCommand {
     private static final String ERROR_PREFIX = " " + ChatColor.RED + ChatColor.BOLD;
 
     public SubCommandToggle(UltraCosmetics ultraCosmetics) {
-        super("toggle", "Toggles a cosmetic.", "<type> <cosmetic> [player]", ultraCosmetics);
+        super("toggle", "Toggles a cosmetic.", "<type> <cosmetic> [player]", ultraCosmetics, true);
     }
 
     @Override
     protected void onExePlayer(Player sender, String[] args) {
-        UltraPlayer ultraPlayer = ultraCosmetics.getPlayerManager().getUltraPlayer(sender);
-
         if (args.length < 3 || args.length > 4) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + getUsage());
             return;
         }
 
-        UltraPlayer target;
+        Player target;
         if (args.length > 3) {
             // null check later
-            target = ultraCosmetics.getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
+            target = Bukkit.getPlayer(args[3]);
         } else {
-            target = ultraPlayer;
+            target = sender;
         }
 
         toggle(sender, target, args[1].toLowerCase(), args[2].toLowerCase());
@@ -58,12 +56,16 @@ public class SubCommandToggle extends SubCommand {
             return;
         }
 
-        UltraPlayer target = ultraCosmetics.getPlayerManager().getUltraPlayer(Bukkit.getPlayer(args[3]));
-
-        toggle(sender, target, args[1].toLowerCase(), args[2].toLowerCase());
+        toggle(sender, Bukkit.getPlayer(args[3]), args[1].toLowerCase(), args[2].toLowerCase());
     }
 
-    private void toggle(CommandSender sender, UltraPlayer target, String type, String cosm) {
+    private void toggle(CommandSender sender, Player targetPlayer, String type, String cosm) {
+        if (sender != targetPlayer && !sender.hasPermission(getPermission().getName() + ".others")) {
+            error(sender, "You do not have permission to toggle cosmetics for others.");
+            return;
+        }
+
+        UltraPlayer target = ultraCosmetics.getPlayerManager().getUltraPlayer(targetPlayer);
         if (target == null) {
             sender.sendMessage(MessageManager.getMessage("Prefix") + ERROR_PREFIX + "Invalid player.");
             return;

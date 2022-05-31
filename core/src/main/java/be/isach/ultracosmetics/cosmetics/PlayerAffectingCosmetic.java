@@ -16,6 +16,8 @@ public interface PlayerAffectingCosmetic {
             Player target = (Player) entity;
             // alternate NPC check
             if (Bukkit.getPlayer(target.getUniqueId()) == null) return false;
+            // Standard API-less vanish check
+            if (target.hasMetadata("vanished")) return false;
             if (!getSelf().getUltraCosmetics().getPlayerManager().getUltraPlayer(target).hasGadgetsEnabled()) {
                 return false;
             }
