@@ -28,6 +28,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -161,8 +162,10 @@ public class EntityUtil implements IEntityUtil {
 
         Brain<?> brain = ((LivingEntity)nmsEntity).getBrain();
 
+        for (MemoryModuleType<?> type : brain.getMemories().keySet()) {
+            brain.eraseMemory(type);
+        }
         try {
-            memoriesField.set(brain, new HashMap<>());
             sensorsField.set(brain, new LinkedHashMap<>());
 
             // this method is annotated with VisibleForTesting but it seems like the easiest thing to do at the moment
