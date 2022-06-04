@@ -160,11 +160,11 @@ public class BlockUtils {
     }
 
     /**
-     * Replaces a block with a new material and data, and after delay, restore it.
+     * Sends packets to replace each block in a Map of blocks with the new material it's mapped to
+     * and after delay, send packets to restore it. No blocks are actually changed on the server side.
      *
-     * @param block      The block.
-     * @param newType   The new material.
-     * @param tickDelay The delay after which the block is restored.
+     * @param blocks    The blocks to restore mapped to the materials to change them to.
+     * @param tickDelay The delay after which the blocks are restored.
      */
     @SuppressWarnings("deprecation")
     public static void setToRestoreIgnoring(final Map<Block,XMaterial> blocks, final int tickDelay) {
