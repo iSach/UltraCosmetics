@@ -41,6 +41,8 @@ jobs:
         java-version: 17
     - name: Build MC 1.18.2
       run: java -jar BuildTools.jar --rev 1.18.2 --remapped
+    - name: Build MC 1.19
+      run: java -jar BuildTools.jar --rev 1.19 --remapped
     - name: Build with Gradle
       run: ./gradlew obfuscate
     - uses: actions/upload-artifact@v2
