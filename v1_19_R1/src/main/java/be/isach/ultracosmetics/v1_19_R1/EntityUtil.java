@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_18_R2;
+package be.isach.ultracosmetics.v1_19_R1;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -9,20 +9,20 @@ import be.isach.ultracosmetics.treasurechests.ChestType;
 import be.isach.ultracosmetics.treasurechests.TreasureChestDesign;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import be.isach.ultracosmetics.v1_18_R2.pathfinders.CustomPathFinderGoalPanic;
+import be.isach.ultracosmetics.v1_19_R1.pathfinders.CustomPathFinderGoalPanic;
 import be.isach.ultracosmetics.version.IEntityUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftBoat;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftCreature;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEnderDragon;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftWither;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftBoat;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftCreature;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEnderDragon;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftWither;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wither;

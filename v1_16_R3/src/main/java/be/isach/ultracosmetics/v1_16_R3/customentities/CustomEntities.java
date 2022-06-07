@@ -28,10 +28,10 @@ import net.minecraft.server.v1_16_R3.Vec3D;
  */
 public class CustomEntities {
     private static final Set<Entity> customEntities = new HashSet<>();
+    @SuppressWarnings("unchecked")
     public static void registerEntities() {
         String customName = "ultracosmetics";
 
-        @SuppressWarnings("unchecked")
         Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.getGameVersion().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
 
         // Pumpling

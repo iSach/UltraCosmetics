@@ -1,10 +1,10 @@
-package be.isach.ultracosmetics.v1_18_R2.customentities;
+package be.isach.ultracosmetics.v1_19_R1.customentities;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
-import be.isach.ultracosmetics.v1_18_R2.EntityBase;
-import be.isach.ultracosmetics.v1_18_R2.ObfuscatedFields;
-import be.isach.ultracosmetics.v1_18_R2.nms.EntityWrapper;
+import be.isach.ultracosmetics.v1_19_R1.EntityBase;
+import be.isach.ultracosmetics.v1_19_R1.ObfuscatedFields;
+import be.isach.ultracosmetics.v1_19_R1.nms.EntityWrapper;
 
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
@@ -20,6 +20,9 @@ import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixers;
@@ -81,7 +84,7 @@ public class CustomEntities {
          * ~[spigot-1.18.2-R0.1-SNAPSHOT.jar:3445-Spigot-fb0dd5f-05a38da] at
          * net.minecraft.world.entity.EntityTypes$Builder.a(EntityTypes.java:669)
          * ~[spigot-1.18.2-R0.1-SNAPSHOT.jar:3445-Spigot-fb0dd5f-05a38da] at
-         * be.isach.ultracosmetics.v1_18_R2.customentities.CustomEntities.registerEntity
+         * be.isach.ultracosmetics.v1_19_R1.customentities.CustomEntities.registerEntity
          * (CustomEntities.java:78) ~[?:?]
          */
         Class<?> registryClass = MappedRegistry.class;
@@ -183,5 +186,9 @@ public class CustomEntities {
 
     public static void removeCustomEntity(Entity entity) {
         customEntities.remove(entity);
+    }
+
+    public static Component toComponent(String str) {
+        return MutableComponent.create(new LiteralContents(str));
     }
 }

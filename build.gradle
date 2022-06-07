@@ -4,9 +4,12 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'be.isach'
-    version = '2.7-DEV-b6'
+    version = '2.7-RELEASE'
 
-    compileJava.options.encoding = 'UTF-8'
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
 
     java {
         toolchain {
