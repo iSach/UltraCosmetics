@@ -324,6 +324,8 @@ public class MessageManager {
         addMessage("Pets.Zombie.entity-displayname", "&l%playername%'s Zombie");
         addMessage("Pets.Frog.menu-name", "&2&lFrog");
         addMessage("Pets.Frog.entity-displayname", "&l%playername%'s Frog");
+        addMessage("Pets.Warden.menu-name", "&3&lWarden");
+        addMessage("Pets.Warden.entity-displayname", "&l%playername%'s Warden");
         addMessage("Pets.Equip", "%prefix% &9You spawned %petname%");
         addMessage("Pets.Unequip", "%prefix% &9You despawned %petname%");
 
