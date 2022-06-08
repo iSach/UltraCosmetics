@@ -95,6 +95,7 @@ public final class PetType extends CosmeticEntType<Pet> {
         if (serverVersion.isAtLeast(ServerVersion.v1_19_R1)) {
             new PetType("Frog", XMaterial.LILY_PAD, "&7&oDoesn't like Fireflies!", EntityType.FROG, PetFrog.class);
             new PetType("Warden", XMaterial.SCULK_SHRIEKER, "&7&oThe scariest Mob in Minecraft!", EntityType.WARDEN, PetWarden.class);
+            new PetType("Allay", XMaterial.ALLAY_SPAWN_EGG, "&7&oA new Friend!", EntityType.ALLAY, PetAllay.class);
         }
         
         if (serverVersion.isAtLeast(ServerVersion.v1_17_R1)) {
