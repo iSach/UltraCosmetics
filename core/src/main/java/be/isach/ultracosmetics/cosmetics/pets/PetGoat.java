@@ -12,9 +12,8 @@ import com.cryptomorin.xseries.XMaterial;
  * @since 18-01-2022
  */
 
-/*Temporarily using WHEAT as material until https://minecraft.fandom.com/wiki/Goat_Horn comes to Java edition*/
 public class PetGoat extends Pet {
     public PetGoat(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("goat"), XMaterial.WHEAT);
+        super(owner, ultraCosmetics, PetType.getByName("goat"), XMaterial.GOAT_HORN);
     }
 }
