@@ -10,14 +10,15 @@ import be.isach.ultracosmetics.menu.CosmeticMenu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
-import com.cryptomorin.xseries.XMaterial;
 import be.isach.ultracosmetics.version.AnvilGUI;
+
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.List;
 
@@ -44,9 +45,6 @@ public class MenuPets extends CosmeticMenu<PetType> {
             int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 4 : 6);
             ClickRunnable run;
             if (SettingsManager.getConfig().getBoolean("Pets-Rename.Permission-Required") && !player.hasPermission("ultracosmetics.pets.rename")) {
-                stack = new ItemStack(Material.AIR);
-                run = data -> {};
-                putItem(inventory, slot, stack, run);
                 return;
             }
             if (player.getCurrentPet() != null) {
@@ -65,19 +63,19 @@ public class MenuPets extends CosmeticMenu<PetType> {
 
     public void renamePet(final UltraPlayer ultraPlayer) {
         new AnvilGUI.Builder().plugin(ultraCosmetics)
-        .itemLeft(XMaterial.PAPER.parseItem())
-        .text(MessageManager.getMessage("Menu.Rename-Pet.Placeholder"))
-        .title(MessageManager.getMessage("Menu.Rename-Pet.Title"))
-        .onComplete((Player player, String text) -> {
-            String newName = ChatColor.translateAlternateColorCodes('&', text);
-            if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") &&
-                    ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
-                return AnvilGUI.Response.openInventory(buyRenamePet(ultraPlayer, newName));
-            } else {
-                ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), newName);
-                return AnvilGUI.Response.close();
-            }
-        }).open(ultraPlayer.getBukkitPlayer());
+                .itemLeft(XMaterial.PAPER.parseItem())
+                .text(MessageManager.getMessage("Menu.Rename-Pet.Placeholder"))
+                .title(MessageManager.getMessage("Menu.Rename-Pet.Title"))
+                .onComplete((Player player, String text) -> {
+                    String newName = ChatColor.translateAlternateColorCodes('&', text);
+                    if (SettingsManager.getConfig().getBoolean("Pets-Rename.Requires-Money.Enabled") &&
+                            ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
+                        return AnvilGUI.Response.openInventory(buyRenamePet(ultraPlayer, newName));
+                    } else {
+                        ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), newName);
+                        return AnvilGUI.Response.close();
+                    }
+                }).open(ultraPlayer.getBukkitPlayer());
     }
 
     private Inventory buyRenamePet(UltraPlayer ultraPlayer, final String name) {

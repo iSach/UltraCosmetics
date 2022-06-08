@@ -59,8 +59,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
     }
 
     /**
-     * Page the user was on when trying to buy ammo.
-     * Is used when player buys ammo from Gadget Menu.
+     * Page the user was on when trying to buy ammo. Is used when player buys ammo from Gadget Menu.
      */
     public int lastPage = 1;
 
@@ -75,8 +74,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
     protected ItemStack itemStack;
 
     /**
-     * If true, will display cooldown left when fail on use
-     * because cooldown active.
+     * If true, will display cooldown left when fail on use because cooldown active.
      */
     protected boolean displayCooldownMessage = true;
 
@@ -98,8 +96,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
     protected void onEquip() {
         int slot = SettingsManager.getConfig().getInt("Gadget-Slot");
         if (getPlayer().getInventory().getItem(slot) != null) {
-            getPlayer().getWorld().dropItem(getPlayer().getLocation(),
-                    getPlayer().getInventory().getItem(slot));
+            getPlayer().getWorld().dropItem(getPlayer().getLocation(), getPlayer().getInventory().getItem(slot));
             getPlayer().getInventory().setItem(slot, null);
         }
 
@@ -121,7 +118,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
             }
 
             if (getOwner().getCurrentGadget() != null && getOwner().getCurrentGadget().getType() == getType()) {
-                ((Updatable)this).onUpdate();
+                ((Updatable) this).onUpdate();
                 try {
                     if (UltraCosmeticsData.get().displaysCooldownInBar()) {
                         @SuppressWarnings("deprecation")
@@ -172,10 +169,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
      */
 
     private void sendCooldownBar() {
-        if (getOwner() == null)
-            return;
-        if (getPlayer() == null)
-            return;
+        if (getOwner() == null || getPlayer() == null) return;
 
         StringBuilder stringBuilder = new StringBuilder(ChatColor.GREEN.toString());
 
@@ -237,8 +231,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
     }
 
     /**
-     * Opens Ammo Purchase Menu.
-     * TODO: I don't feel like this is a good place for this.
+     * Opens Ammo Purchase Menu. TODO: I don't feel like this is a good place for this.
      */
     public void openAmmoPurchaseMenu() {
         String itemName = MessageManager.getMessage("Buy-Ammo-Description");
@@ -266,9 +259,10 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (getOwner() == null || getPlayer() == null || event.getPlayer() != getPlayer() || !(event
-                .getRightClicked() instanceof ItemFrame) || getItemStack() == null || itemStack == null || !itemStack
-                .hasItemMeta() || itemStack.getType() != getItemStack().getType()
+        if (getOwner() == null || getPlayer() == null || event.getPlayer() != getPlayer()
+                || !(event.getRightClicked() instanceof ItemFrame) || getItemStack() == null
+                || itemStack == null || !itemStack.hasItemMeta()
+                || itemStack.getType() != getItemStack().getType()
                 || !itemStack.getItemMeta().getDisplayName().endsWith(getType().getName())) {
             return;
         }
@@ -298,7 +292,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
             return;
         }
 
-        if (SettingsManager.getConfig().getBoolean("Prevent-Cosmetics-In-Vanish")) {
+        if (player.hasMetadata("vanished") && SettingsManager.getConfig().getBoolean("Prevent-Cosmetics-In-Vanish")) {
             getOwner().clear();
             getPlayer().sendMessage(MessageManager.getMessage("Not-Allowed-In-Vanish"));
             return;
@@ -333,8 +327,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             ultraPlayer.removeAmmo(getType());
             itemStack = ItemFactory.create(getType().getMaterial(),
-                    ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType())
-                            + " " + getType().getName(), MessageManager.getMessage("Gadgets.Lore"));
+                    ChatColor.WHITE + "" + ChatColor.BOLD + ultraPlayer.getAmmo(getType()) + " " + getType().getName(),
+                    MessageManager.getMessage("Gadgets.Lore"));
             this.itemStack = itemStack;
             getPlayer().getInventory().setItem((int) SettingsManager.getConfig().get("Gadget-Slot"), itemStack);
         }
@@ -359,10 +353,11 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
             }.runTaskAsynchronously(getUltraCosmetics());
         } else {
             if (useTwoInteractMethods) {
-                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     onRightClick();
-                else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR)
+                } else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                     onLeftClick();
+                }
             } else {
                 onRightClick();
             }
@@ -427,7 +422,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
         ItemStack item = event.getCurrentItem();
         if (item != null && player == getPlayer() && item.equals(itemStack)) {
             event.setCancelled(true);
-            player.closeInventory(); // Close the inventory because clicking again results in the event being handled client side
+            player.closeInventory(); // Close the inventory because clicking again results in the event being handled
+                                     // client side
         }
     }
 
@@ -440,18 +436,16 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
     }
 
     /**
-     * If useTwoInteractMethods is true,
-     * called when only a right click is called.
+     * If useTwoInteractMethods is true, called when only a right click is called.
      * <p/>
-     * Otherwise, called when a right or left click
-     * is performed.
+     * Otherwise, called when a right or left click is performed.
      */
     abstract void onRightClick();
 
     /**
-     * Called when a left click is done with gadget,
-     * only called if useTwoInteractMethods is true.
+     * Called when a left click is done with gadget. Only called if useTwoInteractMethods is true.
      */
-    void onLeftClick() {};
+    void onLeftClick() {
+    };
 
 }
