@@ -1,13 +1,13 @@
 package be.isach.ultracosmetics.config;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import be.isach.ultracosmetics.cosmetics.Category;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
-import be.isach.ultracosmetics.cosmetics.Category;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Message manager.
@@ -72,6 +72,8 @@ public class MessageManager {
         addMessage("Dont-Have-Key", "&4&lYou need a key!");
         addMessage("Click-Open-Chest", "&aClick to open a chest");
         addMessage("Click-Buy-Key", "&aClick to buy a key");
+        addMessage("Left-Click-Open-Chest", "&aLeft-click to open a chest");
+        addMessage("Right-Click-Simple", "&aRight-click to just get cosmetics");
         addMessage("Your-Keys", "&7&oYour keys: &f&l%keys%");
         addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor $%price%");
         addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");

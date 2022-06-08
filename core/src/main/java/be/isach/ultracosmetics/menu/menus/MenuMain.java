@@ -8,12 +8,14 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.menu.Menu;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.treasurechests.TreasureChestManager;
+import be.isach.ultracosmetics.treasurechests.TreasureRandomizer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSound;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 
 /**
  * Main {@link be.isach.ultracosmetics.menu.Menu Menu}.
@@ -29,30 +31,30 @@ public class MenuMain extends Menu {
         super(ultraCosmetics);
 
         switch (Category.enabledSize()) {
-            case 8:
-                layout = new int[]{10, 12, 14, 16, 28, 30, 32, 34};
-                break;
-            case 7:
-                layout = new int[]{10, 13, 16, 28, 30, 32, 34};
-                break;
-            case 6:
-                layout = new int[]{10, 13, 16, 28, 31, 34};
-                break;
-            case 5:
-                layout = new int[]{10, 16, 22, 29, 33};
-                break;
-            case 4:
-                layout = new int[]{19, 21, 23, 25};
-                break;
-            case 3:
-                layout = new int[]{20, 22, 24};
-                break;
-            case 2:
-                layout = new int[]{21, 23};
-                break;
-            case 1:
-                layout = new int[]{22};
-                break;
+        case 8:
+            layout = new int[] { 10, 12, 14, 16, 28, 30, 32, 34 };
+            break;
+        case 7:
+            layout = new int[] { 10, 13, 16, 28, 30, 32, 34 };
+            break;
+        case 6:
+            layout = new int[] { 10, 13, 16, 28, 31, 34 };
+            break;
+        case 5:
+            layout = new int[] { 10, 16, 22, 29, 33 };
+            break;
+        case 4:
+            layout = new int[] { 19, 21, 23, 25 };
+            break;
+        case 3:
+            layout = new int[] { 20, 22, 24 };
+            break;
+        case 2:
+            layout = new int[] { 21, 23 };
+            break;
+        case 1:
+            layout = new int[] { 22 };
+            break;
         }
 
         if (UltraCosmeticsData.get().areTreasureChestsEnabled() && layout != null) {
@@ -93,8 +95,6 @@ public class MenuMain extends Menu {
         });
 
         if (UltraCosmeticsData.get().areTreasureChestsEnabled()) {
-            ItemStack chest;
-
             String msgChests = MessageManager.getMessage("Treasure-Chests");
             final boolean usingEconomy = getUltraCosmetics().getEconomyHandler().isUsingEconomy();
             boolean canBuyKeys = usingEconomy && SettingsManager.getConfig().getInt("TreasureChests.Key-Price") > 0;
@@ -102,10 +102,15 @@ public class MenuMain extends Menu {
             if (canBuyKeys) {
                 buyKeyMessage = "\n" + MessageManager.getMessage("Click-Buy-Key") + "\n";
             }
+            String[] chestLore;
             if (player.getKeys() == 0) {
-                chest = ItemFactory.create(XMaterial.CHEST, msgChests, "", MessageManager.getMessage("Dont-Have-Key"), buyKeyMessage);
+                chestLore = new String[] { "", MessageManager.getMessage("Dont-Have-Key"), buyKeyMessage };
             } else {
-                chest = ItemFactory.create(XMaterial.CHEST, msgChests, "", MessageManager.getMessage("Click-Open-Chest"), "");
+                if (SettingsManager.getConfig().getString("TreasureChests.Mode", "").equalsIgnoreCase("both")) {
+                    chestLore = new String[] { "", MessageManager.getMessage("Left-Click-Open-Chest"), MessageManager.getMessage("Right-Click-Simple"), "" };
+                } else {
+                    chestLore = new String[] { "", MessageManager.getMessage("Click-Open-Chest"), "" };
+                }
             }
             ItemStack keys = ItemFactory.create(XMaterial.TRIPWIRE_HOOK, MessageManager.getMessage("Treasure-Keys"), "",
                     MessageManager.getMessage("Your-Keys").replace("%keys%", String.valueOf(player.getKeys())), buyKeyMessage);
@@ -119,12 +124,32 @@ public class MenuMain extends Menu {
                 player.openKeyPurchaseMenu();
             });
 
+            ItemStack chest = ItemFactory.create(XMaterial.CHEST, msgChests, chestLore);
             putItem(inventory, 3, chest, (data) -> {
                 if (!canBuyKeys && player.getKeys() == 0) {
                     XSound.BLOCK_ANVIL_LAND.play(player.getBukkitPlayer().getLocation(), 0.2f, 1.2f);
                     return;
                 }
-                TreasureChestManager.tryOpenChest(player.getBukkitPlayer());
+                String mode = SettingsManager.getConfig().getString("TreasureChests.Mode", "structure");
+                if (mode.equalsIgnoreCase("both")) {
+                    if (data.getClick().isRightClick()) {
+                        mode = "simple";
+                    } else {
+                        mode = "structure";
+                    }
+                }
+                if (mode.equalsIgnoreCase("simple")) {
+                    player.removeKey();
+                    int count = SettingsManager.getConfig().getInt("TreasureChests.Count", 4);
+                    TreasureRandomizer tr = new TreasureRandomizer(player.getBukkitPlayer(), player.getBukkitPlayer().getLocation());
+                    for (int i = 0; i < count; i++) {
+                        tr.giveRandomThing();
+                    }
+                    // Refresh with new key count
+                    open(player);
+                } else {
+                    TreasureChestManager.tryOpenChest(player.getBukkitPlayer());
+                }
             });
 
         }
