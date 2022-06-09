@@ -128,11 +128,9 @@ public class UltraCosmetics extends JavaPlugin {
      * Stores the reason plugin load failed, if any.
      */
     private String failReason = null;
-    
+
     /**
-     * Called when plugin is loaded.
-     * Used for registering WorldGuard flags
-     * as recommended in API documentation.
+     * Called when plugin is loaded. Used for registering WorldGuard flags as recommended in API documentation.
      */
     @Override
     public void onLoad() {
@@ -401,6 +399,10 @@ public class UltraCosmetics extends JavaPlugin {
         // getInt() defaults to 0 if not found
         if (config.getInt("TreasureChests.Count") < 1 || config.getInt("TreasureChests.Count") > 4) {
             config.set("TreasureChests.Count", 4, "How many treasure chests should be opened per key? Min 1, max 4");
+        }
+        String mode = config.getString("TreasureChests.Mode", "");
+        if (!mode.equalsIgnoreCase("structure") && !mode.equalsIgnoreCase("simple") && !mode.equalsIgnoreCase("both")) {
+            config.set("TreasureChests.Mode", "structure", "The treasure chest mode. Options:", "- structure: places blocks and chests (default)", "- simple: only gives <Count> cosmetics, no blocks are placed", "- both: players can choose either mode through the GUI");
         }
         // Add default values people could not have because of an old version of UC.
         if (config.isConfigurationSection("TreasureChests.Location")) {
@@ -760,7 +762,7 @@ public class UltraCosmetics extends JavaPlugin {
             }
             config.set(key, newValue.toString());
             getSmartLogger().write(LogLevel.INFO, "Successfully upgraded key '" + key + "' from '" + oldValue + "' to '" + newValue + "'!");
-        // this code runs on every startup so don't print "failed to upgrade" message unless there's an actual issue
+            // this code runs on every startup so don't print "failed to upgrade" message unless there's an actual issue
         } else if (legacyMessagePrinted) {
             getSmartLogger().write(LogLevel.WARNING, "Couldn't upgrade key '" + key + "' because it has been changed. Please upgrade it manually.");
         }
