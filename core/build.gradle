@@ -23,7 +23,7 @@ dependencies {
     // NMS modules can't actually use XSeries but it doesn't compile without 'api'.
     // IDEs do not like it when 'core' references XSeries directly
     // but subprojects must reference XSeries as shaded.
-    api 'com.github.cryptomorin:XSeries:8.7.1'
+    api 'com.github.cryptomorin:XSeries:8.8.0'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
     compileOnly 'net.luckperms:api:5.4'
     implementation 'com.zaxxer:HikariCP:4.0.3'
