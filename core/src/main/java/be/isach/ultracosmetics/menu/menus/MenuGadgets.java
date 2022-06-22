@@ -37,12 +37,17 @@ public class MenuGadgets extends CosmeticMenu<GadgetType> {
     private void putToggleGadgetsItems(Inventory inventory, UltraPlayer player) {
         int slot = inventory.getSize() - (getCategory().hasGoBackArrow() ? 4 : 6);
         String configPath = "Categories.Gadgets-Item.When-" + (player.hasGadgetsEnabled() ? "En" : "Dis") + "abled";
-        String msg = MessageManager.getMessage((player.hasGadgetsEnabled() ? "Dis" : "En") + "able-Gadgets");
+        String key = (player.hasGadgetsEnabled() ? "Dis" : "En") + "able-Gadgets";
+        String msg = MessageManager.getMessage(key);
+        String[] lore = MessageManager.getMessage(key + "-Lore").split("\n");
+        if (lore[0].isEmpty()) {
+            lore = new String[] {};
+        }
         ClickRunnable run = data -> {
             player.setGadgetsEnabled(!player.hasGadgetsEnabled());
             putToggleGadgetsItems(inventory, player);
         };
-        putItem(inventory, slot, ItemFactory.rename(ItemFactory.getItemStackFromConfig(configPath), msg), run);
+        putItem(inventory, slot, ItemFactory.rename(ItemFactory.getItemStackFromConfig(configPath), msg, lore), run);
     }
 
     @Override

@@ -137,7 +137,9 @@ public class MessageManager {
         addMessage("Menu.Buy-Ammo.Title", "&lBuy Ammo");
         addMessage("Menu.Rename-Pet.Title", "&lRename Pet");
         addMessage("Disable-Gadgets", "&c&lDisable Gadgets");
+        addMessage("Disable-Gadgets-Lore", "&cDisables use of gadgets and effects of them on you");
         addMessage("Enable-Gadgets", "&a&lEnable Gadgets");
+        addMessage("Enable-Gadgets-Lore", "&aEnables use of gadgets and effects of them on you");
         addMessage("Disable-Third-Person-View", "&c&lDisable Morphs Third Person View");
         addMessage("Enable-Third-Person-View", "&a&lEnable Morphs Third Person View");
         addMessage("Disable-Filter-By-Owned", "&c&lChange to Show All");
