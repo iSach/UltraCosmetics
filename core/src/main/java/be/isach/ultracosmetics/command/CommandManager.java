@@ -1,9 +1,21 @@
 package be.isach.ultracosmetics.command;
 
 import be.isach.ultracosmetics.UltraCosmetics;
-import be.isach.ultracosmetics.command.subcommands.*;
+import be.isach.ultracosmetics.command.subcommands.SubCommandClear;
+import be.isach.ultracosmetics.command.subcommands.SubCommandGadgets;
+import be.isach.ultracosmetics.command.subcommands.SubCommandGive;
+import be.isach.ultracosmetics.command.subcommands.SubCommandMenu;
+import be.isach.ultracosmetics.command.subcommands.SubCommandMigrate;
+import be.isach.ultracosmetics.command.subcommands.SubCommandReload;
+import be.isach.ultracosmetics.command.subcommands.SubCommandReward;
+import be.isach.ultracosmetics.command.subcommands.SubCommandSelfView;
+import be.isach.ultracosmetics.command.subcommands.SubCommandToggle;
+import be.isach.ultracosmetics.command.subcommands.SubCommandTreasure;
+import be.isach.ultracosmetics.command.subcommands.SubCommandTreasureNotification;
+import be.isach.ultracosmetics.command.subcommands.SubCommandUpdate;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.util.MathUtils;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -43,18 +55,21 @@ public class CommandManager implements CommandExecutor {
         commands.add(meCommand);
     }
 
-    public void showHelp(CommandSender commandSender, int page) {
-        commandSender.sendMessage("");
-        commandSender.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "UltraCosmetics Help (/uc <page>) " + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "(" + page + "/" + getMaxPages() + ")");
-        int from = 1;
-        if (page > 1)
-            from = 8 * (page - 1) + 1;
+    public void showHelp(CommandSender sender, int page) {
+        List<SubCommand> available = new ArrayList<>();
+        commands.stream().filter(c -> sender.hasPermission(c.getPermission())).forEach(available::add);
+        if (available.size() < 1) {
+            sender.sendMessage(MessageManager.getMessage("No-Permission"));
+            return;
+        }
+        sender.sendMessage("");
+        sender.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + "UltraCosmetics Help (/uc <page>) " + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "(" + page + "/" + getMaxPages(available.size()) + ")");
+        int from = 8 * (page - 1);
         int to = 8 * page;
-        for (int h = from; h <= to; h++) {
-            if (h > commands.size())
-                break;
-            SubCommand sub = commands.get(h - 1);
-            commandSender.sendMessage(ChatColor.DARK_GRAY + "|  " + ChatColor.GRAY + sub.getUsage() + ChatColor.WHITE + " " + ChatColor.ITALIC + sub.getDescription());
+        for (int i = from; i < to; i++) {
+            if (i >= available.size()) break;
+            SubCommand sub = available.get(i);
+            sender.sendMessage(ChatColor.DARK_GRAY + "|  " + ChatColor.GRAY + sub.getUsage() + ChatColor.WHITE + " " + ChatColor.ITALIC + sub.getDescription());
         }
     }
 
@@ -63,13 +78,13 @@ public class CommandManager implements CommandExecutor {
      *
      * @return the maximum amount of pages.
      */
-    private int getMaxPages() {
+    private int getMaxPages(int commands) {
         int max = 8;
         // test cases:
         // 8 commands: cmds - 1 = 7, 7 / 8 = 0, 0 + 1 = 1
         // 9 commands: cmds - 1 = 8, 8 / 8 = 1, 1 + 1 = 2
         // 0 commands: cmds - 1 = -1, -1 / 8 = 0, 0 + 1 = 1
-        return ((commands.size() - 1) / max) + 1;
+        return ((commands - 1) / max) + 1;
     }
 
     @Override
@@ -125,7 +140,7 @@ public class CommandManager implements CommandExecutor {
         registerCommand(new SubCommandGadgets(ultraCosmetics));
         registerCommand(new SubCommandSelfView(ultraCosmetics));
         registerCommand(new SubCommandMenu(ultraCosmetics));
-        //registerCommand(new SubCommandPurge(ultraCosmetics));
+        // registerCommand(new SubCommandPurge(ultraCosmetics));
         registerCommand(new SubCommandGive(ultraCosmetics));
         registerCommand(new SubCommandToggle(ultraCosmetics));
         registerCommand(new SubCommandClear(ultraCosmetics));

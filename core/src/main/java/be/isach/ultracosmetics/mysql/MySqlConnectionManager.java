@@ -9,11 +9,8 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.log.SmartLogger;
 import be.isach.ultracosmetics.log.SmartLogger.LogLevel;
-import be.isach.ultracosmetics.mysql.hikari.IHikariHook;
-import be.isach.ultracosmetics.mysql.hikari.OldHikariHook;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -32,7 +29,7 @@ import javax.sql.DataSource;
  * Date: 5/08/16
  * Project: UltraCosmetics
  */
-public class MySqlConnectionManager extends BukkitRunnable {
+public class MySqlConnectionManager {
     private final String tableName;
     /**
      * UltraCosmetics instance.
@@ -47,7 +44,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
     /**
      * Connecting pooling.
      */
-    private final IHikariHook hikariHook;
+    private final HikariHook hikariHook;
     private final DataSource dataSource;
     private final String CREATE_TABLE;
     private final List<Column<?>> columns = new ArrayList<>();
@@ -65,14 +62,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
         String password = section.getString("password");
         tableName = section.getString("table");
 
-        hikariHook = createHikariHook(hostname, port, database, username, password);
-        if (hikariHook == null) {
-            // If we couldn't load the Hikari hook, finish initializing the final
-            // fields and give up, an error has already been thrown.
-            dataSource = null;
-            CREATE_TABLE = null;
-            return;
-        }
+        hikariHook = new HikariHook(hostname, port, database, username, password);
         dataSource = hikariHook.getDataSource();
 
         // "PRIMARY KEY" implies UNIQUE NOT NULL.
@@ -100,7 +90,7 @@ public class MySqlConnectionManager extends BukkitRunnable {
                 }
                 continue;
             }
-            
+
             columns.add(new StringColumn(cat.toString().toLowerCase(), 32));
         }
 
@@ -109,14 +99,11 @@ public class MySqlConnectionManager extends BukkitRunnable {
             columnJoiner.add(column.toString());
         }
         CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `" + tableName + "`" + columnJoiner.toString();
+
+        startup();
     }
 
-    public void start() {
-        runTaskAsynchronously(ultraCosmetics);
-    }
-
-    @Override
-    public void run() {
+    public void startup() {
         try (Connection co = dataSource.getConnection()) {
             try (PreparedStatement sql = co.prepareStatement(CREATE_TABLE)) {
                 sql.executeUpdate();
@@ -129,7 +116,6 @@ public class MySqlConnectionManager extends BukkitRunnable {
             reportFailure(e);
             return;
         }
-        ultraCosmetics.getPlayerManager().initPlayers();
     }
 
     private void reportFailure(Throwable e) {
@@ -163,26 +149,6 @@ public class MySqlConnectionManager extends BukkitRunnable {
 
     public void shutdown() {
         hikariHook.close();
-    }
-
-    private IHikariHook createHikariHook(String hostname, String port, String database, String username, String password) {
-        Class<?> hook;
-        try {
-            hook = Class.forName("be.isach.ultracosmetics.mysql.hikari.NewHikariHook");
-            ultraCosmetics.getSmartLogger().write("Loading Hikari for Java 11...");
-            // I think ClassNotFoundException would only be thrown if NewHikariHook isn't present, but we have to catch it anyway
-        } catch (UnsupportedClassVersionError | ClassNotFoundException | NoClassDefFoundError e) {
-            hook = OldHikariHook.class;
-            ultraCosmetics.getSmartLogger().write("Loading Hikari for Java 8...");
-        }
-        try {
-            return (IHikariHook) hook.getDeclaredConstructor(String.class, String.class, String.class, String.class, String.class)
-                    .newInstance(hostname, port, database, username, password);
-        } catch (ReflectiveOperationException e) {
-            ultraCosmetics.getSmartLogger().write(LogLevel.ERROR, "Failed to initialize Hikari handler");
-            reportFailure(e);
-            return null;
-        }
     }
 
     /**

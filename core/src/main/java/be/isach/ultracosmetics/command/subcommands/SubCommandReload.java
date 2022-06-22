@@ -17,6 +17,7 @@ public class SubCommandReload extends SubCommand {
     protected void onExeAnyone(CommandSender sender, String[] args) {
         sender.sendMessage(ChatColor.YELLOW + "Please note that this currently ONLY reloads the messages.yml file.");
         MessageManager.reload();
+        ultraCosmetics.reload();
         sender.sendMessage(ChatColor.GREEN + "Messages reloaded");
     }
 

@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -30,6 +31,11 @@ import java.util.List;
  * @since 10-12-2015
  */
 public class GadgetQuakeGun extends Gadget implements PlayerAffectingCosmetic {
+    private static final FireworkEffect FIREWORK_EFFECT;
+    static {
+        FIREWORK_EFFECT = FireworkEffect.builder().flicker(false).trail(false)
+                .with(FireworkEffect.Type.BALL_LARGE).withColor(Color.RED).withFade(Color.ORANGE).build();
+    }
 
     private List<Firework> fireworkList = new ArrayList<>();
 
@@ -56,16 +62,14 @@ public class GadgetQuakeGun extends Gadget implements PlayerAffectingCosmetic {
                         && entity != getPlayer() && canAffect(entity)) {
                     MathUtils.applyVelocity(entity, new Vector(0, 1, 0));
                     Particles.FLAME.display(entity.getLocation(), 60, 0.4f);
-                    FireworkEffect.Builder builder = FireworkEffect.builder();
-                    FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE)
-                            .withColor(Color.RED).withFade(Color.ORANGE).build();
-                    UltraCosmeticsData.get().getVersionManager().getFireworkFactory().spawn(location, effect);
+                    UltraCosmeticsData.get().getVersionManager().getFireworkFactory().spawn(location, FIREWORK_EFFECT);
                 }
             }
         }
         Bukkit.getScheduler().runTaskLaterAsynchronously(getUltraCosmetics(), () -> {
-            for (Firework firework : fireworkList)
+            for (Firework firework : fireworkList) {
                 UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendDestroyPacket(getPlayer(), firework);
+            }
         }, 6);
     }
 }

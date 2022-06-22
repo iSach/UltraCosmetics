@@ -27,7 +27,7 @@ import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.PurchaseData;
 import be.isach.ultracosmetics.util.ServerVersion;
-import com.cryptomorin.xseries.XMaterial;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -36,6 +36,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.Permission;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +59,7 @@ public class UltraPlayer {
      * all others are in `equipped`.
      */
     private final Map<Category,Cosmetic<?>> equipped = new HashMap<>();
-    private final Map<ArmorSlot, Suit> suitMap = new HashMap<>();
+    private final Map<ArmorSlot,Suit> suitMap = new HashMap<>();
     private TreasureChest currentTreasureChest;
 
     /**
@@ -78,7 +80,7 @@ public class UltraPlayer {
      * The value is the currentTimeMillis when the player should
      * regain access to the gadget.
      */
-    private final Map<GadgetType, Long> gadgetCooldowns = new HashMap<>();
+    private final Map<GadgetType,Long> gadgetCooldowns = new HashMap<>();
 
     private volatile boolean moving;
     private volatile Location lastPos;
@@ -97,10 +99,16 @@ public class UltraPlayer {
     private String clientBrand = null;
 
     /**
+     * Stores the last page of the gadgets menu the user looked at
+     * before clicking to purchase ammo.
+     */
+    private int lastGadgetPage = 1;
+
+    /**
      * Allows to store custom data for each player easily.
      * Created on join, and deleted on quit.
      *
-     * @param uuid The player UUID.
+     * @param uuid           The player UUID.
      * @param ultraCosmetics UltraCosmetics
      */
     public UltraPlayer(UUID uuid, UltraCosmetics ultraCosmetics) {
@@ -111,7 +119,7 @@ public class UltraPlayer {
             cosmeticsProfile = new FileCosmeticsProfile(this, ultraCosmetics);
         } else {
             // loads data from database async
-            cosmeticsProfile = new SqlCache(this, ultraCosmetics); 
+            cosmeticsProfile = new SqlCache(this, ultraCosmetics);
         }
     }
 
@@ -124,9 +132,7 @@ public class UltraPlayer {
     public double getCooldown(GadgetType gadget) {
         Long count = gadgetCooldowns.get(gadget);
 
-        if (count == null || System.currentTimeMillis() > count) {
-            return 0;
-        }
+        if (count == null || System.currentTimeMillis() > count) return 0;
 
         double valueMillis = count - System.currentTimeMillis();
         return valueMillis / 1000d;
@@ -139,14 +145,14 @@ public class UltraPlayer {
     /**
      * Sets the cooldown of a gadget.
      *
-     * @param gadget    The gadget.
+     * @param gadget The gadget.
      */
     public void setCoolDown(GadgetType gadget) {
         double cooldown = gadget.getCountdown();
         if (isBypassingCooldown()) {
             cooldown = gadget.getRunTime();
         }
-        gadgetCooldowns.put(gadget, (long)(cooldown * 1000 + System.currentTimeMillis()));
+        gadgetCooldowns.put(gadget, (long) (cooldown * 1000 + System.currentTimeMillis()));
     }
 
     /**
@@ -159,20 +165,38 @@ public class UltraPlayer {
     }
 
     public Cosmetic<?> getCosmetic(Category category) {
-        if (category == Category.SUITS) {
-            throw new IllegalArgumentException("Can't use generic getCosmetic for suit category!");
-        }
+        if (category == Category.SUITS) throw new IllegalArgumentException("Can't use generic getCosmetic for suit category!");
         return equipped.get(category);
     }
 
     // I don't like this but I can't think of a better way without a bunch of casting elsewhere
-    public ParticleEffect getCurrentParticleEffect() { return (ParticleEffect) getCosmetic(Category.EFFECTS); }
-    public Emote getCurrentEmote() { return (Emote) getCosmetic(Category.EMOTES); }
-    public Gadget getCurrentGadget() { return (Gadget) getCosmetic(Category.GADGETS); }
-    public Hat getCurrentHat() { return (Hat) getCosmetic(Category.HATS); }
-    public Morph getCurrentMorph() { return (Morph) getCosmetic(Category.MORPHS); }
-    public Mount getCurrentMount() { return (Mount) getCosmetic(Category.MOUNTS); }
-    public Pet getCurrentPet() { return (Pet) getCosmetic(Category.PETS); }
+    public ParticleEffect getCurrentParticleEffect() {
+        return (ParticleEffect) getCosmetic(Category.EFFECTS);
+    }
+
+    public Emote getCurrentEmote() {
+        return (Emote) getCosmetic(Category.EMOTES);
+    }
+
+    public Gadget getCurrentGadget() {
+        return (Gadget) getCosmetic(Category.GADGETS);
+    }
+
+    public Hat getCurrentHat() {
+        return (Hat) getCosmetic(Category.HATS);
+    }
+
+    public Morph getCurrentMorph() {
+        return (Morph) getCosmetic(Category.MORPHS);
+    }
+
+    public Mount getCurrentMount() {
+        return (Mount) getCosmetic(Category.MOUNTS);
+    }
+
+    public Pet getCurrentPet() {
+        return (Pet) getCosmetic(Category.PETS);
+    }
 
     public boolean hasCosmetic(Category category) {
         return equipped.containsKey(category);
@@ -180,33 +204,29 @@ public class UltraPlayer {
 
     /**
      * Unequips the cosmetic of the specified category.
-     * 
+     *
      * @return {@code true} if a cosmetic was actually unequipped
      */
     public boolean removeCosmetic(Category category) {
-        if (category == Category.SUITS) {
-            return removeSuit();
-        }
+        if (category == Category.SUITS) return removeSuit();
 
-        if (!equipped.containsKey(category)) {
-            return false;
-        }
+        if (!equipped.containsKey(category)) return false;
 
         unsetCosmetic(category).clear();
-        
+
         return true;
     }
 
     /**
      * Removes a cosmetic from a player without calling clear()
      * Internal use only
-     * 
+     *
      * @param category The category of cosmetic to unequip
      * @return
      */
     public Cosmetic<?> unsetCosmetic(Category category) {
         if (!isQuitting()) {
-            cosmeticsProfile.setEnabledCosmetic(category, (CosmeticType<?>)null);
+            cosmeticsProfile.setEnabledCosmetic(category, (CosmeticType<?>) null);
         }
         return equipped.remove(category);
     }
@@ -214,13 +234,13 @@ public class UltraPlayer {
     /**
      * Sets a cosmetic as equipped, unequipping any cosmetic
      * of the same category that is already equipped.
-     * 
+     *
      * Note that this does not actually call equip() on the cosmetic,
      * equipping should be done before this method is called.
-     * 
+     *
      * Category of the cosmetic is automatically determined.
      * For equipping a Suit part, please use setCurrentSuitPart(ArmorSlot, Suit)
-     * 
+     *
      * @param cosmetic The cosmetic to set as equipped.
      */
     public void setCosmeticEquipped(Cosmetic<?> cosmetic) {
@@ -285,9 +305,7 @@ public class UltraPlayer {
      * @param armorSlot The ArmorSlot to remove.
      */
     public boolean removeSuit(ArmorSlot armorSlot) {
-        if (!suitMap.containsKey(armorSlot)) {
-            return false;
-        }
+        if (!suitMap.containsKey(armorSlot)) return false;
 
         getSuit(armorSlot).clear();
         setCurrentSuitPart(armorSlot, null);
@@ -295,9 +313,7 @@ public class UltraPlayer {
     }
 
     public double getBalance() {
-        if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
-            return ultraCosmetics.getEconomyHandler().balance(getBukkitPlayer());
-        }
+        if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) return ultraCosmetics.getEconomyHandler().balance(getBukkitPlayer());
         return 0;
     }
 
@@ -356,15 +372,17 @@ public class UltraPlayer {
     public boolean clear() {
         boolean toReturn = hasCosmeticsEquipped();
         if (Category.MORPHS.isEnabled() && Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")
-                // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
-                // If player is "quitting", remove the disguise anyway. Player is marked as quitting
-                // when changing worlds, making sure morphs get correctly unset.
+        // Ensure disguises in non-enabled worlds (not from UC) aren't cleared on accident.
+        // If player is "quitting", remove the disguise anyway. Player is marked as quitting
+        // when changing worlds, making sure morphs get correctly unset.
                 && (isQuitting() || SettingsManager.isAllowedWorld(getBukkitPlayer().getWorld()))) {
             removeCosmetic(Category.MORPHS);
         }
         for (Category cat : Category.values()) {
             // handled above
-            if (cat == Category.MORPHS) continue;
+            if (cat == Category.MORPHS) {
+                continue;
+            }
             removeCosmetic(cat);
         }
         removeTreasureChest();
@@ -375,14 +393,10 @@ public class UltraPlayer {
      * Opens the Key Purchase Menu.
      */
     public void openKeyPurchaseMenu() {
-        if (!ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
-            return;
-        }
+        if (!ultraCosmetics.getEconomyHandler().isUsingEconomy()) return;
 
         int price = SettingsManager.getConfig().getInt("TreasureChests.Key-Price");
-        if (price < 1) {
-            return;
-        }
+        if (price < 1) return;
 
         if (!getBukkitPlayer().hasPermission("ultracosmetics.treasurechests.buykey")) {
             getBukkitPlayer().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "You don't have permission to buy Treasure Keys.");
@@ -415,7 +429,7 @@ public class UltraPlayer {
         }
         cosmeticsProfile.setPetName(petType, name);
         if (hasCosmetic(Category.PETS)) {
-            ((Pet)getCosmetic(Category.PETS)).updateName();
+            ((Pet) getCosmetic(Category.PETS)).updateName();
         }
     }
 
@@ -448,8 +462,7 @@ public class UltraPlayer {
 
     public void applyVelocity(Vector vector) {
         getBukkitPlayer().setVelocity(vector);
-        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () ->
-                FallDamageManager.addNoFall(getBukkitPlayer()), 2);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> FallDamageManager.addNoFall(getBukkitPlayer()), 2);
     }
 
     /**
@@ -569,8 +582,9 @@ public class UltraPlayer {
                 && getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
                 && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
                 && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
-                .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname")))))
+                        .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
             getBukkitPlayer().getInventory().setItem(slot, null);
+        }
     }
 
     public void sendMessage(Object message) {
@@ -662,6 +676,7 @@ public class UltraPlayer {
      * We're doing this weird inverted equals() check because it means we don't have to do
      * a separate null check.
      * Not currently used anywhere.
+     *
      * @return {@code true} if the client says it is a Geyser client.
      */
     public boolean isGeyserClient() {
@@ -670,5 +685,13 @@ public class UltraPlayer {
 
     public void setClientBrand(String brand) {
         this.clientBrand = brand;
+    }
+
+    public int getGadgetsPage() {
+        return lastGadgetPage;
+    }
+
+    public void setGadgetsPage(int gadgetsPage) {
+        this.lastGadgetPage = gadgetsPage;
     }
 }

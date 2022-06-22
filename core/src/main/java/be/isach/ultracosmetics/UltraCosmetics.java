@@ -140,9 +140,7 @@ public class UltraCosmetics extends JavaPlugin {
         UltraCosmeticsData.init(this);
 
         failReason = UltraCosmeticsData.get().checkServerVersion();
-        if (failReason != null) {
-            return;
-        }
+        if (failReason != null) return;
 
         // Use super.getConfig() because CustomConfiguration doesn't load until onEnable
         boolean worldGuardIntegration = super.getConfig().getBoolean("WorldGuard-Integration", true);
@@ -234,11 +232,9 @@ public class UltraCosmetics extends JavaPlugin {
         // Set up Cosmetics config.
         new CosmeticManager(this).setupCosmeticsConfigs();
 
-        if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+        if (Category.MORPHS.isEnabled() && !Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
             getSmartLogger().write();
-            getSmartLogger().write("Morphs require Lib's Disguises!");
-            getSmartLogger().write();
-            getSmartLogger().write("Morphs disabled.");
+            getSmartLogger().write("Morphs require Lib's Disguises, but it is not installed. Morphs will be disabled.");
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -259,21 +255,15 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write();
             getSmartLogger().write("Connecting to MySQL database...");
 
-            // Start MySQL.
+            // Start MySQL. May forcefully switch to file storage if it fails to connect.
             mySqlConnectionManager = new MySqlConnectionManager(this);
             if (mySqlConnectionManager.success()) {
-                mySqlConnectionManager.start();
                 getSmartLogger().write("Connected to MySQL database.");
+            } else {
+                getSmartLogger().write("File storage will be used instead.");
             }
         }
-        // This might seem redundant, but MySQLConnectionManager
-        // forcefully switches to file storage if it fails to connect.
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            // Initialize UltraPlayers and give chest (if needed).
-            // Only actually does anything when the plugin is reloaded or loaded REALLY late.
-            // MySQL manager handles this when active.
-            playerManager.initPlayers();
-        }
+        playerManager.initPlayers();
 
         // Start the Fall Damage and Invalid World Check Runnables.
 
@@ -288,7 +278,7 @@ public class UltraCosmetics extends JavaPlugin {
         // Start up bStats
         new Metrics(this, 2629);
 
-        this.menus = new Menus(this);
+        reload();
 
         try {
             config.save(file);
@@ -306,14 +296,20 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     /**
+     * Called on startup and when things need to be reloaded.
+     * Currently only some parts of the plugin are reloaded.
+     */
+    public void reload() {
+        this.menus = new Menus(this);
+    }
+
+    /**
      * Called when plugin disables.
      */
     @Override
     public void onDisable() {
         // when the plugin is disabled from onEnable, skip cleanup
-        if (!enableFinished) {
-            return;
-        }
+        if (!enableFinished) return;
 
         if (mySqlConnectionManager != null && mySqlConnectionManager.success()) {
             mySqlConnectionManager.shutdown();
@@ -381,9 +377,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (!file.exists()) {
             saveResource("config.yml", false);
         }
-        if (!loadConfiguration(file)) {
-            return false;
-        }
+        if (!loadConfiguration(file)) return false;
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
@@ -426,10 +420,11 @@ public class UltraCosmetics extends JavaPlugin {
         if (!config.isInt("TreasureChests.Loots.Money.Min")) {
             int min = 15;
             int max = config.getInt("TreasureChests.Loots.Money.Max");
-            if (max < 5)
+            if (max < 5) {
                 min = 0;
-            else if (max < 15)
+            } else if (max < 15) {
                 min = 5;
+            }
             config.set("TreasureChests.Loots.Money.Min", min);
         }
 
@@ -676,9 +671,7 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     public CosmeticRegionState cosmeticRegionState(Player player, Category category) {
-        if (!worldGuardHooked()) {
-            return CosmeticRegionState.ALLOWED;
-        }
+        if (!worldGuardHooked()) return CosmeticRegionState.ALLOWED;
         return flagManager.allowedCosmeticsState(player, category);
     }
 
