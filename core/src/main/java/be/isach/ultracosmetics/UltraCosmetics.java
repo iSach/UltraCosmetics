@@ -54,6 +54,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import me.libraryaddict.disguise.DisguiseConfig;
+
 /**
  * Main class of the plugin.
  *
@@ -231,9 +233,20 @@ public class UltraCosmetics extends JavaPlugin {
         // Set up Cosmetics config.
         new CosmeticManager(this).setupCosmeticsConfigs();
 
-        if (Category.MORPHS.isEnabled() && !Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            getSmartLogger().write();
-            getSmartLogger().write("Morphs require Lib's Disguises, but it is not installed. Morphs will be disabled.");
+        if (Category.MORPHS.isEnabled()) {
+            if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+                getSmartLogger().write();
+                getSmartLogger().write("Morphs require Lib's Disguises, but it is not installed. Morphs will be disabled.");
+            } else {
+                try {
+                    // Option is not present on older versions of LibsDisguises, added in commit af492c2
+                    if (!DisguiseConfig.isTallSelfDisguises()) {
+                        getSmartLogger().write();
+                        getSmartLogger().write(LogLevel.WARNING, "You have TallSelfDisguises disabled in LibsDisguises's players.yml. Self view of morphs may not work as expected.");
+                    }
+                } catch (NoSuchMethodError ignored) {
+                }
+            }
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
