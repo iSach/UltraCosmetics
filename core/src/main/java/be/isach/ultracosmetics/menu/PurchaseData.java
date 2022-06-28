@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.util;
+package be.isach.ultracosmetics.menu;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -9,6 +9,7 @@ public class PurchaseData {
 
     private int price;
     private Runnable onPurchase;
+    private Runnable onCancel;
     private ItemStack showcaseItem;
 
     public int getPrice() {
@@ -23,16 +24,24 @@ public class PurchaseData {
         return onPurchase;
     }
 
+    public Runnable getOnCancel() {
+        return onCancel;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public void setOnPurchase(Runnable onPurchase) {
         this.onPurchase = onPurchase;
+    }
+
+    public void setOnCancel(Runnable onCancel) {
+        this.onCancel = onCancel;
     }
 
     public void setShowcaseItem(ItemStack showcaseItem) {
         this.showcaseItem = showcaseItem;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
 }
-

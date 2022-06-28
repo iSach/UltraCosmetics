@@ -15,9 +15,7 @@ import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.menu.menus.MenuSuits;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.PurchaseData;
 
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -102,10 +100,12 @@ public class Menus {
         pd.setShowcaseItem(display);
         pd.setOnPurchase(() -> {
             player.addAmmo(type, type.getResultAmmoAmount());
-            Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> {
-                ultraCosmetics.getMenus().getGadgetsMenu().open(player, player.getGadgetsPage());
-                player.setGadgetsPage(1);
-            }, 1);
+            ultraCosmetics.getMenus().getGadgetsMenu().open(player, player.getGadgetsPage());
+            player.setGadgetsPage(1);
+        });
+        pd.setOnCancel(() -> {
+            ultraCosmetics.getMenus().getGadgetsMenu().open(player, player.getGadgetsPage());
+            player.setGadgetsPage(1);
         });
         MenuPurchase mp = new MenuPurchase(ultraCosmetics, MessageManager.getMessage("Menu.Buy-Ammo.Title"), pd);
         player.getBukkitPlayer().openInventory(mp.getInventory(player));

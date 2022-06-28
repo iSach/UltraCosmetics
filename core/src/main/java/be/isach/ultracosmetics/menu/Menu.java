@@ -137,15 +137,6 @@ public abstract class Menu implements Listener {
         return ultraCosmetics;
     }
 
-    public void openMainMenu(UltraPlayer ultraPlayer) {
-        if (ultraCosmetics.getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled")) {
-            String command = ultraCosmetics.getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "").replace("{player}", ultraPlayer.getBukkitPlayer().getName()).replace("{playeruuid}", ultraPlayer.getUUID().toString());
-            Bukkit.dispatchCommand(ultraCosmetics.getServer().getConsoleSender(), command);
-        } else {
-            ultraCosmetics.getMenus().getMainMenu().open(ultraPlayer);
-        }
-    }
-
     protected abstract void putItems(Inventory inventory, UltraPlayer player);
 
     protected abstract int getSize();

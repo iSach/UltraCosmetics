@@ -7,9 +7,9 @@ import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.menu.ClickRunnable;
 import be.isach.ultracosmetics.menu.CosmeticMenu;
+import be.isach.ultracosmetics.menu.PurchaseData;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.PurchaseData;
 import be.isach.ultracosmetics.version.AnvilGUI;
 
 import org.bukkit.ChatColor;
@@ -88,7 +88,9 @@ public class MenuPets extends CosmeticMenu<PetType> {
         purchaseData.setShowcaseItem(showcaseItem);
         purchaseData.setOnPurchase(() -> {
             ultraPlayer.setPetName(ultraPlayer.getCurrentPet().getType(), formattedName);
+            this.open(ultraPlayer);
         });
+        purchaseData.setOnCancel(() -> this.open(ultraPlayer));
 
         MenuPurchase menu = new MenuPurchase(getUltraCosmetics(), MessageManager.getMessage("Menu.Purchase-Rename.Title"), purchaseData);
         return menu.getInventory(ultraPlayer);

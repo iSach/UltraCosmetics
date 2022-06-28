@@ -7,10 +7,10 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticEntType;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.menu.menus.MenuMain;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.PurchaseData;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -167,7 +167,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         // Go Back to Main Menu Arrow.
         if (getCategory().hasGoBackArrow()) {
             ItemStack item = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Back-Main-Menu-Item"), MessageManager.getMessage("Menu.Main.Title"));
-            putItem(inventory, inventory.getSize() - 6, item, (data) -> openMainMenu(player));
+            putItem(inventory, inventory.getSize() - 6, item, (data) -> MenuMain.openMainMenu(player));
         }
 
         if (hasUnlockable && !SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")) {
@@ -354,9 +354,14 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             pd.setShowcaseItem(display);
             pd.setOnPurchase(() -> {
                 ultraCosmetics.getPermissionProvider().setPermission(ultraPlayer.getBukkitPlayer(), cosmeticType.getPermission());
-                // delay by one tick so the command processes
-                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cosmeticType.equip(ultraPlayer, getUltraCosmetics()), 5);
+                // delay by five ticks so the command processes
+                // TODO: how long is actually required?
+                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+                    cosmeticType.equip(ultraPlayer, getUltraCosmetics());
+                    this.open(ultraPlayer);
+                }, 5);
             });
+            pd.setOnCancel(() -> this.open(ultraPlayer));
             MenuPurchase mp = new MenuPurchase(getUltraCosmetics(), "Purchase " + cosmeticType.getName(), pd);
             ultraPlayer.getBukkitPlayer().openInventory(mp.getInventory(ultraPlayer));
             return false; // we just opened another inventory, don't close it

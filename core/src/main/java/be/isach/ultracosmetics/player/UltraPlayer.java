@@ -18,6 +18,8 @@ import be.isach.ultracosmetics.cosmetics.suits.Suit;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.menu.PurchaseData;
+import be.isach.ultracosmetics.menu.menus.MenuMain;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.mysql.SqlCache;
 import be.isach.ultracosmetics.player.profile.CosmeticsProfile;
@@ -25,7 +27,6 @@ import be.isach.ultracosmetics.player.profile.FileCosmeticsProfile;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.treasurechests.TreasureChest;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.PurchaseData;
 import be.isach.ultracosmetics.util.ServerVersion;
 
 import org.bukkit.Bukkit;
@@ -410,7 +411,9 @@ public class UltraPlayer {
         pd.setShowcaseItem(itemStack);
         pd.setOnPurchase(() -> {
             addKey();
+            MenuMain.openMainMenu(this);
         });
+        pd.setOnCancel(() -> MenuMain.openMainMenu(this));
         MenuPurchase mp = new MenuPurchase(ultraCosmetics, MessageManager.getMessage("Buy-Treasure-Key"), pd);
         Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(mp.getInventory(this)), 1);
     }
