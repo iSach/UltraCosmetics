@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     // ideally matches the dependency version of the latest NMS module
-    compileOnly 'org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
     compileOnly('LibsDisguises:LibsDisguises:10.0.28') {
         exclude group: 'org.spigotmc'
         exclude group: 'com.comphenix.protocol'
@@ -23,7 +23,7 @@ dependencies {
     // NMS modules can't actually use XSeries but it doesn't compile without 'api'.
     // IDEs do not like it when 'core' references XSeries directly
     // but subprojects must reference XSeries as shaded.
-    api 'com.github.cryptomorin:XSeries:8.7.1'
+    api 'com.github.cryptomorin:XSeries:8.8.0'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
     compileOnly 'net.luckperms:api:5.4'
     implementation 'com.zaxxer:HikariCP:4.0.3'
