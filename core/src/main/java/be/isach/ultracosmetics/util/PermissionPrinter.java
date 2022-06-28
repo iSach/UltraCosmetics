@@ -2,7 +2,15 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.command.SubCommand;
-import be.isach.ultracosmetics.cosmetics.type.*;
+import be.isach.ultracosmetics.cosmetics.type.EmoteType;
+import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+import be.isach.ultracosmetics.cosmetics.type.HatType;
+import be.isach.ultracosmetics.cosmetics.type.MorphType;
+import be.isach.ultracosmetics.cosmetics.type.MountType;
+import be.isach.ultracosmetics.cosmetics.type.ParticleEffectType;
+import be.isach.ultracosmetics.cosmetics.type.PetType;
+import be.isach.ultracosmetics.cosmetics.type.SuitCategory;
+import be.isach.ultracosmetics.cosmetics.type.SuitType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,7 +52,6 @@ public class PermissionPrinter {
         writer.println("General permissions, enabled by default:");
         writer.println("  - ultracosmetics.receivechest");
         writer.println("  - ultracosmetics.openmenu");
-        writer.println("  - ultracosmetics.commands.treasurenotification");
         writer.println();
         writer.println("Treasure Chests:");
         writer.println("  - ultracosmetics.treasurechests.buykey (enabled by default)");
@@ -56,7 +63,11 @@ public class PermissionPrinter {
         writer.println("Commands:");
         writer.println("  - ultracosmetics.command.*");
         for (SubCommand subCommand : ultraCosmetics.getCommandManager().getCommands()) {
-            writer.println("  - " + subCommand.getPermission());
+            writer.print("  - " + subCommand.getPermission());
+            if (subCommand.isDefault()) {
+                writer.print(" (enabled by default)");
+            }
+            writer.println();
         }
         writer.println();
         writer.println("Other:");

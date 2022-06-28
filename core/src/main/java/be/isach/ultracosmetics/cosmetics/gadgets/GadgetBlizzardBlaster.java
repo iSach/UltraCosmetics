@@ -29,14 +29,14 @@ public class GadgetBlizzardBlaster extends Gadget implements PlayerAffectingCosm
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         this.vector = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         this.vector.setY(0);
 
         this.location = getPlayer().getLocation().subtract(0, 1, 0).add(vector);
         this.active = true;
 
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 40);
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> active = false, 40);
 
     }
 
@@ -48,13 +48,13 @@ public class GadgetBlizzardBlaster extends Gadget implements PlayerAffectingCosm
             }
 
             if (BlockUtils.isAir(location.clone().subtract(0, 1, 0).getBlock().getType())) {
-                if (!location.clone().getBlock().getType().toString().contains("SLAB"))
+                if (!location.clone().getBlock().getType().toString().contains("SLAB")) {
                     location.add(0, -1, 0);
+                }
             }
 
             for (int i = 0; i < 3; i++) {
-                UltraCosmeticsData.get().getVersionManager().getEntityUtil()
-                        .sendBlizzard(getPlayer(), location, this::canAffect, vector);
+                UltraCosmeticsData.get().getVersionManager().getEntityUtil().sendBlizzard(getPlayer(), location, this::canAffect, vector);
             }
 
             location.add(vector);
@@ -70,9 +70,5 @@ public class GadgetBlizzardBlaster extends Gadget implements PlayerAffectingCosm
             return;
         }
         UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearBlizzard(getPlayer());
-    }
-
-    private void clean() {
-        active = false;
     }
 }

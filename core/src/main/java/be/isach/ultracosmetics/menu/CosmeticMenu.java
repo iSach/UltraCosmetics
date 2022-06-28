@@ -7,10 +7,10 @@ import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticEntType;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
+import be.isach.ultracosmetics.menu.menus.MenuMain;
 import be.isach.ultracosmetics.menu.menus.MenuPurchase;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import be.isach.ultracosmetics.util.PurchaseData;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,7 +41,6 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             19, 20, 21, 22, 23, 24, 25,
             28, 29, 30, 31, 32, 33, 34
     };
-
 
     protected Category category;
 
@@ -168,7 +167,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         // Go Back to Main Menu Arrow.
         if (getCategory().hasGoBackArrow()) {
             ItemStack item = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Back-Main-Menu-Item"), MessageManager.getMessage("Menu.Main.Title"));
-            putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(player));
+            putItem(inventory, inventory.getSize() - 6, item, (data) -> MenuMain.openMainMenu(player));
         }
 
         if (hasUnlockable && !SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")) {
@@ -271,7 +270,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer ultraPlayer) {
-        //--
+        // --
     }
 
     /**
@@ -329,10 +328,10 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
     /**
      * Handles clicking on cosmetics in the GUI
-     * 
-     * @param data The ClickData from the event
+     *
+     * @param data         The ClickData from the event
      * @param cosmeticType The cosmetic that was clicked
-     * @param price The price of the clicked cosmetic
+     * @param price        The price of the clicked cosmetic
      * @return true if closing the inventory now is OK
      */
     protected boolean handleClick(ClickData data, T cosmeticType, int price) {
@@ -355,9 +354,14 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             pd.setShowcaseItem(display);
             pd.setOnPurchase(() -> {
                 ultraCosmetics.getPermissionProvider().setPermission(ultraPlayer.getBukkitPlayer(), cosmeticType.getPermission());
-                // delay by one tick so the command processes
-                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> cosmeticType.equip(ultraPlayer, getUltraCosmetics()), 5);
+                // delay by five ticks so the command processes
+                // TODO: how long is actually required?
+                Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+                    cosmeticType.equip(ultraPlayer, getUltraCosmetics());
+                    this.open(ultraPlayer);
+                }, 5);
             });
+            pd.setOnCancel(() -> this.open(ultraPlayer));
             MenuPurchase mp = new MenuPurchase(getUltraCosmetics(), "Purchase " + cosmeticType.getName(), pd);
             ultraPlayer.getBukkitPlayer().openInventory(mp.getInventory(ultraPlayer));
             return false; // we just opened another inventory, don't close it
@@ -384,9 +388,9 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
     protected boolean shouldHideItem(UltraPlayer player, CosmeticType<?> cosmeticType) {
         if ((SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")
                 || player.isFilteringByOwned())
-                && !player.hasPermission(cosmeticType.getPermission())){
-                    return true;
-                }
+                && !player.hasPermission(cosmeticType.getPermission())) {
+            return true;
+        }
         if (cosmeticType instanceof CosmeticEntType
                 && ((CosmeticEntType<?>) cosmeticType).isMonster()
                 && player.getBukkitPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {

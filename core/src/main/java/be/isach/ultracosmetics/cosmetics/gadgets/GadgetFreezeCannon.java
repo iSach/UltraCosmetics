@@ -6,13 +6,14 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
-import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +34,7 @@ public class GadgetFreezeCannon extends Gadget implements Updatable {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         Item item = getPlayer().getWorld().dropItem(getPlayer().getEyeLocation(), new ItemStack(Material.ICE));
         item.setVelocity(getPlayer().getEyeLocation().getDirection().multiply(0.9));
         items.add(item);
@@ -42,7 +43,9 @@ public class GadgetFreezeCannon extends Gadget implements Updatable {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
-        if (items.contains(event.getItem())) event.setCancelled(true);
+        if (items.contains(event.getItem())) {
+            event.setCancelled(true);
+        }
     }
 
     @Override

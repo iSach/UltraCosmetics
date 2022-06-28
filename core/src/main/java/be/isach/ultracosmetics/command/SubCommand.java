@@ -22,6 +22,7 @@ public abstract class SubCommand {
     private final String description;
     private final Permission permission;
     private final String usage;
+    private final boolean defaultPerm;
     protected final UltraCosmetics ultraCosmetics;
 
     public SubCommand(String name, String description, String usage, UltraCosmetics ultraCosmetics) {
@@ -33,6 +34,7 @@ public abstract class SubCommand {
         this.description = description;
         this.permission = registerPermission("ultracosmetics.command." + name, defaultPerm);
         this.usage = "/uc " + name + " " + usage;
+        this.defaultPerm = defaultPerm;
         this.ultraCosmetics = ultraCosmetics;
     }
 
@@ -80,6 +82,10 @@ public abstract class SubCommand {
      */
     public Permission getPermission() {
         return permission;
+    }
+
+    public boolean isDefault() {
+        return defaultPerm;
     }
 
     private Permission registerPermission(String strPerm, boolean defaultPerm) {

@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Particles;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
@@ -30,7 +31,7 @@ public class GadgetFunGun extends Gadget {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         for (int i = 0; i < 5; i++)
             projectiles.add(getPlayer().launchProjectile(Snowball.class));
     }

@@ -21,7 +21,6 @@ import be.isach.ultracosmetics.permissions.LuckPermsHook;
 import be.isach.ultracosmetics.permissions.PermissionCommand;
 import be.isach.ultracosmetics.permissions.PermissionProvider;
 import be.isach.ultracosmetics.placeholderapi.PlaceholderHook;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
@@ -54,6 +53,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import me.libraryaddict.disguise.DisguiseConfig;
 
 /**
  * Main class of the plugin.
@@ -140,9 +141,7 @@ public class UltraCosmetics extends JavaPlugin {
         UltraCosmeticsData.init(this);
 
         failReason = UltraCosmeticsData.get().checkServerVersion();
-        if (failReason != null) {
-            return;
-        }
+        if (failReason != null) return;
 
         // Use super.getConfig() because CustomConfiguration doesn't load until onEnable
         boolean worldGuardIntegration = super.getConfig().getBoolean("WorldGuard-Integration", true);
@@ -234,11 +233,21 @@ public class UltraCosmetics extends JavaPlugin {
         // Set up Cosmetics config.
         new CosmeticManager(this).setupCosmeticsConfigs();
 
-        if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
-            getSmartLogger().write();
-            getSmartLogger().write("Morphs require Lib's Disguises!");
-            getSmartLogger().write();
-            getSmartLogger().write("Morphs disabled.");
+        // Can't use Category.MORPHS.isEnabled() here because it checks whether LibsDisguises is enabled on its own
+        if (SettingsManager.getConfig().getBoolean("Categories-Enabled." + Category.MORPHS.getConfigPath())) {
+            if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
+                getSmartLogger().write();
+                getSmartLogger().write(LogLevel.WARNING, "Morphs require Lib's Disguises, but it is not installed. Morphs will be disabled.");
+            } else {
+                try {
+                    // Option is not present on older versions of LibsDisguises, added in commit af492c2
+                    if (!DisguiseConfig.isTallSelfDisguises()) {
+                        getSmartLogger().write();
+                        getSmartLogger().write(LogLevel.WARNING, "You have TallSelfDisguises disabled in LibsDisguises's players.yml. Self view of morphs may not work as expected.");
+                    }
+                } catch (NoSuchMethodError ignored) {
+                }
+            }
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -259,21 +268,15 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write();
             getSmartLogger().write("Connecting to MySQL database...");
 
-            // Start MySQL.
+            // Start MySQL. May forcefully switch to file storage if it fails to connect.
             mySqlConnectionManager = new MySqlConnectionManager(this);
             if (mySqlConnectionManager.success()) {
-                mySqlConnectionManager.start();
                 getSmartLogger().write("Connected to MySQL database.");
+            } else {
+                getSmartLogger().write("File storage will be used instead.");
             }
         }
-        // This might seem redundant, but MySQLConnectionManager
-        // forcefully switches to file storage if it fails to connect.
-        if (UltraCosmeticsData.get().usingFileStorage()) {
-            // Initialize UltraPlayers and give chest (if needed).
-            // Only actually does anything when the plugin is reloaded or loaded REALLY late.
-            // MySQL manager handles this when active.
-            playerManager.initPlayers();
-        }
+        playerManager.initPlayers();
 
         // Start the Fall Damage and Invalid World Check Runnables.
 
@@ -288,7 +291,7 @@ public class UltraCosmetics extends JavaPlugin {
         // Start up bStats
         new Metrics(this, 2629);
 
-        this.menus = new Menus(this);
+        reload();
 
         try {
             config.save(file);
@@ -306,14 +309,20 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     /**
+     * Called on startup and when things need to be reloaded.
+     * Currently only some parts of the plugin are reloaded.
+     */
+    public void reload() {
+        this.menus = new Menus(this);
+    }
+
+    /**
      * Called when plugin disables.
      */
     @Override
     public void onDisable() {
         // when the plugin is disabled from onEnable, skip cleanup
-        if (!enableFinished) {
-            return;
-        }
+        if (!enableFinished) return;
 
         if (mySqlConnectionManager != null && mySqlConnectionManager.success()) {
             mySqlConnectionManager.shutdown();
@@ -381,9 +390,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (!file.exists()) {
             saveResource("config.yml", false);
         }
-        if (!loadConfiguration(file)) {
-            return false;
-        }
+        if (!loadConfiguration(file)) return false;
 
         List<String> disabledCommands = new ArrayList<>();
         disabledCommands.add("hat");
@@ -404,7 +411,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (!mode.equalsIgnoreCase("structure") && !mode.equalsIgnoreCase("simple") && !mode.equalsIgnoreCase("both")) {
             config.set("TreasureChests.Mode", "structure", "The treasure chest mode. Options:", "- structure: places blocks and chests (default)", "- simple: only gives <Count> cosmetics, no blocks are placed", "- both: players can choose either mode through the GUI");
         }
-        // Add default values people could not have because of an old version of UC.
+        // Add default values people may not have because of an old version of UC.
         if (config.isConfigurationSection("TreasureChests.Location")) {
             config.set("TreasureChests.Locations.Enabled", config.getBoolean("TreasureChests.Location.Enabled"));
             config.set("TreasureChests.Location.Enabled", null);
@@ -426,10 +433,11 @@ public class UltraCosmetics extends JavaPlugin {
         if (!config.isInt("TreasureChests.Loots.Money.Min")) {
             int min = 15;
             int max = config.getInt("TreasureChests.Loots.Money.Max");
-            if (max < 5)
+            if (max < 5) {
                 min = 0;
-            else if (max < 15)
+            } else if (max < 15) {
                 min = 5;
+            }
             config.set("TreasureChests.Loots.Money.Min", min);
         }
 
@@ -638,15 +646,6 @@ public class UltraCosmetics extends JavaPlugin {
         return armorStandManager;
     }
 
-    public void openMainMenu(UltraPlayer ultraPlayer) {
-        if (getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled")) {
-            String command = getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "").replace("{player}", ultraPlayer.getBukkitPlayer().getName()).replace("{playeruuid}", ultraPlayer.getUUID().toString());
-            getServer().dispatchCommand(getServer().getConsoleSender(), command);
-        } else {
-            getMenus().getMainMenu().open(ultraPlayer);
-        }
-    }
-
     public EconomyHandler getEconomyHandler() {
         return economyHandler;
     }
@@ -676,9 +675,7 @@ public class UltraCosmetics extends JavaPlugin {
     }
 
     public CosmeticRegionState cosmeticRegionState(Player player, Category category) {
-        if (!worldGuardHooked()) {
-            return CosmeticRegionState.ALLOWED;
-        }
+        if (!worldGuardHooked()) return CosmeticRegionState.ALLOWED;
         return flagManager.allowedCosmeticsState(player, category);
     }
 

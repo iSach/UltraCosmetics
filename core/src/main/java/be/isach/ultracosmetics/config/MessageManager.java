@@ -76,7 +76,6 @@ public class MessageManager {
         addMessage("Right-Click-Simple", "&aRight-click to just get cosmetics");
         addMessage("Your-Keys", "&7&oYour keys: &f&l%keys%");
         addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor $%price%");
-        addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
         addMessage("Treasure-Chest-Occupied", "%prefix% &c&lAll treasure locations are full, please wait and try again");
 
@@ -137,7 +136,9 @@ public class MessageManager {
         addMessage("Menu.Buy-Ammo.Title", "&lBuy Ammo");
         addMessage("Menu.Rename-Pet.Title", "&lRename Pet");
         addMessage("Disable-Gadgets", "&c&lDisable Gadgets");
+        addMessage("Disable-Gadgets-Lore", "&cDisables use of gadgets and effects of them on you");
         addMessage("Enable-Gadgets", "&a&lEnable Gadgets");
+        addMessage("Enable-Gadgets-Lore", "&aEnables use of gadgets and effects of them on you");
         addMessage("Disable-Third-Person-View", "&c&lDisable Morphs Third Person View");
         addMessage("Enable-Third-Person-View", "&a&lEnable Morphs Third Person View");
         addMessage("Disable-Filter-By-Owned", "&c&lChange to Show All");

@@ -1,18 +1,14 @@
-package be.isach.ultracosmetics.mysql.hikari;
+package be.isach.ultracosmetics.mysql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
 
-public class NewHikariHook implements IHikariHook {
-    static {
-        // Throws an exception on class load if Hikari isn't present
-        HikariConfig.class.getName();
-    }
-
+public class HikariHook {
     private final HikariDataSource dataSource;
-    public NewHikariHook(String hostname, String port, String database, String username, String password) {
+
+    public HikariHook(String hostname, String port, String database, String username, String password) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
         config.setUsername(username);
@@ -23,15 +19,17 @@ public class NewHikariHook implements IHikariHook {
         config.addDataSourceProperty("cachePrepStmts", true);
         config.addDataSourceProperty("useServerPrepStmts", true);
 
+        // Specify character encoding because apparently MySQL
+        // sometimes uses an encoding we don't like.
+        config.addDataSourceProperty("characterEncoding", "utf8");
+        config.addDataSourceProperty("useUnicode", true);
         dataSource = new HikariDataSource(config);
     }
 
-    @Override
     public DataSource getDataSource() {
         return dataSource;
     }
 
-    @Override
     public void close() {
         dataSource.close();
     }

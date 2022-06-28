@@ -1,8 +1,11 @@
 package be.isach.ultracosmetics.menu;
 
+import static be.isach.ultracosmetics.util.ItemFactory.fillerItem;
+
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,8 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import static be.isach.ultracosmetics.util.ItemFactory.fillerItem;
 
 /**
  * Represents a Menu. A menu can have multiple pages in case of cosmetics.
@@ -41,7 +42,7 @@ public abstract class Menu implements Listener {
      * Key: Item
      * Value: ClickRunnable to call when item is clicked.
      */
-    private Map<Inventory, Map<ItemStack, ClickRunnable>> clickRunnableMap = new HashMap<>();
+    private Map<Inventory,Map<ItemStack,ClickRunnable>> clickRunnableMap = new HashMap<>();
 
     public Menu(UltraCosmetics ultraCosmetics) {
         this.ultraCosmetics = ultraCosmetics;
@@ -71,12 +72,13 @@ public abstract class Menu implements Listener {
         }
 
         inventory.setItem(slot, itemStack);
-        Map<ItemStack, ClickRunnable> map = clickRunnableMap.computeIfAbsent(inventory, f -> new HashMap<>());
+        Map<ItemStack,ClickRunnable> map = clickRunnableMap.computeIfAbsent(inventory, f -> new HashMap<>());
         map.put(itemStack, clickRunnable);
     }
 
     protected void putItem(Inventory inventory, int slot, ItemStack itemStack) {
-        putItem(inventory, slot, itemStack, data -> {});
+        putItem(inventory, slot, itemStack, data -> {
+        });
     }
 
     @EventHandler
@@ -88,7 +90,6 @@ public abstract class Menu implements Listener {
         if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta() || !event.getCurrentItem().getItemMeta().hasDisplayName()) {
             return;
         }
-
 
         if (!(event.getWhoClicked() instanceof Player)) {
             return;
@@ -113,8 +114,8 @@ public abstract class Menu implements Listener {
 
         ClickRunnable clickRunnable = null;
         String clickItemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        Set<Entry<ItemStack, ClickRunnable>> entries = clickRunnableMap.get(event.getInventory()).entrySet();
-        for (Entry<ItemStack, ClickRunnable> entry : entries) {
+        Set<Entry<ItemStack,ClickRunnable>> entries = clickRunnableMap.get(event.getInventory()).entrySet();
+        for (Entry<ItemStack,ClickRunnable> entry : entries) {
             if (entry.getKey().getItemMeta().getDisplayName().equals(clickItemName)) {
                 clickRunnable = entry.getValue();
                 break;

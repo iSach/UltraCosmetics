@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 
@@ -36,7 +38,7 @@ public class GadgetChickenator extends Gadget {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         final Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getEyeLocation(), EntityType.CHICKEN);
         chicken.setNoDamageTicks(500);
         chicken.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
@@ -78,8 +80,9 @@ public class GadgetChickenator extends Gadget {
             fireworks.add(f);
         }
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-            for (Firework f : fireworks)
+            for (Firework f : fireworks) {
                 f.detonate();
+            }
         }, 2);
     }
 
@@ -87,7 +90,8 @@ public class GadgetChickenator extends Gadget {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Firework)) return;
         FireworkMeta fm = ((Firework) event.getDamager()).getFireworkMeta();
-        if (fm.getDisplayName().equals("uc_firework"))
+        if (fm.getDisplayName().equals("uc_firework")) {
             event.setCancelled(true);
+        }
     }
 }

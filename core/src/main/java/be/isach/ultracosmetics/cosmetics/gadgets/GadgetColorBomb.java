@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -37,7 +38,7 @@ public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic, 
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         bomb = ItemFactory.createUnpickableItemDirectional(ItemFactory.randomFromTag(XTag.WOOL), getPlayer(), 0.7532);
     }
 
@@ -54,15 +55,15 @@ public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic, 
 
         Particles effect;
         switch (RANDOM.nextInt(5)) {
-            default:
-                effect = Particles.FIREWORKS_SPARK;
-                break;
-            case 3:
-                effect = Particles.FLAME;
-                break;
-            case 4:
-                effect = Particles.SPELL_WITCH;
-                break;
+        default:
+            effect = Particles.FIREWORKS_SPARK;
+            break;
+        case 3:
+            effect = Particles.FLAME;
+            break;
+        case 4:
+            effect = Particles.SPELL_WITCH;
+            break;
         }
 
         effect.display(bomb.getLocation(), 1, 0.2f);

@@ -3,8 +3,37 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.SettingsManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.gadgets.*;
+import be.isach.ultracosmetics.cosmetics.gadgets.Gadget;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetAntiGravity;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetBatBlaster;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetBlackHole;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetBlizzardBlaster;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetChickenator;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetChristmasTree;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetColorBomb;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetDiscoBall;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetEtherealPearl;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetExplosiveSheep;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetFirework;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetFleshHook;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetFreezeCannon;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetFunGun;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetGhostParty;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetMelonThrower;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetPaintballGun;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetParachute;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetPartyPopper;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetPortalGun;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetQuakeGun;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetRocket;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetSmashDown;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetSnowball;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetTNT;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetThorHammer;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetTrampoline;
+import be.isach.ultracosmetics.cosmetics.gadgets.GadgetTsunami;
 import be.isach.ultracosmetics.util.ServerVersion;
+
 import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
@@ -40,19 +69,19 @@ public class GadgetType extends CosmeticType<Gadget> {
         s = s.toLowerCase();
         String finalS = s;
         Stream<GadgetType> stream = VALUES.stream().filter(gadgetType -> gadgetType.getConfigName().equalsIgnoreCase(finalS));
-        if(onlyEnabled) {
+        if (onlyEnabled) {
             stream.filter(gadgetType -> gadgetType.isEnabled());
         }
         Optional<GadgetType> optionalType = stream.findFirst();
-        if(optionalType.isPresent()) {
+        if (optionalType.isPresent())
             return optionalType.get();
-        } else {
+        else {
             stream = VALUES.stream().filter(gadgetType -> gadgetType.getConfigName().toLowerCase().startsWith(finalS));
-            if(onlyEnabled) {
+            if (onlyEnabled) {
                 stream.filter(gadgetType -> gadgetType.isEnabled());
             }
             Optional<GadgetType> bestMatchOptional = stream.findFirst();
-            if(bestMatchOptional.isPresent())
+            if (bestMatchOptional.isPresent())
                 return bestMatchOptional.get();
             return null;
         }
@@ -87,6 +116,24 @@ public class GadgetType extends CosmeticType<Gadget> {
 
     public boolean requiresAmmo() {
         return SettingsManager.getConfig().getBoolean("Gadgets." + getConfigName() + ".Ammo.Enabled");
+    }
+
+    /**
+     * Gets the price for each ammo purchase.
+     *
+     * @return the price for each ammo purchase.
+     */
+    public int getAmmoPrice() {
+        return SettingsManager.getConfig().getInt("Gadgets." + getConfigName() + ".Ammo.Price");
+    }
+
+    /**
+     * Gets the ammo it should give after a purchase.
+     *
+     * @return the ammo it should give after a purchase.
+     */
+    public int getResultAmmoAmount() {
+        return SettingsManager.getConfig().getInt("Gadgets." + getConfigName() + ".Ammo.Result-Amount");
     }
 
     public double getCountdown() {

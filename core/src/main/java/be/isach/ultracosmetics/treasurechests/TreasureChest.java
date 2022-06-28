@@ -9,14 +9,6 @@ import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.Particles;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,9 +32,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
+
 public class TreasureChest implements Listener {
 
-    private final Map<Block, BlockState> blocksToRestore = new HashMap<>();
+    private final Map<Block,BlockState> blocksToRestore = new HashMap<>();
     private final List<Block> chests = new ArrayList<>();
     private final List<Block> chestsToRemove = new ArrayList<>();
     private final UUID owner;
@@ -66,7 +67,7 @@ public class TreasureChest implements Listener {
         this.owner = owner;
         this.preLoc = preLoc;
         this.treasureLoc = destLoc;
-        
+
         UltraCosmetics uc = UltraCosmeticsData.get().getPlugin();
         UltraPlayerManager pm = uc.getPlayerManager();
 
@@ -76,7 +77,7 @@ public class TreasureChest implements Listener {
 
         Location loc = getPlayer().getLocation().getBlock().getLocation();
         Block centerPossibleBlock = loc.getBlock();
-        if(!BlockUtils.isAir(centerPossibleBlock.getType())) {
+        if (!BlockUtils.isAir(centerPossibleBlock.getType())) {
             // Save the block
             blocksToRestore.put(centerPossibleBlock, centerPossibleBlock.getState());
 
@@ -183,8 +184,7 @@ public class TreasureChest implements Listener {
 
             items.add(spawnItem(is, b.getLocation()));
             final String name = randomGenerator.getName();
-            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () ->
-                    spawnHologram(b.getLocation().clone().add(0.5D, 0.3D, 0.5D), name), 15L);
+            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> spawnHologram(b.getLocation().clone().add(0.5D, 0.3D, 0.5D), name), 15L);
 
             chestsLeft -= 1;
             chestsToRemove.add(b);
@@ -218,32 +218,26 @@ public class TreasureChest implements Listener {
 
     @EventHandler
     public void onInter(final PlayerInteractEvent event) {
-        if ((event.getClickedBlock() != null) &&
-                (event.getClickedBlock().getType() == Material.CHEST
-                        || event.getClickedBlock().getType() == Material.ENDER_CHEST
-                        || event.getClickedBlock().getType() == Material.TRAPPED_CHEST) &&
-                (chests.contains(event.getClickedBlock())) && (!cooldown)) {
-            if (event.getPlayer() == getPlayer()) {
-                UltraCosmeticsData.get().getVersionManager().getEntityUtil().playChestAnimation(event.getClickedBlock(), true, design);
-                randomGenerator.setLocation(event.getClickedBlock().getLocation().add(0.0D, 1.0D, 0.0D));
-                randomGenerator.giveRandomThing();
+        if (event.getPlayer() == getPlayer() && event.getClickedBlock() != null
+                && chests.contains(event.getClickedBlock()) && !cooldown) {
+            UltraCosmeticsData.get().getVersionManager().getEntityUtil().playChestAnimation(event.getClickedBlock(), true, design);
+            randomGenerator.setLocation(event.getClickedBlock().getLocation().add(0.0D, 1.0D, 0.0D));
+            randomGenerator.giveRandomThing();
 
-                cooldown = true;
-                Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> cooldown = false, 3L);
+            cooldown = true;
+            Bukkit.getScheduler().runTaskLaterAsynchronously(UltraCosmeticsData.get().getPlugin(), () -> cooldown = false, 3L);
 
-                ItemStack is = randomGenerator.getItemStack();
+            ItemStack is = randomGenerator.getItemStack();
 
-                items.add(spawnItem(is, event.getClickedBlock().getLocation()));
-                final String nameas = randomGenerator.getName();
-                Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () ->
-                        spawnHologram(event.getClickedBlock().getLocation().add(0.5D, 0.3D, 0.5D), nameas), 15L);
+            items.add(spawnItem(is, event.getClickedBlock().getLocation()));
+            final String name = randomGenerator.getName();
+            Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), () -> spawnHologram(event.getClickedBlock().getLocation().add(0.5D, 0.3D, 0.5D), name), 15L);
 
-                chestsLeft -= 1;
-                chests.remove(event.getClickedBlock());
-                chestsToRemove.add(event.getClickedBlock());
-                if (chestsLeft == 0) {
-                    Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::clear, 50L);
-                }
+            chestsLeft -= 1;
+            chests.remove(event.getClickedBlock());
+            chestsToRemove.add(event.getClickedBlock());
+            if (chestsLeft == 0) {
+                Bukkit.getScheduler().runTaskLater(UltraCosmeticsData.get().getPlugin(), this::clear, 50L);
             }
         }
     }
@@ -254,8 +248,7 @@ public class TreasureChest implements Listener {
 
     @EventHandler
     public void onKick(PlayerKickEvent event) {
-        if ((event.getPlayer() == getPlayer()) &&
-                (event.getReason().equals("Flying is not enabled on this server"))) {
+        if (event.getPlayer() == getPlayer() && event.getReason().equals("Flying is not enabled on this server")) {
             UltraCosmeticsData.get().getPlugin().getSmartLogger().write(LogLevel.INFO, "Cancelled flight kick while opening treasure chest");
             event.setCancelled(true);
             event.getPlayer().teleport(center);

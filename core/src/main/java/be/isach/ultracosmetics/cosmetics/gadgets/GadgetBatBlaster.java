@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bat;
@@ -35,7 +36,7 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         this.active = true;
         this.playerVelocity = getPlayer().getEyeLocation();
         this.bats = new ArrayList<>();
@@ -52,7 +53,7 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
         Vector playerVec = player.getLocation().add(0, -player.getLocation().getY(), 0).toVector();
         double vecLength = locVec.subtract(playerVec).length();
 
-        if (vecLength < 0.8D) {
+        if (vecLength < 0.8) {
             return true;
         }
 
@@ -66,9 +67,7 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
     @SuppressWarnings("deprecation")
     @Override
     public void onUpdate() {
-        if (bats != null && bats.isEmpty()) {
-            return;
-        }
+        if (bats != null && bats.isEmpty()) return;
 
         if (!active || bats == null) {
             playerVelocity = null;
@@ -76,14 +75,18 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
             return;
         }
         for (Bat bat : bats) {
-            if (!bat.isValid()) continue;
+            if (!bat.isValid()) {
+                continue;
+            }
             Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
                     (Math.random() - 0.5D) / 3.0D);
             if (playerVelocity != null) {
                 bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
             }
             for (Player other : getPlayer().getWorld().getPlayers()) {
-                if (other == getPlayer() || !hitPlayer(bat.getLocation(), other)) continue;
+                if (other == getPlayer() || !hitPlayer(bat.getLocation(), other)) {
+                    continue;
+                }
                 Vector v = bat.getLocation().getDirection();
                 v.normalize();
                 v.multiply(.4d);

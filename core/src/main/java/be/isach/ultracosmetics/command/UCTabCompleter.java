@@ -4,6 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.Category;
 import be.isach.ultracosmetics.cosmetics.type.CosmeticType;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -31,7 +32,9 @@ public class UCTabCompleter implements TabCompleter {
         // TODO: move each subcommand section to its subcommand class
         if (args.length == 1) {
             for (SubCommand sc : uc.getCommandManager().getCommands()) {
-                options.add(sc.getName());
+                if (sender.hasPermission(sc.getPermission())) {
+                    options.add(sc.getName());
+                }
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("menu") || args[0].equalsIgnoreCase("toggle")) {
@@ -92,10 +95,8 @@ public class UCTabCompleter implements TabCompleter {
                 options.add(world.getName());
             }
         }
-        List<String> results = new ArrayList<>();
         options.replaceAll(String::toLowerCase);
         Collections.sort(options);
-        StringUtil.copyPartialMatches(args[args.length - 1], options, results);
-        return results;
+        return StringUtil.copyPartialMatches(args[args.length - 1], options, new ArrayList<>());
     }
 }

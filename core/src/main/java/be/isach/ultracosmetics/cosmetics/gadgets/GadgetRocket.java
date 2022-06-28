@@ -49,7 +49,7 @@ public class GadgetRocket extends Gadget implements Updatable {
 
     // EntityDismountEvent has existed at least since 1.8, but wasn't cancellable until 1.13
     private static final boolean DISMOUNT_CANCELLABLE = VersionManager.IS_VERSION_1_13;
-    private static final BlockFace[] CARDINAL = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
+    private static final BlockFace[] CARDINAL = new BlockFace[] { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST };
     private static final Material FENCE = XMaterial.OAK_FENCE.parseMaterial();
     public static final Set<GadgetRocket> ROCKETS_WITH_BLOCKS = new HashSet<>();
 
@@ -68,7 +68,7 @@ public class GadgetRocket extends Gadget implements Updatable {
 
     @SuppressWarnings("deprecation")
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         getPlayer().setVelocity(new Vector(0, 1, 0));
         final Location loc = getPlayer().getLocation();
         loc.setX(loc.getBlockX() + 0.5);
@@ -126,7 +126,7 @@ public class GadgetRocket extends Gadget implements Updatable {
                         sendTitle(MessageManager.getMessage("Gadgets.Rocket.LaunchAborted"));
                         cancel();
                         return;
-                        
+
                     }
                     sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"));
                     XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.0f, 1.0f);
@@ -273,11 +273,11 @@ public class GadgetRocket extends Gadget implements Updatable {
             // doesn't seem to work as well if you only wait one tick before trying to remount the player
         }.runTaskTimer(getUltraCosmetics(), 2, 1);
     }
-    
+
     private void enableFlight() {
         getPlayer().setAllowFlight(true);
     }
-    
+
     private void disableFlight() {
         if (getPlayer().getGameMode() != GameMode.CREATIVE) {
             getPlayer().setAllowFlight(false);

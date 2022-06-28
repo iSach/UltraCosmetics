@@ -1,5 +1,7 @@
 package be.isach.ultracosmetics.mysql;
 
+import be.isach.ultracosmetics.UltraCosmeticsData;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +14,6 @@ import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Function;
-
-import be.isach.ultracosmetics.UltraCosmeticsData;
 
 public class StandardQuery {
     protected final Table table;
@@ -47,7 +47,7 @@ public class StandardQuery {
      * pass a Function as a parameter that returns whatever the
      * getResults() method as a whole should return (type parameters ensure same type)
      * 
-     * @param <T> Return type, determined by function passed in.
+     * @param <T>           Return type, determined by function passed in.
      * @param processResult Function to process ResultSet.
      * @return Whatever processResult() returns.
      */
@@ -94,7 +94,6 @@ public class StandardQuery {
                 r.last();
                 return r.getRow() > 0;
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 return false;
             }
