@@ -233,10 +233,11 @@ public class UltraCosmetics extends JavaPlugin {
         // Set up Cosmetics config.
         new CosmeticManager(this).setupCosmeticsConfigs();
 
-        if (Category.MORPHS.isEnabled()) {
+        // Can't use Category.MORPHS.isEnabled() here because it checks whether LibsDisguises is enabled on its own
+        if (SettingsManager.getConfig().getBoolean("Categories-Enabled." + Category.MORPHS.getConfigPath())) {
             if (!Bukkit.getPluginManager().isPluginEnabled("LibsDisguises")) {
                 getSmartLogger().write();
-                getSmartLogger().write("Morphs require Lib's Disguises, but it is not installed. Morphs will be disabled.");
+                getSmartLogger().write(LogLevel.WARNING, "Morphs require Lib's Disguises, but it is not installed. Morphs will be disabled.");
             } else {
                 try {
                     // Option is not present on older versions of LibsDisguises, added in commit af492c2
