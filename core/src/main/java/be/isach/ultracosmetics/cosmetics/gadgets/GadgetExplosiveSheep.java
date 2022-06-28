@@ -40,7 +40,7 @@ public class GadgetExplosiveSheep extends Gadget {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         Location loc = getPlayer().getLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.5));
         loc.setY(getPlayer().getLocation().getBlockY() + 1);
         Sheep sheep = getPlayer().getWorld().spawn(loc, Sheep.class);
@@ -114,6 +114,7 @@ public class GadgetExplosiveSheep extends Gadget {
             s.remove();
             sheepCreationRunnable = new BukkitRunnable() {
                 int i = 5;
+
                 @Override
                 public void run() {
                     for (int i = 0; i < 10; i++) {

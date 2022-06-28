@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -40,7 +41,7 @@ public class GadgetAntiGravity extends Gadget implements PlayerAffectingCosmetic
 
     @SuppressWarnings("deprecation")
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         as = getPlayer().getWorld().spawn(getPlayer().getLocation(), ArmorStand.class);
         as.setMetadata("NO_INTER", new FixedMetadataValue(getUltraCosmetics(), ""));
         as.setGravity(false);

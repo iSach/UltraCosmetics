@@ -12,6 +12,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.TextUtil;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -29,7 +30,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.messages.ActionBar;
@@ -55,11 +55,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
         OTHER_SYMBOLS.setPatternSeparator('.');
         DECIMAL_FORMAT = new DecimalFormat("0.0", OTHER_SYMBOLS);
     }
-
-    /**
-     * If true, it will differentiate left and right click.
-     */
-    protected boolean useTwoInteractMethods = false;
 
     /**
      * Gadget ItemStack.
@@ -276,33 +271,18 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             lastClickedBlock = event.getClickedBlock();
         }
-        if (asynchronous) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (useTwoInteractMethods) {
-                        if (event.getAction() == Action.RIGHT_CLICK_AIR
-                                || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                            onRightClick();
-                        } else if (event.getAction() == Action.LEFT_CLICK_BLOCK
-                                || event.getAction() == Action.LEFT_CLICK_AIR) {
-                            onLeftClick();
-                        }
-                    } else {
-                        onRightClick();
-                    }
-                }
-            }.runTaskAsynchronously(getUltraCosmetics());
-        } else {
-            if (useTwoInteractMethods) {
-                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    onRightClick();
-                } else if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
-                    onLeftClick();
-                }
+        boolean isLeft = event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK;
+        Runnable callClick = () -> {
+            if (isLeft) {
+                onLeftClick();
             } else {
                 onRightClick();
             }
+        };
+        if (asynchronous) {
+            Bukkit.getScheduler().runTaskAsynchronously(getUltraCosmetics(), callClick);
+        } else {
+            callClick.run();
         }
     }
 
@@ -378,16 +358,16 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
     }
 
     /**
-     * If useTwoInteractMethods is true, called when only a right click is called.
-     * <p/>
-     * Otherwise, called when a right or left click is performed.
+     * Called when a right-click is performed, and potentially when a left-click
+     * is performed, depending on the implementation of onLeftClick()
      */
-    abstract void onRightClick();
+    protected abstract void onRightClick();
 
     /**
-     * Called when a left click is done with gadget. Only called if useTwoInteractMethods is true.
+     * Called when a left click is done with gadget.
      */
-    void onLeftClick() {
+    protected void onLeftClick() {
+        onRightClick();
     };
 
 }

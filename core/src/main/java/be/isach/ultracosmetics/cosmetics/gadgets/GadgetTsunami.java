@@ -31,7 +31,7 @@ public class GadgetTsunami extends Gadget implements PlayerAffectingCosmetic {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         final Vector v = getPlayer().getLocation().getDirection().normalize().multiply(0.3);
         v.setY(0);
         final Location loc = getPlayer().getLocation().subtract(0, 1, 0).add(v);

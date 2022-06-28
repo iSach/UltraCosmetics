@@ -8,7 +8,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
-import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,6 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 /**
  * Represents an instance of a blackhole gadget summoned by a player.
@@ -34,7 +35,7 @@ public class GadgetBlackHole extends Gadget implements PlayerAffectingCosmetic, 
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         if (item != null) {
             item.remove();
         }

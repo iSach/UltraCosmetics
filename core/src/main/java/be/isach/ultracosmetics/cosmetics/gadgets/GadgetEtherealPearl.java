@@ -63,7 +63,7 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
 
     @SuppressWarnings("deprecation")
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         getOwner().removeCosmetic(Category.MOUNTS);
 
         if (getPlayer().getVehicle() instanceof EnderPearl) {
@@ -117,7 +117,6 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
             fireworks.clear();
         }, 2);
     }
-
 
     @EventHandler
     public void onItemFrameBreak(HangingBreakByEntityEvent event) {

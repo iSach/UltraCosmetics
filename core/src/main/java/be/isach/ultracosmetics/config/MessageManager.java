@@ -76,7 +76,6 @@ public class MessageManager {
         addMessage("Right-Click-Simple", "&aRight-click to just get cosmetics");
         addMessage("Your-Keys", "&7&oYour keys: &f&l%keys%");
         addMessage("Buy-Treasure-Key-ItemName", "&e&l1 &7&lTreasure Key &e&lfor $%price%");
-        addMessage("Found-Legendary", "%prefix% &c&l%name% found Legendary %found%");
         addMessage("You-Won-Treasure-Chests", "%prefix% &f&lYou won: %name%!");
         addMessage("Treasure-Chest-Occupied", "%prefix% &c&lAll treasure locations are full, please wait and try again");
 

@@ -44,7 +44,7 @@ public class GadgetQuakeGun extends Gadget implements PlayerAffectingCosmetic {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         XSound.ENTITY_BLAZE_DEATH.play(getPlayer(), 1.4f, 1.5f);
 
         Location location = getPlayer().getEyeLocation().subtract(0, 0.4, 0);

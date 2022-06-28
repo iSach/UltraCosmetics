@@ -7,11 +7,6 @@ import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSound;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import org.bukkit.Effect;
 import org.bukkit.entity.Item;
@@ -21,6 +16,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an instance of a melon thrower gadget summoned by a player.
@@ -69,7 +70,7 @@ public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmeti
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.4f, 1.5f);
         melon = ItemFactory.createUnpickableItemDirectional(XMaterial.MELON, getPlayer(), 1.3);
     }

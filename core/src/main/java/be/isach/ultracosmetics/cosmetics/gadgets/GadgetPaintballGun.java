@@ -10,13 +10,6 @@ import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.Particles;
 import be.isach.ultracosmetics.util.ServerVersion;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderPearl;
@@ -24,15 +17,22 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents an instance of a paintball gun gadget summoned by a player.
@@ -67,7 +67,7 @@ public class GadgetPaintballGun extends Gadget {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         Projectile projectile = getPlayer().launchProjectile(EnderPearl.class, getPlayer().getLocation().getDirection().multiply(2));
         projectiles.add(projectile);
         XSound.ENTITY_CHICKEN_EGG.play(getPlayer(), 1.5f, 1.2f);
@@ -91,8 +91,9 @@ public class GadgetPaintballGun extends Gadget {
             }
             // TODO: do we really want to prevent players from breaking hanging things while this gadget is equipped??
             // or is this required to prevent ender pearls from breaking things?
-        } else if (event.getRemover() == getPlayer())
+        } else if (event.getRemover() == getPlayer()) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler

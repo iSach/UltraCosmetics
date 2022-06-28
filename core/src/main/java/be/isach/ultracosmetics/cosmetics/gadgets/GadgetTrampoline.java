@@ -8,6 +8,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
 import be.isach.ultracosmetics.util.BlockUtils;
 import be.isach.ultracosmetics.util.MathUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,7 +45,7 @@ public class GadgetTrampoline extends Gadget implements Updatable {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         clearBlocks();
 
         center = getPlayer().getLocation();
@@ -152,20 +153,16 @@ public class GadgetTrampoline extends Gadget implements Updatable {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (cuboid != null && running && cuboid.contains(event.getBlock()))
-            event.setCancelled(true);
+        if (cuboid != null && running && cuboid.contains(event.getBlock())) event.setCancelled(true);
         if (cuboid != null && running && (event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 0, 0).getLocation())
-                || event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation())))
-            event.setCancelled(true);
+                || event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation()))) event.setCancelled(true);
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (cuboid != null && running && cuboid.contains(event.getBlock()))
-            event.setCancelled(true);
+        if (cuboid != null && running && cuboid.contains(event.getBlock())) event.setCancelled(true);
         if (cuboid != null && running && (event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 0, 0).getLocation())
-                || event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation())))
-            event.setCancelled(true);
+                || event.getBlock().getLocation().equals(center.getBlock().getRelative(-3, 1, 0).getLocation()))) event.setCancelled(true);
     }
 
     private void clearBlocks() {

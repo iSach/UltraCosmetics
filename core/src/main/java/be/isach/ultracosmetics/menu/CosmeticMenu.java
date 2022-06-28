@@ -42,7 +42,6 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
             28, 29, 30, 31, 32, 33, 34
     };
 
-
     protected Category category;
 
     public CosmeticMenu(UltraCosmetics ultraCosmetics, Category category) {
@@ -168,7 +167,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
         // Go Back to Main Menu Arrow.
         if (getCategory().hasGoBackArrow()) {
             ItemStack item = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Categories.Back-Main-Menu-Item"), MessageManager.getMessage("Menu.Main.Title"));
-            putItem(inventory, inventory.getSize() - 6, item, (data) -> getUltraCosmetics().openMainMenu(player));
+            putItem(inventory, inventory.getSize() - 6, item, (data) -> openMainMenu(player));
         }
 
         if (hasUnlockable && !SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")) {
@@ -271,7 +270,7 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
     @Override
     protected void putItems(Inventory inventory, UltraPlayer ultraPlayer) {
-        //--
+        // --
     }
 
     /**
@@ -329,10 +328,10 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
 
     /**
      * Handles clicking on cosmetics in the GUI
-     * 
-     * @param data The ClickData from the event
+     *
+     * @param data         The ClickData from the event
      * @param cosmeticType The cosmetic that was clicked
-     * @param price The price of the clicked cosmetic
+     * @param price        The price of the clicked cosmetic
      * @return true if closing the inventory now is OK
      */
     protected boolean handleClick(ClickData data, T cosmeticType, int price) {
@@ -384,9 +383,9 @@ public abstract class CosmeticMenu<T extends CosmeticType<?>> extends Menu {
     protected boolean shouldHideItem(UltraPlayer player, CosmeticType<?> cosmeticType) {
         if ((SettingsManager.getConfig().getBoolean("No-Permission.Dont-Show-Item")
                 || player.isFilteringByOwned())
-                && !player.hasPermission(cosmeticType.getPermission())){
-                    return true;
-                }
+                && !player.hasPermission(cosmeticType.getPermission())) {
+            return true;
+        }
         if (cosmeticType instanceof CosmeticEntType
                 && ((CosmeticEntType<?>) cosmeticType).isMonster()
                 && player.getBukkitPlayer().getWorld().getDifficulty() == Difficulty.PEACEFUL) {

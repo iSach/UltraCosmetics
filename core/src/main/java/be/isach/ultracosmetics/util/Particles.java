@@ -2,6 +2,7 @@ package be.isach.ultracosmetics.util;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.util.ReflectionUtils.PackageType;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -282,7 +283,7 @@ public enum Particles {
      * <li>The speed value has no influence on this particle effect
      * </ul>
      */
-    //FOOTSTEP("footstep", 28, -1), Doesn't support 1.13 Particle
+    // FOOTSTEP("footstep", 28, -1), Doesn't support 1.13 Particle
     /**
      * A particle effect which is displayed when a mob dies:
      * <ul>
@@ -375,7 +376,7 @@ public enum Particles {
      * <li>It has no visual effect
      * </ul>
      */
-    //ITEM_TAKE("take", 40, 8), Doesn't support 1.13 Particle
+    // ITEM_TAKE("take", 40, 8), Doesn't support 1.13 Particle
     /**
      * A particle effect which is displayed by elder guardians:
      * <ul>
@@ -387,8 +388,8 @@ public enum Particles {
     MOB_APPEARANCE("mobappearance", 41, 8);
 
     private final static int DEF_RADIUS = 128; // for convenience functions by iSach
-    private static final Map<String, Particles> NAME_MAP = new HashMap<>();
-    private static final Map<Integer, Particles> ID_MAP = new HashMap<>();
+    private static final Map<String,Particles> NAME_MAP = new HashMap<>();
+    private static final Map<Integer,Particles> ID_MAP = new HashMap<>();
     private final String name;
     private final int id;
     private final int requiredVersion;
@@ -469,7 +470,7 @@ public enum Particles {
      * @return The particle effect
      */
     public static Particles fromName(String name) {
-        for (Entry<String, Particles> entry : NAME_MAP.entrySet()) {
+        for (Entry<String,Particles> entry : NAME_MAP.entrySet()) {
             if (!entry.getKey().equalsIgnoreCase(name)) {
                 continue;
             }
@@ -485,7 +486,7 @@ public enum Particles {
      * @return The particle effect
      */
     public static Particles fromId(int id) {
-        for (Entry<Integer, Particles> entry : ID_MAP.entrySet()) {
+        for (Entry<Integer,Particles> entry : ID_MAP.entrySet()) {
             if (entry.getKey() != id) {
                 continue;
             }
@@ -920,8 +921,7 @@ public enum Particles {
         Location loc = location.clone().subtract(v);
         int step = 0;
         for (int i = 0; i < particles; i++) {
-            if (step >= (double) particles)
-                step = 0;
+            if (step >= (double) particles) step = 0;
             step++;
             loc.add(v);
             if (this == Particles.REDSTONE) {
@@ -1039,7 +1039,7 @@ public enum Particles {
         public ParticleData(Material material, byte data) {
             this.material = material;
             this.data = data;
-            this.packetData = new int[]{material.getId(), data};
+            this.packetData = new int[] { material.getId(), data };
         }
 
         /**
@@ -1539,7 +1539,7 @@ public enum Particles {
                         ReflectionUtils.setValue(packet, true, "j", longDistance);
                         if (data != null) {
                             int[] packetData = data.getPacketData();
-                            ReflectionUtils.setValue(packet, true, "k", effect == Particles.ITEM_CRACK ? packetData : new int[]{packetData[0] | (packetData[1] << 12)});
+                            ReflectionUtils.setValue(packet, true, "k", effect == Particles.ITEM_CRACK ? packetData : new int[] { packetData[0] | (packetData[1] << 12) });
                         }
                     }
                     ReflectionUtils.setValue(packet, true, "b", (float) center.getX());

@@ -37,7 +37,9 @@ def generate_fields(file):
                 print(fixed_line)
                 break
         out_fields.write(fixed_line)
-
+    out_fields.close()
+    maps.close()
+    template.seek(0)
 
 for file in os.listdir('.'):
     if os.path.isdir(file):
@@ -45,3 +47,5 @@ for file in os.listdir('.'):
     if not file.endswith(".txt") or file == "README.txt":
         continue
     generate_fields(file)
+
+template.close()

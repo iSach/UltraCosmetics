@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class GadgetGhostParty extends Gadget implements Updatable {
 
-    Map<Bat, ArmorStand> bats = new HashMap<>();
+    Map<Bat,ArmorStand> bats = new HashMap<>();
 
     public GadgetGhostParty(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("ghostparty"), ultraCosmetics);
@@ -37,7 +37,7 @@ public class GadgetGhostParty extends Gadget implements Updatable {
 
     @SuppressWarnings("deprecation")
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         for (int i = 0; i < 20; i++) {
             Bat bat = getPlayer().getWorld().spawn(getPlayer().getLocation().add(0, 1, 0), Bat.class);
             ArmorStand ghost = bat.getWorld().spawn(bat.getLocation(), ArmorStand.class);
@@ -57,8 +57,7 @@ public class GadgetGhostParty extends Gadget implements Updatable {
     @EventHandler
     public void onPlayerInteractGhost(PlayerInteractAtEntityEvent event) {
         if (event.getRightClicked() != null && event.getRightClicked().getVehicle() != null
-                && bats.containsKey(event.getRightClicked().getVehicle()))
-            event.setCancelled(true);
+                && bats.containsKey(event.getRightClicked().getVehicle())) event.setCancelled(true);
     }
 
     private void killBats() {
@@ -72,7 +71,7 @@ public class GadgetGhostParty extends Gadget implements Updatable {
     @Override
     public void onUpdate() {
         for (Bat bat : bats.keySet()) {
-            Particles.CLOUD.display(0.05f, 0.05f, 0.05f, bat.getLocation().add(0, 1.5, 0), 1);                
+            Particles.CLOUD.display(0.05f, 0.05f, 0.05f, bat.getLocation().add(0, 1.5, 0), 1);
         }
     }
 

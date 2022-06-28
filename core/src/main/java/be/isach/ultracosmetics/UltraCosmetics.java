@@ -21,7 +21,6 @@ import be.isach.ultracosmetics.permissions.LuckPermsHook;
 import be.isach.ultracosmetics.permissions.PermissionCommand;
 import be.isach.ultracosmetics.permissions.PermissionProvider;
 import be.isach.ultracosmetics.placeholderapi.PlaceholderHook;
-import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.player.UltraPlayerManager;
 import be.isach.ultracosmetics.run.FallDamageManager;
 import be.isach.ultracosmetics.run.InvalidWorldChecker;
@@ -398,7 +397,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (!mode.equalsIgnoreCase("structure") && !mode.equalsIgnoreCase("simple") && !mode.equalsIgnoreCase("both")) {
             config.set("TreasureChests.Mode", "structure", "The treasure chest mode. Options:", "- structure: places blocks and chests (default)", "- simple: only gives <Count> cosmetics, no blocks are placed", "- both: players can choose either mode through the GUI");
         }
-        // Add default values people could not have because of an old version of UC.
+        // Add default values people may not have because of an old version of UC.
         if (config.isConfigurationSection("TreasureChests.Location")) {
             config.set("TreasureChests.Locations.Enabled", config.getBoolean("TreasureChests.Location.Enabled"));
             config.set("TreasureChests.Location.Enabled", null);
@@ -631,15 +630,6 @@ public class UltraCosmetics extends JavaPlugin {
 
     public ArmorStandManager getArmorStandManager() {
         return armorStandManager;
-    }
-
-    public void openMainMenu(UltraPlayer ultraPlayer) {
-        if (getConfig().getBoolean("Categories.Back-To-Main-Menu-Custom-Command.Enabled")) {
-            String command = getConfig().getString("Categories.Back-To-Main-Menu-Custom-Command.Command").replace("/", "").replace("{player}", ultraPlayer.getBukkitPlayer().getName()).replace("{playeruuid}", ultraPlayer.getUUID().toString());
-            getServer().dispatchCommand(getServer().getConsoleSender(), command);
-        } else {
-            getMenus().getMainMenu().open(ultraPlayer);
-        }
     }
 
     public EconomyHandler getEconomyHandler() {

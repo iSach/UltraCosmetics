@@ -410,8 +410,6 @@ public class UltraPlayer {
         pd.setShowcaseItem(itemStack);
         pd.setOnPurchase(() -> {
             addKey();
-            getBukkitPlayer().closeInventory();
-            ultraCosmetics.getMenus().getMainMenu().open(this);
         });
         MenuPurchase mp = new MenuPurchase(ultraCosmetics, MessageManager.getMessage("Buy-Treasure-Key"), pd);
         Bukkit.getScheduler().runTaskLater(ultraCosmetics, () -> getBukkitPlayer().openInventory(mp.getInventory(this)), 1);
@@ -575,8 +573,7 @@ public class UltraPlayer {
      * Removes the menu Item.
      */
     public void removeMenuItem() {
-        if (getBukkitPlayer() == null)
-            return;
+        if (getBukkitPlayer() == null) return;
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
         if (getBukkitPlayer().getInventory().getItem(slot) != null
                 && getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()

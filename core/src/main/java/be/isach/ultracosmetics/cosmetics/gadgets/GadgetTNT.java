@@ -6,6 +6,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -35,7 +36,7 @@ public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         TNTPrimed tnt = getPlayer().getWorld().spawn(getPlayer().getLocation().add(0, 2, 0), TNTPrimed.class);
         // Vector stuff
         tnt.setFuseTicks(20);
@@ -54,8 +55,7 @@ public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
     public void onItemFrameBreak(HangingBreakEvent event) {
         for (Entity ent : entities) {
             if (ent.getWorld() != event.getEntity().getWorld()) continue;
-            if (ent.getLocation().distanceSquared(event.getEntity().getLocation()) < 15 * 15)
-                event.setCancelled(true);
+            if (ent.getLocation().distanceSquared(event.getEntity().getLocation()) < 15 * 15) event.setCancelled(true);
         }
     }
 

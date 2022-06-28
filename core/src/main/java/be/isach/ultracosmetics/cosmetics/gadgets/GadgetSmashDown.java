@@ -47,7 +47,7 @@ public class GadgetSmashDown extends Gadget implements PlayerAffectingCosmetic, 
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         XSound.ENTITY_FIREWORK_ROCKET_LAUNCH.play(getPlayer().getLocation(), 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final BukkitTask task = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {

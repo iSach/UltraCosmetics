@@ -41,8 +41,8 @@ public class GadgetThorHammer extends Gadget implements PlayerAffectingCosmetic 
     }
 
     @Override
-    void onRightClick() {
-        // I think this can only happen if a player is bypassing cooldowns 
+    protected void onRightClick() {
+        // I think this can only happen if a player is bypassing cooldowns
         if (hammer != null) {
             hammer.remove();
         }

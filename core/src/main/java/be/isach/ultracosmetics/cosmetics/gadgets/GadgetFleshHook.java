@@ -7,13 +7,15 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.MathUtils;
-import com.cryptomorin.xseries.XMaterial;
+
 import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.util.Vector;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,7 +39,7 @@ public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic, 
     @EventHandler
     public void onItemPickup(org.bukkit.event.player.PlayerPickupItemEvent event) {
         UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(event.getPlayer());
-        if(ultraPlayer != null && !ultraPlayer.canBeHitByOtherGadgets()) {
+        if (ultraPlayer != null && !ultraPlayer.canBeHitByOtherGadgets()) {
             event.setCancelled(true);
             return;
         }
@@ -67,7 +69,7 @@ public class GadgetFleshHook extends Gadget implements PlayerAffectingCosmetic, 
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         items.add(ItemFactory.createUnpickableItemDirectional(XMaterial.TRIPWIRE_HOOK, getPlayer(), 1.5));
     }
 

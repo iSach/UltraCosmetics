@@ -53,7 +53,7 @@ public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic, 
     }
 
     @Override
-    void onRightClick() {
+    protected void onRightClick() {
         armorStand = (ArmorStand) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(0, 3, 0), EntityType.ARMOR_STAND);
         armorStand.setMetadata("NO_INTER", new FixedMetadataValue(getUltraCosmetics(), ""));
         armorStand.setVisible(false);
@@ -116,7 +116,7 @@ public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic, 
         i2 += 0.4;
 
         XTag<XMaterial> tag = null;
-        Map<Block, XMaterial> updates = new HashMap<>();
+        Map<Block,XMaterial> updates = new HashMap<>();
         for (Block b : BlockUtils.getBlocksInRadius(armorStand.getEyeLocation().add(-.5d, -.5d, -.5d), 10, false)) {
             XMaterial mat = XMaterial.matchXMaterial(b.getType());
             if (XTag.WOOL.isTagged(mat)) {
@@ -124,7 +124,7 @@ public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic, 
             } else if (XTag.CARPETS.isTagged(mat)) {
                 tag = XTag.CARPETS;
             }
-            
+
             if (tag != null) {
                 updates.put(b, ItemFactory.randomFromTag(tag));
                 tag = null;
@@ -172,8 +172,7 @@ public class GadgetDiscoBall extends Gadget implements PlayerAffectingCosmetic, 
         Location loc = location.clone().subtract(v);
         int step = 0;
         for (int i = 0; i < particles; i++) {
-            if (step >= (double) particles)
-                step = 0;
+            if (step >= (double) particles) step = 0;
             step++;
             loc.add(v);
             if (dust) {
