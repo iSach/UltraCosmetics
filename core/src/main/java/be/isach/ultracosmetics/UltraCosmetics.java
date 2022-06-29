@@ -150,7 +150,7 @@ public class UltraCosmetics extends JavaPlugin {
         if (worldGuardIntegration && getServer().getPluginManager().getPlugin("WorldGuard") != null) {
             // does reflect-y things but isn't in VersionManager because of the load timing
             // and because it should only happen if WorldGuard is present
-            String wgVersionPackage = (VersionManager.IS_VERSION_1_13 ? ServerVersion.v1_16_R3 : ServerVersion.v1_12_R1).name();
+            String wgVersionPackage = (VersionManager.IS_VERSION_1_13 ? ServerVersion.v1_17_R1 : ServerVersion.v1_12_R1).name();
             try {
                 flagManager = (AFlagManager) ReflectionUtils.instantiateObject(Class.forName(VersionManager.PACKAGE + "." + wgVersionPackage + ".worldguard.FlagManager"));
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException

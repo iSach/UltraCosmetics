@@ -3,12 +3,47 @@ package be.isach.ultracosmetics.cosmetics.type;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;
 import be.isach.ultracosmetics.cosmetics.Category;
-import be.isach.ultracosmetics.cosmetics.pets.*;
+import be.isach.ultracosmetics.cosmetics.pets.Pet;
+import be.isach.ultracosmetics.cosmetics.pets.PetAllay;
+import be.isach.ultracosmetics.cosmetics.pets.PetAxolotl;
+import be.isach.ultracosmetics.cosmetics.pets.PetBat;
+import be.isach.ultracosmetics.cosmetics.pets.PetBee;
+import be.isach.ultracosmetics.cosmetics.pets.PetBlaze;
+import be.isach.ultracosmetics.cosmetics.pets.PetChick;
+import be.isach.ultracosmetics.cosmetics.pets.PetChristmasElf;
+import be.isach.ultracosmetics.cosmetics.pets.PetCow;
+import be.isach.ultracosmetics.cosmetics.pets.PetCreeper;
+import be.isach.ultracosmetics.cosmetics.pets.PetDog;
+import be.isach.ultracosmetics.cosmetics.pets.PetEasterBunny;
+import be.isach.ultracosmetics.cosmetics.pets.PetEnderman;
+import be.isach.ultracosmetics.cosmetics.pets.PetFox;
+import be.isach.ultracosmetics.cosmetics.pets.PetFrog;
+import be.isach.ultracosmetics.cosmetics.pets.PetGoat;
+import be.isach.ultracosmetics.cosmetics.pets.PetHorse;
+import be.isach.ultracosmetics.cosmetics.pets.PetIronGolem;
+import be.isach.ultracosmetics.cosmetics.pets.PetKitty;
+import be.isach.ultracosmetics.cosmetics.pets.PetLlama;
+import be.isach.ultracosmetics.cosmetics.pets.PetMooshroom;
+import be.isach.ultracosmetics.cosmetics.pets.PetPanda;
+import be.isach.ultracosmetics.cosmetics.pets.PetParrot;
+import be.isach.ultracosmetics.cosmetics.pets.PetPiggy;
+import be.isach.ultracosmetics.cosmetics.pets.PetPiglin;
+import be.isach.ultracosmetics.cosmetics.pets.PetPolarBear;
+import be.isach.ultracosmetics.cosmetics.pets.PetSheep;
+import be.isach.ultracosmetics.cosmetics.pets.PetSilverfish;
+import be.isach.ultracosmetics.cosmetics.pets.PetSkeleton;
+import be.isach.ultracosmetics.cosmetics.pets.PetSnowman;
+import be.isach.ultracosmetics.cosmetics.pets.PetVillager;
+import be.isach.ultracosmetics.cosmetics.pets.PetWarden;
+import be.isach.ultracosmetics.cosmetics.pets.PetWither;
+import be.isach.ultracosmetics.cosmetics.pets.PetZombie;
 import be.isach.ultracosmetics.util.ServerVersion;
-import com.cryptomorin.xseries.XMaterial;
 import be.isach.ultracosmetics.version.GetForVersion;
+
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
+import com.cryptomorin.xseries.XMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,27 +118,24 @@ public final class PetType extends CosmeticEntType<Pet> {
         new PetType("Bat", XMaterial.COAL, "&7&oI prefer dark areas", EntityType.BAT, PetBat.class);
         new PetType("Sheep", XMaterial.WHITE_WOOL, "&7&oBaaaa, baa", EntityType.SHEEP, PetSheep.class);
         new PetType("Wither", XMaterial.WITHER_SKELETON_SKULL, "&7&oWatch out for me..", EntityType.WITHER, PetWither.class);
-        /*Slime disabled because its just constantly jumping in one direction instead of following the player*/
-        /*new PetType("Slime", XMaterial.SLIME_BALL, "&7&oSquish...", EntityType.SLIME, PetSlime.class);*/
+        /* Slime disabled because its just constantly jumping in one direction instead of following the player */
+        /* new PetType("Slime", XMaterial.SLIME_BALL, "&7&oSquish...", EntityType.SLIME, PetSlime.class); */
         new PetType("Silverfish", XMaterial.GRAY_DYE, "&7&oLurking in the walls...", EntityType.SILVERFISH, PetSilverfish.class);
         new PetType("Blaze", XMaterial.BLAZE_ROD, "&7&oFlying and hot!", EntityType.BLAZE, PetBlaze.class);
         new PetType("Creeper", XMaterial.GUNPOWDER, "&7&oLikes blowing up your favorite Stuff...", EntityType.CREEPER, PetCreeper.class);
         new PetType("Enderman", XMaterial.ENDER_PEARL, "&7&oDont look at it or it will hunt you!", EntityType.ENDERMAN, PetEnderman.class);
         new PetType("Skeleton", XMaterial.BOW, "&7&oWatch out, it will try to shoot you!", EntityType.SKELETON, PetSkeleton.class);
         new PetType("Zombie", XMaterial.ROTTEN_FLESH, "&7&oQuick! Hide your Villagers!", EntityType.ZOMBIE, PetZombie.class);
-        
+
         if (serverVersion.isAtLeast(ServerVersion.v1_19_R1)) {
             new PetType("Frog", XMaterial.LILY_PAD, "&7&oDoesn't like Fireflies!", EntityType.FROG, PetFrog.class);
             new PetType("Warden", XMaterial.SCULK_SHRIEKER, "&7&oThe scariest Mob in Minecraft!", EntityType.WARDEN, PetWarden.class);
             new PetType("Allay", XMaterial.ALLAY_SPAWN_EGG, "&7&oA new Friend!", EntityType.ALLAY, PetAllay.class);
             new PetType("Goat", XMaterial.GOAT_HORN, "&7&oBAAAA!", EntityType.GOAT, PetGoat.class);
         }
-        
+
         if (serverVersion.isAtLeast(ServerVersion.v1_17_R1)) {
             new PetType("Axolotl", XMaterial.AXOLOTL_BUCKET, "&7&oSooo Cute!", EntityType.AXOLOTL, PetAxolotl.class);
-        }
-        
-        if (serverVersion.isAtLeast(ServerVersion.v1_16_R3)) {
             new PetType("Piglin", XMaterial.GOLD_INGOT, "&7&oDeals with Gold!", EntityType.PIGLIN, PetPiglin.class);
             new PetType("Bee", XMaterial.HONEYCOMB, "&7&o*bzzzz* *bzzzz*", EntityType.BEE, PetBee.class);
             new PetType("Panda", XMaterial.BAMBOO, "&7&oLikes Bamboo!", EntityType.PANDA, PetPanda.class);
@@ -119,8 +151,8 @@ public final class PetType extends CosmeticEntType<Pet> {
             new PetType("PolarBear", XMaterial.SNOW_BLOCK, "&7&oI prefer cold areas", GetForVersion.entityType("POLAR_BEAR"), PetPolarBear.class);
             new PetType("Llama", XMaterial.RED_WOOL, "&7&oNeed me to carry anything?", GetForVersion.entityType("LLAMA"), PetLlama.class);
             new PetType("Parrot", XMaterial.COOKIE, "&7&oPolly want a cracker?", GetForVersion.entityType("PARROT"), PetParrot.class);
-            /*Vex disabled because its just not following the player at all (Besides teleport)*/
-            /*new PetType("Vex", XMaterial.IRON_SWORD, "&7&oYAAHH Ehehhehe!", GetForVersion.entityType("VEX"), PetVex.class);*/
+            /* Vex disabled because its just not following the player at all (Besides teleport) */
+            /* new PetType("Vex", XMaterial.IRON_SWORD, "&7&oYAAHH Ehehhehe!", GetForVersion.entityType("VEX"), PetVex.class); */
         }
     }
 }
