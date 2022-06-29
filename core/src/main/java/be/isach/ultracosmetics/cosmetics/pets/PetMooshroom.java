@@ -3,7 +3,6 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import com.cryptomorin.xseries.XMaterial;
 
 /**
  * Represents an instance of a mooshroom pet summoned by a player.
@@ -13,6 +12,6 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetMooshroom extends Pet {
     public PetMooshroom(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("mooshroom"), XMaterial.RED_MUSHROOM);
+        super(owner, ultraCosmetics, PetType.getByName("mooshroom"));
     }
 }

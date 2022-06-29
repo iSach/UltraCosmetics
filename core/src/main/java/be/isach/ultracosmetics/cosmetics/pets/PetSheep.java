@@ -4,7 +4,7 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ItemFactory;
-import com.cryptomorin.xseries.XMaterial;
+
 import com.cryptomorin.xseries.XTag;
 
 /**
@@ -15,7 +15,7 @@ import com.cryptomorin.xseries.XTag;
  */
 public class PetSheep extends Pet {
     public PetSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("sheep"), XMaterial.WHITE_WOOL);
+        super(owner, ultraCosmetics, PetType.getByName("sheep"));
     }
 
     @Override

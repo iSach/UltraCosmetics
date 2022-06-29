@@ -28,7 +28,7 @@ public class PetChristmasElf extends Pet {
             getSkull("aa074845885202e17ed5c4be4103733121235c5440ae3a1c49fbd39317b04d"));
 
     public PetChristmasElf(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("christmaself"), PRESENTS.get(0));
+        super(owner, ultraCosmetics, PetType.getByName("christmaself"));
     }
 
     @Override

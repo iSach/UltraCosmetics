@@ -1,7 +1,5 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import com.cryptomorin.xseries.XMaterial;
-
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -14,7 +12,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
  */
 public class PetZombie extends Pet {
     public PetZombie(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("zombie"), XMaterial.ROTTEN_FLESH);
+        super(owner, ultraCosmetics, PetType.getByName("zombie"));
     }
     
     @Override

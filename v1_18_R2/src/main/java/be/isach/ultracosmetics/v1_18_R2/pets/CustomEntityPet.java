@@ -5,9 +5,10 @@ import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_18_R2.customentities.CustomEntities;
+
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.inventory.ItemStack;
+
 import net.minecraft.world.entity.Entity;
 
 /**
@@ -15,8 +16,8 @@ import net.minecraft.world.entity.Entity;
  */
 public abstract class CustomEntityPet extends Pet {
 
-    public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
-        super(owner, ultraCosmetics, petType, dropItem);
+    public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
+        super(owner, ultraCosmetics, petType);
     }
 
     @Override
@@ -44,7 +45,7 @@ public abstract class CustomEntityPet extends Pet {
     }
 
     public Entity getNMSEntity() {
-        return ((CraftEntity)entity).getHandle();
+        return ((CraftEntity) entity).getHandle();
     }
 
     public abstract Entity getNewEntity();

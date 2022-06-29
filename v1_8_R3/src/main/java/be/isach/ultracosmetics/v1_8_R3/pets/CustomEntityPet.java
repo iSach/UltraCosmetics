@@ -5,19 +5,18 @@ import be.isach.ultracosmetics.cosmetics.pets.Pet;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_8_R3.customentities.CustomEntities;
+
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Sacha on 7/03/16.
  */
 public abstract class CustomEntityPet extends Pet {
 
-    public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, ItemStack dropItem) {
-        super(owner, ultraCosmetics, petType, dropItem);
-
+    public CustomEntityPet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
+        super(owner, ultraCosmetics, petType);
     }
 
     @Override

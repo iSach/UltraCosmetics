@@ -1,7 +1,5 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import com.cryptomorin.xseries.XMaterial;
-
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
@@ -14,7 +12,7 @@ import be.isach.ultracosmetics.player.UltraPlayer;
  */
 public class PetSkeleton extends Pet {
     public PetSkeleton(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("skeleton"), XMaterial.BOW);
+        super(owner, ultraCosmetics, PetType.getByName("skeleton"));
     }
     
     @Override

@@ -69,8 +69,12 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
         this.followTask = UltraCosmeticsData.get().getVersionManager().newPlayerFollower(this, getPlayer());
     }
 
-    public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, XMaterial dropItemType) {
-        this(owner, ultraCosmetics, petType, dropItemType.parseItem());
+    public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType, XMaterial dropItem) {
+        this(owner, ultraCosmetics, petType, dropItem.parseItem());
+    }
+
+    public Pet(UltraPlayer owner, UltraCosmetics ultraCosmetics, PetType petType) {
+        this(owner, ultraCosmetics, petType, petType.getItemStack());
     }
 
     @SuppressWarnings("deprecation")
@@ -95,7 +99,7 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
         }
 
         if (entity instanceof Tameable) {
-            ((Tameable)entity).setTamed(true);
+            ((Tameable) entity).setTamed(true);
         }
 
         // setCustomNameVisible(true) doesn't seem to work on 1.8, so we'll just use armor stands in that case
@@ -203,6 +207,7 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
 
     /**
      * This method is overridden by custom entity mobs that don't use the mobs own name tag for the hologram.
+     *
      * @return the entity that should be renamed
      */
     protected Entity getNamedEntity() {
@@ -220,7 +225,7 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
         // Not using the ItemFactory variance method for this one
         // because we want to bump the Y velocity a bit between calcs.
         Vector velocity = new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2.0 + 0.3, RANDOM.nextDouble() - 0.5).multiply(0.4);
-        final Item drop = ItemFactory.spawnUnpickableItem(dropItem, ((LivingEntity)entity).getEyeLocation(), velocity);
+        final Item drop = ItemFactory.spawnUnpickableItem(dropItem, ((LivingEntity) entity).getEyeLocation(), velocity);
         items.add(drop);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             drop.remove();
@@ -230,14 +235,12 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() == getEntity())
-            event.setCancelled(true);
+        if (event.getEntity() == getEntity()) event.setCancelled(true);
     }
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.getPlayer() == getPlayer())
-            getEntity().teleport(getPlayer());
+        if (event.getPlayer() == getPlayer()) getEntity().teleport(getPlayer());
     }
 
     @Override
@@ -247,7 +250,7 @@ public abstract class Pet extends EntityCosmetic<PetType> implements Updatable {
         if (name != null) {
             filtered += " " + ChatColor.GRAY + "(" + name + ChatColor.GRAY + ")";
         }
-        return filtered; 
+        return filtered;
     }
 
     public boolean isCustomEntity() {

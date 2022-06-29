@@ -5,9 +5,7 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.v1_8_R3.customentities.Pumpling;
 
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.inventory.ItemStack;
 
 import net.minecraft.server.v1_8_R3.Entity;
 
@@ -16,7 +14,7 @@ import net.minecraft.server.v1_8_R3.Entity;
  */
 public class PetPumpling extends CustomEntityPet {
     public PetPumpling(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("pumpling"), new ItemStack(Material.JACK_O_LANTERN));
+        super(owner, ultraCosmetics, PetType.getByName("pumpling"));
     }
 
     @Override

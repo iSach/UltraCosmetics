@@ -7,8 +7,6 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-import com.cryptomorin.xseries.XMaterial;
-
 /**
  * Represents an instance of a allay pet summoned by a player.
  *
@@ -17,7 +15,7 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetAllay extends Pet {
     public PetAllay(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("allay"), XMaterial.ALLAY_SPAWN_EGG);
+        super(owner, ultraCosmetics, PetType.getByName("allay"));
     }
 
     @EventHandler

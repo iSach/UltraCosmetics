@@ -3,7 +3,7 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
-import com.cryptomorin.xseries.XMaterial;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.EntityBlockFormEvent;
 
@@ -15,7 +15,7 @@ import org.bukkit.event.block.EntityBlockFormEvent;
  */
 public class PetSnowman extends Pet {
     public PetSnowman(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("snowman"), XMaterial.SNOWBALL);
+        super(owner, ultraCosmetics, PetType.getByName("snowman"));
     }
 
     @EventHandler

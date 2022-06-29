@@ -8,8 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent.Cause;
 
-import com.cryptomorin.xseries.XMaterial;
-
 /**
  * Represents an instance of a warden pet summoned by a player.
  *
@@ -18,7 +16,7 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetWarden extends Pet {
     public PetWarden(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("warden"), XMaterial.SCULK_SHRIEKER);
+        super(owner, ultraCosmetics, PetType.getByName("warden"));
     }
 
     @EventHandler

@@ -18,7 +18,7 @@ public class PetEasterBunny extends Pet {
             XMaterial.ZOMBIE_HORSE_SPAWN_EGG, XMaterial.ENDERMAN_SPAWN_EGG, XMaterial.GHAST_SPAWN_EGG, XMaterial.OCELOT_SPAWN_EGG);
 
     public PetEasterBunny(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("easterbunny"), EGGS.get(0));
+        super(owner, ultraCosmetics, PetType.getByName("easterbunny"));
     }
 
     @Override

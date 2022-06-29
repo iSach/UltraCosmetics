@@ -1,13 +1,10 @@
 package be.isach.ultracosmetics.cosmetics.pets;
 
-import com.cryptomorin.xseries.XMaterial;
-
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.ServerVersion;
-import be.isach.ultracosmetics.version.VersionManager;
 
 import org.bukkit.entity.Horse;
 
@@ -19,7 +16,7 @@ import org.bukkit.entity.Horse;
  */
 public class PetHorse extends Pet {
     public PetHorse(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("horse"), VersionManager.IS_VERSION_1_13 ? XMaterial.LEATHER_HORSE_ARMOR : XMaterial.LEATHER);
+        super(owner, ultraCosmetics, PetType.getByName("horse"));
     }
 
     @SuppressWarnings("deprecation")

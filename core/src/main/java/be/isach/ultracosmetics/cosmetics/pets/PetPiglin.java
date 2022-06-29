@@ -7,8 +7,6 @@ import org.bukkit.entity.Piglin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PiglinBarterEvent;
 
-import com.cryptomorin.xseries.XMaterial;
-
 /**
  * Represents an instance of a piglin pet summoned by a player.
  *
@@ -17,7 +15,7 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetPiglin extends Pet {
     public PetPiglin(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("piglin"), XMaterial.GOLD_INGOT);
+        super(owner, ultraCosmetics, PetType.getByName("piglin"));
     }
 
     @Override

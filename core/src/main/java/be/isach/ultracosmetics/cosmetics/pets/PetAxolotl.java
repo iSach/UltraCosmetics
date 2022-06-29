@@ -7,8 +7,6 @@ import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import org.bukkit.entity.Axolotl;
 
-import com.cryptomorin.xseries.XMaterial;
-
 /**
  * Represents an instance of a axolotl pet summoned by a player.
  *
@@ -17,7 +15,7 @@ import com.cryptomorin.xseries.XMaterial;
  */
 public class PetAxolotl extends Pet {
     public PetAxolotl(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
-        super(owner, ultraCosmetics, PetType.getByName("axolotl"), XMaterial.AXOLOTL_BUCKET);
+        super(owner, ultraCosmetics, PetType.getByName("axolotl"));
     }
 
     @Override
