@@ -3,6 +3,11 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent.Cause;
+
 import com.cryptomorin.xseries.XMaterial;
 
 /**
@@ -14,5 +19,12 @@ import com.cryptomorin.xseries.XMaterial;
 public class PetWarden extends Pet {
     public PetWarden(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.getByName("warden"), XMaterial.SCULK_SHRIEKER);
+    }
+
+    @EventHandler
+    public void onDarkness(EntityPotionEffectEvent event) {
+        if (event.getEntity() == getPlayer() && event.getCause() == Cause.WARDEN) {
+            event.setCancelled(true);
+        }
     }
 }

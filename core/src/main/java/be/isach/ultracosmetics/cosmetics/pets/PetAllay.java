@@ -3,6 +3,10 @@ package be.isach.ultracosmetics.cosmetics.pets;
 import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.cosmetics.type.PetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+
 import com.cryptomorin.xseries.XMaterial;
 
 /**
@@ -14,5 +18,12 @@ import com.cryptomorin.xseries.XMaterial;
 public class PetAllay extends Pet {
     public PetAllay(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, ultraCosmetics, PetType.getByName("allay"), XMaterial.ALLAY_SPAWN_EGG);
+    }
+
+    @EventHandler
+    public void onClick(PlayerInteractEntityEvent event) {
+        if (event.getRightClicked() == entity) {
+            event.setCancelled(true);
+        }
     }
 }

@@ -3,14 +3,16 @@ package be.isach.ultracosmetics.v1_16_R3.pets;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.pets.APlayerFollower;
 import be.isach.ultracosmetics.cosmetics.pets.Pet;
-import net.minecraft.server.v1_16_R3.Entity;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.PathEntity;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
+import net.minecraft.server.v1_16_R3.Entity;
+import net.minecraft.server.v1_16_R3.EntityInsentient;
+import net.minecraft.server.v1_16_R3.PathEntity;
 
 /**
  * @author RadBuilder
@@ -53,7 +55,7 @@ public class PlayerFollower extends APlayerFollower {
                 @SuppressWarnings("deprecation")
                 boolean onGround = player.isOnGround();
                 if (onGround && distanceSquared > 10 * 10 && petEntity.valid) {
-                    petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
+                    petEntity.setLocation(targetLocation.getX(), targetLocation.getY(), targetLocation.getZ(), 0, 0);
                 }
 
                 if (path != null && distanceSquared > 1.3 * 1.3) {
@@ -67,8 +69,8 @@ public class PlayerFollower extends APlayerFollower {
                     ((EntityInsentient) petEntity).getNavigation().a(speed);
                 }
             } catch (IllegalArgumentException exception) {
-                petEntity.setLocation(targetLocation.getBlockX(), targetLocation.getBlockY(), targetLocation.getBlockZ(), 0, 0);
-                //exception.printStackTrace();
+                petEntity.setLocation(targetLocation.getX(), targetLocation.getY(), targetLocation.getZ(), 0, 0);
+                // exception.printStackTrace();
             }
         });
     }
