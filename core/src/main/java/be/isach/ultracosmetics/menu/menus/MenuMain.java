@@ -142,7 +142,7 @@ public class MenuMain extends Menu {
                 if (mode.equalsIgnoreCase("simple")) {
                     player.removeKey();
                     int count = SettingsManager.getConfig().getInt("TreasureChests.Count", 4);
-                    TreasureRandomizer tr = new TreasureRandomizer(player.getBukkitPlayer(), player.getBukkitPlayer().getLocation());
+                    TreasureRandomizer tr = new TreasureRandomizer(player.getBukkitPlayer(), player.getBukkitPlayer().getLocation(), true);
                     for (int i = 0; i < count; i++) {
                         tr.giveRandomThing();
                     }
