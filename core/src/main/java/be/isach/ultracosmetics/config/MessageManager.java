@@ -368,7 +368,7 @@ public class MessageManager {
         addMessage("Morphs.Villager.name", "&a&lVillager");
         addMessage("Morphs.Villager.skill", "&eLeft-Click&7 to: &aEmerald Throw");
         addMessage("Morphs.Witch.name", "&5&lWitch");
-        addMessage("Morphs.Witch.skill", "&eLEft-Click&7 to: &aPotion Throw");
+        addMessage("Morphs.Witch.skill", "&eLeft-Click&7 to: &aPotion Throw");
         addMessage("Morphs.PolarBear.name", "&f&lPolarBear");
         addMessage("Morphs.PolarBear.skill", "&eLeft-Click&7 to: &aBlizzard");
         addMessage("Morphs.Llama.name", "&3&lLlama");
