@@ -32,6 +32,7 @@ import be.isach.ultracosmetics.util.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -40,6 +41,7 @@ import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XMaterial;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -547,27 +549,29 @@ public class UltraPlayer {
     public void giveMenuItem() {
         if (getBukkitPlayer() == null) return;
         removeMenuItem();
-        int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-        if (getBukkitPlayer().getInventory().getItem(slot) != null) {
-            if (getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
-                    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                    && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName().equalsIgnoreCase(SettingsManager.getConfig().getString("Menu-Item.Displayname"))) {
-                // getBukkitPlayer().getInventory().remove(slot);
+        ConfigurationSection section = SettingsManager.getConfig().getConfigurationSection("Menu-Item");
+        int slot = section.getInt("Slot");
+        ItemStack slotItem = getBukkitPlayer().getInventory().getItem(slot);
+        if (slotItem != null) {
+            if (slotItem.hasItemMeta() && slotItem.getItemMeta().hasDisplayName()
+                    && slotItem.getItemMeta().getDisplayName().equalsIgnoreCase(section.getString("Displayname"))) {
                 getBukkitPlayer().getInventory().setItem(slot, null);
             }
-            getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), getBukkitPlayer().getInventory().getItem(slot));
-            // getBukkitPlayer().getInventory().remove(slot);
+            getBukkitPlayer().getWorld().dropItemNaturally(getBukkitPlayer().getLocation(), slotItem);
             getBukkitPlayer().getInventory().setItem(slot, null);
         }
-        String name = ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("Menu-Item.Displayname"));
-        int model = SettingsManager.getConfig().getInt("Menu-Item.Custom-Model-Data");
+        String name = ChatColor.translateAlternateColorCodes('&', section.getString("Displayname"));
+        int model = section.getInt("Custom-Model-Data");
         ItemStack stack = ItemFactory.rename(ItemFactory.getItemStackFromConfig("Menu-Item.Type"), name);
+        ItemMeta meta = stack.getItemMeta();
+        String lore = ChatColor.translateAlternateColorCodes('&', section.getString("Lore"));
+        meta.setLore(Arrays.asList(lore.split("\n")));
 
         if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_16_R3) && model != 0) {
-            ItemMeta meta = stack.getItemMeta();
             meta.setCustomModelData(model);
-            stack.setItemMeta(meta);
         }
+
+        stack.setItemMeta(meta);
 
         getBukkitPlayer().getInventory().setItem(slot, stack);
     }
@@ -578,11 +582,9 @@ public class UltraPlayer {
     public void removeMenuItem() {
         if (getBukkitPlayer() == null) return;
         int slot = SettingsManager.getConfig().getInt("Menu-Item.Slot");
-        if (getBukkitPlayer().getInventory().getItem(slot) != null
-                && getBukkitPlayer().getInventory().getItem(slot).hasItemMeta()
-                && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().hasDisplayName()
-                && getBukkitPlayer().getInventory().getItem(slot).getItemMeta().getDisplayName()
-                        .equals(ChatColor.translateAlternateColorCodes('&', String.valueOf(SettingsManager.getConfig().get("Menu-Item.Displayname"))))) {
+        ItemStack slotItem = getBukkitPlayer().getInventory().getItem(slot);
+        if (slotItem != null && slotItem.hasItemMeta() && slotItem.getItemMeta().hasDisplayName()
+                && slotItem.getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', SettingsManager.getConfig().getString("Menu-Item.Displayname")))) {
             getBukkitPlayer().getInventory().setItem(slot, null);
         }
     }

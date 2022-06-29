@@ -66,23 +66,21 @@ public class GadgetType extends CosmeticType<Gadget> {
     }
 
     public static GadgetType valueOf(String s, boolean onlyEnabled) {
-        s = s.toLowerCase();
-        String finalS = s;
+        String finalS = s.toLowerCase();
         Stream<GadgetType> stream = VALUES.stream().filter(gadgetType -> gadgetType.getConfigName().equalsIgnoreCase(finalS));
         if (onlyEnabled) {
             stream.filter(gadgetType -> gadgetType.isEnabled());
         }
         Optional<GadgetType> optionalType = stream.findFirst();
-        if (optionalType.isPresent())
+        if (optionalType.isPresent()) {
             return optionalType.get();
-        else {
+        } else {
             stream = VALUES.stream().filter(gadgetType -> gadgetType.getConfigName().toLowerCase().startsWith(finalS));
             if (onlyEnabled) {
                 stream.filter(gadgetType -> gadgetType.isEnabled());
             }
             Optional<GadgetType> bestMatchOptional = stream.findFirst();
-            if (bestMatchOptional.isPresent())
-                return bestMatchOptional.get();
+            if (bestMatchOptional.isPresent()) return bestMatchOptional.get();
             return null;
         }
     }

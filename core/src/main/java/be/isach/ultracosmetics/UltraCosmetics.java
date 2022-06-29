@@ -549,6 +549,7 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("Menu-Item.Custom-Model-Data", 0, "Custom model data for the menu item. Only supported on MC >= 1.14.4 (when it was added)");
         config.addDefault("Menu-Item.Open-Menu-On-Inventory-Click", false, "Whether to open cosmetics menu when the menu item is clicked from the player's inventory");
         config.set("Menu-Item.Data", null);
+        config.addDefault("Menu-Item.Lore", "&aRight-click with this\n&ato open the menu", "Lore to apply to the menu item. Set to '' to disable");
         config.addDefault("Auto-Equip-Cosmetics", true, "Allows for players to auto-equip on join cosmetics they had before disconnecting.", "Supports both flatfile and SQL, choosing SQL when possible.");
         config.addDefault("Area-Debug", false, "When enabled, prints why area checks failed to the console");
         List<String> airMaterials = new ArrayList<>();
