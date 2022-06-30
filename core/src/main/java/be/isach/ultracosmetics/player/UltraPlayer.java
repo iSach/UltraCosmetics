@@ -567,7 +567,7 @@ public class UltraPlayer {
         String lore = ChatColor.translateAlternateColorCodes('&', section.getString("Lore"));
         meta.setLore(Arrays.asList(lore.split("\n")));
 
-        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_17_R1) && model != 0) {
+        if (UltraCosmeticsData.get().getServerVersion().isAtLeast(ServerVersion.v1_18_R2) && model != 0) {
             meta.setCustomModelData(model);
         }
 
