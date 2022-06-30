@@ -1,4 +1,5 @@
 dependencies {
     implementation 'org.spigotmc:spigot:1.18.2-R0.1-SNAPSHOT:remapped-mojang'
     implementation project(':core')
+    implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
 }
