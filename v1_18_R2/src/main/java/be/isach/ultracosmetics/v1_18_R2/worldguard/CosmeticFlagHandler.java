@@ -1,4 +1,4 @@
-package be.isach.ultracosmetics.v1_17_R1.worldguard;
+package be.isach.ultracosmetics.v1_18_R2.worldguard;
 
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.config.MessageManager;

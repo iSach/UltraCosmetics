@@ -7,7 +7,6 @@ public enum ServerVersion {
 
     v1_8_R3("1.8.8", null),
     v1_12_R1("1.12.2", null),
-    v1_17_R1("1.17.1", "f0e3dfc7390de285a4693518dd5bd126"),
     v1_18_R2("1.18.2", "eaeedbff51b16ead3170906872fda334"),
     v1_19_R1("1.19", "7b9de0da1357e5b251eddde9aa762916");
 

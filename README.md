@@ -15,7 +15,7 @@
 [![wiki](https://img.shields.io/badge/go%20to-wiki-blue.svg)][wiki-link]
 
 ## Welcome to the UltraCosmetics GitHub repository!
-UltraCosmetics is a Spigot plugin compatible with versions 1.8.8, 1.12.2 and 1.16.5+, that adds cosmetics to your server!
+UltraCosmetics is a Spigot plugin compatible with versions 1.8.8, 1.12.2 and 1.18.2+, that adds cosmetics to your server!
 
 In order for everyone to have the best experience possible, we have a few guidelines that everyone must follow.    
 - For all things on GitHub, please make sure you follow the [code of conduct](CODE_OF_CONDUCT.md).
