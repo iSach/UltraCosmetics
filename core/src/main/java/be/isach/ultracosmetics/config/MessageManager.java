@@ -417,6 +417,18 @@ public class MessageManager {
         addMessage("Hats.Present.Name", "&c&lPresent");
         addMessage("Hats.Elf.Name", "&a&lElf");
         addMessage("Hats.Bedrock.Name", "&8&lBedrock");
+        addMessage("Hats.RedCrewmate.Name", "&4&lRed Crewmate");
+        addMessage("Hats.BlueCrewmate.Name", "&1&lBlue Crewmate");
+        addMessage("Hats.GreenCrewmate.Name", "&2&lGreen Crewmate");
+        addMessage("Hats.CyanCrewmate.Name", "&b&lCyan Crewmate");
+        addMessage("Hats.LimeCrewmate.Name", "&a&lLime Crewmate");
+        addMessage("Hats.YellowCrewmate.Name", "&e&lYellow Crewmate");
+        addMessage("Hats.OrangeCrewmate.Name", "&6&lOrange Crewmate");
+        addMessage("Hats.PurpleCrewmate.Name", "&5&lPurple Crewmate");
+        addMessage("Hats.BlackCrewmate.Name", "&0&lBlack Crewmate");
+        addMessage("Hats.WhiteCrewmate.Name", "&f&lWhite Crewmate");
+        addMessage("Hats.PinkCrewmate.Name", "&d&lPink Crewmate");
+        addMessage("Hats.BrownCrewmate.Name", "&8&lBrown Crewmate");
         addMessage("Hats.Bread.Name", "&f&lBread");
         addMessage("Hats.Cheese.Name", "&e&lCheese");
         addMessage("Hats.Pancakes.Name", "&f&lPancakes");
