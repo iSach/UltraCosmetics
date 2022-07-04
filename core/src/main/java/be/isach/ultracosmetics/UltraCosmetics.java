@@ -365,7 +365,7 @@ public class UltraCosmetics extends JavaPlugin {
                 permissionProvider = new LuckPermsHook(this);
                 return;
             }
-            getSmartLogger().write("Permission-Add-Command was set to '!lp-api' but LuckPerms is not present");
+            getSmartLogger().write(LogLevel.WARNING, "Permission-Add-Command was set to '!lp-api' but LuckPerms is not present. Please change it manually.");
             SettingsManager.getConfig().set("TreasureChests.Permission-Add-Command", "say Please set Permission-Add-Command in UC config.yml");
         }
         permissionProvider = new PermissionCommand();
@@ -398,7 +398,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         List<String> enabledWorlds = new ArrayList<>();
         enabledWorlds.add("*");
-        config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds", "where cosmetics are enabled!", "If list contains '*',", "all worlds will be allowed.");
+        config.addDefault("Enabled-Worlds", enabledWorlds, "List of the worlds where cosmetics are enabled!", "If list contains '*', all worlds will be allowed.");
 
         config.set("Disabled-Items", null);
         config.addDefault("Economy", "Vault");

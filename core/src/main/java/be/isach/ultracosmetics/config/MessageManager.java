@@ -275,8 +275,6 @@ public class MessageManager {
         addMessage("Pets.Wither.entity-displayname", "&l%playername%'s wither");
         addMessage("Pets.Pumpling.menu-name", "&6&lPumpling");
         addMessage("Pets.Pumpling.entity-displayname", "&l%playername%'s pumpling");
-        addMessage("Pets.CompanionCube.menu-name", "&d&lCompanion Cube");
-        addMessage("Pets.CompanionCube.entity-displayname", "&l%playername%'s cube");
         addMessage("Pets.ChristmasElf.menu-name", "&a&lChristmas Elf");
         addMessage("Pets.ChristmasElf.entity-displayname", "&l%playername%'s Christmas elf");
         addMessage("Pets.Mooshroom.menu-name", "&4&lMooshroom");

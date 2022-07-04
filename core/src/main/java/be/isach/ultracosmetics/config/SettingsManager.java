@@ -36,8 +36,9 @@ public class SettingsManager {
      */
     protected SettingsManager(String fileName) {
         File folder = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), "/data");
-        if (!folder.exists())
+        if (!folder.exists()) {
             folder.mkdirs();
+        }
 
         file = new File(UltraCosmeticsData.get().getPlugin().getDataFolder(), fileName + ".yml");
 
@@ -59,7 +60,7 @@ public class SettingsManager {
             success = false;
             e.printStackTrace();
         }
-        
+
     }
 
     /**
@@ -80,6 +81,7 @@ public class SettingsManager {
     public static SettingsManager getData(Player p) {
         return new SettingsManager("/data/" + p.getUniqueId().toString());
     }
+
     /**
      * Gets the data settings manager of a uuid.
      *
