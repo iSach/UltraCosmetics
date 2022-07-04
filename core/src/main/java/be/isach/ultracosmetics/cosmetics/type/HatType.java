@@ -137,6 +137,18 @@ public class HatType extends CosmeticType<Hat> {
         new HatType("f0afa4fffd10863e76c698da2c9c9e799bcf9ab9aa37d8312881734225d3ca", "Present", "&7&oFrom Santa, to you!");
         new HatType("82ab6c79c63b8334b2c03b6f736acf61aced5c24f2ba72b777d77f28e8c", "Elf", "&7&oI work for Santa!");
         new HatType("36d1fabdf3e342671bd9f95f687fe263f439ddc2f1c9ea8ff15b13f1e7e48b9", "Bedrock", "&7&oUnbreakable!");
+        new HatType("a7d5eb0aea5d61ba3ff4996416a90096a9d77609ebcd3b308f906ae888a45f6d", "Red Crewmate", "&7&oRed sus!");
+        new HatType("6670bc5f045830094054aebc75b2ed37fc55f524d979d81ef61f3de5c217d0ca", "Blue Crewmate", "&7&oBlue sus!");
+        new HatType("4e633480d4bfbeaa049d013ed5746d9f5df9495d0bae1d9a70d5e2649bc264f", "Green Crewmate", "&7&oGreen sus!");
+        new HatType("7d3ef1564636889fe3acd3bb264efd752c90d4c6b23b00a3ed6c2d7f5e822775", "Cyan Crewmate", "&7&oCyan sus!");
+        new HatType("e58e56c765e34423ad2877840ab7c5688b44939c537c202363a4f1b5b7580dc8", "Lime Crewmate", "&7&oLime sus!");
+        new HatType("ab6b12c1b862b68936e8aee7a248c3e252e88b1fcff05700fce1c959120a229d", "Yellow Crewmate", "&7&oYellow sus!");
+        new HatType("d910e30441cb829b4ee8ca1c0444c1fac6d94ace5a5c17ce46d4ef6cd93b23a9", "Orange Crewmate", "&7&oOrange sus!");
+        new HatType("68b818677be3c2079937137f50d555c161703d07e99cc708b8b5f4112938281", "Purple Crewmate", "&7&oPurple sus!");
+        new HatType("24e95bdd5151222561370bb67ad4bb0366410f9186dd00ca4d45c6feb8419eac", "Black Crewmate", "&7&oBlack sus!");
+        new HatType("e994f7b302612ac3231d41f0e6d78a3082db3bd667d0a9c5bcf12ced8f9405bc", "White Crewmate", "&7&oWhite sus!");
+        new HatType("feb20b93453a82018e2d4063b084035a5fe55a8a175da4ce1adbc6ec40ebe272", "Pink Crewmate", "&7&oPink sus!");
+        new HatType("c359cc1b468bba51707d0b6e4d229da550bcd8bcbd4fcff2720540a85681b17b", "Brown Crewmate", "&7&oBrown sus!");
         new HatType("f3487d457f9062d787a3e6ce1c4664bf7402ec67dd111256f19b38ce4f670", "Bread", "&7&oFreshly baked");
         new HatType("955d611a878e821231749b2965708cad942650672db09e26847a88e2fac2946", "Cheese", "&7&oSay cheese!");
         new HatType("347f4f5a74c6691280cd80e7148b49b2ce17dcf64fd55368627f5d92a976a6a8", "Pancakes", "&7&oBetter with syrup!");
