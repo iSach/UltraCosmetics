@@ -36,6 +36,7 @@ import be.isach.ultracosmetics.version.VersionManager;
 import be.isach.ultracosmetics.worldguard.AFlagManager;
 
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.DrilldownPie;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -52,7 +53,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.libraryaddict.disguise.DisguiseConfig;
 
@@ -178,6 +181,7 @@ public class UltraCosmetics extends JavaPlugin {
         // Set up config.
         if (!setUpConfig()) {
             getSmartLogger().write(LogLevel.ERROR, "Failed to load config.yml, shutting down to protect data.");
+            getSmartLogger().write(LogLevel.ERROR, "Please run config.yml through a YAML checker site.");
             failReason = "Failed to load config.yml, please run it through a YAML checker";
             return;
         }
@@ -215,6 +219,7 @@ public class UltraCosmetics extends JavaPlugin {
         // Init Message manager.
         if (!MessageManager.success()) {
             getSmartLogger().write(LogLevel.ERROR, "Failed to load messages.yml, shutting down to protect data.");
+            getSmartLogger().write(LogLevel.ERROR, "Please run messages.yml through a YAML checker site.");
             failReason = "Failed to load messages.yml, please run it through a YAML checker";
             return;
         }
@@ -289,7 +294,7 @@ public class UltraCosmetics extends JavaPlugin {
         armorStandManager = new ArmorStandManager(this);
 
         // Start up bStats
-        new Metrics(this, 2629);
+        setupMetrics();
 
         reload();
 
@@ -383,6 +388,26 @@ public class UltraCosmetics extends JavaPlugin {
             getSmartLogger().write();
             getSmartLogger().write("WorldGuard custom flags enabled");
         }
+    }
+
+    private void setupMetrics() {
+        Metrics metrics = new Metrics(this, 2629);
+        String nms = UltraCosmeticsData.get().getServerVersion().toString();
+        String version = getDescription().getVersion();
+        metrics.addCustomChart(new DrilldownPie("uc_by_mc", () -> {
+            Map<String,Map<String,Integer>> map = new HashMap<>();
+            Map<String,Integer> entry = new HashMap<>();
+            entry.put(version, 1);
+            map.put(nms, entry);
+            return map;
+        }));
+        metrics.addCustomChart(new DrilldownPie("mc_by_uc", () -> {
+            Map<String,Map<String,Integer>> map = new HashMap<>();
+            Map<String,Integer> entry = new HashMap<>();
+            entry.put(nms, 1);
+            map.put(version, entry);
+            return map;
+        }));
     }
 
     private boolean setUpConfig() {
