@@ -37,6 +37,7 @@ import be.isach.ultracosmetics.worldguard.AFlagManager;
 
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.DrilldownPie;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -407,6 +408,9 @@ public class UltraCosmetics extends JavaPlugin {
             entry.put(nms, 1);
             map.put(version, entry);
             return map;
+        }));
+        metrics.addCustomChart(new SimplePie("mysql_enabled", () -> {
+            return getConfig().getBoolean("MySQL.Enabled") ? "true" : "false";
         }));
     }
 
