@@ -115,7 +115,7 @@ public class GadgetRocket extends Gadget implements Updatable {
                     }
                     if (i > 0) {
                         sendTitle(ChatColor.RED + "" + ChatColor.BOLD + i);
-                        XSound.BLOCK_NOTE_BLOCK_BASS.play(getPlayer(), 1.0f, 1.0f);
+                        play(XSound.BLOCK_NOTE_BLOCK_BASS, getPlayer(), 1.0f, 1.0f);
                         i--;
                         return;
                     }
@@ -129,7 +129,7 @@ public class GadgetRocket extends Gadget implements Updatable {
 
                     }
                     sendTitle(MessageManager.getMessage("Gadgets.Rocket.Takeoff"));
-                    XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.0f, 1.0f);
+                    play(XSound.ENTITY_GENERIC_EXPLODE, getPlayer().getLocation(), 1.0f, 1.0f);
                     playerVehicle = null;
                     armorStand.remove();
                     armorStand = null;
@@ -167,7 +167,7 @@ public class GadgetRocket extends Gadget implements Updatable {
                         fallingBlocks.forEach(Entity::remove);
                         fallingBlocks.clear();
                         FallDamageManager.addNoFall(getPlayer());
-                        XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.0f, 1.0f);
+                        play(XSound.ENTITY_GENERIC_EXPLODE, getPlayer().getLocation(), 1.0f, 1.0f);
                         Particles.EXPLOSION_HUGE.display(getPlayer().getLocation());
                         disableFlight();
                         launching = false;
@@ -206,8 +206,8 @@ public class GadgetRocket extends Gadget implements Updatable {
         if (launching && !fallingBlocks.isEmpty()) {
             Particles.FLAME.display(0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
             Particles.LAVA.display(0.3f, 0.2f, 0.3f, getPlayer().getLocation().add(0, -3, 0), 10);
-            XSound.ENTITY_BAT_LOOP.play(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), 1.5f, 1.0f);
-            XSound.BLOCK_FIRE_EXTINGUISH.play(fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), 0.025f, 1.0f);
+            play(XSound.ENTITY_BAT_LOOP, fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), 1.5f, 1.0f);
+            play(XSound.BLOCK_FIRE_EXTINGUISH, fallingBlocks.get(9).getLocation().clone().add(0, -1, 0), 0.025f, 1.0f);
         }
     }
 
@@ -267,7 +267,7 @@ public class GadgetRocket extends Gadget implements Updatable {
                 enableFlight();
                 if (vehicle instanceof ArmorStand) {
                     Particles.SMOKE_LARGE.display(0.3f, 0.2f, 0.3f, armorStand.getLocation().add(0, -3, 0), 10);
-                    XSound.BLOCK_FIRE_EXTINGUISH.play(armorStand.getLocation().clone().add(0, -3, 0), 0.025f, 1.0f);
+                    play(XSound.BLOCK_FIRE_EXTINGUISH, armorStand.getLocation().clone().add(0, -3, 0), 0.025f, 1.0f);
                 }
             }
             // doesn't seem to work as well if you only wait one tick before trying to remount the player

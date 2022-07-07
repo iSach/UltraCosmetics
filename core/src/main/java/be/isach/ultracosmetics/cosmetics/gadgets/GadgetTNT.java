@@ -74,7 +74,7 @@ public class GadgetTNT extends Gadget implements PlayerAffectingCosmetic {
         if (entities.remove(event.getEntity())) {
             event.setCancelled(true);
             Particles.EXPLOSION_HUGE.display(event.getEntity().getLocation());
-            XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer(), 1.4f, 1.5f);
+            play(XSound.ENTITY_GENERIC_EXPLODE, getPlayer(), 1.4f, 1.5f);
 
             for (Entity ent : event.getEntity().getNearbyEntities(3, 3, 3)) {
                 if (canAffect(ent)) {

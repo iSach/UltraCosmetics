@@ -564,6 +564,7 @@ public class UltraCosmetics extends JavaPlugin {
 
         config.addDefault("WorldGuard-Integration", true, "Whether WorldGuard should be hooked when loading UC", "Disable this if UC has trouble loading WorldGuard");
         config.addDefault("Pets-Are-Silent", false, "Are pets prevented from making sounds?");
+        config.addDefault("Gadgets-Are-Silent", false, "Are gadgets prevented from making sounds?");
 
         if (config.isBoolean("Menu-Item.Give-On-Join")) {
             boolean enabled = config.getBoolean("Menu-Item.Give-On-Join");

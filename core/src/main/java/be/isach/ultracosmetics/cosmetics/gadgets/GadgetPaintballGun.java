@@ -70,7 +70,7 @@ public class GadgetPaintballGun extends Gadget {
     protected void onRightClick() {
         Projectile projectile = getPlayer().launchProjectile(EnderPearl.class, getPlayer().getLocation().getDirection().multiply(2));
         projectiles.add(projectile);
-        XSound.ENTITY_CHICKEN_EGG.play(getPlayer(), 1.5f, 1.2f);
+        play(XSound.ENTITY_CHICKEN_EGG, getPlayer(), 1.5f, 1.2f);
     }
 
     @EventHandler

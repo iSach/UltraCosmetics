@@ -106,7 +106,7 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
                     MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
                 }
 
-                XSound.ENTITY_BAT_HURT.play(bat.getLocation(), 1.0f, 1.0f);
+                play(XSound.ENTITY_BAT_HURT, bat.getLocation(), 1.0f, 1.0f);
                 Particles.SMOKE_NORMAL.display(bat.getLocation());
 
                 bat.remove();

@@ -44,7 +44,7 @@ public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmeti
                 && event.getItem().getTicksLived() > 5
                 && canAffect(event.getPlayer())) {
             event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 2));
-            XSound.ENTITY_PLAYER_BURP.play(getPlayer().getLocation(), 1.4f, 1.5f);
+            play(XSound.ENTITY_PLAYER_BURP, getPlayer().getLocation(), 1.4f, 1.5f);
             event.getItem().remove();
             melonSlices.remove(event.getItem());
             // Should be done anyway by PlayerListener, but just to be safe
@@ -71,7 +71,7 @@ public class GadgetMelonThrower extends Gadget implements PlayerAffectingCosmeti
 
     @Override
     protected void onRightClick() {
-        XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 1.4f, 1.5f);
+        play(XSound.ENTITY_GENERIC_EXPLODE, getPlayer().getLocation(), 1.4f, 1.5f);
         melon = ItemFactory.createUnpickableItemDirectional(XMaterial.MELON, getPlayer(), 1.3);
     }
 

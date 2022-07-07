@@ -85,7 +85,7 @@ public class GadgetColorBomb extends Gadget implements PlayerAffectingCosmetic, 
             Vector velocity = new Vector(0, 0.5, 0).add(MathUtils.getRandomCircleVector().multiply(0.1));
             Item item = ItemFactory.spawnUnpickableItem(ItemFactory.randomItemFromTag(XTag.WOOL), bomb.getLocation().add(0, 0.15, 0), velocity);
             items.add(item);
-            XSound.ENTITY_CHICKEN_EGG.play(item.getLocation(), 0.2f, 1.0f);
+            play(XSound.ENTITY_CHICKEN_EGG, item.getLocation(), 0.2f, 1.0f);
 
             for (Entity entity : bomb.getNearbyEntities(1.5, 1, 1.5)) {
                 if (entity instanceof Player && canAffect(entity)) {

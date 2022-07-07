@@ -51,7 +51,7 @@ public class GadgetPortalGun extends Gadget implements Updatable {
     }
 
     private void handleClick(PortalLoc portalLoc) {
-        XSound.ENTITY_ENDERMAN_TELEPORT.play(getPlayer(), 0.2f, 1.5f);
+        play(XSound.ENTITY_ENDERMAN_TELEPORT, getPlayer(), 0.2f, 1.5f);
         List<Block> sight = getPlayer().getLastTwoTargetBlocks(null, 20);
         Block target = sight.get(1);
         Location playerFaceLoc = getPlayer().getEyeLocation().add(getPlayer().getEyeLocation().getDirection().multiply(0.6));
@@ -175,7 +175,7 @@ public class GadgetPortalGun extends Gadget implements Updatable {
             entity.teleport(location);
             entity.setVelocity(velocity);
             if (entity instanceof Player) {
-                XSound.ENTITY_ENDERMAN_TELEPORT.play(entity);
+                play(XSound.ENTITY_ENDERMAN_TELEPORT, entity, 1, 1);
             }
         });
     }

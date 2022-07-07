@@ -99,7 +99,7 @@ public class GadgetExplosiveSheep extends Gadget {
                 return;
             }
             s.setColor(red ? DyeColor.RED : DyeColor.WHITE);
-            XSound.BLOCK_NOTE_BLOCK_HAT.play(s.getLocation(), 1.4f, 1.5f);
+            play(XSound.BLOCK_NOTE_BLOCK_HAT, s.getLocation(), 1.4f, 1.5f);
             red = !red;
             time -= 0.2;
 
@@ -108,7 +108,7 @@ public class GadgetExplosiveSheep extends Gadget {
                 new SheepColorRunnable(s, time, red);
                 return;
             }
-            XSound.ENTITY_GENERIC_EXPLODE.play(s.getLocation(), 1.4f, 1.5f);
+            play(XSound.ENTITY_GENERIC_EXPLODE, s.getLocation(), 1.4f, 1.5f);
             Particles.EXPLOSION_HUGE.display(s.getLocation());
             sheeps.remove(s);
             s.remove();

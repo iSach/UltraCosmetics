@@ -48,7 +48,7 @@ public class GadgetSmashDown extends Gadget implements PlayerAffectingCosmetic, 
 
     @Override
     protected void onRightClick() {
-        XSound.ENTITY_FIREWORK_ROCKET_LAUNCH.play(getPlayer().getLocation(), 2.0f, 1.0f);
+        play(XSound.ENTITY_FIREWORK_ROCKET_LAUNCH, getPlayer().getLocation(), 2.0f, 1.0f);
         getPlayer().setVelocity(new Vector(0, 3, 0));
         final BukkitTask task = Bukkit.getScheduler().runTaskTimer(getUltraCosmetics(), () -> {
             if (getOwner() != null && getPlayer() != null && isEquipped()) {
@@ -87,7 +87,7 @@ public class GadgetSmashDown extends Gadget implements PlayerAffectingCosmetic, 
         }
 
         Location loc = getPlayer().getLocation();
-        XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer().getLocation(), 2.0f, 1.0f);
+        play(XSound.ENTITY_GENERIC_EXPLODE, getPlayer().getLocation(), 2.0f, 1.0f);
 
         if (i == 5) {
             playEffect = false;
@@ -136,7 +136,7 @@ public class GadgetSmashDown extends Gadget implements PlayerAffectingCosmetic, 
             } else {
                 Particles.BLOCK_CRACK.display(new Particles.BlockData(fb.getMaterial(), event.getBlock().getData()), 0f, 0f, 0f, 0.4f, 50, fb.getLocation(), 128);
             }
-            XSound.BLOCK_ANVIL_BREAK.play(getPlayer().getLocation(), 0.05f, 1.0f);
+            play(XSound.BLOCK_ANVIL_BREAK, getPlayer().getLocation(), 0.05f, 1.0f);
             event.getEntity().remove();
         }
     }

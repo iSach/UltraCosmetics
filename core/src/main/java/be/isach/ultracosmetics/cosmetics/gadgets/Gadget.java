@@ -14,8 +14,10 @@ import be.isach.ultracosmetics.util.TextUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -133,7 +135,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
                     message = message.replace("%gadgetname%",
                             TextUtil.filterPlaceHolder(getType().getName()));
                     ActionBar.sendActionBar(getPlayer(), message);
-                    XSound.BLOCK_NOTE_BLOCK_HAT.play(getPlayer(), 1.4f, 1.5f);
+                    play(XSound.BLOCK_NOTE_BLOCK_HAT, getPlayer(), 1.4f, 1.5f);
                 }
             }
         } else {
@@ -199,14 +201,25 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
         return true;
     }
 
+    protected void play(XSound sound, Entity entity, float volume, float pitch) {
+        if (!SettingsManager.getConfig().getBoolean("Gadgets-Are-Silent")) {
+            sound.play(entity, volume, pitch);
+        }
+    }
+
+    protected void play(XSound sound, Location loc, float volume, float pitch) {
+        if (!SettingsManager.getConfig().getBoolean("Gadgets-Are-Silent")) {
+            sound.play(loc, volume, pitch);
+        }
+    }
+
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (getOwner() == null || getPlayer() == null || event.getPlayer() != getPlayer()
                 || !(event.getRightClicked() instanceof ItemFrame) || getItemStack() == null
                 || itemStack == null || !itemStack.hasItemMeta()
                 || itemStack.getType() != getItemStack().getType()
-                || !itemStack.getItemMeta().getDisplayName().endsWith(getType().getName()))
-            return;
+                || !itemStack.getItemMeta().getDisplayName().endsWith(getType().getName())) return;
 
         event.setCancelled(true);
     }
@@ -368,6 +381,6 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
      */
     protected void onLeftClick() {
         onRightClick();
-    };
+    }
 
 }

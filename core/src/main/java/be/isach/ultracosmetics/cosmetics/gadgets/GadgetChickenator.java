@@ -42,11 +42,11 @@ public class GadgetChickenator extends Gadget {
         final Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getEyeLocation(), EntityType.CHICKEN);
         chicken.setNoDamageTicks(500);
         chicken.setVelocity(getPlayer().getLocation().getDirection().multiply(Math.PI / 1.5));
-        XSound.ENTITY_CHICKEN_AMBIENT.play(getPlayer(), 1.4f, 1.5f);
-        XSound.ENTITY_GENERIC_EXPLODE.play(getPlayer(), 0.3f, 1.5f);
+        play(XSound.ENTITY_CHICKEN_AMBIENT, getPlayer(), 1.4f, 1.5f);
+        play(XSound.ENTITY_GENERIC_EXPLODE, getPlayer(), 0.3f, 1.5f);
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
             spawnRandomFirework(chicken.getLocation());
-            XSound.ENTITY_CHICKEN_HURT.play(getPlayer(), 1.4f, 1.5f);
+            play(XSound.ENTITY_CHICKEN_HURT, getPlayer(), 1.4f, 1.5f);
             chicken.remove();
             for (int i = 0; i < 30; i++) {
                 items.add(ItemFactory.createUnpickableItemVariance(XMaterial.COOKED_CHICKEN, chicken.getLocation(), RANDOM, 1));
