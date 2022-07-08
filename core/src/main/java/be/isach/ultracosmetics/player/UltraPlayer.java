@@ -316,7 +316,9 @@ public class UltraPlayer {
     }
 
     public double getBalance() {
-        if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) return ultraCosmetics.getEconomyHandler().balance(getBukkitPlayer());
+        if (ultraCosmetics.getEconomyHandler().isUsingEconomy()) {
+            return ultraCosmetics.getEconomyHandler().balance(getBukkitPlayer());
+        }
         return 0;
     }
 
