@@ -9,6 +9,7 @@ import be.isach.ultracosmetics.command.subcommands.SubCommandMigrate;
 import be.isach.ultracosmetics.command.subcommands.SubCommandReload;
 import be.isach.ultracosmetics.command.subcommands.SubCommandReward;
 import be.isach.ultracosmetics.command.subcommands.SubCommandSelfView;
+import be.isach.ultracosmetics.command.subcommands.SubCommandTimings;
 import be.isach.ultracosmetics.command.subcommands.SubCommandToggle;
 import be.isach.ultracosmetics.command.subcommands.SubCommandTreasure;
 import be.isach.ultracosmetics.command.subcommands.SubCommandTreasureNotification;
@@ -150,5 +151,6 @@ public class CommandManager implements CommandExecutor {
         registerCommand(new SubCommandReward(ultraCosmetics));
         registerCommand(new SubCommandReload(ultraCosmetics));
         registerCommand(new SubCommandUpdate(ultraCosmetics));
+        registerCommand(new SubCommandTimings(ultraCosmetics));
     }
 }

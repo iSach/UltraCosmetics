@@ -38,6 +38,8 @@ import com.cryptomorin.xseries.messages.ActionBar;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -50,6 +52,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
 
     private static final DecimalFormatSymbols OTHER_SYMBOLS = new DecimalFormatSymbols(Locale.US);
     private static final DecimalFormat DECIMAL_FORMAT;
+    public static final List<List<Long>> TIMINGS = new ArrayList<>();
 
     static {
         OTHER_SYMBOLS.setDecimalSeparator('.');
@@ -226,6 +229,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
 
     @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event) {
+        List<Long> thisTimings = new ArrayList<>();
+        thisTimings.add(System.currentTimeMillis()); // 0
         if (event.getAction() == Action.PHYSICAL) return;
         Player player = event.getPlayer();
         if (player != getPlayer()) return;
@@ -237,6 +242,7 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
             if (event.getHand() != EquipmentSlot.HAND) return;
         }
         event.setCancelled(true);
+        thisTimings.add(System.currentTimeMillis()); // 1
         // player.updateInventory();
         UltraPlayer ultraPlayer = getUltraCosmetics().getPlayerManager().getUltraPlayer(event.getPlayer());
 
@@ -260,6 +266,8 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
             }
         }
 
+        thisTimings.add(System.currentTimeMillis()); // 2
+
         if (!checkRequirements(event)) return;
 
         double coolDown = ultraPlayer.getCooldown(getType());
@@ -273,6 +281,9 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
             return;
         }
         ultraPlayer.setCoolDown(getType());
+
+        thisTimings.add(System.currentTimeMillis()); // 3
+
         if (UltraCosmeticsData.get().isAmmoEnabled() && getType().requiresAmmo()) {
             ultraPlayer.removeAmmo(getType());
             itemStack = ItemFactory.create(getType().getMaterial(),
@@ -292,11 +303,14 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
                 onRightClick();
             }
         };
+        thisTimings.add(System.currentTimeMillis()); // 4
         if (asynchronous) {
             Bukkit.getScheduler().runTaskAsynchronously(getUltraCosmetics(), callClick);
         } else {
             callClick.run();
         }
+        thisTimings.add(System.currentTimeMillis()); // 5
+        TIMINGS.add(thisTimings);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
