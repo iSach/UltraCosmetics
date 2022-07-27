@@ -1,6 +1,5 @@
 package be.isach.ultracosmetics.v1_19_R1.pathfinders;
 
-
 import be.isach.ultracosmetics.v1_19_R1.ObfuscatedFields;
 
 import java.lang.reflect.Method;
@@ -52,16 +51,11 @@ public class CustomPathFinderGoalPanic extends Goal {
         boolean inLiquid = false;
         try {
             inLiquidMethod = this.entity.getNavigation().getClass().getSuperclass().getDeclaredMethod(ObfuscatedFields.IS_IN_LIQUID);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
-        inLiquidMethod.setAccessible(true);
-
-        try {
+            inLiquidMethod.setAccessible(true);
             inLiquid = (boolean) inLiquidMethod.invoke((this.entity.getNavigation()));
-        } catch (ReflectiveOperationException ex) {
-            ex.printStackTrace();
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+            return false;
         }
 
         Vec3 vec3d = LandRandomPos.getPos(this.entity, 5, 4);
@@ -70,6 +64,5 @@ public class CustomPathFinderGoalPanic extends Goal {
         }
         return !inLiquid;
     }
-
 
 }

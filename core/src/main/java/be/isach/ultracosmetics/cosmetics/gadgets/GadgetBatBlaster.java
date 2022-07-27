@@ -5,19 +5,20 @@ import be.isach.ultracosmetics.cosmetics.PlayerAffectingCosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.EntitySpawner;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Bat;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.cryptomorin.xseries.XSound;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 /**
  * Represents an instance of a bat blaster gadget summoned by a player.
@@ -28,8 +29,8 @@ import java.util.List;
 public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic, Updatable {
 
     private boolean active = false;
-    private Location playerVelocity;
-    private List<Bat> bats;
+    private Location playerStartLoc;
+    private EntitySpawner<Bat> bats;
 
     public GadgetBatBlaster(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("batblaster"), ultraCosmetics);
@@ -38,12 +39,8 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
     @Override
     protected void onRightClick() {
         this.active = true;
-        this.playerVelocity = getPlayer().getEyeLocation();
-        this.bats = new ArrayList<>();
-
-        for (int i = 0; i < 16; i++) {
-            this.bats.add(getPlayer().getWorld().spawn(getPlayer().getEyeLocation(), Bat.class));
-        }
+        this.playerStartLoc = getPlayer().getEyeLocation();
+        this.bats = new EntitySpawner<>(EntityType.BAT, getPlayer().getEyeLocation(), 16, getUltraCosmetics());
 
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), this::clean, 60);
     }
@@ -67,29 +64,30 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
     @SuppressWarnings("deprecation")
     @Override
     public void onUpdate() {
-        if (bats != null && bats.isEmpty()) return;
+        if (bats.isEmpty()) return;
 
-        if (!active || bats == null) {
-            playerVelocity = null;
+        if (!active) {
             clean();
             return;
         }
-        for (Bat bat : bats) {
+        Iterator<Bat> iter = bats.getEntities().iterator();
+        while (iter.hasNext()) {
+            Bat bat = iter.next();
             if (!bat.isValid()) {
                 continue;
             }
             Vector rand = new Vector((Math.random() - 0.5D) / 3.0D, (Math.random() - 0.5D) / 3.0D,
                     (Math.random() - 0.5D) / 3.0D);
-            if (playerVelocity != null) {
-                bat.setVelocity(playerVelocity.getDirection().clone().multiply(0.5D).add(rand));
+            if (playerStartLoc != null) {
+                bat.setVelocity(playerStartLoc.getDirection().clone().multiply(0.5D).add(rand));
             }
             for (Player other : getPlayer().getWorld().getPlayers()) {
-                if (other == getPlayer() || !hitPlayer(bat.getLocation(), other)) {
+                if (other == getPlayer() || !canAffect(other) || !hitPlayer(bat.getLocation(), other)) {
                     continue;
                 }
                 Vector v = bat.getLocation().getDirection();
                 v.normalize();
-                v.multiply(.4d);
+                v.multiply(0.4d);
                 v.setY(v.getY() + 0.2d);
 
                 if (v.getY() > 7.5) {
@@ -101,30 +99,23 @@ public class GadgetBatBlaster extends Gadget implements PlayerAffectingCosmetic,
                 }
 
                 other.setFallDistance(0);
-
-                if (canAffect(other)) {
-                    MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, .4f, 0)));
-                }
+                MathUtils.applyVelocity(other, bat.getLocation().getDirection().add(new Vector(0, 0.4f, 0)));
 
                 play(XSound.ENTITY_BAT_HURT, bat.getLocation(), 1.0f, 1.0f);
                 Particles.SMOKE_NORMAL.display(bat.getLocation());
 
                 bat.remove();
+                iter.remove();
+                break;
             }
         }
     }
 
     private void clean() {
         active = false;
-        playerVelocity = null;
+        playerStartLoc = null;
         if (bats != null) {
-            for (Bat bat : bats) {
-                if (bat.isValid()) {
-                    Particles.SMOKE_LARGE.display(bat.getLocation());
-                }
-                bat.remove();
-            }
-            bats.clear();
+            bats.removeEntities();
         }
     }
 

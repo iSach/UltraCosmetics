@@ -587,6 +587,7 @@ public class UltraCosmetics extends JavaPlugin {
         config.addDefault("Air-Materials", airMaterials, "Materials that are treated as air. Changing these is not recommended.");
         config.addDefault("Auto-Update", false, "Whether UltraCosmetics should automatically download and install new versions.", "Requires Check-For-Updates to be enabled.");
         config.addDefault("Prevent-Cosmetics-In-Vanish", false, "Whether UltraCosmetics should prevent vanished players from using cosmetics.", "Works with any vanish plugin that uses 'vanished' metdata.");
+        config.addDefault("Max-Entity-Spawns-Per-Tick", 0, "Limits the number of entities that can be spawned by a single gadget per tick.", "Set to 0 to spawn all entities instantly (default)");
 
         upgradeIdsToMaterials();
 

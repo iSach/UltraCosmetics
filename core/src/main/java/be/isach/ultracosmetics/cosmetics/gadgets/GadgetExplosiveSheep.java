@@ -4,11 +4,13 @@ import be.isach.ultracosmetics.UltraCosmetics;
 import be.isach.ultracosmetics.UltraCosmeticsData;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.EntitySpawner;
 import be.isach.ultracosmetics.util.MathUtils;
 import be.isach.ultracosmetics.util.Particles;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -33,7 +35,6 @@ public class GadgetExplosiveSheep extends Gadget {
     // and it distinguishes it from the local variables named 'sheep' (singular)
     private Set<Sheep> sheeps = new HashSet<>();
     private BukkitRunnable sheepExplosionRunnable = null;
-    private BukkitRunnable sheepCreationRunnable = null;
 
     public GadgetExplosiveSheep(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("explosivesheep"), ultraCosmetics);
@@ -75,9 +76,6 @@ public class GadgetExplosiveSheep extends Gadget {
         if (sheepExplosionRunnable != null) {
             sheepExplosionRunnable.cancel();
         }
-        if (sheepCreationRunnable != null) {
-            sheepCreationRunnable.cancel();
-        }
     }
 
     private class SheepColorRunnable extends BukkitRunnable {
@@ -112,37 +110,23 @@ public class GadgetExplosiveSheep extends Gadget {
             Particles.EXPLOSION_HUGE.display(s.getLocation());
             sheeps.remove(s);
             s.remove();
-            sheepCreationRunnable = new BukkitRunnable() {
-                int i = 5;
-
-                @Override
-                public void run() {
-                    for (int i = 0; i < 10; i++) {
-                        final Sheep sheep = getPlayer().getWorld().spawn(s.getLocation(), Sheep.class);
-                        sheep.setColor(DyeColor.values()[RANDOM.nextInt(16)]);
-                        MathUtils.applyVelocity(sheep, new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2, RANDOM.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
-                        sheep.setBaby();
-                        sheep.setAgeLock(true);
-                        sheep.setNoDamageTicks(120);
-                        sheeps.add(sheep);
-                        UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
-                        UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
-                    }
-                    if (--i < 1) {
-                        cancel();
-                        sheepCreationRunnable = null;
-                    }
-                }
-            };
-            sheepCreationRunnable.runTaskTimer(getUltraCosmetics(), 0, 1);
+            DyeColor[] colors = DyeColor.values();
+            EntitySpawner<Sheep> sheeps = new EntitySpawner<>(EntityType.SHEEP, s.getLocation(), 50, sheep -> {
+                sheep.setColor(colors[RANDOM.nextInt(colors.length)]);
+                MathUtils.applyVelocity(sheep, new Vector(RANDOM.nextDouble() - 0.5, RANDOM.nextDouble() / 2, RANDOM.nextDouble() - 0.5).multiply(2).add(new Vector(0, 0.8, 0)));
+                sheep.setBaby();
+                sheep.setAgeLock(true);
+                sheep.setNoDamageTicks(120);
+                UltraCosmeticsData.get().getVersionManager().getEntityUtil().clearPathfinders(sheep);
+                UltraCosmeticsData.get().getVersionManager().getEntityUtil().makePanic(sheep);
+            }, getUltraCosmetics());
             sheepExplosionRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    for (Sheep sheep : sheeps) {
+                    for (Sheep sheep : sheeps.getEntities()) {
                         Particles.LAVA.display(sheep.getLocation(), 5);
-                        sheep.remove();
                     }
-                    sheepExplosionRunnable = null;
+                    sheeps.removeEntities();
                 }
             };
             sheepExplosionRunnable.runTaskLater(getUltraCosmetics(), 110);

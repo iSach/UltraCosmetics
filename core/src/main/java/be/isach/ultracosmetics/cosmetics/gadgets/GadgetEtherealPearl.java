@@ -8,23 +8,16 @@ import be.isach.ultracosmetics.player.UltraPlayer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.EnderPearl;
-import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.spigotmc.event.entity.EntityDismountEvent;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Represents an instance of a ethereal pearl gadget summoned by a player.
@@ -95,29 +88,6 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
         endRide();
     }
 
-    public FireworkEffect getRandomFireworkEffect() {
-        FireworkEffect.Builder builder = FireworkEffect.builder();
-        return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(Color.fromRGB(100, 0, 100)).withFade(Color.fromRGB(30, 0, 30)).build();
-    }
-
-    public void spawnRandomFirework(Location location) {
-        Set<Firework> fireworks = new HashSet<>();
-        Bukkit.getScheduler().runTask(getUltraCosmetics(), () -> {
-            for (int i = 0; i < 4; i++) {
-                Firework f = location.getWorld().spawn(location, Firework.class);
-                FireworkMeta fm = f.getFireworkMeta();
-                fm.addEffect(getRandomFireworkEffect());
-                f.setFireworkMeta(fm);
-                fireworks.add(f);
-                f.setMetadata("UCFirework", new FixedMetadataValue(getUltraCosmetics(), 1));
-            }
-        });
-        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
-            fireworks.forEach(Firework::detonate);
-            fireworks.clear();
-        }, 2);
-    }
-
     @EventHandler
     public void onItemFrameBreak(HangingBreakByEntityEvent event) {
         if (pearl == event.getRemover()
@@ -143,7 +113,7 @@ public class GadgetEtherealPearl extends Gadget implements Updatable {
         if (lastLoc != null) {
             getPlayer().teleport(lastLoc.add(0, 1, 0));
         }
-        spawnRandomFirework(getPlayer().getLocation());
+        spawnRandomFirework(getPlayer().getLocation(), Color.fromRGB(100, 0, 100), Color.fromRGB(30, 0, 30));
         if (pearl != null) {
             pearl.remove();
             pearl = null;

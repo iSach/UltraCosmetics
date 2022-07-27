@@ -7,6 +7,7 @@ import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
 import be.isach.ultracosmetics.util.Area;
 import be.isach.ultracosmetics.util.BlockUtils;
+import be.isach.ultracosmetics.util.EntitySpawner;
 import be.isach.ultracosmetics.util.MathUtils;
 
 import org.bukkit.Bukkit;
@@ -21,9 +22,6 @@ import org.bukkit.event.entity.EntityUnleashEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Represents an instance of a parachute gadget summoned by a player.
  *
@@ -32,13 +30,12 @@ import java.util.Set;
  */
 public class GadgetParachute extends Gadget implements Updatable {
 
-    private Set<Chicken> chickens = new HashSet<>();
+    private EntitySpawner<Chicken> chickens;
     private boolean active;
 
     public GadgetParachute(UltraPlayer owner, UltraCosmetics ultraCosmetics) {
         super(owner, GadgetType.valueOf("parachute"), ultraCosmetics);
     }
-
 
     @Override
     public void onRightClick() {
@@ -49,21 +46,15 @@ public class GadgetParachute extends Gadget implements Updatable {
 
         getOwner().setCanBeHitByOtherGadgets(false);
 
-        for (int i = 0; i < 20; i++) {
-            int x = i % 5 - 2;
-            int z = i / 4 - 2;
-            Chicken chicken = (Chicken) getPlayer().getWorld().spawnEntity(getPlayer().getLocation().add(x, 3, z), EntityType.CHICKEN);
-            chickens.add(chicken);
-            chicken.setLeashHolder(getPlayer());
-        }
+        chickens = new EntitySpawner<>(EntityType.CHICKEN, loc, 20, true, c -> c.setLeashHolder(getPlayer()), getUltraCosmetics());
         Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> active = true, 5);
     }
 
     private void killParachute() {
-        for (Chicken chicken : chickens) {
+        for (Chicken chicken : chickens.getEntities()) {
             chicken.setLeashHolder(null);
-            chicken.remove();
         }
+        chickens.removeEntities();
         MathUtils.applyVelocity(getPlayer(), new Vector(0, 0.15, 0));
         active = false;
         getOwner().setCanBeHitByOtherGadgets(true);
@@ -76,6 +67,7 @@ public class GadgetParachute extends Gadget implements Updatable {
             event.setDroppedExp(0);
             event.getDrops().clear();
             event.getEntity().setLeashHolder(null);
+            chickens.removeEntity(event.getEntity());
         }
     }
 
@@ -83,8 +75,8 @@ public class GadgetParachute extends Gadget implements Updatable {
     public void onChickenUnleash(EntityUnleashEvent event) {
         // can't cancel this either, but setting the leash holder to null prevents the lead from dropping
         if (chickens.contains(event.getEntity())) {
-            ((Chicken)event.getEntity()).setLeashHolder(null);
-            event.getEntity().remove();
+            ((Chicken) event.getEntity()).setLeashHolder(null);
+            chickens.removeEntity(event.getEntity());
         }
     }
 
@@ -105,11 +97,13 @@ public class GadgetParachute extends Gadget implements Updatable {
     public void onUpdate() {
         if (active) {
             // isOnGround returns true if they're on a solid block and doesn't account for non-solid blocks (#362)
-            if (!isNotOnAir(getPlayer()) && getPlayer().getVelocity().getY() < -0.3)
+            if (!isNotOnAir(getPlayer()) && getPlayer().getVelocity().getY() < -0.3) {
                 // Intentionally omitted check for canAffect
                 MathUtils.applyVelocity(getPlayer(), getPlayer().getVelocity().add(new Vector(0, 0.1, 0)));
-            if (isNotOnAir(getPlayer()))
+            }
+            if (isNotOnAir(getPlayer())) {
                 killParachute();
+            }
         }
     }
 

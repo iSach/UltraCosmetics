@@ -9,15 +9,20 @@ import be.isach.ultracosmetics.cosmetics.Cosmetic;
 import be.isach.ultracosmetics.cosmetics.Updatable;
 import be.isach.ultracosmetics.cosmetics.type.GadgetType;
 import be.isach.ultracosmetics.player.UltraPlayer;
+import be.isach.ultracosmetics.util.EntitySpawner;
 import be.isach.ultracosmetics.util.ItemFactory;
 import be.isach.ultracosmetics.util.TextUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,6 +37,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.messages.ActionBar;
@@ -211,6 +217,26 @@ public abstract class Gadget extends Cosmetic<GadgetType> {
         if (!SettingsManager.getConfig().getBoolean("Gadgets-Are-Silent")) {
             sound.play(loc, volume, pitch);
         }
+    }
+
+    public static FireworkEffect getRandomFireworkEffect(Color main, Color fade) {
+        FireworkEffect.Builder builder = FireworkEffect.builder();
+        return builder.flicker(false).trail(false).with(FireworkEffect.Type.BALL_LARGE).withColor(main).withFade(fade).build();
+    }
+
+    public void spawnRandomFirework(Location location, Color main, Color fade) {
+        EntitySpawner<Firework> fireworks = new EntitySpawner<>(EntityType.FIREWORK, location, 4, f -> {
+            FireworkMeta fm = f.getFireworkMeta();
+            fm.addEffect(getRandomFireworkEffect(main, fade));
+            fm.setDisplayName("uc_firework");
+            f.setFireworkMeta(fm);
+        }, getUltraCosmetics());
+        Bukkit.getScheduler().runTaskLater(getUltraCosmetics(), () -> {
+            for (Firework f : fireworks.getEntities()) {
+                f.detonate();
+            }
+            fireworks.removeEntities();
+        }, 2);
     }
 
     @EventHandler
