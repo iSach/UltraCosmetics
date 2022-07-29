@@ -566,10 +566,10 @@ public class MessageManager {
         addMessage("Menu.Misc.Button.Next-Page", "&a&lNext Page");
 
         // Misc messages
-        addMessage("Enabled-SelfMorphView", "%prefix% &9you enabled self view for morphs!");
-        addMessage("Disabled-SelfMorphView", "%prefix% &9you disabled self view for morphs!");
-        addMessage("Enabled-Gadgets", "%prefix% &9you enabled gadgets!");
-        addMessage("Disabled-Gadgets", "%prefix% &9you disabled gadgets!");
+        addMessage("Enabled-SelfMorphView", "%prefix% &9You enabled self view for morphs!");
+        addMessage("Disabled-SelfMorphView", "%prefix% &9You disabled self view for morphs!");
+        addMessage("Enabled-Gadgets", "%prefix% &9You enabled gadgets!");
+        addMessage("Disabled-Gadgets", "%prefix% &9You disabled gadgets!");
         addMessage("Not-Allowed-From-Console", "&c&lThis can't be executed from console!");
         addMessage("World-Disabled", "%prefix% &c&lCosmetics are disabled in this world!");
         addMessage("Region-Disabled", "%prefix% &c&lCosmetics are disabled in this area!");
