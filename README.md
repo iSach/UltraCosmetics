@@ -1,3 +1,7 @@
+# This repo has moved!
+
+# Please visit the new one at: https://github.com/datatags/UltraCosmetics
+
 ![logo](https://puu.sh/E6GuW/414e92c886.png)
 
 [discord-invite]: https://discord.gg/PgSXZT37JV
