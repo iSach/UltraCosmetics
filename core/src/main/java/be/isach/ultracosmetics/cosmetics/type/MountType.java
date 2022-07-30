@@ -105,8 +105,8 @@ public class MountType extends CosmeticEntType<Mount> {
 
         new MountType("MountOfWater", XMaterial.LIGHT_BLUE_DYE, EntityType.HORSE, "&7&oThe mount of Poseidon!", 2, Arrays.asList(XMaterial.LIGHT_BLUE_TERRACOTTA, XMaterial.CYAN_TERRACOTTA, XMaterial.BLUE_TERRACOTTA), 0.4, MountOfWater.class);
         new MountType("NyanSheep", XMaterial.CYAN_DYE, EntityType.SHEEP, "&4&lNyan &6&lnyan &e&lnyan\n&a&lnyan &3&lnyan &9&lnyan", 1, null, 0.4, MountNyanSheep.class);
-        new MountType("EcologistHorse", XMaterial.GREEN_DYE, EntityType.HORSE, "&7&oBecome ecologist!", 2, Arrays.asList(XMaterial.LIME_TERRACOTTA, XMaterial.GREEN_TERRACOTTA), 0.4, MountEcologistHorse.class);
-        
+        new MountType("EcologistHorse", XMaterial.GREEN_DYE, EntityType.HORSE, "&7&oBecome an ecologist!", 2, Arrays.asList(XMaterial.LIME_TERRACOTTA, XMaterial.GREEN_TERRACOTTA), 0.4, MountEcologistHorse.class);
+
         new MountType("Rudolph", XMaterial.DEAD_BUSH, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphType(), "&7&oWhat would be Christmas\n&7&owithout Rudolph the Reindeer?", 2, null, 0.4, UltraCosmeticsData.get().getVersionManager().getMounts().getRudolphClass());
         new MountType("WalkingDead", XMaterial.ROTTEN_FLESH, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadType(), "&7&oGraaaaw...", 2, null, 0.4, UltraCosmeticsData.get().getVersionManager().getMounts().getWalkingDeadClass());
         new MountType("InfernalHorror", XMaterial.BONE, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorType(), "&7&oThis mount comes directly from... hell!", 2, null, 0.4, UltraCosmeticsData.get().getVersionManager().getMounts().getHorrorClass());
