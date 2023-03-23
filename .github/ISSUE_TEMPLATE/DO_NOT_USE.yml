@@ -1,0 +1,10 @@
+name: Do not open new issues here
+description: "This repository has moved, please open new issues there: https://github.com/datatags/UltraCosmetics"
+body:
+    -   type: input
+        attributes:
+            label: "Don't open new issues here!"
+            description: "Don't open new issues here!"
+            placeholder: "Don't open new issues here!"
+        validations:
+            required: true

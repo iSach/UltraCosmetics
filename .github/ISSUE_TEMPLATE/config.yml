@@ -1,5 +1,1 @@
-blank_issues_enabled: true
-contact_links:
-  - name: Discord Support
-    url: https://discord.gg/PgSXZT37JV
-    about: If you need help or support, visit Discord!
+blank_issues_enabled: false
